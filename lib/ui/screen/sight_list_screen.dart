@@ -11,7 +11,6 @@ class _SightListScreenState extends State<SightListScreen> {
   @override
   Widget build(BuildContext context) {
     return const Scaffold(
-      resizeToAvoidBottomInset: false,
       body: Center(child: Text('Hello')),
     );
   }
