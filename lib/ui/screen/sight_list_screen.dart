@@ -21,55 +21,11 @@ class _SightListScreenState extends State<SightListScreen> {
         margin: const EdgeInsets.symmetric(horizontal: 16),
         width: 328,
         height: 72,
-        child: RichText(
-          maxLines: 2,
-          text: const TextSpan(
-            text: 'C',
-            style: TextStyle(
-              fontSize: 32,
-              fontWeight: FontWeight.w700,
-              color: Colors.green,
-            ),
-            children: [
-              TextSpan(
-                text: 'писок',
-                style: TextStyle(
-                  color: Color.fromRGBO(59, 62, 91, 1),
-                ),
-                children: [
-                  TextSpan(
-                    text: '\nи',
-                    style: TextStyle(
-                      color: Colors.yellow,
-                    ),
-                    children: [
-                      TextSpan(
-                        text: 'нтересных ',
-                        style: TextStyle(
-                          color: Color.fromRGBO(59, 62, 91, 1),
-                        ),
-                        children: [
-                          TextSpan(
-                            text: 'м',
-                            style: TextStyle(
-                              color: Color.fromRGBO(37, 40, 73, 1),
-                            ),
-                            children: [
-                              TextSpan(
-                                text: 'ест',
-                                style: TextStyle(
-                                  color: Color.fromRGBO(59, 62, 91, 1),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ],
+        child: const Text(
+          'Список \nинтересных мест',
+          style: TextStyle(
+            fontSize: 32,
+            fontWeight: FontWeight.w700,
           ),
         ),
       ),
