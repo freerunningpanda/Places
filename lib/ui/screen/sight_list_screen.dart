@@ -73,32 +73,6 @@ class _SightListScreenState extends State<SightListScreen> {
           ),
         ),
       ),
-      // Center(
-      //   child: Container(
-      //     width: double.infinity,
-      //     height: 50,
-      //     color: Colors.yellow,
-      //     child: RichText(
-      //       textAlign: TextAlign.center,
-      //       text: const TextSpan(
-      //         text: 'Short text rich',
-      //         style: TextStyle(fontSize: 18, color: Colors.black),
-      //         children: [
-      //           TextSpan(
-      //             text: ' text rich',
-      //             style: TextStyle(fontSize: 20, color: Colors.red),
-      //             children: [
-      //               TextSpan(
-      //                 text: ' rich',
-      //                 style: TextStyle(fontSize: 30, color: Colors.blue),
-      //               ),
-      //             ],
-      //           ),
-      //         ],
-      //       ),
-      //     ),
-      //   ),
-      // ),
     );
   }
 }
