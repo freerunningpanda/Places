@@ -10,8 +10,95 @@ class SightListScreen extends StatefulWidget {
 class _SightListScreenState extends State<SightListScreen> {
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      body: Center(child: Text('Hello')),
+    return Scaffold(
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        bottomOpacity: 0.0,
+        elevation: 0,
+      ),
+      body: Container(
+        margin: const EdgeInsets.symmetric(horizontal: 16),
+        width: 328,
+        height: 72,
+        child: RichText(
+          maxLines: 2,
+          text: const TextSpan(
+            text: 'C',
+            style: TextStyle(
+              fontSize: 32,
+              fontWeight: FontWeight.w700,
+              color: Colors.green,
+            ),
+            children: [
+              TextSpan(
+                text: 'писок',
+                style: TextStyle(
+                  color: Color.fromRGBO(59, 62, 91, 1),
+                ),
+                children: [
+                  TextSpan(
+                    text: '\nи',
+                    style: TextStyle(
+                      color: Colors.yellow,
+                    ),
+                    children: [
+                      TextSpan(
+                        text: 'нтересных ',
+                        style: TextStyle(
+                          color: Color.fromRGBO(59, 62, 91, 1),
+                        ),
+                        children: [
+                          TextSpan(
+                            text: 'м',
+                            style: TextStyle(
+                              color: Color.fromRGBO(37, 40, 73, 1),
+                            ),
+                            children: [
+                              TextSpan(
+                                text: 'ест',
+                                style: TextStyle(
+                                  color: Color.fromRGBO(59, 62, 91, 1),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+      // Center(
+      //   child: Container(
+      //     width: double.infinity,
+      //     height: 50,
+      //     color: Colors.yellow,
+      //     child: RichText(
+      //       textAlign: TextAlign.center,
+      //       text: const TextSpan(
+      //         text: 'Short text rich',
+      //         style: TextStyle(fontSize: 18, color: Colors.black),
+      //         children: [
+      //           TextSpan(
+      //             text: ' text rich',
+      //             style: TextStyle(fontSize: 20, color: Colors.red),
+      //             children: [
+      //               TextSpan(
+      //                 text: ' rich',
+      //                 style: TextStyle(fontSize: 30, color: Colors.blue),
+      //               ),
+      //             ],
+      //           ),
+      //         ],
+      //       ),
+      //     ),
+      //   ),
+      // ),
     );
   }
 }
