@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:places/mocks.dart';
 
-import 'package:places/ui/screen/sight_card.dart';
+import 'package:places/mocks.dart';
+import 'package:places/ui/screen/sight_list_screen.dart';
 
 void main() {
   runApp(const App());
@@ -19,7 +19,9 @@ class App extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: SightCard(sight: Mocks.mocks),
+      home: SightListScreen(
+        sight: Mocks.mocks,
+      ),
     );
   }
 }
