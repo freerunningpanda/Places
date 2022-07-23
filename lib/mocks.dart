@@ -1,6 +1,6 @@
 import 'package:places/domain/sight.dart';
-
-final List<Sight> mocks = [
+class Mocks {
+  static final List<Sight> mocks = [
   Sight(
     name: 'Фиолент',
     lat: 44.501394,
@@ -10,7 +10,7 @@ final List<Sight> mocks = [
     type: 'Природные объекты',
   ),
   Sight(
-    name: 'Фиолент',
+    name: 'Тарханкут',
     lat: 45.347618,
     lon: 32.494822,
     url:
@@ -50,3 +50,5 @@ final List<Sight> mocks = [
     type: 'Религиозные объекты',
   ),
 ];
+
+}
