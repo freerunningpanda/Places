@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 
-import 'package:places/domain/sight.dart';
+import 'package:places/mocks.dart';
 import 'package:places/ui/screen/sight_card.dart';
 
 class SightListScreen extends StatelessWidget {
-  final List<Sight> sight;
-  const SightListScreen({Key? key, required this.sight}) : super(key: key);
+  const SightListScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final list = Mocks.mocks;
+    
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -37,9 +38,9 @@ class SightListScreen extends StatelessWidget {
           Expanded(
             child: ListView.builder(
               shrinkWrap: true,
-              itemCount: 5,
+              itemCount: list.length,
               itemBuilder: (context, index) {
-                final item = sight[index];
+                final item = list[index];
 
                 return SightCard(
                   url: item.url,

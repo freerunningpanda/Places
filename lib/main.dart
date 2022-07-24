@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'package:places/mocks.dart';
 import 'package:places/ui/screen/sight_list_screen.dart';
 
 void main() {
@@ -19,8 +18,7 @@ class App extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: SightListScreen(
-        sight: Mocks.mocks,
+      home: const SightListScreen(
       ),
     );
   }
