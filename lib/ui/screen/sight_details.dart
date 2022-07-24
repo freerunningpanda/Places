@@ -33,6 +33,23 @@ class SightDetails extends StatelessWidget {
               ),
               Positioned(
                 left: 16,
+                top: 36,
+                child: Container(
+                  width: 32,
+                  height: 32,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: const Icon(
+                    Icons.chevron_left,
+                    color: Color.fromRGBO(37, 40, 73, 1),
+                    size: 25,
+                  ),
+                ),
+              ),
+              Positioned(
+                left: 16,
                 top: h * 0.5,
                 child: const Text(
                   'Пряности и радости',
