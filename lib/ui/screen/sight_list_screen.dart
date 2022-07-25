@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'package:places/domain/sight.dart';
 import 'package:places/mocks.dart';
 import 'package:places/ui/screen/sight_card.dart';
 
@@ -10,7 +9,6 @@ class SightListScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final list = Mocks.mocks;
-
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
