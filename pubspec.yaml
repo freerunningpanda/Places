@@ -26,6 +26,7 @@ flutter:
 
   assets:
     - resources/
+    - resources/images/
 
   # fonts:
   #   - family: Roboto
