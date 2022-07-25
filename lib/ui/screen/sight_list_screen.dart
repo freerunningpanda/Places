@@ -9,6 +9,7 @@ class SightListScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final list = Mocks.mocks;
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -36,6 +37,7 @@ class SightListScreen extends StatelessWidget {
           ),
           Expanded(
             child: ListView.builder(
+              physics: const BouncingScrollPhysics(),
               shrinkWrap: true,
               itemCount: list.length,
               itemBuilder: (context, index) {
