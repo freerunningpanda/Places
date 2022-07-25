@@ -9,7 +9,6 @@ class SightListScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final list = Mocks.mocks;
-    
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
