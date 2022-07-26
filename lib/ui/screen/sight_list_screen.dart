@@ -12,10 +12,13 @@ class SightListScreen extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        bottomOpacity: 0.0,
-        elevation: 0,
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(58.0),
+        child: AppBar(
+          backgroundColor: Colors.white,
+          bottomOpacity: 0.0,
+          elevation:0,
+        ),
       ),
       body: Column(
         children: [
