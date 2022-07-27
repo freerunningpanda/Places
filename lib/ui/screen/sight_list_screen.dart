@@ -12,14 +12,7 @@ class SightListScreen extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(58.0),
-        child: AppBar(
-          backgroundColor: Colors.white,
-          bottomOpacity: 0.0,
-          elevation:0,
-        ),
-      ),
+      appBar: const _AppBar(),
       body: Column(
         children: [
           Container(
@@ -57,6 +50,21 @@ class SightListScreen extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+class _AppBar extends StatelessWidget implements PreferredSizeWidget {
+  @override
+  Size get preferredSize => const Size(double.infinity, 64);
+
+  const _AppBar({Key? key}) : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    return AppBar(
+      backgroundColor: Colors.white,
+      bottomOpacity: 0.0,
+      elevation: 0,
     );
   }
 }
