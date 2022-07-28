@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:places/ui/res/app_typography.dart';
-import 'package:places/ui/widgets/sight_card_top.dart';
 import 'package:places/ui/widgets/sight_card_bottom.dart';
+import 'package:places/ui/widgets/sight_card_top.dart';
 
-import 'package:places/ui/widgets/sight_card_heart_icon.dart';
 
 class SightCard extends StatelessWidget {
   final String url;

@@ -13,17 +13,10 @@ class SightListScreen extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: const _AppBar(),
       body: Column(
         children: [
-          Container(
-            margin: const EdgeInsets.symmetric(
-              horizontal: 16,
-              vertical: 16,
-            ),
-            width: double.infinity,
-            height: 72,
-          ),
+          const SizedBox(height: 64),
+          const _AppBar(),
           Expanded(
             child: ListView.builder(
               physics: const BouncingScrollPhysics(),
@@ -49,12 +42,13 @@ class SightListScreen extends StatelessWidget {
 
 class _AppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
-  Size get preferredSize => const Size(double.infinity, 64);
+  Size get preferredSize => const Size.fromHeight(0); // Это свойство не применяется
 
   const _AppBar({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return AppBar(
+      toolbarHeight: 86,
       title: const Text(
               'Список \nинтересных мест',
               style: AppTypography.appBarTitle,
