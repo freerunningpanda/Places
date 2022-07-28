@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:places/mocks.dart';
+import 'package:places/ui/res/app_typography.dart';
 import 'package:places/ui/screen/sight_card.dart';
 
 class SightListScreen extends StatelessWidget {
@@ -22,14 +23,6 @@ class SightListScreen extends StatelessWidget {
             ),
             width: double.infinity,
             height: 72,
-            child: const Text(
-              'Список \nинтересных мест',
-              style: TextStyle(
-                fontSize: 32,
-                fontWeight: FontWeight.w700,
-                color: Color.fromRGBO(59, 62, 91, 1),
-              ),
-            ),
           ),
           Expanded(
             child: ListView.builder(
@@ -62,6 +55,10 @@ class _AppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
+      title: const Text(
+              'Список \nинтересных мест',
+              style: AppTypography.appBarTitle,
+            ),
       backgroundColor: Colors.white,
       bottomOpacity: 0.0,
       elevation: 0,

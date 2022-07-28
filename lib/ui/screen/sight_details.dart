@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
+import 'package:places/ui/res/app_typography.dart';
+import 'package:places/ui/widgets/calendar_icon.dart';
+import 'package:places/ui/widgets/sight_card_favourite_heart_icon.dart';
+import 'package:places/ui/widgets/sight_details_button_icon.dart';
 
 class SightDetails extends StatelessWidget {
   const SightDetails({Key? key}) : super(key: key);
@@ -26,7 +29,7 @@ class SightDetails extends StatelessWidget {
                   decoration: BoxDecoration(
                     color: Colors.grey[200],
                     image: const DecorationImage(
-                      image: AssetImage('resources/images/no_image.png'),
+                      image: AssetImage('lib/res/images/no_image.png'),
                     ),
                   ),
                 ),
@@ -53,11 +56,7 @@ class SightDetails extends StatelessWidget {
                 top: h * 0.5,
                 child: const Text(
                   'Пряности и радости',
-                  style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.w700,
-                    color: Color.fromRGBO(59, 62, 91, 1),
-                  ),
+                  style: AppTypography.sightDetailsTitle,
                 ),
               ),
               Positioned(
@@ -67,20 +66,12 @@ class SightDetails extends StatelessWidget {
                   children: const [
                     Text(
                       'ресторан',
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w700,
-                        color: Color.fromRGBO(59, 62, 91, 1),
-                      ),
+                      style: AppTypography.sightDetailsSubtitle,
                     ),
                     SizedBox(width: 16),
                     Text(
                       'закрыто до 09:00',
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w700,
-                        color: Color.fromRGBO(124, 126, 146, 1),
-                      ),
+                      style: AppTypography.sightDetailsSubtitleWithTime,
                     ),
                   ],
                 ),
@@ -92,10 +83,7 @@ class SightDetails extends StatelessWidget {
                   width: 328,
                   child: Text(
                     'Пряный вкус радостной жизни вместе с шеф-поваром Изо Дзандзава, благодаря которой у гостей ресторана есть возможность выбирать из двух направлений: европейского и восточного',
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: Color.fromRGBO(59, 62, 91, 1),
-                    ),
+                    style: AppTypography.sightDetailsDescription,
                   ),
                 ),
               ),
@@ -112,14 +100,11 @@ class SightDetails extends StatelessWidget {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      SvgPicture.asset('resources/images/go.svg'),
+                      const SightDetailsGoButtonIcon(),
                       const SizedBox(width: 8),
                       Text(
                         'Построить маршрут'.toUpperCase(),
-                        style: const TextStyle(
-                          fontWeight: FontWeight.w700,
-                          color: Colors.white,
-                        ),
+                        style: AppTypography.sightDetailsButtonName,
                       ),
                     ],
                   ),
@@ -146,26 +131,22 @@ class SightDetails extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     Row(
-                      children: [
-                        SvgPicture.asset('resources/images/calendar.svg'),
-                        const SizedBox(width: 9),
-                        const Text(
+                      children: const [
+                        CalendarIcon(),
+                        SizedBox(width: 9),
+                        Text(
                           'Запланировать',
-                          style: TextStyle(
-                            color: Color.fromRGBO(0, 0, 0, 0.3),
-                          ),
+                          style: AppTypography.inactiveButtonColor,
                         ),
                       ],
                     ),
                     Row(
-                      children: [
-                        SvgPicture.asset('resources/images/heart_black.svg'),
-                        const SizedBox(width: 9),
-                        const Text(
+                      children: const [
+                        SightCardFavouriteHeartIcon(),
+                        SizedBox(width: 9),
+                        Text(
                           'В избранное',
-                          style: TextStyle(
-                            color: Color.fromRGBO(59, 62, 91, 1),
-                          ),
+                          style: AppTypography.activeButtonColor,
                         ),
                       ],
                     ),
