@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:places/ui/res/app_strings.dart';
 import 'package:places/ui/res/app_typography.dart';
 import 'package:places/ui/widgets/calendar_icon.dart';
 import 'package:places/ui/widgets/sight_card_dark_heart_icon.dart';
@@ -21,7 +22,7 @@ class SightDetailsBottom extends StatelessWidget {
               CalendarIcon(),
               SizedBox(width: 9),
               Text(
-                'Запланировать',
+                AppString.schedule,
                 style: AppTypography.inactiveButtonColor,
               ),
             ],
@@ -34,7 +35,7 @@ class SightDetailsBottom extends StatelessWidget {
               SightCardDarkHeartIcon(),
               SizedBox(width: 9),
               Text(
-                'В избранное',
+                AppString.favourite,
                 style: AppTypography.activeButtonColor,
               ),
               SizedBox(

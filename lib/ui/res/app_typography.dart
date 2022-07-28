@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:places/ui/res/app_colors.dart';
 
 abstract class AppTypography {
   static const textText16Regular = TextStyle(
-    fontSize: 16.0,
+    fontSize: 16,
     height: 1.25,
     fontWeight: FontWeight.w400,
+    color: AppColors.subtitleTextColor,
   );
-
   static const appBarTitle = TextStyle(
     fontSize: 32,
     fontWeight: FontWeight.w700,
-    color: Color.fromARGB(255, 32, 33, 37),
+    color: AppColors.textColor,
   );
 
   static const sightCardTitle = TextStyle(
@@ -21,36 +22,30 @@ abstract class AppTypography {
   static const sightCardDescriptionTitle = TextStyle(
     fontSize: 16,
     fontWeight: FontWeight.w500,
-    color: Color.fromRGBO(59, 62, 91, 1),
-  );
-
-  static const sideCardDescription = TextStyle(
-    fontSize: 16,
-    fontWeight: FontWeight.w400,
-    color: Color.fromRGBO(124, 126, 146, 1),
+    color: AppColors.textColor,
   );
 
   static const sightDetailsTitle = TextStyle(
     fontSize: 24,
     fontWeight: FontWeight.w700,
-    color: Color.fromRGBO(59, 62, 91, 1),
+    color: AppColors.textColor,
   );
 
   static const sightDetailsSubtitle = TextStyle(
     fontSize: 14,
     fontWeight: FontWeight.w700,
-    color: Color.fromRGBO(59, 62, 91, 1),
+    color: AppColors.textColor,
   );
 
   static const sightDetailsSubtitleWithTime = TextStyle(
     fontSize: 14,
     fontWeight: FontWeight.w700,
-    color: Color.fromRGBO(124, 126, 146, 1),
+    color: AppColors.subtitleTextColor,
   );
 
   static const sightDetailsDescription = TextStyle(
     fontSize: 14,
-    color: Color.fromRGBO(59, 62, 91, 1),
+    color: AppColors.textColor,
   );
 
   static const sightDetailsButtonName = TextStyle(
@@ -59,10 +54,10 @@ abstract class AppTypography {
   );
 
   static const inactiveButtonColor = TextStyle(
-    color: Color.fromRGBO(0, 0, 0, 0.3),
+    color: AppColors.inactiveColor,
   );
 
   static const activeButtonColor = TextStyle(
-    color: Color.fromRGBO(59, 62, 91, 1),
+    color: AppColors.textColor,
   );
 }

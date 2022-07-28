@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:places/ui/res/app_strings.dart';
 import 'package:places/ui/res/app_typography.dart';
 import 'package:places/ui/widgets/sight_details_button_icon.dart';
 
@@ -19,7 +20,7 @@ class SightDetailsBuildRouteBtn extends StatelessWidget {
           const SightDetailsGoButtonIcon(),
           const SizedBox(width: 8),
           Text(
-            'Построить маршрут'.toUpperCase(),
+            AppString.goButtonTitle.toUpperCase(),
             style: AppTypography.sightDetailsButtonName,
           ),
         ],

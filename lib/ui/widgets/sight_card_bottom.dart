@@ -23,7 +23,7 @@ class SightCardBottom extends StatelessWidget {
             details,
             maxLines: 5,
             overflow: TextOverflow.ellipsis,
-            style: AppTypography.sideCardDescription,
+            style: AppTypography.textText16Regular,
           ),
         ],
       ),
