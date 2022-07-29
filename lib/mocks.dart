@@ -1,8 +1,8 @@
 import 'package:places/domain/sight.dart';
+
 class Mocks {
   static final List<Sight> mocks = [
   Sight(
-    id: 1,
     name: 'Фиолент',
     lat: 44.501394,
     lon: 33.489158,
@@ -11,7 +11,6 @@ class Mocks {
     type: 'Природные объекты',
   ),
   Sight(
-    id: 2,
     name: 'Тарханкут',
     lat: 45.347618,
     lon: 32.494822,
@@ -22,7 +21,6 @@ class Mocks {
     type: 'Природные объекты',
   ),
   Sight(
-    id: 3,
     name: 'Симиланские острова',
     lat: 8.651096,
     lon: 97.646117,
@@ -33,7 +31,6 @@ class Mocks {
     type: 'Природные объекты',
   ),
   Sight(
-    id: 4,
     name: 'Алупкинский парк',
     lat: 44.421780,
     lon: 34.058052,
@@ -44,7 +41,6 @@ class Mocks {
     type: 'Исторические объекты',
   ),
   Sight(
-    id: 5,
     name: 'Свято-Успенский мужской пещерный монастырь',
     lat: 44.744096,
     lon: 33.910369,

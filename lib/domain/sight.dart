@@ -1,5 +1,4 @@
 class Sight {
-  final int id;
   final String name;
   final double lat;
   final double lon;
@@ -8,7 +7,6 @@ class Sight {
   final String type;
 
   Sight({
-    required this.id,
     required this.name,
     required this.lat,
     required this.lon,

@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 
 import 'package:places/mocks.dart';
 import 'package:places/ui/res/app_typography.dart';
-import 'package:places/ui/screen/sight_card.dart';
-import 'package:places/ui/screen/sight_details.dart';
+import 'package:places/ui/screens/sight_card.dart';
+import 'package:places/ui/screens/sight_details.dart';
 
 class SightListScreen extends StatelessWidget {
   const SightListScreen({Key? key}) : super(key: key);

@@ -1,15 +1,21 @@
 import 'package:flutter/material.dart';
 
-class SightDetailsChevroneBack extends StatelessWidget {
-  const SightDetailsChevroneBack({Key? key}) : super(key: key);
+class ChevroneBack extends StatelessWidget {
+  final double width;
+  final double height;
+  const ChevroneBack({
+    Key? key,
+    required this.height,
+    required this.width,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () => Navigator.pop(context),
       child: Container(
-        width: 32,
-        height: 32,
+        width: height,
+        height: width,
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(10),
