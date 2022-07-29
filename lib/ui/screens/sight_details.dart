@@ -5,7 +5,6 @@ import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_strings.dart';
 import 'package:places/ui/res/app_typography.dart';
 import 'package:places/ui/widgets/chevrone_back.dart';
-import 'package:places/ui/widgets/sight_details_image.dart';
 import 'package:places/ui/widgets/sight_icons.dart';
 
 class SightDetails extends StatelessWidget {
@@ -21,7 +20,7 @@ class SightDetails extends StatelessWidget {
           children: [
             Stack(
               children: [
-                SightDetailsImage(
+                _SightDetailsImage(
                   sight: sight,
                   height: 361,
                 ),
@@ -73,6 +72,30 @@ class SightDetails extends StatelessWidget {
               ),
             ),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class _SightDetailsImage extends StatelessWidget {
+  final Sight sight;
+  final double height;
+  const _SightDetailsImage({
+    Key? key,
+    required this.sight,
+    required this.height,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: height,
+      decoration: BoxDecoration(
+        color: Colors.grey[200],
+        image: DecorationImage(
+          fit: BoxFit.cover,
+          image: NetworkImage(sight.url),
         ),
       ),
     );
