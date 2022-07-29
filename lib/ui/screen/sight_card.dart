@@ -3,7 +3,6 @@ import 'package:places/ui/res/app_colors.dart';
 import 'package:places/ui/widgets/sight_card_bottom.dart';
 import 'package:places/ui/widgets/sight_card_top.dart';
 
-
 class SightCard extends StatelessWidget {
   final String url;
   final String type;

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:places/domain/sight.dart';
 
 import 'package:places/ui/res/app_typography.dart';
 import 'package:places/ui/widgets/details_screen_description.dart';
@@ -8,7 +9,8 @@ import 'package:places/ui/widgets/sight_details_chevrone_back.dart';
 import 'package:places/ui/widgets/sight_details_image.dart';
 
 class SightDetails extends StatelessWidget {
-  const SightDetails({Key? key}) : super(key: key);
+  final Sight sight;
+  const SightDetails({Key? key, required this.sight}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -18,11 +20,12 @@ class SightDetails extends StatelessWidget {
         child: Column(
           children: [
             Stack(
-              children: const [
+              children: [
                 SightDetailsImage(
+                  sight: sight,
                   height: 361,
                 ),
-                Positioned(
+                const Positioned(
                   left: 16,
                   top: 36,
                   child: SightDetailsChevroneBack(),
@@ -35,26 +38,28 @@ class SightDetails extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
-                    'Пряности и радости',
+                  Text(
+                    sight.name,
                     style: AppTypography.sightDetailsTitle,
                   ),
-                  const SizedBox(height: 2,),
+                  const SizedBox(
+                    height: 2,
+                  ),
                   Row(
-                    children: const [
+                    children: [
                       Text(
-                        'ресторан',
+                        sight.type,
                         style: AppTypography.sightDetailsSubtitle,
                       ),
-                      SizedBox(width: 16),
-                      Text(
+                      const SizedBox(width: 16),
+                      const Text(
                         'закрыто до 09:00',
                         style: AppTypography.sightDetailsSubtitleWithTime,
                       ),
                     ],
                   ),
                   const SizedBox(height: 24),
-                  const DetailsScreenDescription(),
+                  DetailsScreenDescription(sight: sight,),
                   const SizedBox(height: 24),
                   const SightDetailsBuildRouteBtn(),
                   const SizedBox(height: 16),

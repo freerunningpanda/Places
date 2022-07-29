@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import 'package:places/ui/res/app_typography.dart';
 import 'package:places/ui/widgets/sight_card_heart_icon.dart';
 

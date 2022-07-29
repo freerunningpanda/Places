@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:places/mocks.dart';
 import 'package:places/ui/res/app_typography.dart';
 import 'package:places/ui/screen/sight_card.dart';
+import 'package:places/ui/screen/sight_details.dart';
 
 class SightListScreen extends StatelessWidget {
   const SightListScreen({Key? key}) : super(key: key);
@@ -25,11 +26,20 @@ class SightListScreen extends StatelessWidget {
               itemBuilder: (context, index) {
                 final item = list[index];
 
-                return SightCard(
-                  url: item.url,
-                  type: item.type,
-                  name: item.name,
-                  details: item.details,
+                return GestureDetector(
+                  onTap: () => Navigator.of(context).push(
+                    MaterialPageRoute<SightDetails>(
+                      builder: (context) => SightDetails(
+                        sight: list[index],
+                      ),
+                    ),
+                  ),
+                  child: SightCard(
+                    url: item.url,
+                    type: item.type,
+                    name: item.name,
+                    details: item.details,
+                  ),
                 );
               },
             ),
@@ -50,9 +60,9 @@ class _AppBar extends StatelessWidget implements PreferredSizeWidget {
     return AppBar(
       toolbarHeight: 86,
       title: const Text(
-              'Список \nинтересных мест',
-              style: AppTypography.appBarTitle,
-            ),
+        'Список \nинтересных мест',
+        style: AppTypography.appBarTitle,
+      ),
       backgroundColor: Colors.white,
       bottomOpacity: 0.0,
       elevation: 0,
