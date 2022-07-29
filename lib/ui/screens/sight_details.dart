@@ -79,59 +79,6 @@ class SightDetails extends StatelessWidget {
   }
 }
 
-  class _SightDetailsBottom extends StatelessWidget {
-  const _SightDetailsBottom({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        GestureDetector(
-          onTap: () {},
-          child: Row(
-            children: const [
-              SizedBox(
-                width: 17,
-              ),
-              SightIcons(
-                assetName: AppAssets.calendar,
-                width: 22,
-                height: 19,
-              ),
-              SizedBox(width: 9),
-              Text(
-                AppString.schedule,
-                style: AppTypography.inactiveButtonColor,
-              ),
-            ],
-          ),
-        ),
-        GestureDetector(
-          onTap: () {},
-          child: Row(
-            children: const [
-              SightIcons(
-                assetName: AppAssets.favouriteDark,
-                width: 20,
-                height: 18,
-              ),
-              SizedBox(width: 9),
-              Text(
-                AppString.favourite,
-                style: AppTypography.activeButtonColor,
-              ),
-              SizedBox(
-                width: 24,
-              ),
-            ],
-          ),
-        ),
-      ],
-    );
-  }
-}
-
 class _DetailsScreenDescription extends StatelessWidget {
   final Sight sight;
   const _DetailsScreenDescription({Key? key, required this.sight}) : super(key: key);
@@ -182,6 +129,59 @@ class _SightDetailsBuildRouteBtn extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+}
+
+class _SightDetailsBottom extends StatelessWidget {
+  const _SightDetailsBottom({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        GestureDetector(
+          onTap: () {},
+          child: Row(
+            children: const [
+              SizedBox(
+                width: 17,
+              ),
+              SightIcons(
+                assetName: AppAssets.calendar,
+                width: 22,
+                height: 19,
+              ),
+              SizedBox(width: 9),
+              Text(
+                AppString.schedule,
+                style: AppTypography.inactiveButtonColor,
+              ),
+            ],
+          ),
+        ),
+        GestureDetector(
+          onTap: () {},
+          child: Row(
+            children: const [
+              SightIcons(
+                assetName: AppAssets.favouriteDark,
+                width: 20,
+                height: 18,
+              ),
+              SizedBox(width: 9),
+              Text(
+                AppString.favourite,
+                style: AppTypography.activeButtonColor,
+              ),
+              SizedBox(
+                width: 24,
+              ),
+            ],
+          ),
+        ),
+      ],
     );
   }
 }
