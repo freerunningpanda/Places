@@ -25,13 +25,13 @@ flutter:
 
 
   assets:
-    - resources/
-    - resources/images/
+    - lib/ui/res/icons/
+    - lib/ui/res/images/
 
-  # fonts:
-  #   - family: Roboto
-  #     fonts:
-  #       - asset: fonts/Roboto-Bold.ttf
-  #       - asset: fonts/Roboto-Regular.ttf
+  fonts:
+    - family: Roboto
+      fonts:
+        - asset: lib/ui/res/fonts/Roboto-Bold.ttf
+        - asset: lib/ui/res/fonts/Roboto-Regular.ttf
 
     
