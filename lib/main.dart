@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import 'package:places/ui/screens/sight_list_screen.dart';
 
-
 void main() {
   runApp(const App());
 }
@@ -10,7 +9,6 @@ void main() {
 class App extends StatelessWidget {
   const App({Key? key}) : super(key: key);
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -19,10 +17,7 @@ class App extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home:
-      const SightListScreen(),
+      home: const SightListScreen(),
     );
   }
 }
-
-
