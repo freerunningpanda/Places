@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'package:places/ui/res/app_colors.dart';
+
 class ChevroneBack extends StatelessWidget {
   final double width;
   final double height;
@@ -17,12 +19,12 @@ class ChevroneBack extends StatelessWidget {
         width: height,
         height: width,
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: AppColors.backgroundColor,
           borderRadius: BorderRadius.circular(10),
         ),
         child: const Icon(
           Icons.chevron_left,
-          color: Color.fromRGBO(37, 40, 73, 1),
+          color: AppColors.chevroneColor,
           size: 25,
         ),
       ),

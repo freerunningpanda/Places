@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:places/domain/sight.dart';
 import 'package:places/ui/res/app_assets.dart';
+import 'package:places/ui/res/app_colors.dart';
 import 'package:places/ui/res/app_strings.dart';
 import 'package:places/ui/res/app_typography.dart';
 import 'package:places/ui/widgets/chevrone_back.dart';
@@ -14,7 +15,7 @@ class SightDetails extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.backgroundColor,
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -22,7 +23,7 @@ class SightDetails extends StatelessWidget {
               children: [
                 _SightDetailsImage(
                   sight: sight,
-                  height: 361,
+                  height: 360,
                 ),
                 const Positioned(
                   left: 16,
@@ -92,7 +93,6 @@ class _SightDetailsImage extends StatelessWidget {
     return Container(
       height: height,
       decoration: BoxDecoration(
-        color: Colors.grey[200],
         image: DecorationImage(
           fit: BoxFit.cover,
           image: NetworkImage(sight.url),
@@ -132,7 +132,7 @@ class _SightDetailsBuildRouteBtn extends StatelessWidget {
         height: 48,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(12),
-          color: const Color.fromRGBO(76, 175, 80, 1),
+          color: AppColors.goButton,
         ),
         child: GestureDetector(
           child: Row(
