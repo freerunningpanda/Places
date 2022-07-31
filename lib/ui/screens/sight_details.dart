@@ -90,13 +90,18 @@ class _SightDetailsImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       height: height,
-      decoration: BoxDecoration(
-        image: DecorationImage(
-          fit: BoxFit.cover,
-          image: NetworkImage(sight.url),
-        ),
+      child: Image.network(
+        sight.url,
+        fit: BoxFit.cover,
+        loadingBuilder: (context, child, loadingProgress) {
+          if (loadingProgress == null) return child;
+          
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        },
       ),
     );
   }
