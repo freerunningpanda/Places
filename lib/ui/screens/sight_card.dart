@@ -65,18 +65,33 @@ class _SightCardTop extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: 96,
-      decoration: BoxDecoration(
-        image: DecorationImage(
-          fit: BoxFit.fitWidth,
-          image: NetworkImage(url),
-        ),
-        borderRadius: const BorderRadius.only(
+      decoration: const BoxDecoration(
+        borderRadius: BorderRadius.only(
           topLeft: Radius.circular(8.0),
           topRight: Radius.circular(8.0),
         ),
       ),
       child: Stack(
+        fit: StackFit.expand,
         children: [
+          ClipRRect(
+            borderRadius: const BorderRadius.only(
+              topLeft: Radius.circular(16),
+              topRight: Radius.circular(16),
+            ),
+            child: Image.network(
+              url,
+              fit: BoxFit.fitWidth,
+              loadingBuilder: (context, child, loadingProgress) {
+                if (loadingProgress == null) return child;
+                
+                return const Center(
+                  child: CircularProgressIndicator(
+                  ),
+                );
+              },
+            ),
+          ),
           Positioned(
             left: 16,
             top: 16,
@@ -129,4 +144,3 @@ class _SightCardBottom extends StatelessWidget {
     );
   }
 }
-
