@@ -48,6 +48,12 @@ abstract class AppTypography {
     color: AppColors.subtitleTextColor,
   );
 
+  static const favouriteTargetSubtitle = TextStyle(
+    fontSize: 14,
+    fontWeight: FontWeight.w400,
+    color: AppColors.subtitleTextColor,
+  );
+
   static const emptyListTitle = TextStyle(
     fontSize: 18,
     fontWeight: FontWeight.w500,

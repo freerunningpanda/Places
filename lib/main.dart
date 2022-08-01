@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'package:places/advanced_tab_demo.dart';
-import 'package:places/ui/screen/sight_list_screen.dart';
 import 'package:places/ui/screen/visiting_screen.dart';
 
 void main() {
@@ -20,17 +18,8 @@ class App extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       home: 
-      VisitingScreen(),
+      const VisitingScreen(),
       // const SightListScreen(),
     );
-  }
-}
-
-class TabBar extends StatefulWidget {
-  const TabBar({Key? key}) : super(key: key);
-
-  @override
-  State<StatefulWidget> createState() {
-    return AdvancedTabDemoState();
   }
 }

@@ -9,5 +9,7 @@ abstract class AppString {
   static const planning = 'Запланировано на';
   static const closed = 'закрыто до';
   static const emptyList = 'Пусто';
+  static const likedPlaces = 'Отмечайте понравившиеся места и они появятся здесь.';
   static const finishRoute = 'Завершите маршрут, чтобы место попало сюда';
+  static const targetReach = 'Цель достигнута';
 }
