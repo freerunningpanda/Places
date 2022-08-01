@@ -13,6 +13,12 @@ class AdvancedTabDemoState extends State with SingleTickerProviderStateMixin {
   }
 
   @override
+  void dispose() {
+    tabController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(

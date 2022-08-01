@@ -20,7 +20,7 @@ class App extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       home: 
-      const VisitingScreen(),
+      VisitingScreen(),
       // const SightListScreen(),
     );
   }
