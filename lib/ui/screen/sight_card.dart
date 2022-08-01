@@ -10,12 +10,14 @@ class SightCard extends StatelessWidget {
   final String type;
   final String name;
   final String details;
+  final List<Widget> actions;
   const SightCard({
     Key? key,
     required this.url,
     required this.type,
     required this.name,
     required this.details,
+    required this.actions,
   }) : super(key: key);
 
   @override
@@ -36,6 +38,7 @@ class SightCard extends StatelessWidget {
         child: Column(
           children: [
             _SightCardTop(
+              actions: actions,
               type: type,
               url: url,
             ),
@@ -52,11 +55,13 @@ class SightCard extends StatelessWidget {
 }
 
 class _SightCardTop extends StatelessWidget {
+  final List<Widget> actions;
   final String type;
   final String url;
 
   const _SightCardTop({
     Key? key,
+    required this.actions,
     required this.type,
     required this.url,
   }) : super(key: key);
@@ -84,10 +89,9 @@ class _SightCardTop extends StatelessWidget {
               fit: BoxFit.fitWidth,
               loadingBuilder: (context, child, loadingProgress) {
                 if (loadingProgress == null) return child;
-                
+
                 return const Center(
-                  child: CircularProgressIndicator(
-                  ),
+                  child: CircularProgressIndicator(),
                 );
               },
             ),
@@ -100,13 +104,11 @@ class _SightCardTop extends StatelessWidget {
               style: AppTypography.sightCardTitle,
             ),
           ),
-          const Positioned(
+          Positioned(
             top: 16,
             right: 16,
-            child: SightIcons(
-              assetName: AppAssets.favourite,
-              height: 24,
-              width: 24,
+            child: Row(
+              children: actions,
             ),
           ),
         ],

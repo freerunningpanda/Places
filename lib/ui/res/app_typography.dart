@@ -24,6 +24,11 @@ abstract class AppTypography {
     fontWeight: FontWeight.w500,
     color: AppColors.textColor,
   );
+  static const visitingScreenTitle = TextStyle(
+    fontSize: 18,
+    fontWeight: FontWeight.w500,
+    color: AppColors.textColor,
+  );
 
   static const sightDetailsTitle = TextStyle(
     fontSize: 24,
