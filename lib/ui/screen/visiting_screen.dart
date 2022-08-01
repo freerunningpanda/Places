@@ -57,26 +57,23 @@ class VisitingScreen extends StatelessWidget {
 }
 
 class _AppBar extends StatelessWidget implements PreferredSizeWidget {
-
-    @override
-  Size get preferredSize => const Size.fromHeight(0);
+  @override
+  Size get preferredSize => const Size.fromHeight(45);
 
   const _AppBar({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return AppBar(
-          centerTitle: true,
-          title: const Text(
-            AppString.visitingScreenTitle,
-            style: AppTypography.visitingScreenTitle,
-          ),
-          backgroundColor: AppColors.backgroundColor,
-          elevation: 0,
-        );
+      centerTitle: true,
+      title: const Text(
+        AppString.visitingScreenTitle,
+        style: AppTypography.visitingScreenTitle,
+      ),
+      backgroundColor: AppColors.backgroundColor,
+      elevation: 0,
+    );
   }
-
-
 }
 
 class _TabBarWidget extends StatelessWidget {
