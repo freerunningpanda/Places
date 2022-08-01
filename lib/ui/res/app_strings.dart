@@ -8,4 +8,6 @@ abstract class AppString {
   static const tabBarTwoText = 'Посетил';
   static const planning = 'Запланировано на';
   static const closed = 'закрыто до';
+  static const emptyList = 'Пусто';
+  static const finishRoute = 'Завершите маршрут, чтобы место попало сюда';
 }

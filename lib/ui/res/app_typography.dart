@@ -48,6 +48,17 @@ abstract class AppTypography {
     color: AppColors.subtitleTextColor,
   );
 
+  static const emptyListTitle = TextStyle(
+    fontSize: 18,
+    fontWeight: FontWeight.w500,
+    color: AppColors.emptyListTextColor,
+  );
+  static const emptyListSubTitle = TextStyle(
+    fontSize: 14,
+    fontWeight: FontWeight.w500,
+    color: AppColors.emptyListTextColor,
+  );
+
   static const sightDetailsDescription = TextStyle(
     fontSize: 14,
     color: AppColors.textColor,

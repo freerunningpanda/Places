@@ -59,8 +59,7 @@ class _TabBarWidget extends StatelessWidget {
         borderRadius: BorderRadius.circular(30),
         color: AppColors.sightCardBackground,
       ),
-      child: 
-      TabBar(
+      child: TabBar(
         indicator: BoxDecoration(
           borderRadius: BorderRadius.circular(50),
           color: AppColors.chevroneColor,
@@ -89,8 +88,11 @@ class _WantToVisitWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final mocks = Mocks.mocks;
+    if (mocks.isEmpty) return const _EmptyList();
+
     return ListView.builder(
-      itemCount: Mocks.mocks.length,
+      itemCount: mocks.length,
       itemBuilder: (context, index) {
         final item = Mocks.mocks[index];
 
@@ -135,6 +137,38 @@ class _WantToVisitWidget extends StatelessWidget {
           ],
         );
       },
+    );
+  }
+}
+
+class _EmptyList extends StatelessWidget {
+  const _EmptyList({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: const [
+        SightIcons(
+          assetName: AppAssets.goIconTransparent,
+          width: 64,
+          height: 64,
+        ),
+        SizedBox(height: 24),
+        Text(
+          AppString.emptyList,
+          style: AppTypography.emptyListTitle,
+        ),
+        SizedBox(height: 8),
+        SizedBox(
+          width: 180,
+          child: Text(
+            AppString.finishRoute,
+            textAlign: TextAlign.center,
+            style: AppTypography.emptyListSubTitle,
+          ),
+        ),
+      ],
     );
   }
 }
