@@ -39,7 +39,7 @@ class SightListScreen extends StatelessWidget {
                     ),
                   ),
                   child: SightCard(
-                    actions: [
+                    actions: const [
                       SightIcons(
                         assetName: AppAssets.favourite,
                         width: 22,
@@ -49,7 +49,20 @@ class SightListScreen extends StatelessWidget {
                     url: item.url,
                     type: item.type,
                     name: item.name,
-                    details: item.details,
+                    details: [
+                      Text(
+                        item.name,
+                        maxLines: 2,
+                        style: AppTypography.sightCardDescriptionTitle,
+                      ),
+                      const SizedBox(height: 2),
+                      Text(
+                        item.details,
+                        maxLines: 5,
+                        overflow: TextOverflow.ellipsis,
+                        style: AppTypography.textText16Regular,
+                      ),
+                    ],
                   ),
                 );
               },

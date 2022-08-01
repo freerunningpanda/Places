@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:places/mocks.dart';
 import 'package:places/ui/res/app_assets.dart';
+import 'package:places/ui/res/app_card_size.dart';
 
 import 'package:places/ui/res/app_colors.dart';
 import 'package:places/ui/res/app_strings.dart';
@@ -48,43 +50,66 @@ class _VisitingScreenState extends State<VisitingScreen> {
             ],
           ),
         ),
-        body: const Padding(
-          padding: EdgeInsets.symmetric(horizontal: 16.0),
-          child: TabBarView(children: [
-            SightCard(
-              actions: [
-                SightIcons(
-                  assetName: AppAssets.favourite,
-                  width: 22,
-                  height: 22,
-                ),
-                SightIcons(
-                  assetName: AppAssets.favourite,
-                  width: 22,
-                  height: 22,
-                ),
-              ],
-              url: 'https://img.youtube.com/vi/2AphasZ9Hs0/0.jpg',
-              type: 'type',
-              name: 'name',
-              details: 'details',
-            ),
-            Center(
-              child: Text('data 2'),
-            ),
-          ]),
-        ),
+        body: const TabBarView(children: [
+          _WantToVisitWidget(),
+          Text('data'),
+        ]),
       ),
     );
   }
 }
 
-// class WantToVisit extends SightCard {
-//   const WantToVisit({
-//     Key? key,
-//     required String url,
-//     required String type,
-//     required String name,
-//     required String details,
-//   }) : super(key: key, url: url, type: type, name: name, details: details);
-// }
+class _WantToVisitWidget extends StatelessWidget {
+  const _WantToVisitWidget({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView.builder(
+      itemCount: Mocks.mocks.length,
+      itemBuilder: (context, index) {
+        final item = Mocks.mocks[index];
+
+        return SightCard(
+          url: item.url,
+          type: item.type,
+          name: item.name,
+          aspectRatio: AppCardSize.visitingCard,
+          details: [
+            Text(
+              item.name,
+              maxLines: 2,
+              style: AppTypography.sightCardDescriptionTitle,
+            ),
+            const SizedBox(height: 2),
+            const Text(
+              '${AppString.planning} 12 окт. 2022',
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: AppTypography.greenColor,
+            ),
+            const SizedBox(height: 10),
+            const Text(
+              '${AppString.closed} 09:00',
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: AppTypography.textText16Regular,
+            ),
+          ],
+          actions: const [
+            SightIcons(
+              assetName: AppAssets.calendarWhite,
+              width: 24,
+              height: 24,
+            ),
+            SizedBox(width: 16),
+            SightIcons(
+              assetName: AppAssets.cross,
+              width: 22,
+              height: 22,
+            ),
+          ],
+        );
+      },
+    );
+  }
+}

@@ -6,4 +6,6 @@ abstract class AppString {
   static const visitingScreenTitle = 'Избранное';
   static const tabBarOneText = 'Хочу посетить';
   static const tabBarTwoText = 'Посетил';
+  static const planning = 'Запланировано на';
+  static const closed = 'закрыто до';
 }

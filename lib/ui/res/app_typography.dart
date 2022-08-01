@@ -65,4 +65,10 @@ abstract class AppTypography {
   static const activeButtonColor = TextStyle(
     color: AppColors.textColor,
   );
+
+  static const greenColor = TextStyle(
+    color: AppColors.goButton,
+    fontSize: 14,
+    fontWeight: FontWeight.w400,
+  );
 }

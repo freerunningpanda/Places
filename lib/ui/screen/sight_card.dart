@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:places/ui/res/app_card_size.dart';
 
-import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_colors.dart';
 import 'package:places/ui/res/app_typography.dart';
-import 'package:places/ui/widgets/sight_icons.dart';
 
 class SightCard extends StatelessWidget {
   final String url;
   final String type;
   final String name;
-  final String details;
+  final List<Widget> details;
   final List<Widget> actions;
+  final double? aspectRatio;
   const SightCard({
     Key? key,
     required this.url,
@@ -18,12 +18,13 @@ class SightCard extends StatelessWidget {
     required this.name,
     required this.details,
     required this.actions,
+    this.aspectRatio,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return AspectRatio(
-      aspectRatio: 3 / 2,
+      aspectRatio: aspectRatio ?? AppCardSize.sightCard,
       child: Container(
         margin: const EdgeInsets.only(
           left: 16,
@@ -33,9 +34,10 @@ class SightCard extends StatelessWidget {
         width: double.infinity,
         decoration: BoxDecoration(
           color: AppColors.sightCardBackground,
-          borderRadius: BorderRadius.circular(8.0),
+          borderRadius: BorderRadius.circular(16.0),
         ),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             _SightCardTop(
               actions: actions,
@@ -119,7 +121,7 @@ class _SightCardTop extends StatelessWidget {
 
 class _SightCardBottom extends StatelessWidget {
   final String name;
-  final String details;
+  final List<Widget> details;
   const _SightCardBottom({Key? key, required this.name, required this.details}) : super(key: key);
 
   @override
@@ -128,20 +130,7 @@ class _SightCardBottom extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            name,
-            maxLines: 2,
-            style: AppTypography.sightCardDescriptionTitle,
-          ),
-          const SizedBox(height: 2),
-          Text(
-            details,
-            maxLines: 5,
-            overflow: TextOverflow.ellipsis,
-            style: AppTypography.textText16Regular,
-          ),
-        ],
+        children: details,
       ),
     );
   }
