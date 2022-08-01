@@ -10,21 +10,7 @@ import 'package:places/ui/screen/sight_card.dart';
 import 'package:places/ui/widgets/sight_icons.dart';
 
 class VisitingScreen extends StatelessWidget {
-  final _tabs = [
-    const Tab(
-      child: Text(
-        AppString.tabBarOneText,
-        style: AppTypography.sightCardTitle,
-      ),
-    ),
-    const Tab(
-      child: Text(
-        AppString.tabBarTwoText,
-        style: AppTypography.sightCardTitle,
-      ),
-    ),
-  ];
-  VisitingScreen({Key? key}) : super(key: key);
+  const VisitingScreen({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -40,28 +26,11 @@ class VisitingScreen extends StatelessWidget {
           ),
           backgroundColor: AppColors.backgroundColor,
           elevation: 0,
-          // bottom: const TabBar(
-          //   indicatorColor: Colors.transparent,
-          //   tabs: [],
-          // ),
         ),
         body: Column(
-          children: [
-            Container(
-              margin: const EdgeInsets.only(left: 16, top: 16, right: 16),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(30),
-                color: AppColors.sightCardBackground,
-              ),
-              child: TabBar(
-                indicator: BoxDecoration(
-                  borderRadius: BorderRadius.circular(50),
-                  color: AppColors.chevroneColor,
-                ),
-                tabs: _tabs,
-              ),
-            ),
-            const Expanded(
+          children: const [
+            _TabBarWidget(),
+            Expanded(
               child: Padding(
                 padding: EdgeInsets.only(top: 30),
                 child: TabBarView(
@@ -74,6 +43,42 @@ class VisitingScreen extends StatelessWidget {
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class _TabBarWidget extends StatelessWidget {
+  const _TabBarWidget({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.only(left: 16, top: 16, right: 16),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(30),
+        color: AppColors.sightCardBackground,
+      ),
+      child: 
+      TabBar(
+        indicator: BoxDecoration(
+          borderRadius: BorderRadius.circular(50),
+          color: AppColors.chevroneColor,
+        ),
+        labelColor: AppColors.backgroundColor,
+        unselectedLabelColor: AppColors.subtitleTextColor,
+        tabs: const [
+          Tab(
+            child: Text(
+              AppString.tabBarOneText,
+            ),
+          ),
+          Tab(
+            child: Text(
+              AppString.tabBarTwoText,
+            ),
+          ),
+        ],
       ),
     );
   }

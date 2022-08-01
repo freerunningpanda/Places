@@ -16,7 +16,7 @@ abstract class AppTypography {
 
   static const sightCardTitle = TextStyle(
     fontWeight: FontWeight.w700,
-    color: Colors.white,
+    color: AppColors.backgroundColor,
   );
 
   static const sightCardDescriptionTitle = TextStyle(
@@ -55,7 +55,7 @@ abstract class AppTypography {
 
   static const sightDetailsButtonName = TextStyle(
     fontWeight: FontWeight.w700,
-    color: Colors.white,
+    color: AppColors.backgroundColor,
   );
 
   static const inactiveButtonColor = TextStyle(
