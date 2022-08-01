@@ -6,5 +6,10 @@ abstract class AppAssets {
   static const goIcon = 'lib/ui/res/icons/go.svg';
   static const goIconTransparent = 'lib/ui/res/icons/go_transparent.svg';
   static const cross = 'lib/ui/res/icons/cross.svg';
+  static const listPlaces = 'lib/ui/res/icons/list.svg';
+  static const map = 'lib/ui/res/icons/map.svg';
+  static const settings = 'lib/ui/res/icons/settings.svg';
+  static const heartFull = 'lib/ui/res/icons/heart_full.svg';
   static const noImage = 'lib/ui/res/images/no_image.png';
+
 }

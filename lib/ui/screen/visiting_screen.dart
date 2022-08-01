@@ -7,6 +7,7 @@ import 'package:places/ui/res/app_colors.dart';
 import 'package:places/ui/res/app_strings.dart';
 import 'package:places/ui/res/app_typography.dart';
 import 'package:places/ui/screen/sight_card.dart';
+import 'package:places/ui/widgets/bottom_navigation_bar.dart';
 import 'package:places/ui/widgets/sight_icons.dart';
 
 class VisitingScreen extends StatelessWidget {
@@ -43,6 +44,7 @@ class VisitingScreen extends StatelessWidget {
             ),
           ],
         ),
+        bottomNavigationBar: const BottomNavigationBarWidget(),
       ),
     );
   }
