@@ -1,6 +1,6 @@
 import 'package:places/domain/sight.dart';
 
-class Mocks {
+abstract class Mocks {
   static final List<Sight> mocks = [
   Sight(
     name: 'Фиолент',

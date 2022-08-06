@@ -16,11 +16,16 @@ abstract class AppTypography {
 
   static const sightCardTitle = TextStyle(
     fontWeight: FontWeight.w700,
-    color: Colors.white,
+    color: AppColors.backgroundColor,
   );
 
   static const sightCardDescriptionTitle = TextStyle(
     fontSize: 16,
+    fontWeight: FontWeight.w500,
+    color: AppColors.textColor,
+  );
+  static const visitingScreenTitle = TextStyle(
+    fontSize: 18,
     fontWeight: FontWeight.w500,
     color: AppColors.textColor,
   );
@@ -43,6 +48,23 @@ abstract class AppTypography {
     color: AppColors.subtitleTextColor,
   );
 
+  static const favouriteTargetSubtitle = TextStyle(
+    fontSize: 14,
+    fontWeight: FontWeight.w400,
+    color: AppColors.subtitleTextColor,
+  );
+
+  static const emptyListTitle = TextStyle(
+    fontSize: 18,
+    fontWeight: FontWeight.w500,
+    color: AppColors.emptyListTextColor,
+  );
+  static const emptyListSubTitle = TextStyle(
+    fontSize: 14,
+    fontWeight: FontWeight.w500,
+    color: AppColors.emptyListTextColor,
+  );
+
   static const sightDetailsDescription = TextStyle(
     fontSize: 14,
     color: AppColors.textColor,
@@ -50,7 +72,7 @@ abstract class AppTypography {
 
   static const sightDetailsButtonName = TextStyle(
     fontWeight: FontWeight.w700,
-    color: Colors.white,
+    color: AppColors.backgroundColor,
   );
 
   static const inactiveButtonColor = TextStyle(
@@ -59,5 +81,11 @@ abstract class AppTypography {
 
   static const activeButtonColor = TextStyle(
     color: AppColors.textColor,
+  );
+
+  static const greenColor = TextStyle(
+    color: AppColors.goButton,
+    fontSize: 14,
+    fontWeight: FontWeight.w400,
   );
 }
