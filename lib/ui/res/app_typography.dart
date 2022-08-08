@@ -13,6 +13,11 @@ abstract class AppTypography {
     fontWeight: FontWeight.w700,
     color: AppColors.textColor,
   );
+  static const appBarTitleDarkMode = TextStyle(
+    fontSize: 32,
+    fontWeight: FontWeight.w700,
+    color: AppColors.backgroundColor,
+  );
 
   static const sightCardTitle = TextStyle(
     fontWeight: FontWeight.w700,
@@ -23,6 +28,11 @@ abstract class AppTypography {
     fontSize: 16,
     fontWeight: FontWeight.w500,
     color: AppColors.textColor,
+  );
+  static const sightCardDescriptionTitleDarkMode = TextStyle(
+    fontSize: 16,
+    fontWeight: FontWeight.w500,
+    color: AppColors.backgroundColor,
   );
   static const visitingScreenTitle = TextStyle(
     fontSize: 18,

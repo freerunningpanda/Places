@@ -10,4 +10,6 @@ abstract class AppColors {
   static const emptyListTextColor = Color.fromRGBO(124, 126, 146, 0.56);
   static const chevroneColor = Color.fromRGBO(37, 40, 73, 1);
   static const goButton = Color.fromRGBO(76, 175, 80, 1);
+  static const darkThemeBgColor = Color.fromRGBO(33, 34, 44, 1);
+  static const darkThemeSightCardColor = Color.fromRGBO(26, 26, 32, 1);
 }

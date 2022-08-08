@@ -11,6 +11,8 @@ class SightCard extends StatelessWidget {
   final List<Widget> details;
   final List<Widget> actions;
   final double? aspectRatio;
+  final bool isDarkMode;
+
   const SightCard({
     Key? key,
     required this.url,
@@ -18,6 +20,7 @@ class SightCard extends StatelessWidget {
     required this.name,
     required this.details,
     required this.actions,
+    this.isDarkMode = false,
     this.aspectRatio,
   }) : super(key: key);
 
@@ -33,7 +36,7 @@ class SightCard extends StatelessWidget {
         ),
         width: double.infinity,
         decoration: BoxDecoration(
-          color: AppColors.sightCardBackground,
+          color: isDarkMode ? AppColors.darkThemeSightCardColor : AppColors.sightCardBackground,
           borderRadius: BorderRadius.circular(16.0),
         ),
         child: Column(
