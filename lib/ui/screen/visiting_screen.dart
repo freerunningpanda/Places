@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import 'package:places/mocks.dart';
 import 'package:places/ui/res/app_assets.dart';
@@ -6,78 +7,107 @@ import 'package:places/ui/res/app_card_size.dart';
 import 'package:places/ui/res/app_colors.dart';
 import 'package:places/ui/res/app_strings.dart';
 import 'package:places/ui/res/app_typography.dart';
+import 'package:places/ui/screen/res/themes.dart';
 import 'package:places/ui/screen/sight_card.dart';
 import 'package:places/ui/widgets/bottom_navigation_bar.dart';
 import 'package:places/ui/widgets/sight_icons.dart';
 
 final mocks = Mocks.mocks;
 
-class VisitingScreen extends StatelessWidget {
+class VisitingScreen extends StatefulWidget {
   const VisitingScreen({Key? key}) : super(key: key);
+
+  @override
+  State<VisitingScreen> createState() => _VisitingScreenState();
+}
+
+class _VisitingScreenState extends State<VisitingScreen> {
+  bool isDarkMode = false;
+
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+      systemNavigationBarColor: isDarkMode ? AppColors.darkThemeBgColor : AppColors.black,
+    ));
+
     return DefaultTabController(
       length: 2,
       initialIndex: 0,
-      child: Scaffold(
-        backgroundColor: AppColors.backgroundColor,
-        appBar: const _AppBar(),
-        body: Column(
-          children: [
-            const _TabBarWidget(),
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.only(top: 30),
-                child: TabBarView(
-                  children: [
-                    if (mocks.isNotEmpty)
-                      const _WantToVisitWidget()
-                    else
-                      const _EmptyList(
-                        icon: AppAssets.card,
-                        description: AppString.likedPlaces,
-                      ),
-                    if (mocks.isNotEmpty)
-                      const _VisitedWidget()
-                    else
-                      const _EmptyList(
-                        icon: AppAssets.goIconTransparent,
-                        description: AppString.finishRoute,
-                      ),
-                  ],
+      child: Theme(
+        data: isDarkMode ? darkTheme : lightTheme,
+        child: Scaffold(
+          appBar: _AppBar(isDarkMode: isDarkMode),
+          body: Column(
+            children: [
+              _TabBarWidget(isDarkMode: isDarkMode),
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 30),
+                  child: TabBarView(
+                    children: [
+                      if (mocks.isNotEmpty)
+                        _WantToVisitWidget(
+                          isDarkMode: isDarkMode,
+                        )
+                      else
+                        const _EmptyList(
+                          icon: AppAssets.card,
+                          description: AppString.likedPlaces,
+                        ),
+                      if (mocks.isNotEmpty)
+                        _VisitedWidget(
+                          isDarkMode: isDarkMode,
+                        )
+                      else
+                        const _EmptyList(
+                          icon: AppAssets.goIconTransparent,
+                          description: AppString.finishRoute,
+                        ),
+                    ],
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
+          floatingActionButton: FloatingActionButton(
+            onPressed: () {
+              setState(() {
+                isDarkMode = !isDarkMode;
+              });
+            },
+          ),
+          bottomNavigationBar: BottomNavigationBarWidget(isDarkMode: isDarkMode),
         ),
-        bottomNavigationBar: const BottomNavigationBarWidget(),
       ),
     );
   }
 }
 
 class _AppBar extends StatelessWidget implements PreferredSizeWidget {
+  final bool isDarkMode;
+
   @override
   Size get preferredSize => const Size.fromHeight(45);
 
-  const _AppBar({Key? key}) : super(key: key);
+  const _AppBar({Key? key, required this.isDarkMode}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+  
     return AppBar(
       centerTitle: true,
-      title: const Text(
+      title: Text(
         AppString.visitingScreenTitle,
-        style: AppTypography.visitingScreenTitle,
+        style: isDarkMode ? AppTypography.visitingScreenTitleDarkMode : AppTypography.visitingScreenTitle,
       ),
-      backgroundColor: AppColors.backgroundColor,
       elevation: 0,
     );
   }
 }
 
 class _TabBarWidget extends StatelessWidget {
-  const _TabBarWidget({Key? key}) : super(key: key);
+  final bool isDarkMode;
+  const _TabBarWidget({Key? key, required this.isDarkMode}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -85,24 +115,25 @@ class _TabBarWidget extends StatelessWidget {
       margin: const EdgeInsets.only(left: 16, top: 16, right: 16),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(30),
-        color: AppColors.sightCardBackground,
+        color: isDarkMode ? AppColors.darkThemeSightCardColor : AppColors.sightCardBackground,
       ),
       child: TabBar(
         indicator: BoxDecoration(
           borderRadius: BorderRadius.circular(50),
-          color: AppColors.chevroneColor,
+          color: isDarkMode ? AppColors.backgroundColor : AppColors.chevroneColor,
         ),
-        labelColor: AppColors.backgroundColor,
-        unselectedLabelColor: AppColors.subtitleTextColor,
-        tabs: const [
+        unselectedLabelColor: isDarkMode ? AppColors.subtitleTextColor : AppColors.backgroundColor,
+        tabs: [
           Tab(
             child: Text(
               AppString.tabBarOneText,
+              style: isDarkMode ? AppTypography.enabledTabDarkMode : AppTypography.sightCardTitle,
             ),
           ),
           Tab(
             child: Text(
               AppString.tabBarTwoText,
+              style: isDarkMode ? AppTypography.enabledTabDarkMode : AppTypography.sightCardTitle,
             ),
           ),
         ],
@@ -112,7 +143,8 @@ class _TabBarWidget extends StatelessWidget {
 }
 
 class _WantToVisitWidget extends StatelessWidget {
-  const _WantToVisitWidget({Key? key}) : super(key: key);
+  final bool isDarkMode;
+  const _WantToVisitWidget({Key? key, required this.isDarkMode}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -122,6 +154,7 @@ class _WantToVisitWidget extends StatelessWidget {
         final item = Mocks.mocks[index];
 
         return SightCard(
+          isDarkMode: isDarkMode,
           url: item.url,
           type: item.type,
           name: item.name,
@@ -130,7 +163,9 @@ class _WantToVisitWidget extends StatelessWidget {
             Text(
               item.name,
               maxLines: 2,
-              style: AppTypography.sightCardDescriptionTitle,
+              style: isDarkMode
+                  ? AppTypography.sightCardDescriptionTitleDarkMode
+                  : AppTypography.sightCardDescriptionTitle,
             ),
             const SizedBox(height: 2),
             const Text(
@@ -167,7 +202,8 @@ class _WantToVisitWidget extends StatelessWidget {
 }
 
 class _VisitedWidget extends StatelessWidget {
-  const _VisitedWidget({Key? key}) : super(key: key);
+  final bool isDarkMode;
+  const _VisitedWidget({Key? key, required this.isDarkMode}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -179,6 +215,7 @@ class _VisitedWidget extends StatelessWidget {
         final item = Mocks.mocks[index];
 
         return SightCard(
+          isDarkMode: isDarkMode,
           url: item.url,
           type: item.type,
           name: item.name,
@@ -187,7 +224,9 @@ class _VisitedWidget extends StatelessWidget {
             Text(
               item.name,
               maxLines: 2,
-              style: AppTypography.sightCardDescriptionTitle,
+              style: isDarkMode
+                  ? AppTypography.sightCardDescriptionTitleDarkMode
+                  : AppTypography.sightCardDescriptionTitle,
             ),
             const SizedBox(height: 2),
             const Text(

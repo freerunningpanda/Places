@@ -6,11 +6,13 @@ class SightIcons extends StatelessWidget {
   final String assetName;
   final double width;
   final double height;
+  final Color? color;
   const SightIcons({
     Key? key,
     required this.assetName,
     required this.width,
     required this.height,
+    this.color,
   }) : super(key: key);
 
   @override
@@ -19,6 +21,7 @@ class SightIcons extends StatelessWidget {
       assetName,
       width: width,
       height: height,
+      color: color,
     );
   }
 }

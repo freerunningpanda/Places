@@ -24,6 +24,16 @@ abstract class AppTypography {
     color: AppColors.backgroundColor,
   );
 
+  static const enabledTabDarkMode = TextStyle(
+    fontWeight: FontWeight.w700,
+    color: AppColors.chevroneColor,
+  );
+  
+  static const disabledTabDarkMode = TextStyle(
+    fontWeight: FontWeight.w700,
+    color: AppColors.emptyListTextColor,
+  );
+
   static const sightCardDescriptionTitle = TextStyle(
     fontSize: 16,
     fontWeight: FontWeight.w500,
@@ -38,6 +48,11 @@ abstract class AppTypography {
     fontSize: 18,
     fontWeight: FontWeight.w500,
     color: AppColors.textColor,
+  );
+  static const visitingScreenTitleDarkMode = TextStyle(
+    fontSize: 18,
+    fontWeight: FontWeight.w500,
+    color: AppColors.backgroundColor,
   );
 
   static const sightDetailsTitle = TextStyle(

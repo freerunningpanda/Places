@@ -19,12 +19,13 @@ class _AppState extends State<App> {
 
   @override
   Widget build(BuildContext context) {
+    
     return const MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       home:
-          // const VisitingScreen(),
-          SightListScreen(),
+          const VisitingScreen(),
+          // SightListScreen(),
     );
   }
 }

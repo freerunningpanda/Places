@@ -12,6 +12,7 @@ final lightTheme = ThemeData(
     elevation: 0,
   ),
   
+  
 );
 final darkTheme = ThemeData(
   scaffoldBackgroundColor: AppColors.darkThemeBgColor,
@@ -20,6 +21,9 @@ final darkTheme = ThemeData(
     titleTextStyle: AppTypography.appBarTitleDarkMode,
     backgroundColor: AppColors.darkThemeBgColor,
     elevation: 0,
+  ),
+  bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+    backgroundColor: AppColors.darkThemeBgColor,
   ),
   
 );
