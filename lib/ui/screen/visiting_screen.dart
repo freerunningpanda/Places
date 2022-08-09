@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import 'package:places/domain/sight.dart';
 import 'package:places/mocks.dart';
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_card_size.dart';
@@ -9,10 +10,11 @@ import 'package:places/ui/res/app_strings.dart';
 import 'package:places/ui/res/app_typography.dart';
 import 'package:places/ui/screen/res/themes.dart';
 import 'package:places/ui/screen/sight_card.dart';
+import 'package:places/ui/screen/sight_details.dart';
 import 'package:places/ui/widgets/bottom_navigation_bar.dart';
 import 'package:places/ui/widgets/sight_icons.dart';
 
-final mocks = Mocks.mocks;
+List<Sight> list = Mocks.mocks;
 
 class VisitingScreen extends StatefulWidget {
   const VisitingScreen({Key? key}) : super(key: key);
@@ -45,7 +47,7 @@ class _VisitingScreenState extends State<VisitingScreen> {
                   padding: const EdgeInsets.only(top: 30),
                   child: TabBarView(
                     children: [
-                      if (mocks.isNotEmpty)
+                      if (list.isNotEmpty)
                         _WantToVisitWidget(
                           isDarkMode: isDarkMode,
                         )
@@ -54,7 +56,7 @@ class _VisitingScreenState extends State<VisitingScreen> {
                           icon: AppAssets.card,
                           description: AppString.likedPlaces,
                         ),
-                      if (mocks.isNotEmpty)
+                      if (list.isNotEmpty)
                         _VisitedWidget(
                           isDarkMode: isDarkMode,
                         )
@@ -162,52 +164,61 @@ class _WantToVisitWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
-      itemCount: mocks.length,
+      itemCount: list.length,
       itemBuilder: (context, index) {
         final item = Mocks.mocks[index];
 
-        return SightCard(
-          isDarkMode: isDarkMode,
-          url: item.url,
-          type: item.type,
-          name: item.name,
-          aspectRatio: AppCardSize.visitingCard,
-          details: [
-            Text(
-              item.name,
-              maxLines: 2,
-              style: isDarkMode
-                  ? AppTypography.sightCardDescriptionTitleDarkMode
-                  : AppTypography.sightCardDescriptionTitle,
+        return GestureDetector(
+          onTap: () => Navigator.of(context).push(
+            MaterialPageRoute<SightDetails>(
+              builder: (context) => SightDetails(
+                sight: item,
+              ),
             ),
-            const SizedBox(height: 2),
-            const Text(
-              '${AppString.planning} 12 окт. 2022',
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: AppTypography.greenColor,
-            ),
-            const SizedBox(height: 10),
-            const Text(
-              '${AppString.closed} 09:00',
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: AppTypography.textText16Regular,
-            ),
-          ],
-          actions: const [
-            SightIcons(
-              assetName: AppAssets.calendarWhite,
-              width: 24,
-              height: 24,
-            ),
-            SizedBox(width: 16),
-            SightIcons(
-              assetName: AppAssets.cross,
-              width: 22,
-              height: 22,
-            ),
-          ],
+          ),
+          child: SightCard(
+            isDarkMode: isDarkMode,
+            url: item.url,
+            type: item.type,
+            name: item.name,
+            aspectRatio: AppCardSize.visitingCard,
+            details: [
+              Text(
+                item.name,
+                maxLines: 2,
+                style: isDarkMode
+                    ? AppTypography.sightCardDescriptionTitleDarkMode
+                    : AppTypography.sightCardDescriptionTitle,
+              ),
+              const SizedBox(height: 2),
+              const Text(
+                '${AppString.planning} 12 окт. 2022',
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: AppTypography.greenColor,
+              ),
+              const SizedBox(height: 10),
+              const Text(
+                '${AppString.closed} 09:00',
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: AppTypography.textText16Regular,
+              ),
+            ],
+            actions: const [
+              SightIcons(
+                assetName: AppAssets.calendarWhite,
+                width: 24,
+                height: 24,
+              ),
+              SizedBox(width: 16),
+              SightIcons(
+                assetName: AppAssets.cross,
+                width: 22,
+                height: 22,
+              ),
+            ],
+          ),
         );
       },
     );
