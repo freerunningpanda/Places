@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 import 'package:places/domain/sight.dart';
 import 'package:places/mocks.dart';
@@ -26,13 +25,13 @@ class VisitingScreen extends StatefulWidget {
 
 class _VisitingScreenState extends State<VisitingScreen> {
   // bool isDarkMode = false;
+  int initialIndex = 0;
 
   @override
   Widget build(BuildContext context) {
-
     return DefaultTabController(
       length: 2,
-      initialIndex: 0,
+      initialIndex: initialIndex,
       child: Theme(
         data: widget.isDarkMode ? darkTheme : lightTheme,
         child: Scaffold(
@@ -209,55 +208,63 @@ class _VisitedWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final mocks = Mocks.mocks;
-
     return ListView.builder(
-      itemCount: mocks.length,
+      itemCount: list.length,
       itemBuilder: (context, index) {
         final item = Mocks.mocks[index];
 
-        return SightCard(
-          isDarkMode: isDarkMode,
-          url: item.url,
-          type: item.type,
-          name: item.name,
-          aspectRatio: AppCardSize.visitingCard,
-          details: [
-            Text(
-              item.name,
-              maxLines: 2,
-              style: isDarkMode
-                  ? AppTypography.sightCardDescriptionTitleDarkMode
-                  : AppTypography.sightCardDescriptionTitle,
+        return GestureDetector(
+          onTap: () => Navigator.of(context).push(
+            MaterialPageRoute<SightDetails>(
+              builder: (context) => SightDetails(
+                isDarkMode: isDarkMode,
+                sight: item,
+              ),
             ),
-            const SizedBox(height: 2),
-            const Text(
-              '${AppString.targetReach} 12 окт. 2022',
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: AppTypography.favouriteTargetSubtitle,
-            ),
-            const SizedBox(height: 10),
-            const Text(
-              '${AppString.closed} 09:00',
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: AppTypography.favouriteTargetSubtitle,
-            ),
-          ],
-          actions: const [
-            SightIcons(
-              assetName: AppAssets.share,
-              width: 24,
-              height: 24,
-            ),
-            SizedBox(width: 16),
-            SightIcons(
-              assetName: AppAssets.cross,
-              width: 22,
-              height: 22,
-            ),
-          ],
+          ),
+          child: SightCard(
+            isDarkMode: isDarkMode,
+            url: item.url,
+            type: item.type,
+            name: item.name,
+            aspectRatio: AppCardSize.visitingCard,
+            details: [
+              Text(
+                item.name,
+                maxLines: 2,
+                style: isDarkMode
+                    ? AppTypography.sightCardDescriptionTitleDarkMode
+                    : AppTypography.sightCardDescriptionTitle,
+              ),
+              const SizedBox(height: 2),
+              const Text(
+                '${AppString.targetReach} 12 окт. 2022',
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: AppTypography.favouriteTargetSubtitle,
+              ),
+              const SizedBox(height: 10),
+              const Text(
+                '${AppString.closed} 09:00',
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: AppTypography.favouriteTargetSubtitle,
+              ),
+            ],
+            actions: const [
+              SightIcons(
+                assetName: AppAssets.share,
+                width: 24,
+                height: 24,
+              ),
+              SizedBox(width: 16),
+              SightIcons(
+                assetName: AppAssets.cross,
+                width: 22,
+                height: 22,
+              ),
+            ],
+          ),
         );
       },
     );
