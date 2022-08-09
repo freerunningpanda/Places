@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+
 import 'package:flutter/services.dart';
 import 'package:places/ui/res/app_colors.dart';
 import 'package:places/ui/screen/res/themes.dart';
-
 import 'package:places/ui/screen/visiting_screen.dart';
 
 void main() {
@@ -44,8 +44,9 @@ class _AppState extends State<App> {
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'Flutter Demo',
-        home: VisitingScreen(isDarkMode: isDarkMode),
-        // SightListScreen(),
+        home: 
+        VisitingScreen(isDarkMode: isDarkMode),
+        // SightListScreen(isDarkMode: isDarkMode),
       ),
     );
   }

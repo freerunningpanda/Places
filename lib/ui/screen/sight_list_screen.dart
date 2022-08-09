@@ -11,20 +11,20 @@ import 'package:places/ui/screen/sight_details.dart';
 import 'package:places/ui/widgets/sight_icons.dart';
 
 class SightListScreen extends StatefulWidget {
-  const SightListScreen({Key? key}) : super(key: key);
+  final bool isDarkMode;
+  const SightListScreen({Key? key, required this.isDarkMode}) : super(key: key);
 
   @override
   State<SightListScreen> createState() => _SightListScreenState();
 }
 
 class _SightListScreenState extends State<SightListScreen> {
-  bool isDarkMode = false;
   List<Sight> list = Mocks.mocks;
 
   @override
   Widget build(BuildContext context) {
     return Theme(
-      data: isDarkMode ? darkTheme : lightTheme,
+      data: widget.isDarkMode ? darkTheme : lightTheme,
       child: Scaffold(
         body: Column(
           children: [
@@ -42,7 +42,7 @@ class _SightListScreenState extends State<SightListScreen> {
                     onTap: () => Navigator.of(context).push(
                       MaterialPageRoute<SightDetails>(
                         builder: (context) => SightDetails(
-                          isDarkMode: isDarkMode,
+                          isDarkMode: widget.isDarkMode,
                           sight: item,
                         ),
                       ),
@@ -62,7 +62,7 @@ class _SightListScreenState extends State<SightListScreen> {
                         Text(
                           item.name,
                           maxLines: 2,
-                          style: isDarkMode
+                          style: widget.isDarkMode
                               ? AppTypography.sightCardDescriptionTitleDarkMode
                               : AppTypography.sightCardDescriptionTitle,
                         ),
@@ -74,7 +74,7 @@ class _SightListScreenState extends State<SightListScreen> {
                           style: AppTypography.textText16Regular,
                         ),
                       ],
-                      isDarkMode: isDarkMode,
+                      isDarkMode: widget.isDarkMode,
                     ),
                   );
                 },
