@@ -42,6 +42,7 @@ class _SightListScreenState extends State<SightListScreen> {
                     onTap: () => Navigator.of(context).push(
                       MaterialPageRoute<SightDetails>(
                         builder: (context) => SightDetails(
+                          isDarkMode: isDarkMode,
                           sight: item,
                         ),
                       ),

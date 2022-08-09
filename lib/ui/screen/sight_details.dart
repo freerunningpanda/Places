@@ -5,76 +5,109 @@ import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_colors.dart';
 import 'package:places/ui/res/app_strings.dart';
 import 'package:places/ui/res/app_typography.dart';
+import 'package:places/ui/screen/res/themes.dart';
 import 'package:places/ui/widgets/chevrone_back.dart';
 import 'package:places/ui/widgets/sight_icons.dart';
 
 class SightDetails extends StatelessWidget {
   final Sight sight;
-  const SightDetails({Key? key, required this.sight}) : super(key: key);
+  final bool isDarkMode;
+  const SightDetails({
+    Key? key,
+    required this.sight,
+    required this.isDarkMode,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.backgroundColor,
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Stack(
-              children: [
-                _SightDetailsImage(
-                  sight: sight,
-                  height: 360,
-                ),
-                const Positioned(
-                  left: 16,
-                  top: 36,
-                  child: ChevroneBack(
-                    width: 32,
-                    height: 32,
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 24),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+    return Theme(
+      data: isDarkMode ? darkTheme : lightTheme,
+      child: Scaffold(
+        // backgroundColor: AppColors.backgroundColor,
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              Stack(
                 children: [
-                  Text(
-                    sight.name,
-                    style: AppTypography.sightDetailsTitle,
+                  _SightDetailsImage(
+                    sight: sight,
+                    height: 360,
                   ),
-                  const SizedBox(
-                    height: 2,
+                  Positioned(
+                    left: 16,
+                    top: 36,
+                    child: ChevroneBack(
+                      isDarkMode: isDarkMode,
+                      width: 32,
+                      height: 32,
+                    ),
                   ),
-                  Row(
-                    children: [
-                      Text(
-                        sight.type,
-                        style: AppTypography.sightDetailsSubtitle,
-                      ),
-                      const SizedBox(width: 16),
-                      const Text(
-                        'закрыто до 09:00',
-                        style: AppTypography.sightDetailsSubtitleWithTime,
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 24),
-                  _DetailsScreenDescription(sight: sight),
-                  const SizedBox(height: 24),
-                  _SightDetailsBuildRouteBtn(sight: sight),
-                  const SizedBox(height: 16),
-                  const Divider(),
-                  const SizedBox(height: 8),
-                  const _SightDetailsBottom(),
                 ],
               ),
+              const SizedBox(height: 24),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                child: Column(
+                  children: [
+                    _DetailsScreenTitle(
+                      sight: sight,
+                      isDarkMode: isDarkMode,
+                    ),
+                    const SizedBox(height: 24),
+                    _DetailsScreenDescription(sight: sight),
+                    const SizedBox(height: 24),
+                    _SightDetailsBuildRouteBtn(sight: sight),
+                    const SizedBox(height: 16),
+                    const Divider(),
+                    const SizedBox(height: 8),
+                    const _SightDetailsBottom(),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _DetailsScreenTitle extends StatelessWidget {
+  final Sight sight;
+  final bool isDarkMode;
+
+  const _DetailsScreenTitle({
+    Key? key,
+    required this.isDarkMode,
+    required this.sight,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          sight.name,
+          style: isDarkMode ? AppTypography.sightDetailsTitleDarkMode : AppTypography.sightDetailsTitle,
+        ),
+        const SizedBox(
+          height: 2,
+        ),
+        Row(
+          children: [
+            Text(
+              sight.type,
+              style: isDarkMode ? AppTypography.secondaryTwo : AppTypography.sightDetailsSubtitle,
+            ),
+            const SizedBox(width: 16),
+            Text(
+              'закрыто до 09:00',
+              style: isDarkMode ? AppTypography.timeDarkMode : AppTypography.secondaryTwo,
             ),
           ],
         ),
-      ),
+      ],
     );
   }
 }
@@ -97,7 +130,7 @@ class _SightDetailsImage extends StatelessWidget {
         fit: BoxFit.cover,
         loadingBuilder: (context, child, loadingProgress) {
           if (loadingProgress == null) return child;
-          
+
           return const Center(
             child: CircularProgressIndicator(),
           );

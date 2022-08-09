@@ -14,7 +14,7 @@ class BottomNavigationBarWidget extends StatelessWidget {
       decoration: BoxDecoration(
         border: Border(
           top: BorderSide(
-            color: isDarkMode ? AppColors.emptyListTextColor : AppColors.transparent,
+            color: isDarkMode ? AppColors.inactiveBlack : AppColors.transparent,
           ),
         ),
       ),

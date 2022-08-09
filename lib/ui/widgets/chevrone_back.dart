@@ -5,10 +5,12 @@ import 'package:places/ui/res/app_colors.dart';
 class ChevroneBack extends StatelessWidget {
   final double width;
   final double height;
+  final bool isDarkMode;
   const ChevroneBack({
     Key? key,
     required this.height,
     required this.width,
+    required this.isDarkMode,
   }) : super(key: key);
 
   @override
@@ -19,12 +21,12 @@ class ChevroneBack extends StatelessWidget {
         width: height,
         height: width,
         decoration: BoxDecoration(
-          color: AppColors.backgroundColor,
+          color: isDarkMode ? AppColors.darkThemeBgColor : AppColors.backgroundColor,
           borderRadius: BorderRadius.circular(10),
         ),
-        child: const Icon(
+        child: Icon(
           Icons.chevron_left,
-          color: AppColors.chevroneColor,
+          color: isDarkMode ? AppColors.backgroundColor : AppColors.chevroneColor,
           size: 25,
         ),
       ),
