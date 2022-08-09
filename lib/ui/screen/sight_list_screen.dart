@@ -82,13 +82,6 @@ class _SightListScreenState extends State<SightListScreen> {
             ),
           ],
         ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            setState(() {
-              isDarkMode = !isDarkMode;
-            });
-          },
-        ),
       ),
     );
   }

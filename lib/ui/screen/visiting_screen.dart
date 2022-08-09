@@ -17,31 +17,29 @@ import 'package:places/ui/widgets/sight_icons.dart';
 List<Sight> list = Mocks.mocks;
 
 class VisitingScreen extends StatefulWidget {
-  const VisitingScreen({Key? key}) : super(key: key);
+  final bool isDarkMode;
+  const VisitingScreen({Key? key, required this.isDarkMode}) : super(key: key);
 
   @override
   State<VisitingScreen> createState() => _VisitingScreenState();
 }
 
 class _VisitingScreenState extends State<VisitingScreen> {
-  bool isDarkMode = false;
+  // bool isDarkMode = false;
 
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-      systemNavigationBarColor: isDarkMode ? AppColors.darkThemeBgColor : AppColors.black,
-    ));
 
     return DefaultTabController(
       length: 2,
       initialIndex: 0,
       child: Theme(
-        data: isDarkMode ? darkTheme : lightTheme,
+        data: widget.isDarkMode ? darkTheme : lightTheme,
         child: Scaffold(
-          appBar: _AppBar(isDarkMode: isDarkMode),
+          appBar: _AppBar(isDarkMode: widget.isDarkMode),
           body: Column(
             children: [
-              _TabBarWidget(isDarkMode: isDarkMode),
+              _TabBarWidget(isDarkMode: widget.isDarkMode),
               Expanded(
                 child: Padding(
                   padding: const EdgeInsets.only(top: 30),
@@ -49,7 +47,7 @@ class _VisitingScreenState extends State<VisitingScreen> {
                     children: [
                       if (list.isNotEmpty)
                         _WantToVisitWidget(
-                          isDarkMode: isDarkMode,
+                          isDarkMode: widget.isDarkMode,
                         )
                       else
                         const _EmptyList(
@@ -58,7 +56,7 @@ class _VisitingScreenState extends State<VisitingScreen> {
                         ),
                       if (list.isNotEmpty)
                         _VisitedWidget(
-                          isDarkMode: isDarkMode,
+                          isDarkMode: widget.isDarkMode,
                         )
                       else
                         const _EmptyList(
@@ -71,28 +69,7 @@ class _VisitingScreenState extends State<VisitingScreen> {
               ),
             ],
           ),
-          floatingActionButton: FloatingActionButton(
-            onPressed: () {
-              setState(() {
-                isDarkMode = !isDarkMode;
-              });
-
-              if (isDarkMode) {
-                SystemChrome.setSystemUIOverlayStyle(
-                  const SystemUiOverlayStyle(
-                    systemNavigationBarColor: AppColors.darkThemeBgColor,
-                  ),
-                );
-              } else {
-                SystemChrome.setSystemUIOverlayStyle(
-                  const SystemUiOverlayStyle(
-                    systemNavigationBarColor: AppColors.black,
-                  ),
-                );
-              }
-            },
-          ),
-          bottomNavigationBar: BottomNavigationBarWidget(isDarkMode: isDarkMode),
+          bottomNavigationBar: BottomNavigationBarWidget(isDarkMode: widget.isDarkMode),
         ),
       ),
     );
