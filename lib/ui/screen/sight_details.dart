@@ -54,13 +54,13 @@ class SightDetails extends StatelessWidget {
                       isDarkMode: isDarkMode,
                     ),
                     const SizedBox(height: 24),
-                    _DetailsScreenDescription(sight: sight),
+                    _DetailsScreenDescription(isDarkMode: isDarkMode, sight: sight),
                     const SizedBox(height: 24),
                     _SightDetailsBuildRouteBtn(sight: sight),
                     const SizedBox(height: 16),
                     const Divider(),
                     const SizedBox(height: 8),
-                    const _SightDetailsBottom(),
+                    _SightDetailsBottom(isDarkMode: isDarkMode),
                   ],
                 ),
               ),
@@ -98,12 +98,12 @@ class _DetailsScreenTitle extends StatelessWidget {
           children: [
             Text(
               sight.type,
-              style: isDarkMode ? AppTypography.secondaryTwo : AppTypography.sightDetailsSubtitle,
+              style: isDarkMode ? AppTypography.grey : AppTypography.sightDetailsSubtitle,
             ),
             const SizedBox(width: 16),
             Text(
               'закрыто до 09:00',
-              style: isDarkMode ? AppTypography.timeDarkMode : AppTypography.secondaryTwo,
+              style: isDarkMode ? AppTypography.timeDarkMode : AppTypography.grey,
             ),
           ],
         ),
@@ -142,14 +142,19 @@ class _SightDetailsImage extends StatelessWidget {
 
 class _DetailsScreenDescription extends StatelessWidget {
   final Sight sight;
-  const _DetailsScreenDescription({Key? key, required this.sight}) : super(key: key);
+  final bool isDarkMode;
+  const _DetailsScreenDescription({
+    Key? key,
+    required this.sight,
+    required this.isDarkMode,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
       child: Text(
         sight.details,
-        style: AppTypography.sightDetailsDescription,
+        style: isDarkMode ? AppTypography.sightDetailsDescriptionDarkMode : AppTypography.sightDetailsDescription,
       ),
     );
   }
@@ -195,7 +200,11 @@ class _SightDetailsBuildRouteBtn extends StatelessWidget {
 }
 
 class _SightDetailsBottom extends StatelessWidget {
-  const _SightDetailsBottom({Key? key}) : super(key: key);
+  final bool isDarkMode;
+  const _SightDetailsBottom({
+    Key? key,
+    required this.isDarkMode,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -205,19 +214,19 @@ class _SightDetailsBottom extends StatelessWidget {
         GestureDetector(
           onTap: () {},
           child: Row(
-            children: const [
-              SizedBox(
+            children: [
+              const SizedBox(
                 width: 17,
               ),
-              SightIcons(
+              const SightIcons(
                 assetName: AppAssets.calendar,
                 width: 22,
                 height: 19,
               ),
-              SizedBox(width: 9),
+              const SizedBox(width: 9),
               Text(
                 AppString.schedule,
-                style: AppTypography.inactiveButtonColor,
+                style: isDarkMode? AppTypography.timeDarkMode : AppTypography.inactiveButton,
               ),
             ],
           ),
@@ -225,18 +234,19 @@ class _SightDetailsBottom extends StatelessWidget {
         GestureDetector(
           onTap: () {},
           child: Row(
-            children: const [
+            children: [
               SightIcons(
                 assetName: AppAssets.favouriteDark,
                 width: 20,
                 height: 18,
+                color: isDarkMode ? AppColors.backgroundColor : AppColors.chevroneColor,
               ),
-              SizedBox(width: 9),
+              const SizedBox(width: 9),
               Text(
                 AppString.favourite,
-                style: AppTypography.activeButtonColor,
+                style: isDarkMode ? AppTypography.activeButtonDarkMode : AppTypography.activeButton,
               ),
-              SizedBox(
+              const SizedBox(
                 width: 24,
               ),
             ],

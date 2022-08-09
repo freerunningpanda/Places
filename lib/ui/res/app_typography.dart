@@ -6,7 +6,7 @@ abstract class AppTypography {
     fontSize: 16,
     height: 1.25,
     fontWeight: FontWeight.w400,
-    color: AppColors.subtitleTextColor,
+    color: AppColors.secondaryTwo,
   );
   static const appBarTitle = TextStyle(
     fontSize: 32,
@@ -78,16 +78,16 @@ abstract class AppTypography {
     color: AppColors.textColor,
   );
 
-  static const secondaryTwo = TextStyle(
+  static const grey = TextStyle(
     fontSize: 14,
     fontWeight: FontWeight.w700,
-    color: AppColors.subtitleTextColor,
+    color: AppColors.secondaryTwo,
   );
 
   static const favouriteTargetSubtitle = TextStyle(
     fontSize: 14,
     fontWeight: FontWeight.w400,
-    color: AppColors.subtitleTextColor,
+    color: AppColors.secondaryTwo,
   );
 
   static const emptyListTitle = TextStyle(
@@ -105,18 +105,26 @@ abstract class AppTypography {
     fontSize: 14,
     color: AppColors.textColor,
   );
+  static const sightDetailsDescriptionDarkMode = TextStyle(
+    fontSize: 14,
+    color: AppColors.backgroundColor,
+  );
 
   static const sightDetailsButtonName = TextStyle(
     fontWeight: FontWeight.w700,
     color: AppColors.backgroundColor,
   );
 
-  static const inactiveButtonColor = TextStyle(
+  static const inactiveButton = TextStyle(
     color: AppColors.inactiveColor,
   );
 
-  static const activeButtonColor = TextStyle(
+  static const activeButton = TextStyle(
     color: AppColors.textColor,
+  );
+
+  static const activeButtonDarkMode = TextStyle(
+    color: AppColors.backgroundColor,
   );
 
   static const greenColor = TextStyle(

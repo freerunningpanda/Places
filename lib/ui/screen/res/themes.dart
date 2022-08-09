@@ -25,5 +25,6 @@ final darkTheme = ThemeData(
   bottomNavigationBarTheme: const BottomNavigationBarThemeData(
     backgroundColor: AppColors.darkThemeBgColor,
   ),
+  dividerColor: AppColors.secondaryTwo,
   
 );

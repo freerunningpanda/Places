@@ -137,7 +137,7 @@ class _TabBarWidget extends StatelessWidget {
           borderRadius: BorderRadius.circular(50),
           color: isDarkMode ? AppColors.backgroundColor : AppColors.chevroneColor,
         ),
-        unselectedLabelColor: isDarkMode ? AppColors.subtitleTextColor : AppColors.backgroundColor,
+        unselectedLabelColor: isDarkMode ? AppColors.secondaryTwo : AppColors.backgroundColor,
         tabs: [
           Tab(
             child: Text(
