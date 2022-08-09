@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:places/ui/res/app_colors.dart';
 import 'package:places/ui/screen/res/themes.dart';
-import 'package:places/ui/screen/sight_list_screen.dart';
 
 import 'package:places/ui/screen/visiting_screen.dart';
 
