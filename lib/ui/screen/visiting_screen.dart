@@ -74,6 +74,20 @@ class _VisitingScreenState extends State<VisitingScreen> {
               setState(() {
                 isDarkMode = !isDarkMode;
               });
+
+              if (isDarkMode) {
+                SystemChrome.setSystemUIOverlayStyle(
+                  const SystemUiOverlayStyle(
+                    systemNavigationBarColor: AppColors.darkThemeBgColor,
+                  ),
+                );
+              } else {
+                SystemChrome.setSystemUIOverlayStyle(
+                  const SystemUiOverlayStyle(
+                    systemNavigationBarColor: AppColors.black,
+                  ),
+                );
+              }
             },
           ),
           bottomNavigationBar: BottomNavigationBarWidget(isDarkMode: isDarkMode),
@@ -93,7 +107,6 @@ class _AppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
-  
     return AppBar(
       centerTitle: true,
       title: Text(
