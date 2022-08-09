@@ -36,40 +36,85 @@ class _VisitingScreenState extends State<VisitingScreen> {
         data: widget.isDarkMode ? darkTheme : lightTheme,
         child: Scaffold(
           appBar: _AppBar(isDarkMode: widget.isDarkMode),
-          body: Column(
+          body: Stack(
             children: [
-              _TabBarWidget(isDarkMode: widget.isDarkMode),
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 30),
-                  child: TabBarView(
-                    children: [
-                      if (list.isNotEmpty)
-                        _WantToVisitWidget(
-                          isDarkMode: widget.isDarkMode,
-                        )
-                      else
-                        const _EmptyList(
-                          icon: AppAssets.card,
-                          description: AppString.likedPlaces,
-                        ),
-                      if (list.isNotEmpty)
-                        _VisitedWidget(
-                          isDarkMode: widget.isDarkMode,
-                        )
-                      else
-                        const _EmptyList(
-                          icon: AppAssets.goIconTransparent,
-                          description: AppString.finishRoute,
-                        ),
-                    ],
+              Column(
+                children: [
+                  _TabBarWidget(isDarkMode: widget.isDarkMode),
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.only(top: 30),
+                      child: TabBarView(
+                        children: [
+                          if (list.isNotEmpty)
+                            _WantToVisitWidget(
+                              isDarkMode: widget.isDarkMode,
+                            )
+                          else
+                            const _EmptyList(
+                              icon: AppAssets.card,
+                              description: AppString.likedPlaces,
+                            ),
+                          if (list.isNotEmpty)
+                            _VisitedWidget(
+                              isDarkMode: widget.isDarkMode,
+                            )
+                          else
+                            const _EmptyList(
+                              icon: AppAssets.goIconTransparent,
+                              description: AppString.finishRoute,
+                            ),
+                        ],
+                      ),
+                    ),
                   ),
-                ),
+                ],
+              ),
+              const Positioned(
+                bottom: 16,
+                left: 92,
+                right: 92,
+                child: _AddNewPlaceButton(),
               ),
             ],
           ),
           bottomNavigationBar: BottomNavigationBarWidget(isDarkMode: widget.isDarkMode),
         ),
+      ),
+    );
+  }
+}
+
+class _AddNewPlaceButton extends StatelessWidget {
+  const _AddNewPlaceButton({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 177,
+      height: 48,
+      decoration: BoxDecoration(
+        gradient: const LinearGradient(
+          begin: Alignment.topRight,
+          end: Alignment.bottomLeft,
+          colors: AppColors.limeGradient,
+        ),
+        borderRadius: BorderRadius.circular(30),
+        color: Colors.green,
+      ),
+      child: Row(
+        children: const [
+          Expanded(child: SizedBox()),
+          SightIcons(assetName: AppAssets.plus, width: 24, height: 24),
+          SizedBox(width: 8),
+          Text(
+            AppString.addNewPlace,
+            style: AppTypography.sightCardTitle,
+          ),
+          Expanded(child: SizedBox()),
+        ],
       ),
     );
   }

@@ -12,4 +12,5 @@ abstract class AppString {
   static const likedPlaces = 'Отмечайте понравившиеся места и они появятся здесь.';
   static const finishRoute = 'Завершите маршрут, чтобы место попало сюда';
   static const targetReach = 'Цель достигнута';
+  static const addNewPlace = 'НОВОЕ МЕСТО';
 }
