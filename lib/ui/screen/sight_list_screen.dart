@@ -5,7 +5,7 @@ import 'package:places/mocks.dart';
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_strings.dart';
 import 'package:places/ui/res/app_typography.dart';
-import 'package:places/ui/screen/res/themes.dart';
+import 'package:places/ui/screen/res/app_theme.dart';
 import 'package:places/ui/screen/sight_card.dart';
 import 'package:places/ui/screen/sight_details.dart';
 import 'package:places/ui/widgets/sight_icons.dart';
@@ -24,7 +24,7 @@ class _SightListScreenState extends State<SightListScreen> {
   @override
   Widget build(BuildContext context) {
     return Theme(
-      data: widget.isDarkMode ? darkTheme : lightTheme,
+      data: widget.isDarkMode ? AppTheme.buildThemeDark() : AppTheme.buildTheme(),
       child: Scaffold(
         body: Column(
           children: [

@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter/services.dart';
 import 'package:places/ui/res/app_colors.dart';
-import 'package:places/ui/screen/res/themes.dart';
+import 'package:places/ui/screen/res/app_theme.dart';
 import 'package:places/ui/screen/visiting_screen.dart';
+
+final ThemeData _lightTheme = AppTheme.buildTheme();
+final ThemeData _darkTheme = AppTheme.buildThemeDark();
 
 void main() {
   runApp(const App());
@@ -17,6 +20,7 @@ class App extends StatefulWidget {
 }
 
 class _AppState extends State<App> {
+  final themeMode = ThemeMode.system;
   bool isDarkMode = true;
 
   @override
@@ -39,15 +43,14 @@ class _AppState extends State<App> {
 
   @override
   Widget build(BuildContext context) {
-    return Theme(
-      data: darkTheme,
-      child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-        title: 'Flutter Demo',
-        home: 
-        VisitingScreen(isDarkMode: isDarkMode),
-        // SightListScreen(isDarkMode: isDarkMode),
-      ),
+    return MaterialApp(
+      theme: _lightTheme,
+      darkTheme: _darkTheme,
+      themeMode: themeMode,
+      debugShowCheckedModeBanner: false,
+      title: 'Flutter Demo',
+      home: VisitingScreen(isDarkMode: isDarkMode),
+      // SightListScreen(isDarkMode: isDarkMode),
     );
   }
 }

@@ -5,7 +5,7 @@ import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_colors.dart';
 import 'package:places/ui/res/app_strings.dart';
 import 'package:places/ui/res/app_typography.dart';
-import 'package:places/ui/screen/res/themes.dart';
+import 'package:places/ui/screen/res/app_theme.dart';
 import 'package:places/ui/widgets/chevrone_back.dart';
 import 'package:places/ui/widgets/sight_icons.dart';
 
@@ -21,7 +21,7 @@ class SightDetails extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Theme(
-      data: isDarkMode ? darkTheme : lightTheme,
+      data: isDarkMode ? AppTheme.buildThemeDark() : AppTheme.buildTheme(),
       child: Scaffold(
         // backgroundColor: AppColors.backgroundColor,
         body: SingleChildScrollView(

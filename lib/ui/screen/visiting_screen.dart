@@ -7,7 +7,7 @@ import 'package:places/ui/res/app_card_size.dart';
 import 'package:places/ui/res/app_colors.dart';
 import 'package:places/ui/res/app_strings.dart';
 import 'package:places/ui/res/app_typography.dart';
-import 'package:places/ui/screen/res/themes.dart';
+import 'package:places/ui/screen/res/app_theme.dart';
 import 'package:places/ui/screen/sight_card.dart';
 import 'package:places/ui/screen/sight_details.dart';
 import 'package:places/ui/widgets/bottom_navigation_bar.dart';
@@ -33,7 +33,7 @@ class _VisitingScreenState extends State<VisitingScreen> {
       length: 2,
       initialIndex: initialIndex,
       child: Theme(
-        data: widget.isDarkMode ? darkTheme : lightTheme,
+        data: widget.isDarkMode ? AppTheme.buildThemeDark() : AppTheme.buildTheme(),
         child: Scaffold(
           appBar: _AppBar(isDarkMode: widget.isDarkMode),
           body: Stack(
