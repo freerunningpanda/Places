@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 abstract class AppColors {
   static const backgroundColor = Colors.white;
   static const sightCardBackground = Color.fromRGBO(245, 245, 245, 1);
+  static const sightCardBackgroundDM = Color.fromRGBO(26, 26, 32, 1);
   static const textColor = Color.fromRGBO(59, 62, 91, 1);
   static const inactiveColor = Color.fromRGBO(0, 0, 0, 0.3);
   static const whiteText = Colors.white;

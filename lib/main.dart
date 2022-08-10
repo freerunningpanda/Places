@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:places/ui/res/app_colors.dart';
 
 import 'package:places/ui/screen/res/app_theme.dart';
 import 'package:places/ui/screen/res/custom_colors.dart';
@@ -21,24 +23,6 @@ class App extends StatefulWidget {
 class _AppState extends State<App> {
   final themeMode = ThemeMode.system;
 
-  // @override
-  // void initState() {
-  //   if (isDarkMode) {
-  //     SystemChrome.setSystemUIOverlayStyle(
-  //       const SystemUiOverlayStyle(
-  //         systemNavigationBarColor: AppColors.darkThemeBgColor,
-  //       ),
-  //     );
-  //   } else {
-  //     SystemChrome.setSystemUIOverlayStyle(
-  //       const SystemUiOverlayStyle(
-  //         systemNavigationBarColor: AppColors.black,
-  //       ),
-  //     );
-  //   }
-  //   super.initState();
-  // }
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -57,7 +41,7 @@ class _AppState extends State<App> {
       title: 'Flutter Demo',
       home:
       //  VisitingScreen(),
-      SightListScreen(),
+      const SightListScreen(),
     );
   }
 }

@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:places/domain/sight.dart';
 
 import 'package:places/mocks.dart';
 import 'package:places/ui/res/app_assets.dart';
+import 'package:places/ui/res/app_colors.dart';
 import 'package:places/ui/res/app_strings.dart';
 import 'package:places/ui/res/app_typography.dart';
 import 'package:places/ui/screen/res/app_theme.dart';
+import 'package:places/ui/screen/res/custom_colors.dart';
 import 'package:places/ui/screen/sight_card.dart';
 import 'package:places/ui/screen/sight_details.dart';
 import 'package:places/ui/widgets/sight_icons.dart';
@@ -93,6 +96,7 @@ class _AppBar extends StatelessWidget implements PreferredSizeWidget {
   const _AppBar({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
+     
     return AppBar(
       toolbarHeight: 86,
       title: const Text(
