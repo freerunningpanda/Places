@@ -78,12 +78,14 @@ class _DetailsScreenTitle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           sight.name,
-          // style: isDarkMode ? AppTypography.sightDetailsTitleDarkMode : AppTypography.sightDetailsTitle,
+          style: theme.textTheme.headlineMedium,
         ),
         const SizedBox(
           height: 2,
@@ -92,12 +94,12 @@ class _DetailsScreenTitle extends StatelessWidget {
           children: [
             Text(
               sight.type,
-              // style: isDarkMode ? AppTypography.grey : AppTypography.sightDetailsSubtitle,
+              style: theme.textTheme.titleSmall,
             ),
             const SizedBox(width: 16),
-            const Text(
+            Text(
               '${AppString.closed} 9:00',
-              // style: isDarkMode ? AppTypography.timeDarkMode : AppTypography.grey,
+              style: theme.textTheme.bodySmall,
             ),
           ],
         ),
@@ -143,10 +145,12 @@ class _DetailsScreenDescription extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return SizedBox(
       child: Text(
         sight.details,
-        // style: isDarkMode ? AppTypography.sightDetailsDescriptionDarkMode : AppTypography.sightDetailsDescription,
+        style: theme.textTheme.displaySmall,
       ),
     );
   }
@@ -200,25 +204,26 @@ class _SightDetailsBottom extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         GestureDetector(
           onTap: () {},
           child: Row(
-            children: [
-              const SizedBox(
+            children: const [
+              SizedBox(
                 width: 17,
               ),
-              const SightIcons(
+              SightIcons(
                 assetName: AppAssets.calendar,
                 width: 22,
                 height: 19,
               ),
-              const SizedBox(width: 9),
-              const Text(
+              SizedBox(width: 9),
+              Text(
                 AppString.schedule,
-                // style: isDarkMode? AppTypography.timeDarkMode : AppTypography.inactiveButton,
               ),
             ],
           ),
@@ -227,16 +232,16 @@ class _SightDetailsBottom extends StatelessWidget {
           onTap: () {},
           child: Row(
             children: [
-              const SightIcons(
+               SightIcons(
                 assetName: AppAssets.favouriteDark,
                 width: 20,
                 height: 18,
-                // color: isDarkMode ? AppColors.backgroundColor : AppColors.chevroneColor,
+                color: theme.iconTheme.color,
               ),
               const SizedBox(width: 9),
-              const Text(
+              Text(
                 AppString.favourite,
-                // style: isDarkMode ? AppTypography.activeButtonDarkMode : AppTypography.activeButton,
+                style: theme.textTheme.displaySmall,
               ),
               const SizedBox(
                 width: 24,

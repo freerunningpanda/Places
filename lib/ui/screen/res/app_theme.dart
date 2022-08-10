@@ -14,6 +14,7 @@ abstract class AppTheme {
         elevation: 0,
       ),
       textTheme: const TextTheme(
+        headlineMedium: AppTypography.sightDetailsTitle,
         headlineSmall: AppTypography.sightCardDescriptionTitle,
         bodyMedium: AppTypography.detailsText, 
       ),
@@ -40,8 +41,12 @@ abstract class AppTheme {
       //   headline3: AppTypography.sightCardDescriptionTitleDarkMode,
       // ),
       textTheme: const TextTheme(
+        headlineMedium: AppTypography.sightDetailsTitleDarkMode,
         headlineSmall: AppTypography.sightCardDescriptionTitleDarkMode,
-        bodyMedium: AppTypography.detailsText,       
+        bodyMedium: AppTypography.detailsText,
+        titleSmall: AppTypography.grey,    
+        bodySmall: AppTypography.timeDarkMode,   
+        displaySmall: AppTypography.sightDetailsDescriptionDarkMode,
       ),
       iconTheme: const IconThemeData(
         color: AppColors.backgroundColor,

@@ -107,6 +107,7 @@ abstract class AppTypography {
   );
   static const sightDetailsDescriptionDarkMode = TextStyle(
     fontSize: 14,
+    fontWeight: FontWeight.w400,
     color: AppColors.backgroundColor,
   );
 
