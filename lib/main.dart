@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:places/ui/res/app_colors.dart';
 
 import 'package:places/ui/screen/res/app_theme.dart';
 import 'package:places/ui/screen/res/custom_colors.dart';
 import 'package:places/ui/screen/sight_list_screen.dart';
+import 'package:places/ui/screen/visiting_screen.dart';
 
 final ThemeData _lightTheme = AppTheme.buildTheme();
 final ThemeData _darkTheme = AppTheme.buildThemeDark();
@@ -38,10 +37,10 @@ class _AppState extends State<App> {
       ),
       themeMode: themeMode,
       debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
+      title: 'Places',
       home:
-      //  VisitingScreen(),
-      const SightListScreen(),
+       const VisitingScreen(),
+      // const SightListScreen(),
     );
   }
 }

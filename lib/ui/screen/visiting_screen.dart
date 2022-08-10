@@ -7,7 +7,7 @@ import 'package:places/ui/res/app_card_size.dart';
 import 'package:places/ui/res/app_colors.dart';
 import 'package:places/ui/res/app_strings.dart';
 import 'package:places/ui/res/app_typography.dart';
-import 'package:places/ui/screen/res/app_theme.dart';
+import 'package:places/ui/screen/res/custom_colors.dart';
 import 'package:places/ui/screen/sight_card.dart';
 import 'package:places/ui/screen/sight_details.dart';
 import 'package:places/ui/widgets/bottom_navigation_bar.dart';
@@ -113,7 +113,6 @@ class _AddNewPlaceButton extends StatelessWidget {
 }
 
 class _AppBar extends StatelessWidget implements PreferredSizeWidget {
-
   @override
   Size get preferredSize => const Size.fromHeight(45);
 
@@ -121,10 +120,13 @@ class _AppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return AppBar(
       centerTitle: true,
-      title: const Text(
+      title: Text(
         AppString.visitingScreenTitle,
+        style: theme.textTheme.titleLarge,
         // style: isDarkMode ? AppTypography.visitingScreenTitleDarkMode : AppTypography.visitingScreenTitle,
       ),
       elevation: 0,
@@ -137,15 +139,23 @@ class _TabBarWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final customColors = Theme.of(context).extension<CustomColors>();
+    final theme = Theme.of(context);
+
     return Container(
       margin: const EdgeInsets.only(left: 16, top: 16, right: 16),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(30),
+        color: customColors?.color,
         // color: isDarkMode ? AppColors.darkThemeSightCardColor : AppColors.sightCardBackground,
       ),
       child: TabBar(
+        unselectedLabelColor: Colors.grey,
+        labelColor: theme.toggleableActiveColor,
+        labelStyle: AppTypography.tabBarIndicator,
         indicator: BoxDecoration(
           borderRadius: BorderRadius.circular(50),
+          color: theme.iconTheme.color,
           // color: isDarkMode ? AppColors.backgroundColor : AppColors.chevroneColor,
         ),
         // unselectedLabelColor: isDarkMode ? AppColors.secondaryTwo : AppColors.backgroundColor,
@@ -173,6 +183,8 @@ class _WantToVisitWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return ListView.builder(
       itemCount: list.length,
       itemBuilder: (context, index) {
@@ -197,6 +209,7 @@ class _WantToVisitWidget extends StatelessWidget {
               Text(
                 item.name,
                 maxLines: 2,
+                style: theme.textTheme.headlineSmall,
                 // style: isDarkMode
                 //     ? AppTypography.sightCardDescriptionTitleDarkMode
                 //     : AppTypography.sightCardDescriptionTitle,
@@ -241,6 +254,8 @@ class _VisitedWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    
     return ListView.builder(
       itemCount: list.length,
       itemBuilder: (context, index) {
@@ -265,6 +280,7 @@ class _VisitedWidget extends StatelessWidget {
               Text(
                 item.name,
                 maxLines: 2,
+                style: theme.textTheme.headlineSmall,
                 // style: isDarkMode
                 //     ? AppTypography.sightCardDescriptionTitleDarkMode
                 //     : AppTypography.sightCardDescriptionTitle,

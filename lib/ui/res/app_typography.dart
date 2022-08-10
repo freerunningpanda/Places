@@ -24,7 +24,7 @@ abstract class AppTypography {
     color: AppColors.backgroundColor,
   );
 
-  static const enabledTabDarkMode = TextStyle(
+  static const tabBarIndicator = TextStyle(
     fontWeight: FontWeight.w700,
     color: AppColors.chevroneColor,
   );
@@ -47,7 +47,7 @@ abstract class AppTypography {
   static const visitingScreenTitle = TextStyle(
     fontSize: 18,
     fontWeight: FontWeight.w500,
-    color: AppColors.textColor,
+    color: AppColors.chevroneColor,
   );
   static const visitingScreenTitleDarkMode = TextStyle(
     fontSize: 18,

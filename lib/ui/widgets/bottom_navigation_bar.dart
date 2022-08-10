@@ -8,11 +8,14 @@ class BottomNavigationBarWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return DecoratedBox(
       position: DecorationPosition.foreground,
-      decoration: const BoxDecoration(
+      decoration: BoxDecoration(
         border: Border(
           top: BorderSide(
+            color: theme.highlightColor,
             // color: isDarkMode ? AppColors.inactiveBlack : AppColors.transparent,
           ),
         ),
@@ -22,38 +25,42 @@ class BottomNavigationBarWidget extends StatelessWidget {
         items: [
           BottomNavigationBarItem(
             icon: GestureDetector(
-              child: const SightIcons(
+              child: SightIcons(
                 assetName: AppAssets.listPlaces,
                 width: 24,
                 height: 24,
+                color: theme.iconTheme.color,
                 // color: isDarkMode ? AppColors.backgroundColor : AppColors.darkThemeBgColor,
               ),
             ),
             label: '',
           ),
-          const BottomNavigationBarItem(
+          BottomNavigationBarItem(
             icon: SightIcons(
               assetName: AppAssets.map,
               width: 24,
               height: 24,
+              color: theme.iconTheme.color,
               // color: isDarkMode ? AppColors.backgroundColor : AppColors.darkThemeBgColor,
             ),
             label: '',
           ),
-          const BottomNavigationBarItem(
+          BottomNavigationBarItem(
             icon: SightIcons(
               assetName: AppAssets.heartFull,
               width: 24,
               height: 24,
+              color: theme.iconTheme.color,
               // color: isDarkMode ? AppColors.backgroundColor : AppColors.darkThemeBgColor,
             ),
             label: '',
           ),
-          const BottomNavigationBarItem(
+          BottomNavigationBarItem(
             icon: SightIcons(
               assetName: AppAssets.settings,
               width: 24,
               height: 24,
+              color: theme.iconTheme.color,
               // color: isDarkMode ? AppColors.backgroundColor : AppColors.darkThemeBgColor,
             ),
             label: '',

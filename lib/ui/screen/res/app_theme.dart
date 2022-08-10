@@ -20,13 +20,16 @@ abstract class AppTheme {
         headlineMedium: AppTypography.sightDetailsTitle,
         headlineSmall: AppTypography.sightCardDescriptionTitle,
         bodyMedium: AppTypography.detailsText,
-        titleSmall: AppTypography.sightDetailsSubtitle,    
+        titleSmall: AppTypography.sightDetailsSubtitle, 
+        titleLarge: AppTypography.visitingScreenTitle,   
         bodySmall: AppTypography.detailsText,   
         displaySmall: AppTypography.sightDetailsDescription,
       ),
       iconTheme: const IconThemeData(
         color: AppColors.darkThemeBgColor,
       ),
+      toggleableActiveColor: AppColors.backgroundColor,
+      highlightColor: AppColors.inactiveBlack,
     );
   }
 
@@ -41,6 +44,7 @@ abstract class AppTheme {
       ),
       bottomNavigationBarTheme: const BottomNavigationBarThemeData(
         backgroundColor: AppColors.darkThemeBgColor,
+
       ),
       dividerTheme: const DividerThemeData(
         color: AppColors.secondaryTwo,
@@ -49,13 +53,16 @@ abstract class AppTheme {
         headlineMedium: AppTypography.sightDetailsTitleDarkMode,
         headlineSmall: AppTypography.sightCardDescriptionTitleDarkMode,
         bodyMedium: AppTypography.detailsText,
-        titleSmall: AppTypography.sightDetailsSubtitleDarkMode,    
+        titleSmall: AppTypography.sightDetailsSubtitleDarkMode,   
+        titleLarge: AppTypography.visitingScreenTitleDarkMode,    
         bodySmall: AppTypography.detailsTextDarkMode,   
         displaySmall: AppTypography.sightDetailsDescriptionDarkMode,
       ),
       iconTheme: const IconThemeData(
         color: AppColors.backgroundColor,
       ),
+      toggleableActiveColor: AppColors.textColor,
+      highlightColor: AppColors.inactiveBlack,
     );
   }
 }
