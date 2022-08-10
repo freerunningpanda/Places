@@ -13,10 +13,16 @@ abstract class AppTheme {
         backgroundColor: AppColors.backgroundColor,
         elevation: 0,
       ),
+      dividerTheme: const DividerThemeData(
+        color: AppColors.inactiveBlack,
+      ),
       textTheme: const TextTheme(
         headlineMedium: AppTypography.sightDetailsTitle,
         headlineSmall: AppTypography.sightCardDescriptionTitle,
-        bodyMedium: AppTypography.detailsText, 
+        bodyMedium: AppTypography.detailsText,
+        titleSmall: AppTypography.sightDetailsSubtitle,    
+        bodySmall: AppTypography.detailsText,   
+        displaySmall: AppTypography.sightDetailsDescription,
       ),
       iconTheme: const IconThemeData(
         color: AppColors.darkThemeBgColor,
@@ -36,16 +42,15 @@ abstract class AppTheme {
       bottomNavigationBarTheme: const BottomNavigationBarThemeData(
         backgroundColor: AppColors.darkThemeBgColor,
       ),
-      dividerColor: AppColors.secondaryTwo,
-      // primaryTextTheme: const TextTheme(
-      //   headline3: AppTypography.sightCardDescriptionTitleDarkMode,
-      // ),
+      dividerTheme: const DividerThemeData(
+        color: AppColors.secondaryTwo,
+      ),
       textTheme: const TextTheme(
         headlineMedium: AppTypography.sightDetailsTitleDarkMode,
         headlineSmall: AppTypography.sightCardDescriptionTitleDarkMode,
         bodyMedium: AppTypography.detailsText,
-        titleSmall: AppTypography.grey,    
-        bodySmall: AppTypography.timeDarkMode,   
+        titleSmall: AppTypography.sightDetailsSubtitleDarkMode,    
+        bodySmall: AppTypography.detailsTextDarkMode,   
         displaySmall: AppTypography.sightDetailsDescriptionDarkMode,
       ),
       iconTheme: const IconThemeData(

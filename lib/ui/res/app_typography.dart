@@ -33,11 +33,6 @@ abstract class AppTypography {
     fontWeight: FontWeight.w700,
     color: AppColors.inactiveBlack,
   );
-  static const timeDarkMode = TextStyle(
-    fontSize: 14,
-    fontWeight: FontWeight.w400,
-    color: AppColors.inactiveBlack,
-  );
 
   static const sightCardDescriptionTitle = TextStyle(
     fontSize: 16,
@@ -78,7 +73,7 @@ abstract class AppTypography {
     color: AppColors.textColor,
   );
 
-  static const grey = TextStyle(
+  static const sightDetailsSubtitleDarkMode = TextStyle(
     fontSize: 14,
     fontWeight: FontWeight.w700,
     color: AppColors.secondaryTwo,
@@ -88,6 +83,12 @@ abstract class AppTypography {
     fontSize: 14,
     fontWeight: FontWeight.w400,
     color: AppColors.secondaryTwo,
+  );
+
+    static const detailsTextDarkMode = TextStyle(
+    fontSize: 14,
+    fontWeight: FontWeight.w400,
+    color: AppColors.inactiveBlack,
   );
 
   static const emptyListTitle = TextStyle(
