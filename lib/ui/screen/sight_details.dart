@@ -5,7 +5,6 @@ import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_colors.dart';
 import 'package:places/ui/res/app_strings.dart';
 import 'package:places/ui/res/app_typography.dart';
-import 'package:places/ui/screen/res/app_theme.dart';
 import 'package:places/ui/widgets/chevrone_back.dart';
 import 'package:places/ui/widgets/sight_icons.dart';
 
@@ -19,7 +18,6 @@ class SightDetails extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // backgroundColor: AppColors.backgroundColor,
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -46,7 +44,6 @@ class SightDetails extends StatelessWidget {
                 children: [
                   _DetailsScreenTitle(
                     sight: sight,
-                    // isDarkMode: isDarkMode,
                   ),
                   const SizedBox(height: 24),
                   _DetailsScreenDescription(sight: sight),
@@ -68,11 +65,9 @@ class SightDetails extends StatelessWidget {
 
 class _DetailsScreenTitle extends StatelessWidget {
   final Sight sight;
-  // final bool isDarkMode;
 
   const _DetailsScreenTitle({
     Key? key,
-    // required this.isDarkMode,
     required this.sight,
   }) : super(key: key);
 
@@ -196,10 +191,8 @@ class _SightDetailsBuildRouteBtn extends StatelessWidget {
 }
 
 class _SightDetailsBottom extends StatelessWidget {
-  // final bool isDarkMode;
   const _SightDetailsBottom({
     Key? key,
-    // required this.isDarkMode,
   }) : super(key: key);
 
   @override

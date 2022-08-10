@@ -16,7 +16,6 @@ class BottomNavigationBarWidget extends StatelessWidget {
         border: Border(
           top: BorderSide(
             color: theme.highlightColor,
-            // color: isDarkMode ? AppColors.inactiveBlack : AppColors.transparent,
           ),
         ),
       ),
@@ -30,7 +29,6 @@ class BottomNavigationBarWidget extends StatelessWidget {
                 width: 24,
                 height: 24,
                 color: theme.iconTheme.color,
-                // color: isDarkMode ? AppColors.backgroundColor : AppColors.darkThemeBgColor,
               ),
             ),
             label: '',
@@ -41,7 +39,6 @@ class BottomNavigationBarWidget extends StatelessWidget {
               width: 24,
               height: 24,
               color: theme.iconTheme.color,
-              // color: isDarkMode ? AppColors.backgroundColor : AppColors.darkThemeBgColor,
             ),
             label: '',
           ),
@@ -51,7 +48,6 @@ class BottomNavigationBarWidget extends StatelessWidget {
               width: 24,
               height: 24,
               color: theme.iconTheme.color,
-              // color: isDarkMode ? AppColors.backgroundColor : AppColors.darkThemeBgColor,
             ),
             label: '',
           ),
@@ -61,7 +57,6 @@ class BottomNavigationBarWidget extends StatelessWidget {
               width: 24,
               height: 24,
               color: theme.iconTheme.color,
-              // color: isDarkMode ? AppColors.backgroundColor : AppColors.darkThemeBgColor,
             ),
             label: '',
             

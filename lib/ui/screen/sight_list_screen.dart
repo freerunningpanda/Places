@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:places/domain/sight.dart';
 
+import 'package:places/domain/sight.dart';
 import 'package:places/mocks.dart';
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_strings.dart';
@@ -40,7 +40,6 @@ class _SightListScreenState extends State<SightListScreen> {
                   onTap: () => Navigator.of(context).push(
                     MaterialPageRoute<SightDetails>(
                       builder: (context) => SightDetails(
-                        // isDarkMode: widget.isDarkMode,
                         sight: item,
                       ),
                     ),
@@ -62,9 +61,6 @@ class _SightListScreenState extends State<SightListScreen> {
                         item.name,
                         maxLines: 2,
                         style: theme.textTheme.headlineSmall,
-                        // style: widget.isDarkMode
-                        //     ? AppTypography.sightCardDescriptionTitleDarkMode
-                        //     : AppTypography.sightCardDescriptionTitle,
                       ),
                       const SizedBox(height: 2),
                       const Text(
@@ -73,7 +69,6 @@ class _SightListScreenState extends State<SightListScreen> {
                         style: AppTypography.textText16Regular,
                       ),
                     ],
-                    // isDarkMode: widget.isDarkMode,
                   ),
                 );
               },

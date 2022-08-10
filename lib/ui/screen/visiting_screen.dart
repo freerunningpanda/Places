@@ -23,7 +23,6 @@ class VisitingScreen extends StatefulWidget {
 }
 
 class _VisitingScreenState extends State<VisitingScreen> {
-  // bool isDarkMode = false;
   int initialIndex = 0;
 
   @override
@@ -127,7 +126,6 @@ class _AppBar extends StatelessWidget implements PreferredSizeWidget {
       title: Text(
         AppString.visitingScreenTitle,
         style: theme.textTheme.titleLarge,
-        // style: isDarkMode ? AppTypography.visitingScreenTitleDarkMode : AppTypography.visitingScreenTitle,
       ),
       elevation: 0,
     );
@@ -147,7 +145,6 @@ class _TabBarWidget extends StatelessWidget {
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(30),
         color: customColors?.color,
-        // color: isDarkMode ? AppColors.darkThemeSightCardColor : AppColors.sightCardBackground,
       ),
       child: TabBar(
         unselectedLabelColor: Colors.grey,
@@ -156,20 +153,16 @@ class _TabBarWidget extends StatelessWidget {
         indicator: BoxDecoration(
           borderRadius: BorderRadius.circular(50),
           color: theme.iconTheme.color,
-          // color: isDarkMode ? AppColors.backgroundColor : AppColors.chevroneColor,
         ),
-        // unselectedLabelColor: isDarkMode ? AppColors.secondaryTwo : AppColors.backgroundColor,
-        tabs: [
+        tabs: const [
           Tab(
             child: Text(
               AppString.tabBarOneText,
-              // style: isDarkMode ? AppTypography.enabledTabDarkMode : AppTypography.sightCardTitle,
             ),
           ),
           Tab(
             child: Text(
               AppString.tabBarTwoText,
-              // style: isDarkMode ? AppTypography.enabledTabDarkMode : AppTypography.sightCardTitle,
             ),
           ),
         ],
@@ -194,13 +187,11 @@ class _WantToVisitWidget extends StatelessWidget {
           onTap: () => Navigator.of(context).push(
             MaterialPageRoute<SightDetails>(
               builder: (context) => SightDetails(
-                // isDarkMode: isDarkMode,
                 sight: item,
               ),
             ),
           ),
           child: SightCard(
-            // isDarkMode: isDarkMode,
             url: item.url,
             type: item.type,
             name: item.name,
@@ -210,9 +201,6 @@ class _WantToVisitWidget extends StatelessWidget {
                 item.name,
                 maxLines: 2,
                 style: theme.textTheme.headlineSmall,
-                // style: isDarkMode
-                //     ? AppTypography.sightCardDescriptionTitleDarkMode
-                //     : AppTypography.sightCardDescriptionTitle,
               ),
               const SizedBox(height: 2),
               const Text(
@@ -255,7 +243,7 @@ class _VisitedWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    
+
     return ListView.builder(
       itemCount: list.length,
       itemBuilder: (context, index) {
@@ -265,13 +253,11 @@ class _VisitedWidget extends StatelessWidget {
           onTap: () => Navigator.of(context).push(
             MaterialPageRoute<SightDetails>(
               builder: (context) => SightDetails(
-                // isDarkMode: isDarkMode,
                 sight: item,
               ),
             ),
           ),
           child: SightCard(
-            // isDarkMode: isDarkMode,
             url: item.url,
             type: item.type,
             name: item.name,
@@ -281,9 +267,6 @@ class _VisitedWidget extends StatelessWidget {
                 item.name,
                 maxLines: 2,
                 style: theme.textTheme.headlineSmall,
-                // style: isDarkMode
-                //     ? AppTypography.sightCardDescriptionTitleDarkMode
-                //     : AppTypography.sightCardDescriptionTitle,
               ),
               const SizedBox(height: 2),
               const Text(
