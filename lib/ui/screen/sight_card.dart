@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:places/ui/res/app_card_size.dart';
 
-import 'package:places/ui/res/app_colors.dart';
 import 'package:places/ui/res/app_typography.dart';
 import 'package:places/ui/screen/res/custom_colors.dart';
 
@@ -37,7 +36,7 @@ class SightCard extends StatelessWidget {
         ),
         width: double.infinity,
         decoration: BoxDecoration(
-          color: customColors.sightCardColor,
+          color: customColors.color,
           borderRadius: BorderRadius.circular(16.0),
         ),
         child: Column(

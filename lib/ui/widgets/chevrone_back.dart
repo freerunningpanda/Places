@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:places/ui/res/app_colors.dart';
+import 'package:places/ui/screen/res/custom_colors.dart';
 
 class ChevroneBack extends StatelessWidget {
   final double width;
@@ -13,18 +13,19 @@ class ChevroneBack extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final customColors = Theme.of(context).extension<CustomColors>()!;
+
     return GestureDetector(
       onTap: () => Navigator.pop(context),
       child: Container(
         width: height,
         height: width,
         decoration: BoxDecoration(
-          // color: isDarkMode ? AppColors.darkThemeBgColor : AppColors.backgroundColor,
+          color: customColors.color,
           borderRadius: BorderRadius.circular(10),
         ),
-        child: Icon(
+        child: const Icon(
           Icons.chevron_left,
-          // color: isDarkMode ? AppColors.backgroundColor : AppColors.chevroneColor,
           size: 25,
         ),
       ),

@@ -32,7 +32,7 @@ class SightDetails extends StatelessWidget {
                 const Positioned(
                   left: 16,
                   top: 36,
-                  child: const ChevroneBack(
+                  child: ChevroneBack(
                     width: 32,
                     height: 32,
                   ),

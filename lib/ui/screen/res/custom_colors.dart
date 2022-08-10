@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:places/ui/res/app_colors.dart';
 
+@immutable
 class CustomColors extends ThemeExtension<CustomColors> {
-  static final sightCardLight = CustomColors(sightCardColor: AppColors.sightCardBackground);
-  static final sightCardDark = CustomColors(sightCardColor: AppColors.darkThemeSightCardColor);
-  
+  static const sightCardLight = CustomColors(color: AppColors.sightCardBackground);
+  static const sightCardDark = CustomColors(color: AppColors.darkThemeSightCardColor);
 
-  final Color? sightCardColor;
+  final Color? color;
 
-  CustomColors({required this.sightCardColor});
+  const CustomColors({required this.color});
 
   @override
   ThemeExtension<CustomColors> copyWith({Color? sightCardColor}) {
-    return CustomColors(sightCardColor: sightCardColor);
+    return CustomColors(color: sightCardColor);
   }
 
   @override
@@ -21,6 +21,6 @@ class CustomColors extends ThemeExtension<CustomColors> {
       return this;
     }
 
-    return CustomColors(sightCardColor: sightCardColor);
+    return CustomColors(color: color);
   }
 }

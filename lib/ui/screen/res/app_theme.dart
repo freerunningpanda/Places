@@ -17,6 +17,9 @@ abstract class AppTheme {
         headlineSmall: AppTypography.sightCardDescriptionTitle,
         bodyMedium: AppTypography.detailsText, 
       ),
+      iconTheme: const IconThemeData(
+        color: AppColors.darkThemeBgColor,
+      ),
     );
   }
 
@@ -39,6 +42,9 @@ abstract class AppTheme {
       textTheme: const TextTheme(
         headlineSmall: AppTypography.sightCardDescriptionTitleDarkMode,
         bodyMedium: AppTypography.detailsText,       
+      ),
+      iconTheme: const IconThemeData(
+        color: AppColors.backgroundColor,
       ),
     );
   }
