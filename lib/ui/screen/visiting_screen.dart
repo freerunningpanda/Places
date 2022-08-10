@@ -16,8 +16,7 @@ import 'package:places/ui/widgets/sight_icons.dart';
 List<Sight> list = Mocks.mocks;
 
 class VisitingScreen extends StatefulWidget {
-  final bool isDarkMode;
-  const VisitingScreen({Key? key, required this.isDarkMode}) : super(key: key);
+  const VisitingScreen({Key? key}) : super(key: key);
 
   @override
   State<VisitingScreen> createState() => _VisitingScreenState();
@@ -32,54 +31,47 @@ class _VisitingScreenState extends State<VisitingScreen> {
     return DefaultTabController(
       length: 2,
       initialIndex: initialIndex,
-      child: Theme(
-        data: widget.isDarkMode ? AppTheme.buildThemeDark() : AppTheme.buildTheme(),
-        child: Scaffold(
-          appBar: _AppBar(isDarkMode: widget.isDarkMode),
-          body: Stack(
-            children: [
-              Column(
-                children: [
-                  _TabBarWidget(isDarkMode: widget.isDarkMode),
-                  Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.only(top: 30),
-                      child: TabBarView(
-                        children: [
-                          if (list.isNotEmpty)
-                            _WantToVisitWidget(
-                              isDarkMode: widget.isDarkMode,
-                            )
-                          else
-                            const _EmptyList(
-                              icon: AppAssets.card,
-                              description: AppString.likedPlaces,
-                            ),
-                          if (list.isNotEmpty)
-                            _VisitedWidget(
-                              isDarkMode: widget.isDarkMode,
-                            )
-                          else
-                            const _EmptyList(
-                              icon: AppAssets.goIconTransparent,
-                              description: AppString.finishRoute,
-                            ),
-                        ],
-                      ),
+      child: Scaffold(
+        appBar: const _AppBar(),
+        body: Stack(
+          children: [
+            Column(
+              children: [
+                const _TabBarWidget(),
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 30),
+                    child: TabBarView(
+                      children: [
+                        if (list.isNotEmpty)
+                          const _WantToVisitWidget()
+                        else
+                          const _EmptyList(
+                            icon: AppAssets.card,
+                            description: AppString.likedPlaces,
+                          ),
+                        if (list.isNotEmpty)
+                          const _VisitedWidget()
+                        else
+                          const _EmptyList(
+                            icon: AppAssets.goIconTransparent,
+                            description: AppString.finishRoute,
+                          ),
+                      ],
                     ),
                   ),
-                ],
-              ),
-              const Positioned(
-                bottom: 16,
-                left: 92,
-                right: 92,
-                child: _AddNewPlaceButton(),
-              ),
-            ],
-          ),
-          bottomNavigationBar: BottomNavigationBarWidget(isDarkMode: widget.isDarkMode),
+                ),
+              ],
+            ),
+            const Positioned(
+              bottom: 16,
+              left: 92,
+              right: 92,
+              child: _AddNewPlaceButton(),
+            ),
+          ],
         ),
+        bottomNavigationBar: const BottomNavigationBarWidget(),
       ),
     );
   }
@@ -121,20 +113,19 @@ class _AddNewPlaceButton extends StatelessWidget {
 }
 
 class _AppBar extends StatelessWidget implements PreferredSizeWidget {
-  final bool isDarkMode;
 
   @override
   Size get preferredSize => const Size.fromHeight(45);
 
-  const _AppBar({Key? key, required this.isDarkMode}) : super(key: key);
+  const _AppBar({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return AppBar(
       centerTitle: true,
-      title: Text(
+      title: const Text(
         AppString.visitingScreenTitle,
-        style: isDarkMode ? AppTypography.visitingScreenTitleDarkMode : AppTypography.visitingScreenTitle,
+        // style: isDarkMode ? AppTypography.visitingScreenTitleDarkMode : AppTypography.visitingScreenTitle,
       ),
       elevation: 0,
     );
@@ -142,8 +133,7 @@ class _AppBar extends StatelessWidget implements PreferredSizeWidget {
 }
 
 class _TabBarWidget extends StatelessWidget {
-  final bool isDarkMode;
-  const _TabBarWidget({Key? key, required this.isDarkMode}) : super(key: key);
+  const _TabBarWidget({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -151,25 +141,25 @@ class _TabBarWidget extends StatelessWidget {
       margin: const EdgeInsets.only(left: 16, top: 16, right: 16),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(30),
-        color: isDarkMode ? AppColors.darkThemeSightCardColor : AppColors.sightCardBackground,
+        // color: isDarkMode ? AppColors.darkThemeSightCardColor : AppColors.sightCardBackground,
       ),
       child: TabBar(
         indicator: BoxDecoration(
           borderRadius: BorderRadius.circular(50),
-          color: isDarkMode ? AppColors.backgroundColor : AppColors.chevroneColor,
+          // color: isDarkMode ? AppColors.backgroundColor : AppColors.chevroneColor,
         ),
-        unselectedLabelColor: isDarkMode ? AppColors.secondaryTwo : AppColors.backgroundColor,
+        // unselectedLabelColor: isDarkMode ? AppColors.secondaryTwo : AppColors.backgroundColor,
         tabs: [
           Tab(
             child: Text(
               AppString.tabBarOneText,
-              style: isDarkMode ? AppTypography.enabledTabDarkMode : AppTypography.sightCardTitle,
+              // style: isDarkMode ? AppTypography.enabledTabDarkMode : AppTypography.sightCardTitle,
             ),
           ),
           Tab(
             child: Text(
               AppString.tabBarTwoText,
-              style: isDarkMode ? AppTypography.enabledTabDarkMode : AppTypography.sightCardTitle,
+              // style: isDarkMode ? AppTypography.enabledTabDarkMode : AppTypography.sightCardTitle,
             ),
           ),
         ],
@@ -179,8 +169,7 @@ class _TabBarWidget extends StatelessWidget {
 }
 
 class _WantToVisitWidget extends StatelessWidget {
-  final bool isDarkMode;
-  const _WantToVisitWidget({Key? key, required this.isDarkMode}) : super(key: key);
+  const _WantToVisitWidget({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -193,13 +182,13 @@ class _WantToVisitWidget extends StatelessWidget {
           onTap: () => Navigator.of(context).push(
             MaterialPageRoute<SightDetails>(
               builder: (context) => SightDetails(
-                isDarkMode: isDarkMode,
+                // isDarkMode: isDarkMode,
                 sight: item,
               ),
             ),
           ),
           child: SightCard(
-            isDarkMode: isDarkMode,
+            // isDarkMode: isDarkMode,
             url: item.url,
             type: item.type,
             name: item.name,
@@ -208,9 +197,9 @@ class _WantToVisitWidget extends StatelessWidget {
               Text(
                 item.name,
                 maxLines: 2,
-                style: isDarkMode
-                    ? AppTypography.sightCardDescriptionTitleDarkMode
-                    : AppTypography.sightCardDescriptionTitle,
+                // style: isDarkMode
+                //     ? AppTypography.sightCardDescriptionTitleDarkMode
+                //     : AppTypography.sightCardDescriptionTitle,
               ),
               const SizedBox(height: 2),
               const Text(
@@ -248,8 +237,7 @@ class _WantToVisitWidget extends StatelessWidget {
 }
 
 class _VisitedWidget extends StatelessWidget {
-  final bool isDarkMode;
-  const _VisitedWidget({Key? key, required this.isDarkMode}) : super(key: key);
+  const _VisitedWidget({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -262,13 +250,13 @@ class _VisitedWidget extends StatelessWidget {
           onTap: () => Navigator.of(context).push(
             MaterialPageRoute<SightDetails>(
               builder: (context) => SightDetails(
-                isDarkMode: isDarkMode,
+                // isDarkMode: isDarkMode,
                 sight: item,
               ),
             ),
           ),
           child: SightCard(
-            isDarkMode: isDarkMode,
+            // isDarkMode: isDarkMode,
             url: item.url,
             type: item.type,
             name: item.name,
@@ -277,23 +265,23 @@ class _VisitedWidget extends StatelessWidget {
               Text(
                 item.name,
                 maxLines: 2,
-                style: isDarkMode
-                    ? AppTypography.sightCardDescriptionTitleDarkMode
-                    : AppTypography.sightCardDescriptionTitle,
+                // style: isDarkMode
+                //     ? AppTypography.sightCardDescriptionTitleDarkMode
+                //     : AppTypography.sightCardDescriptionTitle,
               ),
               const SizedBox(height: 2),
               const Text(
                 '${AppString.targetReach} 12 окт. 2022',
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
-                style: AppTypography.favouriteTargetSubtitle,
+                style: AppTypography.detailsText,
               ),
               const SizedBox(height: 10),
               const Text(
                 '${AppString.closed} 09:00',
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
-                style: AppTypography.favouriteTargetSubtitle,
+                style: AppTypography.detailsText,
               ),
             ],
             actions: const [

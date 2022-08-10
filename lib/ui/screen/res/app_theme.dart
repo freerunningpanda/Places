@@ -13,6 +13,10 @@ abstract class AppTheme {
         backgroundColor: AppColors.backgroundColor,
         elevation: 0,
       ),
+      textTheme: const TextTheme(
+        headlineSmall: AppTypography.sightCardDescriptionTitle,
+        bodyMedium: AppTypography.detailsText, 
+      ),
     );
   }
 
@@ -29,6 +33,13 @@ abstract class AppTheme {
         backgroundColor: AppColors.darkThemeBgColor,
       ),
       dividerColor: AppColors.secondaryTwo,
+      // primaryTextTheme: const TextTheme(
+      //   headline3: AppTypography.sightCardDescriptionTitleDarkMode,
+      // ),
+      textTheme: const TextTheme(
+        headlineSmall: AppTypography.sightCardDescriptionTitleDarkMode,
+        bodyMedium: AppTypography.detailsText,       
+      ),
     );
   }
 }

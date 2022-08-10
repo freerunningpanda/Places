@@ -11,61 +11,55 @@ import 'package:places/ui/widgets/sight_icons.dart';
 
 class SightDetails extends StatelessWidget {
   final Sight sight;
-  final bool isDarkMode;
   const SightDetails({
     Key? key,
     required this.sight,
-    required this.isDarkMode,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Theme(
-      data: isDarkMode ? AppTheme.buildThemeDark() : AppTheme.buildTheme(),
-      child: Scaffold(
-        // backgroundColor: AppColors.backgroundColor,
-        body: SingleChildScrollView(
-          child: Column(
-            children: [
-              Stack(
+    return Scaffold(
+      // backgroundColor: AppColors.backgroundColor,
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            Stack(
+              children: [
+                _SightDetailsImage(
+                  sight: sight,
+                  height: 360,
+                ),
+                const Positioned(
+                  left: 16,
+                  top: 36,
+                  child: const ChevroneBack(
+                    width: 32,
+                    height: 32,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 24),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: Column(
                 children: [
-                  _SightDetailsImage(
+                  _DetailsScreenTitle(
                     sight: sight,
-                    height: 360,
+                    // isDarkMode: isDarkMode,
                   ),
-                  Positioned(
-                    left: 16,
-                    top: 36,
-                    child: ChevroneBack(
-                      isDarkMode: isDarkMode,
-                      width: 32,
-                      height: 32,
-                    ),
-                  ),
+                  const SizedBox(height: 24),
+                  _DetailsScreenDescription(sight: sight),
+                  const SizedBox(height: 24),
+                  _SightDetailsBuildRouteBtn(sight: sight),
+                  const SizedBox(height: 16),
+                  const Divider(),
+                  const SizedBox(height: 8),
+                  const _SightDetailsBottom(),
                 ],
               ),
-              const SizedBox(height: 24),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                child: Column(
-                  children: [
-                    _DetailsScreenTitle(
-                      sight: sight,
-                      isDarkMode: isDarkMode,
-                    ),
-                    const SizedBox(height: 24),
-                    _DetailsScreenDescription(isDarkMode: isDarkMode, sight: sight),
-                    const SizedBox(height: 24),
-                    _SightDetailsBuildRouteBtn(sight: sight),
-                    const SizedBox(height: 16),
-                    const Divider(),
-                    const SizedBox(height: 8),
-                    _SightDetailsBottom(isDarkMode: isDarkMode),
-                  ],
-                ),
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
@@ -74,11 +68,11 @@ class SightDetails extends StatelessWidget {
 
 class _DetailsScreenTitle extends StatelessWidget {
   final Sight sight;
-  final bool isDarkMode;
+  // final bool isDarkMode;
 
   const _DetailsScreenTitle({
     Key? key,
-    required this.isDarkMode,
+    // required this.isDarkMode,
     required this.sight,
   }) : super(key: key);
 
@@ -89,7 +83,7 @@ class _DetailsScreenTitle extends StatelessWidget {
       children: [
         Text(
           sight.name,
-          style: isDarkMode ? AppTypography.sightDetailsTitleDarkMode : AppTypography.sightDetailsTitle,
+          // style: isDarkMode ? AppTypography.sightDetailsTitleDarkMode : AppTypography.sightDetailsTitle,
         ),
         const SizedBox(
           height: 2,
@@ -98,12 +92,12 @@ class _DetailsScreenTitle extends StatelessWidget {
           children: [
             Text(
               sight.type,
-              style: isDarkMode ? AppTypography.grey : AppTypography.sightDetailsSubtitle,
+              // style: isDarkMode ? AppTypography.grey : AppTypography.sightDetailsSubtitle,
             ),
             const SizedBox(width: 16),
-            Text(
-              'закрыто до 09:00',
-              style: isDarkMode ? AppTypography.timeDarkMode : AppTypography.grey,
+            const Text(
+              '${AppString.closed} 9:00',
+              // style: isDarkMode ? AppTypography.timeDarkMode : AppTypography.grey,
             ),
           ],
         ),
@@ -142,11 +136,9 @@ class _SightDetailsImage extends StatelessWidget {
 
 class _DetailsScreenDescription extends StatelessWidget {
   final Sight sight;
-  final bool isDarkMode;
   const _DetailsScreenDescription({
     Key? key,
     required this.sight,
-    required this.isDarkMode,
   }) : super(key: key);
 
   @override
@@ -154,7 +146,7 @@ class _DetailsScreenDescription extends StatelessWidget {
     return SizedBox(
       child: Text(
         sight.details,
-        style: isDarkMode ? AppTypography.sightDetailsDescriptionDarkMode : AppTypography.sightDetailsDescription,
+        // style: isDarkMode ? AppTypography.sightDetailsDescriptionDarkMode : AppTypography.sightDetailsDescription,
       ),
     );
   }
@@ -200,10 +192,10 @@ class _SightDetailsBuildRouteBtn extends StatelessWidget {
 }
 
 class _SightDetailsBottom extends StatelessWidget {
-  final bool isDarkMode;
+  // final bool isDarkMode;
   const _SightDetailsBottom({
     Key? key,
-    required this.isDarkMode,
+    // required this.isDarkMode,
   }) : super(key: key);
 
   @override
@@ -224,9 +216,9 @@ class _SightDetailsBottom extends StatelessWidget {
                 height: 19,
               ),
               const SizedBox(width: 9),
-              Text(
+              const Text(
                 AppString.schedule,
-                style: isDarkMode? AppTypography.timeDarkMode : AppTypography.inactiveButton,
+                // style: isDarkMode? AppTypography.timeDarkMode : AppTypography.inactiveButton,
               ),
             ],
           ),
@@ -235,16 +227,16 @@ class _SightDetailsBottom extends StatelessWidget {
           onTap: () {},
           child: Row(
             children: [
-              SightIcons(
+              const SightIcons(
                 assetName: AppAssets.favouriteDark,
                 width: 20,
                 height: 18,
-                color: isDarkMode ? AppColors.backgroundColor : AppColors.chevroneColor,
+                // color: isDarkMode ? AppColors.backgroundColor : AppColors.chevroneColor,
               ),
               const SizedBox(width: 9),
-              Text(
+              const Text(
                 AppString.favourite,
-                style: isDarkMode ? AppTypography.activeButtonDarkMode : AppTypography.activeButton,
+                // style: isDarkMode ? AppTypography.activeButtonDarkMode : AppTypography.activeButton,
               ),
               const SizedBox(
                 width: 24,

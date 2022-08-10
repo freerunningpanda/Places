@@ -84,7 +84,7 @@ abstract class AppTypography {
     color: AppColors.secondaryTwo,
   );
 
-  static const favouriteTargetSubtitle = TextStyle(
+  static const detailsText = TextStyle(
     fontSize: 14,
     fontWeight: FontWeight.w400,
     color: AppColors.secondaryTwo,
