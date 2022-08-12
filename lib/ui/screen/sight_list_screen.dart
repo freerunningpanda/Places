@@ -37,20 +37,28 @@ class _SightListScreenState extends State<SightListScreen> {
                 final item = list[index];
 
                 return GestureDetector(
-                  onTap: () => Navigator.of(context).push(
-                    MaterialPageRoute<SightDetails>(
-                      builder: (context) => SightDetails(
-                        sight: item,
+                  onTap: () {
+                    debugPrint('go to SightDetails pressed');
+                    Navigator.of(context).push(
+                      MaterialPageRoute<SightDetails>(
+                        builder: (context) => SightDetails(
+                          sight: item,
+                        ),
                       ),
-                    ),
-                  ),
+                    );
+                  },
                   child: SightCard(
-                    aspectRatio: 3/1.5,
-                    actions: const [
-                      SightIcons(
-                        assetName: AppAssets.favourite,
-                        width: 22,
-                        height: 22,
+                    aspectRatio: 3 / 1.5,
+                    actions: [
+                      GestureDetector(
+                        onTap: () {
+                          debugPrint('Like button pressed');
+                        },
+                        child: const SightIcons(
+                          assetName: AppAssets.favourite,
+                          width: 22,
+                          height: 22,
+                        ),
                       ),
                     ],
                     url: item.url,
@@ -87,7 +95,6 @@ class _AppBar extends StatelessWidget implements PreferredSizeWidget {
   const _AppBar({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-     
     return AppBar(
       toolbarHeight: 86,
       title: const Text(

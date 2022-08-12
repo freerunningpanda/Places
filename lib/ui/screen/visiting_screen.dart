@@ -269,13 +269,16 @@ class _VisitedWidget extends StatelessWidget {
         final item = Mocks.mocks[index];
 
         return GestureDetector(
-          onTap: () => Navigator.of(context).push(
+          onTap: () {
+            debugPrint('go to SightDetails pressed');
+            Navigator.of(context).push(
             MaterialPageRoute<SightDetails>(
               builder: (context) => SightDetails(
                 sight: item,
               ),
             ),
-          ),
+          );
+          },
           child: SightCard(
             url: item.url,
             type: item.type,
@@ -302,17 +305,27 @@ class _VisitedWidget extends StatelessWidget {
                 style: AppTypography.detailsText,
               ),
             ],
-            actions: const [
-              SightIcons(
-                assetName: AppAssets.share,
-                width: 24,
-                height: 24,
+            actions: [
+              GestureDetector(
+                onTap: () {
+                  debugPrint('Share button pressed');
+                },
+                child: const SightIcons(
+                  assetName: AppAssets.share,
+                  width: 24,
+                  height: 24,
+                ),
               ),
-              SizedBox(width: 16),
-              SightIcons(
-                assetName: AppAssets.cross,
-                width: 22,
-                height: 22,
+              const SizedBox(width: 16),
+              GestureDetector(
+                onTap: () {
+                  debugPrint('Cross button pressed');
+                },
+                child: const SightIcons(
+                  assetName: AppAssets.cross,
+                  width: 22,
+                  height: 22,
+                ),
               ),
             ],
           ),
