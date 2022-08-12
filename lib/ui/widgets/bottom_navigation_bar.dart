@@ -8,44 +8,61 @@ class BottomNavigationBarWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BottomNavigationBar(
-      type: BottomNavigationBarType.fixed,
-      items: [
-        BottomNavigationBarItem(
-          icon: GestureDetector(
-            child: const SightIcons(
-              assetName: AppAssets.listPlaces,
+    final theme = Theme.of(context);
+
+    return DecoratedBox(
+      position: DecorationPosition.foreground,
+      decoration: BoxDecoration(
+        border: Border(
+          top: BorderSide(
+            color: theme.highlightColor,
+          ),
+        ),
+      ),
+      child: BottomNavigationBar(
+        type: BottomNavigationBarType.fixed,
+        items: [
+          BottomNavigationBarItem(
+            icon: GestureDetector(
+              child: SightIcons(
+                assetName: AppAssets.listPlaces,
+                width: 24,
+                height: 24,
+                color: theme.iconTheme.color,
+              ),
+            ),
+            label: '',
+          ),
+          BottomNavigationBarItem(
+            icon: SightIcons(
+              assetName: AppAssets.map,
               width: 24,
               height: 24,
+              color: theme.iconTheme.color,
             ),
+            label: '',
           ),
-          label: '',
-        ),
-        const BottomNavigationBarItem(
-          icon: SightIcons(
-            assetName: AppAssets.map,
-            width: 24,
-            height: 24,
+          BottomNavigationBarItem(
+            icon: SightIcons(
+              assetName: AppAssets.heartFull,
+              width: 24,
+              height: 24,
+              color: theme.iconTheme.color,
+            ),
+            label: '',
           ),
-          label: '',
-        ),
-        const BottomNavigationBarItem(
-          icon: SightIcons(
-            assetName: AppAssets.heartFull,
-            width: 24,
-            height: 24,
+          BottomNavigationBarItem(
+            icon: SightIcons(
+              assetName: AppAssets.settings,
+              width: 24,
+              height: 24,
+              color: theme.iconTheme.color,
+            ),
+            label: '',
+            
           ),
-          label: '',
-        ),
-        const BottomNavigationBarItem(
-          icon: SightIcons(
-            assetName: AppAssets.settings,
-            width: 24,
-            height: 24,
-          ),
-          label: '',
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

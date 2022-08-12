@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:places/ui/res/app_card_size.dart';
 
-import 'package:places/ui/res/app_colors.dart';
+import 'package:places/ui/res/app_card_size.dart';
 import 'package:places/ui/res/app_typography.dart';
+import 'package:places/ui/screen/res/custom_colors.dart';
 
 class SightCard extends StatelessWidget {
   final String url;
@@ -11,6 +11,7 @@ class SightCard extends StatelessWidget {
   final List<Widget> details;
   final List<Widget> actions;
   final double? aspectRatio;
+
   const SightCard({
     Key? key,
     required this.url,
@@ -23,6 +24,8 @@ class SightCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final customColors = Theme.of(context).extension<CustomColors>()!;
+
     return AspectRatio(
       aspectRatio: aspectRatio ?? AppCardSize.sightCard,
       child: Container(
@@ -33,7 +36,7 @@ class SightCard extends StatelessWidget {
         ),
         width: double.infinity,
         decoration: BoxDecoration(
-          color: AppColors.sightCardBackground,
+          color: customColors.color,
           borderRadius: BorderRadius.circular(16.0),
         ),
         child: Column(

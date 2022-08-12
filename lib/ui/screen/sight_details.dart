@@ -10,12 +10,14 @@ import 'package:places/ui/widgets/sight_icons.dart';
 
 class SightDetails extends StatelessWidget {
   final Sight sight;
-  const SightDetails({Key? key, required this.sight}) : super(key: key);
+  const SightDetails({
+    Key? key,
+    required this.sight,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.backgroundColor,
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -39,27 +41,9 @@ class SightDetails extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    sight.name,
-                    style: AppTypography.sightDetailsTitle,
-                  ),
-                  const SizedBox(
-                    height: 2,
-                  ),
-                  Row(
-                    children: [
-                      Text(
-                        sight.type,
-                        style: AppTypography.sightDetailsSubtitle,
-                      ),
-                      const SizedBox(width: 16),
-                      const Text(
-                        'закрыто до 09:00',
-                        style: AppTypography.sightDetailsSubtitleWithTime,
-                      ),
-                    ],
+                  _DetailsScreenTitle(
+                    sight: sight,
                   ),
                   const SizedBox(height: 24),
                   _DetailsScreenDescription(sight: sight),
@@ -75,6 +59,46 @@ class SightDetails extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+}
+
+class _DetailsScreenTitle extends StatelessWidget {
+  final Sight sight;
+
+  const _DetailsScreenTitle({
+    Key? key,
+    required this.sight,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          sight.name,
+          style: theme.textTheme.headlineMedium,
+        ),
+        const SizedBox(
+          height: 2,
+        ),
+        Row(
+          children: [
+            Text(
+              sight.type,
+              style: theme.textTheme.titleSmall,
+            ),
+            const SizedBox(width: 16),
+            Text(
+              '${AppString.closed} 9:00',
+              style: theme.textTheme.bodySmall,
+            ),
+          ],
+        ),
+      ],
     );
   }
 }
@@ -97,7 +121,7 @@ class _SightDetailsImage extends StatelessWidget {
         fit: BoxFit.cover,
         loadingBuilder: (context, child, loadingProgress) {
           if (loadingProgress == null) return child;
-          
+
           return const Center(
             child: CircularProgressIndicator(),
           );
@@ -109,14 +133,19 @@ class _SightDetailsImage extends StatelessWidget {
 
 class _DetailsScreenDescription extends StatelessWidget {
   final Sight sight;
-  const _DetailsScreenDescription({Key? key, required this.sight}) : super(key: key);
+  const _DetailsScreenDescription({
+    Key? key,
+    required this.sight,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return SizedBox(
       child: Text(
         sight.details,
-        style: AppTypography.sightDetailsDescription,
+        style: theme.textTheme.displaySmall,
       ),
     );
   }
@@ -162,10 +191,14 @@ class _SightDetailsBuildRouteBtn extends StatelessWidget {
 }
 
 class _SightDetailsBottom extends StatelessWidget {
-  const _SightDetailsBottom({Key? key}) : super(key: key);
+  const _SightDetailsBottom({
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -184,7 +217,6 @@ class _SightDetailsBottom extends StatelessWidget {
               SizedBox(width: 9),
               Text(
                 AppString.schedule,
-                style: AppTypography.inactiveButtonColor,
               ),
             ],
           ),
@@ -192,18 +224,19 @@ class _SightDetailsBottom extends StatelessWidget {
         GestureDetector(
           onTap: () {},
           child: Row(
-            children: const [
-              SightIcons(
+            children: [
+               SightIcons(
                 assetName: AppAssets.favouriteDark,
                 width: 20,
                 height: 18,
+                color: theme.iconTheme.color,
               ),
-              SizedBox(width: 9),
+              const SizedBox(width: 9),
               Text(
                 AppString.favourite,
-                style: AppTypography.activeButtonColor,
+                style: theme.textTheme.displaySmall,
               ),
-              SizedBox(
+              const SizedBox(
                 width: 24,
               ),
             ],
