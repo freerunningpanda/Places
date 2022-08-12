@@ -16,7 +16,10 @@ class ChevroneBack extends StatelessWidget {
     final customColors = Theme.of(context).extension<CustomColors>()!;
 
     return GestureDetector(
-      onTap: () => Navigator.pop(context),
+      onTap: () {
+        debugPrint('Back button pressed');
+        Navigator.pop(context);
+      },
       child: Container(
         width: height,
         height: width,

@@ -83,29 +83,32 @@ class _AddNewPlaceButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: 177,
-      height: 48,
-      decoration: BoxDecoration(
-        gradient: const LinearGradient(
-          begin: Alignment.topRight,
-          end: Alignment.bottomLeft,
-          colors: AppColors.limeGradient,
-        ),
-        borderRadius: BorderRadius.circular(30),
-        color: Colors.green,
-      ),
-      child: Row(
-        children: const [
-          Expanded(child: SizedBox()),
-          SightIcons(assetName: AppAssets.plus, width: 24, height: 24),
-          SizedBox(width: 8),
-          Text(
-            AppString.addNewPlace,
-            style: AppTypography.sightCardTitle,
+    return GestureDetector(
+      onTap: () => debugPrint('Add new place button pressed'),
+      child: Container(
+        width: 177,
+        height: 48,
+        decoration: BoxDecoration(
+          gradient: const LinearGradient(
+            begin: Alignment.topRight,
+            end: Alignment.bottomLeft,
+            colors: AppColors.limeGradient,
           ),
-          Expanded(child: SizedBox()),
-        ],
+          borderRadius: BorderRadius.circular(30),
+          color: Colors.green,
+        ),
+        child: Row(
+          children: const [
+            Expanded(child: SizedBox()),
+            SightIcons(assetName: AppAssets.plus, width: 24, height: 24),
+            SizedBox(width: 8),
+            Text(
+              AppString.addNewPlace,
+              style: AppTypography.sightCardTitle,
+            ),
+            Expanded(child: SizedBox()),
+          ],
+        ),
       ),
     );
   }
@@ -147,6 +150,9 @@ class _TabBarWidget extends StatelessWidget {
         color: customColors?.color,
       ),
       child: TabBar(
+        onTap: (value) {
+          debugPrint('TabBar pressed: $value');
+        },
         unselectedLabelColor: Colors.grey,
         labelColor: theme.toggleableActiveColor,
         labelStyle: AppTypography.tabBarIndicator,
@@ -184,13 +190,16 @@ class _WantToVisitWidget extends StatelessWidget {
         final item = Mocks.mocks[index];
 
         return GestureDetector(
-          onTap: () => Navigator.of(context).push(
+          onTap: () {
+            debugPrint('go to SightDetails pressed');
+            Navigator.of(context).push(
             MaterialPageRoute<SightDetails>(
               builder: (context) => SightDetails(
                 sight: item,
               ),
             ),
-          ),
+          );
+          },
           child: SightCard(
             url: item.url,
             type: item.type,
@@ -217,17 +226,27 @@ class _WantToVisitWidget extends StatelessWidget {
                 style: AppTypography.textText16Regular,
               ),
             ],
-            actions: const [
-              SightIcons(
-                assetName: AppAssets.calendarWhite,
-                width: 24,
-                height: 24,
+            actions: [
+              GestureDetector(
+                onTap: () {
+                  debugPrint('Calendar pressed');
+                },
+                child: const SightIcons(
+                  assetName: AppAssets.calendarWhite,
+                  width: 24,
+                  height: 24,
+                ),
               ),
-              SizedBox(width: 16),
-              SightIcons(
-                assetName: AppAssets.cross,
-                width: 22,
-                height: 22,
+              const SizedBox(width: 16),
+              GestureDetector(
+                onTap: () {
+                  debugPrint('Cross pressed');
+                },
+                child: const SightIcons(
+                  assetName: AppAssets.cross,
+                  width: 22,
+                  height: 22,
+                ),
               ),
             ],
           ),

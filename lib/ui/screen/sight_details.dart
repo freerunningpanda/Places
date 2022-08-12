@@ -169,6 +169,7 @@ class _SightDetailsBuildRouteBtn extends StatelessWidget {
           color: AppColors.goButton,
         ),
         child: GestureDetector(
+          onTap: () => debugPrint('Build a route pressed'),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -203,7 +204,7 @@ class _SightDetailsBottom extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         GestureDetector(
-          onTap: () {},
+          onTap: () => debugPrint('Schedule pressed'),
           child: Row(
             children: const [
               SizedBox(
@@ -222,7 +223,7 @@ class _SightDetailsBottom extends StatelessWidget {
           ),
         ),
         GestureDetector(
-          onTap: () {},
+          onTap: () => debugPrint('To favourite pressed'),
           child: Row(
             children: [
                SightIcons(
