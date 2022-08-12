@@ -149,29 +149,34 @@ class _TabBarWidget extends StatelessWidget {
         borderRadius: BorderRadius.circular(30),
         color: customColors?.color,
       ),
-      child: TabBar(
-        onTap: (value) {
-          debugPrint('TabBar pressed: $value');
-        },
-        unselectedLabelColor: Colors.grey,
-        labelColor: theme.toggleableActiveColor,
-        labelStyle: AppTypography.tabBarIndicator,
-        indicator: BoxDecoration(
-          borderRadius: BorderRadius.circular(50),
-          color: theme.iconTheme.color,
+      child: Material(
+        borderRadius: BorderRadius.circular(30),
+        clipBehavior: Clip.antiAlias,
+        type: MaterialType.transparency,
+        child: TabBar(
+          onTap: (value) {
+            debugPrint('TabBar pressed: $value');
+          },
+          unselectedLabelColor: Colors.grey,
+          labelColor: theme.toggleableActiveColor,
+          labelStyle: AppTypography.tabBarIndicator,
+          indicator: BoxDecoration(
+            borderRadius: BorderRadius.circular(50),
+            color: theme.iconTheme.color,
+          ),
+          tabs: const [
+            Tab(
+              child: Text(
+                AppString.tabBarOneText,
+              ),
+            ),
+            Tab(
+              child: Text(
+                AppString.tabBarTwoText,
+              ),
+            ),
+          ],
         ),
-        tabs: const [
-          Tab(
-            child: Text(
-              AppString.tabBarOneText,
-            ),
-          ),
-          Tab(
-            child: Text(
-              AppString.tabBarTwoText,
-            ),
-          ),
-        ],
       ),
     );
   }
