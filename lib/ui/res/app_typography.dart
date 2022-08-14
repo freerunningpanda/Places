@@ -8,6 +8,12 @@ abstract class AppTypography {
     fontWeight: FontWeight.w400,
     color: AppColors.secondaryTwo,
   );
+  static const textText16Search = TextStyle(
+    fontSize: 16,
+    height: 1.25,
+    fontWeight: FontWeight.w400,
+    color: AppColors.inactiveBlack,
+  );
   static const appBarTitle = TextStyle(
     fontSize: 32,
     fontWeight: FontWeight.w700,

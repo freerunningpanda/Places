@@ -14,5 +14,7 @@ abstract class AppAssets {
   static const heartFull = 'lib/ui/res/icons/heart_full.svg';
   static const share = 'lib/ui/res/icons/share.svg';
   static const plus = 'lib/ui/res/icons/plus.svg';
+  static const search = 'lib/ui/res/icons/search.svg';
+  static const filter = 'lib/ui/res/icons/filter.svg';
 
 }

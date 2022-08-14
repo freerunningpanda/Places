@@ -39,8 +39,8 @@ class _AppState extends State<App> {
       debugShowCheckedModeBanner: false,
       title: 'Places',
       home:
-       const VisitingScreen(),
-      // const SightListScreen(),
+      //  const VisitingScreen(),
+      const SightListScreen(),
     );
   }
 }
