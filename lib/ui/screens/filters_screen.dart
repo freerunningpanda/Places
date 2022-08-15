@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:places/main.dart';
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_strings.dart';
@@ -103,7 +104,14 @@ class _FiltersTable extends StatefulWidget {
 }
 
 class _FiltersTableState extends State<_FiltersTable> {
-  final List<String> filters = ['Отель', 'Ресторан', 'Особое место', 'Парк', 'Музей', 'Кафе'];
+  final Map<String, String> filters = {
+    'Отель': AppAssets.hotel,
+    'Ресторан': AppAssets.restourant,
+    'Особое место': AppAssets.particularPlace,
+    'Парк': AppAssets.park,
+    'Музей': AppAssets.museum,
+    'Кафе': AppAssets.cafe,
+  };
 
   @override
   Widget build(BuildContext context) {
@@ -113,7 +121,14 @@ class _FiltersTableState extends State<_FiltersTable> {
         crossAxisAlignment: WrapCrossAlignment.center,
         spacing: 24,
         runSpacing: 40,
-        children: filters.map((e) => _ItemFilter(title: e)).toList(),
+        children: filters.entries
+            .map(
+              (entry) => _ItemFilter(
+                title: entry.key,
+                assetName: entry.value,
+              ),
+            )
+            .toList(),
       ),
     );
   }
@@ -121,33 +136,68 @@ class _FiltersTableState extends State<_FiltersTable> {
 
 class _ItemFilter extends StatelessWidget {
   final String title;
+  final String assetName;
   const _ItemFilter({
     Key? key,
     required this.title,
+    required this.assetName,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: 96,
-      height: 96,
-      child: Column(
-        children: [
-          const SizedBox(
-            height: 64,
-            width: 64,
-            child: CircleAvatar(
-              backgroundColor: Colors.green,
-              child: Icon(Icons.bed),
+    return Wrap(
+      children: [
+        Stack(
+          children: [
+            SizedBox(
+              width: 96,
+              height: 96,
+              child: Column(
+                children: [
+                  SizedBox(
+                    height: 64,
+                    width: 64,
+                    child: CircleAvatar(
+                      // backgroundColor: Theme.of(context).canvasColor,
+                      child: SightIcons(
+                        assetName: assetName,
+                        width: 32,
+                        height: 32,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  Text(
+                    title,
+                    textAlign: TextAlign.center,
+                  ),
+                ],
+              ),
             ),
-          ),
-          const SizedBox(height: 12),
-          Text(
-            title,
-            textAlign: TextAlign.center,
-          ),
-        ],
-      ),
+            Positioned(
+              right: 16,
+              bottom: 30,
+              child: Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 2,
+                  vertical: 2,
+                ),
+                width: 16,
+                height: 16,
+                decoration: BoxDecoration(
+                  color: Theme.of(context).iconTheme.color,
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                child: const SightIcons(
+                  assetName: AppAssets.check,
+                  width: 16,
+                  height: 16,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ],
     );
   }
 }

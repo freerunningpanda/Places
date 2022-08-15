@@ -136,13 +136,13 @@ abstract class AppTypography {
   );
 
   static const greenColor = TextStyle(
-    color: AppColors.goButton,
+    color: AppColors.green,
     fontSize: 14,
     fontWeight: FontWeight.w400,
   );
 
   static const clearButton = TextStyle(
-    color: AppColors.goButton,
+    color: AppColors.green,
     fontSize: 16,
     fontWeight: FontWeight.w500,
   );

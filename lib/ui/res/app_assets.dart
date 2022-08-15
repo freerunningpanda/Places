@@ -17,5 +17,11 @@ abstract class AppAssets {
   static const search = 'lib/ui/res/icons/search.svg';
   static const filter = 'lib/ui/res/icons/filter.svg';
   static const check = 'lib/ui/res/icons/check.svg';
+  static const cafe = 'lib/ui/res/icons/cafe.svg';
+  static const hotel = 'lib/ui/res/icons/hotel.svg';
+  static const museum = 'lib/ui/res/icons/museum.svg';
+  static const park = 'lib/ui/res/icons/park.svg';
+  static const particularPlace = 'lib/ui/res/icons/particular_place.svg';
+  static const restourant = 'lib/ui/res/icons/restourant.svg';
 
 }

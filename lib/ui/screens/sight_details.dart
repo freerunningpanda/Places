@@ -166,7 +166,7 @@ class _SightDetailsBuildRouteBtn extends StatelessWidget {
         height: 48,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(12),
-          color: AppColors.goButton,
+          color: AppColors.green,
         ),
         child: GestureDetector(
           onTap: () => debugPrint('Build a route pressed'),

@@ -30,6 +30,7 @@ abstract class AppTheme {
       ),
       toggleableActiveColor: AppColors.backgroundColor,
       highlightColor: AppColors.inactiveBlack,
+      canvasColor: AppColors.green,
     );
   }
 
