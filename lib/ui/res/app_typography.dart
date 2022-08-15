@@ -140,4 +140,10 @@ abstract class AppTypography {
     fontSize: 14,
     fontWeight: FontWeight.w400,
   );
+
+  static const clearButton = TextStyle(
+    color: AppColors.goButton,
+    fontSize: 16,
+    fontWeight: FontWeight.w500,
+  );
 }

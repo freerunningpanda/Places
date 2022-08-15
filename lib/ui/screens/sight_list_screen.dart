@@ -5,9 +5,10 @@ import 'package:places/mocks.dart';
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_strings.dart';
 import 'package:places/ui/res/app_typography.dart';
-import 'package:places/ui/screen/res/custom_colors.dart';
-import 'package:places/ui/screen/sight_card.dart';
-import 'package:places/ui/screen/sight_details.dart';
+import 'package:places/ui/screens/filters_screen.dart';
+import 'package:places/ui/screens/res/custom_colors.dart';
+import 'package:places/ui/screens/sight_card.dart';
+import 'package:places/ui/screens/sight_details.dart';
 import 'package:places/ui/widgets/sight_icons.dart';
 
 class SightListScreen extends StatefulWidget {
@@ -155,6 +156,12 @@ class _SearchWidgetState extends State<_SearchWidget> {
                   hintStyle: AppTypography.textText16Search,
                   suffixIcon: IconButton(
                     onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute<FilterScreen>(
+                          builder: (context) => const FilterScreen(),
+                        ),
+                      );
                       debugPrint('filters button pressed');
                     },
                     icon: const SightIcons(assetName: AppAssets.filter, width: 24, height: 24),

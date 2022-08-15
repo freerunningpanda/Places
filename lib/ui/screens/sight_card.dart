@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:places/ui/res/app_card_size.dart';
 import 'package:places/ui/res/app_typography.dart';
-import 'package:places/ui/screen/res/custom_colors.dart';
+import 'package:places/ui/screens/res/custom_colors.dart';
 
 class SightCard extends StatelessWidget {
   final String url;
