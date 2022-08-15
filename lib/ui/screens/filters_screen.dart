@@ -168,13 +168,23 @@ class _ItemFilterState extends State<_ItemFilter> {
                 SizedBox(
                   height: 64,
                   width: 64,
-                  child: CircleAvatar(
+                  child: !isEnabled ? CircleAvatar(
                     backgroundColor: Theme.of(context).canvasColor,
                     child: SightIcons(
                       assetName: widget.assetName,
                       width: 32,
                       height: 32,
                     ),
+                  ) : Opacity(
+                    opacity: 0.5,
+                    child: CircleAvatar(
+                    backgroundColor: Theme.of(context).canvasColor,
+                    child: SightIcons(
+                      assetName: widget.assetName,
+                      width: 32,
+                      height: 32,
+                    ),
+                  ),
                   ),
                 ),
                 const SizedBox(height: 12),
