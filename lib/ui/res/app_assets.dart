@@ -16,5 +16,6 @@ abstract class AppAssets {
   static const plus = 'lib/ui/res/icons/plus.svg';
   static const search = 'lib/ui/res/icons/search.svg';
   static const filter = 'lib/ui/res/icons/filter.svg';
+  static const check = 'lib/ui/res/icons/check.svg';
 
 }

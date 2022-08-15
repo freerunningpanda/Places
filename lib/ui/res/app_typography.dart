@@ -34,7 +34,7 @@ abstract class AppTypography {
     fontWeight: FontWeight.w700,
     color: AppColors.chevroneColor,
   );
-  
+
   static const disabledTabDarkMode = TextStyle(
     fontWeight: FontWeight.w700,
     color: AppColors.inactiveBlack,
@@ -91,7 +91,7 @@ abstract class AppTypography {
     color: AppColors.secondaryTwo,
   );
 
-    static const detailsTextDarkMode = TextStyle(
+  static const detailsTextDarkMode = TextStyle(
     fontSize: 14,
     fontWeight: FontWeight.w400,
     color: AppColors.inactiveBlack,
@@ -145,5 +145,11 @@ abstract class AppTypography {
     color: AppColors.goButton,
     fontSize: 16,
     fontWeight: FontWeight.w500,
+  );
+
+  static const categoriesGrey = TextStyle(
+    color: AppColors.inactiveBlack,
+    fontSize: 12,
+    fontWeight: FontWeight.w400,
   );
 }

@@ -14,4 +14,5 @@ abstract class AppString {
   static const targetReach = 'Цель достигнута';
   static const addNewPlace = 'НОВОЕ МЕСТО';
   static const clear = 'Очистить';
+  static const categories = 'КАТЕГОРИИ';
 }
