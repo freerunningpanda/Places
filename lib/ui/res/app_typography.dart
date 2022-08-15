@@ -152,4 +152,15 @@ abstract class AppTypography {
     fontSize: 12,
     fontWeight: FontWeight.w400,
   );
+
+  static const filtersItemsDarkMode = TextStyle(
+    color: AppColors.backgroundColor,
+    fontSize: 12,
+    fontWeight: FontWeight.w400,
+  );
+  static const filtersItems = TextStyle(
+    color: AppColors.textColor,
+    fontSize: 12,
+    fontWeight: FontWeight.w400,
+  );
 }

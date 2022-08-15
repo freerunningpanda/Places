@@ -24,13 +24,15 @@ abstract class AppTheme {
         titleLarge: AppTypography.visitingScreenTitle,   
         bodySmall: AppTypography.detailsText,   
         displaySmall: AppTypography.sightDetailsDescription,
+        labelSmall: AppTypography.filtersItems,
       ),
       iconTheme: const IconThemeData(
         color: AppColors.darkThemeBgColor,
       ),
       toggleableActiveColor: AppColors.backgroundColor,
       highlightColor: AppColors.inactiveBlack,
-      canvasColor: AppColors.green,
+      canvasColor: AppColors.lightGreen,
+      focusColor: AppColors.chevroneColor,
     );
   }
 
@@ -58,12 +60,15 @@ abstract class AppTheme {
         titleLarge: AppTypography.visitingScreenTitleDarkMode,    
         bodySmall: AppTypography.detailsTextDarkMode,   
         displaySmall: AppTypography.sightDetailsDescriptionDarkMode,
+        labelSmall: AppTypography.filtersItemsDarkMode,
       ),
       iconTheme: const IconThemeData(
         color: AppColors.backgroundColor,
       ),
       toggleableActiveColor: AppColors.textColor,
       highlightColor: AppColors.inactiveBlack,
+      canvasColor: AppColors.lightGreen,
+      focusColor: AppColors.chevroneColor,
     );
   }
 }

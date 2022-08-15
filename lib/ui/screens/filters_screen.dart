@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:places/main.dart';
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_strings.dart';
 import 'package:places/ui/res/app_typography.dart';
@@ -27,7 +25,7 @@ class _FilterScreenState extends State<FilterScreen> {
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
+          children: const [
             _Title(),
             Expanded(child: _FiltersTable()),
           ],
@@ -44,7 +42,7 @@ class _Title extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text(
+    return const Text(
       AppString.categories,
       style: AppTypography.categoriesGrey,
     );
@@ -134,7 +132,7 @@ class _FiltersTableState extends State<_FiltersTable> {
   }
 }
 
-class _ItemFilter extends StatelessWidget {
+class _ItemFilter extends StatefulWidget {
   final String title;
   final String assetName;
   const _ItemFilter({
@@ -144,60 +142,75 @@ class _ItemFilter extends StatelessWidget {
   }) : super(key: key);
 
   @override
+  State<_ItemFilter> createState() => _ItemFilterState();
+}
+
+class _ItemFilterState extends State<_ItemFilter> {
+  bool isEnabled = false;
+
+  @override
   Widget build(BuildContext context) {
-    return Wrap(
-      children: [
-        Stack(
-          children: [
-            SizedBox(
-              width: 96,
-              height: 96,
-              child: Column(
-                children: [
-                  SizedBox(
-                    height: 64,
-                    width: 64,
-                    child: CircleAvatar(
-                      // backgroundColor: Theme.of(context).canvasColor,
-                      child: SightIcons(
-                        assetName: assetName,
-                        width: 32,
-                        height: 32,
-                      ),
+    final theme = Theme.of(context);
+
+    return GestureDetector(
+      onTap: () {
+        setState(() {
+          isEnabled = !isEnabled;
+        });
+      },
+      child: Stack(
+        children: [
+          SizedBox(
+            width: 98,
+            height: 96,
+            child: Column(
+              children: [
+                SizedBox(
+                  height: 64,
+                  width: 64,
+                  child: CircleAvatar(
+                    backgroundColor: Theme.of(context).canvasColor,
+                    child: SightIcons(
+                      assetName: widget.assetName,
+                      width: 32,
+                      height: 32,
                     ),
                   ),
-                  const SizedBox(height: 12),
-                  Text(
-                    title,
-                    textAlign: TextAlign.center,
-                  ),
-                ],
-              ),
-            ),
-            Positioned(
-              right: 16,
-              bottom: 30,
-              child: Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 2,
-                  vertical: 2,
                 ),
+                const SizedBox(height: 12),
+                Text(
+                  widget.title,
+                  textAlign: TextAlign.center,
+                  style: theme.textTheme.labelSmall,
+                ),
+              ],
+            ),
+          ),
+          if (isEnabled)
+          Positioned(
+            right: 16,
+            bottom: 30,
+            child: Container(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 2,
+                vertical: 2,
+              ),
+              width: 16,
+              height: 16,
+              decoration: BoxDecoration(
+                color: theme.focusColor,
+                borderRadius: BorderRadius.circular(16),
+              ),
+              child: const SightIcons(
+                assetName: AppAssets.check,
                 width: 16,
                 height: 16,
-                decoration: BoxDecoration(
-                  color: Theme.of(context).iconTheme.color,
-                  borderRadius: BorderRadius.circular(16),
-                ),
-                child: const SightIcons(
-                  assetName: AppAssets.check,
-                  width: 16,
-                  height: 16,
-                ),
               ),
             ),
-          ],
-        ),
-      ],
+          )
+          else const SizedBox(),
+        ],
+      ),
     );
   }
 }
