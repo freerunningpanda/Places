@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:places/ui/res/app_assets.dart';
+import 'package:places/ui/res/app_colors.dart';
 import 'package:places/ui/res/app_strings.dart';
 import 'package:places/ui/res/app_typography.dart';
 import 'package:places/ui/widgets/sight_icons.dart';
@@ -27,7 +28,10 @@ class _FilterScreenState extends State<FilterScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: const [
             _Title(),
-            Expanded(child: _FiltersTable()),
+            SizedBox(height: 24),
+            _FiltersTable(),
+            SizedBox(height: 60),
+            _DistanceSlider(),
           ],
         ),
       ),
@@ -168,24 +172,26 @@ class _ItemFilterState extends State<_ItemFilter> {
                 SizedBox(
                   height: 64,
                   width: 64,
-                  child: !isEnabled ? CircleAvatar(
-                    backgroundColor: Theme.of(context).canvasColor,
-                    child: SightIcons(
-                      assetName: widget.assetName,
-                      width: 32,
-                      height: 32,
-                    ),
-                  ) : Opacity(
-                    opacity: 0.5,
-                    child: CircleAvatar(
-                    backgroundColor: Theme.of(context).canvasColor,
-                    child: SightIcons(
-                      assetName: widget.assetName,
-                      width: 32,
-                      height: 32,
-                    ),
-                  ),
-                  ),
+                  child: !isEnabled
+                      ? CircleAvatar(
+                          backgroundColor: Theme.of(context).canvasColor,
+                          child: SightIcons(
+                            assetName: widget.assetName,
+                            width: 32,
+                            height: 32,
+                          ),
+                        )
+                      : Opacity(
+                          opacity: 0.5,
+                          child: CircleAvatar(
+                            backgroundColor: Theme.of(context).canvasColor,
+                            child: SightIcons(
+                              assetName: widget.assetName,
+                              width: 32,
+                              height: 32,
+                            ),
+                          ),
+                        ),
                 ),
                 const SizedBox(height: 12),
                 Text(
@@ -197,30 +203,80 @@ class _ItemFilterState extends State<_ItemFilter> {
             ),
           ),
           if (isEnabled)
-          Positioned(
-            right: 16,
-            bottom: 30,
-            child: Container(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 2,
-                vertical: 2,
-              ),
-              width: 16,
-              height: 16,
-              decoration: BoxDecoration(
-                color: theme.focusColor,
-                borderRadius: BorderRadius.circular(16),
-              ),
-              child: const SightIcons(
-                assetName: AppAssets.check,
+            Positioned(
+              right: 16,
+              bottom: 30,
+              child: Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 2,
+                  vertical: 2,
+                ),
                 width: 16,
                 height: 16,
+                decoration: BoxDecoration(
+                  color: theme.focusColor,
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                child: const SightIcons(
+                  assetName: AppAssets.check,
+                  width: 16,
+                  height: 16,
+                ),
               ),
-            ),
-          )
-          else const SizedBox(),
+            )
+          else
+            const SizedBox(),
         ],
       ),
+    );
+  }
+}
+
+class _DistanceSlider extends StatefulWidget {
+  const _DistanceSlider({Key? key}) : super(key: key);
+
+  @override
+  State<_DistanceSlider> createState() => _DistanceSliderState();
+}
+
+class _DistanceSliderState extends State<_DistanceSlider> {
+  RangeValues values = const RangeValues(2000, 8000);
+  double min = 100;
+  double max = 10000;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text('Расстояние'),
+            Text('от ${values.start.toInt()} до ${values.end.toInt()} м'),
+          ],
+        ),
+        const SizedBox(height: 24),
+        SliderTheme(
+          data: SliderThemeData(
+            trackHeight: 1,
+            inactiveTrackColor: AppColors.inactiveBlack,
+            activeTrackColor: AppColors.green,
+            thumbColor: AppColors.backgroundColor,
+            overlayShape: SliderComponentShape.noOverlay,
+            rangeThumbShape: const RoundRangeSliderThumbShape(
+              elevation: 3,
+            ),
+          ),
+          child: RangeSlider(
+            values: values,
+            min: min,
+            max: max,
+            onChanged: (values) => setState(
+              () => this.values = values,
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

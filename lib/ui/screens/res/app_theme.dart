@@ -20,9 +20,9 @@ abstract class AppTheme {
         headlineMedium: AppTypography.sightDetailsTitle,
         headlineSmall: AppTypography.sightCardDescriptionTitle,
         bodyMedium: AppTypography.detailsText,
-        titleSmall: AppTypography.sightDetailsSubtitle, 
-        titleLarge: AppTypography.visitingScreenTitle,   
-        bodySmall: AppTypography.detailsText,   
+        titleSmall: AppTypography.sightDetailsSubtitle,
+        titleLarge: AppTypography.visitingScreenTitle,
+        bodySmall: AppTypography.detailsText,
         displaySmall: AppTypography.sightDetailsDescription,
         labelSmall: AppTypography.filtersItems,
       ),
@@ -33,6 +33,16 @@ abstract class AppTheme {
       highlightColor: AppColors.inactiveBlack,
       canvasColor: AppColors.lightGreen,
       focusColor: AppColors.chevroneColor,
+      // sliderTheme: SliderThemeData(
+      //   trackHeight: 1,
+      //   inactiveTrackColor: Colors.grey,
+      //   activeTrackColor: Colors.green,
+      //   thumbColor: Colors.white,
+      //   overlayShape: SliderComponentShape.noOverlay,
+      //   rangeThumbShape: RoundRangeSliderThumbShape(
+      //     elevation: 3,
+      //   ),
+      // ),
     );
   }
 
@@ -47,7 +57,6 @@ abstract class AppTheme {
       ),
       bottomNavigationBarTheme: const BottomNavigationBarThemeData(
         backgroundColor: AppColors.darkThemeBgColor,
-
       ),
       dividerTheme: const DividerThemeData(
         color: AppColors.secondaryTwo,
@@ -56,9 +65,9 @@ abstract class AppTheme {
         headlineMedium: AppTypography.sightDetailsTitleDarkMode,
         headlineSmall: AppTypography.sightCardDescriptionTitleDarkMode,
         bodyMedium: AppTypography.detailsText,
-        titleSmall: AppTypography.sightDetailsSubtitleDarkMode,   
-        titleLarge: AppTypography.visitingScreenTitleDarkMode,    
-        bodySmall: AppTypography.detailsTextDarkMode,   
+        titleSmall: AppTypography.sightDetailsSubtitleDarkMode,
+        titleLarge: AppTypography.visitingScreenTitleDarkMode,
+        bodySmall: AppTypography.detailsTextDarkMode,
         displaySmall: AppTypography.sightDetailsDescriptionDarkMode,
         labelSmall: AppTypography.filtersItemsDarkMode,
       ),
