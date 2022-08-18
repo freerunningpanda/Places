@@ -163,4 +163,16 @@ abstract class AppTypography {
     fontSize: 12,
     fontWeight: FontWeight.w400,
   );
+
+  static const distantion = TextStyle(
+    color: AppColors.textColor,
+    fontSize: 16,
+    fontWeight: FontWeight.w400,
+  );
+
+  static const distantionDarkMode = TextStyle(
+    color: AppColors.backgroundColor,
+    fontSize: 16,
+    fontWeight: FontWeight.w400,
+  );
 }

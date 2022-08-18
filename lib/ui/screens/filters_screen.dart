@@ -107,12 +107,12 @@ class _FiltersTable extends StatefulWidget {
 
 class _FiltersTableState extends State<_FiltersTable> {
   final Map<String, String> filters = {
-    'Отель': AppAssets.hotel,
-    'Ресторан': AppAssets.restourant,
-    'Особое место': AppAssets.particularPlace,
-    'Парк': AppAssets.park,
-    'Музей': AppAssets.museum,
-    'Кафе': AppAssets.cafe,
+    AppString.hotel: AppAssets.hotel,
+    AppString.restaurant: AppAssets.restaurant,
+    AppString.particularPlace: AppAssets.particularPlace,
+    AppString.park: AppAssets.park,
+    AppString.museum: AppAssets.museum,
+    AppString.cafe: AppAssets.cafe,
   };
 
   @override
@@ -246,13 +246,21 @@ class _DistanceSliderState extends State<_DistanceSlider> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Column(
       children: [
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text('Расстояние'),
-            Text('от ${values.start.toInt()} до ${values.end.toInt()} м'),
+            Text(
+              AppString.distantion,
+              style: theme.textTheme.displayMedium,
+            ),
+            Text(
+              'от ${values.start.toInt()} до ${values.end.toInt()} м',
+              style: theme.textTheme.titleMedium,
+            ),
           ],
         ),
         const SizedBox(height: 24),
