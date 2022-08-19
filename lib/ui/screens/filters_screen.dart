@@ -1,12 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:places/domain/filters.dart';
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_colors.dart';
 import 'package:places/ui/res/app_strings.dart';
 import 'package:places/ui/res/app_typography.dart';
 import 'package:places/ui/widgets/sight_icons.dart';
 
+final List<Filters> filters = [
+  Filters(title: AppString.hotel, assetName: AppAssets.hotel, isEnabled: false),
+  Filters(title: AppString.restaurant, assetName: AppAssets.restaurant, isEnabled: false),
+  Filters(title: AppString.particularPlace, assetName: AppAssets.particularPlace, isEnabled: false),
+  Filters(title: AppString.park, assetName: AppAssets.park, isEnabled: false),
+  Filters(title: AppString.museum, assetName: AppAssets.museum, isEnabled: false),
+  Filters(title: AppString.cafe, assetName: AppAssets.cafe, isEnabled: false),
+];
+
 class FilterScreen extends StatefulWidget {
-  const FilterScreen({Key? key}) : super(key: key);
+  final void Function()? onPressed;
+  const FilterScreen({
+    Key? key,
+    this.onPressed,
+  }) : super(key: key);
 
   @override
   State<FilterScreen> createState() => _FilterScreenState();
@@ -16,7 +30,13 @@ class _FilterScreenState extends State<FilterScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const _AppBar(),
+      appBar: _AppBar(
+        onPressed: () {
+          setState(() {
+            filters.map((e) => e.isEnabled = false);
+          });
+        },
+      ),
       body: Padding(
         padding: const EdgeInsets.only(
           left: 16,
@@ -54,10 +74,11 @@ class _Title extends StatelessWidget {
 }
 
 class _AppBar extends StatelessWidget implements PreferredSizeWidget {
+  final void Function()? onPressed;
   @override
   Size get preferredSize => const Size.fromHeight(80); // Это свойство не применяется
 
-  const _AppBar({Key? key}) : super(key: key);
+  const _AppBar({Key? key, required this.onPressed}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -73,23 +94,29 @@ class _AppBar extends StatelessWidget implements PreferredSizeWidget {
         ),
         toolbarHeight: 86,
         bottomOpacity: 0.0,
-        actions: const [
-          _ClearButtonWidget(),
+        actions: [
+          _ClearButtonWidget(
+            onPressed: onPressed,
+          ),
         ],
       ),
     );
   }
 }
 
-class _ClearButtonWidget extends StatelessWidget {
-  const _ClearButtonWidget({Key? key}) : super(key: key);
+class _ClearButtonWidget extends StatefulWidget {
+  final void Function()? onPressed;
+  const _ClearButtonWidget({Key? key, required this.onPressed}) : super(key: key);
 
+  @override
+  State<_ClearButtonWidget> createState() => _ClearButtonWidgetState();
+}
+
+class _ClearButtonWidgetState extends State<_ClearButtonWidget> {
   @override
   Widget build(BuildContext context) {
     return TextButton(
-      onPressed: () {
-        debugPrint('clear Button pressed');
-      },
+      onPressed: widget.onPressed,
       child: const Text(
         AppString.clear,
         style: AppTypography.clearButton,
@@ -106,15 +133,6 @@ class _FiltersTable extends StatefulWidget {
 }
 
 class _FiltersTableState extends State<_FiltersTable> {
-  final Map<String, String> filters = {
-    AppString.hotel: AppAssets.hotel,
-    AppString.restaurant: AppAssets.restaurant,
-    AppString.particularPlace: AppAssets.particularPlace,
-    AppString.park: AppAssets.park,
-    AppString.museum: AppAssets.museum,
-    AppString.cafe: AppAssets.cafe,
-  };
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -123,13 +141,17 @@ class _FiltersTableState extends State<_FiltersTable> {
         crossAxisAlignment: WrapCrossAlignment.center,
         spacing: 24,
         runSpacing: 40,
-        children: filters.entries
-            .map(
-              (entry) => _ItemFilter(
-                title: entry.key,
-                assetName: entry.value,
-              ),
-            )
+        children: filters
+            .map((e) => _ItemFilter(
+                  onPressed: () {
+                    setState(() {
+                      e.isEnabled = false;
+                    });
+                  },
+                  title: e.title,
+                  assetName: e.assetName,
+                  isEnabled: e.isEnabled,
+                ))
             .toList(),
       ),
     );
@@ -137,12 +159,16 @@ class _FiltersTableState extends State<_FiltersTable> {
 }
 
 class _ItemFilter extends StatefulWidget {
+  final void Function()? onPressed;
   final String title;
   final String assetName;
-  const _ItemFilter({
+  bool isEnabled;
+  _ItemFilter({
     Key? key,
     required this.title,
     required this.assetName,
+    this.isEnabled = false,
+    this.onPressed,
   }) : super(key: key);
 
   @override
@@ -150,7 +176,7 @@ class _ItemFilter extends StatefulWidget {
 }
 
 class _ItemFilterState extends State<_ItemFilter> {
-  bool isEnabled = false;
+  // bool isEnabled = false;
 
   @override
   Widget build(BuildContext context) {
@@ -159,7 +185,7 @@ class _ItemFilterState extends State<_ItemFilter> {
     return GestureDetector(
       onTap: () {
         setState(() {
-          isEnabled = !isEnabled;
+          widget.isEnabled = !widget.isEnabled;
         });
       },
       child: Stack(
@@ -172,7 +198,7 @@ class _ItemFilterState extends State<_ItemFilter> {
                 SizedBox(
                   height: 64,
                   width: 64,
-                  child: !isEnabled
+                  child: !widget.isEnabled
                       ? CircleAvatar(
                           backgroundColor: Theme.of(context).canvasColor,
                           child: SightIcons(
@@ -202,7 +228,7 @@ class _ItemFilterState extends State<_ItemFilter> {
               ],
             ),
           ),
-          if (isEnabled)
+          if (widget.isEnabled)
             Positioned(
               right: 16,
               bottom: 30,
