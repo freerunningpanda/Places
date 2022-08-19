@@ -1,19 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:places/domain/filters.dart';
+
+import 'package:places/data/filters.dart';
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_colors.dart';
 import 'package:places/ui/res/app_strings.dart';
 import 'package:places/ui/res/app_typography.dart';
 import 'package:places/ui/widgets/sight_icons.dart';
 
-final List<Filters> filters = [
-  Filters(title: AppString.hotel, assetName: AppAssets.hotel, isEnabled: false),
-  Filters(title: AppString.restaurant, assetName: AppAssets.restaurant, isEnabled: false),
-  Filters(title: AppString.particularPlace, assetName: AppAssets.particularPlace, isEnabled: false),
-  Filters(title: AppString.park, assetName: AppAssets.park, isEnabled: false),
-  Filters(title: AppString.museum, assetName: AppAssets.museum, isEnabled: false),
-  Filters(title: AppString.cafe, assetName: AppAssets.cafe, isEnabled: false),
-];
+
 
 class FilterScreen extends StatefulWidget {
   final void Function()? onPressed;
@@ -27,13 +21,21 @@ class FilterScreen extends StatefulWidget {
 }
 
 class _FilterScreenState extends State<FilterScreen> {
+  final List<Filters> filters = [
+  Filters(title: AppString.hotel, assetName: AppAssets.hotel),
+  Filters(title: AppString.restaurant, assetName: AppAssets.restaurant),
+  Filters(title: AppString.particularPlace, assetName: AppAssets.particularPlace),
+  Filters(title: AppString.park, assetName: AppAssets.park),
+  Filters(title: AppString.museum, assetName: AppAssets.museum),
+  Filters(title: AppString.cafe, assetName: AppAssets.cafe),
+];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: _AppBar(
         onPressed: () {
           setState(() {
-            filters.map((e) => e.isEnabled = false);
+            filters.map((e) => e.isEnabled = false).toList();
           });
         },
       ),
@@ -46,12 +48,12 @@ class _FilterScreenState extends State<FilterScreen> {
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: const [
-            _Title(),
-            SizedBox(height: 24),
-            _FiltersTable(),
-            SizedBox(height: 60),
-            _DistanceSlider(),
+          children: [
+            const _Title(),
+            const SizedBox(height: 24),
+            _FiltersTable(filters: filters,),
+            const SizedBox(height: 60),
+            const _DistanceSlider(),
           ],
         ),
       ),
@@ -126,7 +128,8 @@ class _ClearButtonWidgetState extends State<_ClearButtonWidget> {
 }
 
 class _FiltersTable extends StatefulWidget {
-  const _FiltersTable({Key? key}) : super(key: key);
+  final List<Filters> filters;
+  const _FiltersTable({Key? key, required this.filters}) : super(key: key);
 
   @override
   State<_FiltersTable> createState() => _FiltersTableState();
@@ -141,7 +144,7 @@ class _FiltersTableState extends State<_FiltersTable> {
         crossAxisAlignment: WrapCrossAlignment.center,
         spacing: 24,
         runSpacing: 40,
-        children: filters
+        children: widget.filters
             .map((e) => _ItemFilter(
                   onPressed: () {
                     setState(() {
@@ -170,13 +173,13 @@ class _ItemFilter extends StatefulWidget {
     this.isEnabled = false,
     this.onPressed,
   }) : super(key: key);
+  
 
   @override
   State<_ItemFilter> createState() => _ItemFilterState();
 }
 
 class _ItemFilterState extends State<_ItemFilter> {
-  // bool isEnabled = false;
 
   @override
   Widget build(BuildContext context) {

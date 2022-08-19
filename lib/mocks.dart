@@ -1,4 +1,4 @@
-import 'package:places/domain/sight.dart';
+import 'package:places/data/sight.dart';
 
 abstract class Mocks {
   static final List<Sight> mocks = [

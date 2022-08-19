@@ -6,6 +6,6 @@ class Filters {
   Filters({
     required this.title,
     required this.assetName,
-    required this.isEnabled,
+    this.isEnabled = false,
   });
 }
