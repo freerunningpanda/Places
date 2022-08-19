@@ -5,9 +5,8 @@ import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_colors.dart';
 import 'package:places/ui/res/app_strings.dart';
 import 'package:places/ui/res/app_typography.dart';
+import 'package:places/ui/widgets/action_button.dart';
 import 'package:places/ui/widgets/sight_icons.dart';
-
-
 
 class FilterScreen extends StatefulWidget {
   final void Function()? onPressed;
@@ -22,13 +21,13 @@ class FilterScreen extends StatefulWidget {
 
 class _FilterScreenState extends State<FilterScreen> {
   final List<Filters> filters = [
-  Filters(title: AppString.hotel, assetName: AppAssets.hotel),
-  Filters(title: AppString.restaurant, assetName: AppAssets.restaurant),
-  Filters(title: AppString.particularPlace, assetName: AppAssets.particularPlace),
-  Filters(title: AppString.park, assetName: AppAssets.park),
-  Filters(title: AppString.museum, assetName: AppAssets.museum),
-  Filters(title: AppString.cafe, assetName: AppAssets.cafe),
-];
+    Filters(title: AppString.hotel, assetName: AppAssets.hotel),
+    Filters(title: AppString.restaurant, assetName: AppAssets.restaurant),
+    Filters(title: AppString.particularPlace, assetName: AppAssets.particularPlace),
+    Filters(title: AppString.park, assetName: AppAssets.park),
+    Filters(title: AppString.museum, assetName: AppAssets.museum),
+    Filters(title: AppString.cafe, assetName: AppAssets.cafe),
+  ];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -51,9 +50,17 @@ class _FilterScreenState extends State<FilterScreen> {
           children: [
             const _Title(),
             const SizedBox(height: 24),
-            _FiltersTable(filters: filters,),
+            _FiltersTable(
+              filters: filters,
+            ),
             const SizedBox(height: 60),
-            const _DistanceSlider(),
+            const Expanded(child: _DistanceSlider()),
+            ActionButton(
+              title: '${AppString.showPlaces} (190)',
+              onTap: () {
+                debugPrint('show places pressed');
+              },
+            ),
           ],
         ),
       ),
@@ -146,11 +153,6 @@ class _FiltersTableState extends State<_FiltersTable> {
         runSpacing: 40,
         children: widget.filters
             .map((e) => _ItemFilter(
-                  onPressed: () {
-                    setState(() {
-                      e.isEnabled = false;
-                    });
-                  },
                   title: e.title,
                   assetName: e.assetName,
                   isEnabled: e.isEnabled,
@@ -161,8 +163,8 @@ class _FiltersTableState extends State<_FiltersTable> {
   }
 }
 
+// ignore: must_be_immutable
 class _ItemFilter extends StatefulWidget {
-  final void Function()? onPressed;
   final String title;
   final String assetName;
   bool isEnabled;
@@ -171,16 +173,13 @@ class _ItemFilter extends StatefulWidget {
     required this.title,
     required this.assetName,
     this.isEnabled = false,
-    this.onPressed,
   }) : super(key: key);
-  
 
   @override
   State<_ItemFilter> createState() => _ItemFilterState();
 }
 
 class _ItemFilterState extends State<_ItemFilter> {
-
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);

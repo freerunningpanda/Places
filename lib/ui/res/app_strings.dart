@@ -22,4 +22,5 @@ abstract class AppString {
   static const museum = 'Музей';
   static const cafe = 'Кафе';
   static const distantion = 'Расстояние';
+  static const showPlaces = 'ПОКАЗАТЬ';
 }
