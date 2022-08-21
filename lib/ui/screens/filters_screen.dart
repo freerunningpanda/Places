@@ -143,6 +143,8 @@ class _FiltersTable extends StatefulWidget {
 }
 
 class _FiltersTableState extends State<_FiltersTable> {
+  final List<String> activeFilters = [];
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -151,28 +153,51 @@ class _FiltersTableState extends State<_FiltersTable> {
         crossAxisAlignment: WrapCrossAlignment.center,
         spacing: 24,
         runSpacing: 40,
-        children: widget.filters
-            .map((e) => _ItemFilter(
-                  title: e.title,
-                  assetName: e.assetName,
-                  isEnabled: e.isEnabled,
-                ))
-            .toList(),
+        children: [
+          for (var i = 0; i < widget.filters.length; i++)
+            _ItemFilter(
+              title: widget.filters[i].title,
+              assetName: widget.filters[i].assetName,
+              onTap: () => saveFilters(i),
+              isEnabled: widget.filters[i].isEnabled,
+            ),
+        ],
       ),
     );
   }
+
+  List<String> saveFilters(int index) {
+    widget.filters[index].isEnabled = !widget.filters[index].isEnabled;
+    if (widget.filters[index].isEnabled) {
+      activeFilters.add(widget.filters[index].title);
+      setState(() {
+        widget.filters[index].isEnabled = true;
+      });
+    } else {
+      activeFilters.removeLast();
+      setState(() {
+        widget.filters[index].isEnabled = false;
+      });
+    }
+    debugPrint('$activeFilters');
+    debugPrint('Элементов в списке: ${activeFilters.length}');
+
+    return activeFilters;
+  }
 }
 
-// ignore: must_be_immutable
 class _ItemFilter extends StatefulWidget {
+  final bool isEnabled;
+  final Function() onTap;
   final String title;
   final String assetName;
-  bool isEnabled;
-  _ItemFilter({
+
+  const _ItemFilter({
     Key? key,
+    required this.isEnabled,
     required this.title,
     required this.assetName,
-    this.isEnabled = false,
+    required this.onTap,
   }) : super(key: key);
 
   @override
@@ -185,11 +210,7 @@ class _ItemFilterState extends State<_ItemFilter> {
     final theme = Theme.of(context);
 
     return GestureDetector(
-      onTap: () {
-        setState(() {
-          widget.isEnabled = !widget.isEnabled;
-        });
-      },
+      onTap: widget.onTap,
       child: Stack(
         children: [
           SizedBox(
