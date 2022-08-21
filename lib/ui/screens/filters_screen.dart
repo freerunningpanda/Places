@@ -28,6 +28,9 @@ class _FilterScreenState extends State<FilterScreen> {
     Filters(title: AppString.museum, assetName: AppAssets.museum),
     Filters(title: AppString.cafe, assetName: AppAssets.cafe),
   ];
+
+  final List<String> activeFilters = [];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -52,6 +55,7 @@ class _FilterScreenState extends State<FilterScreen> {
             const SizedBox(height: 24),
             _FiltersTable(
               filters: filters,
+              activeFilters: activeFilters,
             ),
             const SizedBox(height: 60),
             const Expanded(child: _DistanceSlider()),
@@ -136,15 +140,18 @@ class _ClearButtonWidgetState extends State<_ClearButtonWidget> {
 
 class _FiltersTable extends StatefulWidget {
   final List<Filters> filters;
-  const _FiltersTable({Key? key, required this.filters}) : super(key: key);
+  final List<String> activeFilters;
+  const _FiltersTable({
+    Key? key,
+    required this.filters,
+    required this.activeFilters,
+  }) : super(key: key);
 
   @override
   State<_FiltersTable> createState() => _FiltersTableState();
 }
 
 class _FiltersTableState extends State<_FiltersTable> {
-  final List<String> activeFilters = [];
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -169,20 +176,20 @@ class _FiltersTableState extends State<_FiltersTable> {
   List<String> saveFilters(int index) {
     widget.filters[index].isEnabled = !widget.filters[index].isEnabled;
     if (widget.filters[index].isEnabled) {
-      activeFilters.add(widget.filters[index].title);
+      widget.activeFilters.add(widget.filters[index].title);
       setState(() {
         widget.filters[index].isEnabled = true;
       });
     } else {
-      activeFilters.removeLast();
+      widget.activeFilters.removeLast();
       setState(() {
         widget.filters[index].isEnabled = false;
       });
     }
-    debugPrint('$activeFilters');
-    debugPrint('Элементов в списке: ${activeFilters.length}');
+    debugPrint('${widget.activeFilters}');
+    debugPrint('Элементов в списке: ${widget.activeFilters.length}');
 
-    return activeFilters;
+    return widget.activeFilters;
   }
 }
 

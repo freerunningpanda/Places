@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:places/ui/screens/res/app_theme.dart';
 import 'package:places/ui/screens/res/custom_colors.dart';
 import 'package:places/ui/screens/sight_list_screen.dart';
-import 'package:places/ui/screens/visiting_screen.dart';
 
 final ThemeData _lightTheme = AppTheme.buildTheme();
 final ThemeData _darkTheme = AppTheme.buildThemeDark();
