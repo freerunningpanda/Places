@@ -5,6 +5,7 @@ import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_colors.dart';
 import 'package:places/ui/res/app_strings.dart';
 import 'package:places/ui/res/app_typography.dart';
+import 'package:places/ui/screens/filters_screen/filters_settings.dart';
 import 'package:places/ui/widgets/action_button.dart';
 import 'package:places/ui/widgets/sight_icons.dart';
 
@@ -20,28 +21,15 @@ class FilterScreen extends StatefulWidget {
 }
 
 class _FilterScreenState extends State<FilterScreen> {
-  final List<Filters> filters = [
-    Filters(title: AppString.hotel, assetName: AppAssets.hotel),
-    Filters(title: AppString.restaurant, assetName: AppAssets.restaurant),
-    Filters(title: AppString.particularPlace, assetName: AppAssets.particularPlace),
-    Filters(title: AppString.park, assetName: AppAssets.park),
-    Filters(title: AppString.museum, assetName: AppAssets.museum),
-    Filters(title: AppString.cafe, assetName: AppAssets.cafe),
-  ];
-
-  final List<String> activeFilters = [];
-
-  RangeValues rangeValues = const RangeValues(2000, 8000);
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: _AppBar(
         onPressed: () {
           setState(() {
-            filters.map((e) => e.isEnabled = false).toList();
+            FiltersSettings.filters.map((e) => e.isEnabled = false).toList();
           });
-          activeFilters.removeWhere((element) => true);
+          FiltersSettings.activeFilters.removeWhere((element) => true);
         },
       ),
       body: Padding(
@@ -57,25 +45,25 @@ class _FilterScreenState extends State<FilterScreen> {
             const _Title(),
             const SizedBox(height: 24),
             _FiltersTable(
-              filters: filters,
-              activeFilters: activeFilters,
+              filters: FiltersSettings.filters,
+              activeFilters: FiltersSettings.activeFilters,
             ),
             const SizedBox(height: 60),
             Expanded(
               child: _DistanceSlider(
-                rangeValues: rangeValues,
+                rangeValues: FiltersSettings.rangeValues,
                 onChanged: getValues,
               ),
             ),
             ActionButton(
-              activeFilters: activeFilters,
+              activeFilters: FiltersSettings.activeFilters,
               title: '${AppString.showPlaces} (amount)',
-              rangeValues: rangeValues,
+              rangeValues: FiltersSettings.rangeValues,
               onTap: () {
                 debugPrint('show places pressed');
-                debugPrint('Сохранённые значения фильтров: $activeFilters');
+                debugPrint('Сохранённые значения фильтров: ${FiltersSettings.activeFilters}');
                 debugPrint(
-                  'Сохранённое значение слайдера: \nmin: ${rangeValues.start.round()}, max: ${rangeValues.end.round()}',
+                  'Сохранённое значение слайдера: \nmin: ${FiltersSettings.rangeValues.start.round()}, max: ${FiltersSettings.rangeValues.end.round()}',
                 );
               },
             ),
@@ -87,10 +75,10 @@ class _FilterScreenState extends State<FilterScreen> {
 
   RangeValues getValues(RangeValues values) {
     setState(() {
-      rangeValues = values;
+      FiltersSettings.rangeValues = values;
     });
 
-    return rangeValues;
+    return FiltersSettings.rangeValues;
   }
 }
 

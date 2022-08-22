@@ -5,10 +5,10 @@ import 'package:places/mocks.dart';
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_strings.dart';
 import 'package:places/ui/res/app_typography.dart';
-import 'package:places/ui/screens/filters_screen.dart';
+import 'package:places/ui/screens/filters_screen/filters_screen.dart';
 import 'package:places/ui/screens/res/custom_colors.dart';
-import 'package:places/ui/screens/sight_card.dart';
-import 'package:places/ui/screens/sight_details.dart';
+import 'package:places/ui/screens/sight_card/sight_card.dart';
+import 'package:places/ui/screens/sight_details/sight_details.dart';
 import 'package:places/ui/widgets/sight_icons.dart';
 
 class SightListScreen extends StatefulWidget {
