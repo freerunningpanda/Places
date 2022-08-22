@@ -60,9 +60,11 @@ class _FilterScreenState extends State<FilterScreen> {
             const SizedBox(height: 60),
             const Expanded(child: _DistanceSlider()),
             ActionButton(
-              title: '${AppString.showPlaces} (190)',
+              activeFilters: activeFilters,
+              title: '${AppString.showPlaces} (amount)',
               onTap: () {
                 debugPrint('show places pressed');
+                debugPrint('Сохранённые значения: $activeFilters');
               },
             ),
           ],

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:places/data/filters.dart';
 
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_colors.dart';
@@ -9,12 +10,14 @@ class ActionButton extends StatelessWidget {
   final String? assetName;
   final String title;
   final void Function()? onTap;
+  final List<String>? activeFilters;
 
   const ActionButton({
     Key? key,
     this.assetName,
     required this.title,
     required this.onTap,
+    this.activeFilters,
   }) : super(key: key);
 
   @override
