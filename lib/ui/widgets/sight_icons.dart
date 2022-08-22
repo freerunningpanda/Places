@@ -7,12 +7,14 @@ class SightIcons extends StatelessWidget {
   final double width;
   final double height;
   final Color? color;
+  final void Function()? onTap;
   const SightIcons({
     Key? key,
     required this.assetName,
     required this.width,
     required this.height,
     this.color,
+    this.onTap,
   }) : super(key: key);
 
   @override

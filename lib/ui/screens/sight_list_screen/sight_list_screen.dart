@@ -8,7 +8,6 @@ import 'package:places/ui/res/app_typography.dart';
 import 'package:places/ui/screens/filters_screen/filters_screen.dart';
 import 'package:places/ui/screens/res/custom_colors.dart';
 import 'package:places/ui/screens/sight_card/sight_card.dart';
-import 'package:places/ui/screens/sight_details/sight_details.dart';
 import 'package:places/ui/widgets/sight_icons.dart';
 
 class SightListScreen extends StatefulWidget {
@@ -39,48 +38,32 @@ class _SightListScreenState extends State<SightListScreen> {
               itemBuilder: (context, index) {
                 final item = list[index];
 
-                return GestureDetector(
-                  onTap: () {
-                    debugPrint('go to SightDetails pressed');
-                    Navigator.of(context).push(
-                      MaterialPageRoute<SightDetails>(
-                        builder: (context) => SightDetails(
-                          sight: item,
-                        ),
-                      ),
-                    );
-                  },
-                  child: SightCard(
-                    aspectRatio: 3 / 1.5,
-                    actions: [
-                      GestureDetector(
-                        onTap: () {
-                          debugPrint('Like button pressed');
-                        },
-                        child: const SightIcons(
-                          assetName: AppAssets.favourite,
-                          width: 22,
-                          height: 22,
-                        ),
-                      ),
-                    ],
-                    url: item.url,
-                    type: item.type,
-                    name: item.name,
-                    details: [
-                      Text(
-                        item.name,
-                        maxLines: 2,
-                        style: theme.textTheme.headlineSmall,
-                      ),
-                      const SizedBox(height: 2),
-                      const Text(
-                        '${AppString.closed} 20:00',
-                        overflow: TextOverflow.ellipsis,
-                        style: AppTypography.textText16Regular,
-                      ),
-                    ],
-                  ),
+                return SightCard(
+                  aspectRatio: 3 / 1.5,
+                  actions: const [
+                    SightIcons(
+                      assetName: AppAssets.favourite,
+                      width: 22,
+                      height: 22,
+                    ),
+                  ],
+                  url: item.url,
+                  type: item.type,
+                  name: item.name,
+                  item: item,
+                  details: [
+                    Text(
+                      item.name,
+                      maxLines: 2,
+                      style: theme.textTheme.headlineSmall,
+                    ),
+                    const SizedBox(height: 2),
+                    const Text(
+                      '${AppString.closed} 20:00',
+                      overflow: TextOverflow.ellipsis,
+                      style: AppTypography.textText16Regular,
+                    ),
+                  ],
                 );
               },
             ),

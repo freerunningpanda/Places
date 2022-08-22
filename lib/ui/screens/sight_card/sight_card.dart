@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:places/data/sight.dart';
 
 import 'package:places/ui/res/app_card_size.dart';
 import 'package:places/ui/res/app_typography.dart';
 import 'package:places/ui/screens/res/custom_colors.dart';
+import 'package:places/ui/screens/sight_details/sight_details.dart';
 
 class SightCard extends StatelessWidget {
   final String url;
@@ -11,6 +13,7 @@ class SightCard extends StatelessWidget {
   final List<Widget> details;
   final List<Widget> actions;
   final double? aspectRatio;
+  final Sight item;
 
   const SightCard({
     Key? key,
@@ -20,6 +23,7 @@ class SightCard extends StatelessWidget {
     required this.details,
     required this.actions,
     this.aspectRatio,
+    required this.item,
   }) : super(key: key);
 
   @override
@@ -39,20 +43,98 @@ class SightCard extends StatelessWidget {
           color: customColors.color,
           borderRadius: BorderRadius.circular(16.0),
         ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _SightCardTop(
-              actions: actions,
-              type: type,
-              url: url,
+        child: ClipRRect(
+          borderRadius: const BorderRadius.all(Radius.circular(16.0)),
+          child: Stack(
+            children: [
+              Stack(
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      _SightCardTop(
+                        actions: actions,
+                        type: type,
+                        url: url,
+                      ),
+                      const SizedBox(height: 16),
+                      _SightCardBottom(
+                        name: name,
+                        details: details,
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+              RippleCardFull(item: item),
+              RippleIcons(actions: actions),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class RippleIcons extends StatelessWidget {
+  final List<Widget> actions;
+
+  const RippleIcons({
+    Key? key,
+    required this.actions,
+  }) : super(key: key);
+
+
+  @override
+  Widget build(BuildContext context) {
+    return Positioned(
+      top: 16,
+      right: 16,
+      child: Material(
+        type: MaterialType.transparency,
+        child: SizedBox(
+          width: 22,
+          height: 22,
+          child: InkWell(
+            borderRadius: BorderRadius.circular(16.0),
+            onTap: () {
+              debugPrint('like');
+            },
+            child: Row(
+              children: actions,
             ),
-            const SizedBox(height: 16),
-            _SightCardBottom(
-              name: name,
-              details: details,
-            ),
-          ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class RippleCardFull extends StatelessWidget {
+  final Sight item;
+
+  const RippleCardFull({
+    Key? key,
+    required this.item,
+  }) : super(key: key);
+
+
+  @override
+  Widget build(BuildContext context) {
+    return Positioned.fill(
+      child: Material(
+        type: MaterialType.transparency,
+        child: InkWell(
+          onTap: () {
+            debugPrint('to details');
+            Navigator.of(context).push(
+              MaterialPageRoute<SightDetails>(
+                builder: (context) => SightDetails(
+                  sight: item,
+                ),
+              ),
+            );
+          },
         ),
       ),
     );
@@ -107,13 +189,6 @@ class _SightCardTop extends StatelessWidget {
             child: Text(
               type,
               style: AppTypography.sightCardTitle,
-            ),
-          ),
-          Positioned(
-            top: 16,
-            right: 16,
-            child: Row(
-              children: actions,
             ),
           ),
         ],

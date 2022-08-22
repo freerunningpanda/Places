@@ -196,14 +196,15 @@ class _WantToVisitWidget extends StatelessWidget {
           onTap: () {
             debugPrint('go to SightDetails pressed');
             Navigator.of(context).push(
-            MaterialPageRoute<SightDetails>(
-              builder: (context) => SightDetails(
-                sight: item,
+              MaterialPageRoute<SightDetails>(
+                builder: (context) => SightDetails(
+                  sight: item,
+                ),
               ),
-            ),
-          );
+            );
           },
           child: SightCard(
+            item: item,
             url: item.url,
             type: item.type,
             name: item.name,
@@ -275,14 +276,15 @@ class _VisitedWidget extends StatelessWidget {
           onTap: () {
             debugPrint('go to SightDetails pressed');
             Navigator.of(context).push(
-            MaterialPageRoute<SightDetails>(
-              builder: (context) => SightDetails(
-                sight: item,
+              MaterialPageRoute<SightDetails>(
+                builder: (context) => SightDetails(
+                  sight: item,
+                ),
               ),
-            ),
-          );
+            );
           },
           child: SightCard(
+            item: item,
             url: item.url,
             type: item.type,
             name: item.name,
@@ -313,10 +315,13 @@ class _VisitedWidget extends StatelessWidget {
                 onTap: () {
                   debugPrint('Share button pressed');
                 },
-                child: const SightIcons(
+                child: SightIcons(
                   assetName: AppAssets.share,
                   width: 24,
                   height: 24,
+                  onTap: () {
+                    debugPrint('like pressed');
+                  },
                 ),
               ),
               const SizedBox(width: 16),
