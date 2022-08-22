@@ -23,4 +23,7 @@ abstract class AppString {
   static const cafe = 'Кафе';
   static const distantion = 'Расстояние';
   static const showPlaces = 'ПОКАЗАТЬ';
+  static const settings = 'Настройки';
+  static const darkTheme = 'Тёмная тема';
+  static const tutorial = 'Смотреть туториал';
 }

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+
 import 'package:places/ui/res/app_strings.dart';
+import 'package:places/ui/widgets/bottom_navigation_bar.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({Key? key}) : super(key: key);
@@ -11,17 +13,39 @@ class SettingsScreen extends StatefulWidget {
 class _SettingsScreenState extends State<SettingsScreen> {
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Scaffold(
-      appBar: _AppBar(),
-      body: Column(
-        children: [
-          Row(
-            children: [
-              
-            ],
-          ),
-        ],
+      appBar: const _AppBar(),
+      body: Padding(
+        padding: const EdgeInsets.only(
+          left: 16.0,
+          top: 32.0,
+          right: 16.0,
+        ),
+        child: Column(
+          children: [
+            Row(
+              children: [
+                Text(
+                  AppString.darkTheme,
+                  style: theme.textTheme.bodyLarge,
+                ),
+              ],
+            ),
+            const Divider(),
+            Row(
+              children: [
+                Text(
+                  AppString.tutorial,
+                  style: theme.textTheme.bodyLarge,
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
+      bottomNavigationBar: const BottomNavigationBarWidget(),
     );
   }
 }
