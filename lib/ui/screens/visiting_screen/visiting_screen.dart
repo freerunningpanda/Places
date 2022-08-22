@@ -192,55 +192,43 @@ class _WantToVisitWidget extends StatelessWidget {
       itemBuilder: (context, index) {
         final item = Mocks.mocks[index];
 
-        return GestureDetector(
-          onTap: () {
-            debugPrint('go to SightDetails pressed');
-            Navigator.of(context).push(
-              MaterialPageRoute<SightDetails>(
-                builder: (context) => SightDetails(
-                  sight: item,
-                ),
-              ),
-            );
-          },
-          child: SightCard(
-            isVisitingScreen: true,
-            item: item,
-            url: item.url,
-            type: item.type,
-            name: item.name,
-            aspectRatio: AppCardSize.visitingCard,
-            details: [
-              Text(
-                item.name,
-                maxLines: 2,
-                style: theme.textTheme.headlineSmall,
-              ),
-              const SizedBox(height: 2),
-              const Text(
-                '${AppString.planning} 12 окт. 2022',
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: AppTypography.greenColor,
-              ),
-              const SizedBox(height: 10),
-              const Text(
-                '${AppString.closed} 09:00',
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: AppTypography.textText16Regular,
-              ),
-            ],
-            actionOne: const SightIcons(
-              assetName: AppAssets.calendarWhite,
-              width: 24,
-              height: 24,
+        return SightCard(
+          isVisitingScreen: true,
+          item: item,
+          url: item.url,
+          type: item.type,
+          name: item.name,
+          aspectRatio: AppCardSize.visitingCard,
+          details: [
+            Text(
+              item.name,
+              maxLines: 2,
+              style: theme.textTheme.headlineSmall,
             ),
-            actionTwo: const SightIcons(
-              assetName: AppAssets.cross,
-              width: 22,
-              height: 22,
+            const SizedBox(height: 2),
+            const Text(
+              '${AppString.planning} 12 окт. 2022',
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: AppTypography.greenColor,
             ),
+            const SizedBox(height: 10),
+            const Text(
+              '${AppString.closed} 09:00',
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: AppTypography.textText16Regular,
+            ),
+          ],
+          actionOne: const SightIcons(
+            assetName: AppAssets.calendarWhite,
+            width: 24,
+            height: 24,
+          ),
+          actionTwo: const SightIcons(
+            assetName: AppAssets.cross,
+            width: 22,
+            height: 22,
           ),
         );
       },
