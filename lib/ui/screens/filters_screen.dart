@@ -41,6 +41,7 @@ class _FilterScreenState extends State<FilterScreen> {
           setState(() {
             filters.map((e) => e.isEnabled = false).toList();
           });
+          activeFilters.removeWhere((element) => true);
         },
       ),
       body: Padding(
