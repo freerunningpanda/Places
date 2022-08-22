@@ -59,7 +59,7 @@ class _FilterScreenState extends State<FilterScreen> {
                 debugPrint('show places pressed');
                 debugPrint('Сохранённые значения фильтров: ${FiltersSettings.activeFilters}');
                 debugPrint(
-                  'Сохранённое значение слайдера: \nmin: ${FiltersSettings.rangeValues.start.round()}, max: ${FiltersSettings.rangeValues.end.round()}',
+                  'Сохранённое значение слайдера: min: ${FiltersSettings.rangeValues.start.round()}, max: ${FiltersSettings.rangeValues.end.round()}',
                 );
               },
             ),
@@ -222,16 +222,17 @@ class _ItemFilterState extends State<_ItemFilter> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    return GestureDetector(
-      onTap: widget.onTap,
-      child: Stack(
-        children: [
-          SizedBox(
-            width: 98,
-            height: 96,
-            child: Column(
-              children: [
-                SizedBox(
+    return Stack(
+      children: [
+        SizedBox(
+          width: 98,
+          height: 96,
+          child: Column(
+            children: [
+              InkWell(
+                borderRadius: BorderRadius.circular(50),
+                onTap: widget.onTap,
+                child: SizedBox(
                   height: 64,
                   width: 64,
                   child: !widget.isEnabled
@@ -255,41 +256,41 @@ class _ItemFilterState extends State<_ItemFilter> {
                           ),
                         ),
                 ),
-                const SizedBox(height: 12),
-                Text(
-                  widget.title,
-                  textAlign: TextAlign.center,
-                  style: theme.textTheme.labelSmall,
-                ),
-              ],
-            ),
+              ),
+              const SizedBox(height: 12),
+              Text(
+                widget.title,
+                textAlign: TextAlign.center,
+                style: theme.textTheme.labelSmall,
+              ),
+            ],
           ),
-          if (widget.isEnabled)
-            Positioned(
-              right: 16,
-              bottom: 30,
-              child: Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 2,
-                  vertical: 2,
-                ),
+        ),
+        if (widget.isEnabled)
+          Positioned(
+            right: 16,
+            bottom: 30,
+            child: Container(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 2,
+                vertical: 2,
+              ),
+              width: 16,
+              height: 16,
+              decoration: BoxDecoration(
+                color: theme.focusColor,
+                borderRadius: BorderRadius.circular(16),
+              ),
+              child: const SightIcons(
+                assetName: AppAssets.check,
                 width: 16,
                 height: 16,
-                decoration: BoxDecoration(
-                  color: theme.focusColor,
-                  borderRadius: BorderRadius.circular(16),
-                ),
-                child: const SightIcons(
-                  assetName: AppAssets.check,
-                  width: 16,
-                  height: 16,
-                ),
               ),
-            )
-          else
-            const SizedBox(),
-        ],
-      ),
+            ),
+          )
+        else
+          const SizedBox(),
+      ],
     );
   }
 }
