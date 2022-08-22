@@ -26,10 +26,7 @@ class _FilterScreenState extends State<FilterScreen> {
     return Scaffold(
       appBar: _AppBar(
         onPressed: () {
-          setState(() {
-            FiltersSettings.filters.map((e) => e.isEnabled = false).toList();
-          });
-          FiltersSettings.activeFilters.removeWhere((element) => true);
+          setState(FiltersSettings.clearAllFilters);
         },
       ),
       body: Padding(
