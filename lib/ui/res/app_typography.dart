@@ -55,6 +55,16 @@ abstract class AppTypography {
     fontWeight: FontWeight.w500,
     color: AppColors.chevroneColor,
   );
+  static const settings = TextStyle(
+    fontSize: 16,
+    fontWeight: FontWeight.w400,
+    color: AppColors.chevroneColor,
+  );
+  static const settingsDarkMode = TextStyle(
+    fontSize: 16,
+    fontWeight: FontWeight.w400,
+    color: AppColors.backgroundColor,
+  );
   static const visitingScreenTitleDarkMode = TextStyle(
     fontSize: 18,
     fontWeight: FontWeight.w500,

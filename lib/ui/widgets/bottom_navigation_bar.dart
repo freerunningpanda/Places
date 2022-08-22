@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:places/ui/res/app_assets.dart';
+import 'package:places/ui/screens/settings_screen/settings_screen.dart';
 import 'package:places/ui/widgets/sight_icons.dart';
 
 class BottomNavigationBarWidget extends StatelessWidget {
@@ -20,6 +21,7 @@ class BottomNavigationBarWidget extends StatelessWidget {
         ),
       ),
       child: BottomNavigationBar(
+        backgroundColor: theme.scaffoldBackgroundColor,
         type: BottomNavigationBarType.fixed,
         items: [
           BottomNavigationBarItem(
@@ -60,7 +62,15 @@ class BottomNavigationBarWidget extends StatelessWidget {
           ),
           BottomNavigationBarItem(
             icon: GestureDetector(
-              onTap: () => debugPrint('Settings pressed'),
+              onTap: () {
+                debugPrint('Settings pressed');
+                Navigator.push(
+                  context,
+                  MaterialPageRoute<SettingsScreen>(
+                    builder: (context) => const SettingsScreen(),
+                  ),
+                );
+              },
               child: SightIcons(
                 assetName: AppAssets.settings,
                 width: 24,
@@ -69,7 +79,6 @@ class BottomNavigationBarWidget extends StatelessWidget {
               ),
             ),
             label: '',
-            
           ),
         ],
       ),

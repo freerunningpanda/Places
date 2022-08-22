@@ -332,23 +332,11 @@ class _DistanceSliderState extends State<_DistanceSlider> {
           ],
         ),
         const SizedBox(height: 24),
-        SliderTheme(
-          data: SliderThemeData(
-            trackHeight: 1,
-            inactiveTrackColor: AppColors.inactiveBlack,
-            activeTrackColor: AppColors.green,
-            thumbColor: AppColors.backgroundColor,
-            overlayShape: SliderComponentShape.noOverlay,
-            rangeThumbShape: const RoundRangeSliderThumbShape(
-              elevation: 3,
-            ),
-          ),
-          child: RangeSlider(
-            values: widget.rangeValues,
-            min: min,
-            max: max,
-            onChanged: widget.onChanged,
-          ),
+        RangeSlider(
+          values: widget.rangeValues,
+          min: min,
+          max: max,
+          onChanged: widget.onChanged,
         ),
       ],
     );

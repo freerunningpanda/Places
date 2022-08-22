@@ -19,11 +19,12 @@ abstract class AppTheme {
       textTheme: const TextTheme(
         headlineMedium: AppTypography.sightDetailsTitle,
         headlineSmall: AppTypography.sightCardDescriptionTitle,
-        bodyMedium: AppTypography.detailsText,
         titleSmall: AppTypography.sightDetailsSubtitle,
         titleLarge: AppTypography.visitingScreenTitle,
         titleMedium: AppTypography.textText16Regular,
+        bodyMedium: AppTypography.detailsText,
         bodySmall: AppTypography.detailsText,
+        displayLarge: AppTypography.settings,
         displayMedium: AppTypography.distantion,
         displaySmall: AppTypography.sightDetailsDescription,
         labelSmall: AppTypography.filtersItems,
@@ -35,16 +36,16 @@ abstract class AppTheme {
       highlightColor: AppColors.inactiveBlack,
       canvasColor: AppColors.lightGreen,
       focusColor: AppColors.chevroneColor,
-      // sliderTheme: SliderThemeData(
-      //   trackHeight: 1,
-      //   inactiveTrackColor: Colors.grey,
-      //   activeTrackColor: Colors.green,
-      //   thumbColor: Colors.white,
-      //   overlayShape: SliderComponentShape.noOverlay,
-      //   rangeThumbShape: RoundRangeSliderThumbShape(
-      //     elevation: 3,
-      //   ),
-      // ),
+      sliderTheme: SliderThemeData(
+        trackHeight: 1,
+        inactiveTrackColor: AppColors.inactiveBlack,
+        activeTrackColor: AppColors.green,
+        thumbColor: AppColors.backgroundColor,
+        overlayShape: SliderComponentShape.noOverlay,
+        rangeThumbShape: const RoundRangeSliderThumbShape(
+          elevation: 3,
+        ),
+      ),
     );
   }
 
@@ -66,11 +67,12 @@ abstract class AppTheme {
       textTheme: const TextTheme(
         headlineMedium: AppTypography.sightDetailsTitleDarkMode,
         headlineSmall: AppTypography.sightCardDescriptionTitleDarkMode,
-        bodyMedium: AppTypography.detailsText,
         titleSmall: AppTypography.sightDetailsSubtitleDarkMode,
         titleLarge: AppTypography.visitingScreenTitleDarkMode,
         titleMedium: AppTypography.textText16Regular,
+        bodyMedium: AppTypography.detailsText,
         bodySmall: AppTypography.detailsTextDarkMode,
+        displayLarge: AppTypography.settingsDarkMode,
         displayMedium: AppTypography.distantionDarkMode,
         displaySmall: AppTypography.sightDetailsDescriptionDarkMode,
         labelSmall: AppTypography.filtersItemsDarkMode,
@@ -82,6 +84,16 @@ abstract class AppTheme {
       highlightColor: AppColors.inactiveBlack,
       canvasColor: AppColors.lightGreen,
       focusColor: AppColors.chevroneColor,
+      sliderTheme: SliderThemeData(
+        trackHeight: 1,
+        inactiveTrackColor: AppColors.inactiveBlack,
+        activeTrackColor: AppColors.green,
+        thumbColor: AppColors.backgroundColor,
+        overlayShape: SliderComponentShape.noOverlay,
+        rangeThumbShape: const RoundRangeSliderThumbShape(
+          elevation: 3,
+        ),
+      ),
     );
   }
 }
