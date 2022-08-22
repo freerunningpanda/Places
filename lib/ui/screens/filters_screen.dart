@@ -31,6 +31,8 @@ class _FilterScreenState extends State<FilterScreen> {
 
   final List<String> activeFilters = [];
 
+  RangeValues rangeValues = const RangeValues(2000, 8000);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -58,19 +60,36 @@ class _FilterScreenState extends State<FilterScreen> {
               activeFilters: activeFilters,
             ),
             const SizedBox(height: 60),
-            const Expanded(child: _DistanceSlider()),
+            Expanded(
+              child: _DistanceSlider(
+                rangeValues: rangeValues,
+                onChanged: getValues,
+              ),
+            ),
             ActionButton(
               activeFilters: activeFilters,
               title: '${AppString.showPlaces} (amount)',
+              rangeValues: rangeValues,
               onTap: () {
                 debugPrint('show places pressed');
-                debugPrint('Сохранённые значения: $activeFilters');
+                debugPrint('Сохранённые значения фильтров: $activeFilters');
+                debugPrint(
+                  'Сохранённое значение слайдера: \nmin: ${rangeValues.start.round()}, max: ${rangeValues.end.round()}',
+                );
               },
             ),
           ],
         ),
       ),
     );
+  }
+
+  RangeValues getValues(RangeValues values) {
+    setState(() {
+      rangeValues = values;
+    });
+
+    return rangeValues;
   }
 }
 
@@ -290,15 +309,21 @@ class _ItemFilterState extends State<_ItemFilter> {
   }
 }
 
+// ignore: must_be_immutable
 class _DistanceSlider extends StatefulWidget {
-  const _DistanceSlider({Key? key}) : super(key: key);
+  final void Function(RangeValues)? onChanged;
+  RangeValues rangeValues;
+  _DistanceSlider({
+    Key? key,
+    required this.rangeValues,
+    required this.onChanged,
+  }) : super(key: key);
 
   @override
   State<_DistanceSlider> createState() => _DistanceSliderState();
 }
 
 class _DistanceSliderState extends State<_DistanceSlider> {
-  RangeValues values = const RangeValues(2000, 8000);
   double min = 100;
   double max = 10000;
 
@@ -316,7 +341,7 @@ class _DistanceSliderState extends State<_DistanceSlider> {
               style: theme.textTheme.displayMedium,
             ),
             Text(
-              'от ${values.start.toInt()} до ${values.end.toInt()} м',
+              'от ${widget.rangeValues.start.toInt()} до ${widget.rangeValues.end.toInt()} м',
               style: theme.textTheme.titleMedium,
             ),
           ],
@@ -334,12 +359,10 @@ class _DistanceSliderState extends State<_DistanceSlider> {
             ),
           ),
           child: RangeSlider(
-            values: values,
+            values: widget.rangeValues,
             min: min,
             max: max,
-            onChanged: (values) => setState(
-              () => this.values = values,
-            ),
+            onChanged: widget.onChanged,
           ),
         ),
       ],

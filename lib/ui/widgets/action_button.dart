@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:places/data/filters.dart';
 
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_colors.dart';
@@ -11,6 +10,7 @@ class ActionButton extends StatelessWidget {
   final String title;
   final void Function()? onTap;
   final List<String>? activeFilters;
+  final RangeValues? rangeValues;
 
   const ActionButton({
     Key? key,
@@ -18,6 +18,7 @@ class ActionButton extends StatelessWidget {
     required this.title,
     required this.onTap,
     this.activeFilters,
+    this.rangeValues,
   }) : super(key: key);
 
   @override
