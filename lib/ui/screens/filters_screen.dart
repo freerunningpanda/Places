@@ -310,11 +310,10 @@ class _ItemFilterState extends State<_ItemFilter> {
   }
 }
 
-// ignore: must_be_immutable
 class _DistanceSlider extends StatefulWidget {
   final void Function(RangeValues)? onChanged;
-  RangeValues rangeValues;
-  _DistanceSlider({
+  final RangeValues rangeValues;
+  const _DistanceSlider({
     Key? key,
     required this.rangeValues,
     required this.onChanged,
