@@ -44,7 +44,7 @@ class _NavigationScreenState extends State<NavigationScreen> {
           items: [
             BottomNavigationBarItem(
               icon: SightIcons(
-                assetName: AppAssets.listPlaces,
+                assetName: currentIndex == 0 ? AppAssets.listPlacesFilled : AppAssets.listPlaces,
                 width: 24,
                 height: 24,
                 color: theme.iconTheme.color,
@@ -62,7 +62,7 @@ class _NavigationScreenState extends State<NavigationScreen> {
             ),
             BottomNavigationBarItem(
               icon: SightIcons(
-                assetName: AppAssets.heartFull,
+                assetName: currentIndex == 2 ? AppAssets.heartFull : AppAssets.favouriteDark,
                 width: 24,
                 height: 24,
                 color: theme.iconTheme.color,
@@ -71,7 +71,7 @@ class _NavigationScreenState extends State<NavigationScreen> {
             ),
             BottomNavigationBarItem(
               icon: SightIcons(
-                assetName: AppAssets.settings,
+                assetName: currentIndex == 3 ? AppAssets.settingsFill : AppAssets.settings,
                 width: 24,
                 height: 24,
                 color: theme.iconTheme.color,

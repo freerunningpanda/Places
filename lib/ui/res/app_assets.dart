@@ -9,8 +9,10 @@ abstract class AppAssets {
   static const goIconTransparent = 'lib/ui/res/icons/go_transparent.svg';
   static const cross = 'lib/ui/res/icons/cross.svg';
   static const listPlaces = 'lib/ui/res/icons/list.svg';
+  static const listPlacesFilled = 'lib/ui/res/icons/list_filled.svg';
   static const map = 'lib/ui/res/icons/map.svg';
   static const settings = 'lib/ui/res/icons/settings.svg';
+  static const settingsFill = 'lib/ui/res/icons/settings_fill.svg';
   static const heartFull = 'lib/ui/res/icons/heart_full.svg';
   static const share = 'lib/ui/res/icons/share.svg';
   static const plus = 'lib/ui/res/icons/plus.svg';
