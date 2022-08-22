@@ -35,16 +35,16 @@ abstract class AppTheme {
       highlightColor: AppColors.inactiveBlack,
       canvasColor: AppColors.lightGreen,
       focusColor: AppColors.chevroneColor,
-      // sliderTheme: SliderThemeData(
-      //   trackHeight: 1,
-      //   inactiveTrackColor: Colors.grey,
-      //   activeTrackColor: Colors.green,
-      //   thumbColor: Colors.white,
-      //   overlayShape: SliderComponentShape.noOverlay,
-      //   rangeThumbShape: RoundRangeSliderThumbShape(
-      //     elevation: 3,
-      //   ),
-      // ),
+      sliderTheme: SliderThemeData(
+        trackHeight: 1,
+        inactiveTrackColor: AppColors.inactiveBlack,
+        activeTrackColor: AppColors.green,
+        thumbColor: AppColors.backgroundColor,
+        overlayShape: SliderComponentShape.noOverlay,
+        rangeThumbShape: const RoundRangeSliderThumbShape(
+          elevation: 3,
+        ),
+      ),
     );
   }
 
@@ -82,6 +82,16 @@ abstract class AppTheme {
       highlightColor: AppColors.inactiveBlack,
       canvasColor: AppColors.lightGreen,
       focusColor: AppColors.chevroneColor,
+      sliderTheme: SliderThemeData(
+        trackHeight: 1,
+        inactiveTrackColor: AppColors.inactiveBlack,
+        activeTrackColor: AppColors.green,
+        thumbColor: AppColors.backgroundColor,
+        overlayShape: SliderComponentShape.noOverlay,
+        rangeThumbShape: const RoundRangeSliderThumbShape(
+          elevation: 3,
+        ),
+      ),
     );
   }
 }
