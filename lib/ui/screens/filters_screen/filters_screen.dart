@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import 'package:places/data/filters.dart';
 import 'package:places/ui/res/app_assets.dart';
-import 'package:places/ui/res/app_colors.dart';
 import 'package:places/ui/res/app_strings.dart';
 import 'package:places/ui/res/app_typography.dart';
 import 'package:places/ui/screens/filters_screen/filters_settings.dart';

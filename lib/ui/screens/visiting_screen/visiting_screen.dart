@@ -10,7 +10,6 @@ import 'package:places/ui/res/app_typography.dart';
 import 'package:places/ui/screens/res/custom_colors.dart';
 import 'package:places/ui/screens/sight_card/sight_card.dart';
 import 'package:places/ui/screens/sight_details/sight_details.dart';
-import 'package:places/ui/widgets/bottom_navigation_bar.dart';
 import 'package:places/ui/widgets/sight_icons.dart';
 
 List<Sight> list = Mocks.mocks;
@@ -70,7 +69,6 @@ class _VisitingScreenState extends State<VisitingScreen> {
             ),
           ],
         ),
-        bottomNavigationBar: const BottomNavigationBarWidget(),
       ),
     );
   }

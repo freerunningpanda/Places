@@ -1,8 +1,6 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'package:places/ui/res/app_strings.dart';
-import 'package:places/ui/widgets/bottom_navigation_bar.dart';
 import 'package:places/ui/widgets/switcher.dart';
 
 class SettingsScreen extends StatefulWidget {
@@ -63,7 +61,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
           ],
         ),
       ),
-      bottomNavigationBar: const BottomNavigationBarWidget(),
     );
   }
 }

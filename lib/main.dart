@@ -1,15 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:places/appsettings.dart';
+import 'package:places/ui/screens/navigation_screen/navigation_screen.dart';
 
 import 'package:places/ui/screens/res/app_theme.dart';
 import 'package:places/ui/screens/res/custom_colors.dart';
-import 'package:places/ui/screens/sight_list_screen/sight_list_screen.dart';
-import 'package:places/ui/screens/visiting_screen/visiting_screen.dart';
+import 'package:provider/provider.dart';
 
 final ThemeData _lightTheme = AppTheme.buildTheme();
 final ThemeData _darkTheme = AppTheme.buildThemeDark();
 
 void main() {
-  runApp(const App());
+  runApp(MultiProvider(
+    providers: [
+      ChangeNotifierProvider<AppSettings>(
+        create: (_) => AppSettings(),
+      ),
+    ],
+    child: const App(),
+  ));
 }
 
 class App extends StatefulWidget {
@@ -24,23 +32,35 @@ class _AppState extends State<App> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      theme: _lightTheme.copyWith(
-        extensions: <ThemeExtension<dynamic>>[
-          CustomColors.sightCardLight,
-        ],
-      ),
-      darkTheme: _darkTheme.copyWith(
-        extensions: <ThemeExtension<dynamic>>[
-          CustomColors.sightCardDark,
-        ],
-      ),
-      themeMode: themeMode,
-      debugShowCheckedModeBanner: false,
-      title: 'Places',
-      home:
-       const VisitingScreen(),
-      // const SightListScreen(),
-    );
+    return Consumer<AppSettings>(builder: (context, model, child) {
+      final isDarkMode = model.isDarkMode;
+
+      return MaterialApp(
+        theme: !isDarkMode
+            ? _lightTheme.copyWith(
+                extensions: <ThemeExtension<dynamic>>[
+                  CustomColors.sightCardLight,
+                ],
+              )
+            : _darkTheme.copyWith(
+                extensions: <ThemeExtension<dynamic>>[
+                  CustomColors.sightCardDark,
+                ],
+              ),
+        debugShowCheckedModeBanner: false,
+        title: 'Places',
+        home: const MainScreen(),
+        // const SightListScreen(),
+      );
+    });
+  }
+}
+
+class MainScreen extends StatelessWidget {
+  const MainScreen({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return const NavigationScreen();
   }
 }
