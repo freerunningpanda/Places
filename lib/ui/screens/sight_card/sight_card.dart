@@ -11,9 +11,11 @@ class SightCard extends StatelessWidget {
   final String type;
   final String name;
   final List<Widget> details;
-  final List<Widget> actions;
+  final Widget actionOne;
+  final Widget? actionTwo;
   final double? aspectRatio;
   final Sight item;
+  final bool isVisitingScreen;
 
   const SightCard({
     Key? key,
@@ -21,9 +23,11 @@ class SightCard extends StatelessWidget {
     required this.type,
     required this.name,
     required this.details,
-    required this.actions,
+    required this.actionOne,
+    this.actionTwo,
     this.aspectRatio,
     required this.item,
+    required this.isVisitingScreen,
   }) : super(key: key);
 
   @override
@@ -53,7 +57,7 @@ class SightCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       _SightCardTop(
-                        actions: actions,
+                        actionOne: actionOne,
                         type: type,
                         url: url,
                       ),
@@ -67,7 +71,13 @@ class SightCard extends StatelessWidget {
                 ],
               ),
               RippleCardFull(item: item),
-              RippleIcons(actions: actions),
+              if (isVisitingScreen)
+                RippleIcons(
+                  actionOne: actionOne,
+                  actionTwo: actionTwo ?? const SizedBox(),
+                )
+              else
+                RippleIcon(actionOne: actionOne),
             ],
           ),
         ),
@@ -76,14 +86,13 @@ class SightCard extends StatelessWidget {
   }
 }
 
-class RippleIcons extends StatelessWidget {
-  final List<Widget> actions;
+class RippleIcon extends StatelessWidget {
+  final Widget actionOne;
 
-  const RippleIcons({
+  const RippleIcon({
     Key? key,
-    required this.actions,
+    required this.actionOne,
   }) : super(key: key);
-
 
   @override
   Widget build(BuildContext context) {
@@ -98,14 +107,67 @@ class RippleIcons extends StatelessWidget {
           child: InkWell(
             borderRadius: BorderRadius.circular(16.0),
             onTap: () {
-              debugPrint('like');
+              debugPrint('like pressed');
             },
-            child: Row(
-              children: actions,
-            ),
+            child: actionOne,
           ),
         ),
       ),
+    );
+  }
+}
+
+class RippleIcons extends StatelessWidget {
+  final Widget actionOne;
+  final Widget actionTwo;
+
+  const RippleIcons({
+    Key? key,
+    required this.actionOne,
+    required this.actionTwo,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: [
+        Positioned(
+          top: 16,
+          right: 55,
+          child: Material(
+            type: MaterialType.transparency,
+            child: SizedBox(
+              width: 22,
+              height: 22,
+              child: InkWell(
+                borderRadius: BorderRadius.circular(16.0),
+                onTap: () {
+                  debugPrint('first icon pressed');
+                },
+                child: actionOne,
+              ),
+            ),
+          ),
+        ),
+        Positioned(
+          top: 16,
+          right: 16,
+          child: Material(
+            type: MaterialType.transparency,
+            child: SizedBox(
+              width: 22,
+              height: 22,
+              child: InkWell(
+                borderRadius: BorderRadius.circular(16.0),
+                onTap: () {
+                  debugPrint('cross pressed');
+                },
+                child: actionTwo,
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 }
@@ -118,7 +180,6 @@ class RippleCardFull extends StatelessWidget {
     required this.item,
   }) : super(key: key);
 
-
   @override
   Widget build(BuildContext context) {
     return Positioned.fill(
@@ -126,7 +187,7 @@ class RippleCardFull extends StatelessWidget {
         type: MaterialType.transparency,
         child: InkWell(
           onTap: () {
-            debugPrint('to details');
+            debugPrint('to details screen');
             Navigator.of(context).push(
               MaterialPageRoute<SightDetails>(
                 builder: (context) => SightDetails(
@@ -142,13 +203,13 @@ class RippleCardFull extends StatelessWidget {
 }
 
 class _SightCardTop extends StatelessWidget {
-  final List<Widget> actions;
+  final Widget actionOne;
   final String type;
   final String url;
 
   const _SightCardTop({
     Key? key,
-    required this.actions,
+    required this.actionOne,
     required this.type,
     required this.url,
   }) : super(key: key);

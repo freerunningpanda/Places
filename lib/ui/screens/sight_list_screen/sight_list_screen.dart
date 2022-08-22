@@ -39,14 +39,13 @@ class _SightListScreenState extends State<SightListScreen> {
                 final item = list[index];
 
                 return SightCard(
+                  isVisitingScreen: false,
                   aspectRatio: 3 / 1.5,
-                  actions: const [
-                    SightIcons(
+                  actionOne: const SightIcons(
                       assetName: AppAssets.favourite,
                       width: 22,
                       height: 22,
                     ),
-                  ],
                   url: item.url,
                   type: item.type,
                   name: item.name,

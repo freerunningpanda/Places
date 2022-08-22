@@ -204,6 +204,7 @@ class _WantToVisitWidget extends StatelessWidget {
             );
           },
           child: SightCard(
+            isVisitingScreen: true,
             item: item,
             url: item.url,
             type: item.type,
@@ -230,29 +231,16 @@ class _WantToVisitWidget extends StatelessWidget {
                 style: AppTypography.textText16Regular,
               ),
             ],
-            actions: [
-              GestureDetector(
-                onTap: () {
-                  debugPrint('Calendar pressed');
-                },
-                child: const SightIcons(
-                  assetName: AppAssets.calendarWhite,
-                  width: 24,
-                  height: 24,
-                ),
-              ),
-              const SizedBox(width: 16),
-              GestureDetector(
-                onTap: () {
-                  debugPrint('Cross pressed');
-                },
-                child: const SightIcons(
-                  assetName: AppAssets.cross,
-                  width: 22,
-                  height: 22,
-                ),
-              ),
-            ],
+            actionOne: const SightIcons(
+              assetName: AppAssets.calendarWhite,
+              width: 24,
+              height: 24,
+            ),
+            actionTwo: const SightIcons(
+              assetName: AppAssets.cross,
+              width: 22,
+              height: 22,
+            ),
           ),
         );
       },
@@ -284,6 +272,7 @@ class _VisitedWidget extends StatelessWidget {
             );
           },
           child: SightCard(
+            isVisitingScreen: true,
             item: item,
             url: item.url,
             type: item.type,
@@ -310,32 +299,16 @@ class _VisitedWidget extends StatelessWidget {
                 style: AppTypography.detailsText,
               ),
             ],
-            actions: [
-              GestureDetector(
-                onTap: () {
-                  debugPrint('Share button pressed');
-                },
-                child: SightIcons(
-                  assetName: AppAssets.share,
-                  width: 24,
-                  height: 24,
-                  onTap: () {
-                    debugPrint('like pressed');
-                  },
-                ),
-              ),
-              const SizedBox(width: 16),
-              GestureDetector(
-                onTap: () {
-                  debugPrint('Cross button pressed');
-                },
-                child: const SightIcons(
-                  assetName: AppAssets.cross,
-                  width: 22,
-                  height: 22,
-                ),
-              ),
-            ],
+            actionOne: const SightIcons(
+              assetName: AppAssets.share,
+              width: 24,
+              height: 24,
+            ),
+            actionTwo: const SightIcons(
+              assetName: AppAssets.cross,
+              width: 22,
+              height: 22,
+            ),
           ),
         );
       },
