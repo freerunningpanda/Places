@@ -3,13 +3,13 @@ import 'dart:math';
 abstract class CalculationDistance {
   static double distance(
     double startLat,
-    double startLon,
+    double startLot,
     double endLat,
-    double endLon,
+    double endLot,
   ) {
     const earthRadius = 6378137.0;
     final lat = _calcRadians(endLat - startLat);
-    final lon = _calcRadians(endLon - startLon);
+    final lon = _calcRadians(endLot - startLot);
 
     final result = pow(sin(lat / 2), 2) +
         pow(sin(lon / 2), 2) *
