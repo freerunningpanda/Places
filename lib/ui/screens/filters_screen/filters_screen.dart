@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 
 import 'package:places/data/filters.dart';
+import 'package:places/data/filters_table.dart';
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_strings.dart';
 import 'package:places/ui/res/app_typography.dart';
 import 'package:places/ui/screens/filters_screen/filters_settings.dart';
 import 'package:places/ui/widgets/action_button.dart';
 import 'package:places/ui/widgets/sight_icons.dart';
+import 'package:provider/provider.dart';
 
 class FilterScreen extends StatefulWidget {
   final void Function()? onPressed;
@@ -22,11 +24,11 @@ class FilterScreen extends StatefulWidget {
 class _FilterScreenState extends State<FilterScreen> {
   @override
   Widget build(BuildContext context) {
+    final clearFilters = context.read<FiltersSettings>().clearAllFilters;
+
     return Scaffold(
       appBar: _AppBar(
-        onPressed: () {
-          setState(FiltersSettings.clearAllFilters);
-        },
+        onPressed: clearFilters,
       ),
       body: Padding(
         padding: const EdgeInsets.only(
@@ -41,8 +43,8 @@ class _FilterScreenState extends State<FilterScreen> {
             const _Title(),
             const SizedBox(height: 24),
             _FiltersTable(
-              filters: FiltersSettings.filters,
-              activeFilters: FiltersSettings.activeFilters,
+              filters: FiltersTable.filters,
+              activeFilters: FiltersSettings().activeFilters,
             ),
             const SizedBox(height: 60),
             Expanded(
@@ -52,12 +54,12 @@ class _FilterScreenState extends State<FilterScreen> {
               ),
             ),
             ActionButton(
-              activeFilters: FiltersSettings.activeFilters,
+              activeFilters: FiltersSettings().activeFilters,
               title: '${AppString.showPlaces} (amount)',
               rangeValues: FiltersSettings.rangeValues,
               onTap: () {
                 debugPrint('show places pressed');
-                debugPrint('Сохранённые значения фильтров: ${FiltersSettings.activeFilters}');
+                debugPrint('Сохранённые значения фильтров: ${FiltersSettings().activeFilters}');
                 debugPrint(
                   'Сохранённое значение слайдера: min: ${FiltersSettings.rangeValues.start.round()}, max: ${FiltersSettings.rangeValues.end.round()}',
                 );
@@ -160,6 +162,10 @@ class _FiltersTable extends StatefulWidget {
 class _FiltersTableState extends State<_FiltersTable> {
   @override
   Widget build(BuildContext context) {
+    // ignore: unnecessary_statements
+    context.watch<FiltersSettings>().clearAllFilters;
+
+
     return Container(
       alignment: const Alignment(0.0, -0.8),
       child: Wrap(

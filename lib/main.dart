@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:places/appsettings.dart';
+import 'package:places/ui/screens/filters_screen/filters_settings.dart';
 import 'package:places/ui/screens/navigation_screen/navigation_screen.dart';
 
 import 'package:places/ui/screens/res/app_theme.dart';
@@ -11,8 +12,15 @@ final ThemeData _darkTheme = AppTheme.buildThemeDark();
 
 void main() {
   runApp(
-    ChangeNotifierProvider<AppSettings>(
-      create: (_) => AppSettings(),
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider<AppSettings>(
+          create: (_) => AppSettings(),
+        ),
+        ChangeNotifierProvider<FiltersSettings>(
+          create: (_) => FiltersSettings(),
+        ),
+      ],
       child: const App(),
     ),
   );
@@ -32,24 +40,24 @@ class _AppState extends State<App> {
   Widget build(BuildContext context) {
     final isDarkMode = context.watch<AppSettings>().isDarkMode;
 
-      return MaterialApp(
-        theme: !isDarkMode
-            ? _lightTheme.copyWith(
-                extensions: <ThemeExtension<dynamic>>[
-                  CustomColors.sightCardLight,
-                ],
-              )
-            : _darkTheme.copyWith(
-                extensions: <ThemeExtension<dynamic>>[
-                  CustomColors.sightCardDark,
-                ],
-              ),
-        debugShowCheckedModeBanner: false,
-        title: 'Places',
-        home: const MainScreen(),
-        // const SightListScreen(),
-      );
-    }
+    return MaterialApp(
+      theme: !isDarkMode
+          ? _lightTheme.copyWith(
+              extensions: <ThemeExtension<dynamic>>[
+                CustomColors.sightCardLight,
+              ],
+            )
+          : _darkTheme.copyWith(
+              extensions: <ThemeExtension<dynamic>>[
+                CustomColors.sightCardDark,
+              ],
+            ),
+      debugShowCheckedModeBanner: false,
+      title: 'Places',
+      home: const MainScreen(),
+      // const SightListScreen(),
+    );
+  }
 }
 
 class MainScreen extends StatelessWidget {
