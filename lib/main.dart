@@ -10,14 +10,12 @@ final ThemeData _lightTheme = AppTheme.buildTheme();
 final ThemeData _darkTheme = AppTheme.buildThemeDark();
 
 void main() {
-  runApp(MultiProvider(
-    providers: [
-      ChangeNotifierProvider<AppSettings>(
-        create: (_) => AppSettings(),
-      ),
-    ],
-    child: const App(),
-  ));
+  runApp(
+    ChangeNotifierProvider<AppSettings>(
+      create: (_) => AppSettings(),
+      child: const App(),
+    ),
+  );
 }
 
 class App extends StatefulWidget {
@@ -32,8 +30,7 @@ class _AppState extends State<App> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<AppSettings>(builder: (context, model, child) {
-      final isDarkMode = model.isDarkMode;
+    final isDarkMode = context.watch<AppSettings>().isDarkMode;
 
       return MaterialApp(
         theme: !isDarkMode
@@ -52,8 +49,7 @@ class _AppState extends State<App> {
         home: const MainScreen(),
         // const SightListScreen(),
       );
-    });
-  }
+    }
 }
 
 class MainScreen extends StatelessWidget {

@@ -13,7 +13,7 @@ class Switcher extends StatefulWidget {
 class _SwitcherState extends State<Switcher> {
   @override
   Widget build(BuildContext context) {
-    final isSwitched = Provider.of<AppSettings>(context, listen: true).isDarkMode;
+    final isSwitched = context.watch<AppSettings>().isDarkMode;
 
     final theme = Theme.of(context);
 
@@ -22,10 +22,7 @@ class _SwitcherState extends State<Switcher> {
       trackColor: theme.sliderTheme.inactiveTrackColor,
       value: isSwitched,
       onChanged: (value) {
-        Provider.of<AppSettings>(
-          context,
-          listen: false,
-        ).switchTheme(value: value);
+        context.read<AppSettings>().switchTheme(value: value);
       },
     );
   }
