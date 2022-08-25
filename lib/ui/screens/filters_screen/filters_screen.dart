@@ -42,10 +42,7 @@ class _FilterScreenState extends State<FilterScreen> {
           children: [
             const _Title(),
             const SizedBox(height: 24),
-            _FiltersTable(
-              filters: FiltersTable.filters,
-              activeFilters: FiltersSettings().activeFilters,
-            ),
+            const _FiltersTable(),
             const SizedBox(height: 60),
             Expanded(
               child: _DistanceSlider(
@@ -147,12 +144,8 @@ class _ClearButtonWidgetState extends State<_ClearButtonWidget> {
 }
 
 class _FiltersTable extends StatefulWidget {
-  final List<Filters> filters;
-  final List<String> activeFilters;
   const _FiltersTable({
     Key? key,
-    required this.filters,
-    required this.activeFilters,
   }) : super(key: key);
 
   @override
@@ -160,11 +153,12 @@ class _FiltersTable extends StatefulWidget {
 }
 
 class _FiltersTableState extends State<_FiltersTable> {
+  final filters = FiltersTable.filters;
+
   @override
   Widget build(BuildContext context) {
     // ignore: unnecessary_statements
-    context.watch<FiltersSettings>().clearAllFilters;
-
+    context.watch<FiltersSettings>();
 
     return Container(
       alignment: const Alignment(0.0, -0.8),
@@ -173,35 +167,16 @@ class _FiltersTableState extends State<_FiltersTable> {
         spacing: 24,
         runSpacing: 40,
         children: [
-          for (var i = 0; i < widget.filters.length; i++)
+          for (var i = 0; i < filters.length; i++)
             _ItemFilter(
-              title: widget.filters[i].title,
-              assetName: widget.filters[i].assetName,
-              onTap: () => saveFilters(i),
-              isEnabled: widget.filters[i].isEnabled,
+              title: filters[i].title,
+              assetName: filters[i].assetName,
+              onTap: () => context.read<FiltersSettings>().saveFilters(i),
+              isEnabled: filters[i].isEnabled,
             ),
         ],
       ),
     );
-  }
-
-  List<String> saveFilters(int index) {
-    widget.filters[index].isEnabled = !widget.filters[index].isEnabled;
-    if (widget.filters[index].isEnabled) {
-      widget.activeFilters.add(widget.filters[index].title);
-      setState(() {
-        widget.filters[index].isEnabled = true;
-      });
-    } else {
-      widget.activeFilters.removeLast();
-      setState(() {
-        widget.filters[index].isEnabled = false;
-      });
-    }
-    debugPrint('${widget.activeFilters}');
-    debugPrint('Элементов в списке: ${widget.activeFilters.length}');
-
-    return widget.activeFilters;
   }
 }
 

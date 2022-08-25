@@ -13,4 +13,24 @@ class FiltersSettings extends ChangeNotifier {
     notifyListeners();
   }
 
+  List<String> saveFilters(int index) {
+    final filters = FiltersTable.filters[index];
+    final activeFilters = FiltersTable.activeFilters;
+    var isEnabled = !FiltersTable.filters[index].isEnabled;
+    isEnabled = !isEnabled;
+    if (!isEnabled) {
+      activeFilters.add(filters.title);
+      filters.isEnabled = true;
+      notifyListeners();
+    } 
+    else {
+      activeFilters.removeLast();
+      filters.isEnabled = false;
+      notifyListeners();
+    }
+    debugPrint('$activeFilters');
+    debugPrint('Элементов в списке: ${activeFilters.length}');
+
+    return activeFilters;
+  }
 }

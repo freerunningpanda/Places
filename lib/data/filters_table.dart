@@ -4,7 +4,7 @@ import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_strings.dart';
 
 class FiltersTable {
-    static final List<Filters> filters = [
+  static final List<Filters> filters = [
     Filters(title: AppString.hotel, assetName: AppAssets.hotel),
     Filters(title: AppString.restaurant, assetName: AppAssets.restaurant),
     Filters(title: AppString.particularPlace, assetName: AppAssets.particularPlace),
@@ -12,4 +12,5 @@ class FiltersTable {
     Filters(title: AppString.museum, assetName: AppAssets.museum),
     Filters(title: AppString.cafe, assetName: AppAssets.cafe),
   ];
+  static final List<String> activeFilters = [];
 }
