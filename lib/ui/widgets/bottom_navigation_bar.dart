@@ -24,6 +24,7 @@ class BottomNavigationBarWidget extends StatelessWidget {
         items: [
           BottomNavigationBarItem(
             icon: GestureDetector(
+              onTap: () => debugPrint('Places pressed'),
               child: SightIcons(
                 assetName: AppAssets.listPlaces,
                 width: 24,
@@ -34,29 +35,38 @@ class BottomNavigationBarWidget extends StatelessWidget {
             label: '',
           ),
           BottomNavigationBarItem(
-            icon: SightIcons(
-              assetName: AppAssets.map,
-              width: 24,
-              height: 24,
-              color: theme.iconTheme.color,
+            icon: GestureDetector(
+              onTap: () => debugPrint('Route pressed'),
+              child: SightIcons(
+                assetName: AppAssets.map,
+                width: 24,
+                height: 24,
+                color: theme.iconTheme.color,
+              ),
             ),
             label: '',
           ),
           BottomNavigationBarItem(
-            icon: SightIcons(
-              assetName: AppAssets.heartFull,
-              width: 24,
-              height: 24,
-              color: theme.iconTheme.color,
+            icon: GestureDetector(
+              onTap: () => debugPrint('Favourite pressed'),
+              child: SightIcons(
+                assetName: AppAssets.heartFull,
+                width: 24,
+                height: 24,
+                color: theme.iconTheme.color,
+              ),
             ),
             label: '',
           ),
           BottomNavigationBarItem(
-            icon: SightIcons(
-              assetName: AppAssets.settings,
-              width: 24,
-              height: 24,
-              color: theme.iconTheme.color,
+            icon: GestureDetector(
+              onTap: () => debugPrint('Settings pressed'),
+              child: SightIcons(
+                assetName: AppAssets.settings,
+                width: 24,
+                height: 24,
+                color: theme.iconTheme.color,
+              ),
             ),
             label: '',
             
