@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 
 import 'package:places/ui/res/app_colors.dart';
 import 'package:places/ui/res/app_typography.dart';
+import 'package:places/ui/screens/res/custom_colors.dart';
 
 abstract class AppTheme {
   static ThemeData buildTheme() {
     return ThemeData(
+      extensions: const <ThemeExtension<CustomColors>>[CustomColors.sightCardLight],
       textButtonTheme: TextButtonThemeData(
         style: TextButton.styleFrom(
           primary: AppColors.black,
@@ -50,15 +52,14 @@ abstract class AppTheme {
         activeTrackColor: AppColors.green,
         thumbColor: AppColors.backgroundColor,
         overlayShape: SliderComponentShape.noOverlay,
-        rangeThumbShape: const RoundRangeSliderThumbShape(
-          elevation: 3,
-        ),
+        rangeThumbShape: const RoundRangeSliderThumbShape(elevation: 3),
       ),
     );
   }
 
   static ThemeData buildThemeDark() {
     return ThemeData(
+      extensions: const <ThemeExtension<CustomColors>>[CustomColors.sightCardDark],
       textButtonTheme: TextButtonThemeData(
         style: TextButton.styleFrom(
           primary: AppColors.black,
@@ -103,9 +104,7 @@ abstract class AppTheme {
         activeTrackColor: AppColors.green,
         thumbColor: AppColors.backgroundColor,
         overlayShape: SliderComponentShape.noOverlay,
-        rangeThumbShape: const RoundRangeSliderThumbShape(
-          elevation: 3,
-        ),
+        rangeThumbShape: const RoundRangeSliderThumbShape(elevation: 3),
       ),
     );
   }

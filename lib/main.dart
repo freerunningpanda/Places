@@ -34,28 +34,16 @@ class App extends StatefulWidget {
 }
 
 class _AppState extends State<App> {
-  final themeMode = ThemeMode.system;
 
   @override
   Widget build(BuildContext context) {
     final isDarkMode = context.watch<AppSettings>().isDarkMode;
 
     return MaterialApp(
-      theme: !isDarkMode
-          ? _lightTheme.copyWith(
-              extensions: <ThemeExtension<dynamic>>[
-                CustomColors.sightCardLight,
-              ],
-            )
-          : _darkTheme.copyWith(
-              extensions: <ThemeExtension<dynamic>>[
-                CustomColors.sightCardDark,
-              ],
-            ),
+      theme: isDarkMode ? AppTheme.buildTheme() : AppTheme.buildThemeDark(),
       debugShowCheckedModeBanner: false,
       title: 'Places',
       home: const MainScreen(),
-      // const SightListScreen(),
     );
   }
 }
