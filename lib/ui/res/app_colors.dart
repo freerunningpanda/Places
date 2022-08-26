@@ -20,5 +20,4 @@ abstract class AppColors {
     Color.fromRGBO(106, 218, 111, 1),
     Color.fromRGBO(255, 231, 105, 1),
   ];
-  static const rippleEffectColor = Color.fromRGBO(196, 196, 196, 0.5);
 }

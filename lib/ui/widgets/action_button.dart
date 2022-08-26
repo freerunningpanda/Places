@@ -52,14 +52,13 @@ class ActionButton extends StatelessWidget {
         ),
         Positioned.fill(
           child: Material(
-          type: MaterialType.transparency,
-          child: InkWell(
-            borderRadius: BorderRadius.circular(12.0),
-            onTap: onTap,
+            type: MaterialType.transparency,
+            child: InkWell(
+              borderRadius: BorderRadius.circular(12.0),
+              onTap: onTap,
+            ),
           ),
-              ),
         ),
-        
       ],
     );
   }

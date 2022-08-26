@@ -6,6 +6,11 @@ import 'package:places/ui/res/app_typography.dart';
 abstract class AppTheme {
   static ThemeData buildTheme() {
     return ThemeData(
+      textButtonTheme: TextButtonThemeData(
+        style: TextButton.styleFrom(
+          primary: AppColors.black,
+        ),
+      ),
       scaffoldBackgroundColor: AppColors.backgroundColor,
       appBarTheme: const AppBarTheme(
         toolbarHeight: 86,
@@ -54,6 +59,11 @@ abstract class AppTheme {
 
   static ThemeData buildThemeDark() {
     return ThemeData(
+      textButtonTheme: TextButtonThemeData(
+        style: TextButton.styleFrom(
+          primary: AppColors.black,
+        ),
+      ),
       scaffoldBackgroundColor: AppColors.darkThemeBgColor,
       appBarTheme: const AppBarTheme(
         toolbarHeight: 86,
