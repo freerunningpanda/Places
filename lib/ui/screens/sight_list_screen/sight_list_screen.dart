@@ -40,12 +40,12 @@ class _SightListScreenState extends State<SightListScreen> {
 
                 return SightCard(
                   isVisitingScreen: false,
-                  aspectRatio: 3 / 1.5,
+                  aspectRatio: 3 / 2,
                   actionOne: const SightIcons(
-                      assetName: AppAssets.favourite,
-                      width: 22,
-                      height: 22,
-                    ),
+                    assetName: AppAssets.favourite,
+                    width: 22,
+                    height: 22,
+                  ),
                   url: item.url,
                   type: item.type,
                   name: item.name,
@@ -57,8 +57,8 @@ class _SightListScreenState extends State<SightListScreen> {
                       style: theme.textTheme.headlineSmall,
                     ),
                     const SizedBox(height: 2),
-                    const Text(
-                      '${AppString.closed} 20:00',
+                    Text(
+                      item.details,
                       overflow: TextOverflow.ellipsis,
                       style: AppTypography.textText16Regular,
                     ),

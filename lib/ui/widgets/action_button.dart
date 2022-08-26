@@ -8,7 +8,7 @@ import 'package:places/ui/widgets/sight_icons.dart';
 class ActionButton extends StatelessWidget {
   final String? assetName;
   final String title;
-  final void Function()? onTap;
+  final VoidCallback? onTap;
   final List<String>? activeFilters;
   final RangeValues? rangeValues;
 
@@ -23,33 +23,44 @@ class ActionButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        height: 48,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(12),
-          color: AppColors.green,
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            if (assetName == null)
-              const SizedBox()
-            else
-              SightIcons(
-                assetName: assetName ?? AppAssets.goIcon,
-                width: 24,
-                height: 24,
+    return Stack(
+      children: [
+        Container(
+          height: 48,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(12),
+            color: AppColors.green,
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              if (assetName == null)
+                const SizedBox()
+              else
+                SightIcons(
+                  assetName: assetName ?? AppAssets.goIcon,
+                  width: 24,
+                  height: 24,
+                ),
+              const SizedBox(width: 8),
+              Text(
+                title,
+                style: AppTypography.sightDetailsButtonName,
               ),
-            const SizedBox(width: 8),
-            Text(
-              title,
-              style: AppTypography.sightDetailsButtonName,
-            ),
-          ],
+            ],
+          ),
         ),
-      ),
+        Positioned.fill(
+          child: Material(
+          type: MaterialType.transparency,
+          child: InkWell(
+            borderRadius: BorderRadius.circular(12.0),
+            onTap: onTap,
+          ),
+              ),
+        ),
+        
+      ],
     );
   }
 }

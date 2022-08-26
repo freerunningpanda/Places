@@ -38,10 +38,10 @@ abstract class Mocks {
       url: 'https://static.yakitoriya.ru/media/cache/60/15/60158655420e2922294478c35d86ba77.png',
       details:
           'Летняя веранда, доставка еды, роллы филадельфия от 537 ₽, бесплатная доставка, оплата картой, доставка, Wi-Fi, еда навынос, детское меню, средний счёт от 1500 ₽, детская комната..',
-      type: 'Исторические объекты',
+      type: AppString.restaurant,
     ),
     Sight(
-      name: AppString.restaurant,
+      name: 'Lecco',
       lat: 55.907089,
       lon: 37.718347,
       url:

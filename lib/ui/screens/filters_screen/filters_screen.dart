@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'package:places/data/filters.dart';
 import 'package:places/data/filters_table.dart';
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_strings.dart';
@@ -10,7 +11,7 @@ import 'package:places/ui/widgets/sight_icons.dart';
 import 'package:provider/provider.dart';
 
 class FilterScreen extends StatefulWidget {
-  final void Function()? onPressed;
+  final VoidCallback? onPressed;
   const FilterScreen({
     Key? key,
     this.onPressed,
@@ -41,7 +42,10 @@ class _FilterScreenState extends State<FilterScreen> {
           children: [
             const _Title(),
             const SizedBox(height: 24),
-            const _FiltersTable(),
+            _FiltersTable(
+              filters: FiltersTable.filters,
+              activeFilters: FiltersSettings().activeFilters,
+            ),
             const SizedBox(height: 60),
             Expanded(
               child: _DistanceSlider(
@@ -91,7 +95,7 @@ class _Title extends StatelessWidget {
 }
 
 class _AppBar extends StatelessWidget implements PreferredSizeWidget {
-  final void Function()? onPressed;
+  final VoidCallback? onPressed;
   @override
   Size get preferredSize => const Size.fromHeight(80); // Это свойство не применяется
 
@@ -122,7 +126,7 @@ class _AppBar extends StatelessWidget implements PreferredSizeWidget {
 }
 
 class _ClearButtonWidget extends StatefulWidget {
-  final void Function()? onPressed;
+  final VoidCallback? onPressed;
   const _ClearButtonWidget({Key? key, required this.onPressed}) : super(key: key);
 
   @override
@@ -143,8 +147,12 @@ class _ClearButtonWidgetState extends State<_ClearButtonWidget> {
 }
 
 class _FiltersTable extends StatefulWidget {
+  final List<Filters> filters;
+  final List<String> activeFilters;
   const _FiltersTable({
     Key? key,
+    required this.filters,
+    required this.activeFilters,
   }) : super(key: key);
 
   @override
@@ -152,8 +160,6 @@ class _FiltersTable extends StatefulWidget {
 }
 
 class _FiltersTableState extends State<_FiltersTable> {
-  final filters = FiltersTable.filters;
-
   @override
   Widget build(BuildContext context) {
     // ignore: unnecessary_statements
@@ -166,12 +172,12 @@ class _FiltersTableState extends State<_FiltersTable> {
         spacing: 24,
         runSpacing: 40,
         children: [
-          for (var i = 0; i < filters.length; i++)
+          for (var i = 0; i < widget.filters.length; i++)
             _ItemFilter(
-              title: filters[i].title,
-              assetName: filters[i].assetName,
+              title: widget.filters[i].title,
+              assetName: widget.filters[i].assetName,
               onTap: () => context.read<FiltersSettings>().saveFilters(i),
-              isEnabled: filters[i].isEnabled,
+              isEnabled: widget.filters[i].isEnabled,
             ),
         ],
       ),
@@ -202,11 +208,13 @@ class _ItemFilterState extends State<_ItemFilter> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
+    final height = MediaQuery.of(context).size.height / 6;
+
     return Stack(
       children: [
         SizedBox(
           width: 98,
-          height: 96,
+          height: height,
           child: Column(
             children: [
               InkWell(
@@ -249,7 +257,7 @@ class _ItemFilterState extends State<_ItemFilter> {
         if (widget.isEnabled)
           Positioned(
             right: 16,
-            bottom: 30,
+            bottom: 48,
             child: Container(
               padding: const EdgeInsets.symmetric(
                 horizontal: 2,
