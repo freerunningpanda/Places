@@ -4,7 +4,6 @@ import 'package:places/ui/screens/filters_screen/filters_settings.dart';
 import 'package:places/ui/screens/navigation_screen/navigation_screen.dart';
 
 import 'package:places/ui/screens/res/app_theme.dart';
-import 'package:places/ui/screens/res/custom_colors.dart';
 import 'package:provider/provider.dart';
 
 final ThemeData _lightTheme = AppTheme.buildTheme();
@@ -40,7 +39,7 @@ class _AppState extends State<App> {
     final isDarkMode = context.watch<AppSettings>().isDarkMode;
 
     return MaterialApp(
-      theme: isDarkMode ? AppTheme.buildTheme() : AppTheme.buildThemeDark(),
+      theme: !isDarkMode ? _lightTheme : _darkTheme,
       debugShowCheckedModeBanner: false,
       title: 'Places',
       home: const MainScreen(),
