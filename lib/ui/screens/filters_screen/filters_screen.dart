@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'package:places/data/filters.dart';
 import 'package:places/data/filters_table.dart';
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_strings.dart';
