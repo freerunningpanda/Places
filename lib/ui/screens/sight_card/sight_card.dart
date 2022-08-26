@@ -107,7 +107,7 @@ class RippleIcon extends StatelessWidget {
           child: InkWell(
             borderRadius: BorderRadius.circular(16.0),
             onTap: () {
-              debugPrint('like pressed');
+              debugPrint('🟡---------like pressed');
             },
             child: actionOne,
           ),
@@ -142,7 +142,7 @@ class RippleIcons extends StatelessWidget {
               child: InkWell(
                 borderRadius: BorderRadius.circular(16.0),
                 onTap: () {
-                  debugPrint('first icon pressed');
+                  debugPrint('🟡---------first icon pressed');
                 },
                 child: actionOne,
               ),
@@ -160,7 +160,7 @@ class RippleIcons extends StatelessWidget {
               child: InkWell(
                 borderRadius: BorderRadius.circular(16.0),
                 onTap: () {
-                  debugPrint('cross pressed');
+                  debugPrint('🟡---------cross pressed');
                 },
                 child: actionTwo,
               ),
@@ -187,7 +187,7 @@ class RippleCardFull extends StatelessWidget {
         type: MaterialType.transparency,
         child: InkWell(
           onTap: () {
-            debugPrint('to details screen');
+            debugPrint('🟡---------to details screen');
             Navigator.of(context).push(
               MaterialPageRoute<SightDetails>(
                 builder: (context) => SightDetails(

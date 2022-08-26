@@ -28,8 +28,8 @@ class FiltersSettings extends ChangeNotifier {
       filters.isEnabled = false;
       notifyListeners();
     }
-    debugPrint('$activeFilters');
-    debugPrint('Элементов в списке: ${activeFilters.length}');
+    debugPrint('🟡---------$activeFilters');
+    debugPrint('🟡---------Элементов в списке: ${activeFilters.length}');
 
     return activeFilters;
   }

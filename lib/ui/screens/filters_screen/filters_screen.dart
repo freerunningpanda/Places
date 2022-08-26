@@ -58,10 +58,10 @@ class _FilterScreenState extends State<FilterScreen> {
               title: '${AppString.showPlaces} (amount)',
               rangeValues: FiltersSettings.rangeValues,
               onTap: () {
-                debugPrint('show places pressed');
-                debugPrint('Сохранённые значения фильтров: ${FiltersSettings().activeFilters}');
+                debugPrint('🟡---------show places pressed');
+                debugPrint('🟡---------Сохранённые значения фильтров: ${FiltersSettings().activeFilters}');
                 debugPrint(
-                  'Сохранённое значение слайдера: min: ${FiltersSettings.rangeValues.start.round()}, max: ${FiltersSettings.rangeValues.end.round()}',
+                  '🟡---------Сохранённое значение слайдера: min: ${FiltersSettings.rangeValues.start.round()}, max: ${FiltersSettings.rangeValues.end.round()}',
                 );
               },
             ),
@@ -97,7 +97,7 @@ class _Title extends StatelessWidget {
 class _AppBar extends StatelessWidget implements PreferredSizeWidget {
   final VoidCallback? onPressed;
   @override
-  Size get preferredSize => const Size.fromHeight(80); // Это свойство не применяется
+  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 
   const _AppBar({Key? key, required this.onPressed}) : super(key: key);
   @override
@@ -107,7 +107,7 @@ class _AppBar extends StatelessWidget implements PreferredSizeWidget {
       child: AppBar(
         leading: IconButton(
           onPressed: () {
-            debugPrint('chevrone back pressed');
+            debugPrint('🟡---------chevrone back pressed');
             Navigator.pop(context);
           },
           icon: const Icon(Icons.chevron_left),
@@ -171,15 +171,31 @@ class _FiltersTableState extends State<_FiltersTable> {
         crossAxisAlignment: WrapCrossAlignment.center,
         spacing: 24,
         runSpacing: 40,
-        children: [
-          for (var i = 0; i < widget.filters.length; i++)
-            _ItemFilter(
-              title: widget.filters[i].title,
-              assetName: widget.filters[i].assetName,
-              onTap: () => context.read<FiltersSettings>().saveFilters(i),
-              isEnabled: widget.filters[i].isEnabled,
-            ),
-        ],
+        children: widget.filters
+            .asMap()
+            .map(
+              (i, e) => MapEntry(
+                i,
+                _ItemFilter(
+                  isEnabled: e.isEnabled,
+                  title: e.title,
+                  assetName: e.assetName,
+                  onTap: () => context.read<FiltersSettings>().saveFilters(i),
+                ),
+              ),
+            )
+            .values
+            .toList(),
+
+        // [
+        //   for (var i = 0; i < widget.filters.length; i++)
+        //     _ItemFilter(
+        //       title: widget.filters[i].title,
+        //       assetName: widget.filters[i].assetName,
+        //       onTap: () => context.read<FiltersSettings>().saveFilters(i),
+        //       isEnabled: widget.filters[i].isEnabled,
+        //     ),
+        // ],
       ),
     );
   }
@@ -225,7 +241,7 @@ class _ItemFilterState extends State<_ItemFilter> {
                   width: 64,
                   child: !widget.isEnabled
                       ? CircleAvatar(
-                          backgroundColor: Theme.of(context).canvasColor,
+                          backgroundColor: theme.canvasColor,
                           child: SightIcons(
                             assetName: widget.assetName,
                             width: 32,
@@ -235,7 +251,7 @@ class _ItemFilterState extends State<_ItemFilter> {
                       : Opacity(
                           opacity: 0.5,
                           child: CircleAvatar(
-                            backgroundColor: Theme.of(context).canvasColor,
+                            backgroundColor: theme.canvasColor,
                             child: SightIcons(
                               assetName: widget.assetName,
                               width: 32,

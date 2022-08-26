@@ -5,9 +5,8 @@ import 'package:places/mocks.dart';
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_strings.dart';
 import 'package:places/ui/res/app_typography.dart';
-import 'package:places/ui/screens/filters_screen/filters_screen.dart';
-import 'package:places/ui/screens/res/custom_colors.dart';
 import 'package:places/ui/screens/sight_card/sight_card.dart';
+import 'package:places/ui/widgets/search_widget.dart';
 import 'package:places/ui/widgets/sight_icons.dart';
 
 class SightListScreen extends StatefulWidget {
@@ -29,44 +28,8 @@ class _SightListScreenState extends State<SightListScreen> {
         children: [
           const SizedBox(height: 64),
           const _AppBar(),
-          const _SearchWidget(),
-          Expanded(
-            child: ListView.builder(
-              physics: const BouncingScrollPhysics(),
-              shrinkWrap: true,
-              itemCount: list.length,
-              itemBuilder: (context, index) {
-                final item = list[index];
-
-                return SightCard(
-                  isVisitingScreen: false,
-                  aspectRatio: 3 / 2,
-                  actionOne: const SightIcons(
-                    assetName: AppAssets.favourite,
-                    width: 22,
-                    height: 22,
-                  ),
-                  url: item.url,
-                  type: item.type,
-                  name: item.name,
-                  item: item,
-                  details: [
-                    Text(
-                      item.name,
-                      maxLines: 2,
-                      style: theme.textTheme.headlineSmall,
-                    ),
-                    const SizedBox(height: 2),
-                    Text(
-                      item.details,
-                      overflow: TextOverflow.ellipsis,
-                      style: AppTypography.textText16Regular,
-                    ),
-                  ],
-                );
-              },
-            ),
-          ),
+          const SearchWidget(),
+          _SightListWidget(list: list, theme: theme),
         ],
       ),
     );
@@ -75,7 +38,7 @@ class _SightListScreenState extends State<SightListScreen> {
 
 class _AppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
-  Size get preferredSize => const Size.fromHeight(0); // Это свойство не применяется
+  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 
   const _AppBar({Key? key}) : super(key: key);
   @override
@@ -90,69 +53,53 @@ class _AppBar extends StatelessWidget implements PreferredSizeWidget {
   }
 }
 
-class _SearchWidget extends StatefulWidget {
-  const _SearchWidget({Key? key}) : super(key: key);
+class _SightListWidget extends StatelessWidget {
+  final List<Sight> list;
+  final ThemeData theme;
 
-  @override
-  State<_SearchWidget> createState() => _SearchWidgetState();
-}
+  const _SightListWidget({
+    Key? key,
+    required this.list,
+    required this.theme,
+  }) : super(key: key);
 
-class _SearchWidgetState extends State<_SearchWidget> {
   @override
   Widget build(BuildContext context) {
-    final customColors = Theme.of(context).extension<CustomColors>()!;
+    return Expanded(
+      child: ListView.builder(
+        physics: const BouncingScrollPhysics(),
+        shrinkWrap: true,
+        itemCount: list.length,
+        itemBuilder: (context, index) {
+          final sight = list[index];
 
-    return Padding(
-      padding: const EdgeInsets.only(
-        left: 16.0,
-        top: 30.0,
-        right: 16.0,
-        bottom: 34,
-      ),
-      child: Container(
-        padding: const EdgeInsets.only(left: 15),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(16.0),
-          color: customColors.color,
-        ),
-        child: Row(
-          children: [
-            const SightIcons(
-              assetName: AppAssets.search,
-              width: 24,
-              height: 24,
+          return SightCard(
+            isVisitingScreen: false,
+            aspectRatio: 3 / 2,
+            actionOne: const SightIcons(
+              assetName: AppAssets.favourite,
+              width: 22,
+              height: 22,
             ),
-            const SizedBox(width: 14),
-            Expanded(
-              child: TextField(
-                onTap: () {
-                  debugPrint('on textfield pressed');
-                },
-                decoration: InputDecoration(
-                  border: InputBorder.none,
-                  prefixIconConstraints: const BoxConstraints(
-                    maxWidth: 24,
-                    maxHeight: 24,
-                  ),
-                  hintText: 'Поиск',
-                  hintStyle: AppTypography.textText16Search,
-                  suffixIcon: IconButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute<FilterScreen>(
-                          builder: (context) => const FilterScreen(),
-                        ),
-                      );
-                      debugPrint('filters button pressed');
-                    },
-                    icon: const SightIcons(assetName: AppAssets.filter, width: 24, height: 24),
-                  ),
-                ),
+            url: sight.url,
+            type: sight.type,
+            name: sight.name,
+            item: sight,
+            details: [
+              Text(
+                sight.name,
+                maxLines: 2,
+                style: theme.textTheme.headlineSmall,
               ),
-            ),
-          ],
-        ),
+              const SizedBox(height: 2),
+              Text(
+                sight.details,
+                overflow: TextOverflow.ellipsis,
+                style: AppTypography.textText16Regular,
+              ),
+            ],
+          );
+        },
       ),
     );
   }

@@ -82,7 +82,7 @@ class _AddNewPlaceButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => debugPrint('Add new place button pressed'),
+      onTap: () => debugPrint('🟡---------Add new place button pressed'),
       child: Container(
         width: 177,
         height: 48,
@@ -153,7 +153,7 @@ class _TabBarWidget extends StatelessWidget {
         type: MaterialType.transparency,
         child: TabBar(
           onTap: (value) {
-            debugPrint('TabBar pressed: $value');
+            debugPrint('🟡---------TabBar pressed: $value');
           },
           unselectedLabelColor: Colors.grey,
           labelColor: theme.toggleableActiveColor,
@@ -246,29 +246,29 @@ class _VisitedWidget extends StatelessWidget {
     return ListView.builder(
       itemCount: list.length,
       itemBuilder: (context, index) {
-        final item = Mocks.mocks[index];
+        final sight = Mocks.mocks[index];
 
         return GestureDetector(
           onTap: () {
-            debugPrint('go to SightDetails pressed');
+            debugPrint('🟡---------go to SightDetails pressed');
             Navigator.of(context).push(
               MaterialPageRoute<SightDetails>(
                 builder: (context) => SightDetails(
-                  sight: item,
+                  sight: sight,
                 ),
               ),
             );
           },
           child: SightCard(
             isVisitingScreen: true,
-            item: item,
-            url: item.url,
-            type: item.type,
-            name: item.name,
+            item: sight,
+            url: sight.url,
+            type: sight.type,
+            name: sight.name,
             aspectRatio: AppCardSize.visitingCard,
             details: [
               Text(
-                item.name,
+                sight.name,
                 maxLines: 2,
                 style: theme.textTheme.headlineSmall,
               ),
