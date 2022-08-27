@@ -1,7 +1,10 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 
 import 'package:places/data/filters.dart';
 import 'package:places/data/filters_table.dart';
+import 'package:places/data/sight.dart';
 import 'package:places/mocks.dart';
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_strings.dart';
@@ -11,10 +14,28 @@ import 'package:places/ui/widgets/action_button.dart';
 import 'package:places/ui/widgets/sight_icons.dart';
 import 'package:provider/provider.dart';
 
+// ignore: long-parameter-list
+bool isNear({
+  required double startingPointLat,
+  required double startingPointLon,
+  required double checkPointLat,
+  required double checkPointLon,
+  required int distance,
+}) {
+  var ky = 40000000 / 360;
+  var kx = cos(pi * startingPointLat / 180) * ky;
+  var dx = (startingPointLon - checkPointLon).abs() * kx;
+  var dy = (startingPointLat - checkPointLat).abs() * ky;
+
+  return sqrt(dx * dx + dy * dy) < distance;
+}
+
 class FilterScreen extends StatefulWidget {
+  final List<Sight> sightList;
   final VoidCallback? onPressed;
   const FilterScreen({
     Key? key,
+    required this.sightList,
     this.onPressed,
   }) : super(key: key);
 
@@ -181,7 +202,17 @@ class _FiltersTableState extends State<_FiltersTable> {
                   isEnabled: e.isEnabled,
                   title: e.title,
                   assetName: e.assetName,
-                  onTap: () => context.read<FiltersSettings>().saveFilters(i),
+                  onTap: () {
+                    isNear(
+                      startingPointLat: Mocks.mockLat,
+                      startingPointLon: Mocks.mockLot,
+                      checkPointLat: 1,
+                      checkPointLon: 1,
+                      distance: 1,
+                    );
+
+                    return context.read<FiltersSettings>().saveFilters(i);
+                  },
                 ),
               ),
             )

@@ -17,7 +17,7 @@ class SightListScreen extends StatefulWidget {
 }
 
 class _SightListScreenState extends State<SightListScreen> {
-  List<Sight> list = Mocks.mocks;
+  List<Sight> sightList = Mocks.mocks;
 
   @override
   Widget build(BuildContext context) {
@@ -28,8 +28,8 @@ class _SightListScreenState extends State<SightListScreen> {
         children: [
           const SizedBox(height: 64),
           const _AppBar(),
-          const SearchWidget(),
-          _SightListWidget(list: list, theme: theme),
+          SearchWidget(sightList: sightList),
+          _SightListWidget(sightList: sightList, theme: theme),
         ],
       ),
     );
@@ -54,12 +54,12 @@ class _AppBar extends StatelessWidget implements PreferredSizeWidget {
 }
 
 class _SightListWidget extends StatelessWidget {
-  final List<Sight> list;
+  final List<Sight> sightList;
   final ThemeData theme;
 
   const _SightListWidget({
     Key? key,
-    required this.list,
+    required this.sightList,
     required this.theme,
   }) : super(key: key);
 
@@ -69,9 +69,9 @@ class _SightListWidget extends StatelessWidget {
       child: ListView.builder(
         physics: const BouncingScrollPhysics(),
         shrinkWrap: true,
-        itemCount: list.length,
+        itemCount: sightList.length,
         itemBuilder: (context, index) {
-          final sight = list[index];
+          final sight = sightList[index];
 
           return SightCard(
             isVisitingScreen: false,

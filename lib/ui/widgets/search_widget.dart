@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:places/data/sight.dart';
 
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_typography.dart';
@@ -7,7 +8,8 @@ import 'package:places/ui/screens/res/custom_colors.dart';
 import 'package:places/ui/widgets/sight_icons.dart';
 
 class SearchWidget extends StatefulWidget {
-  const SearchWidget({Key? key}) : super(key: key);
+  final List<Sight> sightList;
+  const SearchWidget({Key? key, required this.sightList}) : super(key: key);
 
   @override
   State<SearchWidget> createState() => _SearchWidgetState();
@@ -57,7 +59,7 @@ class _SearchWidgetState extends State<SearchWidget> {
                       Navigator.push(
                         context,
                         MaterialPageRoute<FilterScreen>(
-                          builder: (context) => const FilterScreen(),
+                          builder: (context) => FilterScreen(sightList: widget.sightList),
                         ),
                       );
                       debugPrint('🟡---------filters button pressed');
