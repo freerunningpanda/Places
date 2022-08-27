@@ -3,7 +3,6 @@ import 'package:places/data/sight.dart';
 import 'package:places/ui/res/app_strings.dart';
 
 abstract class Mocks {
-
   static const mockLat = 55.910493;
   static const mockLot = 37.736423;
 
@@ -54,5 +53,8 @@ abstract class Mocks {
     ),
   ];
 
-  static RangeValues rangeValues = const RangeValues(2000, 8000);
+  static double startPoint = 2000;
+  static double endPoint = 8000;
+
+  static RangeValues rangeValues = RangeValues(startPoint, endPoint);
 }
