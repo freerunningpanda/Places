@@ -65,6 +65,7 @@ class _FilterScreenState extends State<FilterScreen> {
             const _Title(),
             const SizedBox(height: 24),
             _FiltersTable(
+              sightList: widget.sightList,
               filters: FiltersTable.filters,
               activeFilters: FiltersSettings().activeFilters,
             ),
@@ -171,8 +172,10 @@ class _ClearButtonWidgetState extends State<_ClearButtonWidget> {
 class _FiltersTable extends StatefulWidget {
   final List<Filters> filters;
   final List<String> activeFilters;
+  final List<Sight> sightList;
   const _FiltersTable({
     Key? key,
+    required this.sightList,
     required this.filters,
     required this.activeFilters,
   }) : super(key: key);
@@ -206,8 +209,8 @@ class _FiltersTableState extends State<_FiltersTable> {
                     isNear(
                       startingPointLat: Mocks.mockLat,
                       startingPointLon: Mocks.mockLot,
-                      checkPointLat: 1,
-                      checkPointLon: 1,
+                      checkPointLat: widget.sightList[i].lat,
+                      checkPointLon: widget.sightList[i].lon,
                       distance: 1,
                     );
 
