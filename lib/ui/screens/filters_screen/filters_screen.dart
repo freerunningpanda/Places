@@ -211,7 +211,7 @@ class _FiltersTableState extends State<_FiltersTable> {
                       startingPointLon: Mocks.mockLot,
                       checkPointLat: widget.sightList[i].lat,
                       checkPointLon: widget.sightList[i].lon,
-                      distance: 1,
+                      distance: (Mocks.endPoint - Mocks.startPoint).toInt(),
                     );
 
                     return context.read<FiltersSettings>().saveFilters(i);
