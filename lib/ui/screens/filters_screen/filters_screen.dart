@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:places/data/filters.dart';
 import 'package:places/data/filters_table.dart';
+import 'package:places/mocks.dart';
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_strings.dart';
 import 'package:places/ui/res/app_typography.dart';
@@ -49,19 +50,19 @@ class _FilterScreenState extends State<FilterScreen> {
             const SizedBox(height: 60),
             Expanded(
               child: _DistanceSlider(
-                rangeValues: FiltersSettings.rangeValues,
+                rangeValues: Mocks.rangeValues,
                 onChanged: getValues,
               ),
             ),
             ActionButton(
               activeFilters: FiltersSettings().activeFilters,
               title: '${AppString.showPlaces} (amount)',
-              rangeValues: FiltersSettings.rangeValues,
+              rangeValues: Mocks.rangeValues,
               onTap: () {
                 debugPrint('🟡---------show places pressed');
                 debugPrint('🟡---------Сохранённые значения фильтров: ${FiltersSettings().activeFilters}');
                 debugPrint(
-                  '🟡---------Сохранённое значение слайдера: min: ${FiltersSettings.rangeValues.start.round()}, max: ${FiltersSettings.rangeValues.end.round()}',
+                  '🟡---------Сохранённое значение слайдера: min: ${Mocks.rangeValues.start.round()}, max: ${Mocks.rangeValues.end.round()}',
                 );
               },
             ),
@@ -73,10 +74,10 @@ class _FilterScreenState extends State<FilterScreen> {
 
   RangeValues getValues(RangeValues values) {
     setState(() {
-      FiltersSettings.rangeValues = values;
+      Mocks.rangeValues = values;
     });
 
-    return FiltersSettings.rangeValues;
+    return Mocks.rangeValues;
   }
 }
 
@@ -186,16 +187,6 @@ class _FiltersTableState extends State<_FiltersTable> {
             )
             .values
             .toList(),
-
-        // [
-        //   for (var i = 0; i < widget.filters.length; i++)
-        //     _ItemFilter(
-        //       title: widget.filters[i].title,
-        //       assetName: widget.filters[i].assetName,
-        //       onTap: () => context.read<FiltersSettings>().saveFilters(i),
-        //       isEnabled: widget.filters[i].isEnabled,
-        //     ),
-        // ],
       ),
     );
   }

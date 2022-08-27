@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:places/data/sight.dart';
 import 'package:places/ui/res/app_strings.dart';
 
@@ -51,4 +52,7 @@ abstract class Mocks {
       type: AppString.hotel,
     ),
   ];
+
+  static RangeValues rangeValues = const RangeValues(2000, 8000);
+
 }
