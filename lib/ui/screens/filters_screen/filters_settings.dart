@@ -3,10 +3,10 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 
 import 'package:places/data/filters_table.dart';
-import 'package:places/mocks.dart';
 
 class FiltersSettings extends ChangeNotifier {
   final List<String> activeFilters = [];
+  // Timer? _debounce;
 
   void clearAllFilters() {
     FiltersTable.filters.map((e) => e.isEnabled = false).toList();
@@ -53,10 +53,13 @@ class FiltersSettings extends ChangeNotifier {
     return sqrt(dx * dx + dy * dy) < distance;
   }
 
-  RangeValues getValues(RangeValues values) {
-    Mocks.rangeValues = values;
-    notifyListeners();
-    
-    return Mocks.rangeValues;
-  }
+  // RangeValues getValues(RangeValues values) {
+  //   if (_debounce?.isActive ?? false) _debounce?.cancel();
+  //   _debounce = Timer(const Duration(seconds: 1), () {
+  //     Mocks.rangeValues = values;
+  //     notifyListeners();
+  //   });
+
+  //   return Mocks.rangeValues;
+  // }
 }

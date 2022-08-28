@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 
 import 'package:places/data/filters.dart';
@@ -13,7 +11,6 @@ import 'package:places/ui/screens/filters_screen/filters_settings.dart';
 import 'package:places/ui/widgets/action_button.dart';
 import 'package:places/ui/widgets/sight_icons.dart';
 import 'package:provider/provider.dart';
-
 
 class FilterScreen extends StatefulWidget {
   final List<Sight> sightList;
@@ -57,8 +54,7 @@ class _FilterScreenState extends State<FilterScreen> {
             const SizedBox(height: 60),
             Expanded(
               child: _DistanceSlider(
-                rangeValues: Mocks.rangeValues,
-                onChanged: context.watch<FiltersSettings>().getValues,
+                sightList: widget.sightList,
               ),
             ),
             ActionButton(
@@ -78,8 +74,6 @@ class _FilterScreenState extends State<FilterScreen> {
       ),
     );
   }
-
-
 }
 
 class _Title extends StatelessWidget {
@@ -186,12 +180,12 @@ class _FiltersTableState extends State<_FiltersTable> {
                   assetName: e.assetName,
                   onTap: () {
                     context.read<FiltersSettings>().calculateDistance(
-                      startingPointLat: Mocks.mockLat,
-                      startingPointLon: Mocks.mockLot,
-                      checkPointLat: widget.sightList[i].lat,
-                      checkPointLon: widget.sightList[i].lon,
-                      distance: (Mocks.endPoint - Mocks.startPoint).toInt(),
-                    );
+                          startingPointLat: Mocks.mockLat,
+                          startingPointLon: Mocks.mockLot,
+                          checkPointLat: widget.sightList[i].lat,
+                          checkPointLon: widget.sightList[i].lon,
+                          distance: (Mocks.endPoint - Mocks.startPoint).toInt(),
+                        );
 
                     return context.read<FiltersSettings>().saveFilters(i);
                   },
@@ -304,12 +298,10 @@ class _ItemFilterState extends State<_ItemFilter> {
 }
 
 class _DistanceSlider extends StatefulWidget {
-  final void Function(RangeValues)? onChanged;
-  final RangeValues rangeValues;
+  final List<Sight> sightList;
   const _DistanceSlider({
     Key? key,
-    required this.rangeValues,
-    required this.onChanged,
+    required this.sightList,
   }) : super(key: key);
 
   @override
@@ -319,6 +311,8 @@ class _DistanceSlider extends StatefulWidget {
 class _DistanceSliderState extends State<_DistanceSlider> {
   double min = 100;
   double max = 10000;
+
+  RangeValues rangeValues = Mocks.rangeValues;
 
   @override
   Widget build(BuildContext context) {
@@ -334,17 +328,30 @@ class _DistanceSliderState extends State<_DistanceSlider> {
               style: theme.textTheme.displayMedium,
             ),
             Text(
-              'от ${widget.rangeValues.start.toInt()} до ${widget.rangeValues.end.toInt()} м',
+              'от ${rangeValues.start.toInt()} до ${rangeValues.end.toInt()} м',
               style: theme.textTheme.titleMedium,
             ),
           ],
         ),
         const SizedBox(height: 24),
         RangeSlider(
-          values: widget.rangeValues,
+          values: rangeValues,
           min: min,
           max: max,
-          onChanged: widget.onChanged,
+          onChanged: (values) {
+            context.read<FiltersSettings>().calculateDistance(
+                  startingPointLat: Mocks.mockLat,
+                  startingPointLon: Mocks.mockLot,
+                  checkPointLat: widget.sightList[0].lat,
+                  checkPointLon: widget.sightList[0].lat,
+                  distance: (Mocks.endPoint - Mocks.startPoint).toInt(),
+                );
+            debugPrint('$rangeValues');
+
+            setState(() {
+              rangeValues = values;
+            });
+          },
         ),
       ],
     );
