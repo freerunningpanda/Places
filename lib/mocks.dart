@@ -51,6 +51,16 @@ abstract class Mocks {
           'Отель Lecco расположен в тихом жилом районе, менее чем в 3 км от центра Мытищ и всего в 40 минутах езды от аэропорта Шереметьево. Кроме того, в отеле работает оздоровительный центр и салон красоты.',
       type: AppString.hotel,
     ),
+    Sight(
+      name: '13-й микрорайон',
+      lat: 55.903283, 
+      lon: 37.714688,
+      url:
+          'https://core-pht-proxy.maps.yandex.ru/v1/photos/download?photo_id=BavQsmxTMiOC0OpsXpM1Rg&image_size=XXXL',
+      details:
+          'Ограничен улицей Сукромка, улицей Благовещенская, рекой Яуза',
+      type: AppString.particularPlace,
+    ),
   ];
 
   static double startPoint = 2000;

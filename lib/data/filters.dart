@@ -1,10 +1,10 @@
 class Filters {
-  final String title;
+  final String category;
   final String assetName;
   bool isEnabled;
 
   Filters({
-    required this.title,
+    required this.category,
     required this.assetName,
     this.isEnabled = false,
   });

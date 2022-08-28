@@ -14,23 +14,6 @@ import 'package:places/ui/widgets/action_button.dart';
 import 'package:places/ui/widgets/sight_icons.dart';
 import 'package:provider/provider.dart';
 
-// ignore: long-parameter-list
-bool isNear({
-  required double startingPointLat,
-  required double startingPointLon,
-  required double checkPointLat,
-  required double checkPointLon,
-  required int distance,
-}) {
-  const ky = 40000000 / 360;
-  final kx = cos(pi * startingPointLat / 180) * ky;
-  final dx = (startingPointLon - checkPointLon).abs() * kx;
-  final dy = (startingPointLat - checkPointLat).abs() * ky;
-
-  debugPrint('🟡---------kx: $kx dx: $dx dy: $dy');
-
-  return sqrt(dx * dx + dy * dy) < distance;
-}
 
 class FilterScreen extends StatefulWidget {
   final List<Sight> sightList;
@@ -75,7 +58,7 @@ class _FilterScreenState extends State<FilterScreen> {
             Expanded(
               child: _DistanceSlider(
                 rangeValues: Mocks.rangeValues,
-                onChanged: getValues,
+                onChanged: context.watch<FiltersSettings>().getValues,
               ),
             ),
             ActionButton(
@@ -84,7 +67,7 @@ class _FilterScreenState extends State<FilterScreen> {
               rangeValues: Mocks.rangeValues,
               onTap: () {
                 debugPrint('🟡---------show places pressed');
-                debugPrint('🟡---------Сохранённые значения фильтров: ${FiltersSettings().activeFilters}');
+                debugPrint('🟡---------Сохранённые значения фильтров: ${FiltersTable.activeFilters}');
                 debugPrint(
                   '🟡---------Сохранённое значение слайдера: min: ${Mocks.rangeValues.start.round()}, max: ${Mocks.rangeValues.end.round()}',
                 );
@@ -96,13 +79,7 @@ class _FilterScreenState extends State<FilterScreen> {
     );
   }
 
-  RangeValues getValues(RangeValues values) {
-    setState(() {
-      Mocks.rangeValues = values;
-    });
 
-    return Mocks.rangeValues;
-  }
 }
 
 class _Title extends StatelessWidget {
@@ -205,10 +182,10 @@ class _FiltersTableState extends State<_FiltersTable> {
                 i,
                 _ItemFilter(
                   isEnabled: e.isEnabled,
-                  title: e.title,
+                  title: e.category,
                   assetName: e.assetName,
                   onTap: () {
-                    isNear(
+                    context.read<FiltersSettings>().calculateDistance(
                       startingPointLat: Mocks.mockLat,
                       startingPointLon: Mocks.mockLot,
                       checkPointLat: widget.sightList[i].lat,

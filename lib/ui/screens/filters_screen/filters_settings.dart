@@ -20,7 +20,7 @@ class FiltersSettings extends ChangeNotifier {
     var isEnabled = !FiltersTable.filters[index].isEnabled;
     isEnabled = !isEnabled;
     if (!isEnabled) {
-      activeFilters.add(filters.title);
+      activeFilters.add(filters.category);
       filters.isEnabled = true;
       notifyListeners();
     } else {
@@ -35,18 +35,28 @@ class FiltersSettings extends ChangeNotifier {
   }
 
   // ignore: long-parameter-list
-  bool isNear({
+  bool calculateDistance({
     required double startingPointLat,
     required double startingPointLon,
     required double checkPointLat,
     required double checkPointLon,
     required int distance,
   }) {
-    var ky = 40000000 / 360;
-    var kx = cos(pi * startingPointLat / 180) * ky;
-    var dx = (startingPointLon - checkPointLon).abs() * kx;
-    var dy = (startingPointLat - checkPointLat).abs() * ky;
+    const ky = 40000000 / 360;
+    final kx = cos(pi * startingPointLat / 180) * ky;
+    final dx = (startingPointLon - checkPointLon).abs() * kx;
+    final dy = (startingPointLat - checkPointLat).abs() * ky;
+
+    debugPrint('🟡---------kx: $kx dx: $dx dy: $dy');
+    notifyListeners();
 
     return sqrt(dx * dx + dy * dy) < distance;
+  }
+
+  RangeValues getValues(RangeValues values) {
+    Mocks.rangeValues = values;
+    notifyListeners();
+    
+    return Mocks.rangeValues;
   }
 }
