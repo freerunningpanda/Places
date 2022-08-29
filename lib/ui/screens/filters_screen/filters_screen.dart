@@ -339,13 +339,16 @@ class _DistanceSliderState extends State<_DistanceSlider> {
           min: min,
           max: max,
           onChanged: (values) {
-            context.read<FiltersSettings>().calculateDistance(
-                  startingPointLat: Mocks.mockLat,
-                  startingPointLon: Mocks.mockLot,
-                  checkPointLat: widget.sightList[0].lat,
-                  checkPointLon: widget.sightList[0].lat,
-                  distance: (Mocks.endPoint - Mocks.startPoint).toInt(),
-                );
+            for (final el in widget.sightList) {
+              context.read<FiltersSettings>().calculateDistance(
+                    startingPointLat: Mocks.mockLat,
+                    startingPointLon: Mocks.mockLot,
+                    checkPointLat: el.lat,
+                    checkPointLon: el.lon,
+                    distance: (Mocks.endPoint - Mocks.startPoint).toInt(),
+                  );
+            }
+
             debugPrint('$rangeValues');
 
             setState(() {
