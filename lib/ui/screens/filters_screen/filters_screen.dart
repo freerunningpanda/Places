@@ -349,7 +349,7 @@ class _DistanceSliderState extends State<_DistanceSlider> {
                   );
             }
 
-            debugPrint('$rangeValues');
+            debugPrint('🟡---------Диапазон: $rangeValues');
 
             setState(() {
               rangeValues = values;
