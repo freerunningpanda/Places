@@ -59,7 +59,7 @@ class _FilterScreenState extends State<FilterScreen> {
             ),
             ActionButton(
               activeFilters: FiltersSettings().activeFilters,
-              title: '${AppString.showPlaces} (amount)',
+              title: '${AppString.showPlaces} (${FiltersTable.activeFiltersWithDistance.length})',
               rangeValues: Mocks.rangeValues,
               onTap: () {
                 debugPrint('🟡---------show places pressed');
@@ -67,6 +67,15 @@ class _FilterScreenState extends State<FilterScreen> {
                 debugPrint(
                   '🟡---------Сохранённое значение слайдера: min: ${Mocks.rangeValues.start.round()}, max: ${Mocks.rangeValues.end.round()}',
                 );
+                setState(() {
+                  for (final el in FiltersTable.filteredMocks) {
+                    if (FiltersSettings().distance >= Mocks.startPoint &&
+                        FiltersSettings().distance <= Mocks.endPoint) {
+                      FiltersTable.activeFiltersWithDistance.add(el.type);
+                      debugPrint('🟡---------Слайдер: ${FiltersTable.activeFiltersWithDistance}');
+                    }
+                  }
+                });
               },
             ),
           ],
@@ -176,15 +185,23 @@ class _FiltersTableState extends State<_FiltersTable> {
                 i,
                 _ItemFilter(
                   isEnabled: e.isEnabled,
-                  title: e.category,
+                  title: e.title,
                   assetName: e.assetName,
                   onTap: () {
+                    final filteredByType = widget.sightList.where((sight) => sight.type.contains(e.title)).toList();
+                    if (!e.isEnabled) {
+                      FiltersTable.filteredMocks.addAll(filteredByType);
+                    } else {
+                      FiltersTable.filteredMocks.removeLast();
+                    }
+                    debugPrint('🟡length---------${FiltersTable.filteredMocks.length}');
+
                     context.read<FiltersSettings>().calculateDistance(
                           startingPointLat: Mocks.mockLat,
                           startingPointLon: Mocks.mockLot,
                           checkPointLat: widget.sightList[i].lat,
                           checkPointLon: widget.sightList[i].lon,
-                          distance: (Mocks.endPoint - Mocks.startPoint).toInt(),
+                          distance: FiltersSettings().distance,
                         );
 
                     return context.read<FiltersSettings>().saveFilters(i);
@@ -349,13 +366,12 @@ class _DistanceSliderState extends State<_DistanceSlider> {
                           startingPointLon: Mocks.mockLot,
                           checkPointLat: e.lat,
                           checkPointLon: e.lon,
-                          distance: (Mocks.endPoint - Mocks.startPoint).toInt(),
+                          distance: FiltersSettings().distance,
                         ),
                   ),
                 )
                 .values
                 .toList();
-
             debugPrint('🟡---------Диапазон: $rangeValues');
 
             setState(() {

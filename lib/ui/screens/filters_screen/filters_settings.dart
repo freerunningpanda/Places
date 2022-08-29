@@ -3,8 +3,11 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 
 import 'package:places/data/filters_table.dart';
+import 'package:places/mocks.dart';
 
 class FiltersSettings extends ChangeNotifier {
+  final distance = (Mocks.endPoint - Mocks.startPoint).toInt();
+
   final List<String> activeFilters = [];
   // Timer? _debounce;
 
@@ -20,8 +23,9 @@ class FiltersSettings extends ChangeNotifier {
     var isEnabled = !FiltersTable.filters[index].isEnabled;
     isEnabled = !isEnabled;
     if (!isEnabled) {
-      activeFilters.add(filters.category);
+      activeFilters.add(filters.title);
       filters.isEnabled = true;
+
       notifyListeners();
     } else {
       activeFilters.removeLast();
