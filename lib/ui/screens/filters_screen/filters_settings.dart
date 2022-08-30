@@ -66,4 +66,10 @@ class FiltersSettings extends ChangeNotifier {
 
   //   return Mocks.rangeValues;
   // }
+
+  void count() {
+    if (FiltersTable.filteredMocks.isNotEmpty) {
+      notifyListeners();
+    }
+  }
 }

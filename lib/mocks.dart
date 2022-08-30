@@ -6,6 +6,8 @@ abstract class Mocks {
   static const mockLat = 55.910493;
   static const mockLot = 37.736423;
 
+  static final List<String> types = [];
+
   static final List<Sight> mocks = [
     Sight(
       name: 'Мытищинский парк',
@@ -13,6 +15,15 @@ abstract class Mocks {
       lon: 37.740033,
       url: 'https://pic.rutubelist.ru/video/39/09/390905576c021a02b5b57c374ba16621.jpg',
       details: 'Мытищинский парк — центральный парк в одноименном городе Московской области.',
+      type: AppString.park,
+    ),
+    Sight(
+      name: 'Воронцовский дворец',
+      lat: 44.419881,
+      lon: 34.055799,
+      url: 'https://core-pht-proxy.maps.yandex.ru/v1/photos/download?photo_id=deRmH1T9ukwAqPbuaHG6FQ&image_size=XXL',
+      details:
+          'Парк на территории Алупки. Памятник садово-паркового искусства, основан в первой половине XIX века под руководством немецкого садовника Карла Кебаха. Составляет единый ансамбль с Воронцовским дворцом.',
       type: AppString.park,
     ),
     Sight(
@@ -53,12 +64,10 @@ abstract class Mocks {
     ),
     Sight(
       name: '13-й микрорайон',
-      lat: 55.903283, 
+      lat: 55.903283,
       lon: 37.714688,
-      url:
-          'https://core-pht-proxy.maps.yandex.ru/v1/photos/download?photo_id=BavQsmxTMiOC0OpsXpM1Rg&image_size=XXXL',
-      details:
-          'Ограничен улицей Сукромка, улицей Благовещенская, рекой Яуза',
+      url: 'https://core-pht-proxy.maps.yandex.ru/v1/photos/download?photo_id=BavQsmxTMiOC0OpsXpM1Rg&image_size=XXXL',
+      details: 'Ограничен улицей Сукромка, улицей Благовещенская, рекой Яуза',
       type: AppString.particularPlace,
     ),
   ];

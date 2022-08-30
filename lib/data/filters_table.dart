@@ -17,5 +17,5 @@ class FiltersTable {
 
   static final List<Sight> filteredMocks = [];
 
-  static final List<String> activeFiltersWithDistance = [];
+  static final List<Sight> activeFiltersWithDistance = [];
 }
