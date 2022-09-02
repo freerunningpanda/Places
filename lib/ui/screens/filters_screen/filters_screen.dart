@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:geolocator/geolocator.dart';
 
+import 'package:geolocator/geolocator.dart';
 import 'package:places/data/filters.dart';
 import 'package:places/data/filters_table.dart';
 import 'package:places/data/sight.dart';
