@@ -14,6 +14,7 @@ class FiltersSettings extends ChangeNotifier {
   void clearAllFilters() {
     FiltersTable.filters.map((e) => e.isEnabled = false).toList();
     activeFilters.removeWhere((element) => true);
+    FiltersTable.filtersWithDistance.clear();
     notifyListeners();
   }
 
@@ -32,16 +33,8 @@ class FiltersSettings extends ChangeNotifier {
       filters.isEnabled = false;
       notifyListeners();
     }
-    debugPrint('🟡---------$activeFilters');
-    debugPrint('🟡---------Элементов в списке: ${activeFilters.length}');
 
     return activeFilters;
-  }
-
-  void count() {
-    if (FiltersTable.filtersWithDistance.isNotEmpty || FiltersTable.filtersWithDistance.isEmpty) {
-      notifyListeners();
-    }
   }
 
   void changeArea({required double start, required double end}) {
@@ -57,16 +50,19 @@ class FiltersSettings extends ChangeNotifier {
         el.lat,
         el.lon,
       );
-      debugPrint('🟡---------Dist: $distance');
       if (distance >= Mocks.rangeValues.start && distance <= Mocks.rangeValues.end) {
         FiltersTable.filtersWithDistance.add(el);
         length = FiltersTable.filtersWithDistance.length;
         notifyListeners();
-        debugPrint('🟡---------Length: $length');
         for (final i in FiltersTable.filtersWithDistance) {
           debugPrint('🟡---------Найдены места: ${i.name}');
         }
       }
     }
+    // if (isEnabled) {
+    //   FiltersTable.filtersWithDistance.clear();
+    //   length = FiltersTable.filtersWithDistance.length;
+    //   debugPrint('🟡---------Length: $length');
+    // }
   }
 }

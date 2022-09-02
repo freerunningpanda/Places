@@ -61,8 +61,9 @@ class _FilterScreenState extends State<FilterScreen> {
               ),
             ),
             ActionButton(
+              counterValue: context.read<FiltersSettings>().length,
               activeFilters: FiltersSettings().activeFilters,
-              title: '${AppString.showPlaces} (${FiltersTable.filtersWithDistance.length})',
+              title: '${AppString.showPlaces} (amount)',
               rangeValues: Mocks.rangeValues,
               onTap: () {
                 for (final el in FiltersTable.filteredMocks) {
@@ -72,13 +73,8 @@ class _FilterScreenState extends State<FilterScreen> {
                     el.lat,
                     el.lon,
                   );
-                  debugPrint('🟡---------Dist: $distance');
                   if (distance >= Mocks.rangeValues.start && distance <= Mocks.rangeValues.end) {
-                    context.read<FiltersSettings>().count();
-                    FiltersTable.filtersWithDistance.add(el);
-                    for (final i in FiltersTable.filtersWithDistance) {
-                      debugPrint('🟡---------Найдены места: ${i.name}');
-                    }
+                    context.read<FiltersSettings>().showCount();
                   }
                 }
               },
@@ -199,7 +195,6 @@ class _FiltersTableState extends State<_FiltersTable> {
                     } else {
                       FiltersTable.filteredMocks.removeWhere((element) => element.type.contains(element.type));
                     }
-                    debugPrint('🟡---------Отфильтрованный список: ${FiltersTable.filteredMocks}}');
                     context.read<FiltersSettings>().showCount();
 
                     return context.read<FiltersSettings>().saveFilters(i);
@@ -351,7 +346,10 @@ class _DistanceSliderState extends State<_DistanceSlider> {
           values: Mocks.rangeValues,
           min: min,
           max: max,
-          onChanged: (values) => context.read<FiltersSettings>().changeArea(start: values.start, end: values.end),
+          onChanged: (values) {
+            context.read<FiltersSettings>().changeArea(start: values.start, end: values.end);
+            context.read<FiltersSettings>().showCount();
+          },
         ),
       ],
     );

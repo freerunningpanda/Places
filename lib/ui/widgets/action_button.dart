@@ -11,6 +11,7 @@ class ActionButton extends StatelessWidget {
   final VoidCallback? onTap;
   final List<String>? activeFilters;
   final RangeValues? rangeValues;
+  final int? counterValue;
 
   const ActionButton({
     Key? key,
@@ -19,19 +20,18 @@ class ActionButton extends StatelessWidget {
     required this.onTap,
     this.activeFilters,
     this.rangeValues,
+    this.counterValue,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-
-
     return Stack(
       children: [
         Container(
           height: 48,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(12),
-            color: AppColors.green,
+            color: counterValue! == 0 ? AppColors.secondaryTwo: AppColors.green,
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
