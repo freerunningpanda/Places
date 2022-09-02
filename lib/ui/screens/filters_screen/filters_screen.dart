@@ -13,11 +13,6 @@ import 'package:places/ui/widgets/action_button.dart';
 import 'package:places/ui/widgets/sight_icons.dart';
 import 'package:provider/provider.dart';
 
-double _startPoint = 2000;
-double _endPoint = 8000;
-
-RangeValues rangeValues = RangeValues(_startPoint, _endPoint);
-
 class FilterScreen extends StatefulWidget {
   final List<Sight> sightList;
   final VoidCallback? onPressed;
@@ -36,7 +31,7 @@ class _FilterScreenState extends State<FilterScreen> {
   Widget build(BuildContext context) {
     final clearFilters = context.read<FiltersSettings>().clearAllFilters;
     // ignore: unnecessary_statements
-    context.watch<FiltersSettings>().count;
+    context.watch<FiltersSettings>();
 
     return Scaffold(
       appBar: _AppBar(
@@ -77,9 +72,12 @@ class _FilterScreenState extends State<FilterScreen> {
                     el.lat,
                     el.lon,
                   );
-                  if (distance >= rangeValues.start && distance <= rangeValues.end) {
+                  debugPrint('🟡---------Dist: $distance');
+                  if (distance >= Mocks.rangeValues.start && distance <= Mocks.rangeValues.end) {
                     FiltersTable.filtersWithDistance.add(el);
-                    debugPrint('🟡---------Показано мест: ${FiltersTable.filtersWithDistance}');
+                    for (final i in FiltersTable.filtersWithDistance) {
+                      debugPrint('🟡---------Найдены места: ${i.name}');
+                    }
                   }
                 }
               },
@@ -339,27 +337,19 @@ class _DistanceSliderState extends State<_DistanceSlider> {
               style: theme.textTheme.displayMedium,
             ),
             Text(
-              'от ${rangeValues.start.toInt()} до ${rangeValues.end.toInt()} м',
+              'от ${Mocks.rangeValues.start.toInt()} до ${Mocks.rangeValues.end.toInt()} м',
               style: theme.textTheme.titleMedium,
             ),
           ],
         ),
         const SizedBox(height: 24),
         RangeSlider(
-          values: rangeValues,
+          values: Mocks.rangeValues,
           min: min,
           max: max,
-          onChanged: (values) {
-            setState(() {
-              changeArea(start: values.start, end: values.end);
-            });
-          },
+          onChanged: (values) => context.read<FiltersSettings>().changeArea(start: values.start, end: values.end),
         ),
       ],
     );
-  }
-
-  void changeArea({required double start, required double end}) {
-    rangeValues = RangeValues(start, end);
   }
 }

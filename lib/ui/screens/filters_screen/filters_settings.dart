@@ -35,9 +35,8 @@ class FiltersSettings extends ChangeNotifier {
     return activeFilters;
   }
 
-  void count() {
-    if (FiltersTable.filteredMocks.isNotEmpty) {
-      notifyListeners();
-    }
+  void changeArea({required double start, required double end}) {
+    Mocks.rangeValues = RangeValues(start, end);
+    notifyListeners();
   }
 }
