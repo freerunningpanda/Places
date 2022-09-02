@@ -74,6 +74,7 @@ class _FilterScreenState extends State<FilterScreen> {
                   );
                   debugPrint('🟡---------Dist: $distance');
                   if (distance >= Mocks.rangeValues.start && distance <= Mocks.rangeValues.end) {
+                    context.read<FiltersSettings>().count();
                     FiltersTable.filtersWithDistance.add(el);
                     for (final i in FiltersTable.filtersWithDistance) {
                       debugPrint('🟡---------Найдены места: ${i.name}');
@@ -195,8 +196,11 @@ class _FiltersTableState extends State<_FiltersTable> {
                     final filteredByType = widget.sightList.where((sight) => sight.type.contains(e.title)).toList();
                     if (!e.isEnabled) {
                       FiltersTable.filteredMocks.addAll(filteredByType);
+                    } else {
+                      FiltersTable.filteredMocks.removeWhere((element) => element.type.contains(element.type));
                     }
                     debugPrint('🟡---------Отфильтрованный список: ${FiltersTable.filteredMocks}}');
+                    context.read<FiltersSettings>().showCount();
 
                     return context.read<FiltersSettings>().saveFilters(i);
                   },
