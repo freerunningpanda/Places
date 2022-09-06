@@ -6,6 +6,7 @@ import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_strings.dart';
 import 'package:places/ui/res/app_typography.dart';
 import 'package:places/ui/screens/sight_card/sight_card.dart';
+import 'package:places/ui/widgets/add_new_place_button.dart';
 import 'package:places/ui/widgets/search_widget.dart';
 import 'package:places/ui/widgets/sight_icons.dart';
 
@@ -24,12 +25,22 @@ class _SightListScreenState extends State<SightListScreen> {
     final theme = Theme.of(context);
 
     return Scaffold(
-      body: Column(
+      body: Stack(
         children: [
-          const SizedBox(height: 64),
-          const _AppBar(),
-          SearchWidget(sightList: sightList),
-          _SightListWidget(sightList: sightList, theme: theme),
+          Column(
+            children: [
+              const SizedBox(height: 64),
+              const _AppBar(),
+              SearchWidget(sightList: sightList),
+              _SightListWidget(sightList: sightList, theme: theme),
+            ],
+          ),
+          const Positioned(
+            bottom: 16,
+            left: 92,
+            right: 92,
+            child: AddNewPlaceButton(),
+          ),
         ],
       ),
     );
