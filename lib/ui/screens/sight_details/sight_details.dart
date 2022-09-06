@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:places/domain/sight.dart';
+import 'package:places/data/sight.dart';
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_colors.dart';
 import 'package:places/ui/res/app_strings.dart';
@@ -166,10 +166,10 @@ class _SightDetailsBuildRouteBtn extends StatelessWidget {
         height: 48,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(12),
-          color: AppColors.goButton,
+          color: AppColors.green,
         ),
         child: GestureDetector(
-          onTap: () => debugPrint('Build a route pressed'),
+          onTap: () => debugPrint('🟡---------Build a route pressed'),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -204,7 +204,7 @@ class _SightDetailsBottom extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         GestureDetector(
-          onTap: () => debugPrint('Schedule pressed'),
+          onTap: () => debugPrint('🟡---------Schedule pressed'),
           child: Row(
             children: const [
               SizedBox(
@@ -223,7 +223,7 @@ class _SightDetailsBottom extends StatelessWidget {
           ),
         ),
         GestureDetector(
-          onTap: () => debugPrint('To favourite pressed'),
+          onTap: () => debugPrint('🟡---------To favourite pressed'),
           child: Row(
             children: [
                SightIcons(

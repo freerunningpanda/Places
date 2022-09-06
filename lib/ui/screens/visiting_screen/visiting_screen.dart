@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
 
-import 'package:places/domain/sight.dart';
+import 'package:places/data/sight.dart';
 import 'package:places/mocks.dart';
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_card_size.dart';
 import 'package:places/ui/res/app_colors.dart';
 import 'package:places/ui/res/app_strings.dart';
 import 'package:places/ui/res/app_typography.dart';
-import 'package:places/ui/screen/res/custom_colors.dart';
-import 'package:places/ui/screen/sight_card.dart';
-import 'package:places/ui/screen/sight_details.dart';
-import 'package:places/ui/widgets/bottom_navigation_bar.dart';
+import 'package:places/ui/screens/res/custom_colors.dart';
+import 'package:places/ui/screens/sight_card/sight_card.dart';
+import 'package:places/ui/screens/sight_details/sight_details.dart';
 import 'package:places/ui/widgets/sight_icons.dart';
 
 List<Sight> list = Mocks.mocks;
@@ -70,7 +69,6 @@ class _VisitingScreenState extends State<VisitingScreen> {
             ),
           ],
         ),
-        bottomNavigationBar: const BottomNavigationBarWidget(),
       ),
     );
   }
@@ -84,7 +82,7 @@ class _AddNewPlaceButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => debugPrint('Add new place button pressed'),
+      onTap: () => debugPrint('🟡---------Add new place button pressed'),
       child: Container(
         width: 177,
         height: 48,
@@ -155,7 +153,7 @@ class _TabBarWidget extends StatelessWidget {
         type: MaterialType.transparency,
         child: TabBar(
           onTap: (value) {
-            debugPrint('TabBar pressed: $value');
+            debugPrint('🟡---------TabBar pressed: $value');
           },
           unselectedLabelColor: Colors.grey,
           labelColor: theme.toggleableActiveColor,
@@ -194,66 +192,43 @@ class _WantToVisitWidget extends StatelessWidget {
       itemBuilder: (context, index) {
         final item = Mocks.mocks[index];
 
-        return GestureDetector(
-          onTap: () {
-            debugPrint('go to SightDetails pressed');
-            Navigator.of(context).push(
-            MaterialPageRoute<SightDetails>(
-              builder: (context) => SightDetails(
-                sight: item,
-              ),
+        return SightCard(
+          isVisitingScreen: true,
+          item: item,
+          url: item.url,
+          type: item.type,
+          name: item.name,
+          aspectRatio: AppCardSize.visitingCard,
+          details: [
+            Text(
+              item.name,
+              maxLines: 2,
+              style: theme.textTheme.headlineSmall,
             ),
-          );
-          },
-          child: SightCard(
-            url: item.url,
-            type: item.type,
-            name: item.name,
-            aspectRatio: AppCardSize.visitingCard,
-            details: [
-              Text(
-                item.name,
-                maxLines: 2,
-                style: theme.textTheme.headlineSmall,
-              ),
-              const SizedBox(height: 2),
-              const Text(
-                '${AppString.planning} 12 окт. 2022',
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: AppTypography.greenColor,
-              ),
-              const SizedBox(height: 10),
-              const Text(
-                '${AppString.closed} 09:00',
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: AppTypography.textText16Regular,
-              ),
-            ],
-            actions: [
-              GestureDetector(
-                onTap: () {
-                  debugPrint('Calendar pressed');
-                },
-                child: const SightIcons(
-                  assetName: AppAssets.calendarWhite,
-                  width: 24,
-                  height: 24,
-                ),
-              ),
-              const SizedBox(width: 16),
-              GestureDetector(
-                onTap: () {
-                  debugPrint('Cross pressed');
-                },
-                child: const SightIcons(
-                  assetName: AppAssets.cross,
-                  width: 22,
-                  height: 22,
-                ),
-              ),
-            ],
+            const SizedBox(height: 2),
+            const Text(
+              '${AppString.planning} 12 окт. 2022',
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: AppTypography.greenColor,
+            ),
+            const SizedBox(height: 10),
+            const Text(
+              '${AppString.closed} 09:00',
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: AppTypography.textText16Regular,
+            ),
+          ],
+          actionOne: const SightIcons(
+            assetName: AppAssets.calendarWhite,
+            width: 24,
+            height: 24,
+          ),
+          actionTwo: const SightIcons(
+            assetName: AppAssets.cross,
+            width: 22,
+            height: 22,
           ),
         );
       },
@@ -271,27 +246,29 @@ class _VisitedWidget extends StatelessWidget {
     return ListView.builder(
       itemCount: list.length,
       itemBuilder: (context, index) {
-        final item = Mocks.mocks[index];
+        final sight = Mocks.mocks[index];
 
         return GestureDetector(
           onTap: () {
-            debugPrint('go to SightDetails pressed');
+            debugPrint('🟡---------go to SightDetails pressed');
             Navigator.of(context).push(
-            MaterialPageRoute<SightDetails>(
-              builder: (context) => SightDetails(
-                sight: item,
+              MaterialPageRoute<SightDetails>(
+                builder: (context) => SightDetails(
+                  sight: sight,
+                ),
               ),
-            ),
-          );
+            );
           },
           child: SightCard(
-            url: item.url,
-            type: item.type,
-            name: item.name,
+            isVisitingScreen: true,
+            item: sight,
+            url: sight.url,
+            type: sight.type,
+            name: sight.name,
             aspectRatio: AppCardSize.visitingCard,
             details: [
               Text(
-                item.name,
+                sight.name,
                 maxLines: 2,
                 style: theme.textTheme.headlineSmall,
               ),
@@ -310,29 +287,16 @@ class _VisitedWidget extends StatelessWidget {
                 style: AppTypography.detailsText,
               ),
             ],
-            actions: [
-              GestureDetector(
-                onTap: () {
-                  debugPrint('Share button pressed');
-                },
-                child: const SightIcons(
-                  assetName: AppAssets.share,
-                  width: 24,
-                  height: 24,
-                ),
-              ),
-              const SizedBox(width: 16),
-              GestureDetector(
-                onTap: () {
-                  debugPrint('Cross button pressed');
-                },
-                child: const SightIcons(
-                  assetName: AppAssets.cross,
-                  width: 22,
-                  height: 22,
-                ),
-              ),
-            ],
+            actionOne: const SightIcons(
+              assetName: AppAssets.share,
+              width: 24,
+              height: 24,
+            ),
+            actionTwo: const SightIcons(
+              assetName: AppAssets.cross,
+              width: 22,
+              height: 22,
+            ),
           ),
         );
       },

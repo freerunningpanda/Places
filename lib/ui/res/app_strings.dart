@@ -13,4 +13,17 @@ abstract class AppString {
   static const finishRoute = 'Завершите маршрут, чтобы место попало сюда';
   static const targetReach = 'Цель достигнута';
   static const addNewPlace = 'НОВОЕ МЕСТО';
+  static const clear = 'Очистить';
+  static const categories = 'КАТЕГОРИИ';
+  static const hotel = 'Отель';
+  static const restaurant = 'Ресторан';
+  static const particularPlace = 'Особое место';
+  static const park = 'Парк';
+  static const museum = 'Музей';
+  static const cafe = 'Кафе';
+  static const distantion = 'Расстояние';
+  static const showPlaces = 'ПОКАЗАТЬ';
+  static const settings = 'Настройки';
+  static const darkTheme = 'Тёмная тема';
+  static const tutorial = 'Смотреть туториал';
 }

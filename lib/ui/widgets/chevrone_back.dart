@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:places/ui/screen/res/custom_colors.dart';
+import 'package:places/ui/screens/res/custom_colors.dart';
 
 class ChevroneBack extends StatelessWidget {
   final double width;
@@ -17,7 +17,7 @@ class ChevroneBack extends StatelessWidget {
 
     return GestureDetector(
       onTap: () {
-        debugPrint('Back button pressed');
+        debugPrint('🟡---------Back button pressed');
         Navigator.pop(context);
       },
       child: Container(

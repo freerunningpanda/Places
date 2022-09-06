@@ -34,7 +34,7 @@ abstract class AppTypography {
     fontWeight: FontWeight.w700,
     color: AppColors.chevroneColor,
   );
-  
+
   static const disabledTabDarkMode = TextStyle(
     fontWeight: FontWeight.w700,
     color: AppColors.inactiveBlack,
@@ -54,6 +54,16 @@ abstract class AppTypography {
     fontSize: 18,
     fontWeight: FontWeight.w500,
     color: AppColors.chevroneColor,
+  );
+  static const settings = TextStyle(
+    fontSize: 16,
+    fontWeight: FontWeight.w400,
+    color: AppColors.chevroneColor,
+  );
+  static const settingsDarkMode = TextStyle(
+    fontSize: 16,
+    fontWeight: FontWeight.w400,
+    color: AppColors.backgroundColor,
   );
   static const visitingScreenTitleDarkMode = TextStyle(
     fontSize: 18,
@@ -91,7 +101,7 @@ abstract class AppTypography {
     color: AppColors.secondaryTwo,
   );
 
-    static const detailsTextDarkMode = TextStyle(
+  static const detailsTextDarkMode = TextStyle(
     fontSize: 14,
     fontWeight: FontWeight.w400,
     color: AppColors.inactiveBlack,
@@ -136,8 +146,43 @@ abstract class AppTypography {
   );
 
   static const greenColor = TextStyle(
-    color: AppColors.goButton,
+    color: AppColors.green,
     fontSize: 14,
+    fontWeight: FontWeight.w400,
+  );
+
+  static const clearButton = TextStyle(
+    color: AppColors.green,
+    fontSize: 16,
+    fontWeight: FontWeight.w500,
+  );
+
+  static const categoriesGrey = TextStyle(
+    color: AppColors.inactiveBlack,
+    fontSize: 12,
+    fontWeight: FontWeight.w400,
+  );
+
+  static const filtersItemsDarkMode = TextStyle(
+    color: AppColors.backgroundColor,
+    fontSize: 12,
+    fontWeight: FontWeight.w400,
+  );
+  static const filtersItems = TextStyle(
+    color: AppColors.textColor,
+    fontSize: 12,
+    fontWeight: FontWeight.w400,
+  );
+
+  static const distantion = TextStyle(
+    color: AppColors.textColor,
+    fontSize: 16,
+    fontWeight: FontWeight.w400,
+  );
+
+  static const distantionDarkMode = TextStyle(
+    color: AppColors.backgroundColor,
+    fontSize: 16,
     fontWeight: FontWeight.w400,
   );
 }
