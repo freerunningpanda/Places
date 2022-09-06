@@ -26,4 +26,6 @@ abstract class AppString {
   static const settings = 'Настройки';
   static const darkTheme = 'Тёмная тема';
   static const tutorial = 'Смотреть туториал';
+  static const newPlace = 'Новое место';
+  static const cancel = 'Отмена';
 }
