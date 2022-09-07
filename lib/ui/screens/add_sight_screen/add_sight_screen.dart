@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:places/main.dart';
+
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_strings.dart';
 import 'package:places/ui/res/app_typography.dart';
@@ -39,23 +39,7 @@ class AddSightScreen extends StatelessWidget {
                   _CategoryChooseWidget(theme: theme),
                   _TitleWidget(theme: theme),
                   const SizedBox(height: 24),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: _LatLotWidget(
-                          theme: theme,
-                          title: AppString.lat,
-                        ),
-                      ),
-                      const SizedBox(width: 16),
-                      Expanded(
-                        child: _LatLotWidget(
-                          theme: theme,
-                          title: AppString.lot,
-                        ),
-                      ),
-                    ],
-                  ),
+                  _CoordinatsWidget(theme: theme),
                   const SizedBox(height: 15),
                   const Text(
                     AppString.pointOnTheMap,
@@ -67,6 +51,37 @@ class AddSightScreen extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+}
+
+class _CoordinatsWidget extends StatelessWidget {
+  final ThemeData theme;
+
+  const _CoordinatsWidget({
+    Key? key,
+    required this.theme,
+  }) : super(key: key);
+
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Expanded(
+          child: _LatLotWidget(
+            theme: theme,
+            title: AppString.lat,
+          ),
+        ),
+        const SizedBox(width: 16),
+        Expanded(
+          child: _LatLotWidget(
+            theme: theme,
+            title: AppString.lot,
+          ),
+        ),
+      ],
     );
   }
 }
@@ -120,23 +135,41 @@ class _LatLotWidgetState extends State<_LatLotWidget> {
                 borderSide: BorderSide(color: widget.theme.sliderTheme.activeTrackColor as Color),
                 borderRadius: BorderRadius.circular(8.0),
               ),
-              suffixIcon: Padding(
-                padding: const EdgeInsets.only(top: 8, bottom: 8),
-                child: InkWell(
-                  borderRadius: BorderRadius.circular(40),
-                  onTap: controller.clear,
-                  child: SightIcons(
-                    assetName: AppAssets.clearDark,
-                    width: 20,
-                    height: 20,
-                    color: widget.theme.iconTheme.color,
-                  ),
-                ),
-              ),
+              suffixIcon: _SuffixIcon(controller: controller, theme: widget.theme),
             ),
           ),
         ),
       ],
+    );
+  }
+}
+
+class _SuffixIcon extends StatelessWidget {
+  final TextEditingController controller;
+  final ThemeData theme;
+
+  const _SuffixIcon({
+    Key? key,
+    required this.controller,
+    required this.theme,
+  }) : super(key: key);
+
+  
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 8, bottom: 8),
+      child: InkWell(
+        borderRadius: BorderRadius.circular(40),
+        onTap: controller.clear,
+        child: SightIcons(
+          assetName: AppAssets.clearDark,
+          width: 20,
+          height: 20,
+          color: theme.iconTheme.color,
+        ),
+      ),
     );
   }
 }
@@ -210,10 +243,16 @@ class _CategoryChooseWidget extends StatelessWidget {
   }
 }
 
-class _TitleWidget extends StatelessWidget {
+class _TitleWidget extends StatefulWidget {
   final ThemeData theme;
   const _TitleWidget({Key? key, required this.theme}) : super(key: key);
 
+  @override
+  State<_TitleWidget> createState() => _TitleWidgetState();
+}
+
+class _TitleWidgetState extends State<_TitleWidget> {
+  final TextEditingController controller = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -223,7 +262,7 @@ class _TitleWidget extends StatelessWidget {
           children: [
             Text(
               AppString.title,
-              style: theme.textTheme.labelLarge,
+              style: widget.theme.textTheme.labelLarge,
             ),
           ],
         ),
@@ -231,19 +270,21 @@ class _TitleWidget extends StatelessWidget {
         SizedBox(
           height: 40,
           child: TextField(
+            controller: controller,
             cursorColor: Colors.black,
             cursorWidth: 1,
-            style: theme.textTheme.bodyLarge,
+            style: widget.theme.textTheme.bodyLarge,
             decoration: InputDecoration(
               contentPadding: const EdgeInsets.only(left: 16.0),
               focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(width: 2, color: theme.sliderTheme.activeTrackColor as Color),
+                borderSide: BorderSide(width: 2, color: widget.theme.sliderTheme.activeTrackColor as Color),
                 borderRadius: BorderRadius.circular(8.0),
               ),
               enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: theme.sliderTheme.activeTrackColor as Color),
+                borderSide: BorderSide(color: widget.theme.sliderTheme.activeTrackColor as Color),
                 borderRadius: BorderRadius.circular(8.0),
               ),
+              suffixIcon: _SuffixIcon(controller: controller, theme: widget.theme),
             ),
           ),
         ),
