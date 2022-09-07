@@ -5,6 +5,7 @@ import 'package:places/ui/res/app_typography.dart';
 import 'package:places/ui/screens/res/custom_colors.dart';
 
 abstract class AppTheme {
+  // ignore: long-method
   static ThemeData buildTheme() {
     return ThemeData(
       extensions: const <ThemeExtension<CustomColors>>[CustomColors.sightCardLight],
@@ -23,9 +24,7 @@ abstract class AppTheme {
       bottomNavigationBarTheme: const BottomNavigationBarThemeData(
         backgroundColor: AppColors.backgroundColor,
       ),
-      dividerTheme: const DividerThemeData(
-        color: AppColors.inactiveBlack,
-      ),
+      dividerColor: AppColors.inactiveBlack,
       textTheme: const TextTheme(
         headlineMedium: AppTypography.sightDetailsTitle,
         headlineSmall: AppTypography.sightCardDescriptionTitle,
@@ -39,6 +38,7 @@ abstract class AppTheme {
         displayMedium: AppTypography.distantion,
         displaySmall: AppTypography.sightDetailsDescription,
         labelSmall: AppTypography.filtersItems,
+        labelLarge: AppTypography.categoriesGrey,
       ),
       iconTheme: const IconThemeData(
         color: AppColors.darkThemeBgColor,
@@ -58,6 +58,7 @@ abstract class AppTheme {
     );
   }
 
+  // ignore: long-method
   static ThemeData buildThemeDark() {
     return ThemeData(
       extensions: const <ThemeExtension<CustomColors>>[CustomColors.sightCardDark],
@@ -76,9 +77,7 @@ abstract class AppTheme {
       bottomNavigationBarTheme: const BottomNavigationBarThemeData(
         backgroundColor: AppColors.darkThemeBgColor,
       ),
-      dividerTheme: const DividerThemeData(
-        color: AppColors.secondaryTwo,
-      ),
+      dividerColor: AppColors.inactiveBlack,
       textTheme: const TextTheme(
         headlineMedium: AppTypography.sightDetailsTitleDarkMode,
         headlineSmall: AppTypography.sightCardDescriptionTitleDarkMode,
@@ -92,6 +91,7 @@ abstract class AppTheme {
         displayMedium: AppTypography.distantionDarkMode,
         displaySmall: AppTypography.sightDetailsDescriptionDarkMode,
         labelSmall: AppTypography.filtersItemsDarkMode,
+        labelLarge: AppTypography.categoriesGrey,
       ),
       iconTheme: const IconThemeData(
         color: AppColors.backgroundColor,

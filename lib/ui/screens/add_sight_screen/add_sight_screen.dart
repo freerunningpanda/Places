@@ -20,10 +20,21 @@ class AddSightScreen extends StatelessWidget {
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.only(left: 16.0, top: 18, right: 16.0),
-          child: _NewPlaceAppBar(
-            theme: theme,
-            width: width,
-            leading: cancel,
+          child: Column(
+            children: [
+              _NewPlaceAppBar(
+                theme: theme,
+                width: width,
+                leading: cancel,
+              ),
+              const SizedBox(height: 40),
+              Column(
+                children: [
+                  _CategoryChooseWidget(theme: theme),
+                  _TitleWidget(theme: theme),
+                ],
+              ),
+            ],
           ),
         ),
       ),
@@ -53,6 +64,89 @@ class _NewPlaceAppBar extends StatelessWidget {
         Text(
           AppString.newPlace,
           style: theme.textTheme.titleLarge,
+        ),
+      ],
+    );
+  }
+}
+
+class _CategoryChooseWidget extends StatelessWidget {
+  final ThemeData theme;
+
+  const _CategoryChooseWidget({
+    Key? key,
+    required this.theme,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Row(
+          children: [
+            Text(
+              AppString.category,
+              style: theme.textTheme.labelLarge,
+            ),
+          ],
+        ),
+        const SizedBox(height: 14),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              AppString.nochoose,
+              style: theme.textTheme.titleMedium,
+            ),
+            const Icon(
+              Icons.chevron_right,
+              size: 25,
+            ),
+          ],
+        ),
+        const SizedBox(height: 10),
+        const Divider(),
+      ],
+    );
+  }
+}
+
+class _TitleWidget extends StatelessWidget {
+  final ThemeData theme;
+  const _TitleWidget({Key? key, required this.theme}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        const SizedBox(height: 24),
+        Row(
+          children: [
+            Text(
+              AppString.title,
+              style: theme.textTheme.labelLarge,
+            ),
+          ],
+        ),
+        const SizedBox(height: 12),
+        SizedBox(
+          height: 40,
+          child: TextField(
+            cursorColor: Colors.black,
+            cursorWidth: 1,
+            style: theme.textTheme.bodyLarge,
+            decoration: InputDecoration(
+              contentPadding: const EdgeInsets.only(left: 16.0),
+              focusedBorder: OutlineInputBorder(
+                borderSide: BorderSide(width: 2, color: theme.sliderTheme.activeTrackColor as Color),
+                borderRadius: BorderRadius.circular(8.0),
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: theme.sliderTheme.activeTrackColor as Color),
+                borderRadius: BorderRadius.circular(8.0),
+              ),
+            ),
+          ),
         ),
       ],
     );

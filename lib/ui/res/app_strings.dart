@@ -15,6 +15,7 @@ abstract class AppString {
   static const addNewPlace = 'НОВОЕ МЕСТО';
   static const clear = 'Очистить';
   static const categories = 'КАТЕГОРИИ';
+  static const category = 'КАТЕГОРИЯ';
   static const hotel = 'Отель';
   static const restaurant = 'Ресторан';
   static const particularPlace = 'Особое место';
@@ -28,4 +29,11 @@ abstract class AppString {
   static const tutorial = 'Смотреть туториал';
   static const newPlace = 'Новое место';
   static const cancel = 'Отмена';
+  static const nochoose = 'Не выбрано';
+  static const title = 'НАЗВАНИЕ';
+  static const lat = 'ШИРОТА';
+  static const lon = 'ДОЛГОТА';
+  static const pointOnTheMap = 'УКАЗАТЬ НА КАРТЕ';
+  static const description = 'ОПИСАНИЕ';
+  static const hintText = 'введите текст';
 }
