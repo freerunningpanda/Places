@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:places/appsettings.dart';
 
+import 'package:places/appsettings.dart';
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_strings.dart';
 import 'package:places/ui/res/app_typography.dart';
@@ -12,6 +12,10 @@ class AddSightScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final titleController = context.read<AppSettings>().titleController;
+    final descriptionController = context.read<AppSettings>().descriptionController;
+    final titleFocus = context.read<AppSettings>().titleFocus;
+    final descriptionFocus = context.read<AppSettings>().descriptionFocus;
     final width = MediaQuery.of(context).size.width;
     final theme = Theme.of(context);
     final cancel = GestureDetector(
@@ -23,57 +27,128 @@ class AddSightScreen extends StatelessWidget {
     );
 
     return Scaffold(
-      resizeToAvoidBottomInset: false,
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.only(left: 16.0, top: 18, right: 16.0),
-          child: Column(
-            children: [
-              _NewPlaceAppBar(
-                theme: theme,
-                width: width / 4.5,
-                leading: cancel,
-              ),
-              const SizedBox(height: 40),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  _CategoryChooseWidget(theme: theme),
-                  _TitleWidget(theme: theme),
-                  const SizedBox(height: 24),
-                  _CoordinatsWidget(
-                    theme: theme,
-                  ),
-                  const SizedBox(height: 15),
-                  const _PointOnMapWidget(),
-                  const SizedBox(height: 37),
-                  SizedBox(
-                    height: 80,
-                    child: TextField(
-                      cursorColor: theme.focusColor,
-                      cursorWidth: 1,
-                      maxLines: 5,
-                      decoration: InputDecoration(
-                        hintText: AppString.enterTheText,
-                        hintStyle: AppTypography.textText16Search,
-                        contentPadding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(width: 2, color: theme.sliderTheme.activeTrackColor as Color),
-                          borderRadius: BorderRadius.circular(8.0),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: theme.sliderTheme.activeTrackColor as Color),
-                          borderRadius: BorderRadius.circular(8.0),
-                        ),
-                      ),
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.only(left: 16.0, top: 18, right: 16.0),
+            child: Column(
+              children: [
+                _NewPlaceAppBar(
+                  theme: theme,
+                  width: width / 4.5,
+                  leading: cancel,
+                ),
+                const SizedBox(height: 40),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _CategoryChooseWidget(theme: theme),
+                    const SizedBox(height: 16),
+                    _TextInputWidget(
+                      theme: theme,
+                      title: AppString.title,
+                      height: 40,
+                      suffixIcon: _SuffixIcon(controller: titleController, theme: theme),
+                      focusNode: titleFocus,
+                      controller: titleController,
                     ),
-                  ),
-                ],
-              ),
-            ],
+                    const SizedBox(height: 24),
+                    _CoordinatsWidget(
+                      theme: theme,
+                    ),
+                    const SizedBox(height: 15),
+                    const _PointOnMapWidget(),
+                    const SizedBox(height: 37),
+                    // _DescriptionWidget(theme: theme),
+                    _TextInputWidget(
+                      theme: theme,
+                      title: AppString.description,
+                      hintText: AppString.enterTheText,
+                      maxLines: 5,
+                      height: 80,
+                      focusNode: descriptionFocus,
+                      controller: descriptionController,
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       ),
+    );
+  }
+}
+
+class _TextInputWidget extends StatefulWidget {
+  final ThemeData theme;
+  final String? hintText;
+  final String title;
+  final int? maxLines;
+  final double height;
+  final FocusNode focusNode;
+  final Widget? suffixIcon;
+  final TextEditingController controller;
+
+  const _TextInputWidget({
+    Key? key,
+    required this.theme,
+    this.hintText,
+    required this.title,
+    this.maxLines,
+    required this.height,
+    required this.focusNode,
+    this.suffixIcon,
+    required this.controller,
+  }) : super(key: key);
+
+  @override
+  State<_TextInputWidget> createState() => _TextInputWidgetState();
+}
+
+class _TextInputWidgetState extends State<_TextInputWidget> {
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            Text(
+              widget.title,
+              style: widget.theme.textTheme.labelLarge,
+            ),
+          ],
+        ),
+        const SizedBox(height: 12),
+        SizedBox(
+          height: widget.height,
+          child: TextField(
+            controller: widget.controller,
+            focusNode: widget.focusNode,
+            textCapitalization: TextCapitalization.sentences,
+            cursorColor: widget.theme.focusColor,
+            cursorWidth: 1,
+            maxLines: widget.maxLines,
+            textInputAction: TextInputAction.done,
+            decoration: InputDecoration(
+              hintText: widget.hintText,
+              hintStyle: AppTypography.textText16Search,
+              contentPadding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10),
+              focusedBorder: OutlineInputBorder(
+                borderSide: BorderSide(width: 2, color: widget.theme.sliderTheme.activeTrackColor as Color),
+                borderRadius: BorderRadius.circular(8.0),
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: widget.theme.sliderTheme.activeTrackColor as Color),
+                borderRadius: BorderRadius.circular(8.0),
+              ),
+              suffixIcon: widget.focusNode.hasFocus ? widget.suffixIcon : null,
+            ),
+          ),
+        ),
+      ],
     );
   }
 }
@@ -280,60 +355,6 @@ class _CategoryChooseWidget extends StatelessWidget {
         ),
         const SizedBox(height: 10),
         const Divider(),
-      ],
-    );
-  }
-}
-
-class _TitleWidget extends StatefulWidget {
-  final ThemeData theme;
-  const _TitleWidget({Key? key, required this.theme}) : super(key: key);
-
-  @override
-  State<_TitleWidget> createState() => _TitleWidgetState();
-}
-
-class _TitleWidgetState extends State<_TitleWidget> {
-  final TextEditingController controller = TextEditingController();
-  final FocusNode titleFocus = FocusNode();
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        const SizedBox(height: 24),
-        Row(
-          children: [
-            Text(
-              AppString.title,
-              style: widget.theme.textTheme.labelLarge,
-            ),
-          ],
-        ),
-        const SizedBox(height: 12),
-        SizedBox(
-          height: 40,
-          child: TextField(
-            textCapitalization: TextCapitalization.sentences,
-            focusNode: titleFocus,
-            controller: controller,
-            cursorColor: widget.theme.focusColor,
-            cursorWidth: 1,
-            style: widget.theme.textTheme.bodyLarge,
-            decoration: InputDecoration(
-              contentPadding: const EdgeInsets.only(left: 16.0),
-              focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(width: 2, color: widget.theme.sliderTheme.activeTrackColor as Color),
-                borderRadius: BorderRadius.circular(8.0),
-              ),
-              enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: widget.theme.sliderTheme.activeTrackColor as Color),
-                borderRadius: BorderRadius.circular(8.0),
-              ),
-              suffixIcon: titleFocus.hasFocus ? _SuffixIcon(controller: controller, theme: widget.theme) : null,
-            ),
-          ),
-        ),
       ],
     );
   }
