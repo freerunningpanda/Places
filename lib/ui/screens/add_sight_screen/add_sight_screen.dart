@@ -53,7 +53,7 @@ class AddSightScreen extends StatelessWidget {
                       controller: titleController,
                     ),
                     const SizedBox(height: 24),
-                    _CoordinatsWidget(
+                    _CoordinatsInputWidget(
                       theme: theme,
                     ),
                     const SizedBox(height: 15),
@@ -166,10 +166,10 @@ class _PointOnMapWidget extends StatelessWidget {
   }
 }
 
-class _CoordinatsWidget extends StatelessWidget {
+class _CoordinatsInputWidget extends StatelessWidget {
   final ThemeData theme;
 
-  const _CoordinatsWidget({
+  const _CoordinatsInputWidget({
     Key? key,
     required this.theme,
   }) : super(key: key);
