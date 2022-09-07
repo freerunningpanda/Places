@@ -59,7 +59,6 @@ class AddSightScreen extends StatelessWidget {
                     const SizedBox(height: 15),
                     const _PointOnMapWidget(),
                     const SizedBox(height: 37),
-                    // _DescriptionWidget(theme: theme),
                     _TextInputWidget(
                       theme: theme,
                       title: AppString.description,
