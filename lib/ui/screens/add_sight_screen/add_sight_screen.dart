@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:places/appsettings.dart';
 
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_strings.dart';
 import 'package:places/ui/res/app_typography.dart';
 import 'package:places/ui/widgets/sight_icons.dart';
+import 'package:provider/provider.dart';
 
 class AddSightScreen extends StatelessWidget {
   const AddSightScreen({Key? key}) : super(key: key);
@@ -39,7 +41,9 @@ class AddSightScreen extends StatelessWidget {
                   _CategoryChooseWidget(theme: theme),
                   _TitleWidget(theme: theme),
                   const SizedBox(height: 24),
-                  _CoordinatsWidget(theme: theme),
+                  _CoordinatsWidget(
+                    theme: theme,
+                  ),
                   const SizedBox(height: 15),
                   const _PointOnMapWidget(),
                   const SizedBox(height: 37),
@@ -98,10 +102,14 @@ class _CoordinatsWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final latFocus = context.read<AppSettings>().latFocus;
+    final lotFocus = context.read<AppSettings>().lotFocus;
+
     return Row(
       children: [
         Expanded(
           child: _LatLotWidget(
+            focusNode: latFocus,
             theme: theme,
             title: AppString.lat,
           ),
@@ -109,6 +117,7 @@ class _CoordinatsWidget extends StatelessWidget {
         const SizedBox(width: 16),
         Expanded(
           child: _LatLotWidget(
+            focusNode: lotFocus,
             theme: theme,
             title: AppString.lot,
           ),
@@ -121,11 +130,13 @@ class _CoordinatsWidget extends StatelessWidget {
 class _LatLotWidget extends StatefulWidget {
   final ThemeData theme;
   final String title;
+  final FocusNode focusNode;
 
   const _LatLotWidget({
     Key? key,
     required this.theme,
     required this.title,
+    required this.focusNode,
   }) : super(key: key);
 
   @override
@@ -134,7 +145,6 @@ class _LatLotWidget extends StatefulWidget {
 
 class _LatLotWidgetState extends State<_LatLotWidget> {
   final TextEditingController controller = TextEditingController();
-  FocusNode latFocus = FocusNode();
 
   @override
   Widget build(BuildContext context) {
@@ -153,7 +163,7 @@ class _LatLotWidgetState extends State<_LatLotWidget> {
         SizedBox(
           height: 40,
           child: TextField(
-            focusNode: latFocus,
+            focusNode: widget.focusNode,
             keyboardType: TextInputType.number,
             controller: controller,
             cursorColor: widget.theme.focusColor,
@@ -169,7 +179,7 @@ class _LatLotWidgetState extends State<_LatLotWidget> {
                 borderSide: BorderSide(color: widget.theme.sliderTheme.activeTrackColor as Color),
                 borderRadius: BorderRadius.circular(8.0),
               ),
-              suffixIcon: latFocus.hasFocus ? _SuffixIcon(controller: controller, theme: widget.theme) : null,
+              suffixIcon: widget.focusNode.hasFocus ? _SuffixIcon(controller: controller, theme: widget.theme) : null,
             ),
           ),
         ),
@@ -285,6 +295,8 @@ class _TitleWidget extends StatefulWidget {
 
 class _TitleWidgetState extends State<_TitleWidget> {
   final TextEditingController controller = TextEditingController();
+  final FocusNode titleFocus = FocusNode();
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -302,6 +314,8 @@ class _TitleWidgetState extends State<_TitleWidget> {
         SizedBox(
           height: 40,
           child: TextField(
+            textCapitalization: TextCapitalization.sentences,
+            focusNode: titleFocus,
             controller: controller,
             cursorColor: widget.theme.focusColor,
             cursorWidth: 1,
@@ -316,7 +330,7 @@ class _TitleWidgetState extends State<_TitleWidget> {
                 borderSide: BorderSide(color: widget.theme.sliderTheme.activeTrackColor as Color),
                 borderRadius: BorderRadius.circular(8.0),
               ),
-              suffixIcon: _SuffixIcon(controller: controller, theme: widget.theme),
+              suffixIcon: titleFocus.hasFocus ? _SuffixIcon(controller: controller, theme: widget.theme) : null,
             ),
           ),
         ),
