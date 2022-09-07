@@ -35,5 +35,5 @@ abstract class AppString {
   static const lot = 'ДОЛГОТА';
   static const pointOnTheMap = 'Указать на карте';
   static const description = 'ОПИСАНИЕ';
-  static const hintText = 'введите текст';
+  static const enterTheText = 'введите текст';
 }

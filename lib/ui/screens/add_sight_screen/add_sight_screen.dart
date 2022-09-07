@@ -41,9 +41,28 @@ class AddSightScreen extends StatelessWidget {
                   const SizedBox(height: 24),
                   _CoordinatsWidget(theme: theme),
                   const SizedBox(height: 15),
-                  const Text(
-                    AppString.pointOnTheMap,
-                    style: AppTypography.clearButton,
+                  const _PointOnMapWidget(),
+                  const SizedBox(height: 37),
+                  SizedBox(
+                    height: 80,
+                    child: TextField(
+                      cursorColor: theme.focusColor,
+                      cursorWidth: 1,
+                      maxLines: 5,
+                      decoration: InputDecoration(
+                        hintText: AppString.enterTheText,
+                        hintStyle: AppTypography.textText16Search,
+                        contentPadding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(width: 2, color: theme.sliderTheme.activeTrackColor as Color),
+                          borderRadius: BorderRadius.circular(8.0),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: theme.sliderTheme.activeTrackColor as Color),
+                          borderRadius: BorderRadius.circular(8.0),
+                        ),
+                      ),
+                    ),
                   ),
                 ],
               ),
@@ -55,6 +74,20 @@ class AddSightScreen extends StatelessWidget {
   }
 }
 
+class _PointOnMapWidget extends StatelessWidget {
+  const _PointOnMapWidget({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return const Text(
+      AppString.pointOnTheMap,
+      style: AppTypography.clearButton,
+    );
+  }
+}
+
 class _CoordinatsWidget extends StatelessWidget {
   final ThemeData theme;
 
@@ -62,7 +95,6 @@ class _CoordinatsWidget extends StatelessWidget {
     Key? key,
     required this.theme,
   }) : super(key: key);
-
 
   @override
   Widget build(BuildContext context) {
@@ -102,6 +134,7 @@ class _LatLotWidget extends StatefulWidget {
 
 class _LatLotWidgetState extends State<_LatLotWidget> {
   final TextEditingController controller = TextEditingController();
+  FocusNode latFocus = FocusNode();
 
   @override
   Widget build(BuildContext context) {
@@ -120,9 +153,10 @@ class _LatLotWidgetState extends State<_LatLotWidget> {
         SizedBox(
           height: 40,
           child: TextField(
+            focusNode: latFocus,
             keyboardType: TextInputType.number,
             controller: controller,
-            cursorColor: Colors.black,
+            cursorColor: widget.theme.focusColor,
             cursorWidth: 1,
             style: widget.theme.textTheme.bodyLarge,
             decoration: InputDecoration(
@@ -135,7 +169,7 @@ class _LatLotWidgetState extends State<_LatLotWidget> {
                 borderSide: BorderSide(color: widget.theme.sliderTheme.activeTrackColor as Color),
                 borderRadius: BorderRadius.circular(8.0),
               ),
-              suffixIcon: _SuffixIcon(controller: controller, theme: widget.theme),
+              suffixIcon: latFocus.hasFocus ? _SuffixIcon(controller: controller, theme: widget.theme) : null,
             ),
           ),
         ),
@@ -153,8 +187,6 @@ class _SuffixIcon extends StatelessWidget {
     required this.controller,
     required this.theme,
   }) : super(key: key);
-
-  
 
   @override
   Widget build(BuildContext context) {
@@ -271,7 +303,7 @@ class _TitleWidgetState extends State<_TitleWidget> {
           height: 40,
           child: TextField(
             controller: controller,
-            cursorColor: Colors.black,
+            cursorColor: widget.theme.focusColor,
             cursorWidth: 1,
             style: widget.theme.textTheme.bodyLarge,
             decoration: InputDecoration(
