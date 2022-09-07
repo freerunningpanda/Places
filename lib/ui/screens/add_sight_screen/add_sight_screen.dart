@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:places/main.dart';
+import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_strings.dart';
 import 'package:places/ui/res/app_typography.dart';
+import 'package:places/ui/widgets/sight_icons.dart';
 
 class AddSightScreen extends StatelessWidget {
   const AddSightScreen({Key? key}) : super(key: key);
@@ -19,6 +21,7 @@ class AddSightScreen extends StatelessWidget {
     );
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.only(left: 16.0, top: 18, right: 16.0),
@@ -68,7 +71,7 @@ class AddSightScreen extends StatelessWidget {
   }
 }
 
-class _LatLotWidget extends StatelessWidget {
+class _LatLotWidget extends StatefulWidget {
   final ThemeData theme;
   final String title;
 
@@ -79,6 +82,13 @@ class _LatLotWidget extends StatelessWidget {
   }) : super(key: key);
 
   @override
+  State<_LatLotWidget> createState() => _LatLotWidgetState();
+}
+
+class _LatLotWidgetState extends State<_LatLotWidget> {
+  final TextEditingController controller = TextEditingController();
+
+  @override
   Widget build(BuildContext context) {
     return Column(
       children: [
@@ -86,8 +96,8 @@ class _LatLotWidget extends StatelessWidget {
         Row(
           children: [
             Text(
-              title,
-              style: theme.textTheme.labelLarge,
+              widget.title,
+              style: widget.theme.textTheme.labelLarge,
             ),
           ],
         ),
@@ -95,18 +105,33 @@ class _LatLotWidget extends StatelessWidget {
         SizedBox(
           height: 40,
           child: TextField(
+            keyboardType: TextInputType.number,
+            controller: controller,
             cursorColor: Colors.black,
             cursorWidth: 1,
-            style: theme.textTheme.bodyLarge,
+            style: widget.theme.textTheme.bodyLarge,
             decoration: InputDecoration(
               contentPadding: const EdgeInsets.only(left: 16.0),
               focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(width: 2, color: theme.sliderTheme.activeTrackColor as Color),
+                borderSide: BorderSide(width: 2, color: widget.theme.sliderTheme.activeTrackColor as Color),
                 borderRadius: BorderRadius.circular(8.0),
               ),
               enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: theme.sliderTheme.activeTrackColor as Color),
+                borderSide: BorderSide(color: widget.theme.sliderTheme.activeTrackColor as Color),
                 borderRadius: BorderRadius.circular(8.0),
+              ),
+              suffixIcon: Padding(
+                padding: const EdgeInsets.only(top: 8, bottom: 8),
+                child: InkWell(
+                  borderRadius: BorderRadius.circular(40),
+                  onTap: controller.clear,
+                  child: SightIcons(
+                    assetName: AppAssets.clearDark,
+                    width: 20,
+                    height: 20,
+                    color: widget.theme.iconTheme.color,
+                  ),
+                ),
               ),
             ),
           ),

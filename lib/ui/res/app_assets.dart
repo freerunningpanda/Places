@@ -25,5 +25,7 @@ abstract class AppAssets {
   static const park = 'lib/ui/res/icons/park.svg';
   static const particularPlace = 'lib/ui/res/icons/particular_place.svg';
   static const restaurant = 'lib/ui/res/icons/restourant.svg';
+  static const clearDark = 'lib/ui/res/icons/clear_dark_icon.svg';
+  static const clearWhite = 'lib/ui/res/icons/clear_white_icon.svg';
 
 }
