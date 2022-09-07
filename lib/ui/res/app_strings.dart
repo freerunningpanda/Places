@@ -32,8 +32,8 @@ abstract class AppString {
   static const nochoose = 'Не выбрано';
   static const title = 'НАЗВАНИЕ';
   static const lat = 'ШИРОТА';
-  static const lon = 'ДОЛГОТА';
-  static const pointOnTheMap = 'УКАЗАТЬ НА КАРТЕ';
+  static const lot = 'ДОЛГОТА';
+  static const pointOnTheMap = 'Указать на карте';
   static const description = 'ОПИСАНИЕ';
   static const hintText = 'введите текст';
 }
