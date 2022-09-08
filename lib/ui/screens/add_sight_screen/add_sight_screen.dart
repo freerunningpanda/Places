@@ -6,7 +6,9 @@ import 'package:places/mocks.dart';
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_strings.dart';
 import 'package:places/ui/res/app_typography.dart';
+import 'package:places/ui/screens/add_sight_screen/choose_category_screen.dart';
 import 'package:places/ui/widgets/action_button.dart';
+import 'package:places/ui/widgets/new_place_app_bar_widget.dart';
 import 'package:places/ui/widgets/sight_icons.dart';
 import 'package:provider/provider.dart';
 
@@ -28,13 +30,6 @@ class AddSightScreen extends StatelessWidget {
     final descriptionFocus = context.read<AppSettings>().descriptionFocus;
     final width = MediaQuery.of(context).size.width;
     final theme = Theme.of(context);
-    final cancel = GestureDetector(
-      onTap: () => Navigator.pop(context),
-      child: Text(
-        AppString.cancel,
-        style: theme.textTheme.displayLarge,
-      ),
-    );
 
     return Scaffold(
       body: SafeArea(
@@ -43,10 +38,10 @@ class AddSightScreen extends StatelessWidget {
             padding: const EdgeInsets.only(left: 16.0, top: 18, right: 16.0, bottom: 8.0),
             child: Column(
               children: [
-                _NewPlaceAppBar(
+                NewPlaceAppBarWidget(
                   theme: theme,
                   width: width / 4.5,
-                  leading: cancel,
+                  leading: _CancelButtonWidget(theme: theme),
                 ),
                 const SizedBox(height: 40),
                 Column(
@@ -101,6 +96,27 @@ class AddSightScreen extends StatelessWidget {
             ),
           ),
         ),
+      ),
+    );
+  }
+}
+
+class _CancelButtonWidget extends StatelessWidget {
+  final ThemeData theme;
+
+  const _CancelButtonWidget({
+    Key? key,
+    required this.theme,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      borderRadius: BorderRadius.circular(12),
+      onTap: () => Navigator.pop(context),
+      child: Text(
+        AppString.cancel,
+        style: theme.textTheme.displayLarge,
       ),
     );
   }
@@ -350,34 +366,6 @@ class _SuffixIcon extends StatelessWidget {
   }
 }
 
-class _NewPlaceAppBar extends StatelessWidget {
-  final ThemeData theme;
-  final double width;
-  final Widget leading;
-  const _NewPlaceAppBar({
-    Key? key,
-    required this.theme,
-    required this.width,
-    required this.leading,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        leading,
-        SizedBox(
-          width: width,
-        ),
-        Text(
-          AppString.newPlace,
-          style: theme.textTheme.titleLarge,
-        ),
-      ],
-    );
-  }
-}
-
 class _CategoryChooseWidget extends StatelessWidget {
   final ThemeData theme;
 
@@ -406,9 +394,17 @@ class _CategoryChooseWidget extends StatelessWidget {
               AppString.nochoose,
               style: theme.textTheme.titleMedium,
             ),
-            const Icon(
-              Icons.chevron_right,
-              size: 25,
+            InkWell(
+              borderRadius: BorderRadius.circular(40),
+              onTap: () => Navigator.of(context).push<ChooseCategoryWidget>(
+                MaterialPageRoute(
+                  builder: (context) => const ChooseCategoryWidget(),
+                ),
+              ),
+              child: const Icon(
+                Icons.chevron_right,
+                size: 25,
+              ),
             ),
           ],
         ),
