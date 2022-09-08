@@ -15,7 +15,7 @@ abstract class AppString {
   static const addNewPlace = 'НОВОЕ МЕСТО';
   static const clear = 'Очистить';
   static const categories = 'КАТЕГОРИИ';
-  static const category = 'КАТЕГОРИЯ';
+  static const category = 'Категория';
   static const hotel = 'Отель';
   static const restaurant = 'Ресторан';
   static const particularPlace = 'Особое место';

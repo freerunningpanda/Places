@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
-
 import 'package:places/data/categories_table.dart';
+
+import 'package:places/ui/res/app_assets.dart';
+import 'package:places/ui/res/app_strings.dart';
 import 'package:places/ui/widgets/new_place_app_bar_widget.dart';
+import 'package:places/ui/widgets/sight_icons.dart';
 
 class ChooseCategoryWidget extends StatefulWidget {
   const ChooseCategoryWidget({Key? key}) : super(key: key);
@@ -11,6 +14,8 @@ class ChooseCategoryWidget extends StatefulWidget {
 }
 
 class _ChooseCategoryWidgetState extends State<ChooseCategoryWidget> {
+  final categories = CategoriesTable.categories;
+
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
@@ -26,20 +31,26 @@ class _ChooseCategoryWidgetState extends State<ChooseCategoryWidget> {
                 theme: theme,
                 width: width / 3.5,
                 leading: const _BackButtonWidget(),
+                title: AppString.category,
               ),
               const SizedBox(height: 40),
-              Column(
-                children: CategoriesTable.categories
-                    .asMap()
-                    .map(
-                      (i, e) => MapEntry(
-                        i,
-                        _ItemCategory(name: e.title),
-                      ),
-                    )
-                    .values
-                    .toList(),
+              ListView.separated(
+                shrinkWrap: true,
+                itemBuilder: (context, index) {
+                  final category = categories[index];
+
+                  return _ItemCategory(
+                    name: category.title,
+                    theme: theme,
+                    isEnabled: category.isEnabled,
+                  );
+                },
+                separatorBuilder: (context, index) {
+                  return const Divider();
+                },
+                itemCount: categories.length,
               ),
+              const Divider(),
             ],
           ),
         ),
@@ -65,14 +76,29 @@ class _BackButtonWidget extends StatelessWidget {
 
 class _ItemCategory extends StatelessWidget {
   final String name;
-  const _ItemCategory({Key? key, required this.name}) : super(key: key);
+  final ThemeData theme;
+  final bool isEnabled;
+  const _ItemCategory({
+    Key? key,
+    required this.name,
+    required this.theme,
+    required this.isEnabled,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Text(name),
-      ],
+    return SizedBox(
+      height: 48,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            name,
+            style: theme.textTheme.bodyLarge,
+          ),
+          if (isEnabled) const SightIcons(assetName: AppAssets.tick, width: 24, height: 24) else const SizedBox(),
+        ],
+      ),
     );
   }
 }

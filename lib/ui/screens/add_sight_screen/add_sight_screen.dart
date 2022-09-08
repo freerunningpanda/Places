@@ -42,6 +42,7 @@ class AddSightScreen extends StatelessWidget {
                   theme: theme,
                   width: width / 4.5,
                   leading: _CancelButtonWidget(theme: theme),
+                  title: AppString.newPlace,
                 ),
                 const SizedBox(height: 40),
                 Column(
@@ -381,7 +382,7 @@ class _CategoryChooseWidget extends StatelessWidget {
         Row(
           children: [
             Text(
-              AppString.category,
+              AppString.category.toUpperCase(),
               style: theme.textTheme.labelLarge,
             ),
           ],
