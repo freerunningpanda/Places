@@ -183,7 +183,7 @@ class _PointOnMapWidget extends StatelessWidget {
   }
 }
 
-class _CoordinatsInputWidget extends StatelessWidget {
+class _CoordinatsInputWidget extends StatefulWidget {
   final ThemeData theme;
 
   const _CoordinatsInputWidget({
@@ -192,6 +192,11 @@ class _CoordinatsInputWidget extends StatelessWidget {
   }) : super(key: key);
 
   @override
+  State<_CoordinatsInputWidget> createState() => _CoordinatsInputWidgetState();
+}
+
+class _CoordinatsInputWidgetState extends State<_CoordinatsInputWidget> {
+  @override
   Widget build(BuildContext context) {
     final latFocus = context.read<AppSettings>().latFocus;
     final lotFocus = context.read<AppSettings>().lotFocus;
@@ -199,25 +204,47 @@ class _CoordinatsInputWidget extends StatelessWidget {
     final latController = context.read<AppSettings>().latController;
     final lotController = context.read<AppSettings>().lotController;
 
+    bool isLot = false;
+
     return Row(
       children: [
         Expanded(
           child: _LatLotWidget(
             focusNode: latFocus,
-            theme: theme,
+            theme: widget.theme,
             title: AppString.lat,
-            onSubmitted: (v) => lotFocus.requestFocus(),
+            onSubmitted: (v) {
+              setState(() {
+                isLot = true;
+                lotFocus.requestFocus();
+              });
+            },
             controller: latController,
+            onTap: () {
+              setState(() {
+                isLot = true;
+              });
+            },
           ),
         ),
         const SizedBox(width: 16),
         Expanded(
           child: _LatLotWidget(
             focusNode: lotFocus,
-            theme: theme,
+            theme: widget.theme,
             title: AppString.lot,
-            onSubmitted: (v) => descriptionFocus.requestFocus(),
+            onSubmitted: (v) {
+              setState(() {
+                isLot = false;
+                descriptionFocus.requestFocus();
+              });
+            },
             controller: lotController,
+            onTap: () {
+              setState(() {
+                isLot = false;
+              });
+            },
           ),
         ),
       ],
@@ -231,6 +258,7 @@ class _LatLotWidget extends StatefulWidget {
   final FocusNode focusNode;
   final OnSubmitted onSubmitted;
   final TextEditingController controller;
+  final VoidCallback onTap;
 
   const _LatLotWidget({
     Key? key,
@@ -239,6 +267,7 @@ class _LatLotWidget extends StatefulWidget {
     required this.focusNode,
     required this.onSubmitted,
     required this.controller,
+    required this.onTap,
   }) : super(key: key);
 
   @override
@@ -263,6 +292,7 @@ class _LatLotWidgetState extends State<_LatLotWidget> {
         SizedBox(
           height: 40,
           child: TextField(
+            onTap: widget.onTap,
             focusNode: widget.focusNode,
             keyboardType: TextInputType.number,
             controller: widget.controller,
