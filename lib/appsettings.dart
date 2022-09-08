@@ -13,10 +13,34 @@ class AppSettings extends ChangeNotifier {
   final descriptionFocus = FocusNode();
 
   bool isDarkMode = false;
+  
+  bool isLat = false;
 
   bool switchTheme({required bool value}) {
     notifyListeners();
 
     return isDarkMode = value;
+  }
+
+  void tapOnLat() {
+    isLat = true;
+    notifyListeners();
+  }
+
+  void goToLat() {
+    isLat = true;
+    lotFocus.requestFocus();
+    notifyListeners();
+  }
+
+  void tapOnLot() {
+    isLat = false;
+    notifyListeners();
+  }
+
+  void goToDescription() {
+    isLat = false;
+    descriptionFocus.requestFocus();
+    notifyListeners();
   }
 }

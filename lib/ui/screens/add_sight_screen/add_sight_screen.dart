@@ -183,7 +183,7 @@ class _PointOnMapWidget extends StatelessWidget {
   }
 }
 
-class _CoordinatsInputWidget extends StatefulWidget {
+class _CoordinatsInputWidget extends StatelessWidget {
   final ThemeData theme;
 
   const _CoordinatsInputWidget({
@@ -192,59 +192,34 @@ class _CoordinatsInputWidget extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<_CoordinatsInputWidget> createState() => _CoordinatsInputWidgetState();
-}
-
-class _CoordinatsInputWidgetState extends State<_CoordinatsInputWidget> {
-  @override
   Widget build(BuildContext context) {
     final latFocus = context.read<AppSettings>().latFocus;
     final lotFocus = context.read<AppSettings>().lotFocus;
-    final descriptionFocus = context.read<AppSettings>().descriptionFocus;
     final latController = context.read<AppSettings>().latController;
     final lotController = context.read<AppSettings>().lotController;
-
-    bool isLot = false;
+    final focus = context.watch<AppSettings>();
 
     return Row(
       children: [
         Expanded(
           child: _LatLotWidget(
             focusNode: latFocus,
-            theme: widget.theme,
+            theme: theme,
             title: AppString.lat,
-            onSubmitted: (v) {
-              setState(() {
-                isLot = true;
-                lotFocus.requestFocus();
-              });
-            },
+            onSubmitted: (v) => focus.goToLat(),
             controller: latController,
-            onTap: () {
-              setState(() {
-                isLot = true;
-              });
-            },
+            onTap: focus.tapOnLat,
           ),
         ),
         const SizedBox(width: 16),
         Expanded(
           child: _LatLotWidget(
             focusNode: lotFocus,
-            theme: widget.theme,
+            theme: theme,
             title: AppString.lot,
-            onSubmitted: (v) {
-              setState(() {
-                isLot = false;
-                descriptionFocus.requestFocus();
-              });
-            },
+            onSubmitted: (v)  => focus.goToDescription(),
             controller: lotController,
-            onTap: () {
-              setState(() {
-                isLot = false;
-              });
-            },
+            onTap: focus.tapOnLot,
           ),
         ),
       ],
