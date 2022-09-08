@@ -125,7 +125,6 @@ class _TextInputWidget extends StatefulWidget {
 class _TextInputWidgetState extends State<_TextInputWidget> {
   @override
   Widget build(BuildContext context) {
-
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -197,6 +196,8 @@ class _CoordinatsInputWidget extends StatelessWidget {
     final latFocus = context.read<AppSettings>().latFocus;
     final lotFocus = context.read<AppSettings>().lotFocus;
     final descriptionFocus = context.read<AppSettings>().descriptionFocus;
+    final latController = context.read<AppSettings>().latController;
+    final lotController = context.read<AppSettings>().lotController;
 
     return Row(
       children: [
@@ -206,15 +207,17 @@ class _CoordinatsInputWidget extends StatelessWidget {
             theme: theme,
             title: AppString.lat,
             onSubmitted: (v) => lotFocus.requestFocus(),
+            controller: latController,
           ),
         ),
         const SizedBox(width: 16),
         Expanded(
-          child: _LotWidget(
+          child: _LatLotWidget(
             focusNode: lotFocus,
             theme: theme,
             title: AppString.lot,
             onSubmitted: (v) => descriptionFocus.requestFocus(),
+            controller: lotController,
           ),
         ),
       ],
@@ -227,6 +230,7 @@ class _LatLotWidget extends StatefulWidget {
   final String title;
   final FocusNode focusNode;
   final OnSubmitted onSubmitted;
+  final TextEditingController controller;
 
   const _LatLotWidget({
     Key? key,
@@ -234,6 +238,7 @@ class _LatLotWidget extends StatefulWidget {
     required this.title,
     required this.focusNode,
     required this.onSubmitted,
+    required this.controller,
   }) : super(key: key);
 
   @override
@@ -241,8 +246,6 @@ class _LatLotWidget extends StatefulWidget {
 }
 
 class _LatLotWidgetState extends State<_LatLotWidget> {
-  final TextEditingController controller = TextEditingController();
-
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -262,7 +265,7 @@ class _LatLotWidgetState extends State<_LatLotWidget> {
           child: TextField(
             focusNode: widget.focusNode,
             keyboardType: TextInputType.number,
-            controller: controller,
+            controller: widget.controller,
             cursorColor: widget.theme.focusColor,
             cursorWidth: 1,
             style: widget.theme.textTheme.bodyLarge,
@@ -278,71 +281,12 @@ class _LatLotWidgetState extends State<_LatLotWidget> {
                 borderSide: BorderSide(color: widget.theme.sliderTheme.activeTrackColor as Color),
                 borderRadius: BorderRadius.circular(8.0),
               ),
-              suffixIcon: widget.focusNode.hasFocus ? _SuffixIcon(controller: controller, theme: widget.theme) : null,
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-}
-class _LotWidget extends StatefulWidget {
-  final ThemeData theme;
-  final String title;
-  final FocusNode focusNode;
-  final OnSubmitted onSubmitted;
-
-  const _LotWidget({
-    Key? key,
-    required this.theme,
-    required this.title,
-    required this.focusNode,
-    required this.onSubmitted,
-  }) : super(key: key);
-
-  @override
-  State<_LotWidget> createState() => _LotWidgetState();
-}
-
-class _LotWidgetState extends State<_LotWidget> {
-  final TextEditingController controller = TextEditingController();
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        const SizedBox(height: 24),
-        Row(
-          children: [
-            Text(
-              widget.title,
-              style: widget.theme.textTheme.labelLarge,
-            ),
-          ],
-        ),
-        const SizedBox(height: 12),
-        SizedBox(
-          height: 40,
-          child: TextField(
-            focusNode: widget.focusNode,
-            keyboardType: TextInputType.number,
-            controller: controller,
-            cursorColor: widget.theme.focusColor,
-            cursorWidth: 1,
-            style: widget.theme.textTheme.bodyLarge,
-            textInputAction: TextInputAction.next,
-            onSubmitted: widget.onSubmitted,
-            decoration: InputDecoration(
-              contentPadding: const EdgeInsets.only(left: 16.0),
-              focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(width: 2, color: widget.theme.sliderTheme.activeTrackColor as Color),
-                borderRadius: BorderRadius.circular(8.0),
-              ),
-              enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: widget.theme.sliderTheme.activeTrackColor as Color),
-                borderRadius: BorderRadius.circular(8.0),
-              ),
-              suffixIcon: widget.focusNode.hasFocus ? _SuffixIcon(controller: controller, theme: widget.theme) : null,
+              suffixIcon: widget.focusNode.hasFocus
+                  ? _SuffixIcon(
+                      controller: widget.controller,
+                      theme: widget.theme,
+                    )
+                  : null,
             ),
           ),
         ),
