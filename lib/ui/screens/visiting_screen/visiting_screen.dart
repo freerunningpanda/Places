@@ -159,7 +159,7 @@ class _WantToVisitWidget extends StatelessWidget {
         return SightCard(
           isVisitingScreen: true,
           item: item,
-          url: item.url,
+          url: item.url ?? 'no_url',
           type: item.type,
           name: item.name,
           aspectRatio: AppCardSize.visitingCard,
@@ -226,7 +226,7 @@ class _VisitedWidget extends StatelessWidget {
           child: SightCard(
             isVisitingScreen: true,
             item: sight,
-            url: sight.url,
+            url: sight.url ?? 'no_url',
             type: sight.type,
             name: sight.name,
             aspectRatio: AppCardSize.visitingCard,

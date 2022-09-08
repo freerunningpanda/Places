@@ -71,7 +71,7 @@ class _FilterScreenState extends State<FilterScreen> {
                     Mocks.mockLat,
                     Mocks.mockLot,
                     el.lat,
-                    el.lon,
+                    el.lot,
                   );
                   if (distance >= Mocks.rangeValues.start && distance <= Mocks.rangeValues.end) {
                     context.read<FiltersSettings>().showCount();

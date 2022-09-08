@@ -1,12 +1,20 @@
 import 'package:flutter/material.dart';
 
 import 'package:places/appsettings.dart';
+import 'package:places/data/sight.dart';
+import 'package:places/mocks.dart';
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_strings.dart';
 import 'package:places/ui/res/app_typography.dart';
 import 'package:places/ui/widgets/action_button.dart';
 import 'package:places/ui/widgets/sight_icons.dart';
 import 'package:provider/provider.dart';
+
+String name = '';
+double lat = 0;
+double lot = 0;
+String details = '';
+String type = '';
 
 class AddSightScreen extends StatelessWidget {
   const AddSightScreen({Key? key}) : super(key: key);
@@ -54,7 +62,8 @@ class AddSightScreen extends StatelessWidget {
                       focusNode: titleFocus,
                       controller: titleController,
                       textInputAction: TextInputAction.next,
-                      onSubmitted: (v) => latFocus.requestFocus(),
+                      onSubmitted: (value) => latFocus.requestFocus(),
+                      onChanged: (value) => name = value,
                     ),
                     const SizedBox(height: 24),
                     _CoordinatsInputWidget(
@@ -72,12 +81,17 @@ class AddSightScreen extends StatelessWidget {
                       focusNode: descriptionFocus,
                       controller: descriptionController,
                       textInputAction: TextInputAction.done,
+                      onChanged: (value) => details = value,
                     ),
                     const SizedBox(height: 124),
                     ActionButton(
                       title: AppString.create,
                       onTap: () {
                         debugPrint('🟡---------create btn pressed');
+                        Mocks.mocks.add(
+                          Sight(name: name, lat: lat, lot: lot, details: details, type: AppString.park),
+                        );
+                        debugPrint('🟡---------mocks: ${Mocks.mocks[7]}');
                       },
                       counterValue: 0,
                     ),
@@ -102,7 +116,8 @@ class _TextInputWidget extends StatefulWidget {
   final Widget? suffixIcon;
   final TextEditingController controller;
   final TextInputAction textInputAction;
-  final OnSubmitted onSubmitted;
+  final VoidFuncString onSubmitted;
+  final VoidFuncString onChanged;
 
   const _TextInputWidget({
     Key? key,
@@ -115,6 +130,7 @@ class _TextInputWidget extends StatefulWidget {
     this.suffixIcon,
     required this.controller,
     required this.textInputAction,
+    required this.onChanged,
     this.onSubmitted,
   }) : super(key: key);
 
@@ -147,6 +163,7 @@ class _TextInputWidgetState extends State<_TextInputWidget> {
             cursorWidth: 1,
             maxLines: widget.maxLines,
             textInputAction: widget.textInputAction,
+            onChanged: widget.onChanged,
             decoration: InputDecoration(
               hintText: widget.hintText,
               hintStyle: AppTypography.textText16Search,
@@ -209,6 +226,7 @@ class _CoordinatsInputWidget extends StatelessWidget {
             onSubmitted: (v) => focus.goToLat(),
             controller: latController,
             onTap: focus.tapOnLat,
+            onChanged: (value) => lat = double.parse(value),
           ),
         ),
         const SizedBox(width: 16),
@@ -217,9 +235,10 @@ class _CoordinatsInputWidget extends StatelessWidget {
             focusNode: lotFocus,
             theme: theme,
             title: AppString.lot,
-            onSubmitted: (v)  => focus.goToDescription(),
+            onSubmitted: (v) => focus.goToDescription(),
             controller: lotController,
             onTap: focus.tapOnLot,
+            onChanged: (value) => lot = double.parse(value),
           ),
         ),
       ],
@@ -231,9 +250,10 @@ class _LatLotWidget extends StatefulWidget {
   final ThemeData theme;
   final String title;
   final FocusNode focusNode;
-  final OnSubmitted onSubmitted;
+  final VoidFuncString onSubmitted;
   final TextEditingController controller;
   final VoidCallback onTap;
+  final VoidFuncString onChanged;
 
   const _LatLotWidget({
     Key? key,
@@ -243,6 +263,7 @@ class _LatLotWidget extends StatefulWidget {
     required this.onSubmitted,
     required this.controller,
     required this.onTap,
+    required this.onChanged,
   }) : super(key: key);
 
   @override
@@ -267,6 +288,7 @@ class _LatLotWidgetState extends State<_LatLotWidget> {
         SizedBox(
           height: 40,
           child: TextField(
+            onChanged: widget.onChanged,
             onTap: widget.onTap,
             focusNode: widget.focusNode,
             keyboardType: TextInputType.number,

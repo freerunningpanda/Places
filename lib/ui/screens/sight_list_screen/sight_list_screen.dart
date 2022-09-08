@@ -92,7 +92,7 @@ class _SightListWidget extends StatelessWidget {
               width: 22,
               height: 22,
             ),
-            url: sight.url,
+            url: sight.url ?? 'no_url',
             type: sight.type,
             name: sight.name,
             item: sight,

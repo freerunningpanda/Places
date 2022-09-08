@@ -48,7 +48,7 @@ class FiltersSettings extends ChangeNotifier {
         Mocks.mockLat,
         Mocks.mockLot,
         el.lat,
-        el.lon,
+        el.lot,
       );
       if (distance >= Mocks.rangeValues.start && distance <= Mocks.rangeValues.end) {
         FiltersTable.filtersWithDistance.add(el);
