@@ -36,4 +36,5 @@ abstract class AppString {
   static const pointOnTheMap = 'Указать на карте';
   static const description = 'ОПИСАНИЕ';
   static const enterTheText = 'введите текст';
+  static const create = 'СОЗДАТЬ';
 }

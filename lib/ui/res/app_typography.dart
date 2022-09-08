@@ -137,6 +137,11 @@ abstract class AppTypography {
     fontWeight: FontWeight.w700,
     color: AppColors.backgroundColor,
   );
+  
+  static const sightDetailsButtonNameInnactive = TextStyle(
+    fontWeight: FontWeight.w700,
+    color: AppColors.inactiveBlack,
+  );
 
   static const inactiveButton = TextStyle(
     color: AppColors.inactiveColor,

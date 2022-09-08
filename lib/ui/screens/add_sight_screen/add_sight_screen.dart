@@ -4,6 +4,7 @@ import 'package:places/appsettings.dart';
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_strings.dart';
 import 'package:places/ui/res/app_typography.dart';
+import 'package:places/ui/widgets/action_button.dart';
 import 'package:places/ui/widgets/sight_icons.dart';
 import 'package:provider/provider.dart';
 
@@ -30,7 +31,7 @@ class AddSightScreen extends StatelessWidget {
       body: SafeArea(
         child: SingleChildScrollView(
           child: Padding(
-            padding: const EdgeInsets.only(left: 16.0, top: 18, right: 16.0),
+            padding: const EdgeInsets.only(left: 16.0, top: 18, right: 16.0, bottom: 8.0),
             child: Column(
               children: [
                 _NewPlaceAppBar(
@@ -67,6 +68,14 @@ class AddSightScreen extends StatelessWidget {
                       height: 80,
                       focusNode: descriptionFocus,
                       controller: descriptionController,
+                    ),
+                    const SizedBox(height: 124),
+                    ActionButton(
+                      title: AppString.create,
+                      onTap: () {
+                        debugPrint('🟡---------create btn pressed');
+                      },
+                      counterValue: 0,
                     ),
                   ],
                 ),
@@ -106,7 +115,6 @@ class _TextInputWidget extends StatefulWidget {
 }
 
 class _TextInputWidgetState extends State<_TextInputWidget> {
-
   @override
   Widget build(BuildContext context) {
     return Column(

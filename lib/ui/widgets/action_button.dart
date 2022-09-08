@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 import 'package:places/ui/res/app_assets.dart';
-import 'package:places/ui/res/app_colors.dart';
 import 'package:places/ui/res/app_typography.dart';
+import 'package:places/ui/screens/res/custom_colors.dart';
 import 'package:places/ui/widgets/sight_icons.dart';
 
 class ActionButton extends StatelessWidget {
@@ -25,13 +25,16 @@ class ActionButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final customColors = Theme.of(context).extension<CustomColors>();
+
     return Stack(
       children: [
         Container(
           height: 48,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(12),
-            color: counterValue! == 0 ? AppColors.secondaryTwo: AppColors.green,
+            color: counterValue == 0 ? customColors?.color : theme.sliderTheme.activeTrackColor,
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -47,7 +50,7 @@ class ActionButton extends StatelessWidget {
               const SizedBox(width: 8),
               Text(
                 title,
-                style: AppTypography.sightDetailsButtonName,
+                style: counterValue == 0 ? AppTypography.sightDetailsButtonNameInnactive : AppTypography.sightDetailsButtonName,
               ),
             ],
           ),
