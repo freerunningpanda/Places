@@ -153,7 +153,7 @@ class _ClearButtonWidgetState extends State<_ClearButtonWidget> {
 }
 
 class _FiltersTable extends StatefulWidget {
-  final List<Filters> filters;
+  final List<Category> filters;
   final List<String> activeFilters;
   final List<Sight> sightList;
   const _FiltersTable({
@@ -187,7 +187,7 @@ class _FiltersTableState extends State<_FiltersTable> {
                 _ItemFilter(
                   isEnabled: e.isEnabled,
                   title: e.title,
-                  assetName: e.assetName,
+                  assetName: e.assetName ?? 'null',
                   onTap: () {
                     final filteredByType = widget.sightList.where((sight) => sight.type.contains(e.title)).toList();
                     if (!e.isEnabled) {

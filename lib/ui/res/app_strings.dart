@@ -22,6 +22,8 @@ abstract class AppString {
   static const park = 'Парк';
   static const museum = 'Музей';
   static const cafe = 'Кафе';
+  static const cinema = 'Кинотеатр';
+  static const theater = 'Театр';
   static const distantion = 'Расстояние';
   static const showPlaces = 'ПОКАЗАТЬ';
   static const settings = 'Настройки';
