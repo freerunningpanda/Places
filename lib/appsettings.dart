@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+typedef OnSubmitted = void Function(String)?;
+
 class AppSettings extends ChangeNotifier {
   final titleController = TextEditingController();
   final descriptionController = TextEditingController();
