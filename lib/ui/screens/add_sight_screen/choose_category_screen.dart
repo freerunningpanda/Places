@@ -55,7 +55,6 @@ class _ChooseCategoryWidgetState extends State<ChooseCategoryWidget> {
                             categories: CategoriesTable.categories,
                             activeCategories: CategoriesTable.chosenCategory,
                           );
-                      debugPrint('>>>>>>>>>${CategoriesTable.chosenCategory}');
                     },
                   );
                 },

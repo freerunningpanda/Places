@@ -36,11 +36,12 @@ class AppSettings extends ChangeNotifier {
       if (!isEnabled) {
         activeCategory.add(category);
         category.isEnabled = true;
-          i.isEnabled = false;
-          activeCategory
-            ..clear()
-            ..add(category);
-            category.isEnabled = true;
+        i.isEnabled = false;
+        activeCategory
+          ..clear()
+          ..add(category);
+        debugPrint('🟡--------- Выбрана категория: ${category.title}');
+        category.isEnabled = true;
         notifyListeners();
       } else {
         category.isEnabled = false;
