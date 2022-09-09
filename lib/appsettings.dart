@@ -23,28 +23,30 @@ class AppSettings extends ChangeNotifier {
     return isDarkMode = value;
   }
 
-  List<String> chooseCategory({
+  List<Category> chooseCategory({
     required int index,
     required List<Category> categories,
-    required List<String> activeCategories,
+    required List<Category> activeCategories,
   }) {
     final category = categories[index];
     final activeCategory = activeCategories;
     var isEnabled = !categories[index].isEnabled;
     isEnabled = !isEnabled;
-    if (!isEnabled) {
-      activeCategory.add(category.title);
-      category.isEnabled = true;
-      if (activeCategories.length > 1) {
-        activeCategory
-          ..clear()
-          ..add(category.title);
+    for (final i in categories) {
+      if (!isEnabled) {
+        activeCategory.add(category);
+        category.isEnabled = true;
+          i.isEnabled = false;
+          activeCategory
+            ..clear()
+            ..add(category);
+            category.isEnabled = true;
+        notifyListeners();
+      } else {
+        category.isEnabled = false;
+        activeCategory.clear();
+        notifyListeners();
       }
-      notifyListeners();
-    } else {
-      category.isEnabled = false;
-      activeCategory.clear();
-      notifyListeners();
     }
 
     return activeCategory;

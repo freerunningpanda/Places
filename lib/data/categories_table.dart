@@ -12,24 +12,24 @@ class CategoriesTable extends ChangeNotifier {
     Category(title: AppString.cafe),
   ];
 
-  static final List<String> chosenCategory = [];
+  static final List<Category> chosenCategory = [];
 
-    List<String> chooseCategory(int index) {
-    final category = CategoriesTable.categories[index];
-    final activeCategory = CategoriesTable.chosenCategory;
-    var isEnabled = !CategoriesTable.categories[index].isEnabled;
-    isEnabled = !isEnabled;
-    if (!isEnabled) {
-      activeCategory.add(category.title);
-      category.isEnabled = true;
+  //   List<String> chooseCategory(int index) {
+  //   final category = CategoriesTable.categories[index];
+  //   final activeCategory = CategoriesTable.chosenCategory;
+  //   var isEnabled = !CategoriesTable.categories[index].isEnabled;
+  //   isEnabled = !isEnabled;
+  //   if (!isEnabled) {
+  //     activeCategory.add(category.title);
+  //     category.isEnabled = true;
 
-      notifyListeners();
-    } else {
-      activeCategory.removeLast();
-      category.isEnabled = false;
-      notifyListeners();
-    }
+  //     notifyListeners();
+  //   } else {
+  //     activeCategory.removeLast();
+  //     category.isEnabled = false;
+  //     notifyListeners();
+  //   }
 
-    return activeCategory;
-  }
+  //   return activeCategory;
+  // }
 }
