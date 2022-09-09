@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:places/data/categories_table.dart';
+import 'package:places/data/filters.dart';
 
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_strings.dart';
 import 'package:places/ui/widgets/new_place_app_bar_widget.dart';
 import 'package:places/ui/widgets/sight_icons.dart';
+import 'package:provider/provider.dart';
 
 class ChooseCategoryWidget extends StatefulWidget {
   const ChooseCategoryWidget({Key? key}) : super(key: key);
@@ -20,6 +22,8 @@ class _ChooseCategoryWidgetState extends State<ChooseCategoryWidget> {
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
     final theme = Theme.of(context);
+
+    context.watch<CategoriesTable>();
 
     return Scaffold(
       body: SafeArea(
@@ -43,6 +47,8 @@ class _ChooseCategoryWidgetState extends State<ChooseCategoryWidget> {
                     name: category.title,
                     theme: theme,
                     isEnabled: category.isEnabled,
+                    category: category,
+                    onTap: () => context.read<CategoriesTable>().chooseCategory(index),
                   );
                 },
                 separatorBuilder: (context, index) {
@@ -78,26 +84,34 @@ class _ItemCategory extends StatelessWidget {
   final String name;
   final ThemeData theme;
   final bool isEnabled;
+  final Category category;
+  final VoidCallback onTap;
+
   const _ItemCategory({
     Key? key,
     required this.name,
     required this.theme,
     required this.isEnabled,
+    required this.category,
+    required this.onTap,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: 48,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(
-            name,
-            style: theme.textTheme.bodyLarge,
-          ),
-          if (isEnabled) const SightIcons(assetName: AppAssets.tick, width: 24, height: 24) else const SizedBox(),
-        ],
+    return InkWell(
+      onTap: onTap,
+      child: SizedBox(
+        height: 48,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              name,
+              style: theme.textTheme.bodyLarge,
+            ),
+            if (isEnabled) const SightIcons(assetName: AppAssets.tick, width: 24, height: 24) else const SizedBox(),
+          ],
+        ),
       ),
     );
   }
