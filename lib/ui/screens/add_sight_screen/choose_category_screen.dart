@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:places/appsettings.dart';
 import 'package:places/data/categories_table.dart';
 import 'package:places/data/filters.dart';
 
@@ -23,7 +24,7 @@ class _ChooseCategoryWidgetState extends State<ChooseCategoryWidget> {
     final width = MediaQuery.of(context).size.width;
     final theme = Theme.of(context);
 
-    context.watch<CategoriesTable>();
+    context.watch<AppSettings>();
 
     return Scaffold(
       body: SafeArea(
@@ -48,7 +49,14 @@ class _ChooseCategoryWidgetState extends State<ChooseCategoryWidget> {
                     theme: theme,
                     isEnabled: category.isEnabled,
                     category: category,
-                    onTap: () => context.read<CategoriesTable>().chooseCategory(index),
+                    onTap: () {
+                      context.read<AppSettings>().chooseCategory(
+                            index: index,
+                            categories: CategoriesTable.categories,
+                            activeCategories: CategoriesTable.chosenCategory,
+                          );
+                      debugPrint('>>>>>>>>>${CategoriesTable.chosenCategory}');
+                    },
                   );
                 },
                 separatorBuilder: (context, index) {

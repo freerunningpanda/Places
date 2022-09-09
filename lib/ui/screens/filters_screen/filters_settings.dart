@@ -18,6 +18,8 @@ class FiltersSettings extends ChangeNotifier {
     notifyListeners();
   }
 
+  
+
   List<String> saveFilters(int index) {
     final filters = FiltersTable.filters[index];
     final activeFilters = FiltersTable.activeFilters;
