@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:places/appsettings.dart';
+import 'package:places/data/categories_table.dart';
 import 'package:places/data/sight.dart';
 import 'package:places/mocks.dart';
 import 'package:places/ui/res/app_assets.dart';
@@ -23,7 +24,10 @@ class AddSightScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final latController = context.read<AppSettings>().latController;
+    final lotController = context.read<AppSettings>().lotController;
     final latFocus = context.read<AppSettings>().latFocus;
+    final lotFocus = context.read<AppSettings>().lotFocus;
     final titleController = context.read<AppSettings>().titleController;
     final descriptionController = context.read<AppSettings>().descriptionController;
     final titleFocus = context.read<AppSettings>().titleFocus;
@@ -63,7 +67,11 @@ class AddSightScreen extends StatelessWidget {
                     ),
                     const SizedBox(height: 24),
                     _CoordinatsInputWidget(
+                      latController: latController,
+                      lotController: lotController,
                       theme: theme,
+                      latFocus: latFocus,
+                      lotFocus: lotFocus,
                     ),
                     const SizedBox(height: 15),
                     const _PointOnMapWidget(),
@@ -85,8 +93,18 @@ class AddSightScreen extends StatelessWidget {
                       onTap: () {
                         debugPrint('🟡---------create btn pressed');
                         Mocks.mocks.add(
-                          Sight(name: name, lat: lat, lot: lot, details: details, type: AppString.park),
+                          Sight(
+                            name: name,
+                            lat: lat,
+                            lot: lot,
+                            details: details,
+                            type: CategoriesTable.chosenCategory[0].title,
+                          ),
                         );
+                        titleController.clear();
+                        descriptionController.clear();
+                        latController.clear();
+                        lotController.clear();
                         debugPrint('🟡---------mocks: ${Mocks.mocks[7]}');
                       },
                       counterValue: 0,
@@ -219,18 +237,22 @@ class _PointOnMapWidget extends StatelessWidget {
 
 class _CoordinatsInputWidget extends StatelessWidget {
   final ThemeData theme;
+  final TextEditingController latController;
+  final TextEditingController lotController;
+  final FocusNode latFocus;
+  final FocusNode lotFocus;
 
   const _CoordinatsInputWidget({
     Key? key,
     required this.theme,
+    required this.latController,
+    required this.lotController,
+    required this.latFocus,
+    required this.lotFocus,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final latFocus = context.read<AppSettings>().latFocus;
-    final lotFocus = context.read<AppSettings>().lotFocus;
-    final latController = context.read<AppSettings>().latController;
-    final lotController = context.read<AppSettings>().lotController;
     final focus = context.watch<AppSettings>();
 
     return Row(
