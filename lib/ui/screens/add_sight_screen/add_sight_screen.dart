@@ -108,6 +108,7 @@ class AddSightScreen extends StatelessWidget {
                         latController.clear();
                         lotController.clear();
                         debugPrint('🟡---------Создан объект: ${Mocks.mocks[7]}');
+                        context.read<AppSettings>().clearCategory(activeCategories: chosenCategory);
                       },
                       titleController: titleController,
                       latController: latController,
