@@ -46,7 +46,7 @@ class _ChooseCategoryWidgetState extends State<ChooseCategoryWidget> {
                   shrinkWrap: true,
                   itemBuilder: (context, index) {
                     final category = categories[index];
-        
+
                     return _ItemCategory(
                       name: category.title,
                       theme: theme,
@@ -68,7 +68,16 @@ class _ChooseCategoryWidgetState extends State<ChooseCategoryWidget> {
                 ),
                 const Divider(),
                 SizedBox(height: height * 0.3),
-                ActionButton(title: AppString.save, onTap: () {}),
+                ActionButton(
+                  title: AppString.save,
+                  onTap: () {
+                    if (CategoriesTable.chosenCategory.isEmpty) {
+                      return;
+                    } else {
+                      Navigator.pop(context);
+                    }
+                  },
+                ),
               ],
             ),
           ),
@@ -85,9 +94,14 @@ class _BackButtonWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final chosenCategory = CategoriesTable.chosenCategory;
+
     return InkWell(
       borderRadius: BorderRadius.circular(40),
-      onTap: () => Navigator.pop(context),
+      onTap: () {
+        context.read<AppSettings>().clearCategory(activeCategories: chosenCategory);
+        Navigator.pop(context);
+      },
       child: const Icon(Icons.chevron_left),
     );
   }

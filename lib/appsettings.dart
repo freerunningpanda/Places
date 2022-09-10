@@ -24,6 +24,14 @@ class AppSettings extends ChangeNotifier {
     return isDarkMode = value;
   }
 
+  void clearCategory({required List<Category> activeCategories}) {
+    for (final i in activeCategories) {
+      i.isEnabled = false;
+    }
+    activeCategories.clear();
+    notifyListeners();
+  }
+
   List<Category> chooseCategory({
     required int index,
     required List<Category> categories,
