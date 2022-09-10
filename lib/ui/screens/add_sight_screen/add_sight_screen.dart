@@ -33,6 +33,7 @@ class AddSightScreen extends StatelessWidget {
     final titleFocus = context.read<AppSettings>().titleFocus;
     final descriptionFocus = context.read<AppSettings>().descriptionFocus;
     final width = MediaQuery.of(context).size.width;
+    final height = MediaQuery.of(context).size.height;
     final theme = Theme.of(context);
 
     return Scaffold(
@@ -87,7 +88,7 @@ class AddSightScreen extends StatelessWidget {
                       textInputAction: TextInputAction.done,
                       onChanged: (value) => details = value,
                     ),
-                    const SizedBox(height: 124),
+                    SizedBox(height: height * 0.18),
                     ActionButton(
                       title: AppString.create,
                       onTap: () {

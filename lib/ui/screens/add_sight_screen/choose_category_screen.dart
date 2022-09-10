@@ -5,6 +5,7 @@ import 'package:places/data/filters.dart';
 
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_strings.dart';
+import 'package:places/ui/widgets/action_button.dart';
 import 'package:places/ui/widgets/new_place_app_bar_widget.dart';
 import 'package:places/ui/widgets/sight_icons.dart';
 import 'package:provider/provider.dart';
@@ -22,49 +23,54 @@ class _ChooseCategoryWidgetState extends State<ChooseCategoryWidget> {
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
+    final height = MediaQuery.of(context).size.height;
     final theme = Theme.of(context);
 
     context.watch<AppSettings>();
 
     return Scaffold(
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.only(left: 16.0, top: 18, right: 16.0, bottom: 8.0),
-          child: Column(
-            children: [
-              NewPlaceAppBarWidget(
-                theme: theme,
-                width: width / 3.5,
-                leading: const _BackButtonWidget(),
-                title: AppString.category,
-              ),
-              const SizedBox(height: 40),
-              ListView.separated(
-                shrinkWrap: true,
-                itemBuilder: (context, index) {
-                  final category = categories[index];
-
-                  return _ItemCategory(
-                    name: category.title,
-                    theme: theme,
-                    isEnabled: category.isEnabled,
-                    category: category,
-                    onTap: () {
-                      context.read<AppSettings>().chooseCategory(
-                            index: index,
-                            categories: CategoriesTable.categories,
-                            activeCategories: CategoriesTable.chosenCategory,
-                          );
-                    },
-                  );
-                },
-                separatorBuilder: (context, index) {
-                  return const Divider();
-                },
-                itemCount: categories.length,
-              ),
-              const Divider(),
-            ],
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.only(left: 16.0, top: 18, right: 16.0, bottom: 8.0),
+            child: Column(
+              children: [
+                NewPlaceAppBarWidget(
+                  theme: theme,
+                  width: width / 3.5,
+                  leading: const _BackButtonWidget(),
+                  title: AppString.category,
+                ),
+                const SizedBox(height: 40),
+                ListView.separated(
+                  shrinkWrap: true,
+                  itemBuilder: (context, index) {
+                    final category = categories[index];
+        
+                    return _ItemCategory(
+                      name: category.title,
+                      theme: theme,
+                      isEnabled: category.isEnabled,
+                      category: category,
+                      onTap: () {
+                        context.read<AppSettings>().chooseCategory(
+                              index: index,
+                              categories: CategoriesTable.categories,
+                              activeCategories: CategoriesTable.chosenCategory,
+                            );
+                      },
+                    );
+                  },
+                  separatorBuilder: (context, index) {
+                    return const Divider();
+                  },
+                  itemCount: categories.length,
+                ),
+                const Divider(),
+                SizedBox(height: height * 0.3),
+                ActionButton(title: AppString.save, onTap: () {}),
+              ],
+            ),
           ),
         ),
       ),
@@ -108,7 +114,7 @@ class _ItemCategory extends StatelessWidget {
     return InkWell(
       onTap: onTap,
       child: SizedBox(
-        height: 48,
+        height: 38,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [

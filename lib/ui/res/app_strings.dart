@@ -39,4 +39,5 @@ abstract class AppString {
   static const description = 'ОПИСАНИЕ';
   static const enterTheText = 'введите текст';
   static const create = 'СОЗДАТЬ';
+  static const save = 'СОХРАНИТЬ';
 }

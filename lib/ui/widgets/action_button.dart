@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:places/data/categories_table.dart';
 
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_typography.dart';
@@ -34,7 +35,7 @@ class ActionButton extends StatelessWidget {
           height: 48,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(12),
-            color: counterValue == 0 ? customColors?.color : theme.sliderTheme.activeTrackColor,
+            color: counterValue == 0 || CategoriesTable.chosenCategory.isEmpty ? customColors?.color : theme.sliderTheme.activeTrackColor,
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -50,7 +51,7 @@ class ActionButton extends StatelessWidget {
               const SizedBox(width: 8),
               Text(
                 title,
-                style: counterValue == 0 ? AppTypography.sightDetailsButtonNameInnactive : AppTypography.sightDetailsButtonName,
+                style: counterValue == 0 || CategoriesTable.chosenCategory.isEmpty ? AppTypography.sightDetailsButtonNameInnactive : AppTypography.sightDetailsButtonName,
               ),
             ],
           ),
