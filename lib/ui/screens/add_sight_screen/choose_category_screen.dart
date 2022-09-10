@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
+
 import 'package:places/appsettings.dart';
 import 'package:places/data/categories_table.dart';
 import 'package:places/data/filters.dart';
-
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_strings.dart';
-import 'package:places/ui/widgets/action_button.dart';
 import 'package:places/ui/widgets/new_place_app_bar_widget.dart';
+import 'package:places/ui/widgets/save_button.dart';
 import 'package:places/ui/widgets/sight_icons.dart';
 import 'package:provider/provider.dart';
 
@@ -68,15 +68,10 @@ class _ChooseCategoryWidgetState extends State<ChooseCategoryWidget> {
                 ),
                 const Divider(),
                 SizedBox(height: height * 0.3),
-                ActionButton(
+                SaveButton(
+                  chosenCategory: CategoriesTable.chosenCategory,
                   title: AppString.save,
-                  onTap: () {
-                    if (CategoriesTable.chosenCategory.isEmpty) {
-                      return;
-                    } else {
-                      Navigator.pop(context);
-                    }
-                  },
+                  onTap: () => Navigator.pop(context),
                 ),
               ],
             ),
