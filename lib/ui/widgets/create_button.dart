@@ -45,6 +45,7 @@ class CreateButton extends StatelessWidget {
             borderRadius: BorderRadius.circular(12),
             color: (chosenCategory.isEmpty ||
                     titleController.text.isEmpty ||
+                    descriptionController.text.isEmpty ||
                     latController.text.isEmpty ||
                     lotController.text.isEmpty)
                 ? customColors?.color
@@ -66,6 +67,7 @@ class CreateButton extends StatelessWidget {
                 title,
                 style: (chosenCategory.isEmpty ||
                         titleController.text.isEmpty ||
+                        descriptionController.text.isEmpty ||
                         latController.text.isEmpty ||
                         lotController.text.isEmpty)
                     ? AppTypography.sightDetailsButtonNameInnactive
@@ -79,7 +81,13 @@ class CreateButton extends StatelessWidget {
             type: MaterialType.transparency,
             child: InkWell(
               borderRadius: BorderRadius.circular(12.0),
-              onTap: onTap,
+              onTap: (chosenCategory.isEmpty ||
+                      titleController.text.isEmpty ||
+                      descriptionController.text.isEmpty ||
+                      latController.text.isEmpty ||
+                      lotController.text.isEmpty)
+                  ? null
+                  : onTap,
             ),
           ),
         ),
