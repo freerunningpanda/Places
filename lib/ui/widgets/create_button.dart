@@ -1,27 +1,35 @@
 import 'package:flutter/material.dart';
 
-import 'package:places/data/categories_table.dart';
+import 'package:places/data/filters.dart';
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_typography.dart';
 import 'package:places/ui/screens/res/custom_colors.dart';
 import 'package:places/ui/widgets/sight_icons.dart';
 
-class ActionButton extends StatelessWidget {
+class CreateButton extends StatelessWidget {
   final String? assetName;
   final String title;
   final VoidCallback? onTap;
   final List<String>? activeFilters;
   final RangeValues? rangeValues;
-  final int? counterValue;
+  final TextEditingController titleController;
+  final TextEditingController latController;
+  final TextEditingController lotController;
+  final TextEditingController descriptionController;
+  final List<Category> chosenCategory;
 
-  const ActionButton({
+  const CreateButton({
     Key? key,
     this.assetName,
     required this.title,
     required this.onTap,
     this.activeFilters,
     this.rangeValues,
-    this.counterValue,
+    required this.titleController,
+    required this.latController,
+    required this.lotController,
+    required this.descriptionController,
+    required this.chosenCategory,
   }) : super(key: key);
 
   @override
@@ -35,7 +43,12 @@ class ActionButton extends StatelessWidget {
           height: 48,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(12),
-            color: counterValue == 0 || CategoriesTable.chosenCategory.isEmpty ? customColors?.color : theme.sliderTheme.activeTrackColor,
+            color: (chosenCategory.isEmpty ||
+                    titleController.text.isEmpty ||
+                    latController.text.isEmpty ||
+                    lotController.text.isEmpty)
+                ? customColors?.color
+                : theme.sliderTheme.activeTrackColor,
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -51,7 +64,12 @@ class ActionButton extends StatelessWidget {
               const SizedBox(width: 8),
               Text(
                 title,
-                style: counterValue == 0 || CategoriesTable.chosenCategory.isEmpty ? AppTypography.sightDetailsButtonNameInnactive : AppTypography.sightDetailsButtonName,
+                style: (chosenCategory.isEmpty ||
+                        titleController.text.isEmpty ||
+                        latController.text.isEmpty ||
+                        lotController.text.isEmpty)
+                    ? AppTypography.sightDetailsButtonNameInnactive
+                    : AppTypography.sightDetailsButtonName,
               ),
             ],
           ),

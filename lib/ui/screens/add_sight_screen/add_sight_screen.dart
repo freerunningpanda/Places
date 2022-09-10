@@ -8,7 +8,7 @@ import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_strings.dart';
 import 'package:places/ui/res/app_typography.dart';
 import 'package:places/ui/screens/add_sight_screen/choose_category_screen.dart';
-import 'package:places/ui/widgets/action_button.dart';
+import 'package:places/ui/widgets/create_button.dart';
 import 'package:places/ui/widgets/new_place_app_bar_widget.dart';
 import 'package:places/ui/widgets/sight_icons.dart';
 import 'package:provider/provider.dart';
@@ -35,6 +35,7 @@ class AddSightScreen extends StatelessWidget {
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
     final theme = Theme.of(context);
+    final chosenCategory = CategoriesTable.chosenCategory;
 
     return Scaffold(
       body: SafeArea(
@@ -89,7 +90,7 @@ class AddSightScreen extends StatelessWidget {
                       onChanged: (value) => details = value,
                     ),
                     SizedBox(height: height * 0.18),
-                    ActionButton(
+                    CreateButton(
                       title: AppString.create,
                       onTap: () {
                         debugPrint('🟡---------create btn pressed');
@@ -99,7 +100,7 @@ class AddSightScreen extends StatelessWidget {
                             lat: lat,
                             lot: lot,
                             details: details,
-                            type: CategoriesTable.chosenCategory[0].title,
+                            type: chosenCategory[0].title,
                           ),
                         );
                         titleController.clear();
@@ -108,7 +109,11 @@ class AddSightScreen extends StatelessWidget {
                         lotController.clear();
                         debugPrint('🟡---------Создан объект: ${Mocks.mocks[7]}');
                       },
-                      counterValue: 0,
+                      titleController: titleController,
+                      latController: latController,
+                      lotController: lotController,
+                      descriptionController: descriptionController,
+                      chosenCategory: chosenCategory,
                     ),
                   ],
                 ),
@@ -266,7 +271,11 @@ class _CoordinatsInputWidget extends StatelessWidget {
             onSubmitted: (v) => focus.goToLat(),
             controller: latController,
             onTap: focus.tapOnLat,
-            onChanged: (value) => lat = double.parse(value),
+            onChanged: (value) {
+              if (double.tryParse(value) != null) {
+                lat = double.parse(value);
+              }
+            },
           ),
         ),
         const SizedBox(width: 16),
@@ -278,7 +287,11 @@ class _CoordinatsInputWidget extends StatelessWidget {
             onSubmitted: (v) => focus.goToDescription(),
             controller: lotController,
             onTap: focus.tapOnLot,
-            onChanged: (value) => lot = double.parse(value),
+            onChanged: (value) {
+              if (double.tryParse(value) != null) {
+                lot = double.parse(value);
+              }
+            },
           ),
         ),
       ],
@@ -331,7 +344,7 @@ class _LatLotWidgetState extends State<_LatLotWidget> {
             onChanged: widget.onChanged,
             onTap: widget.onTap,
             focusNode: widget.focusNode,
-            keyboardType: TextInputType.number,
+            keyboardType: const TextInputType.numberWithOptions(decimal: true),
             controller: widget.controller,
             cursorColor: widget.theme.focusColor,
             cursorWidth: 1,
