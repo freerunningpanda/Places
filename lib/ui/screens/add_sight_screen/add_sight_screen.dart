@@ -105,7 +105,7 @@ class AddSightScreen extends StatelessWidget {
                         descriptionController.clear();
                         latController.clear();
                         lotController.clear();
-                        debugPrint('🟡---------mocks: ${Mocks.mocks[7]}');
+                        debugPrint('🟡---------Создан объект: ${Mocks.mocks[7]}');
                       },
                       counterValue: 0,
                     ),
@@ -399,6 +399,8 @@ class _CategoryChooseWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    context.watch<AppSettings>().updateCategory();
+
     return Column(
       children: [
         Row(
@@ -410,28 +412,35 @@ class _CategoryChooseWidget extends StatelessWidget {
           ],
         ),
         const SizedBox(height: 14),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              AppString.nochoose,
-              style: theme.textTheme.titleMedium,
+        InkWell(
+          onTap: () => Navigator.of(context).push<ChooseCategoryWidget>(
+            MaterialPageRoute(
+              builder: (context) => const ChooseCategoryWidget(),
             ),
-            InkWell(
-              borderRadius: BorderRadius.circular(40),
-              onTap: () => Navigator.of(context).push<ChooseCategoryWidget>(
-                MaterialPageRoute(
-                  builder: (context) => const ChooseCategoryWidget(),
+          ),
+          child: SizedBox(
+            height: 35,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                if (CategoriesTable.chosenCategory.isEmpty)
+                  Text(
+                    AppString.nochoose,
+                    style: theme.textTheme.titleMedium,
+                  )
+                else
+                  Text(
+                    CategoriesTable.chosenCategory[0].title,
+                    style: theme.textTheme.titleMedium,
+                  ),
+                const Icon(
+                  Icons.chevron_right,
+                  size: 25,
                 ),
-              ),
-              child: const Icon(
-                Icons.chevron_right,
-                size: 25,
-              ),
+              ],
             ),
-          ],
+          ),
         ),
-        const SizedBox(height: 10),
         const Divider(),
       ],
     );

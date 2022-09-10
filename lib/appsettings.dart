@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:places/data/categories_table.dart';
 import 'package:places/data/filters.dart';
 
 typedef VoidFuncString = void Function(String)?;
@@ -73,5 +74,9 @@ class AppSettings extends ChangeNotifier {
     isLat = false;
     descriptionFocus.requestFocus();
     notifyListeners();
+  }
+
+  void updateCategory() {
+    CategoriesTable.chosenCategory.isEmpty;
   }
 }
