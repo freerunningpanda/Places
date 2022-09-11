@@ -1,21 +1,28 @@
 import 'package:flutter/material.dart';
-import 'package:places/data/sight.dart';
 
+import 'package:places/data/sight.dart';
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_typography.dart';
 import 'package:places/ui/screens/filters_screen/filters_screen.dart';
 import 'package:places/ui/screens/res/custom_colors.dart';
 import 'package:places/ui/widgets/sight_icons.dart';
 
-class SearchWidget extends StatefulWidget {
+class SearchBar extends StatefulWidget {
   final List<Sight> sightList;
-  const SearchWidget({Key? key, required this.sightList}) : super(key: key);
+  final bool? readOnly;
+  final VoidCallback onTap;
+  const SearchBar({
+    Key? key,
+    required this.sightList,
+    this.readOnly,
+    required this.onTap,
+  }) : super(key: key);
 
   @override
-  State<SearchWidget> createState() => _SearchWidgetState();
+  State<SearchBar> createState() => _SearchBarState();
 }
 
-class _SearchWidgetState extends State<SearchWidget> {
+class _SearchBarState extends State<SearchBar> {
   @override
   Widget build(BuildContext context) {
     final customColors = Theme.of(context).extension<CustomColors>()!;
@@ -43,9 +50,8 @@ class _SearchWidgetState extends State<SearchWidget> {
             const SizedBox(width: 14),
             Expanded(
               child: TextField(
-                onTap: () {
-                  debugPrint('🟡---------on textfield pressed');
-                },
+                readOnly: widget.readOnly ?? true,
+                onTap: widget.onTap,
                 decoration: InputDecoration(
                   border: InputBorder.none,
                   prefixIconConstraints: const BoxConstraints(

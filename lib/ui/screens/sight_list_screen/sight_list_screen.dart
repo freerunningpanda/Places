@@ -3,11 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:places/data/sight.dart';
 import 'package:places/mocks.dart';
 import 'package:places/ui/res/app_assets.dart';
-import 'package:places/ui/res/app_strings.dart';
 import 'package:places/ui/res/app_typography.dart';
 import 'package:places/ui/screens/sight_card/sight_card.dart';
+import 'package:places/ui/screens/sight_search_screen.dart/sight_search_screen.dart';
 import 'package:places/ui/widgets/add_new_place_button.dart';
-import 'package:places/ui/widgets/search_widget.dart';
+import 'package:places/ui/widgets/search_appbar.dart';
+import 'package:places/ui/widgets/search_bar.dart';
 import 'package:places/ui/widgets/sight_icons.dart';
 
 class SightListScreen extends StatefulWidget {
@@ -18,6 +19,7 @@ class SightListScreen extends StatefulWidget {
 }
 
 class _SightListScreenState extends State<SightListScreen> {
+  final bool readOnly = true;
   List<Sight> sightList = Mocks.mocks;
 
   @override
@@ -29,9 +31,17 @@ class _SightListScreenState extends State<SightListScreen> {
         children: [
           Column(
             children: [
-              const SizedBox(height: 64),
-              const _AppBar(),
-              SearchWidget(sightList: sightList),
+              const SizedBox(height: 16),
+              const SearchAppBar(),
+              SearchBar(
+                sightList: sightList,
+                readOnly: readOnly,
+                onTap: () => Navigator.of(context).push(
+                  MaterialPageRoute<SightSearchScreen>(
+                    builder: (context) => SightSearchScreen(sightList: sightList),
+                  ),
+                ),
+              ),
               _SightListWidget(sightList: sightList, theme: theme),
             ],
           ),
@@ -43,23 +53,6 @@ class _SightListScreenState extends State<SightListScreen> {
           ),
         ],
       ),
-    );
-  }
-}
-
-class _AppBar extends StatelessWidget implements PreferredSizeWidget {
-  @override
-  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
-
-  const _AppBar({Key? key}) : super(key: key);
-  @override
-  Widget build(BuildContext context) {
-    return AppBar(
-      toolbarHeight: 86,
-      title: const Text(
-        AppString.appTitle,
-      ),
-      bottomOpacity: 0.0,
     );
   }
 }
