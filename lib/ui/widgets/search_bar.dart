@@ -6,6 +6,7 @@ import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_typography.dart';
 import 'package:places/ui/screens/filters_screen/filters_screen.dart';
 import 'package:places/ui/screens/res/custom_colors.dart';
+import 'package:places/ui/screens/sight_search_screen.dart/sight_search_screen.dart';
 import 'package:places/ui/widgets/sight_icons.dart';
 import 'package:places/ui/widgets/suffix_icon.dart';
 import 'package:provider/provider.dart';
@@ -13,13 +14,13 @@ import 'package:provider/provider.dart';
 class SearchBar extends StatefulWidget {
   final List<Sight> sightList;
   final bool? readOnly;
-  final bool isEnabled;
+  final bool isSearchPage;
 
   const SearchBar({
     Key? key,
-    required this.isEnabled,
     required this.sightList,
     this.readOnly,
+    required this.isSearchPage,
   }) : super(key: key);
 
   @override
@@ -63,7 +64,6 @@ class _SearchBarState extends State<SearchBar> {
               child: TextField(
                 controller: controller,
                 autofocus: autofocus,
-                enabled: widget.isEnabled,
                 focusNode: focusNode,
                 readOnly: widget.readOnly ?? true,
                 onChanged: (value) {
@@ -72,7 +72,16 @@ class _SearchBarState extends State<SearchBar> {
                     ..searchSight(value);
                 },
                 onTap: () {
-                  context.read<AppSettings>().activeFocus(isActive: true);
+                  if (!widget.isSearchPage) {
+                    Navigator.of(context).push(
+                      MaterialPageRoute<SightSearchScreen>(
+                        builder: (context) => const SightSearchScreen(),
+                      ),
+                    );
+                    context.read<AppSettings>().activeFocus(isActive: true);
+                  } else {
+                    return;
+                  }
                 },
                 onSubmitted: (value) {
                   context.read<AppSettings>().activeFocus(isActive: false);

@@ -20,7 +20,7 @@ class SightListScreen extends StatefulWidget {
 
 class _SightListScreenState extends State<SightListScreen> {
   final bool readOnly = true;
-  final isEnabled = false;
+  final isEnabled = true;
   List<Sight> sightList = Mocks.mocks;
 
   @override
@@ -34,19 +34,10 @@ class _SightListScreenState extends State<SightListScreen> {
             children: [
               const SizedBox(height: 16),
               const SearchAppBar(),
-              GestureDetector(
-                onTap: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute<SightSearchScreen>(
-                      builder: (context) => const SightSearchScreen(),
-                    ),
-                  );
-                },
-                child: SearchBar(
-                  isEnabled: isEnabled,
-                  sightList: sightList,
-                  readOnly: readOnly,
-                ),
+              SearchBar(
+                isSearchPage: false,
+                sightList: sightList,
+                readOnly: readOnly,
               ),
               _SightListWidget(sightList: sightList, theme: theme),
             ],
