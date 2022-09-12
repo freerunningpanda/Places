@@ -6,16 +6,18 @@ import 'package:places/ui/res/app_typography.dart';
 import 'package:places/ui/screens/filters_screen/filters_screen.dart';
 import 'package:places/ui/screens/res/custom_colors.dart';
 import 'package:places/ui/widgets/sight_icons.dart';
+import 'package:places/ui/widgets/suffix_icon.dart';
 
 class SearchBar extends StatefulWidget {
   final List<Sight> sightList;
   final bool? readOnly;
-  final VoidCallback onTap;
+  final bool isEnabled;
+
   const SearchBar({
     Key? key,
+    required this.isEnabled,
     required this.sightList,
     this.readOnly,
-    required this.onTap,
   }) : super(key: key);
 
   @override
@@ -23,9 +25,16 @@ class SearchBar extends StatefulWidget {
 }
 
 class _SearchBarState extends State<SearchBar> {
+  final FocusNode focusNode = FocusNode();
+  final TextEditingController controller = TextEditingController();
+
+  bool hasFocus = false;
+  bool autofocus = true;
+
   @override
   Widget build(BuildContext context) {
     final customColors = Theme.of(context).extension<CustomColors>()!;
+    final theme = Theme.of(context);
 
     return Padding(
       padding: const EdgeInsets.only(
@@ -50,8 +59,24 @@ class _SearchBarState extends State<SearchBar> {
             const SizedBox(width: 14),
             Expanded(
               child: TextField(
+                controller: controller,
+                autofocus: autofocus,
+                enabled: widget.isEnabled,
+                focusNode: focusNode,
                 readOnly: widget.readOnly ?? true,
-                onTap: widget.onTap,
+                onChanged: (value) {
+                  setState(() {});
+                },
+                onTap: () {
+                  setState(() {
+                    hasFocus = true;
+                  });
+                },
+                onSubmitted: (value) {
+                  setState(() {
+                    hasFocus = false;
+                  });
+                },
                 decoration: InputDecoration(
                   border: InputBorder.none,
                   prefixIconConstraints: const BoxConstraints(
@@ -60,18 +85,20 @@ class _SearchBarState extends State<SearchBar> {
                   ),
                   hintText: 'Поиск',
                   hintStyle: AppTypography.textText16Search,
-                  suffixIcon: IconButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute<FilterScreen>(
-                          builder: (context) => FilterScreen(sightList: widget.sightList),
+                  suffixIcon: focusNode.hasFocus
+                      ? SuffixIcon(controller: controller, theme: theme)
+                      : IconButton(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute<FilterScreen>(
+                                builder: (context) => FilterScreen(sightList: widget.sightList),
+                              ),
+                            );
+                            debugPrint('🟡---------filters button pressed');
+                          },
+                          icon: const SightIcons(assetName: AppAssets.filter, width: 24, height: 24),
                         ),
-                      );
-                      debugPrint('🟡---------filters button pressed');
-                    },
-                    icon: const SightIcons(assetName: AppAssets.filter, width: 24, height: 24),
-                  ),
                 ),
               ),
             ),

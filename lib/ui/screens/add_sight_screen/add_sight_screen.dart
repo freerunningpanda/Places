@@ -4,13 +4,12 @@ import 'package:places/appsettings.dart';
 import 'package:places/data/categories_table.dart';
 import 'package:places/data/sight.dart';
 import 'package:places/mocks.dart';
-import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_strings.dart';
 import 'package:places/ui/res/app_typography.dart';
 import 'package:places/ui/screens/add_sight_screen/choose_category_screen.dart';
 import 'package:places/ui/widgets/create_button.dart';
 import 'package:places/ui/widgets/new_place_app_bar_widget.dart';
-import 'package:places/ui/widgets/sight_icons.dart';
+import 'package:places/ui/widgets/suffix_icon.dart';
 import 'package:provider/provider.dart';
 
 String name = '';
@@ -60,7 +59,7 @@ class AddSightScreen extends StatelessWidget {
                       theme: theme,
                       title: AppString.title,
                       height: 40,
-                      suffixIcon: _SuffixIcon(controller: titleController, theme: theme),
+                      suffixIcon: SuffixIcon(controller: titleController, theme: theme),
                       focusNode: titleFocus,
                       controller: titleController,
                       textInputAction: TextInputAction.next,
@@ -363,7 +362,7 @@ class _LatLotWidgetState extends State<_LatLotWidget> {
                 borderRadius: BorderRadius.circular(8.0),
               ),
               suffixIcon: widget.focusNode.hasFocus
-                  ? _SuffixIcon(
+                  ? SuffixIcon(
                       controller: widget.controller,
                       theme: widget.theme,
                     )
@@ -372,34 +371,6 @@ class _LatLotWidgetState extends State<_LatLotWidget> {
           ),
         ),
       ],
-    );
-  }
-}
-
-class _SuffixIcon extends StatelessWidget {
-  final TextEditingController controller;
-  final ThemeData theme;
-
-  const _SuffixIcon({
-    Key? key,
-    required this.controller,
-    required this.theme,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 8, bottom: 8),
-      child: InkWell(
-        borderRadius: BorderRadius.circular(40),
-        onTap: controller.clear,
-        child: SightIcons(
-          assetName: AppAssets.clearDark,
-          width: 20,
-          height: 20,
-          color: theme.iconTheme.color,
-        ),
-      ),
     );
   }
 }

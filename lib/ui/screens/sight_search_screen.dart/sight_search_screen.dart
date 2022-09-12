@@ -10,6 +10,10 @@ class SightSearchScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    const readOnly = false;
+    const isEnabled = true;
+
+
     return Scaffold(
       body: Stack(
         children: [
@@ -18,10 +22,9 @@ class SightSearchScreen extends StatelessWidget {
               const SizedBox(height: 16),
               const SearchAppBar(),
               SearchBar(
+                isEnabled: isEnabled,
                 sightList: sightList,
-                onTap: () {
-                  debugPrint('🟡--------- Search pressed');
-                },
+                readOnly: readOnly,
               ),
             ],
           ),

@@ -13,10 +13,12 @@ class AppSettings extends ChangeNotifier {
   final latFocus = FocusNode();
   final lotFocus = FocusNode();
   final descriptionFocus = FocusNode();
+  final searchFocus = FocusNode();
 
   bool isDarkMode = false;
 
   bool isLat = false;
+
 
   bool switchTheme({required bool value}) {
     notifyListeners();
