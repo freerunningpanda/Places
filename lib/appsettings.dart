@@ -26,6 +26,8 @@ class AppSettings extends ChangeNotifier {
 
   bool hasFocus = false;
 
+  bool isFocusOn = false;
+
   List<Sight> suggestions = [];
 
   void activeFocus({required bool isActive}) {

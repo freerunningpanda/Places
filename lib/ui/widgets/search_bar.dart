@@ -72,13 +72,13 @@ class _SearchBarState extends State<SearchBar> {
                     ..searchSight(value);
                 },
                 onTap: () {
+                  context.read<AppSettings>().activeFocus(isActive: true);
                   if (!widget.isSearchPage) {
                     Navigator.of(context).push(
                       MaterialPageRoute<SightSearchScreen>(
                         builder: (context) => const SightSearchScreen(),
                       ),
                     );
-                    context.read<AppSettings>().activeFocus(isActive: true);
                   } else {
                     return;
                   }
