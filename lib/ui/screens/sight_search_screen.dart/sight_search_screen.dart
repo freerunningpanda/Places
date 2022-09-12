@@ -54,39 +54,44 @@ class _SightListWidget extends StatelessWidget {
         itemBuilder: (context, index) {
           final sight = sightList[index];
 
-          return InkWell(
-            onTap: () => Navigator.of(context).push<SightDetails>(
-              MaterialPageRoute(
-                builder: (context) => SightDetails(sight: sight),
+          return Stack(
+            children: [
+              Row(
+                children: [
+                  Image.network(
+                    sight.url ?? 'null',
+                    width: 156,
+                    height: 156,
+                  ),
+                  const SizedBox(width: 16),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(
+                        width: 200,
+                        child: Text(
+                          sight.name,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                      Text(sight.type),
+                    ],
+                  ),
+                ],
               ),
-            ),
-            child: Row(
-              children: [
-                Column(
-                  children: [
-                    Image.network(
-                      sight.url ?? 'null',
-                      width: 156,
-                      height: 156,
-                    ),
-                  ],
-                ),
-                const SizedBox(width: 16),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(
-                      width: 200,
-                      child: Text(
-                        sight.name,
-                        overflow: TextOverflow.ellipsis,
+              Positioned.fill(
+                child: Material(
+                  type: MaterialType.transparency,
+                  child: InkWell(
+                    onTap: () => Navigator.of(context).push<SightDetails>(
+                      MaterialPageRoute(
+                        builder: (context) => SightDetails(sight: sight),
                       ),
                     ),
-                    Text(sight.type),
-                  ],
+                  ),
                 ),
-              ],
-            ),
+              ),
+            ],
           );
         },
       ),
