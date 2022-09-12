@@ -13,22 +13,27 @@ class SightSearchScreen extends StatelessWidget {
     const readOnly = false;
     const isEnabled = true;
 
-
     return Scaffold(
-      body: Stack(
-        children: [
-          Column(
-            children: [
-              const SizedBox(height: 16),
-              const SearchAppBar(),
-              SearchBar(
-                isEnabled: isEnabled,
-                sightList: sightList,
-                readOnly: readOnly,
-              ),
-            ],
-          ),
-        ],
+      body: GestureDetector(
+        behavior: HitTestBehavior.translucent,
+        onTap: () {
+          FocusManager.instance.primaryFocus?.unfocus();
+        },
+        child: Stack(
+          children: [
+            Column(
+              children: [
+                const SizedBox(height: 16),
+                const SearchAppBar(),
+                SearchBar(
+                  isEnabled: isEnabled,
+                  sightList: sightList,
+                  readOnly: readOnly,
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
