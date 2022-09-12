@@ -46,6 +46,9 @@ class _SightListWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final width = MediaQuery.of(context).size.width;
+
     return Expanded(
       child: ListView.builder(
         physics: const BouncingScrollPhysics(),
@@ -56,28 +59,55 @@ class _SightListWidget extends StatelessWidget {
 
           return Stack(
             children: [
-              Row(
-                children: [
-                  Image.network(
-                    sight.url ?? 'null',
-                    width: 156,
-                    height: 156,
-                  ),
-                  const SizedBox(width: 16),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 11),
+                child: SizedBox(
+                  child: Row(
                     children: [
-                      SizedBox(
-                        width: 200,
-                        child: Text(
-                          sight.name,
-                          overflow: TextOverflow.ellipsis,
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(12.0),
+                        child: Container(
+                          width: 56,
+                          height: 56,
+                          decoration: BoxDecoration(
+                            image: DecorationImage(
+                              fit: BoxFit.cover,
+                              image: NetworkImage(
+                                sight.url ?? 'null',
+                              ),
+                            ),
+                          ),
                         ),
                       ),
-                      Text(sight.type),
+                      const SizedBox(width: 16),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const SizedBox(height: 16),
+                          SizedBox(
+                            width: width * 0.73,
+                            child: Text(
+                              sight.name,
+                              overflow: TextOverflow.ellipsis,
+                              style: theme.textTheme.bodyLarge,
+                            ),
+                          ),
+                          const SizedBox(height: 8),
+                          Text(
+                            sight.type,
+                            style: theme.textTheme.bodyMedium,
+                          ),
+                          const SizedBox(height: 16),
+                          Container(
+                            height: 1,
+                            width: width * 0.73,
+                            color: theme.dividerColor,
+                          ),
+                        ],
+                      ),
                     ],
                   ),
-                ],
+                ),
               ),
               Positioned.fill(
                 child: Material(

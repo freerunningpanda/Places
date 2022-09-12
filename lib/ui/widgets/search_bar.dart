@@ -62,6 +62,8 @@ class _SearchBarState extends State<SearchBar> {
             const SizedBox(width: 14),
             Expanded(
               child: TextField(
+                style: theme.textTheme.bodyLarge,
+                textCapitalization: TextCapitalization.sentences,
                 controller: controller,
                 autofocus: autofocus,
                 focusNode: focusNode,
@@ -83,9 +85,7 @@ class _SearchBarState extends State<SearchBar> {
                     return;
                   }
                 },
-                onSubmitted: (value) {
-                  context.read<AppSettings>().activeFocus(isActive: false);
-                },
+                onSubmitted: (value) => context.read<AppSettings>().activeFocus(isActive: false),
                 decoration: InputDecoration(
                   border: InputBorder.none,
                   prefixIconConstraints: const BoxConstraints(
