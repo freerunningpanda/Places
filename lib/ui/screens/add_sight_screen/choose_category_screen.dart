@@ -30,51 +30,53 @@ class _ChooseCategoryWidgetState extends State<ChooseCategoryWidget> {
 
     return Scaffold(
       body: SafeArea(
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.only(left: 16.0, top: 18, right: 16.0, bottom: 8.0),
-            child: Column(
-              children: [
-                NewPlaceAppBarWidget(
-                  theme: theme,
-                  width: width / 3.5,
-                  leading: const _BackButtonWidget(),
-                  title: AppString.category,
+        child: Padding(
+          padding: const EdgeInsets.only(left: 16.0, top: 18, right: 16.0, bottom: 8.0),
+          child: Column(
+            children: [
+              NewPlaceAppBarWidget(
+                theme: theme,
+                width: width / 3.5,
+                leading: const _BackButtonWidget(),
+                title: AppString.category,
+              ),
+              const SizedBox(height: 40),
+              Expanded(
+                child: SingleChildScrollView(
+                  child: ListView.separated(
+                    shrinkWrap: true,
+                    itemBuilder: (context, index) {
+                      final category = categories[index];
+                
+                      return _ItemCategory(
+                        name: category.title,
+                        theme: theme,
+                        isEnabled: category.isEnabled,
+                        category: category,
+                        onTap: () {
+                          context.read<AppSettings>().chooseCategory(
+                                index: index,
+                                categories: CategoriesTable.categories,
+                                activeCategories: CategoriesTable.chosenCategory,
+                              );
+                        },
+                      );
+                    },
+                    separatorBuilder: (context, index) {
+                      return const Divider();
+                    },
+                    itemCount: categories.length,
+                  ),
                 ),
-                const SizedBox(height: 40),
-                ListView.separated(
-                  shrinkWrap: true,
-                  itemBuilder: (context, index) {
-                    final category = categories[index];
-
-                    return _ItemCategory(
-                      name: category.title,
-                      theme: theme,
-                      isEnabled: category.isEnabled,
-                      category: category,
-                      onTap: () {
-                        context.read<AppSettings>().chooseCategory(
-                              index: index,
-                              categories: CategoriesTable.categories,
-                              activeCategories: CategoriesTable.chosenCategory,
-                            );
-                      },
-                    );
-                  },
-                  separatorBuilder: (context, index) {
-                    return const Divider();
-                  },
-                  itemCount: categories.length,
-                ),
-                const Divider(),
-                SizedBox(height: height * 0.3),
-                SaveButton(
-                  chosenCategory: CategoriesTable.chosenCategory,
-                  title: AppString.save,
-                  onTap: () => Navigator.pop(context),
-                ),
-              ],
-            ),
+              ),
+              const Divider(),
+              SizedBox(height: height * 0.3),
+              SaveButton(
+                chosenCategory: CategoriesTable.chosenCategory,
+                title: AppString.save,
+                onTap: () => Navigator.pop(context),
+              ),
+            ],
           ),
         ),
       ),

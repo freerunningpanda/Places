@@ -43,87 +43,89 @@ class AddSightScreen extends StatelessWidget {
           FocusManager.instance.primaryFocus?.unfocus();
         },
         child: SafeArea(
-          child: SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.only(left: 16.0, top: 18, right: 16.0, bottom: 8.0),
-              child: Column(
-                children: [
-                  NewPlaceAppBarWidget(
-                    theme: theme,
-                    width: width / 4.5,
-                    leading: _CancelButtonWidget(theme: theme),
-                    title: AppString.newPlace,
+          child: Padding(
+            padding: const EdgeInsets.only(left: 16.0, top: 18, right: 16.0, bottom: 8.0),
+            child: Column(
+              children: [
+                NewPlaceAppBarWidget(
+                  theme: theme,
+                  width: width / 4.5,
+                  leading: _CancelButtonWidget(theme: theme),
+                  title: AppString.newPlace,
+                ),
+                const SizedBox(height: 40),
+                Expanded(
+                  child: SingleChildScrollView(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        _CategoryChooseWidget(theme: theme),
+                        const SizedBox(height: 16),
+                        _TextInputWidget(
+                          theme: theme,
+                          title: AppString.title,
+                          height: 40,
+                          suffixIcon: SuffixIcon(controller: titleController, theme: theme),
+                          focusNode: titleFocus,
+                          controller: titleController,
+                          textInputAction: TextInputAction.next,
+                          onSubmitted: (value) => latFocus.requestFocus(),
+                          onChanged: (value) => name = value,
+                        ),
+                        const SizedBox(height: 24),
+                        _CoordinatsInputWidget(
+                          latController: latController,
+                          lotController: lotController,
+                          theme: theme,
+                          latFocus: latFocus,
+                          lotFocus: lotFocus,
+                        ),
+                        const SizedBox(height: 15),
+                        const _PointOnMapWidget(),
+                        const SizedBox(height: 37),
+                        _TextInputWidget(
+                          theme: theme,
+                          title: AppString.description,
+                          hintText: AppString.enterTheText,
+                          maxLines: 5,
+                          height: 80,
+                          focusNode: descriptionFocus,
+                          controller: descriptionController,
+                          textInputAction: TextInputAction.done,
+                          onChanged: (value) => details = value,
+                        ),
+                        SizedBox(height: height * 0.18),
+                        CreateButton(
+                          title: AppString.create,
+                          onTap: () {
+                            debugPrint('🟡---------create btn pressed');
+                            Mocks.mocks.add(
+                              Sight(
+                                name: name,
+                                lat: lat,
+                                lot: lot,
+                                details: details,
+                                type: chosenCategory[0].title,
+                              ),
+                            );
+                            titleController.clear();
+                            descriptionController.clear();
+                            latController.clear();
+                            lotController.clear();
+                            debugPrint('🟡---------Создан объект: ${Mocks.mocks[7]}');
+                            context.read<AppSettings>().clearCategory(activeCategories: chosenCategory);
+                          },
+                          titleController: titleController,
+                          latController: latController,
+                          lotController: lotController,
+                          descriptionController: descriptionController,
+                          chosenCategory: chosenCategory,
+                        ),
+                      ],
+                    ),
                   ),
-                  const SizedBox(height: 40),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      _CategoryChooseWidget(theme: theme),
-                      const SizedBox(height: 16),
-                      _TextInputWidget(
-                        theme: theme,
-                        title: AppString.title,
-                        height: 40,
-                        suffixIcon: SuffixIcon(controller: titleController, theme: theme),
-                        focusNode: titleFocus,
-                        controller: titleController,
-                        textInputAction: TextInputAction.next,
-                        onSubmitted: (value) => latFocus.requestFocus(),
-                        onChanged: (value) => name = value,
-                      ),
-                      const SizedBox(height: 24),
-                      _CoordinatsInputWidget(
-                        latController: latController,
-                        lotController: lotController,
-                        theme: theme,
-                        latFocus: latFocus,
-                        lotFocus: lotFocus,
-                      ),
-                      const SizedBox(height: 15),
-                      const _PointOnMapWidget(),
-                      const SizedBox(height: 37),
-                      _TextInputWidget(
-                        theme: theme,
-                        title: AppString.description,
-                        hintText: AppString.enterTheText,
-                        maxLines: 5,
-                        height: 80,
-                        focusNode: descriptionFocus,
-                        controller: descriptionController,
-                        textInputAction: TextInputAction.done,
-                        onChanged: (value) => details = value,
-                      ),
-                      SizedBox(height: height * 0.18),
-                      CreateButton(
-                        title: AppString.create,
-                        onTap: () {
-                          debugPrint('🟡---------create btn pressed');
-                          Mocks.mocks.add(
-                            Sight(
-                              name: name,
-                              lat: lat,
-                              lot: lot,
-                              details: details,
-                              type: chosenCategory[0].title,
-                            ),
-                          );
-                          titleController.clear();
-                          descriptionController.clear();
-                          latController.clear();
-                          lotController.clear();
-                          debugPrint('🟡---------Создан объект: ${Mocks.mocks[7]}');
-                          context.read<AppSettings>().clearCategory(activeCategories: chosenCategory);
-                        },
-                        titleController: titleController,
-                        latController: latController,
-                        lotController: lotController,
-                        descriptionController: descriptionController,
-                        chosenCategory: chosenCategory,
-                      ),
-                    ],
-                  ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         ),
