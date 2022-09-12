@@ -21,6 +21,7 @@ class SightListScreen extends StatefulWidget {
 class _SightListScreenState extends State<SightListScreen> {
   final bool readOnly = true;
   final isEnabled = true;
+  final isSearchPage = false;
   List<Sight> sightList = Mocks.mocks;
 
   @override
@@ -35,7 +36,7 @@ class _SightListScreenState extends State<SightListScreen> {
               const SizedBox(height: 16),
               const SearchAppBar(),
               SearchBar(
-                isSearchPage: false,
+                isSearchPage: isSearchPage,
                 sightList: sightList,
                 readOnly: readOnly,
               ),

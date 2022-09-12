@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:places/appsettings.dart';
 import 'package:places/data/sight.dart';
+import 'package:places/ui/screens/sight_details/sight_details.dart';
 import 'package:places/ui/widgets/search_appbar.dart';
 import 'package:places/ui/widgets/search_bar.dart';
 import 'package:provider/provider.dart';
@@ -13,8 +14,7 @@ class SightSearchScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final sightList = context.read<AppSettings>().suggestions;
     const readOnly = false;
-    const isEnabled = true;
-
+    const isSearchPage = true;
     context.watch<AppSettings>();
 
     return Scaffold(
@@ -28,7 +28,7 @@ class SightSearchScreen extends StatelessWidget {
             const SizedBox(height: 16),
             const SearchAppBar(),
             SearchBar(
-              isSearchPage: true,
+              isSearchPage: isSearchPage,
               sightList: sightList,
               readOnly: readOnly,
             ),
@@ -54,32 +54,39 @@ class _SightListWidget extends StatelessWidget {
         itemBuilder: (context, index) {
           final sight = sightList[index];
 
-          return Row(
-            children: [
-              Column(
-                children: [
-                  Image.network(
-                    sight.url ?? 'null',
-                    width: 156,
-                    height: 156,
-                  ),
-                ],
+          return InkWell(
+            onTap: () => Navigator.of(context).push<SightDetails>(
+              MaterialPageRoute(
+                builder: (context) => SightDetails(sight: sight),
               ),
-              const SizedBox(width: 16),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SizedBox(
-                    width: 200,
-                    child: Text(
-                      sight.name,
-                      overflow: TextOverflow.ellipsis,
+            ),
+            child: Row(
+              children: [
+                Column(
+                  children: [
+                    Image.network(
+                      sight.url ?? 'null',
+                      width: 156,
+                      height: 156,
                     ),
-                  ),
-                  Text(sight.type),
-                ],
-              ),
-            ],
+                  ],
+                ),
+                const SizedBox(width: 16),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(
+                      width: 200,
+                      child: Text(
+                        sight.name,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                    Text(sight.type),
+                  ],
+                ),
+              ],
+            ),
           );
         },
       ),
