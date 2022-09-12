@@ -67,7 +67,9 @@ class _SearchBarState extends State<SearchBar> {
                 focusNode: focusNode,
                 readOnly: widget.readOnly ?? true,
                 onChanged: (value) {
-                  context.read<AppSettings>().activeFocus(isActive: true);
+                  context.read<AppSettings>()
+                    ..activeFocus(isActive: true)
+                    ..searchSight(value);
                 },
                 onTap: () {
                   context.read<AppSettings>().activeFocus(isActive: true);

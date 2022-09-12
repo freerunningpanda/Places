@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:places/data/categories_table.dart';
 import 'package:places/data/filters.dart';
+import 'package:places/data/sight.dart';
+import 'package:places/mocks.dart';
 
 typedef VoidFuncString = void Function(String)?;
 
@@ -16,11 +18,15 @@ class AppSettings extends ChangeNotifier {
   final descriptionFocus = FocusNode();
   final searchFocus = FocusNode();
 
+  List<Sight> sightList = Mocks.mocks;
+
   bool isDarkMode = false;
 
   bool isLat = false;
 
   bool hasFocus = false;
+
+  List<Sight> suggestions = [];
 
   void activeFocus({required bool isActive}) {
     // ignore: prefer-conditional-expressions
@@ -29,6 +35,18 @@ class AppSettings extends ChangeNotifier {
     } else {
       hasFocus = false;
     }
+    notifyListeners();
+  }
+
+  void searchSight(String query) {
+    suggestions = Mocks.mocks.where((sight) {
+      final sightTitle = sight.name.toLowerCase();
+      final input = query.toLowerCase();
+
+      return sightTitle.contains(input);
+    }).toList();
+
+    sightList = suggestions;
     notifyListeners();
   }
 

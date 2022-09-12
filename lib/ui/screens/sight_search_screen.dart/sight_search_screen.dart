@@ -1,17 +1,21 @@
 import 'package:flutter/material.dart';
+
+import 'package:places/appsettings.dart';
 import 'package:places/data/sight.dart';
 import 'package:places/ui/widgets/search_appbar.dart';
-
 import 'package:places/ui/widgets/search_bar.dart';
+import 'package:provider/provider.dart';
 
 class SightSearchScreen extends StatelessWidget {
-  final List<Sight> sightList;
-  const SightSearchScreen({Key? key, required this.sightList}) : super(key: key);
+  const SightSearchScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final sightList = context.read<AppSettings>().suggestions;
     const readOnly = false;
     const isEnabled = true;
+
+    context.watch<AppSettings>();
 
     return Scaffold(
       body: GestureDetector(
@@ -72,7 +76,7 @@ class _SightListWidget extends StatelessWidget {
                       overflow: TextOverflow.ellipsis,
                     ),
                   ),
-                  // Text(sight.type),
+                  Text(sight.type),
                 ],
               ),
             ],

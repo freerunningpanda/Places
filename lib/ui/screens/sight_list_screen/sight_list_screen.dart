@@ -38,7 +38,7 @@ class _SightListScreenState extends State<SightListScreen> {
                 onTap: () {
                   Navigator.of(context).push(
                     MaterialPageRoute<SightSearchScreen>(
-                      builder: (context) => SightSearchScreen(sightList: sightList),
+                      builder: (context) => const SightSearchScreen(),
                     ),
                   );
                 },
