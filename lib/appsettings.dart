@@ -7,6 +7,7 @@ typedef VoidFuncString = void Function(String)?;
 class AppSettings extends ChangeNotifier {
   final titleController = TextEditingController();
   final descriptionController = TextEditingController();
+  final searchController = TextEditingController();
   final latController = TextEditingController();
   final lotController = TextEditingController();
   final titleFocus = FocusNode();
@@ -19,6 +20,17 @@ class AppSettings extends ChangeNotifier {
 
   bool isLat = false;
 
+  bool hasFocus = false;
+
+  void activeFocus({required bool isActive}) {
+    // ignore: prefer-conditional-expressions
+    if (isActive) {
+      hasFocus = true;
+    } else {
+      hasFocus = false;
+    }
+    notifyListeners();
+  }
 
   bool switchTheme({required bool value}) {
     notifyListeners();

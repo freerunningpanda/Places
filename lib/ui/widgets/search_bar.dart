@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:places/appsettings.dart';
 
 import 'package:places/data/sight.dart';
 import 'package:places/ui/res/app_assets.dart';
@@ -7,6 +8,7 @@ import 'package:places/ui/screens/filters_screen/filters_screen.dart';
 import 'package:places/ui/screens/res/custom_colors.dart';
 import 'package:places/ui/widgets/sight_icons.dart';
 import 'package:places/ui/widgets/suffix_icon.dart';
+import 'package:provider/provider.dart';
 
 class SearchBar extends StatefulWidget {
   final List<Sight> sightList;
@@ -65,17 +67,13 @@ class _SearchBarState extends State<SearchBar> {
                 focusNode: focusNode,
                 readOnly: widget.readOnly ?? true,
                 onChanged: (value) {
-                  setState(() {});
+                  context.read<AppSettings>().activeFocus(isActive: true);
                 },
                 onTap: () {
-                  setState(() {
-                    hasFocus = true;
-                  });
+                  context.read<AppSettings>().activeFocus(isActive: true);
                 },
                 onSubmitted: (value) {
-                  setState(() {
-                    hasFocus = false;
-                  });
+                  context.read<AppSettings>().activeFocus(isActive: false);
                 },
                 decoration: InputDecoration(
                   border: InputBorder.none,
