@@ -15,6 +15,7 @@ class SightSearchScreen extends StatelessWidget {
     final sightList = context.read<AppSettings>().suggestions;
     const readOnly = false;
     const isSearchPage = true;
+    
     context.watch<AppSettings>();
 
     return Scaffold(
@@ -57,73 +58,176 @@ class _SightListWidget extends StatelessWidget {
         itemBuilder: (context, index) {
           final sight = sightList[index];
 
-          return Stack(
-            children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 11),
-                child: SizedBox(
-                  child: Row(
-                    children: [
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(12.0),
-                        child: Container(
-                          width: 56,
-                          height: 56,
-                          decoration: BoxDecoration(
-                            image: DecorationImage(
-                              fit: BoxFit.cover,
-                              image: NetworkImage(
-                                sight.url ?? 'null',
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(width: 16),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const SizedBox(height: 16),
-                          SizedBox(
-                            width: width * 0.73,
-                            child: Text(
-                              sight.name,
-                              overflow: TextOverflow.ellipsis,
-                              style: theme.textTheme.bodyLarge,
-                            ),
-                          ),
-                          const SizedBox(height: 8),
-                          Text(
-                            sight.type,
-                            style: theme.textTheme.bodyMedium,
-                          ),
-                          const SizedBox(height: 16),
-                          Container(
-                            height: 1,
-                            width: width * 0.73,
-                            color: theme.dividerColor,
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              Positioned.fill(
-                child: Material(
-                  type: MaterialType.transparency,
-                  child: InkWell(
-                    onTap: () => Navigator.of(context).push<SightDetails>(
-                      MaterialPageRoute(
-                        builder: (context) => SightDetails(sight: sight),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ],
+          return _SightCardWidget(
+            sight: sight,
+            width: width,
+            theme: theme,
           );
         },
+      ),
+    );
+  }
+}
+
+class _SightCardWidget extends StatelessWidget {
+  final Sight sight;
+  final double width;
+  final ThemeData theme;
+
+  const _SightCardWidget({
+    Key? key,
+    required this.sight,
+    required this.width,
+    required this.theme,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 11),
+          child: SizedBox(
+            child: Row(
+              children: [
+                _SightImage(sight: sight),
+                const SizedBox(width: 16),
+                _SightContent(width: width, sight: sight, theme: theme),
+              ],
+            ),
+          ),
+        ),
+        _RippleEffect(sight: sight),
+      ],
+    );
+  }
+}
+
+class _RippleEffect extends StatelessWidget {
+  final Sight sight;
+
+  const _RippleEffect({
+    Key? key,
+    required this.sight,
+  }) : super(key: key);
+
+
+  @override
+  Widget build(BuildContext context) {
+    return Positioned.fill(
+      child: Material(
+        type: MaterialType.transparency,
+        child: InkWell(
+          onTap: () => Navigator.of(context).push<SightDetails>(
+            MaterialPageRoute(
+              builder: (context) => SightDetails(sight: sight),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _SightContent extends StatelessWidget {
+  final double width;
+  final Sight sight;
+  final ThemeData theme;
+
+  const _SightContent({
+    Key? key,
+    required this.width,
+    required this.sight,
+    required this.theme,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const SizedBox(height: 16),
+        _SightTitle(width: width, sight: sight, theme: theme),
+        const SizedBox(height: 8),
+        _SightType(sight: sight, theme: theme),
+        const SizedBox(height: 16),
+        Container(
+          height: 1,
+          width: width * 0.73,
+          color: theme.dividerColor,
+        ),
+      ],
+    );
+  }
+}
+
+class _SightType extends StatelessWidget {
+  final Sight sight;
+  final ThemeData theme;
+
+  const _SightType({
+    Key? key,
+    required this.sight,
+    required this.theme,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      sight.type,
+      style: theme.textTheme.bodyMedium,
+    );
+  }
+}
+
+class _SightTitle extends StatelessWidget {
+  final double width;
+  final Sight sight;
+  final ThemeData theme;
+
+  const _SightTitle({
+    Key? key,
+    required this.width,
+    required this.sight,
+    required this.theme,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: width * 0.73,
+      child: Text(
+        sight.name,
+        overflow: TextOverflow.ellipsis,
+        style: theme.textTheme.bodyLarge,
+      ),
+    );
+  }
+}
+
+class _SightImage extends StatelessWidget {
+  final Sight sight;
+
+  const _SightImage({
+    Key? key,
+    required this.sight,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(12.0),
+      child: Container(
+        width: 56,
+        height: 56,
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            fit: BoxFit.cover,
+            image: NetworkImage(
+              sight.url ?? 'null',
+            ),
+          ),
+        ),
       ),
     );
   }
