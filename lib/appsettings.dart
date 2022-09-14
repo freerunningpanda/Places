@@ -42,6 +42,20 @@ class AppSettings extends ChangeNotifier {
     notifyListeners();
   }
 
+  void clearSight() {
+    for (final el in FiltersTable.filteredMocks) {
+      final distance = Geolocator.distanceBetween(
+        Mocks.mockLat,
+        Mocks.mockLot,
+        el.lat,
+        el.lot,
+      );
+      if (Mocks.rangeValues.start > distance || Mocks.rangeValues.end < distance) {
+        FiltersTable.filtersWithDistance.clear();
+      }
+    }
+  }
+
   void searchSight(String query, TextEditingController controller) {
     for (final el in FiltersTable.filteredMocks) {
       final distance = Geolocator.distanceBetween(

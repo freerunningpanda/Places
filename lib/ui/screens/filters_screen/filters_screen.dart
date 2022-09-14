@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:geolocator/geolocator.dart';
+import 'package:places/appsettings.dart';
 import 'package:places/data/filters.dart';
 import 'package:places/data/filters_table.dart';
 import 'package:places/data/sight.dart';
@@ -66,18 +67,9 @@ class _FilterScreenState extends State<FilterScreen> {
               title: '${AppString.showPlaces} (amount)',
               rangeValues: Mocks.rangeValues,
               onTap: () {
-                // for (final el in FiltersTable.filteredMocks) {
-                //   final distance = Geolocator.distanceBetween(
-                //     Mocks.mockLat,
-                //     Mocks.mockLot,
-                //     el.lat,
-                //     el.lot,
-                //   );
-                // if (distance >= Mocks.rangeValues.start && distance <= Mocks.rangeValues.end) {
                 context.read<FiltersSettings>().showCount();
+                context.read<AppSettings>().clearSight();
                 debugPrint('🟡---------Длина: ${FiltersTable.filtersWithDistance.length}');
-                // }
-                // }
               },
             ),
           ],
