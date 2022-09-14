@@ -344,6 +344,8 @@ class _DistanceSliderState extends State<_DistanceSlider> {
           onChanged: (values) {
             context.read<FiltersSettings>().changeArea(start: values.start, end: values.end);
             context.read<FiltersSettings>().showCount();
+            context.read<AppSettings>().clearSight();
+            debugPrint('🟡---------Длина: ${FiltersTable.filtersWithDistance.length}');
           },
         ),
       ],
