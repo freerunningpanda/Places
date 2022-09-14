@@ -2,10 +2,13 @@ import 'package:flutter/material.dart';
 
 import 'package:places/appsettings.dart';
 import 'package:places/data/sight.dart';
-import 'package:places/ui/screens/res/custom_colors.dart';
+import 'package:places/ui/res/app_assets.dart';
+import 'package:places/ui/res/app_strings.dart';
+import 'package:places/ui/res/app_typography.dart';
 import 'package:places/ui/screens/sight_details/sight_details.dart';
 import 'package:places/ui/widgets/search_appbar.dart';
 import 'package:places/ui/widgets/search_bar.dart';
+import 'package:places/ui/widgets/sight_icons.dart';
 import 'package:provider/provider.dart';
 
 class SightSearchScreen extends StatelessWidget {
@@ -20,6 +23,7 @@ class SightSearchScreen extends StatelessWidget {
     context.watch<AppSettings>();
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: GestureDetector(
         behavior: HitTestBehavior.translucent,
         onTap: () {
@@ -50,12 +54,11 @@ class _SightListWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final width = MediaQuery.of(context).size.width;
+    final height = MediaQuery.of(context).size.height;
     final suggestions = context.read<AppSettings>().suggestions;
 
     return suggestions.isEmpty
-        ? const CircularProgressIndicator(
-            strokeWidth: 7,
-          )
+        ? _EmptyListWidget(height: height, width: width)
         : Expanded(
             child: ListView.builder(
               physics: const BouncingScrollPhysics(),
@@ -72,6 +75,51 @@ class _SightListWidget extends StatelessWidget {
               },
             ),
           );
+  }
+}
+
+class _EmptyListWidget extends StatelessWidget {
+  final double height;
+  final double width;
+
+  const _EmptyListWidget({
+    Key? key,
+    required this.height,
+    required this.width,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        SizedBox(
+          height: height * 0.2,
+        ),
+        const SightIcons(
+          assetName: AppAssets.search,
+          width: 64,
+          height: 64,
+        ),
+        const SizedBox(
+          height: 24,
+        ),
+        const Text(
+          AppString.noPlaces,
+          style: AppTypography.emptyListTitle,
+        ),
+        const SizedBox(
+          height: 8,
+        ),
+        SizedBox(
+          width: width * 0.6,
+          child: const Text(
+            AppString.tryToChange,
+            style: AppTypography.detailsTextDarkMode,
+            textAlign: TextAlign.center,
+          ),
+        ),
+      ],
+    );
   }
 }
 

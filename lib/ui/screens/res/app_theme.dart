@@ -9,7 +9,6 @@ abstract class AppTheme {
   static ThemeData buildTheme() {
     return ThemeData(
       progressIndicatorTheme: const ProgressIndicatorThemeData(
-        linearMinHeight: 9,
         circularTrackColor: AppColors.sightCardBackground,
         color: AppColors.secondaryTwo,
       ),

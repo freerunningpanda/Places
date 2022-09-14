@@ -40,4 +40,6 @@ abstract class AppString {
   static const enterTheText = 'введите текст';
   static const create = 'СОЗДАТЬ';
   static const save = 'СОХРАНИТЬ';
+  static const noPlaces = 'Ничего не найдено.';
+  static const tryToChange = 'Попробуйте изменить параметры поиска';
 }
