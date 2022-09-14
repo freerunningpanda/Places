@@ -38,6 +38,7 @@ class _SearchBarState extends State<SearchBar> {
   Widget build(BuildContext context) {
     final customColors = Theme.of(context).extension<CustomColors>()!;
     final theme = Theme.of(context);
+    final suggestions = context.read<AppSettings>().suggestions;
 
     return Padding(
       padding: const EdgeInsets.only(
@@ -71,7 +72,10 @@ class _SearchBarState extends State<SearchBar> {
                 onChanged: (value) {
                   context.read<AppSettings>()
                     ..activeFocus(isActive: true)
-                    ..searchSight(value);
+                    ..searchSight(value, controller);
+                  if (controller.text.isEmpty) {
+                    suggestions.clear();
+                  }
                 },
                 onTap: () {
                   context.read<AppSettings>().activeFocus(isActive: true);

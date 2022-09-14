@@ -18,7 +18,7 @@ class AppSettings extends ChangeNotifier {
   final descriptionFocus = FocusNode();
   final searchFocus = FocusNode();
 
-  List<Sight> sightList = Mocks.mocks;
+  // List<Sight> sightList = Mocks.mocks;
 
   bool isDarkMode = false;
 
@@ -40,7 +40,7 @@ class AppSettings extends ChangeNotifier {
     notifyListeners();
   }
 
-  void searchSight(String query) {
+  void searchSight(String query, TextEditingController controller) {
     suggestions = Mocks.mocks.where((sight) {
       final sightTitle = sight.name.toLowerCase();
       final input = query.toLowerCase();
@@ -48,7 +48,10 @@ class AppSettings extends ChangeNotifier {
       return sightTitle.contains(input);
     }).toList();
 
-    sightList = suggestions;
+    if (controller.text.isEmpty) {
+      suggestions.clear();
+      notifyListeners();
+    }
     notifyListeners();
   }
 

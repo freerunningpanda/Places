@@ -15,7 +15,7 @@ class SightSearchScreen extends StatelessWidget {
     final sightList = context.read<AppSettings>().suggestions;
     const readOnly = false;
     const isSearchPage = true;
-    
+
     context.watch<AppSettings>();
 
     return Scaffold(
@@ -49,8 +49,9 @@ class _SightListWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final width = MediaQuery.of(context).size.width;
+    final suggestions = context.read<AppSettings>().suggestions;
 
-    return Expanded(
+    return suggestions.isEmpty ? const CircularProgressIndicator() : Expanded(
       child: ListView.builder(
         physics: const BouncingScrollPhysics(),
         shrinkWrap: true,
@@ -110,7 +111,6 @@ class _RippleEffect extends StatelessWidget {
     Key? key,
     required this.sight,
   }) : super(key: key);
-
 
   @override
   Widget build(BuildContext context) {
