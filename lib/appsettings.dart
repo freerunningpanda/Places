@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:places/data/categories_table.dart';
 import 'package:places/data/filters.dart';
+import 'package:places/data/filters_table.dart';
 import 'package:places/data/sight.dart';
 import 'package:places/mocks.dart';
 
@@ -41,12 +43,22 @@ class AppSettings extends ChangeNotifier {
   }
 
   void searchSight(String query, TextEditingController controller) {
-    suggestions = Mocks.mocks.where((sight) {
-      final sightTitle = sight.name.toLowerCase();
-      final input = query.toLowerCase();
+    for (final el in FiltersTable.filteredMocks) {
+      final distance = Geolocator.distanceBetween(
+        Mocks.mockLat,
+        Mocks.mockLot,
+        el.lat,
+        el.lot,
+      );
+      if (distance >= Mocks.rangeValues.start && distance <= Mocks.rangeValues.end) {
+        suggestions = FiltersTable.filtersWithDistance.where((sight) {
+          final sightTitle = sight.name.toLowerCase();
+          final input = query.toLowerCase();
 
-      return sightTitle.contains(input);
-    }).toList();
+          return sightTitle.contains(input);
+        }).toList();
+      }
+    }
 
     if (controller.text.isEmpty) {
       suggestions.clear();

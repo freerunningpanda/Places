@@ -66,17 +66,18 @@ class _FilterScreenState extends State<FilterScreen> {
               title: '${AppString.showPlaces} (amount)',
               rangeValues: Mocks.rangeValues,
               onTap: () {
-                for (final el in FiltersTable.filteredMocks) {
-                  final distance = Geolocator.distanceBetween(
-                    Mocks.mockLat,
-                    Mocks.mockLot,
-                    el.lat,
-                    el.lot,
-                  );
-                  if (distance >= Mocks.rangeValues.start && distance <= Mocks.rangeValues.end) {
-                    context.read<FiltersSettings>().showCount();
-                  }
-                }
+                // for (final el in FiltersTable.filteredMocks) {
+                //   final distance = Geolocator.distanceBetween(
+                //     Mocks.mockLat,
+                //     Mocks.mockLot,
+                //     el.lat,
+                //     el.lot,
+                //   );
+                // if (distance >= Mocks.rangeValues.start && distance <= Mocks.rangeValues.end) {
+                context.read<FiltersSettings>().showCount();
+                debugPrint('🟡---------Длина: ${FiltersTable.filtersWithDistance.length}');
+                // }
+                // }
               },
             ),
           ],
@@ -193,7 +194,9 @@ class _FiltersTableState extends State<_FiltersTable> {
                     if (!e.isEnabled) {
                       FiltersTable.filteredMocks.addAll(filteredByType);
                     } else {
-                      FiltersTable.filteredMocks.removeWhere((element) => element.type.contains(element.type));
+                      FiltersTable.filteredMocks.clear();
+                      FiltersTable.filtersWithDistance.clear();
+                      debugPrint('🟡---------Length: ${FiltersTable.filteredMocks}');
                     }
                     context.read<FiltersSettings>().showCount();
 

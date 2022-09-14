@@ -18,8 +18,6 @@ class FiltersSettings extends ChangeNotifier {
     notifyListeners();
   }
 
-  
-
   List<String> saveFilters(int index) {
     final filters = FiltersTable.filters[index];
     final activeFilters = FiltersTable.activeFilters;
@@ -54,11 +52,12 @@ class FiltersSettings extends ChangeNotifier {
       );
       if (distance >= Mocks.rangeValues.start && distance <= Mocks.rangeValues.end) {
         FiltersTable.filtersWithDistance.add(el);
+        debugPrint('🟡---------Length: ${FiltersTable.filtersWithDistance}');
         length = FiltersTable.filtersWithDistance.length;
         notifyListeners();
-        for (final i in FiltersTable.filtersWithDistance) {
+        /* for (final i in FiltersTable.filtersWithDistance) {
           debugPrint('🟡---------Найдены места: ${i.name}');
-        }
+        } */
       }
     }
     // if (isEnabled) {
