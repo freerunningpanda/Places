@@ -8,6 +8,11 @@ abstract class AppTheme {
   // ignore: long-method
   static ThemeData buildTheme() {
     return ThemeData(
+      progressIndicatorTheme: const ProgressIndicatorThemeData(
+        linearMinHeight: 9,
+        circularTrackColor: AppColors.sightCardBackground,
+        color: AppColors.secondaryTwo,
+      ),
       extensions: const <ThemeExtension<CustomColors>>[CustomColors.sightCardLight],
       textButtonTheme: TextButtonThemeData(
         style: TextButton.styleFrom(

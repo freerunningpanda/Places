@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:places/appsettings.dart';
 import 'package:places/data/sight.dart';
+import 'package:places/ui/screens/res/custom_colors.dart';
 import 'package:places/ui/screens/sight_details/sight_details.dart';
 import 'package:places/ui/widgets/search_appbar.dart';
 import 'package:places/ui/widgets/search_bar.dart';
@@ -51,22 +52,26 @@ class _SightListWidget extends StatelessWidget {
     final width = MediaQuery.of(context).size.width;
     final suggestions = context.read<AppSettings>().suggestions;
 
-    return suggestions.isEmpty ? const CircularProgressIndicator() : Expanded(
-      child: ListView.builder(
-        physics: const BouncingScrollPhysics(),
-        shrinkWrap: true,
-        itemCount: sightList.length,
-        itemBuilder: (context, index) {
-          final sight = sightList[index];
+    return suggestions.isEmpty
+        ? const CircularProgressIndicator(
+            strokeWidth: 7,
+          )
+        : Expanded(
+            child: ListView.builder(
+              physics: const BouncingScrollPhysics(),
+              shrinkWrap: true,
+              itemCount: sightList.length,
+              itemBuilder: (context, index) {
+                final sight = sightList[index];
 
-          return _SightCardWidget(
-            sight: sight,
-            width: width,
-            theme: theme,
+                return _SightCardWidget(
+                  sight: sight,
+                  width: width,
+                  theme: theme,
+                );
+              },
+            ),
           );
-        },
-      ),
-    );
   }
 }
 
