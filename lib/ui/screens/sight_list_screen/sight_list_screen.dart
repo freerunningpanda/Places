@@ -36,7 +36,6 @@ class _SightListScreenState extends State<SightListScreen> {
               const SearchAppBar(),
               SearchBar(
                 isSearchPage: isSearchPage,
-                sightList: sightList,
                 readOnly: readOnly,
               ),
               _SightListWidget(sightList: sightList, theme: theme),

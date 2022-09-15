@@ -14,11 +14,9 @@ import 'package:places/ui/widgets/sight_icons.dart';
 import 'package:provider/provider.dart';
 
 class FilterScreen extends StatefulWidget {
-  final List<Sight> sightList;
   final VoidCallback? onPressed;
   const FilterScreen({
     Key? key,
-    required this.sightList,
     this.onPressed,
   }) : super(key: key);
 
@@ -27,6 +25,8 @@ class FilterScreen extends StatefulWidget {
 }
 
 class _FilterScreenState extends State<FilterScreen> {
+  final sightList = Mocks.mocks;
+
   @override
   Widget build(BuildContext context) {
     final clearFilters = context.read<FiltersSettings>().clearAllFilters;
@@ -50,14 +50,14 @@ class _FilterScreenState extends State<FilterScreen> {
             const _Title(),
             const SizedBox(height: 24),
             _FiltersTable(
-              sightList: widget.sightList,
+              sightList: sightList,
               filters: FiltersTable.filters,
               activeFilters: FiltersSettings().activeFilters,
             ),
             const SizedBox(height: 60),
             Expanded(
               child: _DistanceSlider(
-                sightList: widget.sightList,
+                sightList: sightList,
               ),
             ),
             ActionButton(

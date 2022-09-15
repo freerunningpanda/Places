@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:places/appsettings.dart';
 
-import 'package:places/data/sight.dart';
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_typography.dart';
 import 'package:places/ui/screens/filters_screen/filters_screen.dart';
@@ -13,13 +12,11 @@ import 'package:places/ui/widgets/suffix_icon.dart';
 import 'package:provider/provider.dart';
 
 class SearchBar extends StatefulWidget {
-  final List<Sight> sightList;
   final bool? readOnly;
   final bool isSearchPage;
 
   const SearchBar({
     Key? key,
-    required this.sightList,
     this.readOnly,
     required this.isSearchPage,
   }) : super(key: key);
@@ -110,7 +107,7 @@ class _SearchBarState extends State<SearchBar> {
                             Navigator.push(
                               context,
                               MaterialPageRoute<FilterScreen>(
-                                builder: (context) => FilterScreen(sightList: widget.sightList),
+                                builder: (context) => FilterScreen(),
                               ),
                             );
                             debugPrint('🟡---------filters button pressed');
