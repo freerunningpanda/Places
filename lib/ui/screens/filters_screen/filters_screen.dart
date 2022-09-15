@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'package:geolocator/geolocator.dart';
 import 'package:places/appsettings.dart';
 import 'package:places/data/filters.dart';
 import 'package:places/data/filters_table.dart';
@@ -188,7 +187,7 @@ class _FiltersTableState extends State<_FiltersTable> {
                     } else {
                       FiltersTable.filteredMocks.clear();
                       FiltersTable.filtersWithDistance.clear();
-                      debugPrint('🟡---------Length: ${FiltersTable.filteredMocks}');
+                      debugPrint('🟡---------Добавленные места: ${FiltersTable.filteredMocks}');
                     }
                     context.read<FiltersSettings>().showCount();
 
@@ -344,8 +343,6 @@ class _DistanceSliderState extends State<_DistanceSlider> {
           onChanged: (values) {
             context.read<FiltersSettings>().changeArea(start: values.start, end: values.end);
             context.read<FiltersSettings>().showCount();
-            context.read<AppSettings>().clearSight();
-            debugPrint('🟡---------Длина: ${FiltersTable.filtersWithDistance.length}');
           },
         ),
       ],

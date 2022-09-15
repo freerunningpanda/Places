@@ -52,18 +52,14 @@ class FiltersSettings extends ChangeNotifier {
       );
       if (distance >= Mocks.rangeValues.start && distance <= Mocks.rangeValues.end) {
         FiltersTable.filtersWithDistance.add(el);
-        debugPrint('🟡---------Length: ${FiltersTable.filtersWithDistance}');
+        debugPrint('🟡---------Добавленные места: ${FiltersTable.filtersWithDistance}');
         length = FiltersTable.filtersWithDistance.length;
         notifyListeners();
         /* for (final i in FiltersTable.filtersWithDistance) {
           debugPrint('🟡---------Найдены места: ${i.name}');
         } */
-      }
+      } 
+
     }
-    // if (isEnabled) {
-    //   FiltersTable.filtersWithDistance.clear();
-    //   length = FiltersTable.filtersWithDistance.length;
-    //   debugPrint('🟡---------Length: $length');
-    // }
   }
 }
