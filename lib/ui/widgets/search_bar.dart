@@ -29,7 +29,6 @@ class _SearchBarState extends State<SearchBar> {
   final FocusNode focusNode = FocusNode();
   final TextEditingController controller = TextEditingController();
 
-  bool hasFocus = false;
   bool autofocus = true;
 
   @override
@@ -37,6 +36,8 @@ class _SearchBarState extends State<SearchBar> {
     final customColors = Theme.of(context).extension<CustomColors>()!;
     final theme = Theme.of(context);
     final suggestions = context.read<AppSettings>().suggestions;
+
+    context.watch<AppSettings>();
 
     return Padding(
       padding: const EdgeInsets.only(
