@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:places/appsettings.dart';
 
 import 'package:places/data/sight.dart';
@@ -63,6 +64,9 @@ class _SearchBarState extends State<SearchBar> {
             const SizedBox(width: 14),
             Expanded(
               child: TextField(
+                inputFormatters: [
+                  FilteringTextInputFormatter.deny(RegExp('[ ]')),
+                ],
                 style: theme.textTheme.bodyLarge,
                 textCapitalization: TextCapitalization.sentences,
                 controller: controller,
@@ -73,6 +77,7 @@ class _SearchBarState extends State<SearchBar> {
                   context.read<AppSettings>()
                     ..activeFocus(isActive: true)
                     ..searchSight(value, controller);
+
                   if (controller.text.isEmpty) {
                     suggestions.clear();
                   }
