@@ -107,7 +107,7 @@ class _SearchBarState extends State<SearchBar> {
                             Navigator.push(
                               context,
                               MaterialPageRoute<FilterScreen>(
-                                builder: (context) => FilterScreen(),
+                                builder: (context) => const FilterScreen(),
                               ),
                             );
                             debugPrint('🟡---------filters button pressed');
