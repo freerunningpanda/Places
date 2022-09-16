@@ -149,9 +149,12 @@ class _ClearHistoryButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Text(
-      AppString.clearHistory,
-      style: AppTypography.clearButton,
+    return TextButton(
+      onPressed: (){},
+      child: const Text(
+        AppString.clearHistory,
+        style: AppTypography.clearButton,
+      ),
     );
   }
 }

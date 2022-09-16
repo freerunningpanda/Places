@@ -15,6 +15,7 @@ abstract class AppTheme {
       extensions: const <ThemeExtension<CustomColors>>[CustomColors.sightCardLight],
       textButtonTheme: TextButtonThemeData(
         style: TextButton.styleFrom(
+          padding: EdgeInsets.zero,
           primary: AppColors.black,
         ),
       ),
@@ -68,6 +69,7 @@ abstract class AppTheme {
       extensions: const <ThemeExtension<CustomColors>>[CustomColors.sightCardDark],
       textButtonTheme: TextButtonThemeData(
         style: TextButton.styleFrom(
+          padding: EdgeInsets.zero,
           primary: AppColors.black,
         ),
       ),
