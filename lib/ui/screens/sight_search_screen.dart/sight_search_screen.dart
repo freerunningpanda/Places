@@ -33,36 +33,33 @@ class SightSearchScreen extends StatelessWidget {
         onTap: () {
           FocusManager.instance.primaryFocus?.unfocus();
         },
-        child: Expanded(
-          child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const SizedBox(height: 16),
-                const SearchAppBar(),
-                const SearchBar(
-                  isSearchPage: isSearchPage,
-                  readOnly: readOnly,
-                ),
-                if (showHistoryList && searchStoryList.isNotEmpty)
-                  _SearchHistoryList(
-                    theme: theme,
-                    searchStoryList: searchStoryList,
-                    width: width,
-                  )
-                else
-                  const SizedBox(),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                  child: Column(
-                    children: [
-                      _SightListWidget(sightList: sightList, theme: theme),
-                    ],
-                  ),
-                ),
-              ],
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const SizedBox(height: 16),
+            const SearchAppBar(),
+            const SearchBar(
+              isSearchPage: isSearchPage,
+              readOnly: readOnly,
             ),
-          ),
+            Expanded(
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    if (showHistoryList && searchStoryList.isNotEmpty)
+                      _SearchHistoryList(
+                        theme: theme,
+                        searchStoryList: searchStoryList,
+                        width: width,
+                      )
+                    else
+                      const SizedBox(),
+                    _SightListWidget(sightList: sightList, theme: theme),
+                  ],
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );
@@ -86,21 +83,19 @@ class _SightListWidget extends StatelessWidget {
             width: width,
             theme: theme,
           )
-        : Expanded(
-            child: ListView.builder(
-              physics: const BouncingScrollPhysics(),
-              shrinkWrap: true,
-              itemCount: sightList.length,
-              itemBuilder: (context, index) {
-                final sight = sightList[index];
+        : ListView.builder(
+            physics: const BouncingScrollPhysics(),
+            shrinkWrap: true,
+            itemCount: sightList.length,
+            itemBuilder: (context, index) {
+              final sight = sightList[index];
 
-                return _SightCardWidget(
-                  sight: sight,
-                  width: width,
-                  theme: theme,
-                );
-              },
-            ),
+              return _SightCardWidget(
+                sight: sight,
+                width: width,
+                theme: theme,
+              );
+            },
           );
   }
 }
@@ -207,32 +202,79 @@ class _SearchItem extends StatelessWidget {
   Widget build(BuildContext context) {
     context.watch<AppSettings>();
 
-    return ListView.separated(
-      shrinkWrap: true,
-      itemBuilder: (context, index) {
-        return Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            SizedBox(
-              width: width * 0.7,
-              child: Text(
-                searchStoryList[index],
-                style: theme.textTheme.titleMedium,
+    return Column(
+      children: searchStoryList
+          .asMap()
+          .map(
+            (i, e) => MapEntry(
+              i,
+              Column(
+                children: [
+                  const SizedBox(height: 8),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      InkWell(
+                        borderRadius: BorderRadius.circular(12),
+                        onTap: () {
+                          // SearchBar.focusNode.requestFocus();
+                        },
+                        child: SizedBox(
+                          width: width * 0.7,
+                          child: Text(
+                            searchStoryList[i],
+                            style: theme.textTheme.titleMedium,
+                          ),
+                        ),
+                      ),
+                      InkWell(
+                        borderRadius: BorderRadius.circular(30),
+                        onTap: () {
+                          context.read<AppSettings>().removeItemFromHistory(i);
+                        },
+                        child: const SightIcons(assetName: AppAssets.delete, width: 24, height: 24),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 8),
+                  const Divider(),
+                ],
               ),
             ),
-            InkWell(
-              borderRadius: BorderRadius.circular(30),
-              onTap: () {
-                context.read<AppSettings>().removeItemFromHistory(index);
-              },
-              child: const SightIcons(assetName: AppAssets.delete, width: 24, height: 24),
-            ),
-          ],
-        );
-      },
-      separatorBuilder: (context, index) => const Divider(),
-      itemCount: searchStoryList.length,
+          )
+          .values
+          .toList(),
     );
+
+    // Данный метод кажется правильнее. Но здесь не работает скролл.
+
+    // ListView.separated(
+    //   physics: const AlwaysScrollableScrollPhysics(),
+    //   shrinkWrap: true,
+    //   itemBuilder: (context, index) {
+    //     return Row(
+    //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    //       children: [
+    //         SizedBox(
+    //           width: width * 0.7,
+    //           child: Text(
+    //             searchStoryList[index],
+    //             style: theme.textTheme.titleMedium,
+    //           ),
+    //         ),
+    //         InkWell(
+    //           borderRadius: BorderRadius.circular(30),
+    //           onTap: () {
+    //             context.read<AppSettings>().removeItemFromHistory(index);
+    //           },
+    //           child: const SightIcons(assetName: AppAssets.delete, width: 24, height: 24),
+    //         ),
+    //       ],
+    //     );
+    //   },
+    //   separatorBuilder: (context, index) => const Divider(),
+    //   itemCount: searchStoryList.length,
+    // );
   }
 }
 
@@ -276,6 +318,9 @@ class _EmptyStateWidget extends StatelessWidget {
               style: AppTypography.detailsTextDarkMode,
               textAlign: TextAlign.center,
             ),
+          ),
+          SizedBox(
+            height: height * 0.2,
           ),
         ],
       ),

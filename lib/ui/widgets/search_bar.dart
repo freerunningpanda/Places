@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:places/appsettings.dart';
 
 import 'package:places/ui/res/app_assets.dart';
