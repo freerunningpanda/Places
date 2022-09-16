@@ -96,6 +96,7 @@ class _SearchBarState extends State<SearchBar> {
                   context.read<AppSettings>()
                     ..activeFocus(isActive: false)
                     ..saveSearchHistory(value);
+                  controller.clear();
                 },
                 decoration: InputDecoration(
                   border: InputBorder.none,

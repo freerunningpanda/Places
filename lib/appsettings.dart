@@ -38,6 +38,10 @@ class AppSettings extends ChangeNotifier {
     notifyListeners();
   }
 
+  void removeItemFromHistory(int index) {
+    searchHistoryList.removeAt(index);
+  }
+
   void activeFocus({required bool isActive}) {
     // ignore: prefer-conditional-expressions
     if (isActive) {

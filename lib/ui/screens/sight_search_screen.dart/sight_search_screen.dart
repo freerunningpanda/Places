@@ -22,7 +22,6 @@ class SightSearchScreen extends StatelessWidget {
     const isSearchPage = true;
     final showHistoryList = context.read<AppSettings>().hasFocus;
 
-
     context.watch<AppSettings>();
 
     return Scaffold(
@@ -43,10 +42,7 @@ class SightSearchScreen extends StatelessWidget {
                   isSearchPage: isSearchPage,
                   readOnly: readOnly,
                 ),
-                if(showHistoryList)
-                _SearchHistoryList(theme: theme)
-                else
-                const SizedBox(),
+                if (showHistoryList) _SearchHistoryList(theme: theme) else const SizedBox(),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16.0),
                   child: Column(
@@ -130,7 +126,6 @@ class _SearchHistoryList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
       child: Column(
@@ -178,7 +173,7 @@ class _SearchHistoryTitle extends StatelessWidget {
   }
 }
 
-class _SearchItem extends StatelessWidget {
+class _SearchItem extends StatefulWidget {
   final ThemeData theme;
 
   const _SearchItem({
@@ -187,8 +182,15 @@ class _SearchItem extends StatelessWidget {
   }) : super(key: key);
 
   @override
+  State<_SearchItem> createState() => _SearchItemState();
+}
+
+class _SearchItemState extends State<_SearchItem> {
+  @override
   Widget build(BuildContext context) {
     final searchStoryList = context.read<AppSettings>().searchHistoryList;
+
+    context.watch<AppSettings>();
 
     return ListView.separated(
       shrinkWrap: true,
@@ -198,9 +200,15 @@ class _SearchItem extends StatelessWidget {
           children: [
             Text(
               searchStoryList[index],
-              style: theme.textTheme.titleMedium,
+              style: widget.theme.textTheme.titleMedium,
             ),
-            const SightIcons(assetName: AppAssets.delete, width: 24, height: 24),
+            InkWell(
+              borderRadius: BorderRadius.circular(30),
+              onTap: () => setState(() {
+                searchStoryList.removeAt(index);
+              }),
+              child: const SightIcons(assetName: AppAssets.delete, width: 24, height: 24),
+            ),
           ],
         );
       },
