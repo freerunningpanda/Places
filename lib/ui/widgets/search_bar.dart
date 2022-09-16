@@ -62,9 +62,9 @@ class _SearchBarState extends State<SearchBar> {
             const SizedBox(width: 14),
             Expanded(
               child: TextField(
-                inputFormatters: [
-                  FilteringTextInputFormatter.deny(RegExp('[ ]')),
-                ],
+                // inputFormatters: [
+                //   FilteringTextInputFormatter.deny(RegExp('[ ]')),
+                // ],
                 style: theme.textTheme.bodyLarge,
                 textCapitalization: TextCapitalization.sentences,
                 controller: controller,

@@ -22,6 +22,7 @@ class SightSearchScreen extends StatelessWidget {
     const isSearchPage = true;
     final showHistoryList = context.read<AppSettings>().hasFocus;
     final searchStoryList = context.read<AppSettings>().searchHistoryList;
+    final width = MediaQuery.of(context).size.width;
 
     context.watch<AppSettings>();
 
@@ -44,7 +45,11 @@ class SightSearchScreen extends StatelessWidget {
                   readOnly: readOnly,
                 ),
                 if (showHistoryList)
-                  _SearchHistoryList(theme: theme, searchStoryList: searchStoryList)
+                  _SearchHistoryList(
+                    theme: theme,
+                    searchStoryList: searchStoryList,
+                    width: width,
+                  )
                 else
                   const SizedBox(),
                 Padding(
@@ -121,11 +126,13 @@ class _EmptyListWidget extends StatelessWidget {
 class _SearchHistoryList extends StatelessWidget {
   final List<String> searchStoryList;
   final ThemeData theme;
+  final double width;
 
   const _SearchHistoryList({
     Key? key,
     required this.searchStoryList,
     required this.theme,
+    required this.width,
   }) : super(key: key);
 
   @override
@@ -137,7 +144,11 @@ class _SearchHistoryList extends StatelessWidget {
         children: [
           _SearchHistoryTitle(theme: theme),
           const SizedBox(height: 4),
-          _SearchItem(theme: theme, searchStoryList: searchStoryList),
+          _SearchItem(
+            theme: theme,
+            searchStoryList: searchStoryList,
+            width: width,
+          ),
           const SizedBox(height: 15),
           const _ClearHistoryButton(),
         ],
@@ -183,16 +194,17 @@ class _SearchHistoryTitle extends StatelessWidget {
 class _SearchItem extends StatelessWidget {
   final ThemeData theme;
   final List<String> searchStoryList;
+  final double width;
 
   const _SearchItem({
     Key? key,
     required this.theme,
     required this.searchStoryList,
+    required this.width,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-
     context.watch<AppSettings>();
 
     return ListView.separated(
@@ -201,9 +213,12 @@ class _SearchItem extends StatelessWidget {
         return Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(
-              searchStoryList[index],
-              style: theme.textTheme.titleMedium,
+            SizedBox(
+              width: width * 0.7,
+              child: Text(
+                searchStoryList[index],
+                style: theme.textTheme.titleMedium,
+              ),
             ),
             InkWell(
               borderRadius: BorderRadius.circular(30),
