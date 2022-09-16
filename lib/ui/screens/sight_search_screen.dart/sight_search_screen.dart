@@ -20,6 +20,8 @@ class SightSearchScreen extends StatelessWidget {
     final sightList = context.read<AppSettings>().suggestions;
     const readOnly = false;
     const isSearchPage = true;
+    final showHistoryList = context.read<AppSettings>().hasFocus;
+
 
     context.watch<AppSettings>();
 
@@ -30,24 +32,32 @@ class SightSearchScreen extends StatelessWidget {
         onTap: () {
           FocusManager.instance.primaryFocus?.unfocus();
         },
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const SizedBox(height: 16),
-            const SearchAppBar(),
-            const SearchBar(
-              isSearchPage: isSearchPage,
-              readOnly: readOnly,
+        child: Expanded(
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const SizedBox(height: 16),
+                const SearchAppBar(),
+                const SearchBar(
+                  isSearchPage: isSearchPage,
+                  readOnly: readOnly,
+                ),
+                if(showHistoryList)
+                _SearchHistoryList(theme: theme)
+                else
+                const SizedBox(),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  child: Column(
+                    children: [
+                      _SightListWidget(sightList: sightList, theme: theme),
+                    ],
+                  ),
+                ),
+              ],
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: Column(
-                children: [
-                  _SightListWidget(sightList: sightList, theme: theme),
-                ],
-              ),
-            ),
-          ],
+          ),
         ),
       ),
     );
@@ -104,11 +114,9 @@ class _EmptyListWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final searchStoryList = context.read<AppSettings>().searchStoryList;
+    final searchStoryList = context.read<AppSettings>().searchHistoryList;
 
-    return searchStoryList.isEmpty
-        ? _SearchHistoryList(theme: theme)
-        : _EmptyStateWidget(height: height, width: width);
+    return _EmptyStateWidget(height: height, width: width);
   }
 }
 
@@ -120,27 +128,46 @@ class _SearchHistoryList extends StatelessWidget {
     required this.theme,
   }) : super(key: key);
 
-
   @override
   Widget build(BuildContext context) {
-    return Column(
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+      child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           _SearchHistoryTitle(theme: theme),
           const SizedBox(height: 4),
           _SearchItem(theme: theme),
+          const SizedBox(height: 15),
+          const _ClearHistoryButton(),
         ],
-      );
+      ),
+    );
+  }
+}
+
+class _ClearHistoryButton extends StatelessWidget {
+  const _ClearHistoryButton({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return const Text(
+      AppString.clearHistory,
+      style: AppTypography.clearButton,
+    );
   }
 }
 
 class _SearchHistoryTitle extends StatelessWidget {
+  final ThemeData theme;
+
   const _SearchHistoryTitle({
     Key? key,
     required this.theme,
   }) : super(key: key);
-
-  final ThemeData theme;
 
   @override
   Widget build(BuildContext context) {
@@ -152,24 +179,33 @@ class _SearchHistoryTitle extends StatelessWidget {
 }
 
 class _SearchItem extends StatelessWidget {
+  final ThemeData theme;
+
   const _SearchItem({
     Key? key,
     required this.theme,
   }) : super(key: key);
 
-  final ThemeData theme;
-
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(
-          'data',
-          style: theme.textTheme.titleMedium,
-        ),
-        const SightIcons(assetName: AppAssets.delete, width: 24, height: 24),
-      ],
+    final searchStoryList = context.read<AppSettings>().searchHistoryList;
+
+    return ListView.separated(
+      shrinkWrap: true,
+      itemBuilder: (context, index) {
+        return Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              searchStoryList[index],
+              style: theme.textTheme.titleMedium,
+            ),
+            const SightIcons(assetName: AppAssets.delete, width: 24, height: 24),
+          ],
+        );
+      },
+      separatorBuilder: (context, index) => const Divider(),
+      itemCount: searchStoryList.length,
     );
   }
 }

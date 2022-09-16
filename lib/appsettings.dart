@@ -19,7 +19,7 @@ class AppSettings extends ChangeNotifier {
   final lotFocus = FocusNode();
   final descriptionFocus = FocusNode();
   final searchFocus = FocusNode();
-  final List<String> searchStoryList = [];
+  final List<String> searchHistoryList = [];
 
   // List<Sight> sightList = Mocks.mocks;
 
@@ -33,8 +33,9 @@ class AppSettings extends ChangeNotifier {
 
   List<Sight> suggestions = [];
 
-  void saveSearchStory(String value) {
-    searchStoryList.add(value);
+  void saveSearchHistory(String value) {
+    searchHistoryList.add(value);
+    notifyListeners();
   }
 
   void activeFocus({required bool isActive}) {
