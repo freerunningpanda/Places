@@ -33,7 +33,8 @@ class AppSettings extends ChangeNotifier {
 
   List<Sight> suggestions = [];
 
-  void saveSearchHistory(String value) {
+  void saveSearchHistory(String value, TextEditingController controller) {
+    if (controller.text.isEmpty) return;
     searchHistoryList.add(value);
     notifyListeners();
   }
