@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import 'package:geolocator/geolocator.dart';
 import 'package:places/data/categories_table.dart';
 import 'package:places/data/filters.dart';

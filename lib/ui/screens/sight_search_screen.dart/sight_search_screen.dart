@@ -44,7 +44,7 @@ class SightSearchScreen extends StatelessWidget {
                   isSearchPage: isSearchPage,
                   readOnly: readOnly,
                 ),
-                if (showHistoryList)
+                if (showHistoryList && searchStoryList.isNotEmpty)
                   _SearchHistoryList(
                     theme: theme,
                     searchStoryList: searchStoryList,
