@@ -21,6 +21,7 @@ class SightSearchScreen extends StatelessWidget {
     const readOnly = false;
     const isSearchPage = true;
     final showHistoryList = context.read<AppSettings>().hasFocus;
+    final searchStoryList = context.read<AppSettings>().searchHistoryList;
 
     context.watch<AppSettings>();
 
@@ -42,7 +43,10 @@ class SightSearchScreen extends StatelessWidget {
                   isSearchPage: isSearchPage,
                   readOnly: readOnly,
                 ),
-                if (showHistoryList) _SearchHistoryList(theme: theme) else const SizedBox(),
+                if (showHistoryList)
+                  _SearchHistoryList(theme: theme, searchStoryList: searchStoryList)
+                else
+                  const SizedBox(),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16.0),
                   child: Column(
@@ -110,17 +114,17 @@ class _EmptyListWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final searchStoryList = context.read<AppSettings>().searchHistoryList;
-
     return _EmptyStateWidget(height: height, width: width);
   }
 }
 
 class _SearchHistoryList extends StatelessWidget {
+  final List<String> searchStoryList;
   final ThemeData theme;
 
   const _SearchHistoryList({
     Key? key,
+    required this.searchStoryList,
     required this.theme,
   }) : super(key: key);
 
@@ -133,7 +137,7 @@ class _SearchHistoryList extends StatelessWidget {
         children: [
           _SearchHistoryTitle(theme: theme),
           const SizedBox(height: 4),
-          _SearchItem(theme: theme),
+          _SearchItem(theme: theme, searchStoryList: searchStoryList),
           const SizedBox(height: 15),
           const _ClearHistoryButton(),
         ],
@@ -176,22 +180,18 @@ class _SearchHistoryTitle extends StatelessWidget {
   }
 }
 
-class _SearchItem extends StatefulWidget {
+class _SearchItem extends StatelessWidget {
   final ThemeData theme;
+  final List<String> searchStoryList;
 
   const _SearchItem({
     Key? key,
     required this.theme,
+    required this.searchStoryList,
   }) : super(key: key);
 
   @override
-  State<_SearchItem> createState() => _SearchItemState();
-}
-
-class _SearchItemState extends State<_SearchItem> {
-  @override
   Widget build(BuildContext context) {
-    final searchStoryList = context.read<AppSettings>().searchHistoryList;
 
     context.watch<AppSettings>();
 
@@ -203,7 +203,7 @@ class _SearchItemState extends State<_SearchItem> {
           children: [
             Text(
               searchStoryList[index],
-              style: widget.theme.textTheme.titleMedium,
+              style: theme.textTheme.titleMedium,
             ),
             InkWell(
               borderRadius: BorderRadius.circular(30),
