@@ -74,22 +74,22 @@ class AppSettings extends ChangeNotifier {
           }).toList();
         }
       }
-    }
+    } else if (FiltersTable.activeFilters.isNotEmpty) {
+      for (final el in FiltersTable.filteredMocks) {
+        final distance = Geolocator.distanceBetween(
+          Mocks.mockLat,
+          Mocks.mockLot,
+          el.lat,
+          el.lot,
+        );
+        if (distance >= Mocks.rangeValues.start && distance <= Mocks.rangeValues.end) {
+          suggestions = FiltersTable.filtersWithDistance.where((sight) {
+            final sightTitle = sight.name.toLowerCase();
+            final input = query.toLowerCase();
 
-    for (final el in FiltersTable.filteredMocks) {
-      final distance = Geolocator.distanceBetween(
-        Mocks.mockLat,
-        Mocks.mockLot,
-        el.lat,
-        el.lot,
-      );
-      if (distance >= Mocks.rangeValues.start && distance <= Mocks.rangeValues.end) {
-        suggestions = FiltersTable.filtersWithDistance.where((sight) {
-          final sightTitle = sight.name.toLowerCase();
-          final input = query.toLowerCase();
-
-          return sightTitle.contains(input);
-        }).toList();
+            return sightTitle.contains(input);
+          }).toList();
+        }
       }
     }
 
