@@ -92,7 +92,9 @@ class _SearchBarState extends State<SearchBar> {
                     return;
                   }
                 },
-                onSubmitted: (value) => context.read<AppSettings>().activeFocus(isActive: false),
+                onSubmitted: (value) {
+                  context.read<AppSettings>().activeFocus(isActive: false);
+                },
                 decoration: InputDecoration(
                   border: InputBorder.none,
                   prefixIconConstraints: const BoxConstraints(

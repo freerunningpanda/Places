@@ -42,4 +42,6 @@ abstract class AppString {
   static const save = 'СОХРАНИТЬ';
   static const noPlaces = 'Ничего не найдено.';
   static const tryToChange = 'Попробуйте изменить параметры поиска';
+  static const youSearch = 'ВЫ ИСКАЛИ';
+  static const clearHistory = 'Очистить историю';
 }

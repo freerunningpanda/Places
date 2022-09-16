@@ -16,6 +16,7 @@ class SightSearchScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     final sightList = context.read<AppSettings>().suggestions;
     const readOnly = false;
     const isSearchPage = true;
@@ -30,6 +31,7 @@ class SightSearchScreen extends StatelessWidget {
           FocusManager.instance.primaryFocus?.unfocus();
         },
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const SizedBox(height: 16),
             const SearchAppBar(),
@@ -37,7 +39,14 @@ class SightSearchScreen extends StatelessWidget {
               isSearchPage: isSearchPage,
               readOnly: readOnly,
             ),
-            _SightListWidget(sightList: sightList),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: Column(
+                children: [
+                  _SightListWidget(sightList: sightList, theme: theme),
+                ],
+              ),
+            ),
           ],
         ),
       ),
@@ -47,17 +56,21 @@ class SightSearchScreen extends StatelessWidget {
 
 class _SightListWidget extends StatelessWidget {
   final List<Sight> sightList;
-  const _SightListWidget({Key? key, required this.sightList}) : super(key: key);
+  final ThemeData theme;
+  const _SightListWidget({Key? key, required this.sightList, required this.theme}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
     final suggestions = context.read<AppSettings>().suggestions;
 
     return suggestions.isEmpty
-        ? _EmptyListWidget(height: height, width: width)
+        ? _EmptyListWidget(
+            height: height,
+            width: width,
+            theme: theme,
+          )
         : Expanded(
             child: ListView.builder(
               physics: const BouncingScrollPhysics(),
@@ -80,8 +93,92 @@ class _SightListWidget extends StatelessWidget {
 class _EmptyListWidget extends StatelessWidget {
   final double height;
   final double width;
+  final ThemeData theme;
 
   const _EmptyListWidget({
+    Key? key,
+    required this.height,
+    required this.width,
+    required this.theme,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final searchStoryList = context.read<AppSettings>().searchStoryList;
+
+    return searchStoryList.isEmpty
+        ? _SearchHistoryList(theme: theme)
+        : _EmptyStateWidget(height: height, width: width);
+  }
+}
+
+class _SearchHistoryList extends StatelessWidget {
+  final ThemeData theme;
+
+  const _SearchHistoryList({
+    Key? key,
+    required this.theme,
+  }) : super(key: key);
+
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _SearchHistoryTitle(theme: theme),
+          const SizedBox(height: 4),
+          _SearchItem(theme: theme),
+        ],
+      );
+  }
+}
+
+class _SearchHistoryTitle extends StatelessWidget {
+  const _SearchHistoryTitle({
+    Key? key,
+    required this.theme,
+  }) : super(key: key);
+
+  final ThemeData theme;
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      AppString.youSearch,
+      style: theme.textTheme.labelLarge,
+    );
+  }
+}
+
+class _SearchItem extends StatelessWidget {
+  const _SearchItem({
+    Key? key,
+    required this.theme,
+  }) : super(key: key);
+
+  final ThemeData theme;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(
+          'data',
+          style: theme.textTheme.titleMedium,
+        ),
+        const SightIcons(assetName: AppAssets.delete, width: 24, height: 24),
+      ],
+    );
+  }
+}
+
+class _EmptyStateWidget extends StatelessWidget {
+  final double height;
+  final double width;
+
+  const _EmptyStateWidget({
     Key? key,
     required this.height,
     required this.width,
@@ -89,35 +186,37 @@ class _EmptyListWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        SizedBox(
-          height: height * 0.2,
-        ),
-        const SightIcons(
-          assetName: AppAssets.search,
-          width: 64,
-          height: 64,
-        ),
-        const SizedBox(
-          height: 24,
-        ),
-        const Text(
-          AppString.noPlaces,
-          style: AppTypography.emptyListTitle,
-        ),
-        const SizedBox(
-          height: 8,
-        ),
-        SizedBox(
-          width: width * 0.6,
-          child: const Text(
-            AppString.tryToChange,
-            style: AppTypography.detailsTextDarkMode,
-            textAlign: TextAlign.center,
+    return Center(
+      child: Column(
+        children: [
+          SizedBox(
+            height: height * 0.2,
           ),
-        ),
-      ],
+          const SightIcons(
+            assetName: AppAssets.search,
+            width: 64,
+            height: 64,
+          ),
+          const SizedBox(
+            height: 24,
+          ),
+          const Text(
+            AppString.noPlaces,
+            style: AppTypography.emptyListTitle,
+          ),
+          const SizedBox(
+            height: 8,
+          ),
+          SizedBox(
+            width: width * 0.6,
+            child: const Text(
+              AppString.tryToChange,
+              style: AppTypography.detailsTextDarkMode,
+              textAlign: TextAlign.center,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
