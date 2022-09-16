@@ -204,9 +204,9 @@ class _SearchItemState extends State<_SearchItem> {
             ),
             InkWell(
               borderRadius: BorderRadius.circular(30),
-              onTap: () => setState(() {
-                searchStoryList.removeAt(index);
-              }),
+              onTap: () {
+                context.read<AppSettings>().removeItemFromHistory(index);
+              },
               child: const SightIcons(assetName: AppAssets.delete, width: 24, height: 24),
             ),
           ],

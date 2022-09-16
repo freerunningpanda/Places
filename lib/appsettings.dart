@@ -40,6 +40,7 @@ class AppSettings extends ChangeNotifier {
 
   void removeItemFromHistory(int index) {
     searchHistoryList.removeAt(index);
+    notifyListeners();
   }
 
   void activeFocus({required bool isActive}) {
