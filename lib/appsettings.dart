@@ -57,6 +57,25 @@ class AppSettings extends ChangeNotifier {
   }
 
   void searchSight(String query, TextEditingController controller) {
+    if (FiltersTable.activeFilters.isEmpty) {
+      for (final el in Mocks.mocks) {
+        final distance = Geolocator.distanceBetween(
+          Mocks.mockLat,
+          Mocks.mockLot,
+          el.lat,
+          el.lot,
+        );
+        if (distance >= Mocks.rangeValues.start && distance <= Mocks.rangeValues.end) {
+          suggestions = Mocks.mocks.where((sight) {
+            final sightTitle = sight.name.toLowerCase();
+            final input = query.toLowerCase();
+
+            return sightTitle.contains(input);
+          }).toList();
+        }
+      }
+    }
+
     for (final el in FiltersTable.filteredMocks) {
       final distance = Geolocator.distanceBetween(
         Mocks.mockLat,
