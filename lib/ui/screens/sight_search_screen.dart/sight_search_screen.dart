@@ -119,7 +119,7 @@ class _EmptyListWidget extends StatelessWidget {
 }
 
 class _SearchHistoryList extends StatelessWidget {
-  final List<String> searchStoryList;
+  final Set<String> searchStoryList;
   final ThemeData theme;
   final double width;
 
@@ -188,7 +188,7 @@ class _SearchHistoryTitle extends StatelessWidget {
 
 class _SearchItem extends StatelessWidget {
   final ThemeData theme;
-  final List<String> searchStoryList;
+  final Set<String> searchStoryList;
   final double width;
 
   const _SearchItem({
@@ -204,77 +204,40 @@ class _SearchItem extends StatelessWidget {
 
     return Column(
       children: searchStoryList
-          .asMap()
           .map(
-            (i, e) => MapEntry(
-              i,
-              Column(
-                children: [
-                  const SizedBox(height: 8),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      InkWell(
-                        borderRadius: BorderRadius.circular(12),
-                        onTap: () {
-                          // SearchBar.focusNode.requestFocus();
-                        },
-                        child: SizedBox(
-                          width: width * 0.7,
-                          child: Text(
-                            searchStoryList[i],
-                            style: theme.textTheme.titleMedium,
-                          ),
+            (e) => Column(
+              children: [
+                const SizedBox(height: 8),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    InkWell(
+                      borderRadius: BorderRadius.circular(12),
+                      onTap: () => context.read<AppSettings>().searchController.text = e,
+                      child: SizedBox(
+                        width: width * 0.7,
+                        child: Text(
+                          e,
+                          style: theme.textTheme.titleMedium,
                         ),
                       ),
-                      InkWell(
-                        borderRadius: BorderRadius.circular(30),
-                        onTap: () {
-                          context.read<AppSettings>().removeItemFromHistory(i);
-                        },
-                        child: const SightIcons(assetName: AppAssets.delete, width: 24, height: 24),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 8),
-                  const Divider(),
-                ],
-              ),
+                    ),
+                    InkWell(
+                      borderRadius: BorderRadius.circular(30),
+                      onTap: () {
+                        context.read<AppSettings>().removeItemFromHistory(e);
+                      },
+                      child: const SightIcons(assetName: AppAssets.delete, width: 24, height: 24),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 8),
+                const Divider(),
+              ],
             ),
           )
-          .values
           .toList(),
     );
-
-    // Данный метод кажется правильнее. Но здесь не работает скролл.
-
-    // ListView.separated(
-    //   physics: const AlwaysScrollableScrollPhysics(),
-    //   shrinkWrap: true,
-    //   itemBuilder: (context, index) {
-    //     return Row(
-    //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-    //       children: [
-    //         SizedBox(
-    //           width: width * 0.7,
-    //           child: Text(
-    //             searchStoryList[index],
-    //             style: theme.textTheme.titleMedium,
-    //           ),
-    //         ),
-    //         InkWell(
-    //           borderRadius: BorderRadius.circular(30),
-    //           onTap: () {
-    //             context.read<AppSettings>().removeItemFromHistory(index);
-    //           },
-    //           child: const SightIcons(assetName: AppAssets.delete, width: 24, height: 24),
-    //         ),
-    //       ],
-    //     );
-    //   },
-    //   separatorBuilder: (context, index) => const Divider(),
-    //   itemCount: searchStoryList.length,
-    // );
   }
 }
 

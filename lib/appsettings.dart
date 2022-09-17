@@ -20,7 +20,7 @@ class AppSettings extends ChangeNotifier {
   final lotFocus = FocusNode();
   final descriptionFocus = FocusNode();
   final searchFocus = FocusNode();
-  final List<String> searchHistoryList = [];
+  final Set<String> searchHistoryList = {};
 
   // List<Sight> sightList = Mocks.mocks;
 
@@ -40,8 +40,8 @@ class AppSettings extends ChangeNotifier {
     notifyListeners();
   }
 
-  void removeItemFromHistory(int index) {
-    searchHistoryList.removeAt(index);
+  void removeItemFromHistory(String index) {
+    searchHistoryList.remove(index);
     notifyListeners();
   }
 
