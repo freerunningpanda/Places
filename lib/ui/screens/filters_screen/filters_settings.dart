@@ -9,7 +9,6 @@ class FiltersSettings extends ChangeNotifier {
 
   final List<String> activeFilters = [];
 
-  int length = 0;
 
   void clearAllFilters() {
     FiltersTable.filters.map((e) => e.isEnabled = false).toList();
@@ -53,7 +52,7 @@ class FiltersSettings extends ChangeNotifier {
       if (distance >= Mocks.rangeValues.start && distance <= Mocks.rangeValues.end) {
         FiltersTable.filtersWithDistance.add(el);
         debugPrint('🟡---------Добавленные места: ${FiltersTable.filtersWithDistance}');
-        length = FiltersTable.filtersWithDistance.length;
+        FiltersTable.filtersWithDistance.length;
         notifyListeners();
         /* for (final i in FiltersTable.filtersWithDistance) {
           debugPrint('🟡---------Найдены места: ${i.name}');
