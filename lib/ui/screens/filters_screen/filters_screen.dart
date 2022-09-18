@@ -34,6 +34,7 @@ class _FilterScreenState extends State<FilterScreen> {
     context.watch<FiltersSettings>();
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: _AppBar(
         onPressed: clearFilters,
       ),
