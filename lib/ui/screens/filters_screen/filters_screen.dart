@@ -64,7 +64,7 @@ class _FilterScreenState extends State<FilterScreen> {
             ActionButton(
               counterValue: context.read<FiltersSettings>().length,
               activeFilters: FiltersSettings().activeFilters,
-              title: '${AppString.showPlaces} (amount)',
+              title: '${AppString.showPlaces} (${FiltersTable.filtersWithDistance.length})',
               rangeValues: Mocks.rangeValues,
               onTap: () {
                 context.read<FiltersSettings>().showCount();
