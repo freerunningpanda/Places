@@ -66,7 +66,7 @@ class _FilterScreenState extends State<FilterScreen> {
               title: '${AppString.showPlaces} (amount)',
               rangeValues: Mocks.rangeValues,
               onTap: () {
-                context.read<FiltersSettings>().showCount();
+                context.read<FiltersSettings>().showPlacesWithFilter();
                 context.read<AppSettings>().clearSight();
                 debugPrint('🟡---------Длина: ${FiltersTable.filtersWithDistance.length}');
               },
@@ -189,7 +189,7 @@ class _FiltersTableState extends State<_FiltersTable> {
                       FiltersTable.filtersWithDistance.clear();
                       debugPrint('🟡---------Добавленные места: ${FiltersTable.filteredMocks}');
                     }
-                    context.read<FiltersSettings>().showCount();
+                    context.read<FiltersSettings>().showPlacesWithFilter();
 
                     return context.read<FiltersSettings>().saveFilters(i);
                   },
@@ -342,7 +342,7 @@ class _DistanceSliderState extends State<_DistanceSlider> {
           max: max,
           onChanged: (values) {
             context.read<FiltersSettings>().changeArea(start: values.start, end: values.end);
-            context.read<FiltersSettings>().showCount();
+            context.read<FiltersSettings>().showPlacesWithFilter();
           },
         ),
       ],

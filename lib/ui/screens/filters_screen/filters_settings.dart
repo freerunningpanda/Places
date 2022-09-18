@@ -42,24 +42,43 @@ class FiltersSettings extends ChangeNotifier {
     notifyListeners();
   }
 
-  void showCount() {
-    for (final el in FiltersTable.filteredMocks) {
-      final distance = Geolocator.distanceBetween(
-        Mocks.mockLat,
-        Mocks.mockLot,
-        el.lat,
-        el.lot,
-      );
-      if (distance >= Mocks.rangeValues.start && distance <= Mocks.rangeValues.end) {
-        FiltersTable.filtersWithDistance.add(el);
-        debugPrint('🟡---------Добавленные места: ${FiltersTable.filtersWithDistance}');
-        length = FiltersTable.filtersWithDistance.length;
-        notifyListeners();
-        /* for (final i in FiltersTable.filtersWithDistance) {
+  void showPlacesWithFilter() {
+    if (FiltersTable.filteredMocks.isEmpty) {
+      for (final el in Mocks.mocks) {
+        final distance = Geolocator.distanceBetween(
+          Mocks.mockLat,
+          Mocks.mockLot,
+          el.lat,
+          el.lot,
+        );
+        if (distance >= Mocks.rangeValues.start && distance <= Mocks.rangeValues.end) {
+          FiltersTable.filtersWithDistance.add(el);
+          debugPrint('🟡---------Добавленные места: ${FiltersTable.filtersWithDistance}');
+          length = FiltersTable.filtersWithDistance.length;
+          notifyListeners();
+          /* for (final i in FiltersTable.filtersWithDistance) {
           debugPrint('🟡---------Найдены места: ${i.name}');
         } */
-      } 
-
+        }
+      }
+    } else {
+      for (final el in FiltersTable.filteredMocks) {
+        final distance = Geolocator.distanceBetween(
+          Mocks.mockLat,
+          Mocks.mockLot,
+          el.lat,
+          el.lot,
+        );
+        if (distance >= Mocks.rangeValues.start && distance <= Mocks.rangeValues.end) {
+          FiltersTable.filtersWithDistance.add(el);
+          debugPrint('🟡---------Добавленные места: ${FiltersTable.filtersWithDistance}');
+          length = FiltersTable.filtersWithDistance.length;
+          notifyListeners();
+          /* for (final i in FiltersTable.filtersWithDistance) {
+          debugPrint('🟡---------Найдены места: ${i.name}');
+        } */
+        }
+      }
     }
   }
 }
