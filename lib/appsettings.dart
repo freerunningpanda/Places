@@ -32,7 +32,7 @@ class AppSettings extends ChangeNotifier {
 
   bool isFocusOn = false;
 
-  List<Sight> suggestions = [];
+  List<Sight> suggestions = FiltersTable.filtersWithDistance.toList();
 
   void saveSearchHistory(String value, TextEditingController controller) {
     if (controller.text.isEmpty) return;
@@ -76,7 +76,7 @@ class AppSettings extends ChangeNotifier {
 
   void searchSight(String query, TextEditingController controller) {
     if (FiltersTable.activeFilters.isEmpty) {
-      for (final el in Mocks.mocks) {
+      for (final el in FiltersTable.filtersWithDistance) {
         final distance = Geolocator.distanceBetween(
           Mocks.mockLat,
           Mocks.mockLot,
@@ -84,7 +84,7 @@ class AppSettings extends ChangeNotifier {
           el.lot,
         );
         if (distance >= Mocks.rangeValues.start && distance <= Mocks.rangeValues.end) {
-          suggestions = Mocks.mocks.where((sight) {
+          suggestions = FiltersTable.filtersWithDistance.where((sight) {
             final sightTitle = sight.name.toLowerCase();
             final input = query.toLowerCase();
 

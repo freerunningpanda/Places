@@ -42,6 +42,7 @@ class FiltersSettings extends ChangeNotifier {
 
   void showCount() {
     if (FiltersTable.filteredMocks.isEmpty) {
+      FiltersTable.filtersWithDistance.clear();
       for (final el in Mocks.mocks) {
         final distance = Geolocator.distanceBetween(
           Mocks.mockLat,
