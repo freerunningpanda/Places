@@ -59,7 +59,7 @@ class SightCard extends StatelessWidget {
                       _SightCardTop(
                         actionOne: actionOne,
                         type: type,
-                        url: url ?? 'no_url',
+                        url: url,
                       ),
                       const SizedBox(height: 16),
                       _SightCardBottom(
@@ -205,7 +205,7 @@ class RippleCardFull extends StatelessWidget {
 class _SightCardTop extends StatelessWidget {
   final Widget actionOne;
   final String type;
-  final String url;
+  final String? url;
 
   const _SightCardTop({
     Key? key,
@@ -233,7 +233,7 @@ class _SightCardTop extends StatelessWidget {
               topRight: Radius.circular(16),
             ),
             child: Image.network(
-              url,
+              url ?? 'no_url',
               fit: BoxFit.fitWidth,
               loadingBuilder: (context, child, loadingProgress) {
                 if (loadingProgress == null) return child;
