@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:geolocator/geolocator.dart';
+import 'package:places/appsettings.dart';
 import 'package:places/data/filters.dart';
 import 'package:places/data/filters_table.dart';
 import 'package:places/data/sight.dart';
@@ -14,11 +14,9 @@ import 'package:places/ui/widgets/sight_icons.dart';
 import 'package:provider/provider.dart';
 
 class FilterScreen extends StatefulWidget {
-  final List<Sight> sightList;
   final VoidCallback? onPressed;
   const FilterScreen({
     Key? key,
-    required this.sightList,
     this.onPressed,
   }) : super(key: key);
 
@@ -27,6 +25,8 @@ class FilterScreen extends StatefulWidget {
 }
 
 class _FilterScreenState extends State<FilterScreen> {
+  final sightList = Mocks.mocks;
+
   @override
   Widget build(BuildContext context) {
     final clearFilters = context.read<FiltersSettings>().clearAllFilters;
@@ -34,6 +34,7 @@ class _FilterScreenState extends State<FilterScreen> {
     context.watch<FiltersSettings>();
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: _AppBar(
         onPressed: clearFilters,
       ),
@@ -50,33 +51,25 @@ class _FilterScreenState extends State<FilterScreen> {
             const _Title(),
             const SizedBox(height: 24),
             _FiltersTable(
-              sightList: widget.sightList,
+              sightList: sightList,
               filters: FiltersTable.filters,
               activeFilters: FiltersSettings().activeFilters,
             ),
             const SizedBox(height: 60),
             Expanded(
               child: _DistanceSlider(
-                sightList: widget.sightList,
+                sightList: sightList,
               ),
             ),
             ActionButton(
-              counterValue: context.read<FiltersSettings>().length,
+              counterValue: FiltersTable.filtersWithDistance.length,
               activeFilters: FiltersSettings().activeFilters,
-              title: '${AppString.showPlaces} (amount)',
+              title: '${AppString.showPlaces} (${FiltersTable.filtersWithDistance.length})',
               rangeValues: Mocks.rangeValues,
               onTap: () {
-                for (final el in FiltersTable.filteredMocks) {
-                  final distance = Geolocator.distanceBetween(
-                    Mocks.mockLat,
-                    Mocks.mockLot,
-                    el.lat,
-                    el.lon,
-                  );
-                  if (distance >= Mocks.rangeValues.start && distance <= Mocks.rangeValues.end) {
-                    context.read<FiltersSettings>().showCount();
-                  }
-                }
+                context.read<FiltersSettings>().showCount();
+                context.read<AppSettings>().clearSight();
+                debugPrint('🟡---------Длина: ${FiltersTable.filtersWithDistance.length}');
               },
             ),
           ],
@@ -153,7 +146,7 @@ class _ClearButtonWidgetState extends State<_ClearButtonWidget> {
 }
 
 class _FiltersTable extends StatefulWidget {
-  final List<Filters> filters;
+  final List<Category> filters;
   final List<String> activeFilters;
   final List<Sight> sightList;
   const _FiltersTable({
@@ -187,13 +180,15 @@ class _FiltersTableState extends State<_FiltersTable> {
                 _ItemFilter(
                   isEnabled: e.isEnabled,
                   title: e.title,
-                  assetName: e.assetName,
+                  assetName: e.assetName ?? 'null',
                   onTap: () {
                     final filteredByType = widget.sightList.where((sight) => sight.type.contains(e.title)).toList();
                     if (!e.isEnabled) {
                       FiltersTable.filteredMocks.addAll(filteredByType);
                     } else {
-                      FiltersTable.filteredMocks.removeWhere((element) => element.type.contains(element.type));
+                      FiltersTable.filteredMocks.clear();
+                      FiltersTable.filtersWithDistance.clear();
+                      debugPrint('🟡---------Добавленные места: ${FiltersTable.filteredMocks}');
                     }
                     context.read<FiltersSettings>().showCount();
 

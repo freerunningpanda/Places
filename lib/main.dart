@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:places/appsettings.dart';
+import 'package:places/data/categories_table.dart';
 import 'package:places/ui/screens/filters_screen/filters_settings.dart';
 import 'package:places/ui/screens/navigation_screen/navigation_screen.dart';
 import 'package:places/ui/screens/res/app_theme.dart';
@@ -18,6 +19,9 @@ void main() {
         ),
         ChangeNotifierProvider<FiltersSettings>(
           create: (_) => FiltersSettings(),
+        ),
+        ChangeNotifierProvider<CategoriesTable>(
+          create: (_) => CategoriesTable(),
         ),
       ],
       child: const App(),

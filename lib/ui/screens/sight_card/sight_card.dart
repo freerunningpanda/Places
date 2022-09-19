@@ -7,7 +7,7 @@ import 'package:places/ui/screens/res/custom_colors.dart';
 import 'package:places/ui/screens/sight_details/sight_details.dart';
 
 class SightCard extends StatelessWidget {
-  final String url;
+  final String? url;
   final String type;
   final String name;
   final List<Widget> details;
@@ -205,7 +205,7 @@ class RippleCardFull extends StatelessWidget {
 class _SightCardTop extends StatelessWidget {
   final Widget actionOne;
   final String type;
-  final String url;
+  final String? url;
 
   const _SightCardTop({
     Key? key,
@@ -233,7 +233,7 @@ class _SightCardTop extends StatelessWidget {
               topRight: Radius.circular(16),
             ),
             child: Image.network(
-              url,
+              url ?? 'no_url',
               fit: BoxFit.fitWidth,
               loadingBuilder: (context, child, loadingProgress) {
                 if (loadingProgress == null) return child;

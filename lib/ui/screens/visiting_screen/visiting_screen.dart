@@ -4,12 +4,12 @@ import 'package:places/data/sight.dart';
 import 'package:places/mocks.dart';
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_card_size.dart';
-import 'package:places/ui/res/app_colors.dart';
 import 'package:places/ui/res/app_strings.dart';
 import 'package:places/ui/res/app_typography.dart';
 import 'package:places/ui/screens/res/custom_colors.dart';
 import 'package:places/ui/screens/sight_card/sight_card.dart';
 import 'package:places/ui/screens/sight_details/sight_details.dart';
+import 'package:places/ui/widgets/add_new_place_button.dart';
 import 'package:places/ui/widgets/sight_icons.dart';
 
 List<Sight> list = Mocks.mocks;
@@ -65,7 +65,7 @@ class _VisitingScreenState extends State<VisitingScreen> {
               bottom: 16,
               left: 92,
               right: 92,
-              child: _AddNewPlaceButton(),
+              child: AddNewPlaceButton(),
             ),
           ],
         ),
@@ -74,43 +74,7 @@ class _VisitingScreenState extends State<VisitingScreen> {
   }
 }
 
-class _AddNewPlaceButton extends StatelessWidget {
-  const _AddNewPlaceButton({
-    Key? key,
-  }) : super(key: key);
 
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () => debugPrint('🟡---------Add new place button pressed'),
-      child: Container(
-        width: 177,
-        height: 48,
-        decoration: BoxDecoration(
-          gradient: const LinearGradient(
-            begin: Alignment.topRight,
-            end: Alignment.bottomLeft,
-            colors: AppColors.limeGradient,
-          ),
-          borderRadius: BorderRadius.circular(30),
-          color: Colors.green,
-        ),
-        child: Row(
-          children: const [
-            Expanded(child: SizedBox()),
-            SightIcons(assetName: AppAssets.plus, width: 24, height: 24),
-            SizedBox(width: 8),
-            Text(
-              AppString.addNewPlace,
-              style: AppTypography.sightCardTitle,
-            ),
-            Expanded(child: SizedBox()),
-          ],
-        ),
-      ),
-    );
-  }
-}
 
 class _AppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
@@ -195,7 +159,7 @@ class _WantToVisitWidget extends StatelessWidget {
         return SightCard(
           isVisitingScreen: true,
           item: item,
-          url: item.url,
+          url: item.url ?? 'no_url',
           type: item.type,
           name: item.name,
           aspectRatio: AppCardSize.visitingCard,

@@ -117,7 +117,7 @@ class _SightDetailsImage extends StatelessWidget {
     return SizedBox(
       height: height,
       child: Image.network(
-        sight.url,
+        sight.url ?? 'no_url',
         fit: BoxFit.cover,
         loadingBuilder: (context, child, loadingProgress) {
           if (loadingProgress == null) return child;

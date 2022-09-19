@@ -45,6 +45,11 @@ abstract class AppTypography {
     fontWeight: FontWeight.w500,
     color: AppColors.textColor,
   );
+  static const addNewPlaceCancel = TextStyle(
+    fontSize: 16,
+    fontWeight: FontWeight.w500,
+    color: AppColors.secondaryTwo,
+  );
   static const sightCardDescriptionTitleDarkMode = TextStyle(
     fontSize: 16,
     fontWeight: FontWeight.w500,
@@ -131,6 +136,11 @@ abstract class AppTypography {
   static const sightDetailsButtonName = TextStyle(
     fontWeight: FontWeight.w700,
     color: AppColors.backgroundColor,
+  );
+  
+  static const sightDetailsButtonNameInnactive = TextStyle(
+    fontWeight: FontWeight.w700,
+    color: AppColors.inactiveBlack,
   );
 
   static const inactiveButton = TextStyle(
