@@ -7,7 +7,7 @@ import 'package:places/ui/screens/res/custom_colors.dart';
 import 'package:places/ui/screens/sight_details/sight_details.dart';
 
 class SightCard extends StatelessWidget {
-  final String url;
+  final String? url;
   final String type;
   final String name;
   final List<Widget> details;
@@ -59,7 +59,7 @@ class SightCard extends StatelessWidget {
                       _SightCardTop(
                         actionOne: actionOne,
                         type: type,
-                        url: url,
+                        url: url ?? 'no_url',
                       ),
                       const SizedBox(height: 16),
                       _SightCardBottom(

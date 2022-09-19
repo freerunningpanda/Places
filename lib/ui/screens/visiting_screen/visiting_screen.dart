@@ -226,7 +226,7 @@ class _VisitedWidget extends StatelessWidget {
           child: SightCard(
             isVisitingScreen: true,
             item: sight,
-            url: sight.url ?? 'no_url',
+            url: sight.url,
             type: sight.type,
             name: sight.name,
             aspectRatio: AppCardSize.visitingCard,
