@@ -43,9 +43,7 @@ class CreateButton extends StatelessWidget {
           height: 48,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(12),
-            color: buttonStyle()
-                ? customColors?.color
-                : theme.sliderTheme.activeTrackColor,
+            color: buttonStyle() ? customColors?.color : theme.sliderTheme.activeTrackColor,
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -73,9 +71,7 @@ class CreateButton extends StatelessWidget {
             type: MaterialType.transparency,
             child: InkWell(
               borderRadius: BorderRadius.circular(12.0),
-              onTap: buttonStyle()
-                  ? null
-                  : onTap,
+              onTap: buttonStyle() ? null : onTap,
             ),
           ),
         ),
@@ -85,9 +81,9 @@ class CreateButton extends StatelessWidget {
 
   bool buttonStyle() {
     return chosenCategory.isEmpty ||
-                    titleController.text.isEmpty ||
-                    descriptionController.text.isEmpty ||
-                    latController.text.isEmpty ||
-                    lotController.text.isEmpty;
+        titleController.text.isEmpty ||
+        descriptionController.text.isEmpty ||
+        latController.text.isEmpty ||
+        lotController.text.isEmpty;
   }
 }
