@@ -43,11 +43,7 @@ class CreateButton extends StatelessWidget {
           height: 48,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(12),
-            color: (chosenCategory.isEmpty ||
-                    titleController.text.isEmpty ||
-                    descriptionController.text.isEmpty ||
-                    latController.text.isEmpty ||
-                    lotController.text.isEmpty)
+            color: buttonStyle()
                 ? customColors?.color
                 : theme.sliderTheme.activeTrackColor,
           ),
@@ -65,11 +61,7 @@ class CreateButton extends StatelessWidget {
               const SizedBox(width: 8),
               Text(
                 title,
-                style: (chosenCategory.isEmpty ||
-                        titleController.text.isEmpty ||
-                        descriptionController.text.isEmpty ||
-                        latController.text.isEmpty ||
-                        lotController.text.isEmpty)
+                style: buttonStyle()
                     ? AppTypography.sightDetailsButtonNameInnactive
                     : AppTypography.sightDetailsButtonName,
               ),
@@ -81,11 +73,7 @@ class CreateButton extends StatelessWidget {
             type: MaterialType.transparency,
             child: InkWell(
               borderRadius: BorderRadius.circular(12.0),
-              onTap: (chosenCategory.isEmpty ||
-                      titleController.text.isEmpty ||
-                      descriptionController.text.isEmpty ||
-                      latController.text.isEmpty ||
-                      lotController.text.isEmpty)
+              onTap: buttonStyle()
                   ? null
                   : onTap,
             ),
@@ -93,5 +81,13 @@ class CreateButton extends StatelessWidget {
         ),
       ],
     );
+  }
+
+  bool buttonStyle() {
+    return chosenCategory.isEmpty ||
+                    titleController.text.isEmpty ||
+                    descriptionController.text.isEmpty ||
+                    latController.text.isEmpty ||
+                    lotController.text.isEmpty;
   }
 }
