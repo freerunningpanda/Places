@@ -24,8 +24,6 @@ class AppSettings extends ChangeNotifier {
   List<Sight> sightsToVisit = Mocks.sightsTovisit;
   List<Sight> visitedSights = Mocks.visitedSights;
 
-  bool isSightsEmpty = false;
-
   bool isDarkMode = false;
 
   bool isLat = false;
@@ -37,10 +35,6 @@ class AppSettings extends ChangeNotifier {
   List<Sight> suggestions = FiltersTable.filtersWithDistance.toList();
 
   void deleteSight(int index, List<Sight> sightList) {
-    if (sightsToVisit.isEmpty || visitedSights.isEmpty) {
-      isSightsEmpty = true;
-      notifyListeners();
-    }
     sightList.removeAt(index);
     notifyListeners();
   }
