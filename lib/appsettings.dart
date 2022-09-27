@@ -21,8 +21,10 @@ class AppSettings extends ChangeNotifier {
   final descriptionFocus = FocusNode();
   final searchFocus = FocusNode();
   final Set<String> searchHistoryList = {};
+  List<Sight> sightsToVisit = Mocks.sightsTovisit;
+  List<Sight> visitedSights = Mocks.visitedSights;
 
-  // List<Sight> sightList = Mocks.mocks;
+  bool isSightsEmpty = false;
 
   bool isDarkMode = false;
 
@@ -33,6 +35,15 @@ class AppSettings extends ChangeNotifier {
   bool isFocusOn = false;
 
   List<Sight> suggestions = FiltersTable.filtersWithDistance.toList();
+
+  void deleteSight(int index, List<Sight> sightList) {
+    if (sightsToVisit.isEmpty || visitedSights.isEmpty) {
+      isSightsEmpty = true;
+      notifyListeners();
+    }
+    sightList.removeAt(index);
+    notifyListeners();
+  }
 
   void saveSearchHistory(String value, TextEditingController controller) {
     if (controller.text.isEmpty) return;

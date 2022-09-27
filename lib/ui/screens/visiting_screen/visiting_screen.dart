@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:places/appsettings.dart';
 
 import 'package:places/data/sight.dart';
 import 'package:places/mocks.dart';
@@ -10,9 +11,7 @@ import 'package:places/ui/screens/res/custom_colors.dart';
 import 'package:places/ui/screens/sight_card/sight_card.dart';
 import 'package:places/ui/widgets/add_new_place_button.dart';
 import 'package:places/ui/widgets/sight_icons.dart';
-
-List<Sight> sightsToVisit = Mocks.sightsTovisit;
-List<Sight> visitedSights = Mocks.visitedSights;
+import 'package:provider/provider.dart';
 
 class VisitingScreen extends StatefulWidget {
   const VisitingScreen({Key? key}) : super(key: key);
@@ -26,6 +25,11 @@ class _VisitingScreenState extends State<VisitingScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final sightsToVisit = context.read<AppSettings>().sightsToVisit;
+    final visitedSights = context.read<AppSettings>().visitedSights;
+
+    context.watch<AppSettings>();
+
     return DefaultTabController(
       length: 2,
       initialIndex: initialIndex,
@@ -152,7 +156,10 @@ class _WantToVisitWidget extends StatefulWidget {
 class _WantToVisitWidgetState extends State<_WantToVisitWidget> {
   @override
   Widget build(BuildContext context) {
+    final sightsToVisit = context.read<AppSettings>().sightsToVisit;
     final theme = Theme.of(context);
+
+    context.watch<AppSettings>();
 
     return ListView.builder(
       itemCount: sightsToVisit.length,
@@ -161,7 +168,7 @@ class _WantToVisitWidgetState extends State<_WantToVisitWidget> {
 
         return SightCard(
           // key: ValueKey(sightsToVisit[index]),
-          removeSight: () => deleteSight(index, sightsToVisit),
+          removeSight: () => context.read<AppSettings>().deleteSight(index, sightsToVisit),
           isVisitingScreen: true,
           item: item,
           url: item.url ?? 'no_url',
@@ -204,11 +211,7 @@ class _WantToVisitWidgetState extends State<_WantToVisitWidget> {
     );
   }
 
-  void deleteSight(int index, List<Sight> sightList) {
-    setState(() {
-      sightList.removeAt(index);
-    });
-  }
+
 }
 
 class _VisitedWidget extends StatefulWidget {
@@ -221,6 +224,7 @@ class _VisitedWidget extends StatefulWidget {
 class _VisitedWidgetState extends State<_VisitedWidget> {
   @override
   Widget build(BuildContext context) {
+    final visitedSights = context.read<AppSettings>().visitedSights;
     final theme = Theme.of(context);
 
     return ListView.builder(
