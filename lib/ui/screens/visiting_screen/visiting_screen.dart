@@ -227,6 +227,8 @@ class _VisitedWidgetState extends State<_VisitedWidget> {
     final visitedSights = context.read<AppSettings>().visitedSights;
     final theme = Theme.of(context);
 
+    context.watch<AppSettings>();
+
     return ListView.builder(
       itemCount: visitedSights.length,
       itemBuilder: (context, index) {
@@ -234,7 +236,7 @@ class _VisitedWidgetState extends State<_VisitedWidget> {
 
         return SightCard(
           // key: ValueKey(sightsToVisit[index]),
-          removeSight: () => deleteSight(index, visitedSights),
+          removeSight: () => context.read<AppSettings>().deleteSight(index, visitedSights),
           isVisitingScreen: true,
           item: item,
           url: item.url ?? 'no_url',
