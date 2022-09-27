@@ -45,14 +45,18 @@ class _VisitingScreenState extends State<VisitingScreen> {
                     child: TabBarView(
                       children: [
                         if (sightsToVisit.isNotEmpty)
-                          const _WantToVisitWidget()
+                          const _WantToVisitWidget(
+                            key: PageStorageKey('WantToVisitScrollPosition'),
+                          )
                         else
                           const _EmptyList(
                             icon: AppAssets.card,
                             description: AppString.likedPlaces,
                           ),
                         if (visitedSights.isNotEmpty)
-                          const _VisitedWidget()
+                          const _VisitedWidget(
+                            key: PageStorageKey('VisitedScrollPosition'),
+                          )
                         else
                           const _EmptyList(
                             icon: AppAssets.goIconTransparent,
