@@ -36,8 +36,17 @@ class AppSettings extends ChangeNotifier {
   List<Sight> suggestions = FiltersTable.filtersWithDistance.toList();
 
   void pickImage() {
-    if (places.length < Mocks.mocks.length) {
+    if (places.isEmpty) {
       places.add(Mocks.mocks[0]);
+      notifyListeners();
+    } else if (places.length == 1) {
+      places.add(Mocks.mocks[1]);
+      notifyListeners();
+    } else if (places.length == 2) {
+      places.add(Mocks.mocks[2]);
+      notifyListeners();
+    } else if (places.length == 3) {
+      places.add(Mocks.mocks[3]);
       notifyListeners();
     } else {
       return;
