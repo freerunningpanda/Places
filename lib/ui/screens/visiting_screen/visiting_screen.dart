@@ -24,10 +24,8 @@ class _VisitingScreenState extends State<VisitingScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final sightsToVisit = context.read<AppSettings>().sightsToVisit;
-    final visitedSights = context.read<AppSettings>().visitedSights;
-
-    context.watch<AppSettings>();
+    final sightsToVisit = context.watch<AppSettings>().sightsToVisit;
+    final visitedSights = context.watch<AppSettings>().visitedSights;
 
     return DefaultTabController(
       length: 2,
@@ -45,17 +43,19 @@ class _VisitingScreenState extends State<VisitingScreen> {
                     child: TabBarView(
                       children: [
                         if (sightsToVisit.isNotEmpty)
-                          const _WantToVisitWidget(
-                            key: PageStorageKey('WantToVisitScrollPosition'),
+                          _WantToVisitWidget(
+                            sightsToVisit: sightsToVisit,
+                            key: const PageStorageKey('WantToVisitScrollPosition'),
                           )
                         else
-                          const _EmptyList( 
+                          const _EmptyList(
                             icon: AppAssets.card,
                             description: AppString.likedPlaces,
                           ),
                         if (visitedSights.isNotEmpty)
-                          const _VisitedWidget(
-                            key: PageStorageKey('VisitedScrollPosition'),
+                          _VisitedWidget(
+                            visitedSights: visitedSights,
+                            key: const PageStorageKey('VisitedScrollPosition'),
                           )
                         else
                           const _EmptyList(
@@ -150,7 +150,8 @@ class _TabBarWidget extends StatelessWidget {
 }
 
 class _WantToVisitWidget extends StatefulWidget {
-  const _WantToVisitWidget({Key? key}) : super(key: key);
+  final List<Sight> sightsToVisit;
+  const _WantToVisitWidget({Key? key, required this.sightsToVisit}) : super(key: key);
 
   @override
   State<_WantToVisitWidget> createState() => _WantToVisitWidgetState();
@@ -159,19 +160,16 @@ class _WantToVisitWidget extends StatefulWidget {
 class _WantToVisitWidgetState extends State<_WantToVisitWidget> {
   @override
   Widget build(BuildContext context) {
-    final sightsToVisit = context.read<AppSettings>().sightsToVisit;
     final theme = Theme.of(context);
 
-    context.watch<AppSettings>();
-
     return ListView.builder(
-      itemCount: sightsToVisit.length,
+      itemCount: widget.sightsToVisit.length,
       itemBuilder: (context, index) {
-        final item = sightsToVisit[index];
+        final item = widget.sightsToVisit[index];
 
         return SightCard(
           // key: ValueKey(sightsToVisit[index]),
-          removeSight: () => context.read<AppSettings>().deleteSight(index, sightsToVisit),
+          removeSight: () => context.read<AppSettings>().deleteSight(index, widget.sightsToVisit),
           isVisitingScreen: true,
           item: item,
           url: item.url ?? 'no_url',
@@ -213,12 +211,11 @@ class _WantToVisitWidgetState extends State<_WantToVisitWidget> {
       },
     );
   }
-
-
 }
 
 class _VisitedWidget extends StatefulWidget {
-  const _VisitedWidget({Key? key}) : super(key: key);
+  final List<Sight> visitedSights;
+  const _VisitedWidget({Key? key, required this.visitedSights}) : super(key: key);
 
   @override
   State<_VisitedWidget> createState() => _VisitedWidgetState();
@@ -227,19 +224,15 @@ class _VisitedWidget extends StatefulWidget {
 class _VisitedWidgetState extends State<_VisitedWidget> {
   @override
   Widget build(BuildContext context) {
-    final visitedSights = context.read<AppSettings>().visitedSights;
     final theme = Theme.of(context);
 
-    context.watch<AppSettings>();
-
     return ListView.builder(
-      itemCount: visitedSights.length,
+      itemCount: widget.visitedSights.length,
       itemBuilder: (context, index) {
-        final item = visitedSights[index];
+        final item = widget.visitedSights[index];
 
         return SightCard(
-          // key: ValueKey(sightsToVisit[index]),
-          removeSight: () => context.read<AppSettings>().deleteSight(index, visitedSights),
+          removeSight: () => context.read<AppSettings>().deleteSight(index, widget.visitedSights),
           isVisitingScreen: true,
           item: item,
           url: item.url ?? 'no_url',
