@@ -136,31 +136,87 @@ class AddSightScreen extends StatelessWidget {
   }
 }
 
-class _ImagePickerWidget extends StatelessWidget {
+class _ImagePickerWidget extends StatefulWidget {
   final ThemeData theme;
   const _ImagePickerWidget({Key? key, required this.theme}) : super(key: key);
 
   @override
+  State<_ImagePickerWidget> createState() => _ImagePickerWidgetState();
+}
+
+class _ImagePickerWidgetState extends State<_ImagePickerWidget> {
+  final sightList = Mocks.mocks;
+  @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Container(
-          width: 72,
-          height: 72,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(12),
-            border: Border.all(
-              color: theme.sliderTheme.activeTickMarkColor as Color,
-              width: 2,
-            ),
-          ),
-          child: Icon(
-            Icons.add_rounded,
-            color: theme.sliderTheme.activeTrackColor,
-            size: 45,
-          ),
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      physics: const BouncingScrollPhysics(),
+      child: Row(
+        children: [
+          _PickImageWidget(theme: widget.theme),
+          for(var el in sightList)
+          _ImageSight(image: el.url),
+        ],
+      ),
+    );
+  }
+}
+
+class _ImageSight extends StatefulWidget {
+  final String? image;
+  const _ImageSight({Key? key, required this.image}) : super(key: key);
+
+  @override
+  State<_ImageSight> createState() => _ImageSightState();
+}
+
+class _ImageSightState extends State<_ImageSight> {
+  
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 8),
+      width: 72,
+      height: 72,
+      decoration: const BoxDecoration(),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(12),
+        child: Image.network(
+          widget.image ?? 'no_url',
+          fit: BoxFit.cover,
         ),
-      ],
+      ),
+    );
+  }
+}
+
+class _PickImageWidget extends StatelessWidget {
+  final ThemeData theme;
+
+  const _PickImageWidget({
+    Key? key,
+    required this.theme,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.only(right: 8),
+      width: 72,
+      height: 72,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(
+          color: theme.sliderTheme.activeTickMarkColor as Color,
+          width: 2,
+        ),
+      ),
+      child: Icon(
+        Icons.add_rounded,
+        color: theme.sliderTheme.activeTrackColor,
+        size: 45,
+      ),
     );
   }
 }
