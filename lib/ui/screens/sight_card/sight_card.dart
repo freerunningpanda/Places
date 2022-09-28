@@ -16,6 +16,7 @@ class SightCard extends StatelessWidget {
   final double? aspectRatio;
   final Sight item;
   final bool isVisitingScreen;
+  final VoidCallback? removeSight;
 
   const SightCard({
     Key? key,
@@ -28,6 +29,7 @@ class SightCard extends StatelessWidget {
     this.aspectRatio,
     required this.item,
     required this.isVisitingScreen,
+    this.removeSight,
   }) : super(key: key);
 
   @override
@@ -73,6 +75,7 @@ class SightCard extends StatelessWidget {
               RippleCardFull(item: item),
               if (isVisitingScreen)
                 RippleIcons(
+                  removeSight: removeSight,
                   actionOne: actionOne,
                   actionTwo: actionTwo ?? const SizedBox(),
                 )
@@ -120,11 +123,13 @@ class RippleIcon extends StatelessWidget {
 class RippleIcons extends StatelessWidget {
   final Widget actionOne;
   final Widget actionTwo;
+  final VoidCallback? removeSight;
 
   const RippleIcons({
     Key? key,
     required this.actionOne,
     required this.actionTwo,
+    required this.removeSight,
   }) : super(key: key);
 
   @override
@@ -159,9 +164,7 @@ class RippleIcons extends StatelessWidget {
               height: 22,
               child: InkWell(
                 borderRadius: BorderRadius.circular(16.0),
-                onTap: () {
-                  debugPrint('🟡---------cross pressed');
-                },
+                onTap: removeSight,
                 child: actionTwo,
               ),
             ),

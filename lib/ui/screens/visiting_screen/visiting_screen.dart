@@ -1,18 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:places/appsettings.dart';
 
 import 'package:places/data/sight.dart';
-import 'package:places/mocks.dart';
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_card_size.dart';
 import 'package:places/ui/res/app_strings.dart';
 import 'package:places/ui/res/app_typography.dart';
 import 'package:places/ui/screens/res/custom_colors.dart';
 import 'package:places/ui/screens/sight_card/sight_card.dart';
-import 'package:places/ui/screens/sight_details/sight_details.dart';
 import 'package:places/ui/widgets/add_new_place_button.dart';
 import 'package:places/ui/widgets/sight_icons.dart';
-
-List<Sight> list = Mocks.mocks;
+import 'package:provider/provider.dart';
 
 class VisitingScreen extends StatefulWidget {
   const VisitingScreen({Key? key}) : super(key: key);
@@ -26,6 +24,11 @@ class _VisitingScreenState extends State<VisitingScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final sightsToVisit = context.read<AppSettings>().sightsToVisit;
+    final visitedSights = context.read<AppSettings>().visitedSights;
+
+    context.watch<AppSettings>();
+
     return DefaultTabController(
       length: 2,
       initialIndex: initialIndex,
@@ -41,15 +44,19 @@ class _VisitingScreenState extends State<VisitingScreen> {
                     padding: const EdgeInsets.only(top: 30),
                     child: TabBarView(
                       children: [
-                        if (list.isNotEmpty)
-                          const _WantToVisitWidget()
+                        if (sightsToVisit.isNotEmpty)
+                          const _WantToVisitWidget(
+                            key: PageStorageKey('WantToVisitScrollPosition'),
+                          )
                         else
                           const _EmptyList(
                             icon: AppAssets.card,
                             description: AppString.likedPlaces,
                           ),
-                        if (list.isNotEmpty)
-                          const _VisitedWidget()
+                        if (visitedSights.isNotEmpty)
+                          const _VisitedWidget(
+                            key: PageStorageKey('VisitedScrollPosition'),
+                          )
                         else
                           const _EmptyList(
                             icon: AppAssets.goIconTransparent,
@@ -73,8 +80,6 @@ class _VisitingScreenState extends State<VisitingScreen> {
     );
   }
 }
-
-
 
 class _AppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
@@ -144,19 +149,29 @@ class _TabBarWidget extends StatelessWidget {
   }
 }
 
-class _WantToVisitWidget extends StatelessWidget {
+class _WantToVisitWidget extends StatefulWidget {
   const _WantToVisitWidget({Key? key}) : super(key: key);
 
   @override
+  State<_WantToVisitWidget> createState() => _WantToVisitWidgetState();
+}
+
+class _WantToVisitWidgetState extends State<_WantToVisitWidget> {
+  @override
   Widget build(BuildContext context) {
+    final sightsToVisit = context.read<AppSettings>().sightsToVisit;
     final theme = Theme.of(context);
 
+    context.watch<AppSettings>();
+
     return ListView.builder(
-      itemCount: list.length,
+      itemCount: sightsToVisit.length,
       itemBuilder: (context, index) {
-        final item = Mocks.mocks[index];
+        final item = sightsToVisit[index];
 
         return SightCard(
+          // key: ValueKey(sightsToVisit[index]),
+          removeSight: () => context.read<AppSettings>().deleteSight(index, sightsToVisit),
           isVisitingScreen: true,
           item: item,
           url: item.url ?? 'no_url',
@@ -198,73 +213,79 @@ class _WantToVisitWidget extends StatelessWidget {
       },
     );
   }
+
+
 }
 
-class _VisitedWidget extends StatelessWidget {
+class _VisitedWidget extends StatefulWidget {
   const _VisitedWidget({Key? key}) : super(key: key);
 
   @override
+  State<_VisitedWidget> createState() => _VisitedWidgetState();
+}
+
+class _VisitedWidgetState extends State<_VisitedWidget> {
+  @override
   Widget build(BuildContext context) {
+    final visitedSights = context.read<AppSettings>().visitedSights;
     final theme = Theme.of(context);
 
-    return ListView.builder(
-      itemCount: list.length,
-      itemBuilder: (context, index) {
-        final sight = Mocks.mocks[index];
+    context.watch<AppSettings>();
 
-        return GestureDetector(
-          onTap: () {
-            debugPrint('🟡---------go to SightDetails pressed');
-            Navigator.of(context).push(
-              MaterialPageRoute<SightDetails>(
-                builder: (context) => SightDetails(
-                  sight: sight,
-                ),
-              ),
-            );
-          },
-          child: SightCard(
-            isVisitingScreen: true,
-            item: sight,
-            url: sight.url,
-            type: sight.type,
-            name: sight.name,
-            aspectRatio: AppCardSize.visitingCard,
-            details: [
-              Text(
-                sight.name,
-                maxLines: 2,
-                style: theme.textTheme.headlineSmall,
-              ),
-              const SizedBox(height: 2),
-              const Text(
-                '${AppString.targetReach} 12 окт. 2022',
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: AppTypography.detailsText,
-              ),
-              const SizedBox(height: 10),
-              const Text(
-                '${AppString.closed} 09:00',
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: AppTypography.detailsText,
-              ),
-            ],
-            actionOne: const SightIcons(
-              assetName: AppAssets.share,
-              width: 24,
-              height: 24,
+    return ListView.builder(
+      itemCount: visitedSights.length,
+      itemBuilder: (context, index) {
+        final item = visitedSights[index];
+
+        return SightCard(
+          // key: ValueKey(sightsToVisit[index]),
+          removeSight: () => context.read<AppSettings>().deleteSight(index, visitedSights),
+          isVisitingScreen: true,
+          item: item,
+          url: item.url ?? 'no_url',
+          type: item.type,
+          name: item.name,
+          aspectRatio: AppCardSize.visitingCard,
+          details: [
+            Text(
+              item.name,
+              maxLines: 2,
+              style: theme.textTheme.headlineSmall,
             ),
-            actionTwo: const SightIcons(
-              assetName: AppAssets.cross,
-              width: 22,
-              height: 22,
+            const SizedBox(height: 2),
+            const Text(
+              '${AppString.planning} 12 окт. 2022',
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: AppTypography.greenColor,
             ),
+            const SizedBox(height: 10),
+            const Text(
+              '${AppString.closed} 09:00',
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: AppTypography.textText16Regular,
+            ),
+          ],
+          actionOne: const SightIcons(
+            assetName: AppAssets.calendarWhite,
+            width: 24,
+            height: 24,
+          ),
+          actionTwo: const SightIcons(
+            assetName: AppAssets.cross,
+            width: 22,
+            height: 22,
           ),
         );
       },
     );
+  }
+
+  void deleteSight(int index, List<Sight> sightList) {
+    setState(() {
+      sightList.removeAt(index);
+    });
   }
 }
 
