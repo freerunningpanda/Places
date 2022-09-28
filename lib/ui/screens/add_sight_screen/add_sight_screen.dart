@@ -200,7 +200,7 @@ class _ImageSightState extends State<_ImageSight> {
   }
 }
 
-class _PickImageWidget extends StatefulWidget {
+class _PickImageWidget extends StatelessWidget {
   final List<Sight> places;
   final ThemeData theme;
 
@@ -211,11 +211,6 @@ class _PickImageWidget extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<_PickImageWidget> createState() => _PickImageWidgetState();
-}
-
-class _PickImageWidgetState extends State<_PickImageWidget> {
-  @override
   Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.only(right: 8),
@@ -224,16 +219,14 @@ class _PickImageWidgetState extends State<_PickImageWidget> {
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
-          color: widget.theme.sliderTheme.activeTickMarkColor as Color,
+          color: theme.sliderTheme.activeTickMarkColor as Color,
           width: 2,
         ),
       ),
       child: IconButton(
         icon: const Icon(Icons.add_rounded, size: 45),
-        onPressed: () {
-          setState(() => context.read<AppSettings>().pickImage());
-        },
-        color: widget.theme.sliderTheme.activeTrackColor,
+        onPressed: () => context.read<AppSettings>().pickImage(),
+        color: theme.sliderTheme.activeTrackColor,
       ),
     );
   }
