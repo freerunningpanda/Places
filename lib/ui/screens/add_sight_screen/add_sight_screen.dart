@@ -149,7 +149,15 @@ class _ImagePickerWidget extends StatelessWidget {
           height: 72,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(12),
-            border: Border.all(color: theme.sliderTheme.activeTickMarkColor as Color),
+            border: Border.all(
+              color: theme.sliderTheme.activeTickMarkColor as Color,
+              width: 2,
+            ),
+          ),
+          child: Icon(
+            Icons.add_rounded,
+            color: theme.sliderTheme.activeTrackColor,
+            size: 45,
           ),
         ),
       ],
