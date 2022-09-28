@@ -148,16 +148,25 @@ class _ImagePickerWidgetState extends State<_ImagePickerWidget> {
   final sightList = Mocks.mocks;
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      physics: const BouncingScrollPhysics(),
-      child: Row(
-        children: [
-          _PickImageWidget(theme: widget.theme),
-          for(var el in sightList)
-          _ImageSight(image: el.url),
-        ],
-      ),
+    final places = context.watch<AppSettings>().places;
+
+    return Row(
+      children: [
+        Row(
+          children: [
+            _PickImageWidget(theme: widget.theme, places: places),
+          ],
+        ),
+        Row(
+          children: [
+            for (var el in places)
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: _ImageSight(image: el.url),
+              ),
+          ],
+        ),
+      ],
     );
   }
 }
@@ -171,19 +180,19 @@ class _ImageSight extends StatefulWidget {
 }
 
 class _ImageSightState extends State<_ImageSight> {
-  
-
   @override
   Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 8),
-      width: 72,
-      height: 72,
+      // width: 72,
+      // height: 72,
       decoration: const BoxDecoration(),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(12),
         child: Image.network(
           widget.image ?? 'no_url',
+          width: 72,
+          height: 72,
           fit: BoxFit.cover,
         ),
       ),
@@ -191,14 +200,21 @@ class _ImageSightState extends State<_ImageSight> {
   }
 }
 
-class _PickImageWidget extends StatelessWidget {
+class _PickImageWidget extends StatefulWidget {
+  final List<Sight> places;
   final ThemeData theme;
 
   const _PickImageWidget({
     Key? key,
     required this.theme,
+    required this.places,
   }) : super(key: key);
 
+  @override
+  State<_PickImageWidget> createState() => _PickImageWidgetState();
+}
+
+class _PickImageWidgetState extends State<_PickImageWidget> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -208,14 +224,16 @@ class _PickImageWidget extends StatelessWidget {
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
-          color: theme.sliderTheme.activeTickMarkColor as Color,
+          color: widget.theme.sliderTheme.activeTickMarkColor as Color,
           width: 2,
         ),
       ),
-      child: Icon(
-        Icons.add_rounded,
-        color: theme.sliderTheme.activeTrackColor,
-        size: 45,
+      child: IconButton(
+        icon: const Icon(Icons.add_rounded, size: 45),
+        onPressed: () {
+          setState(() => context.read<AppSettings>().pickImage());
+        },
+        color: widget.theme.sliderTheme.activeTrackColor,
       ),
     );
   }

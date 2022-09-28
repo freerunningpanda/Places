@@ -21,6 +21,7 @@ class AppSettings extends ChangeNotifier {
   final descriptionFocus = FocusNode();
   final searchFocus = FocusNode();
   final Set<String> searchHistoryList = {};
+  final List<Sight> places = [];
   List<Sight> sightsToVisit = Mocks.sightsTovisit;
   List<Sight> visitedSights = Mocks.visitedSights;
 
@@ -33,6 +34,15 @@ class AppSettings extends ChangeNotifier {
   bool isFocusOn = false;
 
   List<Sight> suggestions = FiltersTable.filtersWithDistance.toList();
+
+  void pickImage() {
+    if (places.length < Mocks.mocks.length) {
+      places.add(Mocks.mocks[0]);
+      notifyListeners();
+    } else {
+      return;
+    }
+  }
 
   void deleteSight(int index, List<Sight> sightList) {
     sightList.removeAt(index);
