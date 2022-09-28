@@ -48,6 +48,12 @@ class AppSettings extends ChangeNotifier {
     } else if (places.length == 3) {
       places.add(Mocks.mocks[3]);
       notifyListeners();
+    } else if (places.length == 4) {
+      places.add(Mocks.mocks[4]);
+      notifyListeners();
+    } else if (places.length == 5) {
+      places.add(Mocks.mocks[5]);
+      notifyListeners();
     } else {
       return;
     }

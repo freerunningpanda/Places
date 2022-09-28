@@ -150,23 +150,24 @@ class _ImagePickerWidgetState extends State<_ImagePickerWidget> {
   Widget build(BuildContext context) {
     final places = context.watch<AppSettings>().places;
 
-    return Row(
-      children: [
-        Row(
-          children: [
-            _PickImageWidget(theme: widget.theme, places: places),
-          ],
-        ),
-        Row(
-          children: [
-            for (var el in places)
-              SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: _ImageSight(image: el.url),
-              ),
-          ],
-        ),
-      ],
+    return SizedBox(
+      height: 72,
+      child: ListView(
+        scrollDirection: Axis.horizontal,
+        shrinkWrap: true,
+        children: [
+          Row(
+            children: [
+              _PickImageWidget(theme: widget.theme, places: places),
+            ],
+          ),
+          Row(
+            children: [
+              for (var el in places) _ImageSight(image: el.url),
+            ],
+          ),
+        ],
+      ),
     );
   }
 }
@@ -184,8 +185,6 @@ class _ImageSightState extends State<_ImageSight> {
   Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 8),
-      // width: 72,
-      // height: 72,
       decoration: const BoxDecoration(),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(12),
