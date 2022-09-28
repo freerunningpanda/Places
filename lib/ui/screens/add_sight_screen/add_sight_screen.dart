@@ -54,6 +54,8 @@ class AddSightScreen extends StatelessWidget {
                   title: AppString.newPlace,
                 ),
                 const SizedBox(height: 40),
+                _ImagePickerWidget(theme: theme),
+                const SizedBox(height: 20),
                 Expanded(
                   child: SingleChildScrollView(
                     child: Column(
@@ -130,6 +132,27 @@ class AddSightScreen extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+}
+
+class _ImagePickerWidget extends StatelessWidget {
+  final ThemeData theme;
+  const _ImagePickerWidget({Key? key, required this.theme}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Container(
+          width: 72,
+          height: 72,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(color: theme.sliderTheme.activeTickMarkColor as Color),
+          ),
+        ),
+      ],
     );
   }
 }
@@ -218,11 +241,11 @@ class _TextInputWidgetState extends State<_TextInputWidget> {
               hintStyle: AppTypography.textText16Search,
               contentPadding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10),
               focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(width: 2, color: widget.theme.sliderTheme.activeTrackColor as Color),
+                borderSide: BorderSide(width: 2, color: widget.theme.sliderTheme.overlayColor as Color),
                 borderRadius: BorderRadius.circular(8.0),
               ),
               enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: widget.theme.sliderTheme.activeTrackColor as Color),
+                borderSide: BorderSide(color: widget.theme.sliderTheme.overlayColor as Color),
                 borderRadius: BorderRadius.circular(8.0),
               ),
               suffixIcon: widget.focusNode.hasFocus ? widget.suffixIcon : null,
@@ -362,11 +385,11 @@ class _LatLotWidgetState extends State<_LatLotWidget> {
             decoration: InputDecoration(
               contentPadding: const EdgeInsets.only(left: 16.0),
               focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(width: 2, color: widget.theme.sliderTheme.activeTrackColor as Color),
+                borderSide: BorderSide(width: 2, color: widget.theme.sliderTheme.overlayColor as Color),
                 borderRadius: BorderRadius.circular(8.0),
               ),
               enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: widget.theme.sliderTheme.activeTrackColor as Color),
+                borderSide: BorderSide(color: widget.theme.sliderTheme.overlayColor as Color),
                 borderRadius: BorderRadius.circular(8.0),
               ),
               suffixIcon: widget.focusNode.hasFocus

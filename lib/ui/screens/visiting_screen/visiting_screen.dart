@@ -49,7 +49,7 @@ class _VisitingScreenState extends State<VisitingScreen> {
                             key: PageStorageKey('WantToVisitScrollPosition'),
                           )
                         else
-                          const _EmptyList(
+                          const _EmptyList( 
                             icon: AppAssets.card,
                             description: AppString.likedPlaces,
                           ),
