@@ -33,7 +33,18 @@ class AppSettings extends ChangeNotifier {
 
   bool isFocusOn = false;
 
+  bool isDrag = false;
+
   List<Sight> suggestions = FiltersTable.filtersWithDistance.toList();
+
+  void onDragStarted() {
+    isDrag = true;
+    notifyListeners();
+  }
+  void onDragEnded() {
+    isDrag = false;
+    notifyListeners();
+  }
 
   void pickImage() {
     if (places.isEmpty) {
@@ -54,11 +65,7 @@ class AppSettings extends ChangeNotifier {
     } else if (places.length == 5) {
       places.add(Mocks.mocks[5]);
       notifyListeners();
-    } else if (places[0] == places[0]){
-
-    }
-    
-    else {
+    } else {
       return;
     }
   }
