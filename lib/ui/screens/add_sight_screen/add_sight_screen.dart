@@ -188,6 +188,32 @@ class _ImageSight extends StatefulWidget {
 }
 
 class _ImageSightState extends State<_ImageSight> {
+  GlobalKey globalKey = GlobalKey();
+  bool isDrag = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return Draggable<String>(
+      data: 'uniqueId',
+      onDragStarted: () => setState(() => isDrag = true),
+      onDragEnd: (details) => setState(() {
+        isDrag = false;
+        context.read<AppSettings>().removeImage(widget.index);
+      }),
+      feedback: _SightContent(key: globalKey, widget: widget),
+      child: isDrag ? const SizedBox.shrink() : _SightContent(key: globalKey, widget: widget),
+    );
+  }
+}
+
+class _SightContent extends StatelessWidget {
+  final _ImageSight widget;
+
+  const _SightContent({
+    Key? key,
+    required this.widget,
+  }) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Container(
