@@ -167,45 +167,87 @@ class _WantToVisitWidget extends StatelessWidget {
       },
       children: [
         for (var i = 0; i < sightsToVisit.length; i++)
-          SightCard(
-            key: ValueKey(i),
-            removeSight: () => context.read<AppSettings>().deleteSight(i, sightsToVisit),
-            isVisitingScreen: true,
-            item: sightsToVisit[i],
-            url: sightsToVisit[i].url ?? 'no_url',
-            type: sightsToVisit[i].type,
-            name: sightsToVisit[i].name,
-            aspectRatio: AppCardSize.visitingCard,
-            details: [
-              Text(
-                sightsToVisit[i].name,
-                maxLines: 2,
-                style: theme.textTheme.headlineSmall,
+          Dismissible(
+            key: UniqueKey(),
+            onDismissed: (direction) => context.read<AppSettings>().deleteSight(i, sightsToVisit),
+            background: const SizedBox.shrink(),
+            secondaryBackground: AspectRatio(
+              aspectRatio: AppCardSize.visitingCard,
+              child: Container(
+                margin: const EdgeInsets.only(
+                  left: 16,
+                  right: 16,
+                  bottom: 16,
+                ),
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(16.0),
+                  color: Colors.red,
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.only(right: 16.0),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Column(
+                        // ignore: avoid_redundant_argument_values
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: const[
+                          SightIcons(assetName: AppAssets.bucket, width: 24, height: 24),
+                          SizedBox(height: 8),
+                          Text(
+                            AppString.delete,
+                            style: AppTypography.removeCardText,
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
               ),
-              const SizedBox(height: 2),
-              const Text(
-                '${AppString.planning} 12 окт. 2022',
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: AppTypography.greenColor,
-              ),
-              const SizedBox(height: 10),
-              const Text(
-                '${AppString.closed} 09:00',
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: AppTypography.textText16Regular,
-              ),
-            ],
-            actionOne: const SightIcons(
-              assetName: AppAssets.calendarWhite,
-              width: 24,
-              height: 24,
             ),
-            actionTwo: const SightIcons(
-              assetName: AppAssets.cross,
-              width: 22,
-              height: 22,
+            direction: DismissDirection.endToStart,
+            child: SightCard(
+              key: ValueKey(i),
+              removeSight: () => context.read<AppSettings>().deleteSight(i, sightsToVisit),
+              isVisitingScreen: true,
+              item: sightsToVisit[i],
+              url: sightsToVisit[i].url ?? 'no_url',
+              type: sightsToVisit[i].type,
+              name: sightsToVisit[i].name,
+              aspectRatio: AppCardSize.visitingCard,
+              details: [
+                Text(
+                  sightsToVisit[i].name,
+                  maxLines: 2,
+                  style: theme.textTheme.headlineSmall,
+                ),
+                const SizedBox(height: 2),
+                const Text(
+                  '${AppString.planning} 12 окт. 2022',
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: AppTypography.greenColor,
+                ),
+                const SizedBox(height: 10),
+                const Text(
+                  '${AppString.closed} 09:00',
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: AppTypography.textText16Regular,
+                ),
+              ],
+              actionOne: const SightIcons(
+                assetName: AppAssets.calendarWhite,
+                width: 24,
+                height: 24,
+              ),
+              actionTwo: const SightIcons(
+                assetName: AppAssets.cross,
+                width: 22,
+                height: 22,
+              ),
             ),
           ),
       ],

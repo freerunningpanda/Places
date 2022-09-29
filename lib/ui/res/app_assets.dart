@@ -30,5 +30,6 @@ abstract class AppAssets {
   static const tick = 'lib/ui/res/icons/tick.svg';
   static const delete = 'lib/ui/res/icons/delete.svg';
   static const clear = 'lib/ui/res/icons/clear.svg';
+  static const bucket = 'lib/ui/res/icons/bucket.svg';
 
 }

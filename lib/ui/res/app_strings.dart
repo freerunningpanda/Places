@@ -44,4 +44,5 @@ abstract class AppString {
   static const tryToChange = 'Попробуйте изменить параметры поиска';
   static const youSearch = 'ВЫ ИСКАЛИ';
   static const clearHistory = 'Очистить историю';
+  static const delete = 'Удалить';
 }
