@@ -35,6 +35,17 @@ class AppSettings extends ChangeNotifier {
 
   List<Sight> suggestions = FiltersTable.filtersWithDistance.toList();
 
+  void dragCard(List<Sight> sights, int oldIndex, int newIndex) {
+    final sight = sights.removeAt(oldIndex);
+    sights.insert(newIndex, sight);
+    notifyListeners();
+  }
+
+  void deleteSight(int index, List<Sight> sight) {
+    sight.removeAt(index);
+    notifyListeners();
+  }
+
   void pickImage() {
     if (places.isEmpty) {
       places.add(Mocks.mocks[0]);
@@ -81,11 +92,6 @@ class AppSettings extends ChangeNotifier {
     } else {
       return;
     }
-  }
-
-  void deleteSight(int index, List<Sight> sightList) {
-    sightList.removeAt(index);
-    notifyListeners();
   }
 
   void saveSearchHistory(String value, TextEditingController controller) {

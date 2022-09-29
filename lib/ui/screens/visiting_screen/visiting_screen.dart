@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:places/appsettings.dart';
 
 import 'package:places/data/sight.dart';
-import 'package:places/mocks.dart';
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_card_size.dart';
 import 'package:places/ui/res/app_strings.dart';
@@ -153,15 +152,10 @@ class _TabBarWidget extends StatelessWidget {
   }
 }
 
-class _WantToVisitWidget extends StatefulWidget {
+class _WantToVisitWidget extends StatelessWidget {
   final List<Sight> sightsToVisit;
   const _WantToVisitWidget({Key? key, required this.sightsToVisit}) : super(key: key);
 
-  @override
-  State<_WantToVisitWidget> createState() => _WantToVisitWidgetState();
-}
-
-class _WantToVisitWidgetState extends State<_WantToVisitWidget> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -169,26 +163,22 @@ class _WantToVisitWidgetState extends State<_WantToVisitWidget> {
     return ReorderableListView(
       onReorder: (oldIndex, newIndex) {
         if (newIndex > oldIndex) newIndex--;
-
-        setState(() {
-          final sight = widget.sightsToVisit.removeAt(oldIndex);
-          Mocks.sightsTovisit.insert(newIndex, sight);
-        });
+        context.read<AppSettings>().dragCard(sightsToVisit, oldIndex, newIndex);
       },
       children: [
-        for (var i = 0; i < widget.sightsToVisit.length; i++)
+        for (var i = 0; i < sightsToVisit.length; i++)
           SightCard(
             key: ValueKey(i),
-            removeSight: () => context.read<AppSettings>().deleteSight(i, widget.sightsToVisit),
+            removeSight: () => context.read<AppSettings>().deleteSight(i, sightsToVisit),
             isVisitingScreen: true,
-            item: widget.sightsToVisit[i],
-            url: widget.sightsToVisit[i].url ?? 'no_url',
-            type: widget.sightsToVisit[i].type,
-            name: widget.sightsToVisit[i].name,
+            item: sightsToVisit[i],
+            url: sightsToVisit[i].url ?? 'no_url',
+            type: sightsToVisit[i].type,
+            name: sightsToVisit[i].name,
             aspectRatio: AppCardSize.visitingCard,
             details: [
               Text(
-                widget.sightsToVisit[i].name,
+                sightsToVisit[i].name,
                 maxLines: 2,
                 style: theme.textTheme.headlineSmall,
               ),
@@ -223,42 +213,33 @@ class _WantToVisitWidgetState extends State<_WantToVisitWidget> {
   }
 }
 
-class _VisitedWidget extends StatefulWidget {
+class _VisitedWidget extends StatelessWidget {
   final List<Sight> visitedSights;
   const _VisitedWidget({Key? key, required this.visitedSights}) : super(key: key);
 
-  @override
-  State<_VisitedWidget> createState() => _VisitedWidgetState();
-}
-
-class _VisitedWidgetState extends State<_VisitedWidget> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
     return ReorderableListView(
       onReorder: (oldIndex, newIndex) {
-        setState(() {
-          if (newIndex > oldIndex) newIndex--;
-
-          final sight = widget.visitedSights.removeAt(oldIndex);
-          widget.visitedSights.insert(newIndex, sight);
-        });
+        if (newIndex > oldIndex) newIndex--;
+        context.read<AppSettings>().dragCard(visitedSights, oldIndex, newIndex);
       },
       children: [
-        for (var i = 0; i < widget.visitedSights.length; i++)
+        for (var i = 0; i < visitedSights.length; i++)
           SightCard(
             key: ValueKey(i),
-            removeSight: () => context.read<AppSettings>().deleteSight(i, widget.visitedSights),
+            removeSight: () => context.read<AppSettings>().deleteSight(i, visitedSights),
             isVisitingScreen: true,
-            item: widget.visitedSights[i],
-            url: widget.visitedSights[i].url ?? 'no_url',
-            type: widget.visitedSights[i].type,
-            name: widget.visitedSights[i].name,
+            item: visitedSights[i],
+            url: visitedSights[i].url ?? 'no_url',
+            type: visitedSights[i].type,
+            name: visitedSights[i].name,
             aspectRatio: AppCardSize.visitingCard,
             details: [
               Text(
-                widget.visitedSights[i].name,
+                visitedSights[i].name,
                 maxLines: 2,
                 style: theme.textTheme.headlineSmall,
               ),
@@ -290,12 +271,6 @@ class _VisitedWidgetState extends State<_VisitedWidget> {
           ),
       ],
     );
-  }
-
-  void deleteSight(int index, List<Sight> sightList) {
-    setState(() {
-      sightList.removeAt(index);
-    });
   }
 }
 
