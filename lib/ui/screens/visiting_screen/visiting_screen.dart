@@ -236,52 +236,59 @@ class _VisitedWidgetState extends State<_VisitedWidget> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    return ListView.builder(
-      itemCount: widget.visitedSights.length,
-      itemBuilder: (context, index) {
-        final item = widget.visitedSights[index];
+    return ReorderableListView(
+      onReorder: (oldIndex, newIndex) {
+        setState(() {
+          if (newIndex > oldIndex) newIndex--;
 
-        return SightCard(
-          removeSight: () => context.read<AppSettings>().deleteSight(index, widget.visitedSights),
-          isVisitingScreen: true,
-          item: item,
-          url: item.url ?? 'no_url',
-          type: item.type,
-          name: item.name,
-          aspectRatio: AppCardSize.visitingCard,
-          details: [
-            Text(
-              item.name,
-              maxLines: 2,
-              style: theme.textTheme.headlineSmall,
-            ),
-            const SizedBox(height: 2),
-            const Text(
-              '${AppString.planning} 12 окт. 2022',
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: AppTypography.greenColor,
-            ),
-            const SizedBox(height: 10),
-            const Text(
-              '${AppString.closed} 09:00',
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: AppTypography.textText16Regular,
-            ),
-          ],
-          actionOne: const SightIcons(
-            assetName: AppAssets.calendarWhite,
-            width: 24,
-            height: 24,
-          ),
-          actionTwo: const SightIcons(
-            assetName: AppAssets.cross,
-            width: 22,
-            height: 22,
-          ),
-        );
+          final sight = widget.visitedSights.removeAt(oldIndex);
+          widget.visitedSights.insert(newIndex, sight);
+        });
       },
+      children: [
+        for (var i = 0; i < widget.visitedSights.length; i++)
+          SightCard(
+            key: ValueKey(i),
+            removeSight: () => context.read<AppSettings>().deleteSight(i, widget.visitedSights),
+            isVisitingScreen: true,
+            item: widget.visitedSights[i],
+            url: widget.visitedSights[i].url ?? 'no_url',
+            type: widget.visitedSights[i].type,
+            name: widget.visitedSights[i].name,
+            aspectRatio: AppCardSize.visitingCard,
+            details: [
+              Text(
+                widget.visitedSights[i].name,
+                maxLines: 2,
+                style: theme.textTheme.headlineSmall,
+              ),
+              const SizedBox(height: 2),
+              const Text(
+                '${AppString.planning} 12 окт. 2022',
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: AppTypography.greenColor,
+              ),
+              const SizedBox(height: 10),
+              const Text(
+                '${AppString.closed} 09:00',
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: AppTypography.textText16Regular,
+              ),
+            ],
+            actionOne: const SightIcons(
+              assetName: AppAssets.calendarWhite,
+              width: 24,
+              height: 24,
+            ),
+            actionTwo: const SightIcons(
+              assetName: AppAssets.cross,
+              width: 22,
+              height: 22,
+            ),
+          ),
+      ],
     );
   }
 
