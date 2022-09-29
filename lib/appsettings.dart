@@ -54,6 +54,34 @@ class AppSettings extends ChangeNotifier {
     } else if (places.length == 5) {
       places.add(Mocks.mocks[5]);
       notifyListeners();
+    } else if (places[0] == places[0]){
+
+    }
+    
+    else {
+      return;
+    }
+  }
+
+  void removeImage(int index) {
+    if (places.isEmpty) {
+      places.removeAt(index);
+      notifyListeners();
+    } else if (places.length == 1) {
+      places.removeAt(index);
+      notifyListeners();
+    } else if (places.length == 2) {
+      places.removeAt(index);
+      notifyListeners();
+    } else if (places.length == 3) {
+      places.removeAt(index);
+      notifyListeners();
+    } else if (places.length == 4) {
+      places.removeAt(index);
+      notifyListeners();
+    } else if (places.length == 5) {
+      places.removeAt(index);
+      notifyListeners();
     } else {
       return;
     }

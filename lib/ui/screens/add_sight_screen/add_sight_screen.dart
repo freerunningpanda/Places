@@ -165,7 +165,11 @@ class _ImagePickerWidgetState extends State<_ImagePickerWidget> {
           ),
           Row(
             children: [
-              for (var el in places) _ImageSight(image: el.url),
+              for (var i = 0; i < places.length; i++)
+                _ImageSight(
+                  image: places[i].url,
+                  index: i,
+                ),
             ],
           ),
         ],
@@ -176,7 +180,8 @@ class _ImagePickerWidgetState extends State<_ImagePickerWidget> {
 
 class _ImageSight extends StatefulWidget {
   final String? image;
-  const _ImageSight({Key? key, required this.image}) : super(key: key);
+  final int index;
+  const _ImageSight({Key? key, required this.image, required this.index}) : super(key: key);
 
   @override
   State<_ImageSight> createState() => _ImageSightState();
@@ -210,7 +215,7 @@ class _ImageSightState extends State<_ImageSight> {
                 type: MaterialType.transparency,
                 child: InkWell(
                   borderRadius: BorderRadius.circular(30),
-                  onTap: () => debugPrint('cross pressed'),
+                  onTap: () => context.read<AppSettings>().removeImage(widget.index),
                   child: const SizedBox(height: 24, width: 24),
                 ),
               ),
