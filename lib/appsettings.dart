@@ -33,18 +33,7 @@ class AppSettings extends ChangeNotifier {
 
   bool isFocusOn = false;
 
-  bool isDrag = false;
-
   List<Sight> suggestions = FiltersTable.filtersWithDistance.toList();
-
-  void onDragStarted() {
-    isDrag = true;
-    notifyListeners();
-  }
-  void onDragEnded() {
-    isDrag = false;
-    notifyListeners();
-  }
 
   void pickImage() {
     if (places.isEmpty) {

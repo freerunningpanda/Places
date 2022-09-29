@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:places/appsettings.dart';
 
 import 'package:places/data/sight.dart';
+import 'package:places/mocks.dart';
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_card_size.dart';
 import 'package:places/ui/res/app_strings.dart';
@@ -43,9 +44,12 @@ class _VisitingScreenState extends State<VisitingScreen> {
                     child: TabBarView(
                       children: [
                         if (sightsToVisit.isNotEmpty)
-                          _WantToVisitWidget(
-                            sightsToVisit: sightsToVisit,
-                            key: const PageStorageKey('WantToVisitScrollPosition'),
+                          Draggable(
+                            feedback: const SizedBox.shrink(),
+                            child: _WantToVisitWidget(
+                              sightsToVisit: sightsToVisit,
+                              key: const PageStorageKey('WantToVisitScrollPosition'),
+                            ),
                           )
                         else
                           const _EmptyList(
@@ -162,53 +166,59 @@ class _WantToVisitWidgetState extends State<_WantToVisitWidget> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    return ListView.builder(
-      itemCount: widget.sightsToVisit.length,
-      itemBuilder: (context, index) {
-        final item = widget.sightsToVisit[index];
+    return ReorderableListView(
+      onReorder: (oldIndex, newIndex) {
+        if (newIndex > oldIndex) newIndex--;
 
-        return SightCard(
-          // key: ValueKey(sightsToVisit[index]),
-          removeSight: () => context.read<AppSettings>().deleteSight(index, widget.sightsToVisit),
-          isVisitingScreen: true,
-          item: item,
-          url: item.url ?? 'no_url',
-          type: item.type,
-          name: item.name,
-          aspectRatio: AppCardSize.visitingCard,
-          details: [
-            Text(
-              item.name,
-              maxLines: 2,
-              style: theme.textTheme.headlineSmall,
-            ),
-            const SizedBox(height: 2),
-            const Text(
-              '${AppString.planning} 12 окт. 2022',
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: AppTypography.greenColor,
-            ),
-            const SizedBox(height: 10),
-            const Text(
-              '${AppString.closed} 09:00',
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: AppTypography.textText16Regular,
-            ),
-          ],
-          actionOne: const SightIcons(
-            assetName: AppAssets.calendarWhite,
-            width: 24,
-            height: 24,
-          ),
-          actionTwo: const SightIcons(
-            assetName: AppAssets.cross,
-            width: 22,
-            height: 22,
-          ),
-        );
+        setState(() {
+          final sight = widget.sightsToVisit.removeAt(oldIndex);
+          Mocks.sightsTovisit.insert(newIndex, sight);
+        });
       },
+      children: [
+        for (var i = 0; i < widget.sightsToVisit.length; i++)
+          SightCard(
+            key: ValueKey(i),
+            removeSight: () => context.read<AppSettings>().deleteSight(i, widget.sightsToVisit),
+            isVisitingScreen: true,
+            item: widget.sightsToVisit[i],
+            url: widget.sightsToVisit[i].url ?? 'no_url',
+            type: widget.sightsToVisit[i].type,
+            name: widget.sightsToVisit[i].name,
+            aspectRatio: AppCardSize.visitingCard,
+            details: [
+              Text(
+                widget.sightsToVisit[i].name,
+                maxLines: 2,
+                style: theme.textTheme.headlineSmall,
+              ),
+              const SizedBox(height: 2),
+              const Text(
+                '${AppString.planning} 12 окт. 2022',
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: AppTypography.greenColor,
+              ),
+              const SizedBox(height: 10),
+              const Text(
+                '${AppString.closed} 09:00',
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: AppTypography.textText16Regular,
+              ),
+            ],
+            actionOne: const SightIcons(
+              assetName: AppAssets.calendarWhite,
+              width: 24,
+              height: 24,
+            ),
+            actionTwo: const SightIcons(
+              assetName: AppAssets.cross,
+              width: 22,
+              height: 22,
+            ),
+          ),
+      ],
     );
   }
 }
