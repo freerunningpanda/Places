@@ -29,5 +29,6 @@ abstract class AppAssets {
   static const clearWhite = 'lib/ui/res/icons/clear_white_icon.svg';
   static const tick = 'lib/ui/res/icons/tick.svg';
   static const delete = 'lib/ui/res/icons/delete.svg';
+  static const clear = 'lib/ui/res/icons/clear.svg';
 
 }

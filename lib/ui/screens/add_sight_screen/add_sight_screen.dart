@@ -4,11 +4,13 @@ import 'package:places/appsettings.dart';
 import 'package:places/data/categories_table.dart';
 import 'package:places/data/sight.dart';
 import 'package:places/mocks.dart';
+import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_strings.dart';
 import 'package:places/ui/res/app_typography.dart';
 import 'package:places/ui/screens/add_sight_screen/choose_category_screen.dart';
 import 'package:places/ui/widgets/create_button.dart';
 import 'package:places/ui/widgets/new_place_app_bar_widget.dart';
+import 'package:places/ui/widgets/sight_icons.dart';
 import 'package:places/ui/widgets/suffix_icon.dart';
 import 'package:provider/provider.dart';
 
@@ -188,11 +190,32 @@ class _ImageSightState extends State<_ImageSight> {
       decoration: const BoxDecoration(),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(12),
-        child: Image.network(
-          widget.image ?? 'no_url',
-          width: 72,
-          height: 72,
-          fit: BoxFit.cover,
+        child: Stack(
+          children: [
+            Image.network(
+              widget.image ?? 'no_url',
+              width: 72,
+              height: 72,
+              fit: BoxFit.cover,
+            ),
+            const Positioned(
+              top: 4,
+              right: 4,
+              child: SightIcons(assetName: AppAssets.clear, width: 24, height: 24),
+            ),
+            Positioned(
+              top: 4,
+              right: 4,
+              child: Material(
+                type: MaterialType.transparency,
+                child: InkWell(
+                  borderRadius: BorderRadius.circular(30),
+                  onTap: () => debugPrint('cross pressed'),
+                  child: const SizedBox(height: 24, width: 24),
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );
