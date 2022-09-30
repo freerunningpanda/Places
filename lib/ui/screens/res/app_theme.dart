@@ -8,6 +8,7 @@ abstract class AppTheme {
   // ignore: long-method
   static ThemeData buildTheme() {
     return ThemeData(
+      cardColor: AppColors.red,
       progressIndicatorTheme: const ProgressIndicatorThemeData(
         circularTrackColor: AppColors.sightCardBackground,
         color: AppColors.secondaryTwo,
@@ -68,6 +69,7 @@ abstract class AppTheme {
   // ignore: long-method
   static ThemeData buildThemeDark() {
     return ThemeData(
+      cardColor: AppColors.red,
       extensions: const <ThemeExtension<CustomColors>>[CustomColors.sightCardDark],
       textButtonTheme: TextButtonThemeData(
         style: TextButton.styleFrom(

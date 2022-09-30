@@ -285,7 +285,7 @@ class _VisitedWidget extends StatelessWidget {
                 width: double.infinity,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(16.0),
-                  color: Colors.red,
+                  color: theme.cardColor,
                 ),
                 child: Padding(
                   padding: const EdgeInsets.only(right: 16.0),
