@@ -48,22 +48,18 @@ class SightCard extends StatelessWidget {
           ),
           child: Stack(
             children: [
-              Stack(
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      _SightCardTop(
-                        actionOne: actionOne,
-                        type: type,
-                        url: url,
-                      ),
-                      const SizedBox(height: 16),
-                      _SightCardBottom(
-                        name: name,
-                        details: details,
-                      ),
-                    ],
+                  _SightCardTop(
+                    actionOne: actionOne,
+                    type: type,
+                    url: url,
+                  ),
+                  const SizedBox(height: 16),
+                  _SightCardBottom(
+                    name: name,
+                    details: details,
                   ),
                 ],
               ),
