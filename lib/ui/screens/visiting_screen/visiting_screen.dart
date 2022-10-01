@@ -386,7 +386,7 @@ class _VisitedWidget extends StatelessWidget {
                 ),
                 const SizedBox(height: 2),
                 const Text(
-                  '${AppString.planning} 12 окт. 2022',
+                  '${AppString.targetReach} 12 окт. 2022',
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: AppTypography.detailsText,
