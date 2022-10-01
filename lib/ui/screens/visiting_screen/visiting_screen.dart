@@ -41,58 +41,54 @@ class _VisitingScreenState extends State<VisitingScreen> with TickerProviderStat
     final sightsToVisit = context.watch<AppSettings>().sightsToVisit;
     final visitedSights = context.watch<AppSettings>().visitedSights;
 
-    return DefaultTabController(
-      length: 2,
-      initialIndex: initialIndex,
-      child: Scaffold(
-        appBar: _AppBar(controller: controller),
-        body: Stack(
-          children: [
-            Column(
-              children: [
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.only(top: 30),
-                    child: TabBarView(
-                      controller: controller,
-                      children: [
-                        if (sightsToVisit.isNotEmpty)
-                          Draggable(
-                            feedback: const SizedBox.shrink(),
-                            child: _WantToVisitWidget(
-                              sightsToVisit: sightsToVisit,
-                              key: const PageStorageKey('WantToVisitScrollPosition'),
-                            ),
-                          )
-                        else
-                          const _EmptyList(
-                            icon: AppAssets.card,
-                            description: AppString.likedPlaces,
+    return Scaffold(
+      appBar: _AppBar(controller: controller),
+      body: Stack(
+        children: [
+          Column(
+            children: [
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 30),
+                  child: TabBarView(
+                    controller: controller,
+                    children: [
+                      if (sightsToVisit.isNotEmpty)
+                        Draggable(
+                          feedback: const SizedBox.shrink(),
+                          child: _WantToVisitWidget(
+                            sightsToVisit: sightsToVisit,
+                            key: const PageStorageKey('WantToVisitScrollPosition'),
                           ),
-                        if (visitedSights.isNotEmpty)
-                          _VisitedWidget(
-                            visitedSights: visitedSights,
-                            key: const PageStorageKey('VisitedScrollPosition'),
-                          )
-                        else
-                          const _EmptyList(
-                            icon: AppAssets.goIconTransparent,
-                            description: AppString.finishRoute,
-                          ),
-                      ],
-                    ),
+                        )
+                      else
+                        const _EmptyList(
+                          icon: AppAssets.card,
+                          description: AppString.likedPlaces,
+                        ),
+                      if (visitedSights.isNotEmpty)
+                        _VisitedWidget(
+                          visitedSights: visitedSights,
+                          key: const PageStorageKey('VisitedScrollPosition'),
+                        )
+                      else
+                        const _EmptyList(
+                          icon: AppAssets.goIconTransparent,
+                          description: AppString.finishRoute,
+                        ),
+                    ],
                   ),
                 ),
-              ],
-            ),
-            const Positioned(
-              bottom: 16,
-              left: 92,
-              right: 92,
-              child: AddNewPlaceButton(),
-            ),
-          ],
-        ),
+              ),
+            ],
+          ),
+          const Positioned(
+            bottom: 16,
+            left: 92,
+            right: 92,
+            child: AddNewPlaceButton(),
+          ),
+        ],
       ),
     );
   }
