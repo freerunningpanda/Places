@@ -19,8 +19,22 @@ class VisitingScreen extends StatefulWidget {
   State<VisitingScreen> createState() => _VisitingScreenState();
 }
 
-class _VisitingScreenState extends State<VisitingScreen> {
+class _VisitingScreenState extends State<VisitingScreen> with TickerProviderStateMixin {
   int initialIndex = 0;
+  late TabController controller;
+
+  @override
+  void initState() {
+    super.initState();
+    controller = TabController(length: 2, vsync: this);
+    controller.addListener(_handleTabSelection);
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    controller.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -31,16 +45,16 @@ class _VisitingScreenState extends State<VisitingScreen> {
       length: 2,
       initialIndex: initialIndex,
       child: Scaffold(
-        appBar: const _AppBar(),
+        appBar: _AppBar(controller: controller),
         body: Stack(
           children: [
             Column(
               children: [
-                const _TabBarWidget(),
                 Expanded(
                   child: Padding(
                     padding: const EdgeInsets.only(top: 30),
                     child: TabBarView(
+                      controller: controller,
                       children: [
                         if (sightsToVisit.isNotEmpty)
                           Draggable(
@@ -82,31 +96,59 @@ class _VisitingScreenState extends State<VisitingScreen> {
       ),
     );
   }
+
+  void _handleTabSelection() {
+    setState(() {});
+  }
 }
 
-class _AppBar extends StatelessWidget implements PreferredSizeWidget {
-  @override
-  Size get preferredSize => const Size.fromHeight(45);
+class _AppBar extends StatefulWidget implements PreferredSizeWidget {
+  final TabController controller;
 
-  const _AppBar({Key? key}) : super(key: key);
+  @override
+  Size get preferredSize => const Size.fromHeight(150);
+
+  const _AppBar({Key? key, required this.controller}) : super(key: key);
+
+  @override
+  State<_AppBar> createState() => _AppBarState();
+}
+
+class _AppBarState extends State<_AppBar> with TickerProviderStateMixin {
+  final aligment = Alignment.center;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
     return AppBar(
+      backgroundColor: theme.scaffoldBackgroundColor,
       centerTitle: true,
       title: Text(
         AppString.visitingScreenTitle,
         style: theme.textTheme.titleLarge,
       ),
       elevation: 0,
+      bottom: _TabBarWidget(
+        controller: widget.controller,
+      ),
     );
   }
 }
 
-class _TabBarWidget extends StatelessWidget {
-  const _TabBarWidget({Key? key}) : super(key: key);
+class _TabBarWidget extends StatefulWidget implements PreferredSizeWidget {
+  final TabController controller;
+
+  @override
+  Size get preferredSize => const Size.fromHeight(150);
+  const _TabBarWidget({Key? key, required this.controller}) : super(key: key);
+
+  @override
+  State<_TabBarWidget> createState() => _TabBarWidgetState();
+}
+
+class _TabBarWidgetState extends State<_TabBarWidget> with TickerProviderStateMixin {
+  final aligment = Alignment.center;
 
   @override
   Widget build(BuildContext context) {
@@ -124,25 +166,46 @@ class _TabBarWidget extends StatelessWidget {
         clipBehavior: Clip.antiAlias,
         type: MaterialType.transparency,
         child: TabBar(
-          onTap: (value) {
-            debugPrint('🟡---------TabBar pressed: $value');
-          },
-          unselectedLabelColor: Colors.grey,
+          controller: widget.controller,
+          labelPadding: EdgeInsets.zero,
+          unselectedLabelColor: theme.dividerColor,
           labelColor: theme.toggleableActiveColor,
           labelStyle: AppTypography.tabBarIndicator,
           indicator: BoxDecoration(
             borderRadius: BorderRadius.circular(50),
-            color: theme.iconTheme.color,
           ),
-          tabs: const [
+          indicatorSize: TabBarIndicatorSize.label,
+          tabs: [
             Tab(
-              child: Text(
-                AppString.tabBarOneText,
+              child: DecoratedBox(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(50),
+                  color: widget.controller.index == 0
+                      ? theme.tabBarTheme.labelColor
+                      : theme.progressIndicatorTheme.circularTrackColor,
+                ),
+                child: Align(
+                  alignment: aligment,
+                  child: const Text(
+                    AppString.tabBarOneText,
+                  ),
+                ),
               ),
             ),
             Tab(
-              child: Text(
-                AppString.tabBarTwoText,
+              child: DecoratedBox(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(50),
+                  color: widget.controller.index == 1
+                      ? theme.tabBarTheme.labelColor
+                      : theme.progressIndicatorTheme.circularTrackColor,
+                ),
+                child: Align(
+                  alignment: aligment,
+                  child: const Text(
+                    AppString.tabBarTwoText,
+                  ),
+                ),
               ),
             ),
           ],
@@ -193,7 +256,7 @@ class _WantToVisitWidget extends StatelessWidget {
                       Column(
                         // ignore: avoid_redundant_argument_values
                         crossAxisAlignment: CrossAxisAlignment.center,
-                        children: const[
+                        children: const [
                           SightIcons(assetName: AppAssets.bucket, width: 24, height: 24),
                           SizedBox(height: 8),
                           Text(
@@ -296,7 +359,7 @@ class _VisitedWidget extends StatelessWidget {
                       Column(
                         // ignore: avoid_redundant_argument_values
                         crossAxisAlignment: CrossAxisAlignment.center,
-                        children: const[
+                        children: const [
                           SightIcons(assetName: AppAssets.bucket, width: 24, height: 24),
                           SizedBox(height: 8),
                           Text(

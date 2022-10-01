@@ -8,6 +8,9 @@ abstract class AppTheme {
   // ignore: long-method
   static ThemeData buildTheme() {
     return ThemeData(
+      tabBarTheme: const TabBarTheme(
+        labelColor: AppColors.textColor,
+      ),
       cardColor: AppColors.red,
       progressIndicatorTheme: const ProgressIndicatorThemeData(
         circularTrackColor: AppColors.sightCardBackground,
