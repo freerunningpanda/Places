@@ -278,7 +278,8 @@ class _WantToVisitWidget extends StatelessWidget {
               details: [
                 Text(
                   sightsToVisit[i].name,
-                  maxLines: 2,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                   style: theme.textTheme.headlineSmall,
                 ),
                 const SizedBox(height: 2),
@@ -381,7 +382,8 @@ class _VisitedWidget extends StatelessWidget {
               details: [
                 Text(
                   visitedSights[i].name,
-                  maxLines: 2,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                   style: theme.textTheme.headlineSmall,
                 ),
                 const SizedBox(height: 2),
