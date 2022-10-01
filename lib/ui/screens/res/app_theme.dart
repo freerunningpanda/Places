@@ -72,6 +72,9 @@ abstract class AppTheme {
   // ignore: long-method
   static ThemeData buildThemeDark() {
     return ThemeData(
+      tabBarTheme: const TabBarTheme(
+        labelColor: AppColors.backgroundColor,
+      ),
       cardColor: AppColors.red,
       extensions: const <ThemeExtension<CustomColors>>[CustomColors.sightCardDark],
       textButtonTheme: TextButtonThemeData(
