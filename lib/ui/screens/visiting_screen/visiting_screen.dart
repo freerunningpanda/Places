@@ -335,81 +335,81 @@ class _VisitedWidget extends StatelessWidget {
             background: const SizedBox.shrink(),
             secondaryBackground: AspectRatio(
               aspectRatio: AppCardSize.visitingCard,
-              child: DecoratedBox(
-                // margin: const EdgeInsets.only(
-                //   left: 16,
-                //   right: 16,
-                //   bottom: 16,
-                // ),
-                // width: double.infinity,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(16.0),
-                  color: Colors.red,
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.only(right: 16.0),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      Column(
-                        // ignore: avoid_redundant_argument_values
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: const [
-                          SightIcons(assetName: AppAssets.bucket, width: 24, height: 24),
-                          SizedBox(height: 8),
-                          Text(
-                            AppString.delete,
-                            style: AppTypography.removeCardText,
-                          ),
-                        ],
-                      ),
-                    ],
+              child: Padding(
+                padding: const EdgeInsets.only(bottom: 11.0),
+                child: DecoratedBox(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(16.0),
+                    color: Colors.red,
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.only(right: 16.0),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        Column(
+                          // ignore: avoid_redundant_argument_values
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: const [
+                            SightIcons(assetName: AppAssets.bucket, width: 24, height: 24),
+                            SizedBox(height: 8),
+                            Text(
+                              AppString.delete,
+                              style: AppTypography.removeCardText,
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
             ),
             direction: DismissDirection.endToStart,
-            child: SightCard(
-              key: ValueKey(i),
-              removeSight: () => context.read<AppSettings>().deleteSight(i, visitedSights),
-              isVisitingScreen: true,
-              item: visitedSights[i],
-              url: visitedSights[i].url ?? 'no_url',
-              type: visitedSights[i].type,
-              name: visitedSights[i].name,
-              aspectRatio: AppCardSize.visitingCard,
-              details: [
-                Text(
-                  visitedSights[i].name,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: theme.textTheme.headlineSmall,
+            child: Padding(
+              padding: const EdgeInsets.only(bottom: 11.0),
+              child: SightCard(
+                key: ValueKey(i),
+                removeSight: () => context.read<AppSettings>().deleteSight(i, visitedSights),
+                isVisitingScreen: true,
+                item: visitedSights[i],
+                url: visitedSights[i].url ?? 'no_url',
+                type: visitedSights[i].type,
+                name: visitedSights[i].name,
+                aspectRatio: AppCardSize.visitingCard,
+                details: [
+                  Text(
+                    visitedSights[i].name,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: theme.textTheme.headlineSmall,
+                  ),
+                  const SizedBox(height: 2),
+                  const Text(
+                    '${AppString.targetReach} 12 окт. 2022',
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: AppTypography.detailsText,
+                  ),
+                  const SizedBox(height: 10),
+                  const Text(
+                    '${AppString.closed} 09:00',
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: AppTypography.textText16Regular,
+                  ),
+                ],
+                actionOne: const SightIcons(
+                  assetName: AppAssets.calendarWhite,
+                  width: 24,
+                  height: 24,
                 ),
-                const SizedBox(height: 2),
-                const Text(
-                  '${AppString.targetReach} 12 окт. 2022',
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: AppTypography.detailsText,
+                actionTwo: const SightIcons(
+                  assetName: AppAssets.share,
+                  width: 22,
+                  height: 22,
                 ),
-                const SizedBox(height: 10),
-                const Text(
-                  '${AppString.closed} 09:00',
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: AppTypography.textText16Regular,
-                ),
-              ],
-              actionOne: const SightIcons(
-                assetName: AppAssets.calendarWhite,
-                width: 24,
-                height: 24,
-              ),
-              actionTwo: const SightIcons(
-                assetName: AppAssets.share,
-                width: 22,
-                height: 22,
               ),
             ),
           ),
