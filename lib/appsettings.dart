@@ -7,8 +7,6 @@ import 'package:places/data/filters_table.dart';
 import 'package:places/data/sight.dart';
 import 'package:places/mocks.dart';
 
-typedef VoidFuncString = void Function(String)?;
-
 class AppSettings extends ChangeNotifier {
   final titleController = TextEditingController();
   final descriptionController = TextEditingController();

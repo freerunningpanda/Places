@@ -305,8 +305,8 @@ class _TextInputWidget extends StatefulWidget {
   final Widget? suffixIcon;
   final TextEditingController controller;
   final TextInputAction textInputAction;
-  final VoidFuncString onSubmitted;
-  final VoidFuncString onChanged;
+  final ValueChanged<String>? onSubmitted;
+  final ValueChanged<String>? onChanged;
 
   const _TextInputWidget({
     Key? key,
@@ -451,10 +451,10 @@ class _LatLotWidget extends StatefulWidget {
   final ThemeData theme;
   final String title;
   final FocusNode focusNode;
-  final VoidFuncString onSubmitted;
+  final ValueChanged<String>? onSubmitted;
   final TextEditingController controller;
   final VoidCallback onTap;
-  final VoidFuncString onChanged;
+  final ValueChanged<String>? onChanged;
 
   const _LatLotWidget({
     Key? key,
