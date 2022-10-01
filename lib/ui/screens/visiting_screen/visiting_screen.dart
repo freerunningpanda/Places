@@ -20,7 +20,6 @@ class VisitingScreen extends StatefulWidget {
 }
 
 class _VisitingScreenState extends State<VisitingScreen> with TickerProviderStateMixin {
-  int initialIndex = 0;
   late TabController controller;
 
   @override
