@@ -53,12 +53,9 @@ class _VisitingScreenState extends State<VisitingScreen> with TickerProviderStat
                     controller: controller,
                     children: [
                       if (sightsToVisit.isNotEmpty)
-                        Draggable(
-                          feedback: const SizedBox.shrink(),
-                          child: _WantToVisitWidget(
-                            sightsToVisit: sightsToVisit,
-                            key: const PageStorageKey('WantToVisitScrollPosition'),
-                          ),
+                        _WantToVisitWidget(
+                          sightsToVisit: sightsToVisit,
+                          key: const PageStorageKey('WantToVisitScrollPosition'),
                         )
                       else
                         const _EmptyList(
