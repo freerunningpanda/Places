@@ -40,51 +40,54 @@ class _VisitingScreenState extends State<VisitingScreen> with TickerProviderStat
     final sightsToVisit = context.watch<AppSettings>().sightsToVisit;
     final visitedSights = context.watch<AppSettings>().visitedSights;
 
-    return Scaffold(
-      appBar: _AppBar(controller: controller),
-      body: Stack(
-        children: [
-          Column(
-            children: [
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 30),
-                  child: TabBarView(
-                    controller: controller,
-                    children: [
-                      if (sightsToVisit.isNotEmpty)
-                        _WantToVisitWidget(
-                          sightsToVisit: sightsToVisit,
-                          key: const PageStorageKey('WantToVisitScrollPosition'),
-                        )
-                      else
-                        const _EmptyList(
-                          icon: AppAssets.card,
-                          description: AppString.likedPlaces,
-                        ),
-                      if (visitedSights.isNotEmpty)
-                        _VisitedWidget(
-                          visitedSights: visitedSights,
-                          key: const PageStorageKey('VisitedScrollPosition'),
-                        )
-                      else
-                        const _EmptyList(
-                          icon: AppAssets.goIconTransparent,
-                          description: AppString.finishRoute,
-                        ),
-                    ],
+    return Padding(
+      padding: const EdgeInsets.only(left: 16.0, right: 16.0),
+      child: Scaffold(
+        appBar: _AppBar(controller: controller),
+        body: Stack(
+          children: [
+            Column(
+              children: [
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 30),
+                    child: TabBarView(
+                      controller: controller,
+                      children: [
+                        if (sightsToVisit.isNotEmpty)
+                          _WantToVisitWidget(
+                            sightsToVisit: sightsToVisit,
+                            key: const PageStorageKey('WantToVisitScrollPosition'),
+                          )
+                        else
+                          const _EmptyList(
+                            icon: AppAssets.card,
+                            description: AppString.likedPlaces,
+                          ),
+                        if (visitedSights.isNotEmpty)
+                          _VisitedWidget(
+                            visitedSights: visitedSights,
+                            key: const PageStorageKey('VisitedScrollPosition'),
+                          )
+                        else
+                          const _EmptyList(
+                            icon: AppAssets.goIconTransparent,
+                            description: AppString.finishRoute,
+                          ),
+                      ],
+                    ),
                   ),
                 ),
-              ),
-            ],
-          ),
-          const Positioned(
-            bottom: 16,
-            left: 92,
-            right: 92,
-            child: AddNewPlaceButton(),
-          ),
-        ],
+              ],
+            ),
+            const Positioned(
+              bottom: 16,
+              left: 92,
+              right: 92,
+              child: AddNewPlaceButton(),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -147,8 +150,8 @@ class _TabBarWidgetState extends State<_TabBarWidget> with TickerProviderStateMi
     final customColors = Theme.of(context).extension<CustomColors>();
     final theme = Theme.of(context);
 
-    return Container(
-      margin: const EdgeInsets.only(left: 16, top: 16, right: 16),
+    return DecoratedBox(
+      // margin: const EdgeInsets.only(left: 16, top: 16, right: 16),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(30),
         color: customColors?.color,
@@ -228,81 +231,81 @@ class _WantToVisitWidget extends StatelessWidget {
             background: const SizedBox.shrink(),
             secondaryBackground: AspectRatio(
               aspectRatio: AppCardSize.visitingCard,
-              child: Container(
-                margin: const EdgeInsets.only(
-                  left: 16,
-                  right: 16,
-                  bottom: 16,
-                ),
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(16.0),
-                  color: Colors.red,
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.only(right: 16.0),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      Column(
-                        // ignore: avoid_redundant_argument_values
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: const [
-                          SightIcons(assetName: AppAssets.bucket, width: 24, height: 24),
-                          SizedBox(height: 8),
-                          Text(
-                            AppString.delete,
-                            style: AppTypography.removeCardText,
-                          ),
-                        ],
-                      ),
-                    ],
+              child: Padding(
+                padding: const EdgeInsets.only(bottom: 11.0),
+                child: DecoratedBox(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(16.0),
+                    color: Colors.red,
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.only(right: 16.0),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        Column(
+                          // ignore: avoid_redundant_argument_values
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: const [
+                            SightIcons(assetName: AppAssets.bucket, width: 24, height: 24),
+                            SizedBox(height: 8),
+                            Text(
+                              AppString.delete,
+                              style: AppTypography.removeCardText,
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
             ),
             direction: DismissDirection.endToStart,
-            child: SightCard(
-              key: ValueKey(i),
-              removeSight: () => context.read<AppSettings>().deleteSight(i, sightsToVisit),
-              isVisitingScreen: true,
-              item: sightsToVisit[i],
-              url: sightsToVisit[i].url ?? 'no_url',
-              type: sightsToVisit[i].type,
-              name: sightsToVisit[i].name,
-              aspectRatio: AppCardSize.visitingCard,
-              details: [
-                Text(
-                  sightsToVisit[i].name,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: theme.textTheme.headlineSmall,
+            child: Padding(
+              padding: const EdgeInsets.only(bottom: 11.0),
+              child: SightCard(
+                key: ValueKey(i),
+                removeSight: () => context.read<AppSettings>().deleteSight(i, sightsToVisit),
+                isVisitingScreen: true,
+                item: sightsToVisit[i],
+                url: sightsToVisit[i].url ?? 'no_url',
+                type: sightsToVisit[i].type,
+                name: sightsToVisit[i].name,
+                aspectRatio: AppCardSize.visitingCard,
+                details: [
+                  Text(
+                    sightsToVisit[i].name,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: theme.textTheme.headlineSmall,
+                  ),
+                  const SizedBox(height: 2),
+                  const Text(
+                    '${AppString.planning} 12 окт. 2022',
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: AppTypography.greenColor,
+                  ),
+                  const SizedBox(height: 10),
+                  const Text(
+                    '${AppString.closed} 09:00',
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: AppTypography.textText16Regular,
+                  ),
+                ],
+                actionOne: const SightIcons(
+                  assetName: AppAssets.calendarWhite,
+                  width: 24,
+                  height: 24,
                 ),
-                const SizedBox(height: 2),
-                const Text(
-                  '${AppString.planning} 12 окт. 2022',
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: AppTypography.greenColor,
+                actionTwo: const SightIcons(
+                  assetName: AppAssets.cross,
+                  width: 22,
+                  height: 22,
                 ),
-                const SizedBox(height: 10),
-                const Text(
-                  '${AppString.closed} 09:00',
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: AppTypography.textText16Regular,
-                ),
-              ],
-              actionOne: const SightIcons(
-                assetName: AppAssets.calendarWhite,
-                width: 24,
-                height: 24,
-              ),
-              actionTwo: const SightIcons(
-                assetName: AppAssets.cross,
-                width: 22,
-                height: 22,
               ),
             ),
           ),
@@ -332,16 +335,16 @@ class _VisitedWidget extends StatelessWidget {
             background: const SizedBox.shrink(),
             secondaryBackground: AspectRatio(
               aspectRatio: AppCardSize.visitingCard,
-              child: Container(
-                margin: const EdgeInsets.only(
-                  left: 16,
-                  right: 16,
-                  bottom: 16,
-                ),
-                width: double.infinity,
+              child: DecoratedBox(
+                // margin: const EdgeInsets.only(
+                //   left: 16,
+                //   right: 16,
+                //   bottom: 16,
+                // ),
+                // width: double.infinity,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(16.0),
-                  color: theme.cardColor,
+                  color: Colors.red,
                 ),
                 child: Padding(
                   padding: const EdgeInsets.only(right: 16.0),

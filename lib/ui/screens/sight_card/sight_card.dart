@@ -38,19 +38,14 @@ class SightCard extends StatelessWidget {
 
     return AspectRatio(
       aspectRatio: aspectRatio ?? AppCardSize.sightCard,
-      child: Container(
-        margin: const EdgeInsets.only(
-          left: 16,
-          right: 16,
-          bottom: 16,
+      child: ClipRRect(
+        borderRadius: const BorderRadius.all(
+          Radius.circular(16.0),
         ),
-        width: double.infinity,
-        decoration: BoxDecoration(
-          color: customColors.color,
-          borderRadius: BorderRadius.circular(16.0),
-        ),
-        child: ClipRRect(
-          borderRadius: const BorderRadius.all(Radius.circular(16.0)),
+        child: DecoratedBox(
+          decoration: BoxDecoration(
+            color: customColors.color,
+          ),
           child: Stack(
             children: [
               Stack(
@@ -230,22 +225,16 @@ class _SightCardTop extends StatelessWidget {
       child: Stack(
         fit: StackFit.expand,
         children: [
-          ClipRRect(
-            borderRadius: const BorderRadius.only(
-              topLeft: Radius.circular(16),
-              topRight: Radius.circular(16),
-            ),
-            child: Image.network(
-              url ?? 'no_url',
-              fit: BoxFit.fitWidth,
-              loadingBuilder: (context, child, loadingProgress) {
-                if (loadingProgress == null) return child;
+          Image.network(
+            url ?? 'no_url',
+            fit: BoxFit.fitWidth,
+            loadingBuilder: (context, child, loadingProgress) {
+              if (loadingProgress == null) return child;
 
-                return const Center(
-                  child: CircularProgressIndicator(),
-                );
-              },
-            ),
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            },
           ),
           Positioned(
             left: 16,
