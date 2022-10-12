@@ -295,16 +295,12 @@ class _DismissibleWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(16.0),
-      child: Dismissible(
-        key: uniqueKey,
-        onDismissed: (direction) => context.read<AppSettings>().deleteSight(i, sightsToVisit),
-        background: const SizedBox.shrink(),
-        secondaryBackground: AspectRatio(
+    return Stack(
+      children: [
+        AspectRatio(
           aspectRatio: AppCardSize.visitingCard,
           child: Padding(
-            padding: const EdgeInsets.only(bottom: 11.0),
+            padding: const EdgeInsets.only(bottom: 1),
             child: DecoratedBox(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(16.0),
@@ -334,48 +330,53 @@ class _DismissibleWidget extends StatelessWidget {
             ),
           ),
         ),
-        direction: DismissDirection.endToStart,
-        child: Padding(
-          padding: const EdgeInsets.only(bottom: 11.0),
-          child: SightCard(
-            removeSight: () => context.read<AppSettings>().deleteSight(i, sightsToVisit),
-            isVisitingScreen: true,
-            item: sightsToVisit[i],
-            url: sightsToVisit[i].url ?? 'no_url',
-            type: sightsToVisit[i].type,
-            name: sightsToVisit[i].name,
-            aspectRatio: AppCardSize.visitingCard,
-            details: [
-              Text(
-                sightsToVisit[i].name,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: theme.textTheme.headlineSmall,
+        Dismissible(
+          key: uniqueKey,
+          onDismissed: (direction) => context.read<AppSettings>().deleteSight(i, sightsToVisit),
+          background: const SizedBox.shrink(),
+          direction: DismissDirection.endToStart,
+          child: Padding(
+            padding: const EdgeInsets.only(bottom: 11.0),
+            child: SightCard(
+              removeSight: () => context.read<AppSettings>().deleteSight(i, sightsToVisit),
+              isVisitingScreen: true,
+              item: sightsToVisit[i],
+              url: sightsToVisit[i].url ?? 'no_url',
+              type: sightsToVisit[i].type,
+              name: sightsToVisit[i].name,
+              aspectRatio: AppCardSize.visitingCard,
+              details: [
+                Text(
+                  sightsToVisit[i].name,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: theme.textTheme.headlineSmall,
+                ),
+                const SizedBox(height: 2),
+                const Text(
+                  '${AppString.planning} 12 окт. 2022',
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: AppTypography.greenColor,
+                ),
+                const SizedBox(height: 10),
+                const Text(
+                  '${AppString.closed} 09:00',
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: AppTypography.textText16Regular,
+                ),
+              ],
+              actionOne: const SightIcons(
+                assetName: AppAssets.calendarWhite,
+                width: 24,
+                height: 24,
               ),
-              const SizedBox(height: 2),
-              const Text(
-                '${AppString.planning} 12 окт. 2022',
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: AppTypography.greenColor,
-              ),
-              const SizedBox(height: 10),
-              const Text(
-                '${AppString.closed} 09:00',
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: AppTypography.textText16Regular,
-              ),
-            ],
-            actionOne: const SightIcons(
-              assetName: AppAssets.calendarWhite,
-              width: 24,
-              height: 24,
+              actionTwo: actionTwo,
             ),
-            actionTwo: actionTwo,
           ),
         ),
-      ),
+      ],
     );
   }
 }
