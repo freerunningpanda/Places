@@ -225,91 +225,119 @@ class _WantToVisitWidget extends StatelessWidget {
       },
       children: [
         for (var i = 0; i < sightsToVisit.length; i++)
-          Dismissible(
-            key: UniqueKey(),
-            onDismissed: (direction) => context.read<AppSettings>().deleteSight(i, sightsToVisit),
-            background: const SizedBox.shrink(),
-            secondaryBackground: AspectRatio(
-              aspectRatio: AppCardSize.visitingCard,
-              child: Padding(
-                padding: const EdgeInsets.only(bottom: 11.0),
-                child: DecoratedBox(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(16.0),
-                    color: Colors.red,
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.only(right: 16.0),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        Column(
-                          // ignore: avoid_redundant_argument_values
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: const [
-                            SightIcons(assetName: AppAssets.bucket, width: 24, height: 24),
-                            SizedBox(height: 8),
-                            Text(
-                              AppString.delete,
-                              style: AppTypography.removeCardText,
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            ),
-            direction: DismissDirection.endToStart,
-            child: Padding(
-              padding: const EdgeInsets.only(bottom: 11.0),
-              child: SightCard(
-                key: ObjectKey(sightsToVisit[i]),
-                removeSight: () => context.read<AppSettings>().deleteSight(i, sightsToVisit),
-                isVisitingScreen: true,
-                item: sightsToVisit[i],
-                url: sightsToVisit[i].url ?? 'no_url',
-                type: sightsToVisit[i].type,
-                name: sightsToVisit[i].name,
-                aspectRatio: AppCardSize.visitingCard,
-                details: [
-                  Text(
-                    sightsToVisit[i].name,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: theme.textTheme.headlineSmall,
-                  ),
-                  const SizedBox(height: 2),
-                  const Text(
-                    '${AppString.planning} 12 окт. 2022',
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: AppTypography.greenColor,
-                  ),
-                  const SizedBox(height: 10),
-                  const Text(
-                    '${AppString.closed} 09:00',
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: AppTypography.textText16Regular,
-                  ),
-                ],
-                actionOne: const SightIcons(
-                  assetName: AppAssets.calendarWhite,
-                  width: 24,
-                  height: 24,
-                ),
-                actionTwo: const SightIcons(
-                  assetName: AppAssets.cross,
-                  width: 22,
-                  height: 22,
-                ),
-              ),
+          _DismissibleWidget(
+            key: ObjectKey(sightsToVisit[i]),
+            i: i,
+            sightsToVisit: sightsToVisit,
+            theme: theme,
+            uniqueKey: UniqueKey(),
+            actionTwo: const SightIcons(
+              assetName: AppAssets.cross,
+              width: 22,
+              height: 22,
             ),
           ),
       ],
+    );
+  }
+}
+
+class _DismissibleWidget extends StatelessWidget {
+  final int i;
+  final List<Sight> sightsToVisit;
+  final ThemeData theme;
+  final Key uniqueKey;
+  final Widget actionTwo;
+
+  const _DismissibleWidget({
+    Key? key,
+    required this.i,
+    required this.sightsToVisit,
+    required this.theme,
+    required this.uniqueKey,
+    required this.actionTwo,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Dismissible(
+      key: uniqueKey,
+      onDismissed: (direction) => context.read<AppSettings>().deleteSight(i, sightsToVisit),
+      background: const SizedBox.shrink(),
+      secondaryBackground: AspectRatio(
+        aspectRatio: AppCardSize.visitingCard,
+        child: Padding(
+          padding: const EdgeInsets.only(bottom: 11.0),
+          child: DecoratedBox(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(16.0),
+              color: Colors.red,
+            ),
+            child: Padding(
+              padding: const EdgeInsets.only(right: 16.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Column(
+                    // ignore: avoid_redundant_argument_values
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: const [
+                      SightIcons(assetName: AppAssets.bucket, width: 24, height: 24),
+                      SizedBox(height: 8),
+                      Text(
+                        AppString.delete,
+                        style: AppTypography.removeCardText,
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+      direction: DismissDirection.endToStart,
+      child: Padding(
+        padding: const EdgeInsets.only(bottom: 11.0),
+        child: SightCard(
+          removeSight: () => context.read<AppSettings>().deleteSight(i, sightsToVisit),
+          isVisitingScreen: true,
+          item: sightsToVisit[i],
+          url: sightsToVisit[i].url ?? 'no_url',
+          type: sightsToVisit[i].type,
+          name: sightsToVisit[i].name,
+          aspectRatio: AppCardSize.visitingCard,
+          details: [
+            Text(
+              sightsToVisit[i].name,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: theme.textTheme.headlineSmall,
+            ),
+            const SizedBox(height: 2),
+            const Text(
+              '${AppString.planning} 12 окт. 2022',
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: AppTypography.greenColor,
+            ),
+            const SizedBox(height: 10),
+            const Text(
+              '${AppString.closed} 09:00',
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: AppTypography.textText16Regular,
+            ),
+          ],
+          actionOne: const SightIcons(
+            assetName: AppAssets.calendarWhite,
+            width: 24,
+            height: 24,
+          ),
+          actionTwo: actionTwo,
+        ),
+      ),
     );
   }
 }
