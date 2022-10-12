@@ -200,6 +200,17 @@ abstract class Mocks {
     ),
   ];
 
+  static List<Sight> pickedImage = [
+    Sight(
+      name: 'Мытищинский парк',
+      lat: 55.911397,
+      lot: 37.740033,
+      url: 'https://pic.rutubelist.ru/video/39/09/390905576c021a02b5b57c374ba16621.jpg',
+      details: 'Мытищинский парк — центральный парк в одноименном городе Московской области.',
+      type: AppString.park,
+    ),
+  ];
+
   static double startPoint = 2000;
   static double endPoint = 8000;
 

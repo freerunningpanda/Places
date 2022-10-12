@@ -46,48 +46,16 @@ class AppSettings extends ChangeNotifier {
 
   void pickImage() {
     if (places.isEmpty) {
-      places.add(Mocks.mocks[0]);
+      places.addAll(Mocks.pickedImage);
       notifyListeners();
-    } else if (places.length == 1) {
-      places.add(Mocks.mocks[1]);
-      notifyListeners();
-    } else if (places.length == 2) {
-      places.add(Mocks.mocks[2]);
-      notifyListeners();
-    } else if (places.length == 3) {
-      places.add(Mocks.mocks[3]);
-      notifyListeners();
-    } else if (places.length == 4) {
-      places.add(Mocks.mocks[4]);
-      notifyListeners();
-    } else if (places.length == 5) {
-      places.add(Mocks.mocks[5]);
-      notifyListeners();
-    } else {
-      return;
     }
   }
 
   void removeImage(int index) {
-    if (places.isEmpty) {
+    if (places.isNotEmpty) {
       places.removeAt(index);
       notifyListeners();
-    } else if (places.length == 1) {
-      places.removeAt(index);
-      notifyListeners();
-    } else if (places.length == 2) {
-      places.removeAt(index);
-      notifyListeners();
-    } else if (places.length == 3) {
-      places.removeAt(index);
-      notifyListeners();
-    } else if (places.length == 4) {
-      places.removeAt(index);
-      notifyListeners();
-    } else if (places.length == 5) {
-      places.removeAt(index);
-      notifyListeners();
-    }
+    } 
   }
 
   void saveSearchHistory(String value, TextEditingController controller) {
