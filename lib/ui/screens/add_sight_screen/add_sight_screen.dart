@@ -248,6 +248,7 @@ class _SightContent extends StatelessWidget {
   }
 }
 
+/// Class for image picking to horizontal list
 class _PickImageWidget extends StatelessWidget {
   final List<Sight> places;
   final ThemeData theme;

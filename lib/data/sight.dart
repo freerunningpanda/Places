@@ -1,4 +1,6 @@
-class Sight {
+import 'package:equatable/equatable.dart';
+
+class Sight extends Equatable {
   final String name;
   final double lat;
   final double lot;
@@ -6,7 +8,10 @@ class Sight {
   final String details;
   final String type;
 
-  Sight({
+  @override
+  List<Object?> get props => [name, lat, lot, url, details, type];
+
+  const Sight({
     required this.name,
     required this.lat,
     required this.lot,

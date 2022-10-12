@@ -266,7 +266,7 @@ class _WantToVisitWidget extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.only(bottom: 11.0),
               child: SightCard(
-                key: ValueKey(i),
+                key: ObjectKey(sightsToVisit[i]),
                 removeSight: () => context.read<AppSettings>().deleteSight(i, sightsToVisit),
                 isVisitingScreen: true,
                 item: sightsToVisit[i],
