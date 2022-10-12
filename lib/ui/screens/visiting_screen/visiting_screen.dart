@@ -242,6 +242,38 @@ class _WantToVisitWidget extends StatelessWidget {
   }
 }
 
+class _VisitedWidget extends StatelessWidget {
+  final List<Sight> visitedSights;
+  const _VisitedWidget({Key? key, required this.visitedSights}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    return ReorderableListView(
+      onReorder: (oldIndex, newIndex) {
+        if (newIndex > oldIndex) newIndex--;
+        context.read<AppSettings>().dragCard(visitedSights, oldIndex, newIndex);
+      },
+      children: [
+        for (var i = 0; i < visitedSights.length; i++)
+          _DismissibleWidget(
+            key: ObjectKey(visitedSights[i]),
+            i: i,
+            sightsToVisit: visitedSights,
+            theme: theme,
+            uniqueKey: UniqueKey(),
+            actionTwo: const SightIcons(
+              assetName: AppAssets.share,
+              width: 22,
+              height: 22,
+            ),
+          ),
+      ],
+    );
+  }
+}
+
 class _DismissibleWidget extends StatelessWidget {
   final int i;
   final List<Sight> sightsToVisit;
@@ -338,38 +370,6 @@ class _DismissibleWidget extends StatelessWidget {
           actionTwo: actionTwo,
         ),
       ),
-    );
-  }
-}
-
-class _VisitedWidget extends StatelessWidget {
-  final List<Sight> visitedSights;
-  const _VisitedWidget({Key? key, required this.visitedSights}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
-    return ReorderableListView(
-      onReorder: (oldIndex, newIndex) {
-        if (newIndex > oldIndex) newIndex--;
-        context.read<AppSettings>().dragCard(visitedSights, oldIndex, newIndex);
-      },
-      children: [
-        for (var i = 0; i < visitedSights.length; i++)
-          _DismissibleWidget(
-            key: ObjectKey(visitedSights[i]),
-            i: i,
-            sightsToVisit: visitedSights,
-            theme: theme,
-            uniqueKey: UniqueKey(),
-            actionTwo: const SightIcons(
-              assetName: AppAssets.share,
-              width: 22,
-              height: 22,
-            ),
-          ),
-      ],
     );
   }
 }
