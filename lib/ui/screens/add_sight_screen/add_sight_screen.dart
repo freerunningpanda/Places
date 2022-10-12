@@ -154,23 +154,29 @@ class _ImagePickerWidgetState extends State<_ImagePickerWidget> {
 
     return SizedBox(
       height: 72,
-      child: ListView(
-        scrollDirection: Axis.horizontal,
-        shrinkWrap: true,
+      child: Row(
         children: [
           Row(
             children: [
               _PickImageWidget(theme: widget.theme, places: places),
             ],
           ),
-          Row(
-            children: [
-              for (var i = 0; i < places.length; i++)
-                _ImageSight(
-                  image: places[i].url,
-                  index: i,
+          Expanded(
+            child: ListView(
+              scrollDirection: Axis.horizontal,
+              shrinkWrap: true,
+              children: [
+                Row(
+                  children: [
+                    for (var i = 0; i < places.length; i++)
+                      _ImageSight(
+                        image: places[i].url,
+                        index: i,
+                      ),
+                  ],
                 ),
-            ],
+              ],
+            ),
           ),
         ],
       ),

@@ -87,8 +87,6 @@ class AppSettings extends ChangeNotifier {
     } else if (places.length == 5) {
       places.removeAt(index);
       notifyListeners();
-    } else {
-      return;
     }
   }
 
