@@ -31,49 +31,41 @@ class _VisitingScreenState extends State<VisitingScreen> with TickerProviderStat
         length: 2,
         child: Scaffold(
           appBar: const _AppBar(),
-          body: Stack(
+          body: Column(
             children: [
-              Column(
-                children: [
-                  Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.only(top: 30),
-                      child: TabBarView(
-                        children: [
-                          if (sightsToVisit.isNotEmpty)
-                            _WantToVisitWidget(
-                              sightsToVisit: sightsToVisit,
-                              key: const PageStorageKey('WantToVisitScrollPosition'),
-                            )
-                          else
-                            const _EmptyList(
-                              icon: AppAssets.card,
-                              description: AppString.likedPlaces,
-                            ),
-                          if (visitedSights.isNotEmpty)
-                            _VisitedWidget(
-                              visitedSights: visitedSights,
-                              key: const PageStorageKey('VisitedScrollPosition'),
-                            )
-                          else
-                            const _EmptyList(
-                              icon: AppAssets.goIconTransparent,
-                              description: AppString.finishRoute,
-                            ),
-                        ],
-                      ),
-                    ),
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 30),
+                  child: TabBarView(
+                    children: [
+                      if (sightsToVisit.isNotEmpty)
+                        _WantToVisitWidget(
+                          sightsToVisit: sightsToVisit,
+                          key: const PageStorageKey('WantToVisitScrollPosition'),
+                        )
+                      else
+                        const _EmptyList(
+                          icon: AppAssets.card,
+                          description: AppString.likedPlaces,
+                        ),
+                      if (visitedSights.isNotEmpty)
+                        _VisitedWidget(
+                          visitedSights: visitedSights,
+                          key: const PageStorageKey('VisitedScrollPosition'),
+                        )
+                      else
+                        const _EmptyList(
+                          icon: AppAssets.goIconTransparent,
+                          description: AppString.finishRoute,
+                        ),
+                    ],
                   ),
-                ],
-              ),
-              const Positioned(
-                bottom: 16,
-                left: 92,
-                right: 92,
-                child: AddNewPlaceButton(),
+                ),
               ),
             ],
           ),
+          floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+          floatingActionButton: const AddNewPlaceButton(),
         ),
       ),
     );
@@ -328,7 +320,7 @@ class _DismissibleWidget extends StatelessWidget {
                   style: theme.textTheme.headlineSmall,
                 ),
                 const SizedBox(height: 2),
-                 Text(
+                Text(
                   '$target 12 окт. 2022',
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,

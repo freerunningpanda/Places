@@ -30,27 +30,19 @@ class _SightListScreenState extends State<SightListScreen> {
     return Padding(
       padding: const EdgeInsets.only(left: 16.0, right: 16.0),
       child: Scaffold(
-        body: Stack(
+        body: Column(
           children: [
-            Column(
-              children: [
-                const SizedBox(height: 16),
-                const SearchAppBar(),
-                SearchBar(
-                  isSearchPage: isSearchPage,
-                  readOnly: readOnly,
-                ),
-                _SightListWidget(sightList: sightList, theme: theme),
-              ],
+            const SizedBox(height: 16),
+            const SearchAppBar(),
+            SearchBar(
+              isSearchPage: isSearchPage,
+              readOnly: readOnly,
             ),
-            const Positioned(
-              bottom: 16,
-              left: 92,
-              right: 92,
-              child: AddNewPlaceButton(),
-            ),
+            _SightListWidget(sightList: sightList, theme: theme),
           ],
         ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+        floatingActionButton: const AddNewPlaceButton(),
       ),
     );
   }
