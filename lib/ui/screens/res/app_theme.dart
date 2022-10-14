@@ -11,14 +11,12 @@ abstract class AppTheme {
       tabBarTheme: TabBarTheme(
         unselectedLabelStyle: AppTypography.sightDetailsButtonNameInnactive,
         unselectedLabelColor: AppColors.inactiveBlack,
-        indicatorSize: TabBarIndicatorSize.label,
         indicator: BoxDecoration(
           borderRadius: BorderRadius.circular(50),
           color: AppColors.textColor,
         ),
         labelColor: AppColors.backgroundColor,
         labelStyle: AppTypography.tabBarLabelStyle,
-        labelPadding: EdgeInsets.zero,
       ),
       cardColor: AppColors.red,
       progressIndicatorTheme: const ProgressIndicatorThemeData(

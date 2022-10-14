@@ -117,7 +117,6 @@ class _TabBarWidgetState extends State<_TabBarWidget> with TickerProviderStateMi
   @override
   Widget build(BuildContext context) {
     final customColors = Theme.of(context).extension<CustomColors>();
-    final theme = Theme.of(context);
 
     return DecoratedBox(
       decoration: BoxDecoration(
@@ -125,7 +124,6 @@ class _TabBarWidgetState extends State<_TabBarWidget> with TickerProviderStateMi
         color: customColors?.color,
       ),
       child: TabBar(
-        indicatorSize: TabBarIndicatorSize.label,
         tabs: [
           Tab(
             child: DecoratedBox(
@@ -134,9 +132,8 @@ class _TabBarWidgetState extends State<_TabBarWidget> with TickerProviderStateMi
               ),
               child: Align(
                 alignment: aligment,
-                child: Text(
+                child: const Text(
                   AppString.tabBarOneText,
-                  style: theme.tabBarTheme.labelStyle,
                 ),
               ),
             ),
