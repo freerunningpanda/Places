@@ -123,32 +123,16 @@ class _TabBarWidgetState extends State<_TabBarWidget> with TickerProviderStateMi
         borderRadius: BorderRadius.circular(30),
         color: customColors?.color,
       ),
-      child: TabBar(
+      child: const TabBar(
         tabs: [
           Tab(
-            child: DecoratedBox(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(50),
-              ),
-              child: Align(
-                alignment: aligment,
-                child: const Text(
-                  AppString.tabBarOneText,
-                ),
-              ),
+            child: Text(
+              AppString.tabBarOneText,
             ),
           ),
           Tab(
-            child: DecoratedBox(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(50),
-              ),
-              child: Align(
-                alignment: aligment,
-                child: const Text(
-                  AppString.tabBarTwoText,
-                ),
-              ),
+            child: Text(
+              AppString.tabBarTwoText,
             ),
           ),
         ],
