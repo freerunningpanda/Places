@@ -20,20 +20,6 @@ class VisitingScreen extends StatefulWidget {
 }
 
 class _VisitingScreenState extends State<VisitingScreen> with TickerProviderStateMixin {
-  late TabController controller;
-
-  @override
-  void initState() {
-    super.initState();
-    controller = TabController(length: 2, vsync: this);
-    controller.addListener(_handleTabSelection);
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    controller.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,68 +28,64 @@ class _VisitingScreenState extends State<VisitingScreen> with TickerProviderStat
 
     return Padding(
       padding: const EdgeInsets.only(left: 16.0, right: 16.0),
-      child: Scaffold(
-        appBar: _AppBar(controller: controller),
-        body: Stack(
-          children: [
-            Column(
-              children: [
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.only(top: 30),
-                    child: TabBarView(
-                      controller: controller,
-                      children: [
-                        if (sightsToVisit.isNotEmpty)
-                          _WantToVisitWidget(
-                            sightsToVisit: sightsToVisit,
-                            key: const PageStorageKey('WantToVisitScrollPosition'),
-                          )
-                        else
-                          const _EmptyList(
-                            icon: AppAssets.card,
-                            description: AppString.likedPlaces,
-                          ),
-                        if (visitedSights.isNotEmpty)
-                          _VisitedWidget(
-                            visitedSights: visitedSights,
-                            key: const PageStorageKey('VisitedScrollPosition'),
-                          )
-                        else
-                          const _EmptyList(
-                            icon: AppAssets.goIconTransparent,
-                            description: AppString.finishRoute,
-                          ),
-                      ],
+      child: DefaultTabController(
+        length: 2,
+        child: Scaffold(
+          appBar: const _AppBar(),
+          body: Stack(
+            children: [
+              Column(
+                children: [
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.only(top: 30),
+                      child: TabBarView(
+                        children: [
+                          if (sightsToVisit.isNotEmpty)
+                            _WantToVisitWidget(
+                              sightsToVisit: sightsToVisit,
+                              key: const PageStorageKey('WantToVisitScrollPosition'),
+                            )
+                          else
+                            const _EmptyList(
+                              icon: AppAssets.card,
+                              description: AppString.likedPlaces,
+                            ),
+                          if (visitedSights.isNotEmpty)
+                            _VisitedWidget(
+                              visitedSights: visitedSights,
+                              key: const PageStorageKey('VisitedScrollPosition'),
+                            )
+                          else
+                            const _EmptyList(
+                              icon: AppAssets.goIconTransparent,
+                              description: AppString.finishRoute,
+                            ),
+                        ],
+                      ),
                     ),
                   ),
-                ),
-              ],
-            ),
-            const Positioned(
-              bottom: 16,
-              left: 92,
-              right: 92,
-              child: AddNewPlaceButton(),
-            ),
-          ],
+                ],
+              ),
+              const Positioned(
+                bottom: 16,
+                left: 92,
+                right: 92,
+                child: AddNewPlaceButton(),
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
-
-  void _handleTabSelection() {
-    setState(() {});
-  }
 }
 
 class _AppBar extends StatefulWidget implements PreferredSizeWidget {
-  final TabController controller;
-
   @override
   Size get preferredSize => const Size.fromHeight(150);
 
-  const _AppBar({Key? key, required this.controller}) : super(key: key);
+  const _AppBar({Key? key}) : super(key: key);
 
   @override
   State<_AppBar> createState() => _AppBarState();
@@ -117,26 +99,21 @@ class _AppBarState extends State<_AppBar> with TickerProviderStateMixin {
     final theme = Theme.of(context);
 
     return AppBar(
-      backgroundColor: theme.scaffoldBackgroundColor,
-      centerTitle: true,
-      title: Text(
-        AppString.visitingScreenTitle,
-        style: theme.textTheme.titleLarge,
-      ),
-      elevation: 0,
-      bottom: _TabBarWidget(
-        controller: widget.controller,
-      ),
-    );
+        backgroundColor: theme.scaffoldBackgroundColor,
+        centerTitle: true,
+        title: Text(
+          AppString.visitingScreenTitle,
+          style: theme.textTheme.titleLarge,
+        ),
+        elevation: 0,
+        bottom: const _TabBarWidget(),);
   }
 }
 
 class _TabBarWidget extends StatefulWidget implements PreferredSizeWidget {
-  final TabController controller;
-
   @override
   Size get preferredSize => const Size.fromHeight(150);
-  const _TabBarWidget({Key? key, required this.controller}) : super(key: key);
+  const _TabBarWidget({Key? key}) : super(key: key);
 
   @override
   State<_TabBarWidget> createState() => _TabBarWidgetState();
@@ -151,60 +128,50 @@ class _TabBarWidgetState extends State<_TabBarWidget> with TickerProviderStateMi
     final theme = Theme.of(context);
 
     return DecoratedBox(
-      // margin: const EdgeInsets.only(left: 16, top: 16, right: 16),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(30),
         color: customColors?.color,
       ),
-      child: Material(
-        borderRadius: BorderRadius.circular(30),
-        clipBehavior: Clip.antiAlias,
-        type: MaterialType.transparency,
-        child: TabBar(
-          controller: widget.controller,
-          labelPadding: EdgeInsets.zero,
-          unselectedLabelColor: theme.dividerColor,
-          labelColor: theme.toggleableActiveColor,
-          labelStyle: AppTypography.tabBarIndicator,
-          indicator: BoxDecoration(
-            borderRadius: BorderRadius.circular(50),
-          ),
-          indicatorSize: TabBarIndicatorSize.label,
-          tabs: [
-            Tab(
-              child: DecoratedBox(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(50),
-                  color: widget.controller.index == 0
-                      ? theme.tabBarTheme.labelColor
-                      : theme.progressIndicatorTheme.circularTrackColor,
-                ),
-                child: Align(
-                  alignment: aligment,
-                  child: const Text(
-                    AppString.tabBarOneText,
-                  ),
-                ),
-              ),
-            ),
-            Tab(
-              child: DecoratedBox(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(50),
-                  color: widget.controller.index == 1
-                      ? theme.tabBarTheme.labelColor
-                      : theme.progressIndicatorTheme.circularTrackColor,
-                ),
-                child: Align(
-                  alignment: aligment,
-                  child: const Text(
-                    AppString.tabBarTwoText,
-                  ),
-                ),
-              ),
-            ),
-          ],
+      child: TabBar(
+        labelPadding: EdgeInsets.zero,
+        unselectedLabelColor: theme.dividerColor,
+        labelColor: theme.toggleableActiveColor,
+        labelStyle: AppTypography.tabBarIndicator,
+        indicator: BoxDecoration(
+          borderRadius: BorderRadius.circular(50),
+          color: theme.tabBarTheme.labelColor,
         ),
+        indicatorSize: TabBarIndicatorSize.label,
+        tabs: [
+          Tab(
+            child: DecoratedBox(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(50),
+                // color: Colors.redAccent,
+              ),
+              child: Align(
+                alignment: aligment,
+                child: const Text(
+                  AppString.tabBarOneText,
+                ),
+              ),
+            ),
+          ),
+          Tab(
+            child: DecoratedBox(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(50),
+                // color: Colors.redAccent,
+              ),
+              child: Align(
+                alignment: aligment,
+                child: const Text(
+                  AppString.tabBarTwoText,
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
