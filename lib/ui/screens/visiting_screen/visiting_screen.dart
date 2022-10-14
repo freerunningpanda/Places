@@ -20,7 +20,6 @@ class VisitingScreen extends StatefulWidget {
 }
 
 class _VisitingScreenState extends State<VisitingScreen> with TickerProviderStateMixin {
-
   @override
   Widget build(BuildContext context) {
     final sightsToVisit = context.watch<AppSettings>().sightsToVisit;
@@ -99,14 +98,15 @@ class _AppBarState extends State<_AppBar> with TickerProviderStateMixin {
     final theme = Theme.of(context);
 
     return AppBar(
-        backgroundColor: theme.scaffoldBackgroundColor,
-        centerTitle: true,
-        title: Text(
-          AppString.visitingScreenTitle,
-          style: theme.textTheme.titleLarge,
-        ),
-        elevation: 0,
-        bottom: const _TabBarWidget(),);
+      backgroundColor: theme.scaffoldBackgroundColor,
+      centerTitle: true,
+      title: Text(
+        AppString.visitingScreenTitle,
+        style: theme.textTheme.titleLarge,
+      ),
+      elevation: 0,
+      bottom: const _TabBarWidget(),
+    );
   }
 }
 
@@ -205,6 +205,8 @@ class _WantToVisitWidget extends StatelessWidget {
                 width: 22,
                 height: 22,
               ),
+              style: AppTypography.greenColor,
+              target: AppString.planning,
             ),
           ),
       ],
@@ -238,6 +240,8 @@ class _VisitedWidget extends StatelessWidget {
               width: 22,
               height: 22,
             ),
+            style: AppTypography.detailsText,
+            target: AppString.targetReach,
           ),
       ],
     );
@@ -250,6 +254,8 @@ class _DismissibleWidget extends StatelessWidget {
   final ThemeData theme;
   final Key uniqueKey;
   final Widget actionTwo;
+  final String target;
+  final TextStyle style;
 
   const _DismissibleWidget({
     Key? key,
@@ -258,6 +264,8 @@ class _DismissibleWidget extends StatelessWidget {
     required this.theme,
     required this.uniqueKey,
     required this.actionTwo,
+    required this.style,
+    required this.target,
   }) : super(key: key);
 
   @override
@@ -320,11 +328,11 @@ class _DismissibleWidget extends StatelessWidget {
                   style: theme.textTheme.headlineSmall,
                 ),
                 const SizedBox(height: 2),
-                const Text(
-                  '${AppString.planning} 12 окт. 2022',
+                 Text(
+                  '$target 12 окт. 2022',
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  style: AppTypography.greenColor,
+                  style: style,
                 ),
                 const SizedBox(height: 10),
                 const Text(
