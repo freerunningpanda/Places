@@ -125,26 +125,18 @@ class _TabBarWidgetState extends State<_TabBarWidget> with TickerProviderStateMi
         color: customColors?.color,
       ),
       child: TabBar(
-        labelPadding: EdgeInsets.zero,
-        unselectedLabelColor: theme.dividerColor,
-        labelColor: theme.toggleableActiveColor,
-        labelStyle: AppTypography.tabBarIndicator,
-        indicator: BoxDecoration(
-          borderRadius: BorderRadius.circular(50),
-          color: theme.tabBarTheme.labelColor,
-        ),
         indicatorSize: TabBarIndicatorSize.label,
         tabs: [
           Tab(
             child: DecoratedBox(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(50),
-                // color: Colors.redAccent,
               ),
               child: Align(
                 alignment: aligment,
-                child: const Text(
+                child: Text(
                   AppString.tabBarOneText,
+                  style: theme.tabBarTheme.labelStyle,
                 ),
               ),
             ),
@@ -153,7 +145,6 @@ class _TabBarWidgetState extends State<_TabBarWidget> with TickerProviderStateMi
             child: DecoratedBox(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(50),
-                // color: Colors.redAccent,
               ),
               child: Align(
                 alignment: aligment,
