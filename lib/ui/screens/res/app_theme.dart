@@ -79,16 +79,15 @@ abstract class AppTheme {
   // ignore: long-method
   static ThemeData buildThemeDark() {
     return ThemeData(
-      tabBarTheme: const TabBarTheme(
-        labelColor: AppColors.backgroundColor,
-      ),
-      cardColor: AppColors.red,
-      extensions: const <ThemeExtension<CustomColors>>[CustomColors.sightCardDark],
-      textButtonTheme: TextButtonThemeData(
-        style: TextButton.styleFrom(
-          padding: EdgeInsets.zero,
-          primary: AppColors.black,
+      tabBarTheme: TabBarTheme(
+        unselectedLabelStyle: AppTypography.sightDetailsButtonNameInnactive,
+        unselectedLabelColor: AppColors.inactiveBlack,
+        indicator: BoxDecoration(
+          borderRadius: BorderRadius.circular(50),
+          color: AppColors.backgroundColor,
         ),
+        labelColor: AppColors.textColor,
+        labelStyle: AppTypography.tabBarLabelStyle,
       ),
       scaffoldBackgroundColor: AppColors.darkThemeBgColor,
       appBarTheme: const AppBarTheme(
@@ -131,6 +130,7 @@ abstract class AppTheme {
         overlayShape: SliderComponentShape.noOverlay,
         rangeThumbShape: const RoundRangeSliderThumbShape(elevation: 3),
       ),
+      extensions: const <ThemeExtension<CustomColors>>[CustomColors.sightCardDark],
     );
   }
 }
