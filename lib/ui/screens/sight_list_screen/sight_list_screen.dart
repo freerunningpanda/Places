@@ -27,27 +27,22 @@ class _SightListScreenState extends State<SightListScreen> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    return Scaffold(
-      body: Stack(
-        children: [
-          Column(
-            children: [
-              const SizedBox(height: 16),
-              const SearchAppBar(),
-              SearchBar(
-                isSearchPage: isSearchPage,
-                readOnly: readOnly,
-              ),
-              _SightListWidget(sightList: sightList, theme: theme),
-            ],
-          ),
-          const Positioned(
-            bottom: 16,
-            left: 92,
-            right: 92,
-            child: AddNewPlaceButton(),
-          ),
-        ],
+    return Padding(
+      padding: const EdgeInsets.only(left: 16.0, right: 16.0),
+      child: Scaffold(
+        body: Column(
+          children: [
+            const SizedBox(height: 16),
+            const SearchAppBar(),
+            SearchBar(
+              isSearchPage: isSearchPage,
+              readOnly: readOnly,
+            ),
+            _SightListWidget(sightList: sightList, theme: theme),
+          ],
+        ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+        floatingActionButton: const AddNewPlaceButton(),
       ),
     );
   }
@@ -73,30 +68,35 @@ class _SightListWidget extends StatelessWidget {
         itemBuilder: (context, index) {
           final sight = sightList[index];
 
-          return SightCard(
-            isVisitingScreen: false,
-            aspectRatio: 3 / 2,
-            actionOne: const SightIcons(
-              assetName: AppAssets.favourite,
-              width: 22,
-              height: 22,
-            ),
-            url: sight.url ?? 'no_url',
-            type: sight.type,
-            name: sight.name,
-            item: sight,
-            details: [
-              Text(
-                sight.name,
-                maxLines: 2,
-                style: theme.textTheme.headlineSmall,
+          return Column(
+            children: [
+              SightCard(
+                isVisitingScreen: false,
+                aspectRatio: 3 / 2,
+                actionOne: const SightIcons(
+                  assetName: AppAssets.favourite,
+                  width: 22,
+                  height: 22,
+                ),
+                url: sight.url ?? 'no_url',
+                type: sight.type,
+                name: sight.name,
+                item: sight,
+                details: [
+                  Text(
+                    sight.name,
+                    maxLines: 2,
+                    style: theme.textTheme.headlineSmall,
+                  ),
+                  const SizedBox(height: 2),
+                  Text(
+                    sight.details,
+                    overflow: TextOverflow.ellipsis,
+                    style: AppTypography.textText16Regular,
+                  ),
+                ],
               ),
-              const SizedBox(height: 2),
-              Text(
-                sight.details,
-                overflow: TextOverflow.ellipsis,
-                style: AppTypography.textText16Regular,
-              ),
+              const SizedBox(height: 11),
             ],
           );
         },

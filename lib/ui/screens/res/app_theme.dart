@@ -8,6 +8,17 @@ abstract class AppTheme {
   // ignore: long-method
   static ThemeData buildTheme() {
     return ThemeData(
+      tabBarTheme: TabBarTheme(
+        unselectedLabelStyle: AppTypography.sightDetailsButtonNameInnactive,
+        unselectedLabelColor: AppColors.inactiveBlack,
+        indicator: BoxDecoration(
+          borderRadius: BorderRadius.circular(50),
+          color: AppColors.textColor,
+        ),
+        labelColor: AppColors.backgroundColor,
+        labelStyle: AppTypography.tabBarLabelStyle,
+      ),
+      cardColor: AppColors.red,
       progressIndicatorTheme: const ProgressIndicatorThemeData(
         circularTrackColor: AppColors.sightCardBackground,
         color: AppColors.secondaryTwo,
@@ -53,6 +64,8 @@ abstract class AppTheme {
       canvasColor: AppColors.lightGreen,
       focusColor: AppColors.chevroneColor,
       sliderTheme: SliderThemeData(
+        activeTickMarkColor: AppColors.greenOpacity,
+        overlayColor: AppColors.greenOpacityTextField,
         trackHeight: 1,
         inactiveTrackColor: AppColors.inactiveBlack,
         activeTrackColor: AppColors.green,
@@ -66,12 +79,15 @@ abstract class AppTheme {
   // ignore: long-method
   static ThemeData buildThemeDark() {
     return ThemeData(
-      extensions: const <ThemeExtension<CustomColors>>[CustomColors.sightCardDark],
-      textButtonTheme: TextButtonThemeData(
-        style: TextButton.styleFrom(
-          padding: EdgeInsets.zero,
-          primary: AppColors.black,
+      tabBarTheme: TabBarTheme(
+        unselectedLabelStyle: AppTypography.sightDetailsButtonNameInnactive,
+        unselectedLabelColor: AppColors.inactiveBlack,
+        indicator: BoxDecoration(
+          borderRadius: BorderRadius.circular(50),
+          color: AppColors.backgroundColor,
         ),
+        labelColor: AppColors.textColor,
+        labelStyle: AppTypography.tabBarLabelStyle,
       ),
       scaffoldBackgroundColor: AppColors.darkThemeBgColor,
       appBarTheme: const AppBarTheme(
@@ -114,6 +130,7 @@ abstract class AppTheme {
         overlayShape: SliderComponentShape.noOverlay,
         rangeThumbShape: const RoundRangeSliderThumbShape(elevation: 3),
       ),
+      extensions: const <ThemeExtension<CustomColors>>[CustomColors.sightCardDark],
     );
   }
 }

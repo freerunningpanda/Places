@@ -7,8 +7,6 @@ import 'package:places/data/filters_table.dart';
 import 'package:places/data/sight.dart';
 import 'package:places/mocks.dart';
 
-typedef VoidFuncString = void Function(String)?;
-
 class AppSettings extends ChangeNotifier {
   final titleController = TextEditingController();
   final descriptionController = TextEditingController();
@@ -21,6 +19,7 @@ class AppSettings extends ChangeNotifier {
   final descriptionFocus = FocusNode();
   final searchFocus = FocusNode();
   final Set<String> searchHistoryList = {};
+  final List<Sight> places = [];
   List<Sight> sightsToVisit = Mocks.sightsTovisit;
   List<Sight> visitedSights = Mocks.visitedSights;
 
@@ -34,9 +33,29 @@ class AppSettings extends ChangeNotifier {
 
   List<Sight> suggestions = FiltersTable.filtersWithDistance.toList();
 
-  void deleteSight(int index, List<Sight> sightList) {
-    sightList.removeAt(index);
+  void dragCard(List<Sight> sights, int oldIndex, int newIndex) {
+    final sight = sights.removeAt(oldIndex);
+    sights.insert(newIndex, sight);
     notifyListeners();
+  }
+
+  void deleteSight(int index, List<Sight> sight) {
+    sight.removeAt(index);
+    notifyListeners();
+  }
+
+  void pickImage() {
+    if (places.isEmpty) {
+      places.addAll(Mocks.pickedImage);
+      notifyListeners();
+    }
+  }
+
+  void removeImage(int index) {
+    if (places.isNotEmpty) {
+      places.removeAt(index);
+      notifyListeners();
+    } 
   }
 
   void saveSearchHistory(String value, TextEditingController controller) {

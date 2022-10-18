@@ -4,11 +4,13 @@ import 'package:places/appsettings.dart';
 import 'package:places/data/categories_table.dart';
 import 'package:places/data/sight.dart';
 import 'package:places/mocks.dart';
+import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_strings.dart';
 import 'package:places/ui/res/app_typography.dart';
 import 'package:places/ui/screens/add_sight_screen/choose_category_screen.dart';
 import 'package:places/ui/widgets/create_button.dart';
 import 'package:places/ui/widgets/new_place_app_bar_widget.dart';
+import 'package:places/ui/widgets/sight_icons.dart';
 import 'package:places/ui/widgets/suffix_icon.dart';
 import 'package:provider/provider.dart';
 
@@ -54,6 +56,8 @@ class AddSightScreen extends StatelessWidget {
                   title: AppString.newPlace,
                 ),
                 const SizedBox(height: 40),
+                _ImagePickerWidget(theme: theme),
+                const SizedBox(height: 20),
                 Expanded(
                   child: SingleChildScrollView(
                     child: Column(
@@ -134,6 +138,149 @@ class AddSightScreen extends StatelessWidget {
   }
 }
 
+class _ImagePickerWidget extends StatefulWidget {
+  final ThemeData theme;
+  const _ImagePickerWidget({Key? key, required this.theme}) : super(key: key);
+
+  @override
+  State<_ImagePickerWidget> createState() => _ImagePickerWidgetState();
+}
+
+class _ImagePickerWidgetState extends State<_ImagePickerWidget> {
+  final sightList = Mocks.mocks;
+  @override
+  Widget build(BuildContext context) {
+    final places = context.watch<AppSettings>().places;
+
+    return SizedBox(
+      height: 72,
+      child: Row(
+        children: [
+          Row(
+            children: [
+              _PickImageWidget(theme: widget.theme, places: places),
+            ],
+          ),
+          Expanded(
+            child: ListView(
+              scrollDirection: Axis.horizontal,
+              shrinkWrap: true,
+              children: [
+                Row(
+                  children: [
+                    for (var i = 0; i < places.length; i++)
+                      _ImageSight(
+                        image: places[i].url,
+                        index: i,
+                      ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _ImageSight extends StatelessWidget {
+  final String? image;
+  final int index;
+  const _ImageSight({Key? key, required this.image, required this.index}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return _SightContent(image: image, index: index);
+  }
+}
+
+class _SightContent extends StatelessWidget {
+  final String? image;
+  final int index;
+  const _SightContent({
+    Key? key,
+    required this.image,
+    required this.index,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Dismissible(
+      direction: DismissDirection.vertical,
+      key: UniqueKey(),
+      onDismissed: (direction) => context.read<AppSettings>().removeImage(index),
+      child: Container(
+        margin: const EdgeInsets.symmetric(horizontal: 8),
+        decoration: const BoxDecoration(),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(12),
+          child: Stack(
+            children: [
+              Image.network(
+                image ?? 'no_url',
+                width: 72,
+                height: 72,
+                fit: BoxFit.cover,
+              ),
+              const Positioned(
+                top: 4,
+                right: 4,
+                child: SightIcons(assetName: AppAssets.clear, width: 24, height: 24),
+              ),
+              Positioned(
+                top: 4,
+                right: 4,
+                child: Material(
+                  type: MaterialType.transparency,
+                  child: InkWell(
+                    borderRadius: BorderRadius.circular(30),
+                    onTap: () => context.read<AppSettings>().removeImage(index),
+                    child: const SizedBox(height: 24, width: 24),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// Class for image picking to horizontal list
+class _PickImageWidget extends StatelessWidget {
+  final List<Sight> places;
+  final ThemeData theme;
+
+  const _PickImageWidget({
+    Key? key,
+    required this.theme,
+    required this.places,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.only(right: 8),
+      width: 72,
+      height: 72,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(
+          color: theme.sliderTheme.activeTickMarkColor as Color,
+          width: 2,
+        ),
+      ),
+      child: IconButton(
+        icon: const Icon(Icons.add_rounded, size: 45),
+        onPressed: () => context.read<AppSettings>().pickImage(),
+        color: theme.sliderTheme.activeTrackColor,
+      ),
+    );
+  }
+}
+
 class _CancelButtonWidget extends StatelessWidget {
   final ThemeData theme;
 
@@ -165,8 +312,8 @@ class _TextInputWidget extends StatefulWidget {
   final Widget? suffixIcon;
   final TextEditingController controller;
   final TextInputAction textInputAction;
-  final VoidFuncString onSubmitted;
-  final VoidFuncString onChanged;
+  final ValueChanged<String>? onSubmitted;
+  final ValueChanged<String>? onChanged;
 
   const _TextInputWidget({
     Key? key,
@@ -218,11 +365,11 @@ class _TextInputWidgetState extends State<_TextInputWidget> {
               hintStyle: AppTypography.textText16Search,
               contentPadding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10),
               focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(width: 2, color: widget.theme.sliderTheme.activeTrackColor as Color),
+                borderSide: BorderSide(width: 2, color: widget.theme.sliderTheme.overlayColor as Color),
                 borderRadius: BorderRadius.circular(8.0),
               ),
               enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: widget.theme.sliderTheme.activeTrackColor as Color),
+                borderSide: BorderSide(color: widget.theme.sliderTheme.overlayColor as Color),
                 borderRadius: BorderRadius.circular(8.0),
               ),
               suffixIcon: widget.focusNode.hasFocus ? widget.suffixIcon : null,
@@ -311,10 +458,10 @@ class _LatLotWidget extends StatefulWidget {
   final ThemeData theme;
   final String title;
   final FocusNode focusNode;
-  final VoidFuncString onSubmitted;
+  final ValueChanged<String>? onSubmitted;
   final TextEditingController controller;
   final VoidCallback onTap;
-  final VoidFuncString onChanged;
+  final ValueChanged<String>? onChanged;
 
   const _LatLotWidget({
     Key? key,
@@ -362,11 +509,11 @@ class _LatLotWidgetState extends State<_LatLotWidget> {
             decoration: InputDecoration(
               contentPadding: const EdgeInsets.only(left: 16.0),
               focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(width: 2, color: widget.theme.sliderTheme.activeTrackColor as Color),
+                borderSide: BorderSide(width: 2, color: widget.theme.sliderTheme.overlayColor as Color),
                 borderRadius: BorderRadius.circular(8.0),
               ),
               enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: widget.theme.sliderTheme.activeTrackColor as Color),
+                borderSide: BorderSide(color: widget.theme.sliderTheme.overlayColor as Color),
                 borderRadius: BorderRadius.circular(8.0),
               ),
               suffixIcon: widget.focusNode.hasFocus

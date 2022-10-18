@@ -40,9 +40,7 @@ class _SearchBarState extends State<SearchBar> {
 
     return Padding(
       padding: const EdgeInsets.only(
-        left: 16.0,
         top: 30.0,
-        right: 16.0,
         bottom: 34,
       ),
       child: Container(

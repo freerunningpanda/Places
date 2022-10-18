@@ -33,33 +33,36 @@ class SightSearchScreen extends StatelessWidget {
         onTap: () {
           FocusManager.instance.primaryFocus?.unfocus();
         },
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const SizedBox(height: 16),
-            const SearchAppBar(),
-            const SearchBar(
-              isSearchPage: isSearchPage,
-              readOnly: readOnly,
-            ),
-            Expanded(
-              child: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    if (showHistoryList && searchStoryList.isNotEmpty)
-                      _SearchHistoryList(
-                        theme: theme,
-                        searchStoryList: searchStoryList,
-                        width: width,
-                      )
-                    else
-                      const SizedBox(),
-                    _SightListWidget(sightList: sightList, theme: theme),
-                  ],
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const SizedBox(height: 16),
+              const SearchAppBar(),
+              const SearchBar(
+                isSearchPage: isSearchPage,
+                readOnly: readOnly,
+              ),
+              Expanded(
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      if (showHistoryList && searchStoryList.isNotEmpty)
+                        _SearchHistoryList(
+                          theme: theme,
+                          searchStoryList: searchStoryList,
+                          width: width,
+                        )
+                      else
+                        const SizedBox(),
+                      _SightListWidget(sightList: sightList, theme: theme),
+                    ],
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -132,22 +135,19 @@ class _SearchHistoryList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          _SearchHistoryTitle(theme: theme),
-          const SizedBox(height: 4),
-          _SearchItem(
-            theme: theme,
-            searchStoryList: searchStoryList,
-            width: width,
-          ),
-          const SizedBox(height: 15),
-          const _ClearHistoryButton(),
-        ],
-      ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _SearchHistoryTitle(theme: theme),
+        const SizedBox(height: 4),
+        _SearchItem(
+          theme: theme,
+          searchStoryList: searchStoryList,
+          width: width,
+        ),
+        const SizedBox(height: 15),
+        const _ClearHistoryButton(),
+      ],
     );
   }
 }
@@ -308,7 +308,7 @@ class _SightCardWidget extends StatelessWidget {
     return Stack(
       children: [
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 11),
+          padding: const EdgeInsets.symmetric(vertical: 11),
           child: SizedBox(
             child: Row(
               children: [

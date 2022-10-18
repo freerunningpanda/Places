@@ -55,6 +55,11 @@ abstract class AppTypography {
     fontWeight: FontWeight.w500,
     color: AppColors.backgroundColor,
   );
+  static const removeCardText = TextStyle(
+    fontSize: 12,
+    fontWeight: FontWeight.w500,
+    color: AppColors.backgroundColor,
+  );
   static const visitingScreenTitle = TextStyle(
     fontSize: 18,
     fontWeight: FontWeight.w500,
@@ -137,7 +142,7 @@ abstract class AppTypography {
     fontWeight: FontWeight.w700,
     color: AppColors.backgroundColor,
   );
-  
+
   static const sightDetailsButtonNameInnactive = TextStyle(
     fontWeight: FontWeight.w700,
     color: AppColors.inactiveBlack,
@@ -195,4 +200,6 @@ abstract class AppTypography {
     fontSize: 16,
     fontWeight: FontWeight.w400,
   );
+
+  static const tabBarLabelStyle = TextStyle(fontSize: 14, fontWeight: FontWeight.w700);
 }
