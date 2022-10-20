@@ -138,6 +138,7 @@ class _SearchHistoryList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView(
+      physics: Platform.isAndroid ? const ClampingScrollPhysics() : const BouncingScrollPhysics(),
       shrinkWrap: true,
       children: [
         _SearchHistoryTitle(theme: theme),
