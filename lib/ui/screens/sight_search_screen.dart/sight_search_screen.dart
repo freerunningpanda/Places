@@ -135,8 +135,8 @@ class _SearchHistoryList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+    return ListView(
+      shrinkWrap: true,
       children: [
         _SearchHistoryTitle(theme: theme),
         const SizedBox(height: 4),
@@ -160,10 +160,14 @@ class _ClearHistoryButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextButton(
+      
       onPressed: () => context.read<AppSettings>().removeAllItemsFromHistory(),
-      child: const Text(
-        AppString.clearHistory,
-        style: AppTypography.clearButton,
+      child: const Align(
+        alignment: Alignment.centerLeft,
+        child:  Text(
+          AppString.clearHistory,
+          style: AppTypography.clearButton,
+        ),
       ),
     );
   }
