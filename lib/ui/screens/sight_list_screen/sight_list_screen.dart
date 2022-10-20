@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 
 import 'package:places/data/sight.dart';
@@ -62,7 +64,7 @@ class _SightListWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Expanded(
       child: ListView.builder(
-        physics: const BouncingScrollPhysics(),
+        physics: Platform.isAndroid ? const ClampingScrollPhysics() : const BouncingScrollPhysics(),
         shrinkWrap: true,
         itemCount: sightList.length,
         itemBuilder: (context, index) {

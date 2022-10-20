@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 
 import 'package:places/appsettings.dart';
@@ -44,6 +46,7 @@ class _ChooseCategoryWidgetState extends State<ChooseCategoryWidget> {
               Expanded(
                 child: SingleChildScrollView(
                   child: ListView.separated(
+                    physics: Platform.isAndroid ? const ClampingScrollPhysics() : const BouncingScrollPhysics(),
                     shrinkWrap: true,
                     itemBuilder: (context, index) {
                       final category = categories[index];

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 
 import 'package:places/appsettings.dart';
@@ -87,7 +89,7 @@ class _SightListWidget extends StatelessWidget {
             theme: theme,
           )
         : ListView.builder(
-            physics: const BouncingScrollPhysics(),
+            physics: Platform.isAndroid ? const ClampingScrollPhysics() : const BouncingScrollPhysics(),
             shrinkWrap: true,
             itemCount: sightList.length,
             itemBuilder: (context, index) {
