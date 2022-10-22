@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 
 import 'package:places/appsettings.dart';
@@ -165,7 +163,6 @@ class _ImagePickerWidgetState extends State<_ImagePickerWidget> {
           ),
           Expanded(
             child: ListView(
-              physics: Platform.isAndroid ? const ClampingScrollPhysics() : const BouncingScrollPhysics(),
               scrollDirection: Axis.horizontal,
               shrinkWrap: true,
               children: [
@@ -220,7 +217,7 @@ class _SightContent extends StatelessWidget {
           borderRadius: BorderRadius.circular(12),
           child: Stack(
             children: [
-              Image.network(
+              Image.asset(
                 image ?? 'no_url',
                 width: 72,
                 height: 72,

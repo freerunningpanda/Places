@@ -163,11 +163,10 @@ class _ClearHistoryButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextButton(
-      
       onPressed: () => context.read<AppSettings>().removeAllItemsFromHistory(),
       child: const Align(
         alignment: Alignment.centerLeft,
-        child:  Text(
+        child: Text(
           AppString.clearHistory,
           style: AppTypography.clearButton,
         ),
@@ -451,9 +450,10 @@ class _SightImage extends StatelessWidget {
         decoration: BoxDecoration(
           image: DecorationImage(
             fit: BoxFit.cover,
-            image: NetworkImage(
-              sight.url ?? 'null',
-            ),
+            image: AssetImage(sight.url ?? 'null'),
+            // NetworkImage(
+            //   sight.url ?? 'null',
+            // ),
           ),
         ),
       ),

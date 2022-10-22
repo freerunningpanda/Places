@@ -221,16 +221,16 @@ class _SightCardTop extends StatelessWidget {
       child: Stack(
         fit: StackFit.expand,
         children: [
-          Image.network(
+          Image.asset(
             url ?? 'no_url',
             fit: BoxFit.fitWidth,
-            loadingBuilder: (context, child, loadingProgress) {
-              if (loadingProgress == null) return child;
+            // loadingBuilder: (context, child, loadingProgress) {
+            //   if (loadingProgress == null) return child;
 
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
-            },
+            //   return const Center(
+            //     child: CircularProgressIndicator(),
+            //   );
+            // },
           ),
           Positioned(
             left: 16,
