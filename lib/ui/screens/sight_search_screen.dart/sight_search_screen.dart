@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 
 import 'package:places/appsettings.dart';
@@ -87,7 +89,7 @@ class _SightListWidget extends StatelessWidget {
             theme: theme,
           )
         : ListView.builder(
-            physics: const BouncingScrollPhysics(),
+            physics: Platform.isAndroid ? const ClampingScrollPhysics() : const BouncingScrollPhysics(),
             shrinkWrap: true,
             itemCount: sightList.length,
             itemBuilder: (context, index) {
@@ -135,8 +137,9 @@ class _SearchHistoryList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+    return ListView(
+      physics: Platform.isAndroid ? const ClampingScrollPhysics() : const BouncingScrollPhysics(),
+      shrinkWrap: true,
       children: [
         _SearchHistoryTitle(theme: theme),
         const SizedBox(height: 4),
@@ -161,9 +164,12 @@ class _ClearHistoryButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextButton(
       onPressed: () => context.read<AppSettings>().removeAllItemsFromHistory(),
-      child: const Text(
-        AppString.clearHistory,
-        style: AppTypography.clearButton,
+      child: const Align(
+        alignment: Alignment.centerLeft,
+        child: Text(
+          AppString.clearHistory,
+          style: AppTypography.clearButton,
+        ),
       ),
     );
   }
@@ -444,9 +450,10 @@ class _SightImage extends StatelessWidget {
         decoration: BoxDecoration(
           image: DecorationImage(
             fit: BoxFit.cover,
-            image: NetworkImage(
-              sight.url ?? 'null',
-            ),
+            image: AssetImage(sight.url ?? 'null'),
+            // NetworkImage(
+            //   sight.url ?? 'null',
+            // ),
           ),
         ),
       ),

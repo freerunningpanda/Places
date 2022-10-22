@@ -116,16 +116,16 @@ class _SightDetailsImage extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       height: height,
-      child: Image.network(
+      child: Image.asset(
         sight.url ?? 'no_url',
         fit: BoxFit.cover,
-        loadingBuilder: (context, child, loadingProgress) {
-          if (loadingProgress == null) return child;
+        // loadingBuilder: (context, child, loadingProgress) {
+        //   if (loadingProgress == null) return child;
 
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
-        },
+        //   return const Center(
+        //     child: CircularProgressIndicator(),
+        //   );
+        // },
       ),
     );
   }

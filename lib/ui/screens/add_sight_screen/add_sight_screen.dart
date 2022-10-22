@@ -217,7 +217,7 @@ class _SightContent extends StatelessWidget {
           borderRadius: BorderRadius.circular(12),
           child: Stack(
             children: [
-              Image.network(
+              Image.asset(
                 image ?? 'no_url',
                 width: 72,
                 height: 72,
