@@ -10,9 +10,11 @@ import 'package:places/ui/widgets/sight_icons.dart';
 
 class SightDetails extends StatelessWidget {
   final Sight sight;
+  final double height;
   const SightDetails({
     Key? key,
     required this.sight,
+    required this.height,
   }) : super(key: key);
 
   @override
@@ -23,9 +25,21 @@ class SightDetails extends StatelessWidget {
           children: [
             Stack(
               children: [
-                _SightDetailsImage(
-                  sight: sight,
-                  height: 360,
+                SizedBox(
+                  width: double.infinity,
+                  height: height,
+                  child: PageView(
+                    children: [
+                      _SightDetailsImage(
+                        sight: sight,
+                        height: height,
+                      ),
+                      _SightDetailsImage(
+                        sight: sight,
+                        height: height,
+                      ),
+                    ],
+                  ),
                 ),
                 const Positioned(
                   left: 16,
@@ -226,7 +240,7 @@ class _SightDetailsBottom extends StatelessWidget {
           onTap: () => debugPrint('🟡---------To favourite pressed'),
           child: Row(
             children: [
-               SightIcons(
+              SightIcons(
                 assetName: AppAssets.favouriteDark,
                 width: 20,
                 height: 18,

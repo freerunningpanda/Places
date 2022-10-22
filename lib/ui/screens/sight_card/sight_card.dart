@@ -185,6 +185,7 @@ class RippleCardFull extends StatelessWidget {
             Navigator.of(context).push(
               MaterialPageRoute<SightDetails>(
                 builder: (context) => SightDetails(
+                  height: 360,
                   sight: item,
                 ),
               ),
