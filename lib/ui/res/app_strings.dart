@@ -45,4 +45,9 @@ abstract class AppString {
   static const youSearch = 'ВЫ ИСКАЛИ';
   static const clearHistory = 'Очистить историю';
   static const delete = 'Удалить';
+  static const skip = 'Пропустить';
+  static const welcome = 'Добро пожаловать в Путеводитель';
+  static const findNewLoc = 'Ищи новые локации и сохраняй самые любимые.';
+  static const routeBuild = 'Построй маршрут и отправляйся в путь';
+  static const reachYourTarget = 'Построй маршрут и отправляйся в путь Достигай цели максимально быстро и комфортно.';
 }

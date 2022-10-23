@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:places/ui/res/app_strings.dart';
+import 'package:places/ui/screens/onboarding_screen/onboarding_screen.dart';
 import 'package:places/ui/widgets/switcher.dart';
 
 class SettingsScreen extends StatefulWidget {
@@ -38,23 +39,31 @@ class _SettingsScreenState extends State<SettingsScreen> {
               ],
             ),
             const Divider(),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 6.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    AppString.tutorial,
-                    style: theme.textTheme.bodyLarge,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(right: 10),
-                    child: Icon(
-                      Icons.info_outlined,
-                      color: theme.sliderTheme.activeTrackColor,
+            InkWell(
+              onTap: () => Navigator.push(
+                context,
+                MaterialPageRoute<OnboardingScreen>(
+                  builder: (context) => const OnboardingScreen(),
+                ),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 6.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      AppString.tutorial,
+                      style: theme.textTheme.bodyLarge,
                     ),
-                  ),
-                ],
+                    Padding(
+                      padding: const EdgeInsets.only(right: 10),
+                      child: Icon(
+                        Icons.info_outlined,
+                        color: theme.sliderTheme.activeTrackColor,
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
             const Divider(),

@@ -135,9 +135,11 @@ abstract class AppTheme {
       canvasColor: AppColors.lightGreen,
       focusColor: AppColors.chevroneColor,
       sliderTheme: SliderThemeData(
+        activeTickMarkColor: AppColors.greenOpacity,
         trackHeight: 1,
         inactiveTrackColor: AppColors.inactiveBlack,
         activeTrackColor: AppColors.green,
+        overlayColor: AppColors.greenOpacityTextField,
         thumbColor: AppColors.backgroundColor,
         overlayShape: SliderComponentShape.noOverlay,
         rangeThumbShape: const RoundRangeSliderThumbShape(elevation: 3),
