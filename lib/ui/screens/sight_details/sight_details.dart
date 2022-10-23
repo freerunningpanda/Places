@@ -42,12 +42,18 @@ class _SightDetailsState extends State<SightDetails> {
         _pageController.animateToPage(
           currentIndex,
           duration: const Duration(milliseconds: 500),
-          curve: Curves.linear,
+          curve: Curves.easeIn,
         );
       },
     );
 
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    _pageController.dispose();
+    super.dispose();
   }
 
   @override
@@ -78,6 +84,7 @@ class _SightDetailsState extends State<SightDetails> {
                           sight: widget.sight,
                           height: widget.height,
                         ),
+                        
                       ],
                     ),
                   ),
