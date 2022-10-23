@@ -8,6 +8,12 @@ abstract class AppTheme {
   // ignore: long-method
   static ThemeData buildTheme() {
     return ThemeData(
+      scrollbarTheme: ScrollbarThemeData(
+        thumbVisibility: MaterialStateProperty.all(true),
+        thickness: MaterialStateProperty.all(8),
+        thumbColor: MaterialStateProperty.all(AppColors.chevroneColor),
+        radius: const Radius.circular(6),
+      ),
       tabBarTheme: TabBarTheme(
         unselectedLabelStyle: AppTypography.sightDetailsButtonNameInnactive,
         unselectedLabelColor: AppColors.inactiveBlack,
@@ -79,6 +85,12 @@ abstract class AppTheme {
   // ignore: long-method
   static ThemeData buildThemeDark() {
     return ThemeData(
+      scrollbarTheme: ScrollbarThemeData(
+        thumbVisibility: MaterialStateProperty.all(true),
+        thickness: MaterialStateProperty.all(8),
+        thumbColor: MaterialStateProperty.all(AppColors.backgroundColor),
+        radius: const Radius.circular(6),
+      ),
       tabBarTheme: TabBarTheme(
         unselectedLabelStyle: AppTypography.sightDetailsButtonNameInnactive,
         unselectedLabelColor: AppColors.inactiveBlack,

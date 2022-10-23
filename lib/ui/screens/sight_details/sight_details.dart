@@ -36,7 +36,7 @@ class _SightDetailsState extends State<SightDetails> {
       ),
       (timer) {
         currentIndex++;
-        if (currentIndex > 1) {
+        if (currentIndex > 2) {
           currentIndex = 0;
         }
         _pageController.animateToPage(
@@ -61,18 +61,25 @@ class _SightDetailsState extends State<SightDetails> {
                 SizedBox(
                   width: double.infinity,
                   height: widget.height,
-                  child: PageView(
+                  child: Scrollbar(
                     controller: _pageController,
-                    children: [
-                      _SightDetailsImage(
-                        sight: widget.sight,
-                        height: widget.height,
-                      ),
-                      _SightDetailsImage(
-                        sight: widget.sight,
-                        height: widget.height,
-                      ),
-                    ],
+                    child: PageView(
+                      controller: _pageController,
+                      children: [
+                        _SightDetailsImage(
+                          sight: widget.sight,
+                          height: widget.height,
+                        ),
+                        _SightDetailsImage(
+                          sight: widget.sight,
+                          height: widget.height,
+                        ),
+                        _SightDetailsImage(
+                          sight: widget.sight,
+                          height: widget.height,
+                        ),
+                      ],
+                    ),
                   ),
                 ),
                 const Positioned(
