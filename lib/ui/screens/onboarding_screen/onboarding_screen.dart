@@ -27,20 +27,20 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     final pages = <Widget>[
       _OnboardingScreenContent(
         theme: theme,
-        assetName: !isDarkMode ? AppAssets.tutorial_1 : AppAssets.tutorial_1_dark,
+        assetName: !isDarkMode ? AppAssets.tutorial_1 : AppAssets.tutorial_1Dark,
         title: AppString.welcome,
         description: AppString.findNewLoc,
       ),
       _OnboardingScreenContent(
         theme: theme,
-        assetName: !isDarkMode ? AppAssets.tutorial_2 : AppAssets.tutorial_2_dark,
+        assetName: !isDarkMode ? AppAssets.tutorial_2 : AppAssets.tutorial_2Dark,
         title: AppString.routeBuild,
         description: AppString.reachYourTarget,
       ),
       _OnboardingScreenContent(
         key: UniqueKey(),
         theme: theme,
-        assetName: !isDarkMode ? AppAssets.tutorial_3 : AppAssets.tutorial_3_dark,
+        assetName: !isDarkMode ? AppAssets.tutorial_3 : AppAssets.tutorial_3Dark,
         title: AppString.addYourPlaces,
         description: AppString.shareYourPlaces,
       ),
