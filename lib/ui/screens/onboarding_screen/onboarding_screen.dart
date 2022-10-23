@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:places/main.dart';
 
+import 'package:places/appsettings.dart';
+import 'package:places/main.dart';
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_strings.dart';
 import 'package:places/ui/widgets/action_button.dart';
 import 'package:places/ui/widgets/sight_icons.dart';
+import 'package:provider/provider.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class OnboardingScreen extends StatefulWidget {
@@ -19,25 +21,26 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   var _currentIndex = 0;
   @override
   Widget build(BuildContext context) {
+    final isDarkMode = context.watch<AppSettings>().isDarkMode;
     final theme = Theme.of(context);
 
     final pages = <Widget>[
       _OnboardingScreenContent(
         theme: theme,
-        assetName: AppAssets.tutorial_1,
+        assetName: !isDarkMode ? AppAssets.tutorial_1 : AppAssets.tutorial_1_dark,
         title: AppString.welcome,
         description: AppString.findNewLoc,
       ),
       _OnboardingScreenContent(
         theme: theme,
-        assetName: AppAssets.tutorial_2,
+        assetName: !isDarkMode ? AppAssets.tutorial_2 : AppAssets.tutorial_2_dark,
         title: AppString.routeBuild,
         description: AppString.reachYourTarget,
       ),
       _OnboardingScreenContent(
         key: UniqueKey(),
         theme: theme,
-        assetName: AppAssets.tutorial_3,
+        assetName: !isDarkMode ? AppAssets.tutorial_3 : AppAssets.tutorial_3_dark,
         title: AppString.addYourPlaces,
         description: AppString.shareYourPlaces,
       ),
@@ -128,6 +131,7 @@ class _OnboardingScreenContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    
     return ListView(
       children: [
         Row(

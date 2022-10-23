@@ -34,5 +34,8 @@ abstract class AppAssets {
   static const tutorial_1 = 'lib/ui/res/icons/tutorial_1.svg';
   static const tutorial_2 = 'lib/ui/res/icons/tutorial_2.svg';
   static const tutorial_3 = 'lib/ui/res/icons/tutorial_3.svg';
+  static const tutorial_1_dark = 'lib/ui/res/icons/tutorial_1_dark.svg';
+  static const tutorial_2_dark = 'lib/ui/res/icons/tutorial_2_dark.svg';
+  static const tutorial_3_dark = 'lib/ui/res/icons/tutorial_3_dark.svg';
 
 }
