@@ -347,7 +347,10 @@ class _RippleEffect extends StatelessWidget {
         child: InkWell(
           onTap: () => Navigator.of(context).push<SightDetails>(
             MaterialPageRoute(
-              builder: (context) => SightDetails(sight: sight),
+              builder: (context) => SightDetails(
+                sight: sight,
+                height: 360,
+              ),
             ),
           ),
         ),

@@ -8,6 +8,12 @@ abstract class AppTheme {
   // ignore: long-method
   static ThemeData buildTheme() {
     return ThemeData(
+      scrollbarTheme: ScrollbarThemeData(
+        thumbVisibility: MaterialStateProperty.all(true),
+        thickness: MaterialStateProperty.all(8),
+        thumbColor: MaterialStateProperty.all(AppColors.chevroneColor),
+        radius: const Radius.circular(6),
+      ),
       tabBarTheme: TabBarTheme(
         unselectedLabelStyle: AppTypography.sightDetailsButtonNameInnactive,
         unselectedLabelColor: AppColors.inactiveBlack,
@@ -48,7 +54,7 @@ abstract class AppTheme {
         titleLarge: AppTypography.visitingScreenTitle,
         titleMedium: AppTypography.textText16Regular,
         bodyLarge: AppTypography.settings,
-        bodyMedium: AppTypography.detailsText,
+        bodyMedium: AppTypography.clearButton,
         bodySmall: AppTypography.detailsText,
         displayLarge: AppTypography.addNewPlaceCancel,
         displayMedium: AppTypography.distantion,
@@ -79,6 +85,12 @@ abstract class AppTheme {
   // ignore: long-method
   static ThemeData buildThemeDark() {
     return ThemeData(
+      scrollbarTheme: ScrollbarThemeData(
+        thumbVisibility: MaterialStateProperty.all(true),
+        thickness: MaterialStateProperty.all(8),
+        thumbColor: MaterialStateProperty.all(AppColors.backgroundColor),
+        radius: const Radius.circular(6),
+      ),
       tabBarTheme: TabBarTheme(
         unselectedLabelStyle: AppTypography.sightDetailsButtonNameInnactive,
         unselectedLabelColor: AppColors.inactiveBlack,
@@ -107,7 +119,7 @@ abstract class AppTheme {
         titleLarge: AppTypography.visitingScreenTitleDarkMode,
         titleMedium: AppTypography.textText16Regular,
         bodyLarge: AppTypography.settingsDarkMode,
-        bodyMedium: AppTypography.detailsText,
+        bodyMedium: AppTypography.clearButton,
         bodySmall: AppTypography.detailsTextDarkMode,
         displayLarge: AppTypography.addNewPlaceCancel,
         displayMedium: AppTypography.distantionDarkMode,
@@ -123,9 +135,11 @@ abstract class AppTheme {
       canvasColor: AppColors.lightGreen,
       focusColor: AppColors.chevroneColor,
       sliderTheme: SliderThemeData(
+        activeTickMarkColor: AppColors.greenOpacity,
         trackHeight: 1,
         inactiveTrackColor: AppColors.inactiveBlack,
         activeTrackColor: AppColors.green,
+        overlayColor: AppColors.greenOpacityTextField,
         thumbColor: AppColors.backgroundColor,
         overlayShape: SliderComponentShape.noOverlay,
         rangeThumbShape: const RoundRangeSliderThumbShape(elevation: 3),

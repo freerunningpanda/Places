@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 import 'package:places/data/sight.dart';
@@ -8,12 +10,51 @@ import 'package:places/ui/res/app_typography.dart';
 import 'package:places/ui/widgets/chevrone_back.dart';
 import 'package:places/ui/widgets/sight_icons.dart';
 
-class SightDetails extends StatelessWidget {
+class SightDetails extends StatefulWidget {
   final Sight sight;
+  final double height;
   const SightDetails({
     Key? key,
     required this.sight,
+    required this.height,
   }) : super(key: key);
+
+  @override
+  State<SightDetails> createState() => _SightDetailsState();
+}
+
+class _SightDetailsState extends State<SightDetails> {
+  late final PageController _pageController;
+
+  @override
+  void initState() {
+    _pageController = PageController();
+    var currentIndex = 0;
+    Timer.periodic(
+      const Duration(
+        seconds: 3,
+      ),
+      (timer) {
+        currentIndex++;
+        if (currentIndex > 2) {
+          currentIndex = 0;
+        }
+        _pageController.animateToPage(
+          currentIndex,
+          duration: const Duration(milliseconds: 500),
+          curve: Curves.easeIn,
+        );
+      },
+    );
+
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _pageController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -23,9 +64,30 @@ class SightDetails extends StatelessWidget {
           children: [
             Stack(
               children: [
-                _SightDetailsImage(
-                  sight: sight,
-                  height: 360,
+                SizedBox(
+                  width: double.infinity,
+                  height: widget.height,
+                  child: Scrollbar(
+                    controller: _pageController,
+                    child: PageView(
+                      controller: _pageController,
+                      children: [
+                        _SightDetailsImage(
+                          sight: widget.sight,
+                          height: widget.height,
+                        ),
+                        _SightDetailsImage(
+                          sight: widget.sight,
+                          height: widget.height,
+                        ),
+                        _SightDetailsImage(
+                          sight: widget.sight,
+                          height: widget.height,
+                        ),
+                        
+                      ],
+                    ),
+                  ),
                 ),
                 const Positioned(
                   left: 16,
@@ -43,12 +105,12 @@ class SightDetails extends StatelessWidget {
               child: Column(
                 children: [
                   _DetailsScreenTitle(
-                    sight: sight,
+                    sight: widget.sight,
                   ),
                   const SizedBox(height: 24),
-                  _DetailsScreenDescription(sight: sight),
+                  _DetailsScreenDescription(sight: widget.sight),
                   const SizedBox(height: 24),
-                  _SightDetailsBuildRouteBtn(sight: sight),
+                  _SightDetailsBuildRouteBtn(sight: widget.sight),
                   const SizedBox(height: 16),
                   const Divider(),
                   const SizedBox(height: 8),
@@ -226,7 +288,7 @@ class _SightDetailsBottom extends StatelessWidget {
           onTap: () => debugPrint('🟡---------To favourite pressed'),
           child: Row(
             children: [
-               SightIcons(
+              SightIcons(
                 assetName: AppAssets.favouriteDark,
                 width: 20,
                 height: 18,
