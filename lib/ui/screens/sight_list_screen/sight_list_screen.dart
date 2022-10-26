@@ -32,15 +32,27 @@ class _SightListScreenState extends State<SightListScreen> {
     return Padding(
       padding: const EdgeInsets.only(left: 16.0, right: 16.0),
       child: Scaffold(
-        body: Column(
-          children: [
-            const SizedBox(height: 16),
-            const SearchAppBar(),
-            SearchBar(
-              isSearchPage: isSearchPage,
-              readOnly: readOnly,
+        body: CustomScrollView(
+          slivers: [
+            const SliverToBoxAdapter(
+              child: SizedBox(height: 16),
             ),
-            _SightListWidget(sightList: sightList, theme: theme),
+            SliverPersistentHeader(
+              delegate: StickyHeaderDelegate(theme: theme),
+              pinned: true,
+            ),
+            const SliverToBoxAdapter(
+              child: SizedBox(height: 16),
+            ),
+            SliverToBoxAdapter(
+              child: SearchBar(
+                isSearchPage: isSearchPage,
+                readOnly: readOnly,
+              ),
+            ),
+            SliverToBoxAdapter(
+              child: _SightListWidget(sightList: sightList, theme: theme),
+            ),
           ],
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
@@ -48,6 +60,41 @@ class _SightListScreenState extends State<SightListScreen> {
       ),
     );
   }
+}
+
+class StickyHeaderDelegate extends SliverPersistentHeaderDelegate {
+  final ThemeData theme;
+
+  @override
+  double get maxExtent => 70;
+
+  @override
+  double get minExtent => 70;
+  const StickyHeaderDelegate({required this.theme});
+
+  @override
+  Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) => CustomScrollView(
+        slivers: [
+          SliverToBoxAdapter(
+            child: Container(
+              height: 16,
+              color: theme.scaffoldBackgroundColor,
+            ),
+          ),
+          const SliverToBoxAdapter(
+            child: SearchAppBar(),
+          ),
+          SliverToBoxAdapter(
+            child: Container(
+              height: 16,
+              color: theme.scaffoldBackgroundColor,
+            ),
+          ),
+        ],
+      );
+
+  @override
+  bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) => false;
 }
 
 class _SightListWidget extends StatelessWidget {
