@@ -59,10 +59,12 @@ class _SightDetailsState extends State<SightDetails> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Stack(
+      body: CustomScrollView(
+        slivers: [
+          SliverAppBar(
+            automaticallyImplyLeading: false,
+            expandedHeight: widget.height,
+            flexibleSpace: Stack(
               children: [
                 SizedBox(
                   width: double.infinity,
@@ -84,7 +86,6 @@ class _SightDetailsState extends State<SightDetails> {
                           sight: widget.sight,
                           height: widget.height,
                         ),
-                        
                       ],
                     ),
                   ),
@@ -99,8 +100,10 @@ class _SightDetailsState extends State<SightDetails> {
                 ),
               ],
             ),
-            const SizedBox(height: 24),
-            Padding(
+          ),
+          const SliverToBoxAdapter(child: SizedBox(height: 24)),
+          SliverToBoxAdapter(
+            child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: Column(
                 children: [
@@ -118,8 +121,8 @@ class _SightDetailsState extends State<SightDetails> {
                 ],
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
