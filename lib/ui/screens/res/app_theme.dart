@@ -33,7 +33,7 @@ abstract class AppTheme {
       textButtonTheme: TextButtonThemeData(
         style: TextButton.styleFrom(
           padding: EdgeInsets.zero,
-          primary: AppColors.black,
+          foregroundColor: AppColors.black,
         ),
       ),
       scaffoldBackgroundColor: AppColors.backgroundColor,

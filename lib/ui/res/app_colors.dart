@@ -23,4 +23,8 @@ abstract class AppColors {
     Color.fromRGBO(106, 218, 111, 1),
     Color.fromRGBO(255, 231, 105, 1),
   ];
+  static const splashScreenBackground = <Color>[
+    Color.fromRGBO(252, 221, 61, 1),
+    Color.fromRGBO(76, 175, 80, 1),
+  ];
 }
