@@ -1,10 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_colors.dart';
+import 'package:places/ui/screens/onboarding_screen/onboarding_screen.dart';
 import 'package:places/ui/widgets/sight_icons.dart';
 
-class SplashScreen extends StatelessWidget {
+class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
+
+  @override
+  State<SplashScreen> createState() => _SplashScreenState();
+}
+
+class _SplashScreenState extends State<SplashScreen> {
+  bool isInitialized = false;
+
+  @override
+  void initState() {
+    _navigateToNext();
+    isInitialized = true;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -19,6 +34,17 @@ class SplashScreen extends StatelessWidget {
           assetName: AppAssets.subtract,
           width: 160,
           height: 160,
+        ),
+      ),
+    );
+  }
+
+  Future<void> _navigateToNext() {
+    return Future.delayed(
+      const Duration(seconds: 2),
+      () => Navigator.of(context).pushReplacement(
+        MaterialPageRoute(
+          builder: (context) => const OnboardingScreen(),
         ),
       ),
     );

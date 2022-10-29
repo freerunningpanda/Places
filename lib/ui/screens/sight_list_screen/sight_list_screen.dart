@@ -29,10 +29,10 @@ class _SightListScreenState extends State<SightListScreen> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    return Padding(
-      padding: const EdgeInsets.only(left: 16.0, right: 16.0),
-      child: Scaffold(
-        body: Column(
+    return Scaffold(
+      body: Padding(
+        padding: const EdgeInsets.only(left: 16.0, right: 16.0),
+        child: Column(
           children: [
             const SizedBox(height: 16),
             const SearchAppBar(),
@@ -43,9 +43,9 @@ class _SightListScreenState extends State<SightListScreen> {
             _SightListWidget(sightList: sightList, theme: theme),
           ],
         ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-        floatingActionButton: const AddNewPlaceButton(),
       ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButton: const AddNewPlaceButton(),
     );
   }
 }
