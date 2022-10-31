@@ -53,7 +53,7 @@ class _SplashScreenState extends State<SplashScreen> {
         ),
       );
     } else {
-      return; /// иначе остаёмся на SpashScreen
+      return; /// иначе остаёмся на SplashScreen
     }
   }
 }
