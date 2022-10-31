@@ -17,7 +17,6 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     _navigateToNext();
-    isInitialized = true;
     super.initState();
   }
 
@@ -42,7 +41,7 @@ class _SplashScreenState extends State<SplashScreen> {
   Future<void> _navigateToNext() async {
     await Future.delayed(
       const Duration(seconds: 2),
-      () => isInitialized,
+      () => isInitialized = true,
 
       /// удачная инициализация данных. isInitialized меняется на true.
     );
