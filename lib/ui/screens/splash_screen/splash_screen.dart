@@ -39,14 +39,22 @@ class _SplashScreenState extends State<SplashScreen> {
     );
   }
 
-  Future<void> _navigateToNext() {
-    return Future.delayed(
+  Future<void> _navigateToNext() async {
+    await Future.delayed(
       const Duration(seconds: 2),
-      () => Navigator.of(context).pushReplacement(
-        MaterialPageRoute(
+      () => isInitialized,
+
+      /// удачная инициализация данных. isInitialized меняется на true.
+    );
+
+    if (mounted && isInitialized) { /// если виджет смонтирован и проинициализирован, то переходим на OnBoardingScreen
+      await Navigator.of(context).pushReplacement(
+        MaterialPageRoute<OnboardingScreen>(
           builder: (context) => const OnboardingScreen(),
         ),
-      ),
-    );
+      );
+    } else {
+      return; /// иначе остаёмся на SpashScreen
+    }
   }
 }
