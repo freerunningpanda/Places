@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_colors.dart';
 import 'package:places/ui/screens/onboarding_screen/onboarding_screen.dart';
@@ -16,7 +17,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   void initState() {
-    init();
+    _init();
     super.initState();
   }
 
@@ -39,14 +40,14 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   /// Метод инициализации данных
-  Future<void> init() async {
+  Future<void> _init() async {
     isInitialized = false; /// изначально данные непроинициализированы.
-    await loadData();
+    await _loadData();
     await _navigateToNext();
   }
 
   /// Метод загрузки данных
-  Future<void> loadData() {
+  Future<void> _loadData() {
     return Future.delayed(
       const Duration(seconds: 2),
       () => isInitialized = true, /// загрузка данных. isInitialized меняется на true.
