@@ -12,11 +12,11 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-  bool isInitialized = false;
+  late bool isInitialized;
 
   @override
   void initState() {
-    _navigateToNext();
+    init();
     super.initState();
   }
 
@@ -38,22 +38,34 @@ class _SplashScreenState extends State<SplashScreen> {
     );
   }
 
-  Future<void> _navigateToNext() async {
-    await Future.delayed(
+  /// Метод инициализации данных
+  Future<void> init() async {
+    isInitialized = false; /// изначально данные непроинициализированы.
+    await loadData();
+    await _navigateToNext();
+  }
+
+  /// Метод загрузки данных
+  Future<void> loadData() {
+    return Future.delayed(
       const Duration(seconds: 2),
-      () => isInitialized = true,
-
-      /// удачная инициализация данных. isInitialized меняется на true.
+      () => isInitialized = true, /// загрузка данных. isInitialized меняется на true.
     );
+  }
 
-    if (mounted && isInitialized) { /// если виджет смонтирован и проинициализирован, то переходим на OnBoardingScreen
+  /// Метод навигации
+  Future<void> _navigateToNext() async {
+    if (mounted && isInitialized) {
+      /// если виджет смонтирован и проинициализирован, то переходим на OnBoardingScreen
       await Navigator.of(context).pushReplacement(
         MaterialPageRoute<OnboardingScreen>(
           builder: (context) => const OnboardingScreen(),
         ),
       );
     } else {
-      return; /// иначе остаёмся на SplashScreen
+      return;
+
+      /// иначе остаёмся на SplashScreen
     }
   }
 }
