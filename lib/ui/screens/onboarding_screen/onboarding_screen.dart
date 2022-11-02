@@ -4,6 +4,7 @@ import 'package:places/appsettings.dart';
 import 'package:places/main.dart';
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_strings.dart';
+import 'package:places/ui/screens/sight_list_screen/sight_list_screen.dart';
 import 'package:places/ui/widgets/action_button.dart';
 import 'package:places/ui/widgets/sight_icons.dart';
 import 'package:provider/provider.dart';
@@ -100,7 +101,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     title: AppString.start,
                     onTap: () => Navigator.of(context).pushReplacement(
                       MaterialPageRoute<MainScreen>(
-                        builder: (context) => const MainScreen(),
+                        builder: (context) => const SightListScreen(),
                       ),
                     ),
                   ),
@@ -140,7 +141,7 @@ class _OnboardingScreenContent extends StatelessWidget {
             InkWell(
               onTap: () => Navigator.of(context).pushReplacement(
                 MaterialPageRoute<MainScreen>(
-                  builder: (context) => const MainScreen(),
+                  builder: (context) => const SightListScreen(),
                 ),
               ),
               child: Text(

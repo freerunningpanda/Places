@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:places/appsettings.dart';
 import 'package:places/data/categories_table.dart';
 import 'package:places/ui/screens/filters_screen/filters_settings.dart';
-import 'package:places/ui/screens/navigation_screen/navigation_screen.dart';
 import 'package:places/ui/screens/res/app_theme.dart';
+import 'package:places/ui/screens/splash_screen/splash_screen.dart';
 import 'package:provider/provider.dart';
 
 final ThemeData _lightTheme = AppTheme.buildTheme();
@@ -56,6 +56,6 @@ class MainScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const NavigationScreen();
+    return const SplashScreen();
   }
 }
