@@ -5,10 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:places/data/sight.dart';
 import 'package:places/mocks.dart';
 import 'package:places/ui/res/app_assets.dart';
+import 'package:places/ui/res/app_strings.dart';
 import 'package:places/ui/res/app_typography.dart';
 import 'package:places/ui/screens/sight_card/sight_card.dart';
 import 'package:places/ui/widgets/add_new_place_button.dart';
-import 'package:places/ui/widgets/search_appbar.dart';
 import 'package:places/ui/widgets/search_bar.dart';
 import 'package:places/ui/widgets/sight_icons.dart';
 
@@ -32,16 +32,26 @@ class _SightListScreenState extends State<SightListScreen> {
     return Padding(
       padding: const EdgeInsets.only(left: 16.0, right: 16.0),
       child: Scaffold(
-        body: Column(
-          children: [
-            const SizedBox(height: 16),
-            const SearchAppBar(),
-            SearchBar(
-              isSearchPage: isSearchPage,
-              readOnly: readOnly,
+        body: NestedScrollView(
+          headerSliverBuilder: (context, innerBoxIsScrolled) => [
+            SliverAppBar(
+              centerTitle: true,
+              pinned: true,
+              title: Text(
+                AppString.appTitle,
+                style: theme.textTheme.titleLarge,
+              ),
             ),
-            _SightListWidget(sightList: sightList, theme: theme),
           ],
+          body: Column(
+            children: [
+              SearchBar(
+                isSearchPage: isSearchPage,
+                readOnly: readOnly,
+              ),
+              _SightListWidget(sightList: sightList, theme: theme),
+            ],
+          ),
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
         floatingActionButton: const AddNewPlaceButton(),

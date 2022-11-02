@@ -59,10 +59,12 @@ class _SightDetailsState extends State<SightDetails> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Stack(
+      body: CustomScrollView(
+        slivers: [
+          SliverAppBar(
+            automaticallyImplyLeading: false,
+            expandedHeight: widget.height,
+            flexibleSpace: Stack(
               children: [
                 SizedBox(
                   width: double.infinity,
@@ -84,7 +86,6 @@ class _SightDetailsState extends State<SightDetails> {
                           sight: widget.sight,
                           height: widget.height,
                         ),
-                        
                       ],
                     ),
                   ),
@@ -99,27 +100,34 @@ class _SightDetailsState extends State<SightDetails> {
                 ),
               ],
             ),
-            const SizedBox(height: 24),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: Column(
-                children: [
-                  _DetailsScreenTitle(
-                    sight: widget.sight,
+          ),
+          SliverList(
+            delegate: SliverChildListDelegate(
+              [
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  child: Column(
+                    children: [
+                      _DetailsScreenTitle(
+                        sight: widget.sight,
+                      ),
+                      const SizedBox(height: 24),
+                      _DetailsScreenDescription(sight: widget.sight),
+                      const SizedBox(height: 24),
+                      _SightDetailsBuildRouteBtn(sight: widget.sight),
+                      const SizedBox(height: 16),
+                      const Divider(),
+                      const SizedBox(height: 8),
+                      const _SightDetailsBottom(),
+                      const SizedBox(height: 16),
+
+                    ],
                   ),
-                  const SizedBox(height: 24),
-                  _DetailsScreenDescription(sight: widget.sight),
-                  const SizedBox(height: 24),
-                  _SightDetailsBuildRouteBtn(sight: widget.sight),
-                  const SizedBox(height: 16),
-                  const Divider(),
-                  const SizedBox(height: 8),
-                  const _SightDetailsBottom(),
-                ],
-              ),
+                ),
+              ],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
