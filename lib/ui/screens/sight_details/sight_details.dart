@@ -24,11 +24,10 @@ class SightDetails extends StatefulWidget {
 }
 
 class _SightDetailsState extends State<SightDetails> {
-  late final PageController _pageController;
+  final _pageController = PageController();
 
   @override
   void initState() {
-    _pageController = PageController();
     var currentIndex = 0;
     Timer.periodic(
       const Duration(
@@ -39,11 +38,13 @@ class _SightDetailsState extends State<SightDetails> {
         if (currentIndex > 2) {
           currentIndex = 0;
         }
-        _pageController.animateToPage(
-          currentIndex,
-          duration: const Duration(milliseconds: 500),
-          curve: Curves.easeIn,
-        );
+        if (_pageController.hasClients) {
+          _pageController.animateToPage(
+            currentIndex,
+            duration: const Duration(milliseconds: 500),
+            curve: Curves.easeIn,
+          );
+        }
       },
     );
 
@@ -120,7 +121,6 @@ class _SightDetailsState extends State<SightDetails> {
                       const SizedBox(height: 8),
                       const _SightDetailsBottom(),
                       const SizedBox(height: 16),
-
                     ],
                   ),
                 ),
