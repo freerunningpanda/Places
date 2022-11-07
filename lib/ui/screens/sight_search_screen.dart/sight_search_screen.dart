@@ -42,6 +42,7 @@ class SightSearchScreen extends StatelessWidget {
             children: [
               const SizedBox(height: 16),
               const SearchAppBar(),
+              const SizedBox(height: 16),
               const SearchBar(
                 isSearchPage: isSearchPage,
                 readOnly: readOnly,
