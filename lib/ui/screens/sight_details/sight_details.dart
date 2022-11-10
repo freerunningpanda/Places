@@ -61,7 +61,6 @@ class _SightDetailsState extends State<SightDetails> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Column(
-        // mainAxisAlignment: MainAxisAlignment.end,
         children: [
           Expanded(
             child: ColoredBox(
@@ -96,50 +95,72 @@ class _SightDetailsFull extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
+    final theme = Theme.of(context);
+
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.end,
       children: [
-        DecoratedBox(
-          decoration: const BoxDecoration(
-            borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(12.0),
-              topRight: Radius.circular(12.0),
+        GestureDetector(
+          onTap: () => Navigator.of(context).pop(),
+          child: Container(
+            margin: const EdgeInsets.symmetric(horizontal: 32),
+            width: double.infinity,
+            height: 16,
+            decoration: const BoxDecoration(
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(12.0),
+                topRight: Radius.circular(12.0),
+              ),
+              color: AppColors.detailsScreenBottomSheet,
             ),
-            color: Colors.white,
           ),
-          child: ConstrainedBox(
-            constraints: const BoxConstraints(maxHeight: 629),
-            child: ListView(
-              children: [
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(12),
-                  child: _SightDetailsGallery(
-                    height: height,
-                    sight: sight,
-                    pageController: _pageController,
-                  ),
+        ),
+        Stack(
+          children: [
+            DecoratedBox(
+              decoration: BoxDecoration(
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(12.0),
+                  topRight: Radius.circular(12.0),
                 ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                  child: Column(
-                    children: [
-                      _DetailsScreenTitle(
+                color: theme.sliderTheme.thumbColor,
+              ),
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(maxHeight: 629),
+                child: ListView(
+                  children: [
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(12),
+                      child: _SightDetailsGallery(
+                        height: height,
                         sight: sight,
+                        pageController: _pageController,
                       ),
-                      const SizedBox(height: 24),
-                      _DetailsScreenDescription(sight: sight),
-                      const SizedBox(height: 24),
-                      _SightDetailsBuildRouteBtn(sight: sight),
-                      const SizedBox(height: 16),
-                      const Divider(),
-                      const SizedBox(height: 8),
-                      const _SightDetailsBottom(),
-                      const SizedBox(height: 16),
-                    ],
-                  ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                      child: Column(
+                        children: [
+                          _DetailsScreenTitle(
+                            sight: sight,
+                          ),
+                          const SizedBox(height: 24),
+                          _DetailsScreenDescription(sight: sight),
+                          const SizedBox(height: 24),
+                          _SightDetailsBuildRouteBtn(sight: sight),
+                          const SizedBox(height: 16),
+                          const Divider(),
+                          const SizedBox(height: 8),
+                          const _SightDetailsBottom(),
+                          const SizedBox(height: 16),
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
-              ],
+              ),
             ),
-          ),
+          ],
         ),
       ],
     );
@@ -292,8 +313,8 @@ class _SightDetailsGallery extends StatelessWidget {
                 ),
                 Positioned(
                   top: 12,
-                  left: size.width / 2.35,
-                  right: size.width / 2.35,
+                  left: size.width / 2.3,
+                  right: size.width / 2.3,
                   child: GestureDetector(
                     onTap: () => Navigator.of(context).pop(),
                     child: Container(
@@ -412,13 +433,15 @@ class _SightDetailsBuildRouteBtn extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return GestureDetector(
       onTap: () {},
       child: Container(
         height: 48,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(12),
-          color: AppColors.green,
+          color: theme.sliderTheme.activeTrackColor,
         ),
         child: GestureDetector(
           onTap: () => debugPrint('🟡---------Build a route pressed'),
