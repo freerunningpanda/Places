@@ -19,49 +19,78 @@ class PickImageWidget extends StatelessWidget {
       ),
       alignment: const Alignment(0, 0.83),
       titlePadding: EdgeInsets.zero,
-      title: Container(
-        constraints: BoxConstraints(
-          minWidth: MediaQuery.of(context).size.width,
-        ),
-        height: 152,
-        child: Stack(
-          clipBehavior: Clip.none,
-          children: [
-            Container(
-              margin: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  const SizedBox(height: 4),
-                  _DialogItem(
-                    theme: theme,
-                    assetName: AppAssets.camera,
-                    title: AppString.camera,
-                  ),
-                  const Divider(),
-                  _DialogItem(
-                    theme: theme,
-                    assetName: AppAssets.photo,
-                    title: AppString.photo,
-                  ),
-                  const Divider(),
-                  _DialogItem(
-                    theme: theme,
-                    assetName: AppAssets.file,
-                    title: AppString.file,
-                  ),
-                  const SizedBox(height: 4),
-                ],
-              ),
-            ),
-            const Positioned(
-              left: 0,
-              right: 0,
-              bottom: -55,
-              child: CancelButton(),
-            ),
-          ],
-        ),
+      title: _DialogContent(theme: theme),
+    );
+  }
+}
+
+class _DialogContent extends StatelessWidget {
+  final ThemeData theme;
+
+  const _DialogContent({
+    Key? key,
+    required this.theme,
+  }) : super(key: key);
+
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      constraints: BoxConstraints(
+        minWidth: MediaQuery.of(context).size.width,
+      ),
+      height: 152,
+      child: Stack(
+        clipBehavior: Clip.none,
+        children: [
+          _DialogItems(theme: theme),
+          const Positioned(
+            left: 0,
+            right: 0,
+            bottom: -55,
+            child: CancelButton(),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _DialogItems extends StatelessWidget {
+  final ThemeData theme;
+
+  const _DialogItems({
+    Key? key,
+    required this.theme,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 16.0),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          const SizedBox(height: 4),
+          _DialogItem(
+            theme: theme,
+            assetName: AppAssets.camera,
+            title: AppString.camera,
+          ),
+          const Divider(),
+          _DialogItem(
+            theme: theme,
+            assetName: AppAssets.photo,
+            title: AppString.photo,
+          ),
+          const Divider(),
+          _DialogItem(
+            theme: theme,
+            assetName: AppAssets.file,
+            title: AppString.file,
+          ),
+          const SizedBox(height: 4),
+        ],
       ),
     );
   }
