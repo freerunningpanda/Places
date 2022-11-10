@@ -10,6 +10,7 @@ import 'package:places/ui/res/app_typography.dart';
 import 'package:places/ui/screens/add_sight_screen/choose_category_screen.dart';
 import 'package:places/ui/widgets/create_button.dart';
 import 'package:places/ui/widgets/new_place_app_bar_widget.dart';
+import 'package:places/ui/widgets/pick_image_widget.dart';
 import 'package:places/ui/widgets/sight_icons.dart';
 import 'package:places/ui/widgets/suffix_icon.dart';
 import 'package:provider/provider.dart';
@@ -274,7 +275,12 @@ class _PickImageWidget extends StatelessWidget {
       ),
       child: IconButton(
         icon: const Icon(Icons.add_rounded, size: 45),
-        onPressed: () => context.read<AppSettings>().pickImage(),
+        onPressed: () async {
+          // context.read<AppSettings>().pickImage();
+          await showDialog<PickImageWidget>(context: context, builder: (_) {
+            return const PickImageWidget();
+          });
+        },
         color: theme.sliderTheme.activeTrackColor,
       ),
     );
