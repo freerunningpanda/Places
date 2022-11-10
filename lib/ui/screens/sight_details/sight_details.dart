@@ -108,7 +108,7 @@ class _SightDetailsFull extends StatelessWidget {
           ),
           child: ConstrainedBox(
             constraints: const BoxConstraints(maxHeight: 629),
-            child: Column(
+            child: ListView(
               children: [
                 ClipRRect(
                   borderRadius: BorderRadius.circular(12),
