@@ -191,22 +191,25 @@ class _SightDetailsClosedState extends State<_SightDetailsClosed> {
                   ),
                 ),
               ),
-              Column(
-                children: [
-                  const SizedBox(height: 8),
-                  _DetailsScreenTitle(
-                    sight: widget.sight,
-                  ),
-                  const SizedBox(height: 24),
-                  _DetailsScreenDescription(sight: widget.sight),
-                  const SizedBox(height: 24),
-                  _SightDetailsBuildRouteBtn(sight: widget.sight),
-                  const SizedBox(height: 16),
-                  const Divider(),
-                  const SizedBox(height: 8),
-                  const _SightDetailsBottom(),
-                  const SizedBox(height: 16),
-                ],
+              SizedBox(
+                height: size.height / 2,
+                child: Column(
+                  children: [
+                    const SizedBox(height: 8),
+                    _DetailsScreenTitle(
+                      sight: widget.sight,
+                    ),
+                    const SizedBox(height: 24),
+                    _DetailsScreenDescription(sight: widget.sight),
+                    const SizedBox(height: 24),
+                    _SightDetailsBuildRouteBtn(sight: widget.sight),
+                    const SizedBox(height: 16),
+                    const Divider(),
+                    const SizedBox(height: 8),
+                    const _SightDetailsBottom(),
+                    const SizedBox(height: 16),
+                  ],
+                ),
               ),
             ],
           ),
@@ -243,6 +246,9 @@ class _SightDetailsGallery extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+    final theme = Theme.of(context);
+
     return SizedBox(
       height: MediaQuery.of(context).size.height / 1.8,
       child: CustomScrollView(
@@ -282,6 +288,22 @@ class _SightDetailsGallery extends StatelessWidget {
                   child: ChevroneBack(
                     width: 32,
                     height: 32,
+                  ),
+                ),
+                Positioned(
+                  top: 12,
+                  left: size.width / 2.35,
+                  right: size.width / 2.35,
+                  child: GestureDetector(
+                    onTap: () => Navigator.of(context).pop(),
+                    child: Container(
+                      width: 40,
+                      height: 3,
+                      decoration: BoxDecoration(
+                        borderRadius: const BorderRadius.all(Radius.circular(8.0)),
+                        color: theme.sliderTheme.thumbColor,
+                      ),
+                    ),
                   ),
                 ),
               ],
@@ -346,16 +368,16 @@ class _SightDetailsImage extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       height: height,
-      child: Image.asset(
+      child: Image.network(
         sight.url ?? 'no_url',
         fit: BoxFit.cover,
-        // loadingBuilder: (context, child, loadingProgress) {
-        //   if (loadingProgress == null) return child;
+        loadingBuilder: (context, child, loadingProgress) {
+          if (loadingProgress == null) return child;
 
-        //   return const Center(
-        //     child: CircularProgressIndicator(),
-        //   );
-        // },
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        },
       ),
     );
   }
