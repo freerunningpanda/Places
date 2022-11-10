@@ -8,6 +8,10 @@ abstract class AppTheme {
   // ignore: long-method
   static ThemeData buildTheme() {
     return ThemeData(
+      bottomSheetTheme: const BottomSheetThemeData(
+        backgroundColor: AppColors.transparent,
+        modalBackgroundColor: AppColors.detailsScreenBackground,
+      ),
       scrollbarTheme: ScrollbarThemeData(
         thumbVisibility: MaterialStateProperty.all(true),
         thickness: MaterialStateProperty.all(8),
@@ -85,6 +89,9 @@ abstract class AppTheme {
   // ignore: long-method
   static ThemeData buildThemeDark() {
     return ThemeData(
+      bottomSheetTheme: const BottomSheetThemeData(
+        backgroundColor: AppColors.transparent,
+      ),
       scrollbarTheme: ScrollbarThemeData(
         thumbVisibility: MaterialStateProperty.all(true),
         thickness: MaterialStateProperty.all(8),

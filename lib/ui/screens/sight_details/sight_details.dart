@@ -60,32 +60,217 @@ class _SightDetailsState extends State<SightDetails> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: CustomScrollView(
+      body: Column(
+        // mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          Expanded(
+            child: ColoredBox(
+              child: Container(),
+              color: AppColors.detailsScreenBackground,
+            ),
+          ),
+          const SizedBox(height: 12),
+          _SightDetailsClosed(
+            height: widget.height,
+            sight: widget.sight,
+            pageController: _pageController,
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _SightDetailsFull extends StatelessWidget {
+  final Sight sight;
+  final double height;
+  final PageController _pageController;
+
+  const _SightDetailsFull({
+    Key? key,
+    required this.sight,
+    required this.height,
+    required PageController pageController,
+  })  : _pageController = pageController,
+        super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: [
+        DecoratedBox(
+          decoration: const BoxDecoration(
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(12.0),
+              topRight: Radius.circular(12.0),
+            ),
+            color: Colors.white,
+          ),
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxHeight: 629),
+            child: Column(
+              children: [
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(12),
+                  child: _SightDetailsGallery(
+                    height: height,
+                    sight: sight,
+                    pageController: _pageController,
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  child: Column(
+                    children: [
+                      _DetailsScreenTitle(
+                        sight: sight,
+                      ),
+                      const SizedBox(height: 24),
+                      _DetailsScreenDescription(sight: sight),
+                      const SizedBox(height: 24),
+                      _SightDetailsBuildRouteBtn(sight: sight),
+                      const SizedBox(height: 16),
+                      const Divider(),
+                      const SizedBox(height: 8),
+                      const _SightDetailsBottom(),
+                      const SizedBox(height: 16),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _SightDetailsClosed extends StatefulWidget {
+  final Sight sight;
+  final double height;
+  final PageController _pageController;
+
+  const _SightDetailsClosed({
+    Key? key,
+    required this.sight,
+    required this.height,
+    required PageController pageController,
+  })  : _pageController = pageController,
+        super(key: key);
+
+  @override
+  State<_SightDetailsClosed> createState() => _SightDetailsClosedState();
+}
+
+class _SightDetailsClosedState extends State<_SightDetailsClosed> {
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final size = MediaQuery.of(context).size;
+
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          child: Stack(
+            clipBehavior: Clip.none,
+            children: [
+              Positioned(
+                left: size.width / 2.5,
+                right: size.width / 2.5,
+                child: GestureDetector(
+                  onTap: _showGallery,
+                  child: Container(
+                    width: 40,
+                    height: 3,
+                    decoration: BoxDecoration(
+                      borderRadius: const BorderRadius.all(Radius.circular(8.0)),
+                      color: theme.iconTheme.color,
+                    ),
+                  ),
+                ),
+              ),
+              Column(
+                children: [
+                  const SizedBox(height: 8),
+                  _DetailsScreenTitle(
+                    sight: widget.sight,
+                  ),
+                  const SizedBox(height: 24),
+                  _DetailsScreenDescription(sight: widget.sight),
+                  const SizedBox(height: 24),
+                  _SightDetailsBuildRouteBtn(sight: widget.sight),
+                  const SizedBox(height: 16),
+                  const Divider(),
+                  const SizedBox(height: 8),
+                  const _SightDetailsBottom(),
+                  const SizedBox(height: 16),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  void _showGallery() {
+    showModalBottomSheet<_SightDetailsFull>(
+      context: context,
+      builder: (_) => _SightDetailsFull(
+        height: widget.height,
+        sight: widget.sight,
+        pageController: widget._pageController,
+      ),
+      isScrollControlled: true,
+    );
+  }
+}
+
+class _SightDetailsGallery extends StatelessWidget {
+  final Sight sight;
+  final double height;
+  final PageController _pageController;
+
+  const _SightDetailsGallery({
+    Key? key,
+    required this.sight,
+    required this.height,
+    required PageController pageController,
+  })  : _pageController = pageController,
+        super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: MediaQuery.of(context).size.height / 1.8,
+      child: CustomScrollView(
         slivers: [
           SliverAppBar(
             automaticallyImplyLeading: false,
-            expandedHeight: widget.height,
+            expandedHeight: height,
             flexibleSpace: Stack(
               children: [
                 SizedBox(
                   width: double.infinity,
-                  height: widget.height,
+                  height: height,
                   child: Scrollbar(
                     controller: _pageController,
                     child: PageView(
                       controller: _pageController,
                       children: [
                         _SightDetailsImage(
-                          sight: widget.sight,
-                          height: widget.height,
+                          sight: sight,
+                          height: height,
                         ),
                         _SightDetailsImage(
-                          sight: widget.sight,
-                          height: widget.height,
+                          sight: sight,
+                          height: height,
                         ),
                         _SightDetailsImage(
-                          sight: widget.sight,
-                          height: widget.height,
+                          sight: sight,
+                          height: height,
                         ),
                       ],
                     ),
@@ -97,31 +282,6 @@ class _SightDetailsState extends State<SightDetails> {
                   child: ChevroneBack(
                     width: 32,
                     height: 32,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          SliverList(
-            delegate: SliverChildListDelegate(
-              [
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                  child: Column(
-                    children: [
-                      _DetailsScreenTitle(
-                        sight: widget.sight,
-                      ),
-                      const SizedBox(height: 24),
-                      _DetailsScreenDescription(sight: widget.sight),
-                      const SizedBox(height: 24),
-                      _SightDetailsBuildRouteBtn(sight: widget.sight),
-                      const SizedBox(height: 16),
-                      const Divider(),
-                      const SizedBox(height: 8),
-                      const _SightDetailsBottom(),
-                      const SizedBox(height: 16),
-                    ],
                   ),
                 ),
               ],
