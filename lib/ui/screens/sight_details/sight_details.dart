@@ -7,7 +7,7 @@ import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_colors.dart';
 import 'package:places/ui/res/app_strings.dart';
 import 'package:places/ui/res/app_typography.dart';
-import 'package:places/ui/widgets/chevrone_back.dart';
+import 'package:places/ui/widgets/close_bottom_sheet.dart';
 import 'package:places/ui/widgets/sight_icons.dart';
 
 class SightDetails extends StatefulWidget {
@@ -304,9 +304,9 @@ class _SightDetailsGallery extends StatelessWidget {
                   ),
                 ),
                 const Positioned(
-                  left: 16,
-                  top: 36,
-                  child: ChevroneBack(
+                  top: 32,
+                  right: 16,
+                  child: CloseBottomSheet(
                     width: 32,
                     height: 32,
                   ),
