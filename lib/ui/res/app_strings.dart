@@ -53,4 +53,7 @@ abstract class AppString {
   static const addYourPlaces = 'Добавляй места, которые нашёл сам';
   static const shareYourPlaces = 'Делись самыми интересными и помоги нам стать лучше!';
   static const start = 'НА СТАРТ';
+  static const camera = 'Камера';
+  static const photo = 'Фотография';
+  static const file = 'Файл';
 }

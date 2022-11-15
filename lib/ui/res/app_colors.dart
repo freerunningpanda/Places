@@ -19,6 +19,8 @@ abstract class AppColors {
   static const black = Color.fromARGB(255, 0, 0, 0);
   static const transparent = Color.fromARGB(0, 0, 0, 0);
   static const red = Color.fromRGBO(239, 67, 67, 0);
+  static const detailsScreenBottomSheet = Color.fromRGBO(53, 53, 59, 1);
+  static const detailsScreenBackground = Color.fromRGBO(25, 26, 32, 1);
   static const limeGradient = <Color>[
     Color.fromRGBO(106, 218, 111, 1),
     Color.fromRGBO(255, 231, 105, 1),

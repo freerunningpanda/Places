@@ -202,4 +202,9 @@ abstract class AppTypography {
   );
 
   static const tabBarLabelStyle = TextStyle(fontSize: 14, fontWeight: FontWeight.w700);
+  static const cancelButtonStyle = TextStyle(
+    fontSize: 14,
+    fontWeight: FontWeight.w700,
+    color: AppColors.green,
+  );
 }
