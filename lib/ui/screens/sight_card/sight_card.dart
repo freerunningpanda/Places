@@ -37,7 +37,8 @@ class SightCard extends StatelessWidget {
     final customColors = Theme.of(context).extension<CustomColors>()!;
 
     return AspectRatio(
-      aspectRatio: aspectRatio ?? AppCardSize.sightCard,
+      aspectRatio: MediaQuery.of(context).orientation == Orientation.portrait ? aspectRatio ?? AppCardSize.sightCard
+      : 1.5,
       child: ClipRRect(
         borderRadius: const BorderRadius.all(
           Radius.circular(16.0),
