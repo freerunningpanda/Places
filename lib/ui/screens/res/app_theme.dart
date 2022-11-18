@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'package:places/ui/res/app_colors.dart';
@@ -8,9 +9,20 @@ abstract class AppTheme {
   // ignore: long-method
   static ThemeData buildTheme() {
     return ThemeData(
+      timePickerTheme: TimePickerThemeData(
+        hourMinuteTextColor: AppColors.backgroundColor,
+        hourMinuteColor: AppColors.green,
+        hourMinuteTextStyle: AppTypography.hourMinute,
+        dialBackgroundColor: AppColors.dialBackgroundColor,
+        dialHandColor: AppColors.green,
+        backgroundColor: AppColors.backgroundColor,
+        dayPeriodShape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(100),
+        ),
+      ),
       bottomSheetTheme: const BottomSheetThemeData(
         backgroundColor: AppColors.transparent,
-        modalBackgroundColor: AppColors.detailsScreenBackground,
+        // modalBackgroundColor: AppColors.detailsScreenBackground,
       ),
       scrollbarTheme: ScrollbarThemeData(
         thumbVisibility: MaterialStateProperty.all(true),
@@ -89,8 +101,19 @@ abstract class AppTheme {
   // ignore: long-method
   static ThemeData buildThemeDark() {
     return ThemeData(
+      timePickerTheme: TimePickerThemeData(
+        hourMinuteColor: AppColors.green,
+        hourMinuteTextStyle: AppTypography.hourMinute,
+        dialBackgroundColor: AppColors.dialBackgroundColor,
+        dialHandColor: AppColors.green,
+        backgroundColor: AppColors.backgroundColor,
+        dayPeriodShape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(100),
+        ),
+      ),
       bottomSheetTheme: const BottomSheetThemeData(
         backgroundColor: AppColors.transparent,
+        // modalBackgroundColor: AppColors.detailsScreenBackground,
       ),
       scrollbarTheme: ScrollbarThemeData(
         thumbVisibility: MaterialStateProperty.all(true),
