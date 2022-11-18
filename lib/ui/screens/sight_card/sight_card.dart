@@ -37,8 +37,7 @@ class SightCard extends StatelessWidget {
     final customColors = Theme.of(context).extension<CustomColors>()!;
 
     return AspectRatio(
-      aspectRatio: MediaQuery.of(context).orientation == Orientation.portrait ? aspectRatio ?? AppCardSize.sightCard
-      : 1.5,
+      aspectRatio: aspectRatio ?? AppCardSize.sightCard,
       child: ClipRRect(
         borderRadius: const BorderRadius.all(
           Radius.circular(16.0),
@@ -138,7 +137,15 @@ class RippleIcons extends StatelessWidget {
               height: 22,
               child: InkWell(
                 borderRadius: BorderRadius.circular(16.0),
-                onTap: () {
+                onTap: () async {
+                  await showDatePicker(
+                    context: context,
+                    initialDate: DateTime.now(),
+                    firstDate: DateTime.now(),
+                    lastDate: DateTime.now().add(
+                      const Duration(days: 31),
+                    ),
+                  );
                   debugPrint('🟡---------first icon pressed');
                 },
                 child: actionOne,
