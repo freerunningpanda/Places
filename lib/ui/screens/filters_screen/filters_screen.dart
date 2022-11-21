@@ -185,7 +185,7 @@ class _FiltersTableState extends State<_FiltersTable> {
     context.watch<FiltersSettings>();
 
     return Container(
-      height: 90,
+      height: size.width <= 320 ? 90 : 170,
       alignment: const Alignment(0.0, -0.8),
       child: Builder(
         builder: (context) {
@@ -205,7 +205,6 @@ class _ItemFiltersListBigScreens extends StatelessWidget {
     Key? key,
     required this.filtersTable,
   }) : super(key: key);
-
 
   @override
   Widget build(BuildContext context) {
@@ -358,7 +357,7 @@ class _ItemFilterState extends State<_ItemFilter> {
         if (widget.isEnabled)
           Positioned(
             right: 16,
-            bottom: size.width <= 320 ? 25 : 48,
+            bottom: size.width <= 320 ? 48 : 25,
             child: Container(
               padding: const EdgeInsets.symmetric(
                 horizontal: 2,
