@@ -12,7 +12,7 @@ class _CupertinoTimeWidgetState extends State<CupertinoTimeWidget> {
   // ignore: unused_field
   final mode = CupertinoDatePickerMode.dateAndTime;
 
-  DateTime? _duration;
+  // DateTime? _duration;
 
   @override
   Widget build(BuildContext context) {
@@ -32,11 +32,11 @@ class _CupertinoTimeWidgetState extends State<CupertinoTimeWidget> {
               height: 250,
               child: CupertinoDatePicker(
                 onDateTimeChanged: (selected) {
-                  setState(
-                    () {
-                      _duration = selected;
-                    },
-                  );
+                  // setState(
+                  //   () {
+                  //     _duration = selected;
+                  //   },
+                  // );
                 },
                 mode: mode,
               ),

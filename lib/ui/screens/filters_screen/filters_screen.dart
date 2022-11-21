@@ -30,6 +30,7 @@ class _FilterScreenState extends State<FilterScreen> {
   @override
   Widget build(BuildContext context) {
     final clearFilters = context.read<FiltersSettings>().clearAllFilters;
+    final size = MediaQuery.of(context).size;
     // ignore: unnecessary_statements
     context.watch<FiltersSettings>();
 
@@ -55,23 +56,38 @@ class _FilterScreenState extends State<FilterScreen> {
               filters: FiltersTable.filters,
               activeFilters: FiltersSettings().activeFilters,
             ),
-            const SizedBox(height: 60),
+            if (size.width <= 320) SizedBox(height: size.height / 10) else SizedBox(height: size.height / 3.5),
             Expanded(
               child: _DistanceSlider(
                 sightList: sightList,
               ),
             ),
-            ActionButton(
-              counterValue: FiltersTable.filtersWithDistance.length,
-              activeFilters: FiltersSettings().activeFilters,
-              title: '${AppString.showPlaces} (${FiltersTable.filtersWithDistance.length})',
-              rangeValues: Mocks.rangeValues,
-              onTap: () {
-                context.read<FiltersSettings>().showCount();
-                context.read<AppSettings>().clearSight();
-                debugPrint('🟡---------Длина: ${FiltersTable.filtersWithDistance.length}');
-              },
-            ),
+            if (size.width <= 320)
+              Expanded(
+                child: ActionButton(
+                  counterValue: FiltersTable.filtersWithDistance.length,
+                  activeFilters: FiltersSettings().activeFilters,
+                  title: '${AppString.showPlaces} (${FiltersTable.filtersWithDistance.length})',
+                  rangeValues: Mocks.rangeValues,
+                  onTap: () {
+                    context.read<FiltersSettings>().showCount();
+                    context.read<AppSettings>().clearSight();
+                    debugPrint('🟡---------Длина: ${FiltersTable.filtersWithDistance.length}');
+                  },
+                ),
+              )
+            else
+              ActionButton(
+                counterValue: FiltersTable.filtersWithDistance.length,
+                activeFilters: FiltersSettings().activeFilters,
+                title: '${AppString.showPlaces} (${FiltersTable.filtersWithDistance.length})',
+                rangeValues: Mocks.rangeValues,
+                onTap: () {
+                  context.read<FiltersSettings>().showCount();
+                  context.read<AppSettings>().clearSight();
+                  debugPrint('🟡---------Длина: ${FiltersTable.filtersWithDistance.length}');
+                },
+              ),
           ],
         ),
       ),
@@ -163,43 +179,110 @@ class _FiltersTable extends StatefulWidget {
 class _FiltersTableState extends State<_FiltersTable> {
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+
     // ignore: unnecessary_statements
     context.watch<FiltersSettings>();
 
     return Container(
+      height: 90,
       alignment: const Alignment(0.0, -0.8),
-      child: Wrap(
-        crossAxisAlignment: WrapCrossAlignment.center,
-        spacing: 24,
-        runSpacing: 40,
-        children: widget.filters
-            .asMap()
-            .map(
-              (i, e) => MapEntry(
-                i,
-                _ItemFilter(
-                  isEnabled: e.isEnabled,
-                  title: e.title,
-                  assetName: e.assetName ?? 'null',
-                  onTap: () {
-                    final filteredByType = widget.sightList.where((sight) => sight.type.contains(e.title)).toList();
-                    if (!e.isEnabled) {
-                      FiltersTable.filteredMocks.addAll(filteredByType);
-                    } else {
-                      FiltersTable.filteredMocks.clear();
-                      FiltersTable.filtersWithDistance.clear();
-                      debugPrint('🟡---------Добавленные места: ${FiltersTable.filteredMocks}');
-                    }
-                    context.read<FiltersSettings>().showCount();
-
-                    return context.read<FiltersSettings>().saveFilters(i);
-                  },
-                ),
-              ),
-            )
-            .values
-            .toList(),
+      child: Builder(
+        builder: (context) {
+          return size.width <= 320
+              ? _ItemFiltersListSmallScreens(filtersTable: widget)
+              : _ItemFiltersListBigScreens(filtersTable: widget);
+        },
       ),
+    );
+  }
+}
+
+class _ItemFiltersListBigScreens extends StatelessWidget {
+  final _FiltersTable filtersTable;
+
+  const _ItemFiltersListBigScreens({
+    Key? key,
+    required this.filtersTable,
+  }) : super(key: key);
+
+
+  @override
+  Widget build(BuildContext context) {
+    return Wrap(
+      crossAxisAlignment: WrapCrossAlignment.center,
+      spacing: 24,
+      runSpacing: 40,
+      children: filtersTable.filters
+          .asMap()
+          .map(
+            (i, e) => MapEntry(
+              i,
+              _ItemFilter(
+                isEnabled: e.isEnabled,
+                title: e.title,
+                assetName: e.assetName ?? 'null',
+                onTap: () {
+                  final filteredByType = filtersTable.sightList.where((sight) => sight.type.contains(e.title)).toList();
+                  if (!e.isEnabled) {
+                    FiltersTable.filteredMocks.addAll(filteredByType);
+                  } else {
+                    FiltersTable.filteredMocks.clear();
+                    FiltersTable.filtersWithDistance.clear();
+                    debugPrint('🟡---------Добавленные места: ${FiltersTable.filteredMocks}');
+                  }
+                  context.read<FiltersSettings>().showCount();
+
+                  return context.read<FiltersSettings>().saveFilters(i);
+                },
+              ),
+            ),
+          )
+          .values
+          .toList(),
+    );
+  }
+}
+
+class _ItemFiltersListSmallScreens extends StatelessWidget {
+  final _FiltersTable filtersTable;
+
+  const _ItemFiltersListSmallScreens({
+    Key? key,
+    required this.filtersTable,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView(
+      scrollDirection: Axis.horizontal,
+      children: filtersTable.filters
+          .asMap()
+          .map(
+            (i, e) => MapEntry(
+              i,
+              _ItemFilter(
+                isEnabled: e.isEnabled,
+                title: e.title,
+                assetName: e.assetName ?? 'null',
+                onTap: () {
+                  final filteredByType = filtersTable.sightList.where((sight) => sight.type.contains(e.title)).toList();
+                  if (!e.isEnabled) {
+                    FiltersTable.filteredMocks.addAll(filteredByType);
+                  } else {
+                    FiltersTable.filteredMocks.clear();
+                    FiltersTable.filtersWithDistance.clear();
+                    debugPrint('🟡---------Добавленные места: ${FiltersTable.filteredMocks}');
+                  }
+                  context.read<FiltersSettings>().showCount();
+
+                  return context.read<FiltersSettings>().saveFilters(i);
+                },
+              ),
+            ),
+          )
+          .values
+          .toList(),
     );
   }
 }
@@ -226,14 +309,13 @@ class _ItemFilterState extends State<_ItemFilter> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-
-    final height = MediaQuery.of(context).size.height / 6;
+    final size = MediaQuery.of(context).size;
 
     return Stack(
       children: [
         SizedBox(
           width: 98,
-          height: height,
+          // height: height,
           child: Column(
             children: [
               InkWell(
@@ -276,7 +358,7 @@ class _ItemFilterState extends State<_ItemFilter> {
         if (widget.isEnabled)
           Positioned(
             right: 16,
-            bottom: 48,
+            bottom: size.width <= 320 ? 25 : 48,
             child: Container(
               padding: const EdgeInsets.symmetric(
                 horizontal: 2,
