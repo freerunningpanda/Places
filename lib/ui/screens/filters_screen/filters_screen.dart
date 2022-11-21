@@ -308,7 +308,6 @@ class _ItemFilterState extends State<_ItemFilter> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final size = MediaQuery.of(context).size;
 
     return Stack(
       children: [
@@ -357,7 +356,7 @@ class _ItemFilterState extends State<_ItemFilter> {
         if (widget.isEnabled)
           Positioned(
             right: 16,
-            bottom: size.width <= 320 ? 48 : 25,
+            bottom: 25,
             child: Container(
               padding: const EdgeInsets.symmetric(
                 horizontal: 2,
