@@ -96,6 +96,7 @@ class _SightDetailsFull extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final orientation = MediaQuery.of(context).orientation == Orientation.portrait;
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.end,
@@ -127,7 +128,7 @@ class _SightDetailsFull extends StatelessWidget {
               ),
               child: ConstrainedBox(
                 constraints: BoxConstraints(
-                  maxHeight: MediaQuery.of(context).orientation == Orientation.portrait ? 629 : 350,
+                  maxHeight: orientation ? 629 : 350,
                 ),
                 child: ListView(
                   children: [
@@ -191,6 +192,7 @@ class _SightDetailsClosedState extends State<_SightDetailsClosed> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final size = MediaQuery.of(context).size;
+    final orientation = MediaQuery.of(context).orientation == Orientation.portrait;
 
     return Column(
       children: [
@@ -216,7 +218,7 @@ class _SightDetailsClosedState extends State<_SightDetailsClosed> {
               ),
               SizedBox(
                 height:
-                    MediaQuery.of(context).orientation == Orientation.portrait ? size.height / 2.0 : size.height / 1.5,
+                    orientation ? size.height / 2.0 : size.height / 1.5,
                 child: Column(
                   children: [
                     const SizedBox(height: 8),

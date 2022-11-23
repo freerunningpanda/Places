@@ -29,6 +29,7 @@ class _SightListScreenState extends State<SightListScreen> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final orientation = MediaQuery.of(context).orientation == Orientation.portrait;
 
     return Scaffold(
       body: Padding(
@@ -36,7 +37,7 @@ class _SightListScreenState extends State<SightListScreen> {
         child: NestedScrollView(
           headerSliverBuilder: (context, innerBoxIsScrolled) => [
             SliverAppBar(
-              centerTitle: MediaQuery.of(context).orientation == Orientation.portrait ? isPortrait : !isPortrait,
+              centerTitle: orientation ? isPortrait : !isPortrait,
               pinned: true,
               title: Text(
                 AppString.appTitle,
@@ -46,7 +47,7 @@ class _SightListScreenState extends State<SightListScreen> {
           ],
           body: Column(
             children: [
-              if (MediaQuery.of(context).orientation == Orientation.portrait)
+              if (orientation)
                 SearchBar(
                   isSearchPage: isSearchPage,
                   readOnly: readOnly,
@@ -59,7 +60,7 @@ class _SightListScreenState extends State<SightListScreen> {
                     readOnly: readOnly,
                   ),
                 ),
-              if (MediaQuery.of(context).orientation == Orientation.portrait)
+              if (orientation)
                 _SightListWidgetPortrait(sightList: sightList, theme: theme)
               else
                 _SightListWidgetLandscape(sightList: sightList, theme: theme),
