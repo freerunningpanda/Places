@@ -126,7 +126,9 @@ class _SightDetailsFull extends StatelessWidget {
                 color: theme.sliderTheme.thumbColor,
               ),
               child: ConstrainedBox(
-                constraints: const BoxConstraints(maxHeight: 629),
+                constraints: BoxConstraints(
+                  maxHeight: MediaQuery.of(context).orientation == Orientation.portrait ? 629 : 350,
+                ),
                 child: ListView(
                   children: [
                     ClipRRect(
@@ -213,7 +215,8 @@ class _SightDetailsClosedState extends State<_SightDetailsClosed> {
                 ),
               ),
               SizedBox(
-                height: size.height / 2,
+                height:
+                    MediaQuery.of(context).orientation == Orientation.portrait ? size.height / 2.0 : size.height / 1.5,
                 child: Column(
                   children: [
                     const SizedBox(height: 8),

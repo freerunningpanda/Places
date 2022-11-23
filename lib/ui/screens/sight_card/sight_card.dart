@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:places/data/sight.dart';
 
@@ -5,6 +8,7 @@ import 'package:places/ui/res/app_card_size.dart';
 import 'package:places/ui/res/app_typography.dart';
 import 'package:places/ui/screens/res/custom_colors.dart';
 import 'package:places/ui/screens/sight_details/sight_details.dart';
+import 'package:places/ui/widgets/cupertino_time_widget.dart';
 
 class SightCard extends StatelessWidget {
   final String? url;
@@ -138,14 +142,20 @@ class RippleIcons extends StatelessWidget {
               child: InkWell(
                 borderRadius: BorderRadius.circular(16.0),
                 onTap: () async {
-                  await showDatePicker(
-                    context: context,
-                    initialDate: DateTime.now(),
-                    firstDate: DateTime.now(),
-                    lastDate: DateTime.now().add(
-                      const Duration(days: 31),
-                    ),
-                  );
+                  if (Platform.isAndroid) {
+                    await showTimePicker(
+                      context: context,
+                      initialTime: TimeOfDay.now(),
+                    );
+                  } else if (Platform.isIOS) {
+                    await showModalBottomSheet<CupertinoTimerPicker>(
+                      context: context,
+                      builder: (_) {
+                        return const CupertinoTimeWidget();
+                      },
+                    );
+                  }
+
                   debugPrint('🟡---------first icon pressed');
                 },
                 child: actionOne,

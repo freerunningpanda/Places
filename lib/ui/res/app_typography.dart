@@ -207,4 +207,10 @@ abstract class AppTypography {
     fontWeight: FontWeight.w700,
     color: AppColors.green,
   );
+
+  static const hourMinute = TextStyle(
+    fontSize: 30,
+    fontWeight: FontWeight.w400,
+    color: AppColors.backgroundColor,
+  );
 }

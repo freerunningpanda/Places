@@ -21,6 +21,7 @@ abstract class AppColors {
   static const red = Color.fromRGBO(239, 67, 67, 0);
   static const detailsScreenBottomSheet = Color.fromRGBO(53, 53, 59, 1);
   static const detailsScreenBackground = Color.fromRGBO(25, 26, 32, 1);
+  static const dialBackgroundColor = Color.fromRGBO(238, 238, 238, 1);
   static const limeGradient = <Color>[
     Color.fromRGBO(106, 218, 111, 1),
     Color.fromRGBO(255, 231, 105, 1),
