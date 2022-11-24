@@ -19,7 +19,7 @@ BaseOptions baseoptions = BaseOptions(
 Future<dynamic> getPosts() async {
   initInterceptors();
 
-  final response = await dio.get<String>('/posts');
+  final response = await dio.get<String>('/users');
   if (response.statusCode == 200) {
     return response.data;
   }
@@ -32,7 +32,7 @@ void initInterceptors() {
       onError: (e, handler) {},
       onRequest: (options, handler) {
         debugPrint('Запрос отправляется');
-        
+
         return handler.next(options);
       },
       onResponse: (e, handler) {
