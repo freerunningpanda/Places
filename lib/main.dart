@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:places/appsettings.dart';
 import 'package:places/data/categories_table.dart';
+import 'package:places/data/dio.dart';
 import 'package:places/ui/screens/filters_screen/filters_settings.dart';
 import 'package:places/ui/screens/res/app_theme.dart';
 import 'package:places/ui/screens/splash_screen/splash_screen.dart';
@@ -37,6 +38,11 @@ class App extends StatefulWidget {
 }
 
 class _AppState extends State<App> {
+  @override
+  void initState() {
+    super.initState();
+    testNetworkCall();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -48,6 +54,11 @@ class _AppState extends State<App> {
       title: 'Places',
       home: const MainScreen(),
     );
+  }
+
+  Future<void> testNetworkCall() async {
+    final dynamic response = await getPosts();
+    debugPrint('Response HTTP call: $response');
   }
 }
 
