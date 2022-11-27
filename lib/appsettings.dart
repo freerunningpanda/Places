@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
 import 'package:geolocator/geolocator.dart';
-import 'package:places/data/categories_table.dart';
-import 'package:places/data/filters.dart';
-import 'package:places/data/filters_table.dart';
-import 'package:places/data/sight.dart';
+import 'package:places/data/interactor/categories_table.dart';
+import 'package:places/data/interactor/filters_table.dart';
+import 'package:places/data/model/filters.dart';
+import 'package:places/data/model/sight.dart';
 import 'package:places/mocks.dart';
 
 class AppSettings extends ChangeNotifier {

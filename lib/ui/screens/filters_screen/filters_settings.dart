@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:geolocator/geolocator.dart';
-import 'package:places/data/filters_table.dart';
+import 'package:places/data/interactor/filters_table.dart';
 import 'package:places/mocks.dart';
 
 class FiltersSettings extends ChangeNotifier {

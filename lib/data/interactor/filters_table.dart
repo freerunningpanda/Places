@@ -1,5 +1,5 @@
-import 'package:places/data/filters.dart';
-import 'package:places/data/sight.dart';
+import 'package:places/data/model/filters.dart';
+import 'package:places/data/model/sight.dart';
 
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_strings.dart';

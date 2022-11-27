@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
 import 'package:places/appsettings.dart';
-import 'package:places/data/filters.dart';
-import 'package:places/data/filters_table.dart';
-import 'package:places/data/sight.dart';
+import 'package:places/data/interactor/filters_table.dart';
+import 'package:places/data/model/filters.dart';
+import 'package:places/data/model/sight.dart';
 import 'package:places/mocks.dart';
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_strings.dart';
