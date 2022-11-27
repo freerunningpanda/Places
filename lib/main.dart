@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 import 'package:places/appsettings.dart';
-import 'package:places/data/dio.dart';
 import 'package:places/data/interactor/categories_table.dart';
+import 'package:places/data/repository/place_repository.dart';
 import 'package:places/ui/screens/filters_screen/filters_settings.dart';
 import 'package:places/ui/screens/res/app_theme.dart';
 import 'package:places/ui/screens/splash_screen/splash_screen.dart';
@@ -57,7 +57,7 @@ class _AppState extends State<App> {
   }
 
   Future<void> testNetworkCall() async {
-    final dynamic response = await getPosts();
+    final dynamic response = await PlaceRepository().getPlaces();
     debugPrint('Response HTTP call: $response');
   }
 }
