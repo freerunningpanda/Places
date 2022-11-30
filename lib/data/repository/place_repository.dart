@@ -74,15 +74,27 @@ class PlaceRepository {
       '/place',
       data: jsonEncode(
         {
-          'id': 27,
+          'id': 3,
           'lat': 565407.77,
           'lng': 6547450.76,
-          'name': 'Паттайя',
+          'name': 'Уряяяя!!!',
           'urls': ['http://example.com'],
           'placeType': 'temple',
-          'description': 'Городской парк',
+          'description': 'Я сделяль запрос в сеть!',
         },
       ),
+    );
+    if (response.statusCode == 200) {
+      return response.data ?? '';
+    }
+    throw Exception('No 200 status code: Error code: ${response.statusCode}');
+  }
+
+  Future<String> deletePlace(int id) async {
+    initInterceptors();
+
+    final response = await dio.delete<String>(
+      '/place/$id',
     );
     if (response.statusCode == 200) {
       return response.data ?? '';

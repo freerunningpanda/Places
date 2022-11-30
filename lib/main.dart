@@ -57,7 +57,7 @@ class _AppState extends State<App> {
   }
 
   Future<void> testNetworkCall() async {
-    final dynamic response = await PlaceRepository().getPlace(27);
+    final dynamic response = await PlaceRepository().postPlace();
     debugPrint('Response HTTP call: $response');
   }
 }
