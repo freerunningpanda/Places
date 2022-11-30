@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
-import 'package:places/data/model/place.dart';
+import 'package:places/data/model/places_filter_request_dto.dart';
 
 const url = 'https://test-backend-flutter.surfstudio.ru';
 
@@ -18,7 +18,7 @@ BaseOptions baseoptions = BaseOptions(
 );
 
 class PlaceRepository {
-  Future<List<Place>> getPlaces() async {
+  Future<List<PlacesFilterRequestDto>> getPlaces() async {
     initInterceptors();
 
     final response = await dio.get<String>('/place');
@@ -27,8 +27,50 @@ class PlaceRepository {
 
       return (placesListJson as List<dynamic>)
           // ignore: avoid_annotating_with_dynamic
-          .map((dynamic place) => Place.fromJson(place as Map<String, dynamic>))
+          .map((dynamic place) => PlacesFilterRequestDto.fromJson(place as Map<String, dynamic>))
           .toList();
+    }
+    throw Exception('No 200 status code: Error code: ${response.statusCode}');
+  }
+
+  Future<String> postFilteredPlaces() async {
+    initInterceptors();
+
+    final response = await dio.post<String>(
+
+      '/filtered_places',
+      data: jsonEncode(
+        {
+          'lat': null,
+          'lng': null,
+          'radius': null,
+          'typeFilter': ['other', 'park'],
+          'nameFilter': '',
+        },
+      ),
+    );
+    if (response.statusCode == 200) {
+      return response.data ?? '';
+    }
+    throw Exception('No 200 status code: Error code: ${response.statusCode}');
+  }
+
+  Future<String> post() async {
+    // initInterceptors();
+
+    final response = await dio.post<String>(
+      'https://jsonplaceholder.typicode.com/posts',
+      data: jsonEncode(
+        {
+          'userId': 1,
+          'id': 5433,
+          'title': '',
+          'body': '',
+        },
+      ),
+    );
+    if (response.statusCode == 201) {
+      return response.data ?? '';
     }
     throw Exception('No 200 status code: Error code: ${response.statusCode}');
   }
