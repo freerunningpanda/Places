@@ -30,6 +30,6 @@ class Place {
 
   @override
   String toString() {
-    return urls.toString();
+    return 'Название: $name. Тип: $placeType. Описание: $description';
   }
 }

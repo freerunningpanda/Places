@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
+import 'package:places/data/model/place.dart';
 import 'package:places/data/model/places_filter_request_dto.dart';
 
 const url = 'https://test-backend-flutter.surfstudio.ru';
@@ -33,11 +34,22 @@ class PlaceRepository {
     throw Exception('No 200 status code: Error code: ${response.statusCode}');
   }
 
+  Future<Place> getPlace(int id) async {
+    initInterceptors();
+
+    final response = await dio.get<String>('/place/$id');
+    if (response.statusCode == 200) {
+      final dynamic placesListJson = jsonDecode(response.data ?? '');
+
+      return Place.fromJson(placesListJson as Map<String, dynamic>);
+    }
+    throw Exception('No 200 status code: Error code: ${response.statusCode}');
+  }
+
   Future<String> postFilteredPlaces() async {
     initInterceptors();
 
     final response = await dio.post<String>(
-
       '/filtered_places',
       data: jsonEncode(
         {
@@ -55,11 +67,10 @@ class PlaceRepository {
     throw Exception('No 200 status code: Error code: ${response.statusCode}');
   }
 
-  Future<String> postPlaces() async {
-    // initInterceptors();
+  Future<String> postPlace() async {
+    initInterceptors();
 
     final response = await dio.post<String>(
-
       '/place',
       data: jsonEncode(
         {
