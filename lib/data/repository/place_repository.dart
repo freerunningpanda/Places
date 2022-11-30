@@ -55,6 +55,30 @@ class PlaceRepository {
     throw Exception('No 200 status code: Error code: ${response.statusCode}');
   }
 
+  Future<String> postPlaces() async {
+    // initInterceptors();
+
+    final response = await dio.post<String>(
+
+      '/place',
+      data: jsonEncode(
+        {
+          'id': 27,
+          'lat': 565407.77,
+          'lng': 6547450.76,
+          'name': 'Паттайя',
+          'urls': ['http://example.com'],
+          'placeType': 'temple',
+          'description': 'Городской парк',
+        },
+      ),
+    );
+    if (response.statusCode == 200) {
+      return response.data ?? '';
+    }
+    throw Exception('No 200 status code: Error code: ${response.statusCode}');
+  }
+
   Future<String> post() async {
     // initInterceptors();
 
