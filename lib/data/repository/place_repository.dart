@@ -74,13 +74,35 @@ class PlaceRepository {
       '/place',
       data: jsonEncode(
         {
-          'id': 3,
+          'id': 4,
           'lat': 565407.77,
           'lng': 6547450.76,
-          'name': 'Уряяяя!!!',
+          'name': 'Место',
+          'urls': ['http://test.com'],
+          'placeType': 'temple',
+          'description': 'Описание!',
+        },
+      ),
+    );
+    if (response.statusCode == 200) {
+      return response.data ?? '';
+    }
+    throw Exception('No 200 status code: Error code: ${response.statusCode}');
+  }
+
+  Future<String> putPlace(int id) async {
+    initInterceptors();
+
+    final response = await dio.put<String>(
+      '/place/$id',
+      data: jsonEncode(
+        {
+          'lat': 565407.77,
+          'lng': 6547450.76,
+          'name': 'Место!!!',
           'urls': ['http://example.com'],
           'placeType': 'temple',
-          'description': 'Я сделяль запрос в сеть!',
+          'description': 'Место',
         },
       ),
     );
