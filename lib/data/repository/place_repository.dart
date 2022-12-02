@@ -2,8 +2,10 @@ import 'dart:convert';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:places/data/model/place.dart';
 import 'package:places/data/model/places_filter_request_dto.dart';
+import 'package:places/mocks.dart';
 
 const url = 'https://test-backend-flutter.surfstudio.ru';
 
@@ -19,7 +21,7 @@ BaseOptions baseoptions = BaseOptions(
 );
 
 class PlaceRepository {
-  Future<List<PlacesFilterRequestDto>> getPlaces() async {
+  Future<List<PlacesFilterRequestDto>> getPlaces({required int radius, required String category}) async {
     initInterceptors();
 
     final response = await dio.get<String>('/place');
@@ -34,6 +36,31 @@ class PlaceRepository {
     throw Exception('No 200 status code: Error code: ${response.statusCode}');
   }
 
+  void getFilteredPlaces({required int radius, required String category, required List<Place> places}) {
+    for (var i = 0; i <= places.length; i++) {
+      final distance = Geolocator.distanceBetween(
+        Mocks.mockLat,
+        Mocks.mockLot,
+        places[i].lat,
+        places[i].lon,
+      );
+
+      if (distance >= radius && category == places[i].placeType) {
+        Place(
+          id: places[i].id,
+          lat: places[i].lat,
+          lon: places[i].lon,
+          name: places[i].name,
+          urls: places[i].urls,
+          placeType: places[i].placeType,
+          description: places[i].description,
+        );
+      } else {
+        return;
+      }
+    }
+  }
+
   Future<Place> getPlace(int id) async {
     initInterceptors();
 
@@ -46,20 +73,18 @@ class PlaceRepository {
     throw Exception('No 200 status code: Error code: ${response.statusCode}');
   }
 
-  Future<String> postFilteredPlaces() async {
+  Future<String> postFilteredPlaces({required String category, required int radius}) async {
     initInterceptors();
 
     final response = await dio.post<String>(
       '/filtered_places',
-      data: jsonEncode(
-        {
-          'lat': null,
-          'lng': null,
-          'radius': null,
-          'typeFilter': ['other', 'park'],
-          'nameFilter': '',
-        },
-      ),
+      data: jsonEncode({
+        'lat': 55.989198,
+        'lng': 37.601605,
+        'radius': radius.toDouble(),
+        'typeFilter': ['other', 'park'],
+        'nameFilter': category,
+      }),
     );
     if (response.statusCode == 200) {
       return response.data ?? '';
@@ -74,7 +99,7 @@ class PlaceRepository {
       '/place',
       data: jsonEncode(
         {
-          'id': 4,
+          // 'id': 4,
           'lat': 565407.77,
           'lng': 6547450.76,
           'name': 'Место',

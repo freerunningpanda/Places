@@ -57,7 +57,7 @@ class _AppState extends State<App> {
   }
 
   Future<void> testNetworkCall() async {
-    final dynamic response = await PlaceRepository().postPlace();
+    final dynamic response = await PlaceRepository().postFilteredPlaces(radius: 10000, category: 'водохранилище');
     debugPrint('Response HTTP call: $response');
   }
 }
