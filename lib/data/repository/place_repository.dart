@@ -4,7 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:places/data/model/place.dart';
-import 'package:places/data/model/places_filter_request_dto.dart';
+import 'package:places/data/model/place_dto.dart';
 import 'package:places/mocks.dart';
 
 const url = 'https://test-backend-flutter.surfstudio.ru';
@@ -21,20 +21,55 @@ BaseOptions baseoptions = BaseOptions(
 );
 
 class PlaceRepository {
-  Future<List<PlacesFilterRequestDto>> getPlaces() async {
+  Future<List<PlaceDto>> getPlaces({required String category, required int radius}) async {
     initInterceptors();
 
-    final response = await dio.get<String>('/place');
-    if (response.statusCode == 200) {
-      final dynamic placesListJson = jsonDecode(response.data ?? '');
+    final response = await dio.post<String>(
+      '/filtered_places',
+      data: jsonEncode({
+        'lat': Mocks.mockLat,
+        'lng': Mocks.mockLot,
+        'radius': radius.toDouble(),
+        'typeFilter': ['park', 'museum', 'other', 'theatre'],
+        'nameFilter': category,
+      }),
+    );
 
-      return (placesListJson as List<dynamic>)
-          // ignore: avoid_annotating_with_dynamic
-          .map((dynamic place) => PlacesFilterRequestDto.fromJson(place as Map<String, dynamic>))
-          .toList();
+    if (response.statusCode == 200) {
+      final dynamic list = jsonDecode(response.data ?? '');
+
+      // ignore: avoid_annotating_with_dynamic
+      return (list as List<dynamic>).map((dynamic e) => PlaceDto.fromJson(e as Map<String, dynamic>)).toList();
     }
     throw Exception('No 200 status code: Error code: ${response.statusCode}');
   }
+
+  Future<Place> getPlaceDetails(int id) async {
+    initInterceptors();
+
+    final response = await dio.get<String>('/place/$id');
+    if (response.statusCode == 200) {
+      final dynamic placesListJson = jsonDecode(response.data ?? '');
+
+      return Place.fromJson(placesListJson as Map<String, dynamic>);
+    }
+    throw Exception('No 200 status code: Error code: ${response.statusCode}');
+  }
+
+  // Future<List<PlacesFilterRequestDto>> getPlaces() async {
+  //   initInterceptors();
+
+  //   final response = await dio.get<String>('/place');
+  //   if (response.statusCode == 200) {
+  //     final dynamic placesListJson = jsonDecode(response.data ?? '');
+
+  //     return (placesListJson as List<dynamic>)
+  //         // ignore: avoid_annotating_with_dynamic
+  //         .map((dynamic place) => PlacesFilterRequestDto.fromJson(place as Map<String, dynamic>))
+  //         .toList();
+  //   }
+  //   throw Exception('No 200 status code: Error code: ${response.statusCode}');
+  // }
 
   void getFilteredPlaces({required int radius, required String category, required List<Place> places}) {
     for (var i = 0; i <= places.length; i++) {
@@ -58,53 +93,6 @@ class PlaceRepository {
       } else {
         return;
       }
-    }
-  }
-
-  Future<Place> getPlace(int id) async {
-    initInterceptors();
-
-    final response = await dio.get<String>('/place/$id');
-    if (response.statusCode == 200) {
-      final dynamic placesListJson = jsonDecode(response.data ?? '');
-
-      return Place.fromJson(placesListJson as Map<String, dynamic>);
-    }
-    throw Exception('No 200 status code: Error code: ${response.statusCode}');
-  }
-
-  Future<List<Place>> postFilteredPlaces({required String category, required int radius}) async {
-    initInterceptors();
-
-    final distance = Geolocator.distanceBetween(
-      Mocks.mockLat,
-      Mocks.mockLot,
-      55.989198,
-      37.601605,
-    );
-    debugPrint('🟡--------- Дистанция ${distance.toString()}');
-
-    if (distance <= radius) {
-      final response = await dio.post<String>(
-        '/filtered_places',
-        data: jsonEncode({
-          'lat': 55.989198,
-          'lng': 37.601605,
-          'radius': radius.toDouble(),
-          'typeFilter': ['park', 'museum', 'other', 'theatre'],
-          'nameFilter': category,
-        }),
-      );
-
-      if (response.statusCode == 200) {
-        final dynamic list = jsonDecode(response.data ?? '');
-
-        // ignore: avoid_annotating_with_dynamic
-        return (list as List<dynamic>).map((dynamic e) => Place.fromJson(e as Map<String, dynamic>)).toList();
-      }
-      throw Exception('No 200 status code: Error code: ${response.statusCode}');
-    } else {
-      return [];
     }
   }
 
