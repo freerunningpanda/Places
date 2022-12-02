@@ -79,9 +79,10 @@ class PlaceRepository {
     final distance = Geolocator.distanceBetween(
       Mocks.mockLat,
       Mocks.mockLot,
-      55.910493,
-      37.736423,
+      55.989198,
+      37.601605,
     );
+    debugPrint('🟡--------- Дистанция ${distance.toString()}');
 
     if (distance <= radius) {
       final response = await dio.post<String>(
@@ -90,7 +91,7 @@ class PlaceRepository {
           'lat': 55.989198,
           'lng': 37.601605,
           'radius': radius.toDouble(),
-          'typeFilter': ['other', 'park'],
+          'typeFilter': ['park', 'museum', 'other', 'theatre'],
           'nameFilter': category,
         }),
       );

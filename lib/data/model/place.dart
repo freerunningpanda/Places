@@ -30,6 +30,6 @@ class Place {
 
   @override
   String toString() {
-    return 'Название: $name. Тип: $placeType. Описание: $description';
+    return 'Название: $name. Тип: $placeType. Ширина: $lat. Долгота: $lon. Описание: $description';
   }
 }
