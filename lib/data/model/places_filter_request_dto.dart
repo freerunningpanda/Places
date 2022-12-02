@@ -14,9 +14,9 @@ class PlacesFilterRequestDto {
   });
 
   factory PlacesFilterRequestDto.fromJson(Map<String, dynamic> json) => PlacesFilterRequestDto(
-        lat: json['lat'] as double,
-        lng: json['lng'] as double,
-        radius: json['radius'] as double,
+        lat: (json['lat'] as num).toDouble(),
+        lng: (json['lng'] as num).toDouble(),
+        radius: (json['radius'] as num).toDouble(),
         typeFilter: json['typeFilter'] as List<String>,
         nameFilter: json['nameFilter'] as String,
       );

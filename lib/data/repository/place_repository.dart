@@ -21,7 +21,7 @@ BaseOptions baseoptions = BaseOptions(
 );
 
 class PlaceRepository {
-  Future<List<PlacesFilterRequestDto>> getPlaces({required int radius, required String category}) async {
+  Future<List<PlacesFilterRequestDto>> getPlaces() async {
     initInterceptors();
 
     final response = await dio.get<String>('/place');
@@ -73,23 +73,38 @@ class PlaceRepository {
     throw Exception('No 200 status code: Error code: ${response.statusCode}');
   }
 
-  Future<String> postFilteredPlaces({required String category, required int radius}) async {
+  Future<List<Place>> postFilteredPlaces({required String category, required int radius}) async {
     initInterceptors();
 
-    final response = await dio.post<String>(
-      '/filtered_places',
-      data: jsonEncode({
-        'lat': 55.989198,
-        'lng': 37.601605,
-        'radius': radius.toDouble(),
-        'typeFilter': ['other', 'park'],
-        'nameFilter': category,
-      }),
+    final distance = Geolocator.distanceBetween(
+      Mocks.mockLat,
+      Mocks.mockLot,
+      55.910493,
+      37.736423,
     );
-    if (response.statusCode == 200) {
-      return response.data ?? '';
+
+    if (distance <= radius) {
+      final response = await dio.post<String>(
+        '/filtered_places',
+        data: jsonEncode({
+          'lat': 55.989198,
+          'lng': 37.601605,
+          'radius': radius.toDouble(),
+          'typeFilter': ['other', 'park'],
+          'nameFilter': category,
+        }),
+      );
+
+      if (response.statusCode == 200) {
+        final dynamic list = jsonDecode(response.data ?? '');
+
+        // ignore: avoid_annotating_with_dynamic
+        return (list as List<dynamic>).map((dynamic e) => Place.fromJson(e as Map<String, dynamic>)).toList();
+      }
+      throw Exception('No 200 status code: Error code: ${response.statusCode}');
+    } else {
+      return [];
     }
-    throw Exception('No 200 status code: Error code: ${response.statusCode}');
   }
 
   Future<String> postPlace() async {
