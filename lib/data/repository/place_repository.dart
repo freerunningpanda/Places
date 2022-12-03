@@ -56,6 +56,37 @@ class PlaceRepository {
     throw Exception('No 200 status code: Error code: ${response.statusCode}');
   }
 
+  // Future<List<PlaceDto>> getFavoritesPlaces() async {
+  //   initInterceptors();
+
+  //   final response = await dio.get<String>(path);
+  // }
+
+  Future<List<Place>> addToFavorites({required Place place}) async {
+    initInterceptors();
+
+    final response = await dio.put<String>(
+      '/place/${place.id}',
+      data: jsonEncode(
+        {
+          'lat': 565407.77,
+          'lng': 6547450.76,
+          'name': 'Место!!!',
+          'urls': ['http://example.com'],
+          'placeType': 'temple',
+          'description': 'Место',
+        },
+      ),
+    );
+    if (response.statusCode == 200) {
+      final dynamic favoritePlacesListJson = jsonDecode(response.data ?? '');
+
+      // ignore: avoid_annotating_with_dynamic
+      return (favoritePlacesListJson as List<dynamic>).map((dynamic e) => Place.fromJson(e as Map<String, dynamic>)).toList();
+    }
+    throw Exception('No 200 status code: Error code: ${response.statusCode}');
+  }
+
   // Future<List<PlacesFilterRequestDto>> getPlaces() async {
   //   initInterceptors();
 

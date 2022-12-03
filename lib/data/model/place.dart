@@ -32,4 +32,13 @@ class Place {
   String toString() {
     return 'Название: $name. Тип: $placeType. Ширина: $lat. Долгота: $lon. Описание: $description';
   }
+
+  Map<String, dynamic> toJson() => <String, dynamic>{
+        'id': id,
+        'lat': lat,
+        'lng': lon,
+        'name': name,
+        'urls': List<dynamic>.from(urls.map<String>((e) => e)),
+        'placeType': description,
+      };
 }
