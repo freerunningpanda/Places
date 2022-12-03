@@ -97,6 +97,9 @@ class _SightListWidgetPortrait extends StatelessWidget {
           return Column(
             children: [
               SightCard(
+                addSight: () {
+                  debugPrint('🟡---------like pressed');
+                },
                 isVisitingScreen: false,
                 aspectRatio: 3 / 2,
                 actionOne: const SightIcons(

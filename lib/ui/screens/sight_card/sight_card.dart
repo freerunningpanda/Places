@@ -21,6 +21,7 @@ class SightCard extends StatelessWidget {
   final Sight item;
   final bool isVisitingScreen;
   final VoidCallback? removeSight;
+  final VoidCallback? addSight;
 
   const SightCard({
     Key? key,
@@ -34,6 +35,7 @@ class SightCard extends StatelessWidget {
     required this.item,
     required this.isVisitingScreen,
     this.removeSight,
+    this.addSight,
   }) : super(key: key);
 
   @override
@@ -75,7 +77,10 @@ class SightCard extends StatelessWidget {
                   actionTwo: actionTwo ?? const SizedBox(),
                 )
               else
-                RippleIcon(actionOne: actionOne),
+                RippleIcon(
+                  actionOne: actionOne,
+                  addSight: addSight,
+                ),
             ],
           ),
         ),
@@ -86,10 +91,12 @@ class SightCard extends StatelessWidget {
 
 class RippleIcon extends StatelessWidget {
   final Widget actionOne;
+  final VoidCallback? addSight;
 
   const RippleIcon({
     Key? key,
     required this.actionOne,
+    required this.addSight,
   }) : super(key: key);
 
   @override
@@ -104,9 +111,7 @@ class RippleIcon extends StatelessWidget {
           height: 22,
           child: InkWell(
             borderRadius: BorderRadius.circular(16.0),
-            onTap: () {
-              debugPrint('🟡---------like pressed');
-            },
+            onTap: addSight,
             child: actionOne,
           ),
         ),
