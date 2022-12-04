@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:places/data/interactor/favorites_places.dart';
 import 'package:places/data/model/place.dart';
 import 'package:places/data/model/place_dto.dart';
 import 'package:places/mocks.dart';
@@ -56,51 +57,17 @@ class PlaceRepository {
     throw Exception('No 200 status code: Error code: ${response.statusCode}');
   }
 
-  // Future<List<PlaceDto>> getFavoritesPlaces() async {
-  //   initInterceptors();
-
-  //   final response = await dio.get<String>(path);
-  // }
-
-  Future<List<Place>> addToFavorites({required Place place}) async {
-    initInterceptors();
-
-    final response = await dio.put<String>(
-      '/place/${place.id}',
-      data: jsonEncode(
-        {
-          'lat': 565407.77,
-          'lng': 6547450.76,
-          'name': 'Место!!!',
-          'urls': ['http://example.com'],
-          'placeType': 'temple',
-          'description': 'Место',
-        },
-      ),
-    );
-    if (response.statusCode == 200) {
-      final dynamic favoritePlacesListJson = jsonDecode(response.data ?? '');
-
-      // ignore: avoid_annotating_with_dynamic
-      return (favoritePlacesListJson as List<dynamic>).map((dynamic e) => Place.fromJson(e as Map<String, dynamic>)).toList();
-    }
-    throw Exception('No 200 status code: Error code: ${response.statusCode}');
+  void getFavoritesPlaces() {
+    favoritePlaces.sort();
   }
 
-  // Future<List<PlacesFilterRequestDto>> getPlaces() async {
-  //   initInterceptors();
+  void addToFavorites({required PlaceDto place}) {
+    return favoritePlaces.add(place);
+  }
 
-  //   final response = await dio.get<String>('/place');
-  //   if (response.statusCode == 200) {
-  //     final dynamic placesListJson = jsonDecode(response.data ?? '');
-
-  //     return (placesListJson as List<dynamic>)
-  //         // ignore: avoid_annotating_with_dynamic
-  //         .map((dynamic place) => PlacesFilterRequestDto.fromJson(place as Map<String, dynamic>))
-  //         .toList();
-  //   }
-  //   throw Exception('No 200 status code: Error code: ${response.statusCode}');
-  // }
+  void removeFromFavorites({required PlaceDto place}) {
+    favoritePlaces.remove(place);
+  }
 
   void getFilteredPlaces({required int radius, required String category, required List<Place> places}) {
     for (var i = 0; i <= places.length; i++) {
