@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:places/data/interactor/place_store.dart';
 import 'package:places/data/model/place.dart';
 import 'package:places/data/model/place_dto.dart';
@@ -81,31 +80,6 @@ class PlaceRepository {
     PlaceStore.visitedPlaces.remove(place);
   }
 
-  void getFilteredPlaces({required int radius, required String category, required List<Place> places}) {
-    for (var i = 0; i <= places.length; i++) {
-      final distance = Geolocator.distanceBetween(
-        Mocks.mockLat,
-        Mocks.mockLot,
-        places[i].lat,
-        places[i].lon,
-      );
-
-      if (distance >= radius && category == places[i].placeType) {
-        Place(
-          id: places[i].id,
-          lat: places[i].lat,
-          lon: places[i].lon,
-          name: places[i].name,
-          urls: places[i].urls,
-          placeType: places[i].placeType,
-          description: places[i].description,
-        );
-      } else {
-        return;
-      }
-    }
-  }
-
   Future<String> postPlace() async {
     initInterceptors();
 
@@ -158,26 +132,6 @@ class PlaceRepository {
       '/place/$id',
     );
     if (response.statusCode == 200) {
-      return response.data ?? '';
-    }
-    throw Exception('No 200 status code: Error code: ${response.statusCode}');
-  }
-
-  Future<String> post() async {
-    // initInterceptors();
-
-    final response = await dio.post<String>(
-      'https://jsonplaceholder.typicode.com/posts',
-      data: jsonEncode(
-        {
-          'userId': 1,
-          'id': 5433,
-          'title': '',
-          'body': '',
-        },
-      ),
-    );
-    if (response.statusCode == 201) {
       return response.data ?? '';
     }
     throw Exception('No 200 status code: Error code: ${response.statusCode}');
