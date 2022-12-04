@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:places/data/interactor/favorites_places.dart';
+import 'package:places/data/interactor/place_store.dart';
 import 'package:places/data/model/place.dart';
 import 'package:places/data/model/place_dto.dart';
 import 'package:places/mocks.dart';
@@ -58,15 +58,27 @@ class PlaceRepository {
   }
 
   void getFavoritesPlaces() {
-    favoritePlaces.sort();
+    PlaceStore.favoritePlaces.sort();
   }
 
   void addToFavorites({required PlaceDto place}) {
-    return favoritePlaces.add(place);
+    PlaceStore.favoritePlaces.add(place);
   }
 
   void removeFromFavorites({required PlaceDto place}) {
-    favoritePlaces.remove(place);
+    PlaceStore.favoritePlaces.remove(place);
+  }
+
+  List<PlaceDto> getVisitPlaces() {
+    return PlaceStore.visitedPlaces;
+  }
+
+  void addToVisitingPlaces({required PlaceDto place}) {
+    PlaceStore.visitedPlaces.add(place);
+  }
+
+  void addNewPlace({required PlaceDto place}) {
+    PlaceStore.visitedPlaces.remove(place);
   }
 
   void getFilteredPlaces({required int radius, required String category, required List<Place> places}) {
