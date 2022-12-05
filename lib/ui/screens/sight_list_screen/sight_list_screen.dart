@@ -114,44 +114,44 @@ class _SightListWidgetPortrait extends StatelessWidget {
         itemBuilder: (context, index) {
           final sight = sightList[index];
 
-          return ListTile(
-            title: Text(sight.name),
-          );
-
-          // return Column(
-          //   children: [
-          //     SightCard(
-          //       addSight: () {
-          //         debugPrint('🟡---------like pressed');
-          //       },
-          //       isVisitingScreen: false,
-          //       aspectRatio: 3 / 2,
-          //       actionOne: const SightIcons(
-          //         assetName: AppAssets.favourite,
-          //         width: 22,
-          //         height: 22,
-          //       ),
-          //       url: sight.urls[0],
-          //       type: sight.placeType,
-          //       name: sight.name,
-          //       item: sight,
-          //       details: [
-          //         Text(
-          //           sight.name,
-          //           maxLines: 2,
-          //           style: theme.textTheme.headlineSmall,
-          //         ),
-          //         const SizedBox(height: 2),
-          //         Text(
-          //           sight.description,
-          //           overflow: TextOverflow.ellipsis,
-          //           style: AppTypography.textText16Regular,
-          //         ),
-          //       ],
-          //     ),
-          //     const SizedBox(height: 11),
-          //   ],
+          // return ListTile(
+          //   title: Text(sight.name),
           // );
+
+          return Column(
+            children: [
+              SightCard(
+                addSight: () {
+                  debugPrint('🟡---------like pressed');
+                },
+                isVisitingScreen: false,
+                aspectRatio: 3 / 2,
+                actionOne: const SightIcons(
+                  assetName: AppAssets.favourite,
+                  width: 22,
+                  height: 22,
+                ),
+                url: sight.urls[0],
+                type: sight.placeType,
+                name: sight.name,
+                item: sight,
+                details: [
+                  Text(
+                    sight.name,
+                    maxLines: 2,
+                    style: theme.textTheme.headlineSmall,
+                  ),
+                  const SizedBox(height: 2),
+                  Text(
+                    sight.description,
+                    overflow: TextOverflow.ellipsis,
+                    style: AppTypography.textText16Regular,
+                  ),
+                ],
+              ),
+              const SizedBox(height: 11),
+            ],
+          );
         },
       ),
     );
@@ -159,7 +159,7 @@ class _SightListWidgetPortrait extends StatelessWidget {
 }
 
 class _SightListWidgetLandscape extends StatelessWidget {
-  final List<Sight> sightList;
+  final List<Place> sightList;
   final ThemeData theme;
 
   const _SightListWidgetLandscape({
@@ -195,8 +195,8 @@ class _SightListWidgetLandscape extends StatelessWidget {
                   width: 22,
                   height: 22,
                 ),
-                url: sight.url ?? 'no_url',
-                type: sight.type,
+                url: sight.urls[0],
+                type: sight.placeType,
                 name: sight.name,
                 item: sight,
                 details: [
@@ -207,7 +207,7 @@ class _SightListWidgetLandscape extends StatelessWidget {
                   ),
                   const SizedBox(height: 2),
                   Text(
-                    sight.details,
+                    sight.description,
                     overflow: TextOverflow.ellipsis,
                     style: AppTypography.textText16Regular,
                   ),

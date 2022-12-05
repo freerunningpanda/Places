@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:places/data/interactor/categories_table.dart';
 import 'package:places/data/interactor/filters_table.dart';
+import 'package:places/data/interactor/place_store.dart';
 import 'package:places/data/model/filters.dart';
+import 'package:places/data/model/place.dart';
 import 'package:places/data/model/sight.dart';
 import 'package:places/mocks.dart';
 
@@ -20,8 +22,8 @@ class AppSettings extends ChangeNotifier {
   final searchFocus = FocusNode();
   final Set<String> searchHistoryList = {};
   final List<Sight> places = [];
-  List<Sight> sightsToVisit = Mocks.sightsTovisit;
-  List<Sight> visitedSights = Mocks.visitedSights;
+  List<Place> sightsToVisit = PlaceStore.favoritePlaces;
+  List<Place> visitedSights = PlaceStore.visitedPlaces;
 
   bool isDarkMode = false;
 
@@ -33,13 +35,13 @@ class AppSettings extends ChangeNotifier {
 
   List<Sight> suggestions = FiltersTable.filtersWithDistance.toList();
 
-  void dragCard(List<Sight> sights, int oldIndex, int newIndex) {
+  void dragCard(List<Place> sights, int oldIndex, int newIndex) {
     final sight = sights.removeAt(oldIndex);
     sights.insert(newIndex, sight);
     notifyListeners();
   }
 
-  void deleteSight(int index, List<Sight> sight) {
+  void deleteSight(int index, List<Place> sight) {
     sight.removeAt(index);
     notifyListeners();
   }

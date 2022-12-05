@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:places/appsettings.dart';
+import 'package:places/data/model/place.dart';
 import 'package:places/data/model/sight.dart';
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_card_size.dart';
@@ -142,7 +143,7 @@ class _TabBarWidgetState extends State<_TabBarWidget> with TickerProviderStateMi
 }
 
 class _WantToVisitWidget extends StatelessWidget {
-  final List<Sight> sightsToVisit;
+  final List<Place> sightsToVisit;
   const _WantToVisitWidget({Key? key, required this.sightsToVisit}) : super(key: key);
 
   @override
@@ -179,7 +180,7 @@ class _WantToVisitWidget extends StatelessWidget {
 }
 
 class _VisitedWidget extends StatelessWidget {
-  final List<Sight> visitedSights;
+  final List<Place> visitedSights;
   const _VisitedWidget({Key? key, required this.visitedSights}) : super(key: key);
 
   @override
@@ -214,7 +215,7 @@ class _VisitedWidget extends StatelessWidget {
 
 class _DismissibleWidget extends StatelessWidget {
   final int i;
-  final List<Sight> sightsToVisit;
+  final List<Place> sightsToVisit;
   final ThemeData theme;
   final Key uniqueKey;
   final Widget actionTwo;
@@ -280,8 +281,8 @@ class _DismissibleWidget extends StatelessWidget {
               removeSight: () => context.read<AppSettings>().deleteSight(i, sightsToVisit),
               isVisitingScreen: true,
               item: sightsToVisit[i],
-              url: sightsToVisit[i].url ?? 'no_url',
-              type: sightsToVisit[i].type,
+              url: sightsToVisit[i].urls[0],
+              type: sightsToVisit[i].placeType,
               name: sightsToVisit[i].name,
               aspectRatio: AppCardSize.visitingCard,
               details: [
