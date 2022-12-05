@@ -1,9 +1,11 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:places/data/interactor/place_interactor.dart';
+import 'package:places/data/model/place.dart';
 
 import 'package:places/data/model/sight.dart';
-import 'package:places/mocks.dart';
+import 'package:places/data/repository/api_place_repository.dart';
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_strings.dart';
 import 'package:places/ui/res/app_typography.dart';
@@ -24,7 +26,14 @@ class _SightListScreenState extends State<SightListScreen> {
   final isEnabled = true;
   final isSearchPage = false;
   final isPortrait = true;
-  List<Sight> sightList = Mocks.mocks;
+  late List<Place> sightList;
+  bool isLoading = false;
+
+  @override
+  void initState() {
+    super.initState();
+    getPlaces();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -45,37 +54,48 @@ class _SightListScreenState extends State<SightListScreen> {
               ),
             ),
           ],
-          body: Column(
-            children: [
-              if (orientation)
-                SearchBar(
-                  isSearchPage: isSearchPage,
-                  readOnly: readOnly,
+          body: isLoading
+              ? Column(
+                  children: [
+                    if (orientation)
+                      SearchBar(
+                        isSearchPage: isSearchPage,
+                        readOnly: readOnly,
+                      )
+                    else
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 18.0),
+                        child: SearchBar(
+                          isSearchPage: isSearchPage,
+                          readOnly: readOnly,
+                        ),
+                      ),
+                    _SightListWidgetPortrait(sightList: sightList, theme: theme),
+
+                    // if (orientation)
+                    //   _SightListWidgetPortrait(sightList: sightList, theme: theme)
+                    // else
+                    //   _SightListWidgetLandscape(sightList: sightList, theme: theme),
+                  ],
                 )
-              else
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 18.0),
-                  child: SearchBar(
-                    isSearchPage: isSearchPage,
-                    readOnly: readOnly,
-                  ),
-                ),
-              if (orientation)
-                _SightListWidgetPortrait(sightList: sightList, theme: theme)
-              else
-                _SightListWidgetLandscape(sightList: sightList, theme: theme),
-            ],
-          ),
+              : const Center(child: CircularProgressIndicator()),
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: const AddNewPlaceButton(),
     );
   }
+
+  Future<void> getPlaces() async {
+    sightList = await PlaceInteractor(apiPlaceRepository: ApiPlaceRepository()).getPlaces();
+    setState(() {
+      isLoading = true;
+    });
+  }
 }
 
 class _SightListWidgetPortrait extends StatelessWidget {
-  final List<Sight> sightList;
+  final List<Place> sightList;
   final ThemeData theme;
 
   const _SightListWidgetPortrait({
@@ -94,40 +114,44 @@ class _SightListWidgetPortrait extends StatelessWidget {
         itemBuilder: (context, index) {
           final sight = sightList[index];
 
-          return Column(
-            children: [
-              SightCard(
-                addSight: () {
-                  debugPrint('🟡---------like pressed');
-                },
-                isVisitingScreen: false,
-                aspectRatio: 3 / 2,
-                actionOne: const SightIcons(
-                  assetName: AppAssets.favourite,
-                  width: 22,
-                  height: 22,
-                ),
-                url: sight.url ?? 'no_url',
-                type: sight.type,
-                name: sight.name,
-                item: sight,
-                details: [
-                  Text(
-                    sight.name,
-                    maxLines: 2,
-                    style: theme.textTheme.headlineSmall,
-                  ),
-                  const SizedBox(height: 2),
-                  Text(
-                    sight.details,
-                    overflow: TextOverflow.ellipsis,
-                    style: AppTypography.textText16Regular,
-                  ),
-                ],
-              ),
-              const SizedBox(height: 11),
-            ],
+          return ListTile(
+            title: Text(sight.name),
           );
+
+          // return Column(
+          //   children: [
+          //     SightCard(
+          //       addSight: () {
+          //         debugPrint('🟡---------like pressed');
+          //       },
+          //       isVisitingScreen: false,
+          //       aspectRatio: 3 / 2,
+          //       actionOne: const SightIcons(
+          //         assetName: AppAssets.favourite,
+          //         width: 22,
+          //         height: 22,
+          //       ),
+          //       url: sight.urls[0],
+          //       type: sight.placeType,
+          //       name: sight.name,
+          //       item: sight,
+          //       details: [
+          //         Text(
+          //           sight.name,
+          //           maxLines: 2,
+          //           style: theme.textTheme.headlineSmall,
+          //         ),
+          //         const SizedBox(height: 2),
+          //         Text(
+          //           sight.description,
+          //           overflow: TextOverflow.ellipsis,
+          //           style: AppTypography.textText16Regular,
+          //         ),
+          //       ],
+          //     ),
+          //     const SizedBox(height: 11),
+          //   ],
+          // );
         },
       ),
     );

@@ -12,7 +12,7 @@ class PlaceInteractor {
 
   Future<List<Place>> getPlaces() async {
     final placesDto = await apiPlaceRepository.getPlaces(
-      category: 'park',
+      category: '',
       radius: 15000,
     );
     final places = await _fromApiToUI(placesDto);

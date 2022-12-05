@@ -37,7 +37,7 @@ class ApiPlaceRepository {
 
     if (response.statusCode == 200) {
       final dynamic list = jsonDecode(response.data ?? '');
-      
+      debugPrint('$response');
 
       // ignore: avoid_annotating_with_dynamic
       return (list as List<dynamic>).map((dynamic e) => PlaceDto.fromJson(e as Map<String, dynamic>)).toList();
