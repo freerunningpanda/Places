@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:places/appsettings.dart';
 import 'package:places/data/interactor/categories_table.dart';
-import 'package:places/data/repository/place_repository.dart';
+import 'package:places/data/interactor/place_interactor.dart';
 import 'package:places/ui/screens/filters_screen/filters_settings.dart';
 import 'package:places/ui/screens/res/app_theme.dart';
 import 'package:places/ui/screens/splash_screen/splash_screen.dart';
@@ -41,7 +41,7 @@ class _AppState extends State<App> {
   @override
   void initState() {
     super.initState();
-    testNetworkCall();
+    // testNetworkCall();
   }
 
   @override
@@ -56,10 +56,10 @@ class _AppState extends State<App> {
     );
   }
 
-  Future<void> testNetworkCall() async {
-    final dynamic response = await PlaceRepository().getPlaces(radius: 150000, category: '');
-    debugPrint('Response HTTP call: $response');
-  }
+  // Future<void> testNetworkCall() async {
+  //   final dynamic response = await PlaceInteractor().getPlaces;
+  //   debugPrint('Response HTTP call: $response');
+  // }
 }
 
 class MainScreen extends StatelessWidget {

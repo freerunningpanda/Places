@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:places/data/interactor/place_store.dart';
-import 'package:places/data/model/place.dart';
 import 'package:places/data/model/place_dto.dart';
 import 'package:places/mocks.dart';
 
@@ -20,7 +19,7 @@ BaseOptions baseoptions = BaseOptions(
   responseType: ResponseType.json,
 );
 
-class PlaceRepository {
+class ApiPlaceRepository {
   Future<List<PlaceDto>> getPlaces({required String category, required int radius}) async {
     initInterceptors();
 
@@ -44,14 +43,14 @@ class PlaceRepository {
     throw Exception('No 200 status code: Error code: ${response.statusCode}');
   }
 
-  Future<Place> getPlaceDetails(int id) async {
+  Future<PlaceDto> getPlaceDetails(int id) async {
     initInterceptors();
 
     final response = await dio.get<String>('/place/$id');
     if (response.statusCode == 200) {
       final dynamic placesListJson = jsonDecode(response.data ?? '');
 
-      return Place.fromJson(placesListJson as Map<String, dynamic>);
+      return PlaceDto.fromJson(placesListJson as Map<String, dynamic>);
     }
     throw Exception('No 200 status code: Error code: ${response.statusCode}');
   }
