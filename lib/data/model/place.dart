@@ -16,4 +16,9 @@ class Place {
     required this.placeType,
     required this.description,
   });
+
+  @override
+  String toString() {
+    return 'Название: $name. Тип: $placeType. Ширина: $lat. Долгота: $lon.';
+  }
 }

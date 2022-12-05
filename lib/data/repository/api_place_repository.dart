@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:places/data/interactor/place_store.dart';
+import 'package:places/data/model/place.dart';
 import 'package:places/data/model/place_dto.dart';
 import 'package:places/mocks.dart';
 
@@ -36,6 +37,7 @@ class ApiPlaceRepository {
 
     if (response.statusCode == 200) {
       final dynamic list = jsonDecode(response.data ?? '');
+      
 
       // ignore: avoid_annotating_with_dynamic
       return (list as List<dynamic>).map((dynamic e) => PlaceDto.fromJson(e as Map<String, dynamic>)).toList();
@@ -59,23 +61,23 @@ class ApiPlaceRepository {
     PlaceStore.favoritePlaces.sort();
   }
 
-  void addToFavorites({required PlaceDto place}) {
+  void addToFavorites({required Place place}) {
     PlaceStore.favoritePlaces.add(place);
   }
 
-  void removeFromFavorites({required PlaceDto place}) {
+  void removeFromFavorites({required Place place}) {
     PlaceStore.favoritePlaces.remove(place);
   }
 
-  List<PlaceDto> getVisitPlaces() {
+  List<Place> getVisitPlaces() {
     return PlaceStore.visitedPlaces;
   }
 
-  void addToVisitingPlaces({required PlaceDto place}) {
+  void addToVisitingPlaces({required Place place}) {
     PlaceStore.visitedPlaces.add(place);
   }
 
-  void addNewPlace({required PlaceDto place}) {
+  void addNewPlace({required Place place}) {
     PlaceStore.visitedPlaces.remove(place);
   }
 

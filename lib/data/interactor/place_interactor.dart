@@ -10,22 +10,43 @@ class PlaceInteractor {
     required this.apiPlaceRepository,
   });
 
-  Future<List<Place>> getPlaces(PlaceDto place) async {
-
-    final placesDto = await ApiPlaceRepository().getPlaces(
-      category: place.placeType,
-      radius: place.distance.toInt(),
+  Future<List<Place>> getPlaces() async {
+    final placesDto = await apiPlaceRepository.getPlaces(
+      category: 'park',
+      radius: 15000,
     );
     final places = await _fromApiToUI(placesDto);
 
     return places;
   }
 
-  Future<PlaceDto> getPlaceDetails(PlaceDto place) async {
-    return apiPlaceRepository.getPlaceDetails(place.id);
+  Future<Place> getPlaceDetails(PlaceDto place) async {
+    final placeDto = await apiPlaceRepository.getPlaceDetails(place.id);
+
+    final placeDetail = await _fromApiToUIPlace(placeDto);
+
+    return placeDetail;
   }
 
+  void getFavoritesPlaces() => apiPlaceRepository.getFavoritesPlaces();
+
+  void addToFavorites({required Place place}) => apiPlaceRepository.addToFavorites(place: place);
+
+  void removeFromFavorites({required Place place}) => apiPlaceRepository.removeFromFavorites(place: place);
+
+  List<Place> getVisitPlaces() => apiPlaceRepository.getVisitPlaces();
+
+  void addToVisitingPlaces({required Place place}) => apiPlaceRepository.addToVisitingPlaces(place: place);
+
+  void addNewPlace({required Place place}) => apiPlaceRepository.addNewPlace(place: place);
+
+// Преобразовать все места из Dto в места для UI
   Future<List<Place>> _fromApiToUI(List<PlaceDto> apiPlaces) async {
     return apiPlaces.map(Mapper.fromApi).toList();
+  }
+
+// Преобразовать одно место из Dto в UI
+  Future<Place> _fromApiToUIPlace(PlaceDto place) async {
+    return Mapper.fromApi(place);
   }
 }
