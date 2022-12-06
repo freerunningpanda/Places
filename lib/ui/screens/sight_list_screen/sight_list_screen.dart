@@ -70,12 +70,10 @@ class _SightListScreenState extends State<SightListScreen> {
                           readOnly: readOnly,
                         ),
                       ),
-                    _SightListWidgetPortrait(sightList: sightList, theme: theme),
-
-                    // if (orientation)
-                    //   _SightListWidgetPortrait(sightList: sightList, theme: theme)
-                    // else
-                    //   _SightListWidgetLandscape(sightList: sightList, theme: theme),
+                    if (orientation)
+                      _SightListWidgetPortrait(sightList: sightList, theme: theme)
+                    else
+                      _SightListWidgetLandscape(sightList: sightList, theme: theme),
                   ],
                 )
               : const Center(child: CircularProgressIndicator()),
@@ -106,6 +104,8 @@ class _SightListWidgetPortrait extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+
     return Expanded(
       child: ListView.builder(
         physics: Platform.isAndroid ? const ClampingScrollPhysics() : const BouncingScrollPhysics(),
@@ -142,10 +142,13 @@ class _SightListWidgetPortrait extends StatelessWidget {
                     style: theme.textTheme.headlineSmall,
                   ),
                   const SizedBox(height: 2),
-                  Text(
-                    sight.description,
-                    overflow: TextOverflow.ellipsis,
-                    style: AppTypography.textText16Regular,
+                  SizedBox(
+                    height: size.height / 7,
+                    child: Text(
+                      sight.description,
+                      overflow: TextOverflow.ellipsis,
+                      style: AppTypography.textText16Regular,
+                    ),
                   ),
                 ],
               ),
@@ -170,6 +173,8 @@ class _SightListWidgetLandscape extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+
     return Expanded(
       child: GridView.builder(
         padding: const EdgeInsets.symmetric(horizontal: 18.0),
@@ -189,7 +194,7 @@ class _SightListWidgetLandscape extends StatelessWidget {
             children: [
               SightCard(
                 isVisitingScreen: false,
-                aspectRatio: 3 / 1,
+                aspectRatio: 1.5 / 1,
                 actionOne: const SightIcons(
                   assetName: AppAssets.favourite,
                   width: 22,
@@ -206,10 +211,13 @@ class _SightListWidgetLandscape extends StatelessWidget {
                     style: theme.textTheme.headlineSmall,
                   ),
                   const SizedBox(height: 2),
-                  Text(
-                    sight.description,
-                    overflow: TextOverflow.ellipsis,
-                    style: AppTypography.textText16Regular,
+                  SizedBox(
+                    height: size.height / 10,
+                    child: Text(
+                      sight.description,
+                      overflow: TextOverflow.ellipsis,
+                      style: AppTypography.textText16Regular,
+                    ),
                   ),
                 ],
               ),
