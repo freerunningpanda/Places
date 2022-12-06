@@ -1,10 +1,9 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+
 import 'package:places/data/interactor/place_interactor.dart';
 import 'package:places/data/model/place.dart';
-
-import 'package:places/data/model/sight.dart';
 import 'package:places/data/repository/api_place_repository.dart';
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_strings.dart';
@@ -71,9 +70,9 @@ class _SightListScreenState extends State<SightListScreen> {
                         ),
                       ),
                     if (orientation)
-                      _SightListWidgetPortrait(sightList: sightList, theme: theme)
+                      _SightListWidgetPortrait(placeList: sightList, theme: theme)
                     else
-                      _SightListWidgetLandscape(sightList: sightList, theme: theme),
+                      _SightListWidgetLandscape(placeList: sightList, theme: theme),
                   ],
                 )
               : const Center(child: CircularProgressIndicator()),
@@ -93,12 +92,12 @@ class _SightListScreenState extends State<SightListScreen> {
 }
 
 class _SightListWidgetPortrait extends StatelessWidget {
-  final List<Place> sightList;
+  final List<Place> placeList;
   final ThemeData theme;
 
   const _SightListWidgetPortrait({
     Key? key,
-    required this.sightList,
+    required this.placeList,
     required this.theme,
   }) : super(key: key);
 
@@ -110,13 +109,9 @@ class _SightListWidgetPortrait extends StatelessWidget {
       child: ListView.builder(
         physics: Platform.isAndroid ? const ClampingScrollPhysics() : const BouncingScrollPhysics(),
         shrinkWrap: true,
-        itemCount: sightList.length,
+        itemCount: placeList.length,
         itemBuilder: (context, index) {
-          final sight = sightList[index];
-
-          // return ListTile(
-          //   title: Text(sight.name),
-          // );
+          final place = placeList[index];
 
           return Column(
             children: [
@@ -131,13 +126,13 @@ class _SightListWidgetPortrait extends StatelessWidget {
                   width: 22,
                   height: 22,
                 ),
-                url: sight.urls[0],
-                type: sight.placeType,
-                name: sight.name,
-                item: sight,
+                url: place.urls[0],
+                type: place.placeType,
+                name: place.name,
+                item: place,
                 details: [
                   Text(
-                    sight.name,
+                    place.name,
                     maxLines: 2,
                     style: theme.textTheme.headlineSmall,
                   ),
@@ -145,7 +140,7 @@ class _SightListWidgetPortrait extends StatelessWidget {
                   SizedBox(
                     height: size.height / 7,
                     child: Text(
-                      sight.description,
+                      place.description,
                       overflow: TextOverflow.ellipsis,
                       style: AppTypography.textText16Regular,
                     ),
@@ -162,12 +157,12 @@ class _SightListWidgetPortrait extends StatelessWidget {
 }
 
 class _SightListWidgetLandscape extends StatelessWidget {
-  final List<Place> sightList;
+  final List<Place> placeList;
   final ThemeData theme;
 
   const _SightListWidgetLandscape({
     Key? key,
-    required this.sightList,
+    required this.placeList,
     required this.theme,
   }) : super(key: key);
 
@@ -186,9 +181,9 @@ class _SightListWidgetLandscape extends StatelessWidget {
         ),
         physics: Platform.isAndroid ? const ClampingScrollPhysics() : const BouncingScrollPhysics(),
         shrinkWrap: true,
-        itemCount: sightList.length,
+        itemCount: placeList.length,
         itemBuilder: (context, index) {
-          final sight = sightList[index];
+          final place = placeList[index];
 
           return Column(
             children: [
@@ -200,13 +195,13 @@ class _SightListWidgetLandscape extends StatelessWidget {
                   width: 22,
                   height: 22,
                 ),
-                url: sight.urls[0],
-                type: sight.placeType,
-                name: sight.name,
-                item: sight,
+                url: place.urls[0],
+                type: place.placeType,
+                name: place.name,
+                item: place,
                 details: [
                   Text(
-                    sight.name,
+                    place.name,
                     maxLines: 2,
                     style: theme.textTheme.headlineSmall,
                   ),
@@ -214,7 +209,7 @@ class _SightListWidgetLandscape extends StatelessWidget {
                   SizedBox(
                     height: size.height / 10,
                     child: Text(
-                      sight.description,
+                      place.description,
                       overflow: TextOverflow.ellipsis,
                       style: AppTypography.textText16Regular,
                     ),
