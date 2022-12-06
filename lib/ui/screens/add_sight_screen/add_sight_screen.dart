@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 
 import 'package:places/appsettings.dart';
 import 'package:places/data/interactor/categories_table.dart';
-import 'package:places/data/model/sight.dart';
+import 'package:places/data/interactor/place_store.dart';
+import 'package:places/data/model/place.dart';
 import 'package:places/mocks.dart';
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_strings.dart';
@@ -104,20 +105,22 @@ class AddSightScreen extends StatelessWidget {
                           title: AppString.create,
                           onTap: () {
                             debugPrint('🟡---------create btn pressed');
-                            Mocks.mocks.add(
-                              Sight(
+                            PlaceStore.favoritePlaces.add(
+                              Place(
+                                id: 0,
+                                urls: [''],
                                 name: name,
                                 lat: lat,
-                                lot: lot,
-                                details: details,
-                                type: chosenCategory[0].title,
+                                lon: lot,
+                                description: details,
+                                placeType: chosenCategory[0].title,
                               ),
                             );
                             titleController.clear();
                             descriptionController.clear();
                             latController.clear();
                             lotController.clear();
-                            debugPrint('🟡---------Создан объект: ${Mocks.mocks[7]}');
+                            debugPrint('🟡---------Создан объект: ${PlaceStore.favoritePlaces[7]}');
                             context.read<AppSettings>().clearCategory(activeCategories: chosenCategory);
                           },
                           titleController: titleController,
@@ -148,7 +151,8 @@ class _ImagePickerWidget extends StatefulWidget {
 }
 
 class _ImagePickerWidgetState extends State<_ImagePickerWidget> {
-  final sightList = Mocks.mocks;
+  // TODO(Alex): rewrite.
+  final sightList = PlaceStore.favoritePlaces;
   @override
   Widget build(BuildContext context) {
     final places = context.watch<AppSettings>().places;
@@ -171,7 +175,7 @@ class _ImagePickerWidgetState extends State<_ImagePickerWidget> {
                   children: [
                     for (var i = 0; i < places.length; i++)
                       _ImageSight(
-                        image: places[i].url,
+                        image: places[i].urls[0],
                         index: i,
                       ),
                   ],
@@ -251,7 +255,7 @@ class _SightContent extends StatelessWidget {
 
 /// Class for image picking to horizontal list
 class _PickImageWidget extends StatelessWidget {
-  final List<Sight> places;
+  final List<Place> places;
   final ThemeData theme;
 
   const _PickImageWidget({

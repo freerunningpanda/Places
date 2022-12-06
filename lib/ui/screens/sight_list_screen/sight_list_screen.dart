@@ -25,7 +25,7 @@ class _SightListScreenState extends State<SightListScreen> {
   final isEnabled = true;
   final isSearchPage = false;
   final isPortrait = true;
-  late List<Place> sightList;
+  late List<Place> placeList;
   bool isLoading = false;
 
   @override
@@ -70,9 +70,9 @@ class _SightListScreenState extends State<SightListScreen> {
                         ),
                       ),
                     if (orientation)
-                      _SightListWidgetPortrait(placeList: sightList, theme: theme)
+                      _SightListWidgetPortrait(placeList: placeList, theme: theme)
                     else
-                      _SightListWidgetLandscape(placeList: sightList, theme: theme),
+                      _SightListWidgetLandscape(placeList: placeList, theme: theme),
                   ],
                 )
               : const Center(child: CircularProgressIndicator()),
@@ -84,7 +84,7 @@ class _SightListScreenState extends State<SightListScreen> {
   }
 
   Future<void> getPlaces() async {
-    sightList = await PlaceInteractor(apiPlaceRepository: ApiPlaceRepository()).getPlaces();
+    placeList = await PlaceInteractor(apiPlaceRepository: ApiPlaceRepository()).getPlaces();
     setState(() {
       isLoading = true;
     });

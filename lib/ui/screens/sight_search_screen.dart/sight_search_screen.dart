@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 
 import 'package:places/appsettings.dart';
-import 'package:places/data/model/sight.dart';
+import 'package:places/data/model/place.dart';
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_strings.dart';
 import 'package:places/ui/res/app_typography.dart';
@@ -73,7 +73,7 @@ class SightSearchScreen extends StatelessWidget {
 }
 
 class _SightListWidget extends StatelessWidget {
-  final List<Sight> sightList;
+  final List<Place> sightList;
   final ThemeData theme;
   const _SightListWidget({Key? key, required this.sightList, required this.theme}) : super(key: key);
 
@@ -299,7 +299,7 @@ class _EmptyStateWidget extends StatelessWidget {
 }
 
 class _SightCardWidget extends StatelessWidget {
-  final Sight sight;
+  final Place sight;
   final double width;
   final ThemeData theme;
 
@@ -333,7 +333,7 @@ class _SightCardWidget extends StatelessWidget {
 }
 
 class _RippleEffect extends StatelessWidget {
-  final Sight sight;
+  final Place sight;
 
   const _RippleEffect({
     Key? key,
@@ -362,7 +362,7 @@ class _RippleEffect extends StatelessWidget {
 
 class _SightContent extends StatelessWidget {
   final double width;
-  final Sight sight;
+  final Place sight;
   final ThemeData theme;
 
   const _SightContent({
@@ -393,7 +393,7 @@ class _SightContent extends StatelessWidget {
 }
 
 class _SightType extends StatelessWidget {
-  final Sight sight;
+  final Place sight;
   final ThemeData theme;
 
   const _SightType({
@@ -405,7 +405,7 @@ class _SightType extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Text(
-      sight.type,
+      sight.placeType,
       style: theme.textTheme.bodyMedium,
     );
   }
@@ -413,7 +413,7 @@ class _SightType extends StatelessWidget {
 
 class _SightTitle extends StatelessWidget {
   final double width;
-  final Sight sight;
+  final Place sight;
   final ThemeData theme;
 
   const _SightTitle({
@@ -437,7 +437,7 @@ class _SightTitle extends StatelessWidget {
 }
 
 class _SightImage extends StatelessWidget {
-  final Sight sight;
+  final Place sight;
 
   const _SightImage({
     Key? key,
@@ -454,7 +454,7 @@ class _SightImage extends StatelessWidget {
         decoration: BoxDecoration(
           image: DecorationImage(
             fit: BoxFit.cover,
-            image: AssetImage(sight.url ?? 'null'),
+            image: AssetImage(sight.urls[0]),
             // NetworkImage(
             //   sight.url ?? 'null',
             // ),

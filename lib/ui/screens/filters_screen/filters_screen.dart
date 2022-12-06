@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 
 import 'package:places/appsettings.dart';
 import 'package:places/data/interactor/filters_table.dart';
+import 'package:places/data/interactor/place_interactor.dart';
 import 'package:places/data/model/filters.dart';
-import 'package:places/data/model/sight.dart';
+import 'package:places/data/model/place.dart';
+import 'package:places/data/repository/api_place_repository.dart';
 import 'package:places/mocks.dart';
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_strings.dart';
@@ -25,7 +27,8 @@ class FilterScreen extends StatefulWidget {
 }
 
 class _FilterScreenState extends State<FilterScreen> {
-  final sightList = Mocks.mocks;
+  late final List<Place> placeList;
+  bool isLoading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -52,14 +55,14 @@ class _FilterScreenState extends State<FilterScreen> {
             const _Title(),
             const SizedBox(height: 24),
             _FiltersTable(
-              sightList: sightList,
+              placeList: placeList,
               filters: FiltersTable.filters,
               activeFilters: FiltersSettings().activeFilters,
             ),
             if (size.width <= 320) SizedBox(height: size.height / 10) else SizedBox(height: size.height / 3.5),
             Expanded(
               child: _DistanceSlider(
-                sightList: sightList,
+                placeList: placeList,
               ),
             ),
             if (size.width <= 320)
@@ -70,8 +73,8 @@ class _FilterScreenState extends State<FilterScreen> {
                   title: '${AppString.showPlaces} (${FiltersTable.filtersWithDistance.length})',
                   rangeValues: Mocks.rangeValues,
                   onTap: () {
-                    context.read<FiltersSettings>().showCount();
-                    context.read<AppSettings>().clearSight();
+                    context.read<FiltersSettings>().showCount(placeList: placeList);
+                    context.read<AppSettings>().clearSight(placeList: placeList);
                     debugPrint('🟡---------Длина: ${FiltersTable.filtersWithDistance.length}');
                   },
                 ),
@@ -83,8 +86,8 @@ class _FilterScreenState extends State<FilterScreen> {
                 title: '${AppString.showPlaces} (${FiltersTable.filtersWithDistance.length})',
                 rangeValues: Mocks.rangeValues,
                 onTap: () {
-                  context.read<FiltersSettings>().showCount();
-                  context.read<AppSettings>().clearSight();
+                  context.read<FiltersSettings>().showCount(placeList: placeList);
+                  context.read<AppSettings>().clearSight(placeList: placeList);
                   debugPrint('🟡---------Длина: ${FiltersTable.filtersWithDistance.length}');
                 },
               ),
@@ -92,6 +95,13 @@ class _FilterScreenState extends State<FilterScreen> {
         ),
       ),
     );
+  }
+
+  Future<void> getPlaces() async {
+    placeList = await PlaceInteractor(apiPlaceRepository: ApiPlaceRepository()).getPlaces();
+    setState(() {
+      isLoading = true;
+    });
   }
 }
 
@@ -164,12 +174,12 @@ class _ClearButtonWidgetState extends State<_ClearButtonWidget> {
 class _FiltersTable extends StatefulWidget {
   final List<Category> filters;
   final List<String> activeFilters;
-  final List<Sight> sightList;
+  final List<Place> placeList;
   const _FiltersTable({
     Key? key,
-    required this.sightList,
     required this.filters,
     required this.activeFilters,
+    required this.placeList,
   }) : super(key: key);
 
   @override
@@ -190,8 +200,14 @@ class _FiltersTableState extends State<_FiltersTable> {
       child: Builder(
         builder: (context) {
           return size.width <= 320
-              ? _ItemFiltersListSmallScreens(filtersTable: widget)
-              : _ItemFiltersListBigScreens(filtersTable: widget);
+              ? _ItemFiltersListSmallScreens(
+                  filtersTable: widget,
+                  placeList: widget.placeList,
+                )
+              : _ItemFiltersListBigScreens(
+                  filtersTable: widget,
+                  placeList: widget.placeList,
+                );
         },
       ),
     );
@@ -200,10 +216,12 @@ class _FiltersTableState extends State<_FiltersTable> {
 
 class _ItemFiltersListBigScreens extends StatelessWidget {
   final _FiltersTable filtersTable;
+  final List<Place> placeList;
 
   const _ItemFiltersListBigScreens({
     Key? key,
     required this.filtersTable,
+    required this.placeList,
   }) : super(key: key);
 
   @override
@@ -222,7 +240,8 @@ class _ItemFiltersListBigScreens extends StatelessWidget {
                 title: e.title,
                 assetName: e.assetName ?? 'null',
                 onTap: () {
-                  final filteredByType = filtersTable.sightList.where((sight) => sight.type.contains(e.title)).toList();
+                  final filteredByType =
+                      filtersTable.placeList.where((sight) => sight.placeType.contains(e.title)).toList();
                   if (!e.isEnabled) {
                     FiltersTable.filteredMocks.addAll(filteredByType);
                   } else {
@@ -230,7 +249,7 @@ class _ItemFiltersListBigScreens extends StatelessWidget {
                     FiltersTable.filtersWithDistance.clear();
                     debugPrint('🟡---------Добавленные места: ${FiltersTable.filteredMocks}');
                   }
-                  context.read<FiltersSettings>().showCount();
+                  context.read<FiltersSettings>().showCount(placeList: placeList);
 
                   return context.read<FiltersSettings>().saveFilters(i);
                 },
@@ -245,10 +264,12 @@ class _ItemFiltersListBigScreens extends StatelessWidget {
 
 class _ItemFiltersListSmallScreens extends StatelessWidget {
   final _FiltersTable filtersTable;
+  final List<Place> placeList;
 
   const _ItemFiltersListSmallScreens({
     Key? key,
     required this.filtersTable,
+    required this.placeList,
   }) : super(key: key);
 
   @override
@@ -265,7 +286,8 @@ class _ItemFiltersListSmallScreens extends StatelessWidget {
                 title: e.title,
                 assetName: e.assetName ?? 'null',
                 onTap: () {
-                  final filteredByType = filtersTable.sightList.where((sight) => sight.type.contains(e.title)).toList();
+                  final filteredByType =
+                      filtersTable.placeList.where((sight) => sight.placeType.contains(e.title)).toList();
                   if (!e.isEnabled) {
                     FiltersTable.filteredMocks.addAll(filteredByType);
                   } else {
@@ -273,7 +295,7 @@ class _ItemFiltersListSmallScreens extends StatelessWidget {
                     FiltersTable.filtersWithDistance.clear();
                     debugPrint('🟡---------Добавленные места: ${FiltersTable.filteredMocks}');
                   }
-                  context.read<FiltersSettings>().showCount();
+                  context.read<FiltersSettings>().showCount(placeList: placeList);
 
                   return context.read<FiltersSettings>().saveFilters(i);
                 },
@@ -383,10 +405,10 @@ class _ItemFilterState extends State<_ItemFilter> {
 }
 
 class _DistanceSlider extends StatefulWidget {
-  final List<Sight> sightList;
+  final List<Place> placeList;
   const _DistanceSlider({
     Key? key,
-    required this.sightList,
+    required this.placeList,
   }) : super(key: key);
 
   @override
@@ -423,7 +445,7 @@ class _DistanceSliderState extends State<_DistanceSlider> {
           max: max,
           onChanged: (values) {
             context.read<FiltersSettings>().changeArea(start: values.start, end: values.end);
-            context.read<FiltersSettings>().showCount();
+            context.read<FiltersSettings>().showCount(placeList: widget.placeList);
           },
         ),
       ],

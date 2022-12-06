@@ -3,12 +3,11 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:places/data/model/place.dart';
-import 'package:places/data/model/sight.dart';
 
 import 'package:places/ui/res/app_card_size.dart';
 import 'package:places/ui/res/app_typography.dart';
 import 'package:places/ui/screens/res/custom_colors.dart';
-import 'package:places/ui/screens/sight_details/sight_details.dart';
+import 'package:places/ui/screens/sight_details/sight_details_new.dart';
 import 'package:places/ui/widgets/cupertino_time_widget.dart';
 
 class SightCard extends StatelessWidget {
@@ -206,14 +205,14 @@ class RippleCardFull extends StatelessWidget {
         child: InkWell(
           onTap: () {
             debugPrint('🟡---------to details screen');
-            // Navigator.of(context).push(
-            //   MaterialPageRoute<SightDetails>(
-            //     builder: (context) => SightDetails(
-            //       height: 360,
-            //       sight: item,
-            //     ),
-            //   ),
-            // );
+            Navigator.of(context).push(
+              MaterialPageRoute<SightDetailsNew>(
+                builder: (context) => SightDetailsNew(
+                  height: 360,
+                  sight: item,
+                ),
+              ),
+            );
           },
         ),
       ),

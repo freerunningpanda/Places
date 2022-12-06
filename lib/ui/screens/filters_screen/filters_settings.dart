@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:geolocator/geolocator.dart';
 import 'package:places/data/interactor/filters_table.dart';
+import 'package:places/data/model/place.dart';
 import 'package:places/mocks.dart';
 
 class FiltersSettings extends ChangeNotifier {
@@ -40,15 +41,15 @@ class FiltersSettings extends ChangeNotifier {
     notifyListeners();
   }
 
-  void showCount() {
+  void showCount({required List<Place> placeList}) {
     if (FiltersTable.filteredMocks.isEmpty) {
       FiltersTable.filtersWithDistance.clear();
-      for (final el in Mocks.mocks) {
+      for (final el in placeList) {
         final distance = Geolocator.distanceBetween(
           Mocks.mockLat,
           Mocks.mockLot,
           el.lat,
-          el.lot,
+          el.lon,
         );
         if (distance >= Mocks.rangeValues.start && distance <= Mocks.rangeValues.end) {
           FiltersTable.filtersWithDistance.add(el);
@@ -67,7 +68,7 @@ class FiltersSettings extends ChangeNotifier {
           Mocks.mockLat,
           Mocks.mockLot,
           el.lat,
-          el.lot,
+          el.lon,
         );
         if (distance >= Mocks.rangeValues.start && distance <= Mocks.rangeValues.end) {
           FiltersTable.filtersWithDistance.add(el);

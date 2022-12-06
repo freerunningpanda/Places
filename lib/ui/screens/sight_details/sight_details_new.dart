@@ -10,20 +10,20 @@ import 'package:places/ui/res/app_typography.dart';
 import 'package:places/ui/widgets/close_bottom_sheet.dart';
 import 'package:places/ui/widgets/sight_icons.dart';
 
-class SightDetails extends StatefulWidget {
+class SightDetailsNew extends StatefulWidget {
   final Place sight;
   final double height;
-  const SightDetails({
+  const SightDetailsNew({
     Key? key,
     required this.sight,
     required this.height,
   }) : super(key: key);
 
   @override
-  State<SightDetails> createState() => _SightDetailsState();
+  State<SightDetailsNew> createState() => _SightDetailsNewState();
 }
 
-class _SightDetailsState extends State<SightDetails> {
+class _SightDetailsNewState extends State<SightDetailsNew> {
   final _pageController = PageController();
 
   @override
@@ -198,28 +198,24 @@ class _SightDetailsClosedState extends State<_SightDetailsClosed> {
       children: [
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
-          child: Stack(
-            clipBehavior: Clip.none,
+          child: Column(
+            // clipBehavior: Clip.none,
             children: [
-              Positioned(
-                left: size.width / 2.5,
-                right: size.width / 2.5,
-                child: GestureDetector(
-                  onTap: _showGallery,
-                  child: Container(
-                    width: 40,
-                    height: 3,
-                    decoration: BoxDecoration(
-                      borderRadius: const BorderRadius.all(Radius.circular(8.0)),
-                      color: theme.iconTheme.color,
-                    ),
+              GestureDetector(
+                onTap: _showGallery,
+                child: Container(
+                  width: 60,
+                  height: 3,
+                  decoration: BoxDecoration(
+                    borderRadius: const BorderRadius.all(Radius.circular(8.0)),
+                    color: theme.iconTheme.color,
                   ),
                 ),
               ),
               SizedBox(
-                height:
-                    orientation ? size.height / 2.0 : size.height / 1.5,
-                child: Column(
+                height: orientation ? size.height / 2.0 : size.height / 1.5,
+                child: ListView(
+                  shrinkWrap: true,
                   children: [
                     const SizedBox(height: 8),
                     _DetailsScreenTitle(
@@ -289,22 +285,15 @@ class _SightDetailsGallery extends StatelessWidget {
                   height: height,
                   child: Scrollbar(
                     controller: _pageController,
-                    child: PageView(
+                    child: PageView.builder(
                       controller: _pageController,
-                      children: [
-                        _SightDetailsImage(
-                          sight: sight,
+                      itemBuilder: (context, index) {
+                        return _SightDetailsImage(
+                          index: index,
                           height: height,
-                        ),
-                        _SightDetailsImage(
                           sight: sight,
-                          height: height,
-                        ),
-                        _SightDetailsImage(
-                          sight: sight,
-                          height: height,
-                        ),
-                      ],
+                        );
+                      },
                     ),
                   ),
                 ),
@@ -384,10 +373,12 @@ class _DetailsScreenTitle extends StatelessWidget {
 class _SightDetailsImage extends StatelessWidget {
   final Place sight;
   final double height;
+  final int index;
   const _SightDetailsImage({
     Key? key,
     required this.sight,
     required this.height,
+    required this.index,
   }) : super(key: key);
 
   @override
@@ -395,7 +386,7 @@ class _SightDetailsImage extends StatelessWidget {
     return SizedBox(
       height: height,
       child: Image.network(
-        sight.urls[0],
+        sight.urls[index],
         fit: BoxFit.cover,
         loadingBuilder: (context, child, loadingProgress) {
           if (loadingProgress == null) return child;

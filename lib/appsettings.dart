@@ -6,7 +6,6 @@ import 'package:places/data/interactor/filters_table.dart';
 import 'package:places/data/interactor/place_store.dart';
 import 'package:places/data/model/filters.dart';
 import 'package:places/data/model/place.dart';
-import 'package:places/data/model/sight.dart';
 import 'package:places/mocks.dart';
 
 class AppSettings extends ChangeNotifier {
@@ -21,7 +20,7 @@ class AppSettings extends ChangeNotifier {
   final descriptionFocus = FocusNode();
   final searchFocus = FocusNode();
   final Set<String> searchHistoryList = {};
-  final List<Sight> places = [];
+  final List<Place> places = [];
   List<Place> sightsToVisit = PlaceStore.favoritePlaces;
   List<Place> visitedSights = PlaceStore.visitedPlaces;
 
@@ -33,7 +32,7 @@ class AppSettings extends ChangeNotifier {
 
   bool isFocusOn = false;
 
-  List<Sight> suggestions = FiltersTable.filtersWithDistance.toList();
+  List<Place> suggestions = FiltersTable.filtersWithDistance.toList();
 
   void dragCard(List<Place> sights, int oldIndex, int newIndex) {
     final sight = sights.removeAt(oldIndex);
@@ -57,7 +56,7 @@ class AppSettings extends ChangeNotifier {
     if (places.isNotEmpty) {
       places.removeAt(index);
       notifyListeners();
-    } 
+    }
   }
 
   void saveSearchHistory(String value, TextEditingController controller) {
@@ -86,13 +85,13 @@ class AppSettings extends ChangeNotifier {
     notifyListeners();
   }
 
-  void clearSight() {
-    for (final el in FiltersTable.filteredMocks) {
+  void clearSight({required List<Place> placeList}) {
+    for (final el in placeList) {
       final distance = Geolocator.distanceBetween(
         Mocks.mockLat,
         Mocks.mockLot,
         el.lat,
-        el.lot,
+        el.lon,
       );
       if (Mocks.rangeValues.start > distance || Mocks.rangeValues.end < distance) {
         FiltersTable.filtersWithDistance.clear();
@@ -107,7 +106,7 @@ class AppSettings extends ChangeNotifier {
           Mocks.mockLat,
           Mocks.mockLot,
           el.lat,
-          el.lot,
+          el.lon,
         );
         if (distance >= Mocks.rangeValues.start && distance <= Mocks.rangeValues.end) {
           suggestions = FiltersTable.filtersWithDistance.where((sight) {
@@ -124,7 +123,7 @@ class AppSettings extends ChangeNotifier {
           Mocks.mockLat,
           Mocks.mockLot,
           el.lat,
-          el.lot,
+          el.lon,
         );
         if (distance >= Mocks.rangeValues.start && distance <= Mocks.rangeValues.end) {
           suggestions = FiltersTable.filtersWithDistance.where((sight) {
