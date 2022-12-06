@@ -209,7 +209,7 @@ class RippleCardFull extends StatelessWidget {
               MaterialPageRoute<SightDetailsNew>(
                 builder: (context) => SightDetailsNew(
                   height: 360,
-                  sight: item,
+                  place: item,
                 ),
               ),
             );
