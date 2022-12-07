@@ -124,7 +124,7 @@ class _SightDetailsFull extends StatelessWidget {
                   topLeft: Radius.circular(12.0),
                   topRight: Radius.circular(12.0),
                 ),
-                color: theme.sliderTheme.thumbColor,
+                color: theme.scaffoldBackgroundColor,
               ),
               child: ConstrainedBox(
                 constraints: BoxConstraints(
@@ -291,21 +291,24 @@ class _SightDetailsGalleryState extends State<_SightDetailsGallery> {
                 SizedBox(
                   width: double.infinity,
                   height: widget.height,
-                  child: PageView(
+                  child: Scrollbar(
                     controller: widget._pageController,
-                    children: widget.images
-                        .asMap()
-                        .map(
-                          (i, e) => MapEntry(
-                            i,
-                            _SightDetailsImage(
-                              height: widget.height,
-                              image: e,
+                    child: PageView(
+                      controller: widget._pageController,
+                      children: widget.images
+                          .asMap()
+                          .map(
+                            (i, e) => MapEntry(
+                              i,
+                              _SightDetailsImage(
+                                height: widget.height,
+                                image: e,
+                              ),
                             ),
-                          ),
-                        )
-                        .values
-                        .toList(),
+                          )
+                          .values
+                          .toList(),
+                    ),
                   ),
                 ),
                 const Positioned(
