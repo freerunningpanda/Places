@@ -349,7 +349,7 @@ class _RippleEffect extends StatelessWidget {
           onTap: () => Navigator.of(context).push<SightDetails>(
             MaterialPageRoute(
               builder: (context) => SightDetails(
-                sight: sight,
+                place: sight,
                 height: 360,
               ),
             ),
