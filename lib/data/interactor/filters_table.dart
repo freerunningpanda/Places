@@ -1,5 +1,5 @@
 import 'package:places/data/model/filters.dart';
-import 'package:places/data/model/place.dart';
+import 'package:places/domain/place_ui.dart';
 
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_strings.dart';
@@ -15,7 +15,7 @@ class FiltersTable {
   ];
   static final List<String> activeFilters = [];
 
-  static final List<Place> filteredMocks = [];
+  static final List<PlaceUI> filteredMocks = [];
 
-  static final Set<Place> filtersWithDistance = {};
+  static final Set<PlaceUI> filtersWithDistance = {};
 }

@@ -1,6 +1,7 @@
-import 'package:places/data/model/place.dart';
+
+import 'package:places/domain/place_ui.dart';
 
 abstract class PlaceStore {
-  static List<Place> favoritePlaces = [];
-  static List<Place> visitedPlaces = [];
+  static List<PlaceUI> favoritePlaces = [];
+  static List<PlaceUI> visitedPlaces = [];
 }

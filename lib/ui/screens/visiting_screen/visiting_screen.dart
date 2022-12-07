@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:places/appsettings.dart';
-import 'package:places/data/model/place.dart';
+import 'package:places/domain/place_ui.dart';
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_card_size.dart';
 import 'package:places/ui/res/app_strings.dart';
@@ -142,7 +142,7 @@ class _TabBarWidgetState extends State<_TabBarWidget> with TickerProviderStateMi
 }
 
 class _WantToVisitWidget extends StatelessWidget {
-  final List<Place> sightsToVisit;
+  final List<PlaceUI> sightsToVisit;
   const _WantToVisitWidget({Key? key, required this.sightsToVisit}) : super(key: key);
 
   @override
@@ -179,7 +179,7 @@ class _WantToVisitWidget extends StatelessWidget {
 }
 
 class _VisitedWidget extends StatelessWidget {
-  final List<Place> visitedSights;
+  final List<PlaceUI> visitedSights;
   const _VisitedWidget({Key? key, required this.visitedSights}) : super(key: key);
 
   @override
@@ -214,7 +214,7 @@ class _VisitedWidget extends StatelessWidget {
 
 class _DismissibleWidget extends StatelessWidget {
   final int i;
-  final List<Place> sightsToVisit;
+  final List<PlaceUI> sightsToVisit;
   final ThemeData theme;
   final Key uniqueKey;
   final Widget actionTwo;

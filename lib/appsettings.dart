@@ -5,7 +5,7 @@ import 'package:places/data/interactor/categories_table.dart';
 import 'package:places/data/interactor/filters_table.dart';
 import 'package:places/data/interactor/place_store.dart';
 import 'package:places/data/model/filters.dart';
-import 'package:places/data/model/place.dart';
+import 'package:places/domain/place_ui.dart';
 import 'package:places/mocks.dart';
 
 class AppSettings extends ChangeNotifier {
@@ -20,9 +20,9 @@ class AppSettings extends ChangeNotifier {
   final descriptionFocus = FocusNode();
   final searchFocus = FocusNode();
   final Set<String> searchHistoryList = {};
-  final List<Place> places = [];
-  List<Place> sightsToVisit = PlaceStore.favoritePlaces;
-  List<Place> visitedSights = PlaceStore.visitedPlaces;
+  final List<PlaceUI> places = [];
+  List<PlaceUI> sightsToVisit = PlaceStore.favoritePlaces;
+  List<PlaceUI> visitedSights = PlaceStore.visitedPlaces;
 
   bool isDarkMode = false;
 
@@ -32,15 +32,15 @@ class AppSettings extends ChangeNotifier {
 
   bool isFocusOn = false;
 
-  List<Place> suggestions = FiltersTable.filtersWithDistance.toList();
+  List<PlaceUI> suggestions = FiltersTable.filtersWithDistance.toList();
 
-  void dragCard(List<Place> sights, int oldIndex, int newIndex) {
+  void dragCard(List<PlaceUI> sights, int oldIndex, int newIndex) {
     final sight = sights.removeAt(oldIndex);
     sights.insert(newIndex, sight);
     notifyListeners();
   }
 
-  void deleteSight(int index, List<Place> sight) {
+  void deleteSight(int index, List<PlaceUI> sight) {
     sight.removeAt(index);
     notifyListeners();
   }
@@ -85,7 +85,7 @@ class AppSettings extends ChangeNotifier {
     notifyListeners();
   }
 
-  void clearSight({required List<Place> placeList}) {
+  void clearSight({required List<PlaceUI> placeList}) {
     for (final el in placeList) {
       final distance = Geolocator.distanceBetween(
         Mocks.mockLat,

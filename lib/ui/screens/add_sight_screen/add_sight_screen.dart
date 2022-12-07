@@ -3,8 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:places/appsettings.dart';
 import 'package:places/data/interactor/categories_table.dart';
 import 'package:places/data/interactor/place_store.dart';
-import 'package:places/data/model/place.dart';
-import 'package:places/mocks.dart';
+import 'package:places/domain/place_ui.dart';
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_strings.dart';
 import 'package:places/ui/res/app_typography.dart';
@@ -106,7 +105,7 @@ class AddSightScreen extends StatelessWidget {
                           onTap: () {
                             debugPrint('🟡---------create btn pressed');
                             PlaceStore.favoritePlaces.add(
-                              Place(
+                              PlaceUI(
                                 id: 0,
                                 urls: [''],
                                 name: name,
@@ -255,7 +254,7 @@ class _SightContent extends StatelessWidget {
 
 /// Class for image picking to horizontal list
 class _PickImageWidget extends StatelessWidget {
-  final List<Place> places;
+  final List<PlaceUI> places;
   final ThemeData theme;
 
   const _PickImageWidget({

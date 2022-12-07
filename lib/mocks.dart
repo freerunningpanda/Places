@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:places/data/model/place.dart';
+import 'package:places/domain/place_ui.dart';
 // import 'package:places/data/model/sight.dart';
 import 'package:places/ui/res/app_strings.dart';
 
@@ -219,8 +219,8 @@ abstract class Mocks {
   //   ),
   // ];
 
-  static List<Place> pickedImage = [
-    Place(
+  static List<PlaceUI> pickedImage = [
+    PlaceUI(
       id: 27,
       name: 'Мытищинский парк',
       lat: 55.911397,

@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:places/data/interactor/place_store.dart';
 import 'package:places/data/model/place.dart';
 import 'package:places/data/model/place_dto.dart';
+import 'package:places/domain/place_ui.dart';
 import 'package:places/mocks.dart';
 
 const url = 'https://test-backend-flutter.surfstudio.ru';
@@ -61,23 +62,23 @@ class ApiPlaceRepository {
     PlaceStore.favoritePlaces.sort();
   }
 
-  void addToFavorites({required Place place}) {
+  void addToFavorites({required PlaceUI place}) {
     PlaceStore.favoritePlaces.add(place);
   }
 
-  void removeFromFavorites({required Place place}) {
+  void removeFromFavorites({required PlaceUI place}) {
     PlaceStore.favoritePlaces.remove(place);
   }
 
-  List<Place> getVisitPlaces() {
+  List<PlaceUI> getVisitPlaces() {
     return PlaceStore.visitedPlaces;
   }
 
-  void addToVisitingPlaces({required Place place}) {
+  void addToVisitingPlaces({required PlaceUI place}) {
     PlaceStore.visitedPlaces.add(place);
   }
 
-  void addNewPlace({required Place place}) {
+  void addNewPlace({required PlaceUI place}) {
     PlaceStore.visitedPlaces.remove(place);
   }
 

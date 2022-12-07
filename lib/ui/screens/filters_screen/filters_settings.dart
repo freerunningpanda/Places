@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:geolocator/geolocator.dart';
 import 'package:places/data/interactor/filters_table.dart';
-import 'package:places/data/model/place.dart';
+import 'package:places/domain/place_ui.dart';
 import 'package:places/mocks.dart';
 
 class FiltersSettings extends ChangeNotifier {
@@ -41,7 +41,7 @@ class FiltersSettings extends ChangeNotifier {
     notifyListeners();
   }
 
-  void showCount({required List<Place> placeList}) {
+  void showCount({required List<PlaceUI> placeList}) {
     if (FiltersTable.filteredMocks.isEmpty) {
       FiltersTable.filtersWithDistance.clear();
       for (final el in placeList) {
