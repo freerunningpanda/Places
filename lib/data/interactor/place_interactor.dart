@@ -20,12 +20,10 @@ class PlaceInteractor {
     return places;
   }
 
-  Future<Place> getPlaceDetails(PlaceDto place) async {
+  Future<Place> getPlaceDetails(Place place) async {
     final placeDto = await apiPlaceRepository.getPlaceDetails(place.id);
 
-    final placeDetail = await _fromApiToUIPlace(placeDto);
-
-    return placeDetail;
+    return placeDto;
   }
 
   void getFavoritesPlaces() => apiPlaceRepository.getFavoritesPlaces();

@@ -37,7 +37,7 @@ class ApiPlaceRepository {
 
     if (response.statusCode == 200) {
       final dynamic list = jsonDecode(response.data ?? '');
-      debugPrint('$response');
+      debugPrint('$list');
 
       // ignore: avoid_annotating_with_dynamic
       return (list as List<dynamic>).map((dynamic e) => PlaceDto.fromJson(e as Map<String, dynamic>)).toList();
@@ -45,14 +45,14 @@ class ApiPlaceRepository {
     throw Exception('No 200 status code: Error code: ${response.statusCode}');
   }
 
-  Future<PlaceDto> getPlaceDetails(int id) async {
+  Future<Place> getPlaceDetails(int id) async {
     initInterceptors();
 
     final response = await dio.get<String>('/place/$id');
     if (response.statusCode == 200) {
       final dynamic placesListJson = jsonDecode(response.data ?? '');
 
-      return PlaceDto.fromJson(placesListJson as Map<String, dynamic>);
+      return Place.fromJson(placesListJson as Map<String, dynamic>);
     }
     throw Exception('No 200 status code: Error code: ${response.statusCode}');
   }

@@ -1,7 +1,9 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:places/data/interactor/place_interactor.dart';
 import 'package:places/data/model/place.dart';
+import 'package:places/data/repository/api_place_repository.dart';
 
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_colors.dart';
@@ -47,7 +49,7 @@ class _SightDetailsState extends State<SightDetails> {
         }
       },
     );
-
+    getPlaces();
     super.initState();
   }
 
@@ -77,6 +79,10 @@ class _SightDetailsState extends State<SightDetails> {
         ],
       ),
     );
+  }
+
+  Future<void> getPlaces() async {
+    await PlaceInteractor(apiPlaceRepository: ApiPlaceRepository()).getPlaceDetails(widget.place);
   }
 }
 
