@@ -91,7 +91,7 @@ class _SightListScreenState extends State<SightListScreen> {
   }
 }
 
-class _SightListWidgetPortrait extends StatelessWidget {
+class _SightListWidgetPortrait extends StatefulWidget {
   final List<PlaceUI> placeList;
   final ThemeData theme;
 
@@ -102,6 +102,12 @@ class _SightListWidgetPortrait extends StatelessWidget {
   }) : super(key: key);
 
   @override
+  State<_SightListWidgetPortrait> createState() => _SightListWidgetPortraitState();
+}
+
+class _SightListWidgetPortraitState extends State<_SightListWidgetPortrait> {
+
+  @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
 
@@ -109,23 +115,43 @@ class _SightListWidgetPortrait extends StatelessWidget {
       child: ListView.builder(
         physics: Platform.isAndroid ? const ClampingScrollPhysics() : const BouncingScrollPhysics(),
         shrinkWrap: true,
-        itemCount: placeList.length,
+        itemCount: widget.placeList.length,
         itemBuilder: (context, index) {
-          final place = placeList[index];
+          final place = widget.placeList[index];
 
           return Column(
             children: [
               SightCard(
-                addSight: () => PlaceInteractor(
-                  apiPlaceRepository: ApiPlaceRepository(),
-                ).addToFavorites(place: place),
+                addSight: () {
+                  if (!place.isFavorite) {
+                    PlaceInteractor(
+                      apiPlaceRepository: ApiPlaceRepository(),
+                    ).addToFavorites(place: place);
+                    setState(() {
+                      place.isFavorite = true;
+                    });
+                  } else {
+                    PlaceInteractor(
+                      apiPlaceRepository: ApiPlaceRepository(),
+                    ).removeFromFavorites(place: place);
+                    setState(() {
+                      place.isFavorite = false;
+                    });
+                  }
+                },
                 isVisitingScreen: false,
                 aspectRatio: 3 / 2,
-                actionOne: const SightIcons(
-                  assetName: AppAssets.favourite,
-                  width: 22,
-                  height: 22,
-                ),
+                actionOne: !place.isFavorite
+                    ? const SightIcons(
+                        assetName: AppAssets.favourite,
+                        width: 22,
+                        height: 22,
+                      )
+                    : const SightIcons(
+                        assetName: AppAssets.heartFull,
+                        width: 22,
+                        height: 22,
+                      ),
                 url: place.urls[0],
                 type: place.placeType,
                 name: place.name,
@@ -134,7 +160,7 @@ class _SightListWidgetPortrait extends StatelessWidget {
                   Text(
                     place.name,
                     maxLines: 2,
-                    style: theme.textTheme.headlineSmall,
+                    style: widget.theme.textTheme.headlineSmall,
                   ),
                   const SizedBox(height: 2),
                   SizedBox(

@@ -6,6 +6,7 @@ class PlaceUI {
   final List<String> urls;
   final String placeType;
   final String description;
+  bool isFavorite;
 
   PlaceUI({
     required this.id,
@@ -15,6 +16,7 @@ class PlaceUI {
     required this.urls,
     required this.placeType,
     required this.description,
+    this.isFavorite = false,
   });
 
   @override
