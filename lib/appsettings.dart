@@ -3,8 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:places/data/interactor/categories_table.dart';
 import 'package:places/data/interactor/filters_table.dart';
+import 'package:places/data/interactor/place_interactor.dart';
 import 'package:places/data/interactor/place_store.dart';
 import 'package:places/data/model/filters.dart';
+import 'package:places/data/repository/api_place_repository.dart';
 import 'package:places/domain/place_ui.dart';
 import 'package:places/mocks.dart';
 
@@ -41,7 +43,9 @@ class AppSettings extends ChangeNotifier {
   }
 
   void deleteSight(int index, List<PlaceUI> sight) {
-    sight.removeAt(index);
+    PlaceInteractor(apiPlaceRepository: ApiPlaceRepository()).removeFromFavorites(
+      place: sight[index],
+    );
     notifyListeners();
   }
 

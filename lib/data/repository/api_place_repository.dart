@@ -70,6 +70,7 @@ class ApiPlaceRepository {
 
   void removeFromFavorites({required PlaceUI place}) {
     PlaceStore.favoritePlaces.remove(place);
+    debugPrint('🟡--------- Длина: ${PlaceStore.favoritePlaces.length}');
   }
 
   Set<PlaceUI> getVisitPlaces() {
