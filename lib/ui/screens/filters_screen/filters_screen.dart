@@ -31,6 +31,12 @@ class _FilterScreenState extends State<FilterScreen> {
   bool isLoading = false;
 
   @override
+  void initState() {
+    getPlaces();
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final clearFilters = context.read<FiltersSettings>().clearAllFilters;
     final size = MediaQuery.of(context).size;
@@ -49,50 +55,52 @@ class _FilterScreenState extends State<FilterScreen> {
           right: 16,
           bottom: 8.0,
         ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const _Title(),
-            const SizedBox(height: 24),
-            _FiltersTable(
-              placeList: placeList,
-              filters: FiltersTable.filters,
-              activeFilters: FiltersSettings().activeFilters,
-            ),
-            if (size.width <= 320) SizedBox(height: size.height / 10) else SizedBox(height: size.height / 3.5),
-            Expanded(
-              child: _DistanceSlider(
-                placeList: placeList,
-              ),
-            ),
-            if (size.width <= 320)
-              Expanded(
-                child: ActionButton(
-                  counterValue: FiltersTable.filtersWithDistance.length,
-                  activeFilters: FiltersSettings().activeFilters,
-                  title: '${AppString.showPlaces} (${FiltersTable.filtersWithDistance.length})',
-                  rangeValues: Mocks.rangeValues,
-                  onTap: () {
-                    context.read<FiltersSettings>().showCount(placeList: placeList);
-                    context.read<AppSettings>().clearSight(placeList: placeList);
-                    debugPrint('🟡---------Длина: ${FiltersTable.filtersWithDistance.length}');
-                  },
-                ),
+        child: isLoading
+            ? Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const _Title(),
+                  const SizedBox(height: 24),
+                  _FiltersTable(
+                    placeList: placeList,
+                    filters: FiltersTable.filters,
+                    activeFilters: FiltersSettings().activeFilters,
+                  ),
+                  if (size.width <= 320) SizedBox(height: size.height / 10) else SizedBox(height: size.height / 3.5),
+                  Expanded(
+                    child: _DistanceSlider(
+                      placeList: placeList,
+                    ),
+                  ),
+                  if (size.width <= 320)
+                    Expanded(
+                      child: ActionButton(
+                        counterValue: FiltersTable.filtersWithDistance.length,
+                        activeFilters: FiltersSettings().activeFilters,
+                        title: '${AppString.showPlaces} (${FiltersTable.filtersWithDistance.length})',
+                        rangeValues: Mocks.rangeValues,
+                        onTap: () {
+                          context.read<FiltersSettings>().showCount(placeList: placeList);
+                          context.read<AppSettings>().clearSight(placeList: placeList);
+                          debugPrint('🟡---------Длина: ${FiltersTable.filtersWithDistance.length}');
+                        },
+                      ),
+                    )
+                  else
+                    ActionButton(
+                      counterValue: FiltersTable.filtersWithDistance.length,
+                      activeFilters: FiltersSettings().activeFilters,
+                      title: '${AppString.showPlaces} (${FiltersTable.filtersWithDistance.length})',
+                      rangeValues: Mocks.rangeValues,
+                      onTap: () {
+                        context.read<FiltersSettings>().showCount(placeList: placeList);
+                        context.read<AppSettings>().clearSight(placeList: placeList);
+                        debugPrint('🟡---------Длина: ${FiltersTable.filtersWithDistance.length}');
+                      },
+                    ),
+                ],
               )
-            else
-              ActionButton(
-                counterValue: FiltersTable.filtersWithDistance.length,
-                activeFilters: FiltersSettings().activeFilters,
-                title: '${AppString.showPlaces} (${FiltersTable.filtersWithDistance.length})',
-                rangeValues: Mocks.rangeValues,
-                onTap: () {
-                  context.read<FiltersSettings>().showCount(placeList: placeList);
-                  context.read<AppSettings>().clearSight(placeList: placeList);
-                  debugPrint('🟡---------Длина: ${FiltersTable.filtersWithDistance.length}');
-                },
-              ),
-          ],
-        ),
+            : const Center(child: CircularProgressIndicator()),
       ),
     );
   }
