@@ -58,8 +58,8 @@ class ApiPlaceRepository {
     throw Exception('No 200 status code: Error code: ${response.statusCode}');
   }
 
-  void getFavoritesPlaces() {
-    PlaceStore.favoritePlaces.toList().sort();
+  Set<PlaceUI> getFavoritesPlaces() {
+    return PlaceStore.favoritePlaces;
   }
 
   void addToFavorites({required PlaceUI place}) {
@@ -72,7 +72,7 @@ class ApiPlaceRepository {
     PlaceStore.favoritePlaces.remove(place);
   }
 
-  List<PlaceUI> getVisitPlaces() {
+  Set<PlaceUI> getVisitPlaces() {
     return PlaceStore.visitedPlaces;
   }
 

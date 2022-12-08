@@ -22,7 +22,7 @@ class AppSettings extends ChangeNotifier {
   final Set<String> searchHistoryList = {};
   final List<PlaceUI> places = [];
   Set<PlaceUI> sightsToVisit = PlaceStore.favoritePlaces;
-  List<PlaceUI> visitedSights = PlaceStore.visitedPlaces;
+  Set<PlaceUI> visitedSights = PlaceStore.visitedPlaces;
 
   bool isDarkMode = false;
 

@@ -27,13 +27,13 @@ class PlaceInteractor {
     return placeDto;
   }
 
-  void getFavoritesPlaces() => apiPlaceRepository.getFavoritesPlaces();
+  Set<PlaceUI> getFavoritesPlaces() => apiPlaceRepository.getFavoritesPlaces();
 
   void addToFavorites({required PlaceUI place}) => apiPlaceRepository.addToFavorites(place: place);
 
   void removeFromFavorites({required PlaceUI place}) => apiPlaceRepository.removeFromFavorites(place: place);
 
-  List<PlaceUI> getVisitPlaces() => apiPlaceRepository.getVisitPlaces();
+  Set<PlaceUI> getVisitPlaces() => apiPlaceRepository.getVisitPlaces();
 
   void addToVisitingPlaces({required PlaceUI place}) => apiPlaceRepository.addToVisitingPlaces(place: place);
 

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 import 'package:places/appsettings.dart';
+import 'package:places/data/interactor/place_interactor.dart';
+import 'package:places/data/repository/api_place_repository.dart';
 import 'package:places/domain/place_ui.dart';
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_card_size.dart';
@@ -20,9 +22,16 @@ class VisitingScreen extends StatefulWidget {
 }
 
 class _VisitingScreenState extends State<VisitingScreen> with TickerProviderStateMixin {
+  late final Set<PlaceUI> sightsToVisit;
+
+  @override
+  void initState() {
+    getFavoritePlaces();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
-    final sightsToVisit = context.watch<AppSettings>().sightsToVisit;
     final visitedSights = context.watch<AppSettings>().visitedSights;
 
     return Padding(
@@ -50,7 +59,7 @@ class _VisitingScreenState extends State<VisitingScreen> with TickerProviderStat
                         ),
                       if (visitedSights.isNotEmpty)
                         _VisitedWidget(
-                          visitedSights: visitedSights,
+                          visitedSights: visitedSights.toList(),
                           key: const PageStorageKey('VisitedScrollPosition'),
                         )
                       else
@@ -69,6 +78,10 @@ class _VisitingScreenState extends State<VisitingScreen> with TickerProviderStat
         ),
       ),
     );
+  }
+
+  void getFavoritePlaces() {
+    sightsToVisit = PlaceInteractor(apiPlaceRepository: ApiPlaceRepository()).getFavoritesPlaces();
   }
 }
 
