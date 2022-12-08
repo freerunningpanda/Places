@@ -59,11 +59,13 @@ class ApiPlaceRepository {
   }
 
   void getFavoritesPlaces() {
-    PlaceStore.favoritePlaces.sort();
+    PlaceStore.favoritePlaces.toList().sort();
   }
 
   void addToFavorites({required PlaceUI place}) {
-    PlaceStore.favoritePlaces.add(place);
+    final list = PlaceStore.favoritePlaces.add(place);
+    debugPrint('🟡--------- Добавлено в избранное: ${PlaceStore.favoritePlaces}');
+    debugPrint('🟡--------- Длина: ${PlaceStore.favoritePlaces.length}');
   }
 
   void removeFromFavorites({required PlaceUI place}) {

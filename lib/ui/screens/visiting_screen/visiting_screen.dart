@@ -40,7 +40,7 @@ class _VisitingScreenState extends State<VisitingScreen> with TickerProviderStat
                     children: [
                       if (sightsToVisit.isNotEmpty)
                         _WantToVisitWidget(
-                          sightsToVisit: sightsToVisit,
+                          sightsToVisit: sightsToVisit.toList(),
                           key: const PageStorageKey('WantToVisitScrollPosition'),
                         )
                       else

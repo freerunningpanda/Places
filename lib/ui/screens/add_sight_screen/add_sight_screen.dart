@@ -119,7 +119,7 @@ class AddSightScreen extends StatelessWidget {
                             descriptionController.clear();
                             latController.clear();
                             lotController.clear();
-                            debugPrint('🟡---------Создан объект: ${PlaceStore.favoritePlaces[7]}');
+                            debugPrint('🟡---------Создан объект: ${PlaceStore.favoritePlaces.toList()[7]}');
                             context.read<AppSettings>().clearCategory(activeCategories: chosenCategory);
                           },
                           titleController: titleController,

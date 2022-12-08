@@ -116,9 +116,9 @@ class _SightListWidgetPortrait extends StatelessWidget {
           return Column(
             children: [
               SightCard(
-                addSight: () {
-                  debugPrint('🟡---------like pressed');
-                },
+                addSight: () => PlaceInteractor(
+                  apiPlaceRepository: ApiPlaceRepository(),
+                ).addToFavorites(place: place),
                 isVisitingScreen: false,
                 aspectRatio: 3 / 2,
                 actionOne: const SightIcons(

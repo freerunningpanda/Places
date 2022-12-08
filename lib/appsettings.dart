@@ -21,7 +21,7 @@ class AppSettings extends ChangeNotifier {
   final searchFocus = FocusNode();
   final Set<String> searchHistoryList = {};
   final List<PlaceUI> places = [];
-  List<PlaceUI> sightsToVisit = PlaceStore.favoritePlaces;
+  Set<PlaceUI> sightsToVisit = PlaceStore.favoritePlaces;
   List<PlaceUI> visitedSights = PlaceStore.visitedPlaces;
 
   bool isDarkMode = false;
