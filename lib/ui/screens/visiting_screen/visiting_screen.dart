@@ -82,10 +82,12 @@ class _VisitingScreenState extends State<VisitingScreen> with TickerProviderStat
     );
   }
 
+  // Получить список избранных мест
   void getFavoritePlaces() {
     sightsToVisit = PlaceInteractor(apiPlaceRepository: ApiPlaceRepository()).getFavoritesPlaces();
   }
 
+  // Показать посещённые места
   void getVisitPlaces() {
     visitedSights = PlaceInteractor(apiPlaceRepository: ApiPlaceRepository()).getVisitPlaces();
   }

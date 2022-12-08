@@ -63,7 +63,7 @@ class ApiPlaceRepository {
   }
 
   void addToFavorites({required PlaceUI place}) {
-    final list = PlaceStore.favoritePlaces.add(place);
+    PlaceStore.favoritePlaces.add(place);
     debugPrint('🟡--------- Добавлено в избранное: ${PlaceStore.favoritePlaces}');
     debugPrint('🟡--------- Длина: ${PlaceStore.favoritePlaces.length}');
   }

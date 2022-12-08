@@ -73,7 +73,7 @@ class _SightDetailsState extends State<SightDetails> {
           const SizedBox(height: 12),
           _SightDetailsClosed(
             height: widget.height,
-            sight: widget.place,
+            place: widget.place,
             pageController: _pageController,
           ),
         ],
@@ -87,13 +87,13 @@ class _SightDetailsState extends State<SightDetails> {
 }
 
 class _SightDetailsFull extends StatelessWidget {
-  final PlaceUI sight;
+  final PlaceUI place;
   final double height;
   final PageController _pageController;
 
   const _SightDetailsFull({
     Key? key,
-    required this.sight,
+    required this.place,
     required this.height,
     required PageController pageController,
   })  : _pageController = pageController,
@@ -141,7 +141,7 @@ class _SightDetailsFull extends StatelessWidget {
                     ClipRRect(
                       borderRadius: BorderRadius.circular(12),
                       child: _SightDetailsGallery(
-                        images: sight.urls,
+                        images: place.urls,
                         height: height,
                         pageController: _pageController,
                       ),
@@ -151,16 +151,16 @@ class _SightDetailsFull extends StatelessWidget {
                       child: Column(
                         children: [
                           _DetailsScreenTitle(
-                            sight: sight,
+                            sight: place,
                           ),
                           const SizedBox(height: 24),
-                          _DetailsScreenDescription(sight: sight),
+                          _DetailsScreenDescription(sight: place),
                           const SizedBox(height: 24),
-                          _SightDetailsBuildRouteBtn(sight: sight),
+                          _SightDetailsBuildRouteBtn(sight: place),
                           const SizedBox(height: 16),
                           const Divider(),
                           const SizedBox(height: 8),
-                          const _SightDetailsBottom(),
+                          _SightDetailsBottom(place: place),
                           const SizedBox(height: 16),
                         ],
                       ),
@@ -177,13 +177,13 @@ class _SightDetailsFull extends StatelessWidget {
 }
 
 class _SightDetailsClosed extends StatefulWidget {
-  final PlaceUI sight;
+  final PlaceUI place;
   final double height;
   final PageController _pageController;
 
   const _SightDetailsClosed({
     Key? key,
-    required this.sight,
+    required this.place,
     required this.height,
     required PageController pageController,
   })  : _pageController = pageController,
@@ -225,16 +225,16 @@ class _SightDetailsClosedState extends State<_SightDetailsClosed> {
                   children: [
                     const SizedBox(height: 8),
                     _DetailsScreenTitle(
-                      sight: widget.sight,
+                      sight: widget.place,
                     ),
                     const SizedBox(height: 24),
-                    _DetailsScreenDescription(sight: widget.sight),
+                    _DetailsScreenDescription(sight: widget.place),
                     const SizedBox(height: 24),
-                    _SightDetailsBuildRouteBtn(sight: widget.sight),
+                    _SightDetailsBuildRouteBtn(sight: widget.place),
                     const SizedBox(height: 16),
                     const Divider(),
                     const SizedBox(height: 8),
-                    const _SightDetailsBottom(),
+                    _SightDetailsBottom(place: widget.place),
                     const SizedBox(height: 16),
                   ],
                 ),
@@ -251,7 +251,7 @@ class _SightDetailsClosedState extends State<_SightDetailsClosed> {
       context: context,
       builder: (_) => _SightDetailsFull(
         height: widget.height,
-        sight: widget.sight,
+        place: widget.place,
         pageController: widget._pageController,
       ),
       isScrollControlled: true,
@@ -481,7 +481,9 @@ class _SightDetailsBuildRouteBtn extends StatelessWidget {
 }
 
 class _SightDetailsBottom extends StatelessWidget {
+  final PlaceUI place;
   const _SightDetailsBottom({
+    required this.place,
     Key? key,
   }) : super(key: key);
 
@@ -492,7 +494,7 @@ class _SightDetailsBottom extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        GestureDetector(
+        InkWell(
           onTap: () => debugPrint('🟡---------Schedule pressed'),
           child: Row(
             children: const [
@@ -511,8 +513,10 @@ class _SightDetailsBottom extends StatelessWidget {
             ],
           ),
         ),
-        GestureDetector(
-          onTap: () => debugPrint('🟡---------To favourite pressed'),
+        InkWell(
+          onTap: () => PlaceInteractor(
+                  apiPlaceRepository: ApiPlaceRepository(),
+                ).addToFavorites(place: place),
           child: Row(
             children: [
               SightIcons(

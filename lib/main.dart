@@ -1,14 +1,7 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 
 import 'package:places/appsettings.dart';
 import 'package:places/data/interactor/categories_table.dart';
-import 'package:places/data/interactor/place_interactor.dart';
-import 'package:places/data/model/place.dart';
-import 'package:places/data/model/place_dto.dart';
-import 'package:places/data/repository/api_place_repository.dart';
-import 'package:places/mocks.dart';
 import 'package:places/ui/screens/filters_screen/filters_settings.dart';
 import 'package:places/ui/screens/res/app_theme.dart';
 import 'package:places/ui/screens/splash_screen/splash_screen.dart';
