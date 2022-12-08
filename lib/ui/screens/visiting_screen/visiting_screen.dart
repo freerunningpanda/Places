@@ -23,16 +23,20 @@ class VisitingScreen extends StatefulWidget {
 
 class _VisitingScreenState extends State<VisitingScreen> with TickerProviderStateMixin {
   late final Set<PlaceUI> sightsToVisit;
+  late final Set<PlaceUI> visitedSights;
 
   @override
   void initState() {
     getFavoritePlaces();
+    getVisitPlaces();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    final visitedSights = context.watch<AppSettings>().visitedSights;
+    // final sightsToVisit = context.watch<AppSettings>().sightsToVisit;
+    // final visitedSights = context.watch<AppSettings>().visitedSights;
+    context.watch<AppSettings>();
 
     return Padding(
       padding: const EdgeInsets.only(left: 16.0, right: 16.0),
@@ -82,6 +86,10 @@ class _VisitingScreenState extends State<VisitingScreen> with TickerProviderStat
 
   void getFavoritePlaces() {
     sightsToVisit = PlaceInteractor(apiPlaceRepository: ApiPlaceRepository()).getFavoritesPlaces();
+  }
+
+  void getVisitPlaces() {
+    visitedSights = PlaceInteractor(apiPlaceRepository: ApiPlaceRepository()).getVisitPlaces();
   }
 }
 
@@ -161,6 +169,7 @@ class _WantToVisitWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    context.watch<AppSettings>();
 
     return ReorderableListView(
       onReorder: (oldIndex, newIndex) {
@@ -198,6 +207,7 @@ class _VisitedWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    context.watch<AppSettings>();
 
     return ReorderableListView(
       onReorder: (oldIndex, newIndex) {
@@ -207,7 +217,6 @@ class _VisitedWidget extends StatelessWidget {
       children: [
         for (var i = 0; i < visitedSights.length; i++)
           _DismissibleWidget(
-            key: ObjectKey(visitedSights[i]),
             i: i,
             sightsToVisit: visitedSights,
             theme: theme,
@@ -247,6 +256,8 @@ class _DismissibleWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    context.watch<AppSettings>();
+
     return Stack(
       children: [
         AspectRatio(
