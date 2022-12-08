@@ -34,8 +34,6 @@ class _VisitingScreenState extends State<VisitingScreen> with TickerProviderStat
 
   @override
   Widget build(BuildContext context) {
-    // final sightsToVisit = context.watch<AppSettings>().sightsToVisit;
-    // final visitedSights = context.watch<AppSettings>().visitedSights;
     context.watch<AppSettings>();
 
     return Padding(
@@ -169,7 +167,6 @@ class _WantToVisitWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    context.watch<AppSettings>();
 
     return ReorderableListView(
       onReorder: (oldIndex, newIndex) {
@@ -207,7 +204,6 @@ class _VisitedWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    context.watch<AppSettings>();
 
     return ReorderableListView(
       onReorder: (oldIndex, newIndex) {
@@ -256,7 +252,6 @@ class _DismissibleWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    context.watch<AppSettings>();
 
     return Stack(
       children: [
