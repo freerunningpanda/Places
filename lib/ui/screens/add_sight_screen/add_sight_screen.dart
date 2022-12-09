@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 
 import 'package:places/appsettings.dart';
 import 'package:places/data/interactor/categories_table.dart';
+import 'package:places/data/interactor/place_interactor.dart';
 import 'package:places/data/interactor/place_store.dart';
+import 'package:places/data/repository/api_place_repository.dart';
 import 'package:places/domain/place_ui.dart';
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_strings.dart';
@@ -104,8 +106,8 @@ class AddSightScreen extends StatelessWidget {
                           title: AppString.create,
                           onTap: () {
                             debugPrint('🟡---------create btn pressed');
-                            PlaceStore.favoritePlaces.add(
-                              PlaceUI(
+                            PlaceInteractor(apiPlaceRepository: ApiPlaceRepository()).addNewPlace(
+                              place: PlaceUI(
                                 id: 0,
                                 urls: [''],
                                 name: name,
@@ -119,7 +121,7 @@ class AddSightScreen extends StatelessWidget {
                             descriptionController.clear();
                             latController.clear();
                             lotController.clear();
-                            debugPrint('🟡---------Создан объект: ${PlaceStore.favoritePlaces.toList()[7]}');
+                            debugPrint('🟡---------Создан объект: ${PlaceStore.newPlaces.toList()}');
                             context.read<AppSettings>().clearCategory(activeCategories: chosenCategory);
                           },
                           titleController: titleController,
@@ -280,9 +282,11 @@ class _PickImageWidget extends StatelessWidget {
         icon: const Icon(Icons.add_rounded, size: 45),
         onPressed: () async {
           // context.read<AppSettings>().pickImage();
-          await showDialog<PickImageWidget>(context: context, builder: (_) {
-            return const PickImageWidget();
-          });
+          await showDialog<PickImageWidget>(
+              context: context,
+              builder: (_) {
+                return const PickImageWidget();
+              });
         },
         color: theme.sliderTheme.activeTrackColor,
       ),

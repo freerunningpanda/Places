@@ -82,7 +82,7 @@ class ApiPlaceRepository {
   }
 
   void addNewPlace({required PlaceUI place}) {
-    PlaceStore.visitedPlaces.remove(place);
+    PlaceStore.newPlaces.add(place);
   }
 
   Future<String> postPlace() async {
