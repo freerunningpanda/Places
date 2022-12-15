@@ -283,10 +283,11 @@ class _PickImageWidget extends StatelessWidget {
         onPressed: () async {
           // context.read<AppSettings>().pickImage();
           await showDialog<PickImageWidget>(
-              context: context,
-              builder: (_) {
-                return const PickImageWidget();
-              });
+            context: context,
+            builder: (_) {
+              return const PickImageWidget();
+            },
+          );
         },
         color: theme.sliderTheme.activeTrackColor,
       ),

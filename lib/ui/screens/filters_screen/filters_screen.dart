@@ -248,8 +248,7 @@ class _ItemFiltersListBigScreens extends StatelessWidget {
                 title: e.title,
                 assetName: e.assetName ?? 'null',
                 onTap: () {
-                  final filteredByType =
-                      filtersTable.placeList.where((sight) => sight.placeType.contains(e.title)).toList();
+                  final filteredByType = placeList.where((sight) => sight.placeType == e.placeType).toList();
                   if (!e.isEnabled) {
                     FiltersTable.filteredMocks.addAll(filteredByType);
                   } else {
@@ -294,8 +293,7 @@ class _ItemFiltersListSmallScreens extends StatelessWidget {
                 title: e.title,
                 assetName: e.assetName ?? 'null',
                 onTap: () {
-                  final filteredByType =
-                      filtersTable.placeList.where((sight) => sight.placeType.contains(e.title)).toList();
+                  final filteredByType = placeList.where((sight) => sight.placeType == e.placeType).toList();
                   if (!e.isEnabled) {
                     FiltersTable.filteredMocks.addAll(filteredByType);
                   } else {

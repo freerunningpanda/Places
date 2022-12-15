@@ -4,8 +4,8 @@ import 'package:places/domain/place_ui.dart';
 import 'package:places/ui/res/app_strings.dart';
 
 abstract class Mocks {
-  static const mockLat = 55.910493;
-  static const mockLot = 37.736423;
+  static const mockLat = 55.988344;
+  static const mockLot = 37.608042;
 
   static final List<String> types = [];
 
