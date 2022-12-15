@@ -36,8 +36,6 @@ class PlaceInteractor extends ChangeNotifier {
   Set<PlaceUI> sightsToVisit = PlaceStore.favoritePlaces;
   Set<PlaceUI> visitedSights = PlaceStore.visitedPlaces;
 
-  bool isDarkMode = false;
-
   bool isLat = false;
 
   bool hasFocus = false;
@@ -260,12 +258,6 @@ class PlaceInteractor extends ChangeNotifier {
       notifyListeners();
     }
     notifyListeners();
-  }
-
-  bool switchTheme({required bool value}) {
-    notifyListeners();
-
-    return isDarkMode = value;
   }
 
   void clearCategory({required List<Category> activeCategories}) {

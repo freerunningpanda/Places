@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:places/data/interactor/categories_table.dart';
 import 'package:places/data/interactor/place_interactor.dart';
+import 'package:places/data/interactor/settings_interactor.dart';
 import 'package:places/data/repository/api_place_repository.dart';
 import 'package:places/ui/screens/res/app_theme.dart';
 import 'package:places/ui/screens/splash_screen/splash_screen.dart';
@@ -19,6 +20,9 @@ void main() {
         ),
         ChangeNotifierProvider<CategoriesTable>(
           create: (_) => CategoriesTable(),
+        ),
+        ChangeNotifierProvider<SettingsInteractor>(
+          create: (_) => SettingsInteractor(),
         ),
       ],
       child: const App(),
@@ -38,7 +42,7 @@ class _AppState extends State<App> {
 
   @override
   Widget build(BuildContext context) {
-    final isDarkMode = context.watch<PlaceInteractor>().isDarkMode;
+    final isDarkMode = context.watch<SettingsInteractor>().isDarkMode;
 
     return MaterialApp(
       theme: !isDarkMode ? _lightTheme : _darkTheme,
