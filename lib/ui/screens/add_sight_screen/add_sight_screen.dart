@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:places/data/interactor/categories_table.dart';
 import 'package:places/data/interactor/place_interactor.dart';
-import 'package:places/data/interactor/place_store.dart';
 import 'package:places/data/repository/api_place_repository.dart';
 import 'package:places/domain/place_ui.dart';
 import 'package:places/ui/res/app_assets.dart';
@@ -38,7 +36,7 @@ class AddSightScreen extends StatelessWidget {
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
     final theme = Theme.of(context);
-    final chosenCategory = CategoriesTable.chosenCategory;
+    final chosenCategory = PlaceInteractor.chosenCategory;
 
     return Scaffold(
       body: GestureDetector(
@@ -120,7 +118,7 @@ class AddSightScreen extends StatelessWidget {
                             descriptionController.clear();
                             latController.clear();
                             lotController.clear();
-                            debugPrint('🟡---------Создан объект: ${PlaceStore.newPlaces.toList()}');
+                            debugPrint('🟡---------Создан объект: ${PlaceInteractor.newPlaces.toList()}');
                             context.read<PlaceInteractor>().clearCategory(activeCategories: chosenCategory);
                           },
                           titleController: titleController,
@@ -152,7 +150,7 @@ class _ImagePickerWidget extends StatefulWidget {
 
 class _ImagePickerWidgetState extends State<_ImagePickerWidget> {
   // TODO(Alex): rewrite.
-  final sightList = PlaceStore.favoritePlaces;
+  final sightList = PlaceInteractor.favoritePlaces;
   @override
   Widget build(BuildContext context) {
     final places = context.watch<PlaceInteractor>().places;
@@ -577,14 +575,14 @@ class _CategoryChooseWidget extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                if (CategoriesTable.chosenCategory.isEmpty)
+                if (PlaceInteractor.chosenCategory.isEmpty)
                   Text(
                     AppString.nochoose,
                     style: theme.textTheme.titleMedium,
                   )
                 else
                   Text(
-                    CategoriesTable.chosenCategory[0].title,
+                    PlaceInteractor.chosenCategory[0].title,
                     style: theme.textTheme.titleMedium,
                   ),
                 const Icon(

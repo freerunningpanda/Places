@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 
-import 'package:places/data/interactor/categories_table.dart';
 import 'package:places/data/interactor/place_interactor.dart';
 import 'package:places/data/model/filters.dart';
 import 'package:places/ui/res/app_assets.dart';
@@ -20,7 +19,7 @@ class ChooseCategoryWidget extends StatefulWidget {
 }
 
 class _ChooseCategoryWidgetState extends State<ChooseCategoryWidget> {
-  final categories = CategoriesTable.categories;
+  final categories = PlaceInteractor.categories;
 
   @override
   Widget build(BuildContext context) {
@@ -59,8 +58,8 @@ class _ChooseCategoryWidgetState extends State<ChooseCategoryWidget> {
                         onTap: () {
                           context.read<PlaceInteractor>().chooseCategory(
                                 index: index,
-                                categories: CategoriesTable.categories,
-                                activeCategories: CategoriesTable.chosenCategory,
+                                categories: PlaceInteractor.categories,
+                                activeCategories: PlaceInteractor.chosenCategory,
                               );
                         },
                       );
@@ -75,7 +74,7 @@ class _ChooseCategoryWidgetState extends State<ChooseCategoryWidget> {
               const Divider(),
               SizedBox(height: height * 0.3),
               SaveButton(
-                chosenCategory: CategoriesTable.chosenCategory,
+                chosenCategory: PlaceInteractor.chosenCategory,
                 title: AppString.save,
                 onTap: () => Navigator.pop(context),
               ),
@@ -94,7 +93,7 @@ class _BackButtonWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final chosenCategory = CategoriesTable.chosenCategory;
+    final chosenCategory = PlaceInteractor.chosenCategory;
 
     return InkWell(
       borderRadius: BorderRadius.circular(40),

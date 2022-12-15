@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'package:places/data/interactor/categories_table.dart';
 import 'package:places/data/interactor/place_interactor.dart';
 import 'package:places/data/interactor/settings_interactor.dart';
 import 'package:places/data/repository/api_place_repository.dart';
@@ -17,9 +16,6 @@ void main() {
       providers: [
         ChangeNotifierProvider<PlaceInteractor>(
           create: (_) => PlaceInteractor(apiPlaceRepository: ApiPlaceRepository()),
-        ),
-        ChangeNotifierProvider<CategoriesTable>(
-          create: (_) => CategoriesTable(),
         ),
         ChangeNotifierProvider<SettingsInteractor>(
           create: (_) => SettingsInteractor(),

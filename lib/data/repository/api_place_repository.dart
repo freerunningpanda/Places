@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
-import 'package:places/data/interactor/place_store.dart';
+import 'package:places/data/interactor/place_interactor.dart';
 import 'package:places/data/model/place.dart';
 import 'package:places/data/model/place_dto.dart';
 import 'package:places/domain/place_ui.dart';
@@ -59,30 +59,30 @@ class ApiPlaceRepository {
   }
 
   Set<PlaceUI> getFavoritesPlaces() {
-    return PlaceStore.favoritePlaces;
+    return PlaceInteractor.favoritePlaces;
   }
 
   void addToFavorites({required PlaceUI place}) {
-    PlaceStore.favoritePlaces.add(place);
-    debugPrint('🟡--------- Добавлено в избранное: ${PlaceStore.favoritePlaces}');
-    debugPrint('🟡--------- Длина: ${PlaceStore.favoritePlaces.length}');
+    PlaceInteractor.favoritePlaces.add(place);
+    debugPrint('🟡--------- Добавлено в избранное: ${PlaceInteractor.favoritePlaces}');
+    debugPrint('🟡--------- Длина: ${PlaceInteractor.favoritePlaces.length}');
   }
 
   void removeFromFavorites({required PlaceUI place}) {
-    PlaceStore.favoritePlaces.remove(place);
-    debugPrint('🟡--------- Длина: ${PlaceStore.favoritePlaces.length}');
+    PlaceInteractor.favoritePlaces.remove(place);
+    debugPrint('🟡--------- Длина: ${PlaceInteractor.favoritePlaces.length}');
   }
 
   Set<PlaceUI> getVisitPlaces() {
-    return PlaceStore.visitedPlaces;
+    return PlaceInteractor.visitedPlaces;
   }
 
   void addToVisitingPlaces({required PlaceUI place}) {
-    PlaceStore.visitedPlaces.add(place);
+    PlaceInteractor.visitedPlaces.add(place);
   }
 
   void addNewPlace({required PlaceUI place}) {
-    PlaceStore.newPlaces.add(place);
+    PlaceInteractor.newPlaces.add(place);
   }
 
   Future<String> postPlace() async {
