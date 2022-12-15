@@ -5,7 +5,10 @@ import 'package:places/data/repository/mapper.dart';
 import 'package:places/domain/place_ui.dart';
 
 class PlaceInteractor {
+  static final Set<String> searchHistoryList = {};
+
   final ApiPlaceRepository apiPlaceRepository;
+
 
   PlaceInteractor({
     required this.apiPlaceRepository,

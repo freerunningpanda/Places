@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 
 import 'package:places/appsettings.dart';
+import 'package:places/data/interactor/place_interactor.dart';
 import 'package:places/domain/place_ui.dart';
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_strings.dart';
@@ -23,7 +24,7 @@ class SightSearchScreen extends StatelessWidget {
     const readOnly = false;
     const isSearchPage = true;
     final showHistoryList = context.read<AppSettings>().hasFocus;
-    final searchStoryList = context.read<AppSettings>().searchHistoryList;
+    final searchStoryList = PlaceInteractor.searchHistoryList;
     final width = MediaQuery.of(context).size.width;
 
     context.watch<AppSettings>();
@@ -454,10 +455,7 @@ class _SightImage extends StatelessWidget {
         decoration: BoxDecoration(
           image: DecorationImage(
             fit: BoxFit.cover,
-            image: AssetImage(sight.urls[0]),
-            // NetworkImage(
-            //   sight.url ?? 'null',
-            // ),
+            image: NetworkImage(sight.urls[0]),
           ),
         ),
       ),

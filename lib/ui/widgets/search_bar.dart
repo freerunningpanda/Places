@@ -73,7 +73,7 @@ class _SearchBarState extends State<SearchBar> {
                     onChanged: (value) {
                       context.read<AppSettings>()
                         ..activeFocus(isActive: true)
-                        ..searchSight(value, controller);
+                        ..searchPlaces(value, controller);
 
                       if (controller.text.isEmpty) {
                         suggestions.clear();

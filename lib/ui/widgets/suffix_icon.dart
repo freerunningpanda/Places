@@ -23,7 +23,7 @@ class SuffixIcon extends StatelessWidget {
         borderRadius: BorderRadius.circular(40),
         onTap: () {
           controller.clear();
-          context.read<AppSettings>().searchSight('', controller);
+          context.read<AppSettings>().searchPlaces('', controller);
         },
         child: SightIcons(
           assetName: AppAssets.clearDark,

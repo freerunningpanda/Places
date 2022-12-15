@@ -21,7 +21,7 @@ class AppSettings extends ChangeNotifier {
   final lotFocus = FocusNode();
   final descriptionFocus = FocusNode();
   final searchFocus = FocusNode();
-  final Set<String> searchHistoryList = {};
+  
   final List<PlaceUI> places = [];
   Set<PlaceUI> sightsToVisit = PlaceStore.favoritePlaces;
   Set<PlaceUI> visitedSights = PlaceStore.visitedPlaces;
@@ -65,17 +65,17 @@ class AppSettings extends ChangeNotifier {
 
   void saveSearchHistory(String value, TextEditingController controller) {
     if (controller.text.isEmpty) return;
-    searchHistoryList.add(value);
+    PlaceInteractor.searchHistoryList.add(value);
     notifyListeners();
   }
 
   void removeItemFromHistory(String index) {
-    searchHistoryList.remove(index);
+    PlaceInteractor.searchHistoryList.remove(index);
     notifyListeners();
   }
 
   void removeAllItemsFromHistory() {
-    searchHistoryList.clear();
+    PlaceInteractor.searchHistoryList.clear();
     notifyListeners();
   }
 
@@ -103,7 +103,7 @@ class AppSettings extends ChangeNotifier {
     }
   }
 
-  void searchSight(String query, TextEditingController controller) {
+  void searchPlaces(String query, TextEditingController controller) {
     if (FiltersTable.activeFilters.isEmpty) {
       for (final el in FiltersTable.filtersWithDistance) {
         final distance = Geolocator.distanceBetween(
