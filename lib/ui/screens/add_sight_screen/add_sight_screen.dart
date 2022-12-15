@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'package:places/appsettings.dart';
 import 'package:places/data/interactor/categories_table.dart';
 import 'package:places/data/interactor/place_interactor.dart';
 import 'package:places/data/interactor/place_store.dart';
@@ -28,14 +27,14 @@ class AddSightScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final latController = context.read<AppSettings>().latController;
-    final lotController = context.read<AppSettings>().lotController;
-    final latFocus = context.read<AppSettings>().latFocus;
-    final lotFocus = context.read<AppSettings>().lotFocus;
-    final titleController = context.read<AppSettings>().titleController;
-    final descriptionController = context.read<AppSettings>().descriptionController;
-    final titleFocus = context.read<AppSettings>().titleFocus;
-    final descriptionFocus = context.read<AppSettings>().descriptionFocus;
+    final latController = context.read<PlaceInteractor>().latController;
+    final lotController = context.read<PlaceInteractor>().lotController;
+    final latFocus = context.read<PlaceInteractor>().latFocus;
+    final lotFocus = context.read<PlaceInteractor>().lotFocus;
+    final titleController = context.read<PlaceInteractor>().titleController;
+    final descriptionController = context.read<PlaceInteractor>().descriptionController;
+    final titleFocus = context.read<PlaceInteractor>().titleFocus;
+    final descriptionFocus = context.read<PlaceInteractor>().descriptionFocus;
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
     final theme = Theme.of(context);
@@ -122,7 +121,7 @@ class AddSightScreen extends StatelessWidget {
                             latController.clear();
                             lotController.clear();
                             debugPrint('🟡---------Создан объект: ${PlaceStore.newPlaces.toList()}');
-                            context.read<AppSettings>().clearCategory(activeCategories: chosenCategory);
+                            context.read<PlaceInteractor>().clearCategory(activeCategories: chosenCategory);
                           },
                           titleController: titleController,
                           latController: latController,
@@ -156,7 +155,7 @@ class _ImagePickerWidgetState extends State<_ImagePickerWidget> {
   final sightList = PlaceStore.favoritePlaces;
   @override
   Widget build(BuildContext context) {
-    final places = context.watch<AppSettings>().places;
+    final places = context.watch<PlaceInteractor>().places;
 
     return SizedBox(
       height: 72,
@@ -215,7 +214,7 @@ class _SightContent extends StatelessWidget {
     return Dismissible(
       direction: DismissDirection.vertical,
       key: UniqueKey(),
-      onDismissed: (direction) => context.read<AppSettings>().removeImage(index),
+      onDismissed: (direction) => context.read<PlaceInteractor>().removeImage(index),
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 8),
         decoration: const BoxDecoration(),
@@ -241,7 +240,7 @@ class _SightContent extends StatelessWidget {
                   type: MaterialType.transparency,
                   child: InkWell(
                     borderRadius: BorderRadius.circular(30),
-                    onTap: () => context.read<AppSettings>().removeImage(index),
+                    onTap: () => context.read<PlaceInteractor>().removeImage(index),
                     child: const SizedBox(height: 24, width: 24),
                   ),
                 ),
@@ -428,7 +427,7 @@ class _CoordinatsInputWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final focus = context.watch<AppSettings>();
+    final focus = context.watch<PlaceInteractor>();
 
     return Row(
       children: [
@@ -554,7 +553,7 @@ class _CategoryChooseWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    context.watch<AppSettings>().updateCategory();
+    context.watch<PlaceInteractor>().updateCategory();
 
     return Column(
       children: [

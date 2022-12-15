@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:places/appsettings.dart';
+import 'package:places/data/interactor/place_interactor.dart';
 import 'package:provider/provider.dart';
 
 class Switcher extends StatefulWidget {
@@ -13,7 +13,7 @@ class Switcher extends StatefulWidget {
 class _SwitcherState extends State<Switcher> {
   @override
   Widget build(BuildContext context) {
-    final isSwitched = context.watch<AppSettings>().isDarkMode;
+    final isSwitched = context.watch<PlaceInteractor>().isDarkMode;
 
     final theme = Theme.of(context);
 
@@ -22,7 +22,7 @@ class _SwitcherState extends State<Switcher> {
       trackColor: theme.sliderTheme.inactiveTrackColor,
       value: isSwitched,
       onChanged: (value) {
-        context.read<AppSettings>().switchTheme(value: value);
+        context.read<PlaceInteractor>().switchTheme(value: value);
       },
     );
   }

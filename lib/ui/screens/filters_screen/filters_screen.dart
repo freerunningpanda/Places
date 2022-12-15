@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'package:places/appsettings.dart';
 import 'package:places/data/interactor/filters_table.dart';
 import 'package:places/data/interactor/place_interactor.dart';
 import 'package:places/data/model/filters.dart';
@@ -80,7 +79,7 @@ class _FilterScreenState extends State<FilterScreen> {
                         rangeValues: Mocks.rangeValues,
                         onTap: () {
                           context.read<PlaceInteractor>().showCount(placeList: placeList);
-                          context.read<AppSettings>().clearSight(placeList: placeList);
+                          context.read<PlaceInteractor>().clearSight(placeList: placeList);
                           debugPrint('🟡---------Длина: ${FiltersTable.filtersWithDistance.length}');
                         },
                       ),
@@ -93,7 +92,7 @@ class _FilterScreenState extends State<FilterScreen> {
                       rangeValues: Mocks.rangeValues,
                       onTap: () {
                         context.read<PlaceInteractor>().showCount(placeList: placeList);
-                        context.read<AppSettings>().clearSight(placeList: placeList);
+                        context.read<PlaceInteractor>().clearSight(placeList: placeList);
                         debugPrint('🟡---------Длина: ${FiltersTable.filtersWithDistance.length}');
                       },
                     ),

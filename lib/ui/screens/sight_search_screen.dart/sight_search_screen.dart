@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 
-import 'package:places/appsettings.dart';
 import 'package:places/data/interactor/place_interactor.dart';
 import 'package:places/domain/place_ui.dart';
 import 'package:places/ui/res/app_assets.dart';
@@ -20,14 +19,14 @@ class SightSearchScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final sightList = context.read<AppSettings>().suggestions;
+    final sightList = context.read<PlaceInteractor>().suggestions;
     const readOnly = false;
     const isSearchPage = true;
-    final showHistoryList = context.read<AppSettings>().hasFocus;
+    final showHistoryList = context.read<PlaceInteractor>().hasFocus;
     final searchStoryList = PlaceInteractor.searchHistoryList;
     final width = MediaQuery.of(context).size.width;
 
-    context.watch<AppSettings>();
+    context.watch<PlaceInteractor>();
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -82,7 +81,7 @@ class _SightListWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
-    final suggestions = context.read<AppSettings>().suggestions;
+    final suggestions = context.read<PlaceInteractor>().suggestions;
 
     return suggestions.isEmpty
         ? _EmptyListWidget(
@@ -165,7 +164,7 @@ class _ClearHistoryButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextButton(
-      onPressed: () => context.read<AppSettings>().removeAllItemsFromHistory(),
+      onPressed: () => context.read<PlaceInteractor>().removeAllItemsFromHistory(),
       child: const Align(
         alignment: Alignment.centerLeft,
         child: Text(
@@ -208,7 +207,7 @@ class _SearchItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    context.watch<AppSettings>();
+    context.watch<PlaceInteractor>();
 
     return Column(
       children: searchStoryList
@@ -221,7 +220,7 @@ class _SearchItem extends StatelessWidget {
                   children: [
                     InkWell(
                       borderRadius: BorderRadius.circular(12),
-                      onTap: () => context.read<AppSettings>().searchController.text = e,
+                      onTap: () => context.read<PlaceInteractor>().searchController.text = e,
                       child: SizedBox(
                         width: width * 0.7,
                         child: Text(
@@ -233,7 +232,7 @@ class _SearchItem extends StatelessWidget {
                     InkWell(
                       borderRadius: BorderRadius.circular(30),
                       onTap: () {
-                        context.read<AppSettings>().removeItemFromHistory(e);
+                        context.read<PlaceInteractor>().removeItemFromHistory(e);
                       },
                       child: const SightIcons(assetName: AppAssets.delete, width: 24, height: 24),
                     ),

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'package:places/appsettings.dart';
 import 'package:places/data/interactor/place_interactor.dart';
 import 'package:places/data/repository/api_place_repository.dart';
 import 'package:places/domain/place_ui.dart';
@@ -34,7 +33,7 @@ class _VisitingScreenState extends State<VisitingScreen> with TickerProviderStat
 
   @override
   Widget build(BuildContext context) {
-    context.watch<AppSettings>();
+    context.watch<PlaceInteractor>();
 
     return Padding(
       padding: const EdgeInsets.only(left: 16.0, right: 16.0),
@@ -173,7 +172,7 @@ class _WantToVisitWidget extends StatelessWidget {
     return ReorderableListView(
       onReorder: (oldIndex, newIndex) {
         if (newIndex > oldIndex) newIndex--;
-        context.read<AppSettings>().dragCard(sightsToVisit, oldIndex, newIndex);
+        context.read<PlaceInteractor>().dragCard(sightsToVisit, oldIndex, newIndex);
       },
       children: [
         for (var i = 0; i < sightsToVisit.length; i++)
@@ -210,7 +209,7 @@ class _VisitedWidget extends StatelessWidget {
     return ReorderableListView(
       onReorder: (oldIndex, newIndex) {
         if (newIndex > oldIndex) newIndex--;
-        context.read<AppSettings>().dragCard(visitedSights, oldIndex, newIndex);
+        context.read<PlaceInteractor>().dragCard(visitedSights, oldIndex, newIndex);
       },
       children: [
         for (var i = 0; i < visitedSights.length; i++)
@@ -292,13 +291,13 @@ class _DismissibleWidget extends StatelessWidget {
         ),
         Dismissible(
           key: uniqueKey,
-          onDismissed: (direction) => context.read<AppSettings>().deleteSight(i, sightsToVisit),
+          onDismissed: (direction) => context.read<PlaceInteractor>().deleteSight(i, sightsToVisit),
           background: const SizedBox.shrink(),
           direction: DismissDirection.endToStart,
           child: Padding(
             padding: const EdgeInsets.only(bottom: 11.0),
             child: SightCard(
-              removeSight: () => context.read<AppSettings>().deleteSight(i, sightsToVisit),
+              removeSight: () => context.read<PlaceInteractor>().deleteSight(i, sightsToVisit),
               isVisitingScreen: true,
               item: sightsToVisit[i],
               url: sightsToVisit[i].urls[0],

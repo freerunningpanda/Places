@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:places/appsettings.dart';
+import 'package:places/data/interactor/place_interactor.dart';
 
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_typography.dart';
@@ -33,10 +33,10 @@ class _SearchBarState extends State<SearchBar> {
   Widget build(BuildContext context) {
     final customColors = Theme.of(context).extension<CustomColors>()!;
     final theme = Theme.of(context);
-    final suggestions = context.read<AppSettings>().suggestions;
-    final controller = context.read<AppSettings>().searchController;
+    final suggestions = context.read<PlaceInteractor>().suggestions;
+    final controller = context.read<PlaceInteractor>().searchController;
 
-    context.watch<AppSettings>();
+    context.watch<PlaceInteractor>();
 
     return Padding(
       padding: const EdgeInsets.only(
@@ -71,7 +71,7 @@ class _SearchBarState extends State<SearchBar> {
                     focusNode: focusNode,
                     readOnly: widget.readOnly ?? true,
                     onChanged: (value) {
-                      context.read<AppSettings>()
+                      context.read<PlaceInteractor>()
                         ..activeFocus(isActive: true)
                         ..searchPlaces(value, controller);
 
@@ -80,7 +80,7 @@ class _SearchBarState extends State<SearchBar> {
                       }
                     },
                     onTap: () {
-                      context.read<AppSettings>().activeFocus(isActive: true);
+                      context.read<PlaceInteractor>().activeFocus(isActive: true);
                       if (!widget.isSearchPage) {
                         Navigator.of(context).push(
                           MaterialPageRoute<SightSearchScreen>(
@@ -92,7 +92,7 @@ class _SearchBarState extends State<SearchBar> {
                       }
                     },
                     onSubmitted: (value) {
-                      context.read<AppSettings>()
+                      context.read<PlaceInteractor>()
                         ..activeFocus(isActive: false)
                         ..saveSearchHistory(value, controller);
                       controller.clear();

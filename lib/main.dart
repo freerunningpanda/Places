@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'package:places/appsettings.dart';
 import 'package:places/data/interactor/categories_table.dart';
 import 'package:places/data/interactor/place_interactor.dart';
 import 'package:places/data/repository/api_place_repository.dart';
@@ -15,9 +14,6 @@ void main() {
   runApp(
     MultiProvider(
       providers: [
-        ChangeNotifierProvider<AppSettings>(
-          create: (_) => AppSettings(),
-        ),
         ChangeNotifierProvider<PlaceInteractor>(
           create: (_) => PlaceInteractor(apiPlaceRepository: ApiPlaceRepository()),
         ),
@@ -42,7 +38,7 @@ class _AppState extends State<App> {
 
   @override
   Widget build(BuildContext context) {
-    final isDarkMode = context.watch<AppSettings>().isDarkMode;
+    final isDarkMode = context.watch<PlaceInteractor>().isDarkMode;
 
     return MaterialApp(
       theme: !isDarkMode ? _lightTheme : _darkTheme,

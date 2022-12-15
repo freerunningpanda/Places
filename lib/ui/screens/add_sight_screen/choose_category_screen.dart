@@ -2,8 +2,8 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 
-import 'package:places/appsettings.dart';
 import 'package:places/data/interactor/categories_table.dart';
+import 'package:places/data/interactor/place_interactor.dart';
 import 'package:places/data/model/filters.dart';
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_strings.dart';
@@ -28,7 +28,7 @@ class _ChooseCategoryWidgetState extends State<ChooseCategoryWidget> {
     final height = MediaQuery.of(context).size.height;
     final theme = Theme.of(context);
 
-    context.watch<AppSettings>();
+    context.watch<PlaceInteractor>();
 
     return Scaffold(
       body: SafeArea(
@@ -57,7 +57,7 @@ class _ChooseCategoryWidgetState extends State<ChooseCategoryWidget> {
                         isEnabled: category.isEnabled,
                         category: category,
                         onTap: () {
-                          context.read<AppSettings>().chooseCategory(
+                          context.read<PlaceInteractor>().chooseCategory(
                                 index: index,
                                 categories: CategoriesTable.categories,
                                 activeCategories: CategoriesTable.chosenCategory,
@@ -99,7 +99,7 @@ class _BackButtonWidget extends StatelessWidget {
     return InkWell(
       borderRadius: BorderRadius.circular(40),
       onTap: () {
-        context.read<AppSettings>().clearCategory(activeCategories: chosenCategory);
+        context.read<PlaceInteractor>().clearCategory(activeCategories: chosenCategory);
         Navigator.pop(context);
       },
       child: const Icon(Icons.chevron_left),
