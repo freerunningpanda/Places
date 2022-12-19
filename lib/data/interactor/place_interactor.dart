@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:places/data/api/api_places.dart';
-import 'package:places/data/api/mapper.dart';
 import 'package:places/data/dto/place_request.dart';
 import 'package:places/data/dto/place_response.dart';
 import 'package:places/data/model/category.dart';
 import 'package:places/data/model/place.dart';
+import 'package:places/data/repository/repository.dart';
 import 'package:places/mocks.dart';
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_strings.dart';
@@ -351,6 +351,6 @@ class PlaceInteractor extends ChangeNotifier {
 
 // Преобразовать все места из Dto в места для UI
   Future<List<Place>> _fromApiToUI(List<PlaceResponse> apiPlaces) async {
-    return apiPlaces.map(Mapper.fromApi).toList();
+    return apiPlaces.map(Repository.fromApi).toList();
   }
 }

@@ -1,7 +1,7 @@
 import 'package:places/data/dto/place_response.dart';
 import 'package:places/data/model/place.dart';
 
-abstract class Mapper {
+abstract class Repository {
   static Place fromApi(PlaceResponse place) => Place(
         id: place.id,
         lat: place.lat,
