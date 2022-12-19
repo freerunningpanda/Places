@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:places/data/api/api_place_repository.dart';
 
 import 'package:places/data/interactor/place_interactor.dart';
-import 'package:places/domain/place_ui.dart';
+import 'package:places/data/model/place.dart';
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_card_size.dart';
 import 'package:places/ui/res/app_strings.dart';
@@ -21,8 +21,8 @@ class VisitingScreen extends StatefulWidget {
 }
 
 class _VisitingScreenState extends State<VisitingScreen> with TickerProviderStateMixin {
-  late final Set<PlaceUI> sightsToVisit;
-  late final Set<PlaceUI> visitedSights;
+  late final Set<Place> sightsToVisit;
+  late final Set<Place> visitedSights;
 
   @override
   void initState() {
@@ -162,7 +162,7 @@ class _TabBarWidgetState extends State<_TabBarWidget> with TickerProviderStateMi
 }
 
 class _WantToVisitWidget extends StatelessWidget {
-  final List<PlaceUI> sightsToVisit;
+  final List<Place> sightsToVisit;
   const _WantToVisitWidget({Key? key, required this.sightsToVisit}) : super(key: key);
 
   @override
@@ -199,7 +199,7 @@ class _WantToVisitWidget extends StatelessWidget {
 }
 
 class _VisitedWidget extends StatelessWidget {
-  final List<PlaceUI> visitedSights;
+  final List<Place> visitedSights;
   const _VisitedWidget({Key? key, required this.visitedSights}) : super(key: key);
 
   @override
@@ -233,7 +233,7 @@ class _VisitedWidget extends StatelessWidget {
 
 class _DismissibleWidget extends StatelessWidget {
   final int i;
-  final List<PlaceUI> sightsToVisit;
+  final List<Place> sightsToVisit;
   final ThemeData theme;
   final Key uniqueKey;
   final Widget actionTwo;

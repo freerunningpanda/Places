@@ -2,10 +2,10 @@ import 'dart:convert';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
-import 'package:places/data/dto/place_response.dart';
 import 'package:places/data/dto/place_request.dart';
+import 'package:places/data/dto/place_response.dart';
 import 'package:places/data/interactor/place_interactor.dart';
-import 'package:places/domain/place_ui.dart';
+import 'package:places/data/model/place.dart';
 import 'package:places/mocks.dart';
 
 const url = 'https://test-backend-flutter.surfstudio.ru';
@@ -58,30 +58,30 @@ class ApiPlaceRepository {
     throw Exception('No 200 status code: Error code: ${response.statusCode}');
   }
 
-  Set<PlaceUI> getFavoritesPlaces() {
+  Set<Place> getFavoritesPlaces() {
     return PlaceInteractor.favoritePlaces;
   }
 
-  void addToFavorites({required PlaceUI place}) {
+  void addToFavorites({required Place place}) {
     PlaceInteractor.favoritePlaces.add(place);
     debugPrint('🟡--------- Добавлено в избранное: ${PlaceInteractor.favoritePlaces}');
     debugPrint('🟡--------- Длина: ${PlaceInteractor.favoritePlaces.length}');
   }
 
-  void removeFromFavorites({required PlaceUI place}) {
+  void removeFromFavorites({required Place place}) {
     PlaceInteractor.favoritePlaces.remove(place);
     debugPrint('🟡--------- Длина: ${PlaceInteractor.favoritePlaces.length}');
   }
 
-  Set<PlaceUI> getVisitPlaces() {
+  Set<Place> getVisitPlaces() {
     return PlaceInteractor.visitedPlaces;
   }
 
-  void addToVisitingPlaces({required PlaceUI place}) {
+  void addToVisitingPlaces({required Place place}) {
     PlaceInteractor.visitedPlaces.add(place);
   }
 
-  void addNewPlace({required PlaceUI place}) {
+  void addNewPlace({required Place place}) {
     PlaceInteractor.newPlaces.add(place);
   }
 

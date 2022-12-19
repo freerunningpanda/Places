@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:places/data/model/filters.dart';
+import 'package:places/data/model/category.dart';
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_typography.dart';
 import 'package:places/ui/screens/res/custom_colors.dart';

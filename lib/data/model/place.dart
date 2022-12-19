@@ -1,4 +1,4 @@
-class PlaceUI {
+class Place {
   final int id;
   final double lat;
   final double lon;
@@ -8,7 +8,7 @@ class PlaceUI {
   final String description;
   bool isFavorite;
 
-  PlaceUI({
+  Place({
     required this.id,
     required this.lat,
     required this.lon,

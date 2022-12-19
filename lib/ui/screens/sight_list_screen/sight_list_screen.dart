@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:places/data/api/api_place_repository.dart';
 
 import 'package:places/data/interactor/place_interactor.dart';
-import 'package:places/domain/place_ui.dart';
+import 'package:places/data/model/place.dart';
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_strings.dart';
 import 'package:places/ui/res/app_typography.dart';
@@ -25,7 +25,7 @@ class _SightListScreenState extends State<SightListScreen> {
   final isEnabled = true;
   final isSearchPage = false;
   final isPortrait = true;
-  late List<PlaceUI> placeList;
+  late List<Place> placeList;
   bool isLoading = false;
 
   @override
@@ -92,7 +92,7 @@ class _SightListScreenState extends State<SightListScreen> {
 }
 
 class _SightListWidgetPortrait extends StatefulWidget {
-  final List<PlaceUI> placeList;
+  final List<Place> placeList;
   final ThemeData theme;
 
   const _SightListWidgetPortrait({
@@ -183,7 +183,7 @@ class _SightListWidgetPortraitState extends State<_SightListWidgetPortrait> {
 }
 
 class _SightListWidgetLandscape extends StatelessWidget {
-  final List<PlaceUI> placeList;
+  final List<Place> placeList;
   final ThemeData theme;
 
   const _SightListWidgetLandscape({

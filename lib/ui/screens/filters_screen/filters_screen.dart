@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:places/data/api/api_place_repository.dart';
 
 import 'package:places/data/interactor/place_interactor.dart';
-import 'package:places/data/model/filters.dart';
-import 'package:places/domain/place_ui.dart';
+import 'package:places/data/model/category.dart';
+import 'package:places/data/model/place.dart';
 import 'package:places/mocks.dart';
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_strings.dart';
@@ -24,7 +24,7 @@ class FilterScreen extends StatefulWidget {
 }
 
 class _FilterScreenState extends State<FilterScreen> {
-  late final List<PlaceUI> placeList;
+  late final List<Place> placeList;
   bool isLoading = false;
 
   @override
@@ -179,7 +179,7 @@ class _ClearButtonWidgetState extends State<_ClearButtonWidget> {
 class _FiltersTable extends StatefulWidget {
   final List<Category> filters;
   final List<String> activeFilters;
-  final List<PlaceUI> placeList;
+  final List<Place> placeList;
   const _FiltersTable({
     Key? key,
     required this.filters,
@@ -221,7 +221,7 @@ class _FiltersTableState extends State<_FiltersTable> {
 
 class _ItemFiltersListBigScreens extends StatelessWidget {
   final _FiltersTable filtersTable;
-  final List<PlaceUI> placeList;
+  final List<Place> placeList;
 
   const _ItemFiltersListBigScreens({
     Key? key,
@@ -269,7 +269,7 @@ class _ItemFiltersListBigScreens extends StatelessWidget {
 
 class _ItemFiltersListSmallScreens extends StatelessWidget {
   final _FiltersTable filtersTable;
-  final List<PlaceUI> placeList;
+  final List<Place> placeList;
 
   const _ItemFiltersListSmallScreens({
     Key? key,
@@ -410,7 +410,7 @@ class _ItemFilterState extends State<_ItemFilter> {
 }
 
 class _DistanceSlider extends StatefulWidget {
-  final List<PlaceUI> placeList;
+  final List<Place> placeList;
   const _DistanceSlider({
     Key? key,
     required this.placeList,

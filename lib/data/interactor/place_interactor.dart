@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:places/data/api/api_place_repository.dart';
 import 'package:places/data/api/mapper.dart';
-import 'package:places/data/dto/place_response.dart';
 import 'package:places/data/dto/place_request.dart';
-import 'package:places/data/model/filters.dart';
-import 'package:places/domain/place_ui.dart';
+import 'package:places/data/dto/place_response.dart';
+import 'package:places/data/model/category.dart';
+import 'package:places/data/model/place.dart';
 import 'package:places/mocks.dart';
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_strings.dart';
@@ -21,11 +21,11 @@ class PlaceInteractor extends ChangeNotifier {
     Category(title: AppString.cafe, assetName: AppAssets.cafe, placeType: PlaceType.cafe),
   ];
 
-  static final List<PlaceUI> filteredMocks = [];
+  static final List<Place> filteredMocks = [];
   static final List<String> activeFilters = [];
 
 
-  static final Set<PlaceUI> filtersWithDistance = {};
+  static final Set<Place> filtersWithDistance = {};
   
   static final Set<String> searchHistoryList = {};
   static final List<Category> chosenCategory = [];
@@ -38,9 +38,9 @@ class PlaceInteractor extends ChangeNotifier {
     Category(title: AppString.cafe, placeType: PlaceType.cafe),
   ];
 
-  static Set<PlaceUI> favoritePlaces = {};
-  static Set<PlaceUI> visitedPlaces = {};
-  static Set<PlaceUI> newPlaces = {};
+  static Set<Place> favoritePlaces = {};
+  static Set<Place> visitedPlaces = {};
+  static Set<Place> newPlaces = {};
 
 
   final titleController = TextEditingController();
@@ -59,7 +59,7 @@ class PlaceInteractor extends ChangeNotifier {
 
   final ApiPlaceRepository apiPlaceRepository;
 
-  final List<PlaceUI> places = [];
+  final List<Place> places = [];
 
   bool isLat = false;
 
@@ -67,13 +67,13 @@ class PlaceInteractor extends ChangeNotifier {
 
   bool isFocusOn = false;
 
-  List<PlaceUI> suggestions = filtersWithDistance.toList();
+  List<Place> suggestions = filtersWithDistance.toList();
 
   PlaceInteractor({
     required this.apiPlaceRepository,
   });
 
-  Future<List<PlaceUI>> getPlaces() async {
+  Future<List<Place>> getPlaces() async {
     final placesDto = await apiPlaceRepository.getPlaces(
       category: '',
       radius: 15000,
@@ -83,23 +83,23 @@ class PlaceInteractor extends ChangeNotifier {
     return places;
   }
 
-  Future<PlaceRequest> getPlaceDetails(PlaceUI place) async {
+  Future<PlaceRequest> getPlaceDetails(Place place) async {
     final placeDto = await apiPlaceRepository.getPlaceDetails(place.id);
 
     return placeDto;
   }
 
-  Set<PlaceUI> getFavoritesPlaces() => apiPlaceRepository.getFavoritesPlaces();
+  Set<Place> getFavoritesPlaces() => apiPlaceRepository.getFavoritesPlaces();
 
-  void addToFavorites({required PlaceUI place}) => apiPlaceRepository.addToFavorites(place: place);
+  void addToFavorites({required Place place}) => apiPlaceRepository.addToFavorites(place: place);
 
-  void removeFromFavorites({required PlaceUI place}) => apiPlaceRepository.removeFromFavorites(place: place);
+  void removeFromFavorites({required Place place}) => apiPlaceRepository.removeFromFavorites(place: place);
 
-  Set<PlaceUI> getVisitPlaces() => apiPlaceRepository.getVisitPlaces();
+  Set<Place> getVisitPlaces() => apiPlaceRepository.getVisitPlaces();
 
-  void addToVisitingPlaces({required PlaceUI place}) => apiPlaceRepository.addToVisitingPlaces(place: place);
+  void addToVisitingPlaces({required Place place}) => apiPlaceRepository.addToVisitingPlaces(place: place);
 
-  void addNewPlace({required PlaceUI place}) => apiPlaceRepository.addNewPlace(place: place);
+  void addNewPlace({required Place place}) => apiPlaceRepository.addNewPlace(place: place);
 
   void clearAllFilters() {
     filters.map((e) => e.isEnabled = false).toList();
@@ -132,7 +132,7 @@ class PlaceInteractor extends ChangeNotifier {
     notifyListeners();
   }
 
-  void showCount({required List<PlaceUI> placeList}) {
+  void showCount({required List<Place> placeList}) {
     if (filteredMocks.isEmpty) {
       filtersWithDistance.clear();
       for (final el in placeList) {
@@ -174,13 +174,13 @@ class PlaceInteractor extends ChangeNotifier {
     }
   }
 
-  void dragCard(List<PlaceUI> sights, int oldIndex, int newIndex) {
+  void dragCard(List<Place> sights, int oldIndex, int newIndex) {
     final sight = sights.removeAt(oldIndex);
     sights.insert(newIndex, sight);
     notifyListeners();
   }
 
-  void deleteSight(int index, List<PlaceUI> sight) {
+  void deleteSight(int index, List<Place> sight) {
     PlaceInteractor(apiPlaceRepository: ApiPlaceRepository()).removeFromFavorites(
       place: sight[index],
     );
@@ -227,7 +227,7 @@ class PlaceInteractor extends ChangeNotifier {
     notifyListeners();
   }
 
-  void clearSight({required List<PlaceUI> placeList}) {
+  void clearSight({required List<Place> placeList}) {
     for (final el in placeList) {
       final distance = Geolocator.distanceBetween(
         Mocks.mockLat,
@@ -350,7 +350,7 @@ class PlaceInteractor extends ChangeNotifier {
   }
 
 // Преобразовать все места из Dto в места для UI
-  Future<List<PlaceUI>> _fromApiToUI(List<PlaceResponse> apiPlaces) async {
+  Future<List<Place>> _fromApiToUI(List<PlaceResponse> apiPlaces) async {
     return apiPlaces.map(Mapper.fromApi).toList();
   }
 }

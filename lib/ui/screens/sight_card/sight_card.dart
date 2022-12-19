@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:places/domain/place_ui.dart';
+import 'package:places/data/model/place.dart';
 
 import 'package:places/ui/res/app_card_size.dart';
 import 'package:places/ui/res/app_typography.dart';
@@ -18,7 +18,7 @@ class SightCard extends StatelessWidget {
   final Widget actionOne;
   final Widget? actionTwo;
   final double? aspectRatio;
-  final PlaceUI item;
+  final Place item;
   final bool isVisitingScreen;
   final VoidCallback? removeSight;
   final VoidCallback? addSight;
@@ -190,7 +190,7 @@ class RippleIcons extends StatelessWidget {
 }
 
 class RippleCardFull extends StatelessWidget {
-  final PlaceUI item;
+  final Place item;
 
   const RippleCardFull({
     Key? key,

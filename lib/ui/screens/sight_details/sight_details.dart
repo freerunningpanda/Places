@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:places/data/api/api_place_repository.dart';
 import 'package:places/data/interactor/place_interactor.dart';
-import 'package:places/domain/place_ui.dart';
+import 'package:places/data/model/place.dart';
 
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_colors.dart';
@@ -13,7 +13,7 @@ import 'package:places/ui/widgets/close_bottom_sheet.dart';
 import 'package:places/ui/widgets/sight_icons.dart';
 
 class SightDetails extends StatefulWidget {
-  final PlaceUI place;
+  final Place place;
   final double height;
   const SightDetails({
     Key? key,
@@ -87,7 +87,7 @@ class _SightDetailsState extends State<SightDetails> {
 }
 
 class _SightDetailsFull extends StatelessWidget {
-  final PlaceUI place;
+  final Place place;
   final double height;
   final PageController _pageController;
 
@@ -177,7 +177,7 @@ class _SightDetailsFull extends StatelessWidget {
 }
 
 class _SightDetailsClosed extends StatefulWidget {
-  final PlaceUI place;
+  final Place place;
   final double height;
   final PageController _pageController;
 
@@ -351,7 +351,7 @@ class _SightDetailsGalleryState extends State<_SightDetailsGallery> {
 }
 
 class _DetailsScreenTitle extends StatelessWidget {
-  final PlaceUI sight;
+  final Place sight;
 
   const _DetailsScreenTitle({
     Key? key,
@@ -419,7 +419,7 @@ class _SightDetailsImage extends StatelessWidget {
 }
 
 class _DetailsScreenDescription extends StatelessWidget {
-  final PlaceUI sight;
+  final Place sight;
   const _DetailsScreenDescription({
     Key? key,
     required this.sight,
@@ -439,7 +439,7 @@ class _DetailsScreenDescription extends StatelessWidget {
 }
 
 class _SightDetailsBuildRouteBtn extends StatelessWidget {
-  final PlaceUI sight;
+  final Place sight;
   const _SightDetailsBuildRouteBtn({
     Key? key,
     required this.sight,
@@ -481,7 +481,7 @@ class _SightDetailsBuildRouteBtn extends StatelessWidget {
 }
 
 class _SightDetailsBottom extends StatelessWidget {
-  final PlaceUI place;
+  final Place place;
   const _SightDetailsBottom({
     required this.place,
     Key? key,

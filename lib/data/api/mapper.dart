@@ -1,8 +1,8 @@
-import 'package:places/data/dto/place_dto.dart';
-import 'package:places/domain/place_ui.dart';
+import 'package:places/data/dto/place_response.dart';
+import 'package:places/data/model/place.dart';
 
 abstract class Mapper {
-  static PlaceUI fromApi(PlaceResponse place) => PlaceUI(
+  static Place fromApi(PlaceResponse place) => Place(
         id: place.id,
         lat: place.lat,
         lon: place.lon,
