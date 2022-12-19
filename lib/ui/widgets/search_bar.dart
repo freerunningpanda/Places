@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:places/data/interactor/place_interactor.dart';
+import 'package:places/providers/filter_data_provider.dart';
 
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_typography.dart';
@@ -33,7 +34,7 @@ class _SearchBarState extends State<SearchBar> {
   Widget build(BuildContext context) {
     final customColors = Theme.of(context).extension<CustomColors>()!;
     final theme = Theme.of(context);
-    final suggestions = context.read<PlaceInteractor>().suggestions;
+    final filteredPlaces = context.read<FilterDataProvider>().filteredPlaces;
     final controller = context.read<PlaceInteractor>().searchController;
 
     context.watch<PlaceInteractor>();
@@ -71,16 +72,16 @@ class _SearchBarState extends State<SearchBar> {
                     focusNode: focusNode,
                     readOnly: widget.readOnly ?? true,
                     onChanged: (value) {
-                      context.read<PlaceInteractor>()
+                      context.read<FilterDataProvider>()
                         ..activeFocus(isActive: true)
                         ..searchPlaces(value, controller);
 
                       if (controller.text.isEmpty) {
-                        suggestions.clear();
+                        filteredPlaces.clear();
                       }
                     },
                     onTap: () {
-                      context.read<PlaceInteractor>().activeFocus(isActive: true);
+                      context.read<FilterDataProvider>().activeFocus(isActive: true);
                       if (!widget.isSearchPage) {
                         Navigator.of(context).push(
                           MaterialPageRoute<SightSearchScreen>(
@@ -92,7 +93,7 @@ class _SearchBarState extends State<SearchBar> {
                       }
                     },
                     onSubmitted: (value) {
-                      context.read<PlaceInteractor>()
+                      context.read<FilterDataProvider>()
                         ..activeFocus(isActive: false)
                         ..saveSearchHistory(value, controller);
                       controller.clear();

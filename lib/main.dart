@@ -3,6 +3,7 @@ import 'package:places/data/api/api_places.dart';
 
 import 'package:places/data/interactor/place_interactor.dart';
 import 'package:places/data/interactor/settings_interactor.dart';
+import 'package:places/providers/filter_data_provider.dart';
 import 'package:places/ui/screens/res/app_theme.dart';
 import 'package:places/ui/screens/splash_screen/splash_screen.dart';
 import 'package:provider/provider.dart';
@@ -14,6 +15,9 @@ void main() {
   runApp(
     MultiProvider(
       providers: [
+        ChangeNotifierProvider<FilterDataProvider>(
+          create: (_) => FilterDataProvider(),
+        ),
         ChangeNotifierProvider<PlaceInteractor>(
           create: (_) => PlaceInteractor(apiPlaceRepository: ApiPlaceRepository()),
         ),

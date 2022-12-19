@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 import 'package:places/data/interactor/place_interactor.dart';
 import 'package:places/data/model/place.dart';
+import 'package:places/providers/filter_data_provider.dart';
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_strings.dart';
 import 'package:places/ui/res/app_typography.dart';
@@ -19,11 +20,11 @@ class SightSearchScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final sightList = context.read<PlaceInteractor>().suggestions;
+    final sightList = context.read<FilterDataProvider>().filteredPlaces;
     const readOnly = false;
     const isSearchPage = true;
-    final showHistoryList = context.read<PlaceInteractor>().hasFocus;
-    final searchStoryList = PlaceInteractor.searchHistoryList;
+    final showHistoryList = context.read<FilterDataProvider>().hasFocus;
+    final searchStoryList = FilterDataProvider.searchHistoryList;
     final width = MediaQuery.of(context).size.width;
 
     context.watch<PlaceInteractor>();
@@ -81,7 +82,7 @@ class _SightListWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
-    final suggestions = context.read<PlaceInteractor>().suggestions;
+    final suggestions = context.read<FilterDataProvider>().filteredPlaces;
 
     return suggestions.isEmpty
         ? _EmptyListWidget(
@@ -164,7 +165,7 @@ class _ClearHistoryButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextButton(
-      onPressed: () => context.read<PlaceInteractor>().removeAllItemsFromHistory(),
+      onPressed: () => context.read<FilterDataProvider>().removeAllItemsFromHistory(),
       child: const Align(
         alignment: Alignment.centerLeft,
         child: Text(
@@ -232,7 +233,7 @@ class _SearchItem extends StatelessWidget {
                     InkWell(
                       borderRadius: BorderRadius.circular(30),
                       onTap: () {
-                        context.read<PlaceInteractor>().removeItemFromHistory(e);
+                        context.read<FilterDataProvider>().removeItemFromHistory(e);
                       },
                       child: const SightIcons(assetName: AppAssets.delete, width: 24, height: 24),
                     ),
