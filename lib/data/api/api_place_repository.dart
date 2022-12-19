@@ -2,9 +2,9 @@ import 'dart:convert';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
+import 'package:places/data/dto/place_response.dart';
+import 'package:places/data/dto/place_request.dart';
 import 'package:places/data/interactor/place_interactor.dart';
-import 'package:places/data/model/place.dart';
-import 'package:places/data/model/place_dto.dart';
 import 'package:places/domain/place_ui.dart';
 import 'package:places/mocks.dart';
 
@@ -22,7 +22,7 @@ BaseOptions baseoptions = BaseOptions(
 );
 
 class ApiPlaceRepository {
-  Future<List<PlaceDto>> getPlaces({required String category, required int radius}) async {
+  Future<List<PlaceResponse>> getPlaces({required String category, required int radius}) async {
     initInterceptors();
 
     final response = await dio.post<String>(
@@ -41,19 +41,19 @@ class ApiPlaceRepository {
       debugPrint('$list');
 
       // ignore: avoid_annotating_with_dynamic
-      return (list as List<dynamic>).map((dynamic e) => PlaceDto.fromJson(e as Map<String, dynamic>)).toList();
+      return (list as List<dynamic>).map((dynamic e) => PlaceResponse.fromJson(e as Map<String, dynamic>)).toList();
     }
     throw Exception('No 200 status code: Error code: ${response.statusCode}');
   }
 
-  Future<Place> getPlaceDetails(int id) async {
+  Future<PlaceRequest> getPlaceDetails(int id) async {
     initInterceptors();
 
     final response = await dio.get<String>('/place/$id');
     if (response.statusCode == 200) {
       final dynamic placesListJson = jsonDecode(response.data ?? '');
 
-      return Place.fromJson(placesListJson as Map<String, dynamic>);
+      return PlaceRequest.fromJson(placesListJson as Map<String, dynamic>);
     }
     throw Exception('No 200 status code: Error code: ${response.statusCode}');
   }

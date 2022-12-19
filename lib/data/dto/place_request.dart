@@ -1,4 +1,4 @@
-class Place {
+class PlaceRequest {
   final int id;
   final double lat;
   final double lon;
@@ -7,7 +7,7 @@ class Place {
   final String placeType;
   final String description;
 
-  Place({
+  PlaceRequest({
     required this.id,
     required this.lat,
     required this.lon,
@@ -17,7 +17,7 @@ class Place {
     required this.description,
   });
 
-    factory Place.fromJson(Map<String, dynamic> json) => Place(
+    factory PlaceRequest.fromJson(Map<String, dynamic> json) => PlaceRequest(
         id: json['id'] as int,
         lat: json['lat'] as double,
         lon: json['lng'] as double,

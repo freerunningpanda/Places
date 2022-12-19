@@ -1,11 +1,11 @@
-class PlacesFilterRequestDto {
+class PlacesFilterRequest {
   final double lat;
   final double lng;
   final double radius;
   final List<String> typeFilter;
   final String nameFilter;
 
-  PlacesFilterRequestDto({
+  PlacesFilterRequest({
     required this.lat,
     required this.lng,
     required this.radius,
@@ -13,7 +13,7 @@ class PlacesFilterRequestDto {
     required this.nameFilter,
   });
 
-  factory PlacesFilterRequestDto.fromJson(Map<String, dynamic> json) => PlacesFilterRequestDto(
+  factory PlacesFilterRequest.fromJson(Map<String, dynamic> json) => PlacesFilterRequest(
         lat: (json['lat'] as num).toDouble(),
         lng: (json['lng'] as num).toDouble(),
         radius: (json['radius'] as num).toDouble(),
