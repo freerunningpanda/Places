@@ -5,6 +5,7 @@ import 'package:places/providers/category_provider.dart';
 import 'package:places/providers/image_provider.dart' as image_provider;
 import 'package:places/providers/places_functions_provider.dart';
 import 'package:places/providers/text_field_provider.dart';
+import 'package:places/ui/res/app_strings.dart';
 import 'package:places/ui/screens/res/app_theme.dart';
 import 'package:places/ui/screens/splash_screen/splash_screen.dart';
 import 'package:provider/provider.dart';
@@ -52,7 +53,7 @@ class _AppState extends State<App> {
     return MaterialApp(
       theme: !isDarkMode ? _lightTheme : _darkTheme,
       debugShowCheckedModeBanner: false,
-      title: 'Places',
+      title: AppString.places,
       home: const MainScreen(),
     );
   }
