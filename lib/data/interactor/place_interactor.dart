@@ -12,24 +12,13 @@ class PlaceInteractor extends ChangeNotifier {
   static Set<Place> visitedPlaces = {};
   static Set<Place> newPlaces = {};
 
-  final titleController = TextEditingController();
-  final descriptionController = TextEditingController();
-  final searchController = TextEditingController();
-  final latController = TextEditingController();
-  final lotController = TextEditingController();
-  final titleFocus = FocusNode();
-  final latFocus = FocusNode();
-  final lotFocus = FocusNode();
-  final descriptionFocus = FocusNode();
-  final searchFocus = FocusNode();
+
 
   final distance = (Mocks.endPoint - Mocks.startPoint).toInt();
 
   final ApiPlaceRepository apiPlaceRepository;
 
   final List<Place> places = [];
-
-  bool isLat = false;
 
   bool isFocusOn = false;
 
@@ -99,27 +88,7 @@ class PlaceInteractor extends ChangeNotifier {
 
 
 
-  void tapOnLat() {
-    isLat = true;
-    notifyListeners();
-  }
 
-  void goToLat() {
-    isLat = true;
-    lotFocus.requestFocus();
-    notifyListeners();
-  }
-
-  void tapOnLot() {
-    isLat = false;
-    notifyListeners();
-  }
-
-  void goToDescription() {
-    isLat = false;
-    descriptionFocus.requestFocus();
-    notifyListeners();
-  }
 
 // Преобразовать все места из Dto в места для UI
   Future<List<Place>> _fromApiToUI(List<PlaceResponse> apiPlaces) async {

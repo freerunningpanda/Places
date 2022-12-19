@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:places/data/interactor/place_interactor.dart';
 import 'package:places/providers/filter_data_provider.dart';
+import 'package:places/providers/text_field_provider.dart';
 
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_typography.dart';
@@ -35,7 +36,7 @@ class _SearchBarState extends State<SearchBar> {
     final customColors = Theme.of(context).extension<CustomColors>()!;
     final theme = Theme.of(context);
     final filteredPlaces = context.read<FilterDataProvider>().filteredPlaces;
-    final controller = context.read<PlaceInteractor>().searchController;
+    final controller = context.read<TextFieldProvider>().searchController;
 
     context.watch<PlaceInteractor>();
 

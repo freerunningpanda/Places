@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:places/data/api/api_places.dart';
 
+import 'package:places/data/api/api_places.dart';
 import 'package:places/data/interactor/place_interactor.dart';
 import 'package:places/data/model/place.dart';
 import 'package:places/providers/category_provider.dart';
+import 'package:places/providers/text_field_provider.dart';
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_strings.dart';
 import 'package:places/ui/res/app_typography.dart';
@@ -26,14 +27,14 @@ class AddSightScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final latController = context.read<PlaceInteractor>().latController;
-    final lotController = context.read<PlaceInteractor>().lotController;
-    final latFocus = context.read<PlaceInteractor>().latFocus;
-    final lotFocus = context.read<PlaceInteractor>().lotFocus;
-    final titleController = context.read<PlaceInteractor>().titleController;
-    final descriptionController = context.read<PlaceInteractor>().descriptionController;
-    final titleFocus = context.read<PlaceInteractor>().titleFocus;
-    final descriptionFocus = context.read<PlaceInteractor>().descriptionFocus;
+    final latController = context.read<TextFieldProvider>().latController;
+    final lotController = context.read<TextFieldProvider>().lotController;
+    final latFocus = context.read<TextFieldProvider>().latFocus;
+    final lotFocus = context.read<TextFieldProvider>().lotFocus;
+    final titleController = context.read<TextFieldProvider>().titleController;
+    final descriptionController = context.read<TextFieldProvider>().descriptionController;
+    final titleFocus = context.read<TextFieldProvider>().titleFocus;
+    final descriptionFocus = context.read<TextFieldProvider>().descriptionFocus;
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
     final theme = Theme.of(context);
@@ -426,7 +427,7 @@ class _CoordinatsInputWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final focus = context.watch<PlaceInteractor>();
+    final focus = context.watch<TextFieldProvider>();
 
     return Row(
       children: [
