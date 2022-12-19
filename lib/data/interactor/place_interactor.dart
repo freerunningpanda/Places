@@ -1,6 +1,4 @@
-import 'package:places/data/api/api_places.dart';
 import 'package:places/data/dto/place_request.dart';
-import 'package:places/data/dto/place_response.dart';
 import 'package:places/data/model/place.dart';
 import 'package:places/data/repository/repository.dart';
 
@@ -10,42 +8,26 @@ class PlaceInteractor {
   static Set<Place> visitedPlaces = {};
   static Set<Place> newPlaces = {};
 
-  final ApiPlaceRepository apiPlaceRepository;
+  final Repository repository;
 
   PlaceInteractor({
-    required this.apiPlaceRepository,
+    required this.repository,
   });
 
-  Future<List<Place>> getPlaces() async {
-    final placesDto = await apiPlaceRepository.getPlaces(
-      category: '',
-      radius: 15000,
-    );
-    final places = await _fromApiToUI(placesDto);
+  Future<List<Place>> getPlaces() async => repository.getPlaces();
 
-    return places;
-  }
+  Future<PlaceRequest> getPlaceDetails(Place place) => repository.getPlaceDetails(place);
 
-  Future<PlaceRequest> getPlaceDetails(Place place) async {
-    final placeDto = await apiPlaceRepository.getPlaceDetails(place.id);
+  Set<Place> getFavoritesPlaces() => repository.getFavoritesPlaces();
 
-    return placeDto;
-  }
+  void addToFavorites({required Place place}) => repository.addToFavorites(place: place);
 
-  Set<Place> getFavoritesPlaces() => apiPlaceRepository.getFavoritesPlaces();
+  void removeFromFavorites({required Place place}) => repository.removeFromFavorites(place: place);
 
-  void addToFavorites({required Place place}) => apiPlaceRepository.addToFavorites(place: place);
+  Set<Place> getVisitPlaces() => repository.getVisitPlaces();
 
-  void removeFromFavorites({required Place place}) => apiPlaceRepository.removeFromFavorites(place: place);
+  void addToVisitingPlaces({required Place place}) => repository.addToVisitingPlaces(place: place);
 
-  Set<Place> getVisitPlaces() => apiPlaceRepository.getVisitPlaces();
-
-  void addToVisitingPlaces({required Place place}) => apiPlaceRepository.addToVisitingPlaces(place: place);
-
-  void addNewPlace({required Place place}) => apiPlaceRepository.addNewPlace(place: place);
-
-// Преобразовать все места из Dto в места для UI
-  Future<List<Place>> _fromApiToUI(List<PlaceResponse> apiPlaces) async {
-    return apiPlaces.map(Repository.fromApi).toList();
-  }
+  void addNewPlace({required Place place}) => repository.addNewPlace(place: place);
+  
 }

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:places/data/api/api_places.dart';
 import 'package:places/data/interactor/place_interactor.dart';
 import 'package:places/data/model/place.dart';
+import 'package:places/data/repository/repository.dart';
 
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_colors.dart';
@@ -82,7 +83,7 @@ class _SightDetailsState extends State<SightDetails> {
   }
 
   Future<void> getPlaces() async {
-    await PlaceInteractor(apiPlaceRepository: ApiPlaceRepository()).getPlaceDetails(widget.place);
+    await PlaceInteractor(repository: Repository(apiPlaces: ApiPlaces())).getPlaceDetails(widget.place);
   }
 }
 
@@ -515,8 +516,10 @@ class _SightDetailsBottom extends StatelessWidget {
         ),
         InkWell(
           onTap: () => PlaceInteractor(
-                  apiPlaceRepository: ApiPlaceRepository(),
-                ).addToFavorites(place: place),
+            repository: Repository(
+              apiPlaces: ApiPlaces(),
+            ),
+          ).addToFavorites(place: place),
           child: Row(
             children: [
               SightIcons(

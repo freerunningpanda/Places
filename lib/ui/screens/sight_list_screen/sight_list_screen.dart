@@ -5,6 +5,7 @@ import 'package:places/data/api/api_places.dart';
 
 import 'package:places/data/interactor/place_interactor.dart';
 import 'package:places/data/model/place.dart';
+import 'package:places/data/repository/repository.dart';
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_strings.dart';
 import 'package:places/ui/res/app_typography.dart';
@@ -84,7 +85,11 @@ class _SightListScreenState extends State<SightListScreen> {
   }
 
   Future<void> getPlaces() async {
-    placeList = await PlaceInteractor(apiPlaceRepository: ApiPlaceRepository()).getPlaces();
+    placeList = await PlaceInteractor(
+      repository: Repository(
+        apiPlaces: ApiPlaces(),
+      ),
+    ).getPlaces();
     setState(() {
       isLoading = true;
     });
@@ -106,7 +111,6 @@ class _SightListWidgetPortrait extends StatefulWidget {
 }
 
 class _SightListWidgetPortraitState extends State<_SightListWidgetPortrait> {
-
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -125,14 +129,18 @@ class _SightListWidgetPortraitState extends State<_SightListWidgetPortrait> {
                 addSight: () {
                   if (!place.isFavorite) {
                     PlaceInteractor(
-                      apiPlaceRepository: ApiPlaceRepository(),
+                      repository: Repository(
+                        apiPlaces: ApiPlaces(),
+                      ),
                     ).addToFavorites(place: place);
                     setState(() {
                       place.isFavorite = true;
                     });
                   } else {
                     PlaceInteractor(
-                      apiPlaceRepository: ApiPlaceRepository(),
+                      repository: Repository(
+                        apiPlaces: ApiPlaces(),
+                      ),
                     ).removeFromFavorites(place: place);
                     setState(() {
                       place.isFavorite = false;

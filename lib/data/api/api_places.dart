@@ -10,7 +10,7 @@ import 'package:places/mocks.dart';
 
 
 
-class ApiPlaceRepository {
+class ApiPlaces {
   Future<List<PlaceResponse>> getPlaces({required String category, required int radius}) async {
     initInterceptors();
 
@@ -51,28 +51,9 @@ class ApiPlaceRepository {
     return PlaceInteractor.favoritePlaces;
   }
 
-  void addToFavorites({required Place place}) {
-    PlaceInteractor.favoritePlaces.add(place);
-    debugPrint('🟡--------- Добавлено в избранное: ${PlaceInteractor.favoritePlaces}');
-    debugPrint('🟡--------- Длина: ${PlaceInteractor.favoritePlaces.length}');
-  }
 
-  void removeFromFavorites({required Place place}) {
-    PlaceInteractor.favoritePlaces.remove(place);
-    debugPrint('🟡--------- Длина: ${PlaceInteractor.favoritePlaces.length}');
-  }
 
-  Set<Place> getVisitPlaces() {
-    return PlaceInteractor.visitedPlaces;
-  }
 
-  void addToVisitingPlaces({required Place place}) {
-    PlaceInteractor.visitedPlaces.add(place);
-  }
-
-  void addNewPlace({required Place place}) {
-    PlaceInteractor.newPlaces.add(place);
-  }
 
   Future<String> postPlace() async {
     initInterceptors();
