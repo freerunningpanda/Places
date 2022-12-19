@@ -1,4 +1,3 @@
-import 'package:places/data/dto/place_request.dart';
 import 'package:places/data/model/place.dart';
 import 'package:places/data/repository/repository.dart';
 
@@ -16,7 +15,7 @@ class PlaceInteractor {
 
   Future<List<Place>> getPlaces() async => repository.getPlaces();
 
-  Future<PlaceRequest> getPlaceDetails(Place place) => repository.getPlaceDetails(place);
+  Future<Place> getPlaceDetails(Place place) => repository.getPlaceDetails(place);
 
   Set<Place> getFavoritesPlaces() => repository.getFavoritesPlaces();
 

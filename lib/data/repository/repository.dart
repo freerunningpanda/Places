@@ -19,15 +19,16 @@ class Repository {
       category: '',
       radius: 15000,
     );
-    final places = await _fromApiToUI(placesDto);
+    final places = await _placesFromApiToUi(placesDto);
 
     return places;
   }
 
-  Future<PlaceRequest> getPlaceDetails(Place place) async {
+  Future<Place> getPlaceDetails(Place place) async {
     final placeDto = await apiPlaces.getPlaceDetails(place.id);
+    final placeDetail = await _detailPlaceFromApiToUi(placeDto);
 
-    return placeDto;
+    return placeDetail;
   }
 
   Set<Place> getFavoritesPlaces() => apiPlaces.getFavoritesPlaces();
@@ -56,7 +57,12 @@ class Repository {
   }
 
   // Преобразовать все места из Dto в места для UI
-  Future<List<Place>> _fromApiToUI(List<PlaceResponse> apiPlaces) async {
-    return apiPlaces.map(Mapper.fromApi).toList();
+  Future<List<Place>> _placesFromApiToUi(List<PlaceResponse> apiPlaces) async {
+    return apiPlaces.map(Mapper.placesFromApiToUi).toList();
+  }
+
+  // Преобразовать одно место из Dto в место для UI
+  Future<Place> _detailPlaceFromApiToUi(PlaceRequest apiPlaces) async {
+    return Mapper.detailPlaceFromApiToUi(apiPlaces);
   }
 }
