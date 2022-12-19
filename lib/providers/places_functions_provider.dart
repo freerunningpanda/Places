@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import 'package:geolocator/geolocator.dart';
 import 'package:places/data/api/api_places.dart';
 import 'package:places/data/interactor/place_interactor.dart';
@@ -194,6 +195,11 @@ class PlacesFunctionsProvider extends ChangeNotifier {
   void dragCard(List<Place> sights, int oldIndex, int newIndex) {
     final sight = sights.removeAt(oldIndex);
     sights.insert(newIndex, sight);
+    notifyListeners();
+  }
+
+  void changeArea({required double start, required double end}) {
+    Mocks.rangeValues = RangeValues(start, end);
     notifyListeners();
   }
 }

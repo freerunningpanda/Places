@@ -450,7 +450,7 @@ class _DistanceSliderState extends State<_DistanceSlider> {
           min: min,
           max: max,
           onChanged: (values) {
-            context.read<PlaceInteractor>().changeArea(start: values.start, end: values.end);
+            context.read<PlacesFunctionsProvider>().changeArea(start: values.start, end: values.end);
             context.read<PlacesFunctionsProvider>().showCount(placeList: widget.placeList);
           },
         ),

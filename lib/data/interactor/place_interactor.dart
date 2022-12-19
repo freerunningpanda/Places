@@ -8,17 +8,14 @@ import 'package:places/data/repository/repository.dart';
 import 'package:places/mocks.dart';
 
 class PlaceInteractor extends ChangeNotifier {
+  static final List<Place> places = [];
   static Set<Place> favoritePlaces = {};
   static Set<Place> visitedPlaces = {};
   static Set<Place> newPlaces = {};
 
-
-
   final distance = (Mocks.endPoint - Mocks.startPoint).toInt();
 
   final ApiPlaceRepository apiPlaceRepository;
-
-  final List<Place> places = [];
 
   bool isFocusOn = false;
 
@@ -53,30 +50,6 @@ class PlaceInteractor extends ChangeNotifier {
   void addToVisitingPlaces({required Place place}) => apiPlaceRepository.addToVisitingPlaces(place: place);
 
   void addNewPlace({required Place place}) => apiPlaceRepository.addNewPlace(place: place);
-
-  void changeArea({required double start, required double end}) {
-    Mocks.rangeValues = RangeValues(start, end);
-    notifyListeners();
-  }
-
-
-  void pickImage() {
-    if (places.isEmpty) {
-      places.addAll(Mocks.pickedImage);
-      notifyListeners();
-    }
-  }
-
-  void removeImage(int index) {
-    if (places.isNotEmpty) {
-      places.removeAt(index);
-      notifyListeners();
-    }
-  }
-
-
-
-
 
 // Преобразовать все места из Dto в места для UI
   Future<List<Place>> _fromApiToUI(List<PlaceResponse> apiPlaces) async {
