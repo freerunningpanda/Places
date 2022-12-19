@@ -1,7 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
 import 'package:places/data/interactor/settings_interactor.dart';
+import 'package:places/providers/dark_mode_provider.dart';
+
 import 'package:provider/provider.dart';
 
 class Switcher extends StatefulWidget {
@@ -14,7 +15,9 @@ class Switcher extends StatefulWidget {
 class _SwitcherState extends State<Switcher> {
   @override
   Widget build(BuildContext context) {
-    final isSwitched = context.watch<SettingsInteractor>().isDarkMode;
+    final isSwitched = SettingsInteractor(
+      darkModeProvider: DarkModeProvider(),
+    ).switchTheme(value: context.watch<DarkModeProvider>().isDarkMode);
 
     final theme = Theme.of(context);
 
@@ -23,7 +26,7 @@ class _SwitcherState extends State<Switcher> {
       trackColor: theme.sliderTheme.inactiveTrackColor,
       value: isSwitched,
       onChanged: (value) {
-        context.read<SettingsInteractor>().switchTheme(value: value);
+        context.read<DarkModeProvider>().switchTheme(value: value);
       },
     );
   }

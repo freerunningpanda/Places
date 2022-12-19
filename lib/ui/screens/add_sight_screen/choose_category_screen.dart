@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 
-import 'package:places/data/interactor/place_interactor.dart';
 import 'package:places/data/model/category.dart';
 import 'package:places/providers/category_provider.dart';
 import 'package:places/ui/res/app_assets.dart';
@@ -28,7 +27,7 @@ class _ChooseCategoryWidgetState extends State<ChooseCategoryWidget> {
     final height = MediaQuery.of(context).size.height;
     final theme = Theme.of(context);
 
-    context.watch<PlaceInteractor>();
+    context.watch<CategoryProvider>();
 
     return Scaffold(
       body: SafeArea(

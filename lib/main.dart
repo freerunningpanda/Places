@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import 'package:places/data/interactor/settings_interactor.dart';
 import 'package:places/providers/category_provider.dart';
+import 'package:places/providers/dark_mode_provider.dart';
 import 'package:places/providers/image_provider.dart' as image_provider;
 import 'package:places/providers/places_functions_provider.dart';
 import 'package:places/providers/text_field_provider.dart';
@@ -29,8 +29,8 @@ void main() {
         ChangeNotifierProvider<image_provider.ImageProvider>(
           create: (_) => image_provider.ImageProvider(),
         ),
-        ChangeNotifierProvider<SettingsInteractor>(
-          create: (_) => SettingsInteractor(),
+        ChangeNotifierProvider<DarkModeProvider>(
+          create: (_) => DarkModeProvider(),
         ),
       ],
       child: const App(),
@@ -48,7 +48,7 @@ class App extends StatefulWidget {
 class _AppState extends State<App> {
   @override
   Widget build(BuildContext context) {
-    final isDarkMode = context.watch<SettingsInteractor>().isDarkMode;
+    final isDarkMode = context.watch<DarkModeProvider>().isDarkMode;
 
     return MaterialApp(
       theme: !isDarkMode ? _lightTheme : _darkTheme,

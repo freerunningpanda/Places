@@ -1,11 +1,11 @@
-import 'package:flutter/cupertino.dart';
+import 'package:places/providers/dark_mode_provider.dart';
 
-class SettingsInteractor extends ChangeNotifier {
-  bool isDarkMode = false;
-  
-  bool switchTheme({required bool value}) {
-    notifyListeners();
+class SettingsInteractor {
+  final DarkModeProvider darkModeProvider;
 
-    return isDarkMode = value;
-  }
+  SettingsInteractor({
+    required this.darkModeProvider,
+  });
+
+  bool switchTheme({required bool value}) => darkModeProvider.switchTheme(value: value);
 }
