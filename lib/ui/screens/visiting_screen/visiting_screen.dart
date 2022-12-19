@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:places/data/api/api_place_repository.dart';
 
 import 'package:places/data/interactor/place_interactor.dart';
-import 'package:places/data/repository/api_place_repository.dart';
 import 'package:places/domain/place_ui.dart';
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_card_size.dart';

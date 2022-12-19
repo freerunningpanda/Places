@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:places/data/api/api_place_repository.dart';
 
 import 'package:places/data/interactor/place_interactor.dart';
 import 'package:places/data/interactor/settings_interactor.dart';
-import 'package:places/data/repository/api_place_repository.dart';
 import 'package:places/ui/screens/res/app_theme.dart';
 import 'package:places/ui/screens/splash_screen/splash_screen.dart';
 import 'package:provider/provider.dart';
