@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import 'package:places/data/interactor/place_interactor.dart';
 import 'package:places/data/model/category.dart';
+import 'package:places/providers/category_provider.dart';
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_typography.dart';
 import 'package:places/ui/screens/res/custom_colors.dart';
@@ -32,7 +32,7 @@ class SaveButton extends StatelessWidget {
           height: 48,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(12),
-            color: PlaceInteractor.chosenCategory.isEmpty ? customColors?.color : theme.sliderTheme.activeTrackColor,
+            color: CategoryProvider.chosenCategory.isEmpty ? customColors?.color : theme.sliderTheme.activeTrackColor,
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -48,7 +48,7 @@ class SaveButton extends StatelessWidget {
               const SizedBox(width: 8),
               Text(
                 title,
-                style: PlaceInteractor.chosenCategory.isEmpty
+                style: CategoryProvider.chosenCategory.isEmpty
                     ? AppTypography.sightDetailsButtonNameInnactive
                     : AppTypography.sightDetailsButtonName,
               ),

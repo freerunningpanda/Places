@@ -3,6 +3,7 @@ import 'package:places/data/api/api_places.dart';
 
 import 'package:places/data/interactor/place_interactor.dart';
 import 'package:places/data/model/place.dart';
+import 'package:places/providers/category_provider.dart';
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_strings.dart';
 import 'package:places/ui/res/app_typography.dart';
@@ -36,7 +37,7 @@ class AddSightScreen extends StatelessWidget {
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
     final theme = Theme.of(context);
-    final chosenCategory = PlaceInteractor.chosenCategory;
+    final chosenCategory = CategoryProvider.chosenCategory;
 
     return Scaffold(
       body: GestureDetector(
@@ -119,7 +120,7 @@ class AddSightScreen extends StatelessWidget {
                             latController.clear();
                             lotController.clear();
                             debugPrint('🟡---------Создан объект: ${PlaceInteractor.newPlaces.toList()}');
-                            context.read<PlaceInteractor>().clearCategory(activeCategories: chosenCategory);
+                            context.read<CategoryProvider>().clearCategory(activeCategories: chosenCategory);
                           },
                           titleController: titleController,
                           latController: latController,
@@ -551,7 +552,7 @@ class _CategoryChooseWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    context.watch<PlaceInteractor>().updateCategory();
+    context.watch<CategoryProvider>().updateCategory();
 
     return Column(
       children: [
@@ -575,14 +576,14 @@ class _CategoryChooseWidget extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                if (PlaceInteractor.chosenCategory.isEmpty)
+                if (CategoryProvider.chosenCategory.isEmpty)
                   Text(
                     AppString.nochoose,
                     style: theme.textTheme.titleMedium,
                   )
                 else
                   Text(
-                    PlaceInteractor.chosenCategory[0].title,
+                    CategoryProvider.chosenCategory[0].title,
                     style: theme.textTheme.titleMedium,
                   ),
                 const Icon(
