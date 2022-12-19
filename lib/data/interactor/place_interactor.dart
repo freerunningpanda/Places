@@ -1,23 +1,16 @@
-import 'package:flutter/material.dart';
-
 import 'package:places/data/api/api_places.dart';
 import 'package:places/data/dto/place_request.dart';
 import 'package:places/data/dto/place_response.dart';
 import 'package:places/data/model/place.dart';
 import 'package:places/data/repository/repository.dart';
-import 'package:places/mocks.dart';
 
-class PlaceInteractor extends ChangeNotifier {
+class PlaceInteractor {
   static final List<Place> places = [];
   static Set<Place> favoritePlaces = {};
   static Set<Place> visitedPlaces = {};
   static Set<Place> newPlaces = {};
 
-  final distance = (Mocks.endPoint - Mocks.startPoint).toInt();
-
   final ApiPlaceRepository apiPlaceRepository;
-
-  bool isFocusOn = false;
 
   PlaceInteractor({
     required this.apiPlaceRepository,

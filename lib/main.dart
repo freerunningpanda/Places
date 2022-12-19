@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:places/data/api/api_places.dart';
 
-import 'package:places/data/interactor/place_interactor.dart';
 import 'package:places/data/interactor/settings_interactor.dart';
 import 'package:places/providers/category_provider.dart';
 import 'package:places/providers/image_provider.dart' as image_provider;
@@ -30,9 +28,6 @@ void main() {
         ChangeNotifierProvider<image_provider.ImageProvider>(
           create: (_) => image_provider.ImageProvider(),
         ),
-        ChangeNotifierProvider<PlaceInteractor>(
-          create: (_) => PlaceInteractor(apiPlaceRepository: ApiPlaceRepository()),
-        ),
         ChangeNotifierProvider<SettingsInteractor>(
           create: (_) => SettingsInteractor(),
         ),
@@ -50,8 +45,6 @@ class App extends StatefulWidget {
 }
 
 class _AppState extends State<App> {
-
-
   @override
   Widget build(BuildContext context) {
     final isDarkMode = context.watch<SettingsInteractor>().isDarkMode;
@@ -63,13 +56,6 @@ class _AppState extends State<App> {
       home: const MainScreen(),
     );
   }
-
-  // Future<void> testNetworkCall() async {
-  //   final dynamic response = PlaceInteractor(
-  //     apiPlaceRepository: ApiPlaceRepository(),
-  //   ).getPlaces();
-  //   debugPrint('Response HTTP call: $response');
-  // }
 }
 
 class MainScreen extends StatelessWidget {
