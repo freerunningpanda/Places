@@ -4,7 +4,7 @@ import 'package:places/data/api/api_places.dart';
 import 'package:places/data/interactor/place_interactor.dart';
 import 'package:places/data/interactor/settings_interactor.dart';
 import 'package:places/providers/category_provider.dart';
-import 'package:places/providers/filter_data_provider.dart';
+import 'package:places/providers/places_functions_provider.dart';
 import 'package:places/providers/text_field_provider.dart';
 import 'package:places/ui/screens/res/app_theme.dart';
 import 'package:places/ui/screens/splash_screen/splash_screen.dart';
@@ -17,14 +17,14 @@ void main() {
   runApp(
     MultiProvider(
       providers: [
-        ChangeNotifierProvider<FilterDataProvider>(
-          create: (_) => FilterDataProvider(),
-        ),
         ChangeNotifierProvider<CategoryProvider>(
           create: (_) => CategoryProvider(),
         ),
         ChangeNotifierProvider<TextFieldProvider>(
           create: (_) => TextFieldProvider(),
+        ),
+        ChangeNotifierProvider<PlacesFunctionsProvider>(
+          create: (_) => PlacesFunctionsProvider(),
         ),
         ChangeNotifierProvider<PlaceInteractor>(
           create: (_) => PlaceInteractor(apiPlaceRepository: ApiPlaceRepository()),

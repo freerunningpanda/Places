@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:places/data/api/api_places.dart';
+import 'package:places/data/interactor/place_interactor.dart';
 import 'package:places/data/model/category.dart';
 import 'package:places/data/model/place.dart';
 import 'package:places/mocks.dart';
@@ -7,7 +9,7 @@ import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_strings.dart';
 import 'package:places/utils/place_type.dart';
 
-class FilterDataProvider extends ChangeNotifier {
+class PlacesFunctionsProvider extends ChangeNotifier {
   static final List<Category> filters = [
     Category(title: AppString.hotel, assetName: AppAssets.hotel, placeType: PlaceType.hotel),
     Category(
@@ -21,16 +23,84 @@ class FilterDataProvider extends ChangeNotifier {
     Category(title: AppString.cafe, assetName: AppAssets.cafe, placeType: PlaceType.cafe),
   ];
 
-  static final List<Place> filteredMocks = [];
-  static final List<String> activeFilters = [];
-
-  static final Set<Place> filtersWithDistance = {};
-
   static final Set<String> searchHistoryList = {};
+  static final List<String> activeFilters = [];
+  static final Set<Place> filtersWithDistance = {};
+  static final List<Place> filteredMocks = [];
+
+  List<Place> filteredPlaces = filtersWithDistance.toList();
 
   bool hasFocus = false;
 
-  List<Place> filteredPlaces = filtersWithDistance.toList();
+  void saveSearchHistory(String value, TextEditingController controller) {
+    if (controller.text.isEmpty) return;
+    PlacesFunctionsProvider.searchHistoryList.add(value);
+    notifyListeners();
+  }
+
+  void removeItemFromHistory(String index) {
+    PlacesFunctionsProvider.searchHistoryList.remove(index);
+    notifyListeners();
+  }
+
+  void removeAllItemsFromHistory() {
+    PlacesFunctionsProvider.searchHistoryList.clear();
+    notifyListeners();
+  }
+
+  void activeFocus({required bool isActive}) {
+    // ignore: prefer-conditional-expressions
+    if (isActive) {
+      hasFocus = true;
+    } else {
+      hasFocus = false;
+    }
+    notifyListeners();
+  }
+
+  void searchPlaces(String query, TextEditingController controller) {
+    if (activeFilters.isEmpty) {
+      for (final el in filtersWithDistance) {
+        final distance = Geolocator.distanceBetween(
+          Mocks.mockLat,
+          Mocks.mockLot,
+          el.lat,
+          el.lon,
+        );
+        if (distance >= Mocks.rangeValues.start && distance <= Mocks.rangeValues.end) {
+          filteredPlaces = filtersWithDistance.where((sight) {
+            final sightTitle = sight.name.toLowerCase();
+            final input = query.toLowerCase();
+
+            return sightTitle.contains(input);
+          }).toList();
+        }
+      }
+    } else if (activeFilters.isNotEmpty) {
+      for (final el in filteredMocks) {
+        final distance = Geolocator.distanceBetween(
+          Mocks.mockLat,
+          Mocks.mockLot,
+          el.lat,
+          el.lon,
+        );
+        if (distance >= Mocks.rangeValues.start && distance <= Mocks.rangeValues.end) {
+          filteredPlaces = filtersWithDistance.where((sight) {
+            final sightTitle = sight.name.toLowerCase();
+            final input = query.toLowerCase();
+
+            return sightTitle.contains(input);
+          }).toList();
+        }
+      }
+    }
+
+    if (controller.text.isEmpty) {
+      filteredPlaces.clear();
+      notifyListeners();
+    }
+    notifyListeners();
+  }
 
   void clearAllFilters() {
     filters.map((e) => e.isEnabled = false).toList();
@@ -40,9 +110,9 @@ class FilterDataProvider extends ChangeNotifier {
   }
 
   List<String> saveFilters(int index) {
-    final filters = FilterDataProvider.filters[index];
-    final activeFilters = FilterDataProvider.activeFilters;
-    var isEnabled = !FilterDataProvider.filters[index].isEnabled;
+    final filters = PlacesFunctionsProvider.filters[index];
+    final activeFilters = PlacesFunctionsProvider.activeFilters;
+    var isEnabled = !PlacesFunctionsProvider.filters[index].isEnabled;
     isEnabled = !isEnabled;
     if (!isEnabled) {
       activeFilters.add(filters.title);
@@ -114,73 +184,16 @@ class FilterDataProvider extends ChangeNotifier {
     }
   }
 
-  void searchPlaces(String query, TextEditingController controller) {
-    if (activeFilters.isEmpty) {
-      for (final el in filtersWithDistance) {
-        final distance = Geolocator.distanceBetween(
-          Mocks.mockLat,
-          Mocks.mockLot,
-          el.lat,
-          el.lon,
-        );
-        if (distance >= Mocks.rangeValues.start && distance <= Mocks.rangeValues.end) {
-          filteredPlaces = filtersWithDistance.where((sight) {
-            final sightTitle = sight.name.toLowerCase();
-            final input = query.toLowerCase();
-
-            return sightTitle.contains(input);
-          }).toList();
-        }
-      }
-    } else if (activeFilters.isNotEmpty) {
-      for (final el in filteredMocks) {
-        final distance = Geolocator.distanceBetween(
-          Mocks.mockLat,
-          Mocks.mockLot,
-          el.lat,
-          el.lon,
-        );
-        if (distance >= Mocks.rangeValues.start && distance <= Mocks.rangeValues.end) {
-          filteredPlaces = filtersWithDistance.where((sight) {
-            final sightTitle = sight.name.toLowerCase();
-            final input = query.toLowerCase();
-
-            return sightTitle.contains(input);
-          }).toList();
-        }
-      }
-    }
-
-    if (controller.text.isEmpty) {
-      filteredPlaces.clear();
-      notifyListeners();
-    }
+  void deleteSight(int index, List<Place> sight) {
+    PlaceInteractor(apiPlaceRepository: ApiPlaceRepository()).removeFromFavorites(
+      place: sight[index],
+    );
     notifyListeners();
   }
 
-  void activeFocus({required bool isActive}) {
-    // ignore: prefer-conditional-expressions
-    if (isActive) {
-      hasFocus = true;
-    } else {
-      hasFocus = false;
-    }
-    notifyListeners();
-  }
-
-  void saveSearchHistory(String value, TextEditingController controller) {
-    if (controller.text.isEmpty) return;
-    FilterDataProvider.searchHistoryList.add(value);
-    notifyListeners();
-  }
-
-  void removeItemFromHistory(String index) {
-    FilterDataProvider.searchHistoryList.remove(index);
-    notifyListeners();
-  }
-
-  void removeAllItemsFromHistory() {
-    FilterDataProvider.searchHistoryList.clear();
+  void dragCard(List<Place> sights, int oldIndex, int newIndex) {
+    final sight = sights.removeAt(oldIndex);
+    sights.insert(newIndex, sight);
     notifyListeners();
   }
 }

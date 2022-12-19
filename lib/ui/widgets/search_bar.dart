@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:places/data/interactor/place_interactor.dart';
-import 'package:places/providers/filter_data_provider.dart';
+import 'package:places/providers/places_functions_provider.dart';
 import 'package:places/providers/text_field_provider.dart';
 
 import 'package:places/ui/res/app_assets.dart';
@@ -35,10 +34,10 @@ class _SearchBarState extends State<SearchBar> {
   Widget build(BuildContext context) {
     final customColors = Theme.of(context).extension<CustomColors>()!;
     final theme = Theme.of(context);
-    final filteredPlaces = context.read<FilterDataProvider>().filteredPlaces;
+    final filteredPlaces = context.read<PlacesFunctionsProvider>().filteredPlaces;
     final controller = context.read<TextFieldProvider>().searchController;
 
-    context.watch<PlaceInteractor>();
+    context.watch<PlacesFunctionsProvider>();
 
     return Padding(
       padding: const EdgeInsets.only(
@@ -73,7 +72,7 @@ class _SearchBarState extends State<SearchBar> {
                     focusNode: focusNode,
                     readOnly: widget.readOnly ?? true,
                     onChanged: (value) {
-                      context.read<FilterDataProvider>()
+                      context.read<PlacesFunctionsProvider>()
                         ..activeFocus(isActive: true)
                         ..searchPlaces(value, controller);
 
@@ -82,7 +81,7 @@ class _SearchBarState extends State<SearchBar> {
                       }
                     },
                     onTap: () {
-                      context.read<FilterDataProvider>().activeFocus(isActive: true);
+                      context.read<PlacesFunctionsProvider>().activeFocus(isActive: true);
                       if (!widget.isSearchPage) {
                         Navigator.of(context).push(
                           MaterialPageRoute<SightSearchScreen>(
@@ -94,7 +93,7 @@ class _SearchBarState extends State<SearchBar> {
                       }
                     },
                     onSubmitted: (value) {
-                      context.read<FilterDataProvider>()
+                      context.read<PlacesFunctionsProvider>()
                         ..activeFocus(isActive: false)
                         ..saveSearchHistory(value, controller);
                       controller.clear();

@@ -59,18 +59,6 @@ class PlaceInteractor extends ChangeNotifier {
     notifyListeners();
   }
 
-  void dragCard(List<Place> sights, int oldIndex, int newIndex) {
-    final sight = sights.removeAt(oldIndex);
-    sights.insert(newIndex, sight);
-    notifyListeners();
-  }
-
-  void deleteSight(int index, List<Place> sight) {
-    PlaceInteractor(apiPlaceRepository: ApiPlaceRepository()).removeFromFavorites(
-      place: sight[index],
-    );
-    notifyListeners();
-  }
 
   void pickImage() {
     if (places.isEmpty) {

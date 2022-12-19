@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:places/providers/filter_data_provider.dart';
+import 'package:places/providers/places_functions_provider.dart';
 
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/widgets/sight_icons.dart';
@@ -23,7 +23,7 @@ class SuffixIcon extends StatelessWidget {
         borderRadius: BorderRadius.circular(40),
         onTap: () {
           controller.clear();
-          context.read<FilterDataProvider>().searchPlaces('', controller);
+          context.read<PlacesFunctionsProvider>().searchPlaces('', controller);
         },
         child: SightIcons(
           assetName: AppAssets.clearDark,

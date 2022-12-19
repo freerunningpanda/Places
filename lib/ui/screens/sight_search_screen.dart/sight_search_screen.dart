@@ -2,9 +2,8 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 
-import 'package:places/data/interactor/place_interactor.dart';
 import 'package:places/data/model/place.dart';
-import 'package:places/providers/filter_data_provider.dart';
+import 'package:places/providers/places_functions_provider.dart';
 import 'package:places/providers/text_field_provider.dart';
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_strings.dart';
@@ -21,14 +20,14 @@ class SightSearchScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final sightList = context.read<FilterDataProvider>().filteredPlaces;
+    final sightList = context.read<PlacesFunctionsProvider>().filteredPlaces;
     const readOnly = false;
     const isSearchPage = true;
-    final showHistoryList = context.read<FilterDataProvider>().hasFocus;
-    final searchStoryList = FilterDataProvider.searchHistoryList;
+    final showHistoryList = context.read<PlacesFunctionsProvider>().hasFocus;
+    final searchStoryList = PlacesFunctionsProvider.searchHistoryList;
     final width = MediaQuery.of(context).size.width;
 
-    context.watch<PlaceInteractor>();
+    context.watch<PlacesFunctionsProvider>();
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -83,7 +82,7 @@ class _SightListWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
-    final suggestions = context.read<FilterDataProvider>().filteredPlaces;
+    final suggestions = context.read<PlacesFunctionsProvider>().filteredPlaces;
 
     return suggestions.isEmpty
         ? _EmptyListWidget(
@@ -166,7 +165,7 @@ class _ClearHistoryButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextButton(
-      onPressed: () => context.read<FilterDataProvider>().removeAllItemsFromHistory(),
+      onPressed: () => context.read<PlacesFunctionsProvider>().removeAllItemsFromHistory(),
       child: const Align(
         alignment: Alignment.centerLeft,
         child: Text(
@@ -209,7 +208,7 @@ class _SearchItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    context.watch<PlaceInteractor>();
+    context.watch<PlacesFunctionsProvider>();
 
     return Column(
       children: searchStoryList
@@ -234,7 +233,7 @@ class _SearchItem extends StatelessWidget {
                     InkWell(
                       borderRadius: BorderRadius.circular(30),
                       onTap: () {
-                        context.read<FilterDataProvider>().removeItemFromHistory(e);
+                        context.read<PlacesFunctionsProvider>().removeItemFromHistory(e);
                       },
                       child: const SightIcons(assetName: AppAssets.delete, width: 24, height: 24),
                     ),
