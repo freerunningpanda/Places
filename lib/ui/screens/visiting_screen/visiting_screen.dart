@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:places/data/api/api_place_repository.dart';
+import 'package:places/data/api/api_places.dart';
 
 import 'package:places/data/interactor/place_interactor.dart';
 import 'package:places/data/model/place.dart';

@@ -1,25 +1,14 @@
 import 'dart:convert';
 
-import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
+import 'package:places/data/dio_configurator.dart';
 import 'package:places/data/dto/place_request.dart';
 import 'package:places/data/dto/place_response.dart';
 import 'package:places/data/interactor/place_interactor.dart';
 import 'package:places/data/model/place.dart';
 import 'package:places/mocks.dart';
 
-const url = 'https://test-backend-flutter.surfstudio.ru';
 
-final dio = Dio(baseoptions);
-
-BaseOptions baseoptions = BaseOptions(
-  baseUrl: url,
-  connectTimeout: 5000,
-  receiveTimeout: 5000,
-  sendTimeout: 5000,
-  // ignore: avoid_redundant_argument_values
-  responseType: ResponseType.json,
-);
 
 class ApiPlaceRepository {
   Future<List<PlaceResponse>> getPlaces({required String category, required int radius}) async {
@@ -143,20 +132,4 @@ class ApiPlaceRepository {
   }
 }
 
-void initInterceptors() {
-  dio.interceptors.add(
-    InterceptorsWrapper(
-      onError: (e, handler) {},
-      onRequest: (options, handler) {
-        debugPrint('Запрос отправляется');
 
-        return handler.next(options);
-      },
-      onResponse: (e, handler) {
-        debugPrint('Ответ получен');
-
-        return handler.next(e);
-      },
-    ),
-  );
-}

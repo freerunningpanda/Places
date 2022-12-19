@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:places/data/api/api_place_repository.dart';
+import 'package:places/data/api/api_places.dart';
 import 'package:places/data/api/mapper.dart';
 import 'package:places/data/dto/place_request.dart';
 import 'package:places/data/dto/place_response.dart';

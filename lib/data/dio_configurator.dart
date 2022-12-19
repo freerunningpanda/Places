@@ -1,30 +1,18 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 
-const url = 'https://test-backend-flutter.surfstudio.ru/client/client.html';
-
-const testUrl = 'https://jsonplaceholder.typicode.com';
+const url = 'https://test-backend-flutter.surfstudio.ru';
 
 final dio = Dio(baseoptions);
 
 BaseOptions baseoptions = BaseOptions(
-  baseUrl: testUrl,
+  baseUrl: url,
   connectTimeout: 5000,
   receiveTimeout: 5000,
   sendTimeout: 5000,
   // ignore: avoid_redundant_argument_values
   responseType: ResponseType.json,
 );
-
-Future<dynamic> getPosts() async {
-  initInterceptors();
-
-  final response = await dio.get<String>('/users');
-  if (response.statusCode == 200) {
-    return response.data;
-  }
-  throw Exception('No 200 status code: Error code: ${response.statusCode}');
-}
 
 void initInterceptors() {
   dio.interceptors.add(
