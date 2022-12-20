@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:places/data/model/place.dart';
 // import 'package:places/data/model/sight.dart';
-import 'package:places/ui/res/app_strings.dart';
 
 abstract class Mocks {
   static const mockLat = 55.988344;
@@ -218,19 +216,6 @@ abstract class Mocks {
   //     type: AppString.particularPlace,
   //   ),
   // ];
-
-  static List<Place> pickedImage = [
-    Place(
-      id: 27,
-      name: 'Мытищинский парк',
-      lat: 55.911397,
-      lon: 37.740033,
-      urls: ['https://pic.rutubelist.ru/video/39/09/390905576c021a02b5b57c374ba16621.jpg'],
-      // url: 'lib/ui/res/images/no_image.png',
-      description: 'Мытищинский парк — центральный парк в одноименном городе Московской области.',
-      placeType: AppString.park,
-    ),
-  ];
 
   static double startPoint = 2000;
   static double endPoint = 8000;

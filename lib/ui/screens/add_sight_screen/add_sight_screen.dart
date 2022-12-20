@@ -6,7 +6,8 @@ import 'package:places/data/model/place.dart';
 import 'package:places/data/repository/place_repository.dart';
 import 'package:places/providers/add_place_data_provider.dart';
 import 'package:places/providers/category_data_provider.dart';
-import 'package:places/providers/image_provider.dart' as image_provider;
+import 'package:places/providers/image_data_provider.dart' as image_provider;
+import 'package:places/providers/image_data_provider.dart';
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_strings.dart';
 import 'package:places/ui/res/app_typography.dart';
@@ -157,7 +158,7 @@ class _ImagePickerWidgetState extends State<_ImagePickerWidget> {
   final sightList = PlaceInteractor.favoritePlaces;
   @override
   Widget build(BuildContext context) {
-    final places = PlaceInteractor.places;
+    final places = ImageDataProvider.places;
 
     return SizedBox(
       height: 72,
@@ -216,7 +217,7 @@ class _SightContent extends StatelessWidget {
     return Dismissible(
       direction: DismissDirection.vertical,
       key: UniqueKey(),
-      onDismissed: (direction) => context.read<image_provider.ImageProvider>().removeImage(index),
+      onDismissed: (direction) => context.read<image_provider.ImageDataProvider>().removeImage(index),
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 8),
         decoration: const BoxDecoration(),
@@ -242,7 +243,7 @@ class _SightContent extends StatelessWidget {
                   type: MaterialType.transparency,
                   child: InkWell(
                     borderRadius: BorderRadius.circular(30),
-                    onTap: () => context.read<image_provider.ImageProvider>().removeImage(index),
+                    onTap: () => context.read<image_provider.ImageDataProvider>().removeImage(index),
                     child: const SizedBox(height: 24, width: 24),
                   ),
                 ),

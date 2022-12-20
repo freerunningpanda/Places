@@ -2,7 +2,6 @@ import 'package:places/data/model/place.dart';
 import 'package:places/data/repository/place_repository.dart';
 
 class PlaceInteractor {
-  static final List<Place> places = [];
   static final List<String> activeFilters = [];
   static final Set<Place> filtersWithDistance = {};
   static final List<Place> filteredMocks = [];

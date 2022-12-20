@@ -4,7 +4,7 @@ import 'package:places/providers/add_place_data_provider.dart';
 import 'package:places/providers/category_data_provider.dart';
 import 'package:places/providers/dismissible_data_provider.dart';
 import 'package:places/providers/filter_data_provider.dart';
-import 'package:places/providers/image_provider.dart' as image_provider;
+import 'package:places/providers/image_data_provider.dart';
 import 'package:places/providers/search_data_provider.dart';
 import 'package:places/providers/theme_data_provider.dart';
 import 'package:places/ui/res/app_strings.dart';
@@ -25,8 +25,8 @@ void main() {
         ChangeNotifierProvider<AddPlaceDataProvider>(
           create: (_) => AddPlaceDataProvider(),
         ),
-        ChangeNotifierProvider<image_provider.ImageProvider>(
-          create: (_) => image_provider.ImageProvider(),
+        ChangeNotifierProvider<ImageDataProvider>(
+          create: (_) => ImageDataProvider(),
         ),
         ChangeNotifierProvider<ThemeDataProvider>(
           create: (_) => ThemeDataProvider(),
