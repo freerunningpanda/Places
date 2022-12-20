@@ -1,7 +1,5 @@
 import 'package:flutter/foundation.dart';
 import 'package:places/data/api/api_places.dart';
-import 'package:places/data/dto/place_request.dart';
-import 'package:places/data/dto/place_response.dart';
 import 'package:places/data/interactor/place_interactor.dart';
 import 'package:places/data/model/place.dart';
 import 'package:places/data/repository/mapper.dart';
@@ -14,22 +12,18 @@ class Repository {
     required this.apiPlaces,
   });
 
+  // Преобразовать все места из Dto в места для UI
   Future<List<Place>> getPlaces() async {
-    final placesDto = await apiPlaces.getPlaces(
+    final places = await apiPlaces.getPlaces(
       category: '',
       radius: 15000,
     );
-    final places = _placesFromApiToUi(placesDto);
 
-    return places;
+    return places.map(Mapper.placesFromApiToUi).toList();
   }
 
-  Future<Place> getPlaceDetails(Place place) async {
-    final placeDto = await apiPlaces.getPlaceDetails(place.id);
-    final placeDetail = _detailPlaceFromApiToUi(placeDto);
-
-    return placeDetail;
-  }
+  // Преобразовать одно место из Dto в место для UI
+  Future<Place> getPlaceDetails(Place place) => apiPlaces.getPlaceDetails(place.id).then(Mapper.detailPlaceFromApiToUi);
 
   Set<Place> getFavoritesPlaces() => apiPlaces.getFavoritesPlaces();
 
@@ -54,15 +48,5 @@ class Repository {
 
   void addNewPlace({required Place place}) {
     PlaceInteractor.newPlaces.add(place);
-  }
-
-  // Преобразовать все места из Dto в места для UI
-  List<Place> _placesFromApiToUi(List<PlaceResponse> apiPlaces) {
-    return apiPlaces.map(Mapper.placesFromApiToUi).toList();
-  }
-
-  // Преобразовать одно место из Dto в место для UI
-  Place _detailPlaceFromApiToUi(PlaceRequest apiPlaces) {
-    return Mapper.detailPlaceFromApiToUi(apiPlaces);
   }
 }
