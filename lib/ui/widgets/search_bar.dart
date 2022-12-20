@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:places/providers/places_functions_provider.dart';
-import 'package:places/providers/add_place_data_provider.dart';
 
+import 'package:places/providers/add_place_data_provider.dart';
+import 'package:places/providers/places_functions_provider.dart';
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_typography.dart';
 import 'package:places/ui/screens/filters_screen/filters_screen.dart';
