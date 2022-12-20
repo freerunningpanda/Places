@@ -4,8 +4,7 @@ import 'package:places/data/api/api_places.dart';
 import 'package:places/data/interactor/place_interactor.dart';
 import 'package:places/data/model/place.dart';
 import 'package:places/data/repository/place_repository.dart';
-import 'package:places/providers/filter_data_provider.dart';
-import 'package:places/providers/places_functions_provider.dart';
+import 'package:places/providers/dismissible_data_provider.dart';
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_card_size.dart';
 import 'package:places/ui/res/app_strings.dart';
@@ -36,7 +35,7 @@ class _VisitingScreenState extends State<VisitingScreen> with TickerProviderStat
 
   @override
   Widget build(BuildContext context) {
-    context.watch<PlacesFunctionsProvider>();
+    context.watch<DismissibleDataProvider>();
 
     return Padding(
       padding: const EdgeInsets.only(left: 16.0, right: 16.0),
@@ -183,7 +182,7 @@ class _WantToVisitWidget extends StatelessWidget {
     return ReorderableListView(
       onReorder: (oldIndex, newIndex) {
         if (newIndex > oldIndex) newIndex--;
-        context.read<PlacesFunctionsProvider>().dragCard(sightsToVisit, oldIndex, newIndex);
+        context.read<DismissibleDataProvider>().dragCard(sightsToVisit, oldIndex, newIndex);
       },
       children: [
         for (var i = 0; i < sightsToVisit.length; i++)
@@ -220,7 +219,7 @@ class _VisitedWidget extends StatelessWidget {
     return ReorderableListView(
       onReorder: (oldIndex, newIndex) {
         if (newIndex > oldIndex) newIndex--;
-        context.read<PlacesFunctionsProvider>().dragCard(visitedSights, oldIndex, newIndex);
+        context.read<DismissibleDataProvider>().dragCard(visitedSights, oldIndex, newIndex);
       },
       children: [
         for (var i = 0; i < visitedSights.length; i++)
@@ -301,13 +300,13 @@ class _DismissibleWidget extends StatelessWidget {
         ),
         Dismissible(
           key: uniqueKey,
-          onDismissed: (direction) => context.read<FilterDataProvider>().deleteSight(i, sightsToVisit),
+          onDismissed: (direction) => context.read<DismissibleDataProvider>().deleteSight(i, sightsToVisit),
           background: const SizedBox.shrink(),
           direction: DismissDirection.endToStart,
           child: Padding(
             padding: const EdgeInsets.only(bottom: 11.0),
             child: SightCard(
-              removeSight: () => context.read<FilterDataProvider>().deleteSight(i, sightsToVisit),
+              removeSight: () => context.read<DismissibleDataProvider>().deleteSight(i, sightsToVisit),
               isVisitingScreen: true,
               item: sightsToVisit[i],
               url: sightsToVisit[i].urls[0],

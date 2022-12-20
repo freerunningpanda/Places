@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 
 import 'package:places/providers/add_place_data_provider.dart';
 import 'package:places/providers/category_data_provider.dart';
+import 'package:places/providers/dismissible_data_provider.dart';
 import 'package:places/providers/filter_data_provider.dart';
 import 'package:places/providers/image_provider.dart' as image_provider;
-import 'package:places/providers/places_functions_provider.dart';
 import 'package:places/providers/search_data_provider.dart';
 import 'package:places/providers/theme_data_provider.dart';
 import 'package:places/ui/res/app_strings.dart';
@@ -25,9 +25,6 @@ void main() {
         ChangeNotifierProvider<AddPlaceDataProvider>(
           create: (_) => AddPlaceDataProvider(),
         ),
-        ChangeNotifierProvider<PlacesFunctionsProvider>(
-          create: (_) => PlacesFunctionsProvider(),
-        ),
         ChangeNotifierProvider<image_provider.ImageProvider>(
           create: (_) => image_provider.ImageProvider(),
         ),
@@ -39,6 +36,9 @@ void main() {
         ),
         ChangeNotifierProvider<FilterDataProvider>(
           create: (_) => FilterDataProvider(),
+        ),
+        ChangeNotifierProvider<DismissibleDataProvider>(
+          create: (_) => DismissibleDataProvider(),
         ),
       ],
       child: const App(),

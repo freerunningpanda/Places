@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:places/data/interactor/place_interactor.dart';
 import 'package:places/data/model/place.dart';
 import 'package:places/providers/add_place_data_provider.dart';
-import 'package:places/providers/places_functions_provider.dart';
 import 'package:places/providers/search_data_provider.dart';
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_strings.dart';
@@ -209,7 +208,7 @@ class _SearchItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    context.watch<PlacesFunctionsProvider>();
+    context.watch<SearchDataProvider>();
 
     return Column(
       children: searchStoryList
