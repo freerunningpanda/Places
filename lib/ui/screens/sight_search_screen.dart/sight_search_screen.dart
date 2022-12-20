@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 import 'package:places/data/model/place.dart';
 import 'package:places/providers/places_functions_provider.dart';
-import 'package:places/providers/text_field_provider.dart';
+import 'package:places/providers/add_place_data_provider.dart';
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_strings.dart';
 import 'package:places/ui/res/app_typography.dart';
@@ -221,7 +221,7 @@ class _SearchItem extends StatelessWidget {
                   children: [
                     InkWell(
                       borderRadius: BorderRadius.circular(12),
-                      onTap: () => context.read<TextFieldProvider>().searchController.text = e,
+                      onTap: () => context.read<AddPlaceDataProvider>().searchController.text = e,
                       child: SizedBox(
                         width: width * 0.7,
                         child: Text(

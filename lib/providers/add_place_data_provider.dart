@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class TextFieldProvider extends ChangeNotifier {
+class AddPlaceDataProvider extends ChangeNotifier {
   final titleController = TextEditingController();
   final descriptionController = TextEditingController();
   final searchController = TextEditingController();

@@ -4,9 +4,9 @@ import 'package:places/data/api/api_places.dart';
 import 'package:places/data/interactor/place_interactor.dart';
 import 'package:places/data/model/place.dart';
 import 'package:places/data/repository/place_repository.dart';
-import 'package:places/providers/category_provider.dart';
+import 'package:places/providers/category_data_provider.dart';
 import 'package:places/providers/image_provider.dart' as image_provider;
-import 'package:places/providers/text_field_provider.dart';
+import 'package:places/providers/add_place_data_provider.dart';
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_strings.dart';
 import 'package:places/ui/res/app_typography.dart';
@@ -29,18 +29,18 @@ class AddSightScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final latController = context.read<TextFieldProvider>().latController;
-    final lotController = context.read<TextFieldProvider>().lotController;
-    final latFocus = context.read<TextFieldProvider>().latFocus;
-    final lotFocus = context.read<TextFieldProvider>().lotFocus;
-    final titleController = context.read<TextFieldProvider>().titleController;
-    final descriptionController = context.read<TextFieldProvider>().descriptionController;
-    final titleFocus = context.read<TextFieldProvider>().titleFocus;
-    final descriptionFocus = context.read<TextFieldProvider>().descriptionFocus;
+    final latController = context.read<AddPlaceDataProvider>().latController;
+    final lotController = context.read<AddPlaceDataProvider>().lotController;
+    final latFocus = context.read<AddPlaceDataProvider>().latFocus;
+    final lotFocus = context.read<AddPlaceDataProvider>().lotFocus;
+    final titleController = context.read<AddPlaceDataProvider>().titleController;
+    final descriptionController = context.read<AddPlaceDataProvider>().descriptionController;
+    final titleFocus = context.read<AddPlaceDataProvider>().titleFocus;
+    final descriptionFocus = context.read<AddPlaceDataProvider>().descriptionFocus;
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
     final theme = Theme.of(context);
-    final chosenCategory = CategoryProvider.chosenCategory;
+    final chosenCategory = CategoryDataProvider.chosenCategory;
 
     return Scaffold(
       body: GestureDetector(
@@ -123,7 +123,7 @@ class AddSightScreen extends StatelessWidget {
                             latController.clear();
                             lotController.clear();
                             debugPrint('🟡---------Создан объект: ${PlaceInteractor.newPlaces.toList()}');
-                            context.read<CategoryProvider>().clearCategory(activeCategories: chosenCategory);
+                            context.read<CategoryDataProvider>().clearCategory(activeCategories: chosenCategory);
                           },
                           titleController: titleController,
                           latController: latController,
@@ -429,7 +429,7 @@ class _CoordinatsInputWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final focus = context.watch<TextFieldProvider>();
+    final focus = context.watch<AddPlaceDataProvider>();
 
     return Row(
       children: [
@@ -555,7 +555,7 @@ class _CategoryChooseWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    context.watch<CategoryProvider>().updateCategory();
+    context.watch<CategoryDataProvider>().updateCategory();
 
     return Column(
       children: [
@@ -579,14 +579,14 @@ class _CategoryChooseWidget extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                if (CategoryProvider.chosenCategory.isEmpty)
+                if (CategoryDataProvider.chosenCategory.isEmpty)
                   Text(
                     AppString.nochoose,
                     style: theme.textTheme.titleMedium,
                   )
                 else
                   Text(
-                    CategoryProvider.chosenCategory[0].title,
+                    CategoryDataProvider.chosenCategory[0].title,
                     style: theme.textTheme.titleMedium,
                   ),
                 const Icon(

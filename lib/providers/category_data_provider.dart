@@ -3,7 +3,7 @@ import 'package:places/data/model/category.dart';
 import 'package:places/ui/res/app_strings.dart';
 import 'package:places/utils/place_type.dart';
 
-class CategoryProvider extends ChangeNotifier {
+class CategoryDataProvider extends ChangeNotifier {
   static final List<Category> chosenCategory = [];
   static final List<Category> categories = [
     Category(title: AppString.hotel, placeType: PlaceType.hotel),

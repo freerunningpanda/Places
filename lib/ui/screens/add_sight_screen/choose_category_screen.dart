@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 
 import 'package:places/data/model/category.dart';
-import 'package:places/providers/category_provider.dart';
+import 'package:places/providers/category_data_provider.dart';
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_strings.dart';
 import 'package:places/ui/widgets/new_place_app_bar_widget.dart';
@@ -19,7 +19,7 @@ class ChooseCategoryWidget extends StatefulWidget {
 }
 
 class _ChooseCategoryWidgetState extends State<ChooseCategoryWidget> {
-  final categories = CategoryProvider.categories;
+  final categories = CategoryDataProvider.categories;
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +27,7 @@ class _ChooseCategoryWidgetState extends State<ChooseCategoryWidget> {
     final height = MediaQuery.of(context).size.height;
     final theme = Theme.of(context);
 
-    context.watch<CategoryProvider>();
+    context.watch<CategoryDataProvider>();
 
     return Scaffold(
       body: SafeArea(
@@ -56,10 +56,10 @@ class _ChooseCategoryWidgetState extends State<ChooseCategoryWidget> {
                         isEnabled: category.isEnabled,
                         category: category,
                         onTap: () {
-                          context.read<CategoryProvider>().chooseCategory(
+                          context.read<CategoryDataProvider>().chooseCategory(
                                 index: index,
-                                categories: CategoryProvider.categories,
-                                activeCategories: CategoryProvider.chosenCategory,
+                                categories: CategoryDataProvider.categories,
+                                activeCategories: CategoryDataProvider.chosenCategory,
                               );
                         },
                       );
@@ -74,7 +74,7 @@ class _ChooseCategoryWidgetState extends State<ChooseCategoryWidget> {
               const Divider(),
               SizedBox(height: height * 0.3),
               SaveButton(
-                chosenCategory: CategoryProvider.chosenCategory,
+                chosenCategory: CategoryDataProvider.chosenCategory,
                 title: AppString.save,
                 onTap: () => Navigator.pop(context),
               ),
@@ -93,12 +93,12 @@ class _BackButtonWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final chosenCategory = CategoryProvider.chosenCategory;
+    final chosenCategory = CategoryDataProvider.chosenCategory;
 
     return InkWell(
       borderRadius: BorderRadius.circular(40),
       onTap: () {
-        context.read<CategoryProvider>().clearCategory(activeCategories: chosenCategory);
+        context.read<CategoryDataProvider>().clearCategory(activeCategories: chosenCategory);
         Navigator.pop(context);
       },
       child: const Icon(Icons.chevron_left),
