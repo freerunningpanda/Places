@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
+import 'package:places/data/interactor/place_interactor.dart';
 import 'package:places/providers/add_place_data_provider.dart';
-import 'package:places/providers/places_functions_provider.dart';
+import 'package:places/providers/search_data_provider.dart';
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_typography.dart';
 import 'package:places/ui/screens/filters_screen/filters_screen.dart';
@@ -34,10 +35,10 @@ class _SearchBarState extends State<SearchBar> {
   Widget build(BuildContext context) {
     final customColors = Theme.of(context).extension<CustomColors>()!;
     final theme = Theme.of(context);
-    final filteredPlaces = context.read<PlacesFunctionsProvider>().filteredPlaces;
+    final filteredPlaces = PlaceInteractor.filteredPlaces;
     final controller = context.read<AddPlaceDataProvider>().searchController;
 
-    context.watch<PlacesFunctionsProvider>();
+    context.watch<SearchDataProvider>();
 
     return Padding(
       padding: const EdgeInsets.only(
@@ -72,7 +73,7 @@ class _SearchBarState extends State<SearchBar> {
                     focusNode: focusNode,
                     readOnly: widget.readOnly ?? true,
                     onChanged: (value) {
-                      context.read<PlacesFunctionsProvider>()
+                      context.read<SearchDataProvider>()
                         ..activeFocus(isActive: true)
                         ..searchPlaces(value, controller);
 
@@ -81,7 +82,7 @@ class _SearchBarState extends State<SearchBar> {
                       }
                     },
                     onTap: () {
-                      context.read<PlacesFunctionsProvider>().activeFocus(isActive: true);
+                      context.read<SearchDataProvider>().activeFocus(isActive: true);
                       if (!widget.isSearchPage) {
                         Navigator.of(context).push(
                           MaterialPageRoute<SightSearchScreen>(
@@ -93,7 +94,7 @@ class _SearchBarState extends State<SearchBar> {
                       }
                     },
                     onSubmitted: (value) {
-                      context.read<PlacesFunctionsProvider>()
+                      context.read<SearchDataProvider>()
                         ..activeFocus(isActive: false)
                         ..saveSearchHistory(value, controller);
                       controller.clear();

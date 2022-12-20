@@ -3,11 +3,16 @@ import 'package:places/data/repository/place_repository.dart';
 
 class PlaceInteractor {
   static final List<Place> places = [];
+  static final List<String> activeFilters = [];
+  static final Set<Place> filtersWithDistance = {};
+  static final List<Place> filteredMocks = [];
+  static final Set<String> searchHistoryList = {};
+  static List<Place> filteredPlaces = filtersWithDistance.toList();
   static Set<Place> favoritePlaces = {};
   static Set<Place> visitedPlaces = {};
   static Set<Place> newPlaces = {};
-
   final PlaceRepository repository;
+
 
   PlaceInteractor({
     required this.repository,
@@ -28,5 +33,4 @@ class PlaceInteractor {
   void addToVisitingPlaces({required Place place}) => repository.addToVisitingPlaces(place: place);
 
   void addNewPlace({required Place place}) => repository.addNewPlace(place: place);
-  
 }

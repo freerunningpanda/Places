@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 
 import 'package:places/providers/add_place_data_provider.dart';
 import 'package:places/providers/category_data_provider.dart';
+import 'package:places/providers/filter_data_provider.dart';
 import 'package:places/providers/image_provider.dart' as image_provider;
 import 'package:places/providers/places_functions_provider.dart';
+import 'package:places/providers/search_data_provider.dart';
 import 'package:places/providers/theme_data_provider.dart';
 import 'package:places/ui/res/app_strings.dart';
 import 'package:places/ui/screens/res/app_theme.dart';
@@ -31,6 +33,12 @@ void main() {
         ),
         ChangeNotifierProvider<ThemeDataProvider>(
           create: (_) => ThemeDataProvider(),
+        ),
+        ChangeNotifierProvider<SearchDataProvider>(
+          create: (_) => SearchDataProvider(),
+        ),
+        ChangeNotifierProvider<FilterDataProvider>(
+          create: (_) => FilterDataProvider(),
         ),
       ],
       child: const App(),
