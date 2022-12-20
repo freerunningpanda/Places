@@ -59,7 +59,7 @@ class _AppState extends State<App> {
     final isDarkMode = context.watch<ThemeDataProvider>().isDarkMode;
 
     return MaterialApp(
-      theme: !isDarkMode ? _lightTheme : _darkTheme,
+      theme: isDarkMode ? _darkTheme : _lightTheme,
       debugShowCheckedModeBanner: false,
       title: AppString.places,
       home: const MainScreen(),
