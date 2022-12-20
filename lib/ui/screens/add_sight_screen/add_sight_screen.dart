@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:places/data/api/api_places.dart';
 import 'package:places/data/interactor/place_interactor.dart';
 import 'package:places/data/model/place.dart';
-import 'package:places/data/repository/repository.dart';
+import 'package:places/data/repository/place_repository.dart';
 import 'package:places/providers/category_provider.dart';
 import 'package:places/providers/image_provider.dart' as image_provider;
 import 'package:places/providers/text_field_provider.dart';
@@ -107,7 +107,7 @@ class AddSightScreen extends StatelessWidget {
                           title: AppString.create,
                           onTap: () {
                             debugPrint('🟡---------create btn pressed');
-                            PlaceInteractor(repository: Repository(apiPlaces: ApiPlaces())).addNewPlace(
+                            PlaceInteractor(repository: PlaceRepository(apiPlaces: ApiPlaces())).addNewPlace(
                               place: Place(
                                 id: 0,
                                 urls: [''],

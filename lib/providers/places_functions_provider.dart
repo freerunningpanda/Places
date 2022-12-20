@@ -5,7 +5,7 @@ import 'package:places/data/api/api_places.dart';
 import 'package:places/data/interactor/place_interactor.dart';
 import 'package:places/data/model/category.dart';
 import 'package:places/data/model/place.dart';
-import 'package:places/data/repository/repository.dart';
+import 'package:places/data/repository/place_repository.dart';
 import 'package:places/mocks.dart';
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_strings.dart';
@@ -187,7 +187,7 @@ class PlacesFunctionsProvider extends ChangeNotifier {
   }
 
   void deleteSight(int index, List<Place> sight) {
-    PlaceInteractor(repository: Repository(apiPlaces: ApiPlaces())).removeFromFavorites(
+    PlaceInteractor(repository: PlaceRepository(apiPlaces: ApiPlaces())).removeFromFavorites(
       place: sight[index],
     );
     notifyListeners();

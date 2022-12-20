@@ -1,7 +1,7 @@
-import 'package:places/providers/dark_mode_provider.dart';
+import 'package:places/providers/theme_data_provider.dart';
 
 class SettingsInteractor {
-  final DarkModeProvider darkModeProvider;
+  final ThemeDataProvider darkModeProvider;
 
   SettingsInteractor({
     required this.darkModeProvider,

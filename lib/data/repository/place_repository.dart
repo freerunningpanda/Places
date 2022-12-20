@@ -4,11 +4,11 @@ import 'package:places/data/interactor/place_interactor.dart';
 import 'package:places/data/model/place.dart';
 import 'package:places/data/repository/mapper.dart';
 
-class Repository {
+class PlaceRepository {
   static final List<Place> places = [];
   final ApiPlaces apiPlaces;
 
-  Repository({
+  PlaceRepository({
     required this.apiPlaces,
   });
 

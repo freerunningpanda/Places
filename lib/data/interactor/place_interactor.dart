@@ -1,5 +1,5 @@
 import 'package:places/data/model/place.dart';
-import 'package:places/data/repository/repository.dart';
+import 'package:places/data/repository/place_repository.dart';
 
 class PlaceInteractor {
   static final List<Place> places = [];
@@ -7,7 +7,7 @@ class PlaceInteractor {
   static Set<Place> visitedPlaces = {};
   static Set<Place> newPlaces = {};
 
-  final Repository repository;
+  final PlaceRepository repository;
 
   PlaceInteractor({
     required this.repository,

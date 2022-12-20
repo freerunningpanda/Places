@@ -5,7 +5,7 @@ import 'package:places/data/api/api_places.dart';
 
 import 'package:places/data/interactor/place_interactor.dart';
 import 'package:places/data/model/place.dart';
-import 'package:places/data/repository/repository.dart';
+import 'package:places/data/repository/place_repository.dart';
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_strings.dart';
 import 'package:places/ui/res/app_typography.dart';
@@ -86,7 +86,7 @@ class _SightListScreenState extends State<SightListScreen> {
 
   Future<void> getPlaces() async {
     placeList = await PlaceInteractor(
-      repository: Repository(
+      repository: PlaceRepository(
         apiPlaces: ApiPlaces(),
       ),
     ).getPlaces();
@@ -129,7 +129,7 @@ class _SightListWidgetPortraitState extends State<_SightListWidgetPortrait> {
                 addSight: () {
                   if (!place.isFavorite) {
                     PlaceInteractor(
-                      repository: Repository(
+                      repository: PlaceRepository(
                         apiPlaces: ApiPlaces(),
                       ),
                     ).addToFavorites(place: place);
@@ -138,7 +138,7 @@ class _SightListWidgetPortraitState extends State<_SightListWidgetPortrait> {
                     });
                   } else {
                     PlaceInteractor(
-                      repository: Repository(
+                      repository: PlaceRepository(
                         apiPlaces: ApiPlaces(),
                       ),
                     ).removeFromFavorites(place: place);
