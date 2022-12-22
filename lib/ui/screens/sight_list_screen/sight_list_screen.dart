@@ -130,7 +130,7 @@ class _SightListWidgetPortraitState extends State<_SightListWidgetPortrait> {
         itemBuilder: (context, index) {
           final place = widget.placeList[index];
 
-          return StreamBuilder<Object>(
+          return StreamBuilder<bool>(
             stream: _controller.stream,
             builder: (context, snapshot) {
               return Column(

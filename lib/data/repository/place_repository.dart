@@ -27,7 +27,7 @@ class PlaceRepository {
 
   Set<Place> getFavoritesPlaces() => apiPlaces.getFavoritesPlaces();
 
-   Stream<bool> addToFavorites({required Place place}) async* {
+  Stream<bool> addToFavorites({required Place place}) async* {
     if (!place.isFavorite) {
       final list = PlaceInteractor.favoritePlaces.add(place);
       debugPrint('🟡--------- Добавлено в избранное: ${PlaceInteractor.favoritePlaces}');
