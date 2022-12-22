@@ -27,12 +27,11 @@ class _SightListScreenState extends State<SightListScreen> {
   final isSearchPage = false;
   final isPortrait = true;
   late List<Place> placeList;
-  bool isLoading = false;
 
   @override
   void initState() {
     super.initState();
-    getPlaces();
+    getPlacesStream();
   }
 
   @override
@@ -54,29 +53,26 @@ class _SightListScreenState extends State<SightListScreen> {
               ),
             ),
           ],
-          body: isLoading
-              ? Column(
-                  children: [
-                    if (orientation)
-                      SearchBar(
-                        isSearchPage: isSearchPage,
-                        readOnly: readOnly,
-                      )
-                    else
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 18.0),
-                        child: SearchBar(
-                          isSearchPage: isSearchPage,
-                          readOnly: readOnly,
+          body: StreamBuilder<List<Place>>(
+            stream: getPlacesStream(),
+            builder: (context, snapshot) {
+              return snapshot.hasData
+                  ? Column(children: [
+                      if (orientation)
+                        SearchBar(isSearchPage: isSearchPage, readOnly: readOnly)
+                      else
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 18.0),
+                          child: SearchBar(isSearchPage: isSearchPage, readOnly: readOnly),
                         ),
-                      ),
-                    if (orientation)
-                      _SightListWidgetPortrait(placeList: placeList, theme: theme)
-                    else
-                      _SightListWidgetLandscape(placeList: placeList, theme: theme),
-                  ],
-                )
-              : const Center(child: CircularProgressIndicator()),
+                      if (orientation)
+                        _SightListWidgetPortrait(placeList: placeList, theme: theme)
+                      else
+                        _SightListWidgetLandscape(placeList: placeList, theme: theme),
+                    ])
+                  : const Center(child: CircularProgressIndicator());
+            },
+          ),
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
@@ -84,15 +80,13 @@ class _SightListScreenState extends State<SightListScreen> {
     );
   }
 
-  Future<void> getPlaces() async {
+  Stream<List<Place>> getPlacesStream() async* {
     placeList = await PlaceInteractor(
       repository: PlaceRepository(
         apiPlaces: ApiPlaces(),
       ),
     ).getPlaces();
-    setState(() {
-      isLoading = true;
-    });
+    yield placeList;
   }
 }
 
