@@ -1,9 +1,11 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:places/data/api/api_places.dart';
 
-import 'package:places/data/sight.dart';
-import 'package:places/mocks.dart';
+import 'package:places/data/interactor/place_interactor.dart';
+import 'package:places/data/model/place.dart';
+import 'package:places/data/repository/place_repository.dart';
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_strings.dart';
 import 'package:places/ui/res/app_typography.dart';
@@ -24,11 +26,19 @@ class _SightListScreenState extends State<SightListScreen> {
   final isEnabled = true;
   final isSearchPage = false;
   final isPortrait = true;
-  List<Sight> sightList = Mocks.mocks;
+  late List<Place> placeList;
+  bool isLoading = false;
+
+  @override
+  void initState() {
+    super.initState();
+    getPlaces();
+  }
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final orientation = MediaQuery.of(context).orientation == Orientation.portrait;
 
     return Scaffold(
       body: Padding(
@@ -36,7 +46,7 @@ class _SightListScreenState extends State<SightListScreen> {
         child: NestedScrollView(
           headerSliverBuilder: (context, innerBoxIsScrolled) => [
             SliverAppBar(
-              centerTitle: MediaQuery.of(context).orientation == Orientation.portrait ? isPortrait : !isPortrait,
+              centerTitle: orientation ? isPortrait : !isPortrait,
               pinned: true,
               title: Text(
                 AppString.appTitle,
@@ -44,80 +54,130 @@ class _SightListScreenState extends State<SightListScreen> {
               ),
             ),
           ],
-          body: Column(
-            children: [
-              if (MediaQuery.of(context).orientation == Orientation.portrait)
-                SearchBar(
-                  isSearchPage: isSearchPage,
-                  readOnly: readOnly,
+          body: isLoading
+              ? Column(
+                  children: [
+                    if (orientation)
+                      SearchBar(
+                        isSearchPage: isSearchPage,
+                        readOnly: readOnly,
+                      )
+                    else
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 18.0),
+                        child: SearchBar(
+                          isSearchPage: isSearchPage,
+                          readOnly: readOnly,
+                        ),
+                      ),
+                    if (orientation)
+                      _SightListWidgetPortrait(placeList: placeList, theme: theme)
+                    else
+                      _SightListWidgetLandscape(placeList: placeList, theme: theme),
+                  ],
                 )
-              else
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 18.0),
-                  child: SearchBar(
-                    isSearchPage: isSearchPage,
-                    readOnly: readOnly,
-                  ),
-                ),
-              if (MediaQuery.of(context).orientation == Orientation.portrait)
-                _SightListWidgetPortrait(sightList: sightList, theme: theme)
-              else
-                _SightListWidgetLandscape(sightList: sightList, theme: theme),
-            ],
-          ),
+              : const Center(child: CircularProgressIndicator()),
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: const AddNewPlaceButton(),
     );
   }
+
+  Future<void> getPlaces() async {
+    placeList = await PlaceInteractor(
+      repository: PlaceRepository(
+        apiPlaces: ApiPlaces(),
+      ),
+    ).getPlaces();
+    setState(() {
+      isLoading = true;
+    });
+  }
 }
 
-class _SightListWidgetPortrait extends StatelessWidget {
-  final List<Sight> sightList;
+class _SightListWidgetPortrait extends StatefulWidget {
+  final List<Place> placeList;
   final ThemeData theme;
 
   const _SightListWidgetPortrait({
     Key? key,
-    required this.sightList,
+    required this.placeList,
     required this.theme,
   }) : super(key: key);
 
   @override
+  State<_SightListWidgetPortrait> createState() => _SightListWidgetPortraitState();
+}
+
+class _SightListWidgetPortraitState extends State<_SightListWidgetPortrait> {
+  @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+
     return Expanded(
       child: ListView.builder(
         physics: Platform.isAndroid ? const ClampingScrollPhysics() : const BouncingScrollPhysics(),
         shrinkWrap: true,
-        itemCount: sightList.length,
+        itemCount: widget.placeList.length,
         itemBuilder: (context, index) {
-          final sight = sightList[index];
+          final place = widget.placeList[index];
 
           return Column(
             children: [
               SightCard(
+                addSight: () {
+                  if (!place.isFavorite) {
+                    PlaceInteractor(
+                      repository: PlaceRepository(
+                        apiPlaces: ApiPlaces(),
+                      ),
+                    ).addToFavorites(place: place);
+                    setState(() {
+                      place.isFavorite = true;
+                    });
+                  } else {
+                    PlaceInteractor(
+                      repository: PlaceRepository(
+                        apiPlaces: ApiPlaces(),
+                      ),
+                    ).removeFromFavorites(place: place);
+                    setState(() {
+                      place.isFavorite = false;
+                    });
+                  }
+                },
                 isVisitingScreen: false,
                 aspectRatio: 3 / 2,
-                actionOne: const SightIcons(
-                  assetName: AppAssets.favourite,
-                  width: 22,
-                  height: 22,
-                ),
-                url: sight.url ?? 'no_url',
-                type: sight.type,
-                name: sight.name,
-                item: sight,
+                actionOne: !place.isFavorite
+                    ? const SightIcons(
+                        assetName: AppAssets.favourite,
+                        width: 22,
+                        height: 22,
+                      )
+                    : const SightIcons(
+                        assetName: AppAssets.heartFull,
+                        width: 22,
+                        height: 22,
+                      ),
+                url: place.urls[0],
+                type: place.placeType,
+                name: place.name,
+                item: place,
                 details: [
                   Text(
-                    sight.name,
+                    place.name,
                     maxLines: 2,
-                    style: theme.textTheme.headlineSmall,
+                    style: widget.theme.textTheme.headlineSmall,
                   ),
                   const SizedBox(height: 2),
-                  Text(
-                    sight.details,
-                    overflow: TextOverflow.ellipsis,
-                    style: AppTypography.textText16Regular,
+                  SizedBox(
+                    height: size.height / 7,
+                    child: Text(
+                      place.description,
+                      overflow: TextOverflow.ellipsis,
+                      style: AppTypography.textText16Regular,
+                    ),
                   ),
                 ],
               ),
@@ -131,17 +191,19 @@ class _SightListWidgetPortrait extends StatelessWidget {
 }
 
 class _SightListWidgetLandscape extends StatelessWidget {
-  final List<Sight> sightList;
+  final List<Place> placeList;
   final ThemeData theme;
 
   const _SightListWidgetLandscape({
     Key? key,
-    required this.sightList,
+    required this.placeList,
     required this.theme,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+
     return Expanded(
       child: GridView.builder(
         padding: const EdgeInsets.symmetric(horizontal: 18.0),
@@ -153,35 +215,38 @@ class _SightListWidgetLandscape extends StatelessWidget {
         ),
         physics: Platform.isAndroid ? const ClampingScrollPhysics() : const BouncingScrollPhysics(),
         shrinkWrap: true,
-        itemCount: sightList.length,
+        itemCount: placeList.length,
         itemBuilder: (context, index) {
-          final sight = sightList[index];
+          final place = placeList[index];
 
           return Column(
             children: [
               SightCard(
                 isVisitingScreen: false,
-                aspectRatio: 3 / 1,
+                aspectRatio: 1.5 / 1,
                 actionOne: const SightIcons(
                   assetName: AppAssets.favourite,
                   width: 22,
                   height: 22,
                 ),
-                url: sight.url ?? 'no_url',
-                type: sight.type,
-                name: sight.name,
-                item: sight,
+                url: place.urls[0],
+                type: place.placeType,
+                name: place.name,
+                item: place,
                 details: [
                   Text(
-                    sight.name,
+                    place.name,
                     maxLines: 2,
                     style: theme.textTheme.headlineSmall,
                   ),
                   const SizedBox(height: 2),
-                  Text(
-                    sight.details,
-                    overflow: TextOverflow.ellipsis,
-                    style: AppTypography.textText16Regular,
+                  SizedBox(
+                    height: size.height / 10,
+                    child: Text(
+                      place.description,
+                      overflow: TextOverflow.ellipsis,
+                      style: AppTypography.textText16Regular,
+                    ),
                   ),
                 ],
               ),

@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 
-import 'package:places/appsettings.dart';
-import 'package:places/data/categories_table.dart';
-import 'package:places/data/sight.dart';
-import 'package:places/mocks.dart';
+import 'package:places/data/api/api_places.dart';
+import 'package:places/data/interactor/place_interactor.dart';
+import 'package:places/data/model/place.dart';
+import 'package:places/data/repository/place_repository.dart';
+import 'package:places/providers/add_place_data_provider.dart';
+import 'package:places/providers/category_data_provider.dart';
+import 'package:places/providers/image_data_provider.dart' as image_provider;
+import 'package:places/providers/image_data_provider.dart';
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_strings.dart';
 import 'package:places/ui/res/app_typography.dart';
@@ -26,18 +30,18 @@ class AddSightScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final latController = context.read<AppSettings>().latController;
-    final lotController = context.read<AppSettings>().lotController;
-    final latFocus = context.read<AppSettings>().latFocus;
-    final lotFocus = context.read<AppSettings>().lotFocus;
-    final titleController = context.read<AppSettings>().titleController;
-    final descriptionController = context.read<AppSettings>().descriptionController;
-    final titleFocus = context.read<AppSettings>().titleFocus;
-    final descriptionFocus = context.read<AppSettings>().descriptionFocus;
+    final latController = context.read<AddPlaceDataProvider>().latController;
+    final lotController = context.read<AddPlaceDataProvider>().lotController;
+    final latFocus = context.read<AddPlaceDataProvider>().latFocus;
+    final lotFocus = context.read<AddPlaceDataProvider>().lotFocus;
+    final titleController = context.read<AddPlaceDataProvider>().titleController;
+    final descriptionController = context.read<AddPlaceDataProvider>().descriptionController;
+    final titleFocus = context.read<AddPlaceDataProvider>().titleFocus;
+    final descriptionFocus = context.read<AddPlaceDataProvider>().descriptionFocus;
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
     final theme = Theme.of(context);
-    final chosenCategory = CategoriesTable.chosenCategory;
+    final chosenCategory = CategoryDataProvider.chosenCategory;
 
     return Scaffold(
       body: GestureDetector(
@@ -104,21 +108,23 @@ class AddSightScreen extends StatelessWidget {
                           title: AppString.create,
                           onTap: () {
                             debugPrint('🟡---------create btn pressed');
-                            Mocks.mocks.add(
-                              Sight(
+                            PlaceInteractor(repository: PlaceRepository(apiPlaces: ApiPlaces())).addNewPlace(
+                              place: Place(
+                                id: 0,
+                                urls: [''],
                                 name: name,
                                 lat: lat,
-                                lot: lot,
-                                details: details,
-                                type: chosenCategory[0].title,
+                                lon: lot,
+                                description: details,
+                                placeType: chosenCategory[0].title,
                               ),
                             );
                             titleController.clear();
                             descriptionController.clear();
                             latController.clear();
                             lotController.clear();
-                            debugPrint('🟡---------Создан объект: ${Mocks.mocks[7]}');
-                            context.read<AppSettings>().clearCategory(activeCategories: chosenCategory);
+                            debugPrint('🟡---------Создан объект: ${PlaceInteractor.newPlaces.toList()}');
+                            context.read<CategoryDataProvider>().clearCategory(activeCategories: chosenCategory);
                           },
                           titleController: titleController,
                           latController: latController,
@@ -148,10 +154,11 @@ class _ImagePickerWidget extends StatefulWidget {
 }
 
 class _ImagePickerWidgetState extends State<_ImagePickerWidget> {
-  final sightList = Mocks.mocks;
+  // TODO(Alex): rewrite.
+  final sightList = PlaceInteractor.favoritePlaces;
   @override
   Widget build(BuildContext context) {
-    final places = context.watch<AppSettings>().places;
+    final places = ImageDataProvider.places;
 
     return SizedBox(
       height: 72,
@@ -171,7 +178,7 @@ class _ImagePickerWidgetState extends State<_ImagePickerWidget> {
                   children: [
                     for (var i = 0; i < places.length; i++)
                       _ImageSight(
-                        image: places[i].url,
+                        image: places[i].urls[0],
                         index: i,
                       ),
                   ],
@@ -210,7 +217,7 @@ class _SightContent extends StatelessWidget {
     return Dismissible(
       direction: DismissDirection.vertical,
       key: UniqueKey(),
-      onDismissed: (direction) => context.read<AppSettings>().removeImage(index),
+      onDismissed: (direction) => context.read<image_provider.ImageDataProvider>().removeImage(index),
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 8),
         decoration: const BoxDecoration(),
@@ -236,7 +243,7 @@ class _SightContent extends StatelessWidget {
                   type: MaterialType.transparency,
                   child: InkWell(
                     borderRadius: BorderRadius.circular(30),
-                    onTap: () => context.read<AppSettings>().removeImage(index),
+                    onTap: () => context.read<image_provider.ImageDataProvider>().removeImage(index),
                     child: const SizedBox(height: 24, width: 24),
                   ),
                 ),
@@ -251,7 +258,7 @@ class _SightContent extends StatelessWidget {
 
 /// Class for image picking to horizontal list
 class _PickImageWidget extends StatelessWidget {
-  final List<Sight> places;
+  final List<Place> places;
   final ThemeData theme;
 
   const _PickImageWidget({
@@ -277,9 +284,12 @@ class _PickImageWidget extends StatelessWidget {
         icon: const Icon(Icons.add_rounded, size: 45),
         onPressed: () async {
           // context.read<AppSettings>().pickImage();
-          await showDialog<PickImageWidget>(context: context, builder: (_) {
-            return const PickImageWidget();
-          });
+          await showDialog<PickImageWidget>(
+            context: context,
+            builder: (_) {
+              return const PickImageWidget();
+            },
+          );
         },
         color: theme.sliderTheme.activeTrackColor,
       ),
@@ -420,7 +430,7 @@ class _CoordinatsInputWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final focus = context.watch<AppSettings>();
+    final focus = context.watch<AddPlaceDataProvider>();
 
     return Row(
       children: [
@@ -546,7 +556,7 @@ class _CategoryChooseWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    context.watch<AppSettings>().updateCategory();
+    context.watch<CategoryDataProvider>().updateCategory();
 
     return Column(
       children: [
@@ -570,14 +580,14 @@ class _CategoryChooseWidget extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                if (CategoriesTable.chosenCategory.isEmpty)
+                if (CategoryDataProvider.chosenCategory.isEmpty)
                   Text(
                     AppString.nochoose,
                     style: theme.textTheme.titleMedium,
                   )
                 else
                   Text(
-                    CategoriesTable.chosenCategory[0].title,
+                    CategoryDataProvider.chosenCategory[0].title,
                     style: theme.textTheme.titleMedium,
                   ),
                 const Icon(

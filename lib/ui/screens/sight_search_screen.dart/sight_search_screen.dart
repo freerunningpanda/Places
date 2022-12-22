@@ -1,9 +1,10 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-
-import 'package:places/appsettings.dart';
-import 'package:places/data/sight.dart';
+import 'package:places/data/interactor/place_interactor.dart';
+import 'package:places/data/model/place.dart';
+import 'package:places/providers/add_place_data_provider.dart';
+import 'package:places/providers/search_data_provider.dart';
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_strings.dart';
 import 'package:places/ui/res/app_typography.dart';
@@ -19,14 +20,14 @@ class SightSearchScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final sightList = context.read<AppSettings>().suggestions;
+    final sightList = PlaceInteractor.filteredPlaces;
     const readOnly = false;
     const isSearchPage = true;
-    final showHistoryList = context.read<AppSettings>().hasFocus;
-    final searchStoryList = context.read<AppSettings>().searchHistoryList;
+    final showHistoryList = context.read<SearchDataProvider>().hasFocus;
+    final searchStoryList = PlaceInteractor.searchHistoryList;
     final width = MediaQuery.of(context).size.width;
 
-    context.watch<AppSettings>();
+    context.watch<SearchDataProvider>();
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -73,7 +74,7 @@ class SightSearchScreen extends StatelessWidget {
 }
 
 class _SightListWidget extends StatelessWidget {
-  final List<Sight> sightList;
+  final List<Place> sightList;
   final ThemeData theme;
   const _SightListWidget({Key? key, required this.sightList, required this.theme}) : super(key: key);
 
@@ -81,9 +82,9 @@ class _SightListWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
-    final suggestions = context.read<AppSettings>().suggestions;
+    final filteredPlaces = PlaceInteractor.filteredPlaces;
 
-    return suggestions.isEmpty
+    return filteredPlaces.isEmpty
         ? _EmptyListWidget(
             height: height,
             width: width,
@@ -164,7 +165,7 @@ class _ClearHistoryButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextButton(
-      onPressed: () => context.read<AppSettings>().removeAllItemsFromHistory(),
+      onPressed: () => context.read<SearchDataProvider>().removeAllItemsFromHistory(),
       child: const Align(
         alignment: Alignment.centerLeft,
         child: Text(
@@ -207,7 +208,7 @@ class _SearchItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    context.watch<AppSettings>();
+    context.watch<SearchDataProvider>();
 
     return Column(
       children: searchStoryList
@@ -220,7 +221,7 @@ class _SearchItem extends StatelessWidget {
                   children: [
                     InkWell(
                       borderRadius: BorderRadius.circular(12),
-                      onTap: () => context.read<AppSettings>().searchController.text = e,
+                      onTap: () => context.read<AddPlaceDataProvider>().searchController.text = e,
                       child: SizedBox(
                         width: width * 0.7,
                         child: Text(
@@ -232,7 +233,7 @@ class _SearchItem extends StatelessWidget {
                     InkWell(
                       borderRadius: BorderRadius.circular(30),
                       onTap: () {
-                        context.read<AppSettings>().removeItemFromHistory(e);
+                        context.read<SearchDataProvider>().removeItemFromHistory(e);
                       },
                       child: const SightIcons(assetName: AppAssets.delete, width: 24, height: 24),
                     ),
@@ -299,7 +300,7 @@ class _EmptyStateWidget extends StatelessWidget {
 }
 
 class _SightCardWidget extends StatelessWidget {
-  final Sight sight;
+  final Place sight;
   final double width;
   final ThemeData theme;
 
@@ -333,7 +334,7 @@ class _SightCardWidget extends StatelessWidget {
 }
 
 class _RippleEffect extends StatelessWidget {
-  final Sight sight;
+  final Place sight;
 
   const _RippleEffect({
     Key? key,
@@ -349,7 +350,7 @@ class _RippleEffect extends StatelessWidget {
           onTap: () => Navigator.of(context).push<SightDetails>(
             MaterialPageRoute(
               builder: (context) => SightDetails(
-                sight: sight,
+                place: sight,
                 height: 360,
               ),
             ),
@@ -362,7 +363,7 @@ class _RippleEffect extends StatelessWidget {
 
 class _SightContent extends StatelessWidget {
   final double width;
-  final Sight sight;
+  final Place sight;
   final ThemeData theme;
 
   const _SightContent({
@@ -393,7 +394,7 @@ class _SightContent extends StatelessWidget {
 }
 
 class _SightType extends StatelessWidget {
-  final Sight sight;
+  final Place sight;
   final ThemeData theme;
 
   const _SightType({
@@ -405,7 +406,7 @@ class _SightType extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Text(
-      sight.type,
+      sight.placeType,
       style: theme.textTheme.bodyMedium,
     );
   }
@@ -413,7 +414,7 @@ class _SightType extends StatelessWidget {
 
 class _SightTitle extends StatelessWidget {
   final double width;
-  final Sight sight;
+  final Place sight;
   final ThemeData theme;
 
   const _SightTitle({
@@ -437,7 +438,7 @@ class _SightTitle extends StatelessWidget {
 }
 
 class _SightImage extends StatelessWidget {
-  final Sight sight;
+  final Place sight;
 
   const _SightImage({
     Key? key,
@@ -454,10 +455,7 @@ class _SightImage extends StatelessWidget {
         decoration: BoxDecoration(
           image: DecorationImage(
             fit: BoxFit.cover,
-            image: AssetImage(sight.url ?? 'null'),
-            // NetworkImage(
-            //   sight.url ?? 'null',
-            // ),
+            image: NetworkImage(sight.urls[0]),
           ),
         ),
       ),

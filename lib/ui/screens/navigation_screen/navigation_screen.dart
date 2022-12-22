@@ -62,7 +62,7 @@ class _NavigationScreenState extends State<NavigationScreen> {
             ),
             BottomNavigationBarItem(
               icon: SightIcons(
-                assetName: currentIndex == 2 ? AppAssets.heartFull : AppAssets.favouriteDark,
+                assetName: currentIndex == 2 ? AppAssets.heartFullDark : AppAssets.favouriteDark,
                 width: 24,
                 height: 24,
                 color: theme.iconTheme.color,

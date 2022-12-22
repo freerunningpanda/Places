@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import 'package:places/appsettings.dart';
 import 'package:places/main.dart';
+import 'package:places/providers/theme_data_provider.dart';
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_strings.dart';
 import 'package:places/ui/screens/navigation_screen/navigation_screen.dart';
@@ -22,7 +22,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   var _currentIndex = 0;
   @override
   Widget build(BuildContext context) {
-    final isDarkMode = context.watch<AppSettings>().isDarkMode;
+    final isDarkMode = context.watch<ThemeDataProvider>().isDarkMode;
     final theme = Theme.of(context);
 
     final pages = <Widget>[

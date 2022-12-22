@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:places/data/api/api_places.dart';
 
-import 'package:places/appsettings.dart';
-import 'package:places/data/filters.dart';
-import 'package:places/data/filters_table.dart';
-import 'package:places/data/sight.dart';
+import 'package:places/data/interactor/place_interactor.dart';
+import 'package:places/data/model/category.dart';
+import 'package:places/data/model/place.dart';
+import 'package:places/data/repository/place_repository.dart';
 import 'package:places/mocks.dart';
+import 'package:places/providers/filter_data_provider.dart';
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_strings.dart';
 import 'package:places/ui/res/app_typography.dart';
-import 'package:places/ui/screens/filters_screen/filters_settings.dart';
 import 'package:places/ui/widgets/action_button.dart';
 import 'package:places/ui/widgets/sight_icons.dart';
 import 'package:provider/provider.dart';
@@ -25,14 +26,21 @@ class FilterScreen extends StatefulWidget {
 }
 
 class _FilterScreenState extends State<FilterScreen> {
-  final sightList = Mocks.mocks;
+  late final List<Place> placeList;
+  bool isLoading = false;
+
+  @override
+  void initState() {
+    getPlaces();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
-    final clearFilters = context.read<FiltersSettings>().clearAllFilters;
+    final clearFilters = context.read<FilterDataProvider>().clearAllFilters;
     final size = MediaQuery.of(context).size;
     // ignore: unnecessary_statements
-    context.watch<FiltersSettings>();
+    context.watch<FilterDataProvider>();
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -46,52 +54,61 @@ class _FilterScreenState extends State<FilterScreen> {
           right: 16,
           bottom: 8.0,
         ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const _Title(),
-            const SizedBox(height: 24),
-            _FiltersTable(
-              sightList: sightList,
-              filters: FiltersTable.filters,
-              activeFilters: FiltersSettings().activeFilters,
-            ),
-            if (size.width <= 320) SizedBox(height: size.height / 10) else SizedBox(height: size.height / 3.5),
-            Expanded(
-              child: _DistanceSlider(
-                sightList: sightList,
-              ),
-            ),
-            if (size.width <= 320)
-              Expanded(
-                child: ActionButton(
-                  counterValue: FiltersTable.filtersWithDistance.length,
-                  activeFilters: FiltersSettings().activeFilters,
-                  title: '${AppString.showPlaces} (${FiltersTable.filtersWithDistance.length})',
-                  rangeValues: Mocks.rangeValues,
-                  onTap: () {
-                    context.read<FiltersSettings>().showCount();
-                    context.read<AppSettings>().clearSight();
-                    debugPrint('🟡---------Длина: ${FiltersTable.filtersWithDistance.length}');
-                  },
-                ),
+        child: isLoading
+            ? Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const _Title(),
+                  const SizedBox(height: 24),
+                  _FiltersTable(
+                    placeList: placeList,
+                    filters: FilterDataProvider.filters,
+                    activeFilters: PlaceInteractor.activeFilters,
+                  ),
+                  if (size.width <= 320) SizedBox(height: size.height / 10) else SizedBox(height: size.height / 3.5),
+                  Expanded(
+                    child: _DistanceSlider(
+                      placeList: placeList,
+                    ),
+                  ),
+                  if (size.width <= 320)
+                    Expanded(
+                      child: ActionButton(
+                        counterValue: PlaceInteractor.filtersWithDistance.length,
+                        activeFilters: PlaceInteractor.activeFilters,
+                        title: '${AppString.showPlaces} (${PlaceInteractor.filtersWithDistance.length})',
+                        rangeValues: Mocks.rangeValues,
+                        onTap: () {
+                          context.read<FilterDataProvider>().showCount(placeList: placeList);
+                          context.read<FilterDataProvider>().clearSight(placeList: placeList);
+                          debugPrint('🟡---------Длина: ${PlaceInteractor.filtersWithDistance.length}');
+                        },
+                      ),
+                    )
+                  else
+                    ActionButton(
+                      counterValue: PlaceInteractor.filtersWithDistance.length,
+                      activeFilters: PlaceInteractor.activeFilters,
+                      title: '${AppString.showPlaces} (${PlaceInteractor.filtersWithDistance.length})',
+                      rangeValues: Mocks.rangeValues,
+                      onTap: () {
+                        context.read<FilterDataProvider>().showCount(placeList: placeList);
+                        context.read<FilterDataProvider>().clearSight(placeList: placeList);
+                        debugPrint('🟡---------Длина: ${PlaceInteractor.filtersWithDistance.length}');
+                      },
+                    ),
+                ],
               )
-            else
-              ActionButton(
-                counterValue: FiltersTable.filtersWithDistance.length,
-                activeFilters: FiltersSettings().activeFilters,
-                title: '${AppString.showPlaces} (${FiltersTable.filtersWithDistance.length})',
-                rangeValues: Mocks.rangeValues,
-                onTap: () {
-                  context.read<FiltersSettings>().showCount();
-                  context.read<AppSettings>().clearSight();
-                  debugPrint('🟡---------Длина: ${FiltersTable.filtersWithDistance.length}');
-                },
-              ),
-          ],
-        ),
+            : const Center(child: CircularProgressIndicator()),
       ),
     );
+  }
+
+  Future<void> getPlaces() async {
+    placeList = await PlaceInteractor(repository: PlaceRepository(apiPlaces: ApiPlaces())).getPlaces();
+    setState(() {
+      isLoading = true;
+    });
   }
 }
 
@@ -164,12 +181,12 @@ class _ClearButtonWidgetState extends State<_ClearButtonWidget> {
 class _FiltersTable extends StatefulWidget {
   final List<Category> filters;
   final List<String> activeFilters;
-  final List<Sight> sightList;
+  final List<Place> placeList;
   const _FiltersTable({
     Key? key,
-    required this.sightList,
     required this.filters,
     required this.activeFilters,
+    required this.placeList,
   }) : super(key: key);
 
   @override
@@ -182,7 +199,7 @@ class _FiltersTableState extends State<_FiltersTable> {
     final size = MediaQuery.of(context).size;
 
     // ignore: unnecessary_statements
-    context.watch<FiltersSettings>();
+    context.watch<FilterDataProvider>();
 
     return Container(
       height: size.width <= 320 ? 90 : 170,
@@ -190,8 +207,14 @@ class _FiltersTableState extends State<_FiltersTable> {
       child: Builder(
         builder: (context) {
           return size.width <= 320
-              ? _ItemFiltersListSmallScreens(filtersTable: widget)
-              : _ItemFiltersListBigScreens(filtersTable: widget);
+              ? _ItemFiltersListSmallScreens(
+                  filtersTable: widget,
+                  placeList: widget.placeList,
+                )
+              : _ItemFiltersListBigScreens(
+                  filtersTable: widget,
+                  placeList: widget.placeList,
+                );
         },
       ),
     );
@@ -200,10 +223,12 @@ class _FiltersTableState extends State<_FiltersTable> {
 
 class _ItemFiltersListBigScreens extends StatelessWidget {
   final _FiltersTable filtersTable;
+  final List<Place> placeList;
 
   const _ItemFiltersListBigScreens({
     Key? key,
     required this.filtersTable,
+    required this.placeList,
   }) : super(key: key);
 
   @override
@@ -222,17 +247,18 @@ class _ItemFiltersListBigScreens extends StatelessWidget {
                 title: e.title,
                 assetName: e.assetName ?? 'null',
                 onTap: () {
-                  final filteredByType = filtersTable.sightList.where((sight) => sight.type.contains(e.title)).toList();
+                  final filteredByType =
+                      filtersTable.placeList.where((sight) => sight.placeType.contains(e.title)).toList();
                   if (!e.isEnabled) {
-                    FiltersTable.filteredMocks.addAll(filteredByType);
+                    PlaceInteractor.filteredMocks.addAll(filteredByType);
                   } else {
-                    FiltersTable.filteredMocks.clear();
-                    FiltersTable.filtersWithDistance.clear();
-                    debugPrint('🟡---------Добавленные места: ${FiltersTable.filteredMocks}');
+                    PlaceInteractor.filteredMocks.clear();
+                    PlaceInteractor.filtersWithDistance.clear();
+                    debugPrint('🟡---------Добавленные места: ${PlaceInteractor.filteredMocks}');
                   }
-                  context.read<FiltersSettings>().showCount();
+                  context.read<FilterDataProvider>().showCount(placeList: placeList);
 
-                  return context.read<FiltersSettings>().saveFilters(i);
+                  return context.read<FilterDataProvider>().saveFilters(i);
                 },
               ),
             ),
@@ -245,10 +271,12 @@ class _ItemFiltersListBigScreens extends StatelessWidget {
 
 class _ItemFiltersListSmallScreens extends StatelessWidget {
   final _FiltersTable filtersTable;
+  final List<Place> placeList;
 
   const _ItemFiltersListSmallScreens({
     Key? key,
     required this.filtersTable,
+    required this.placeList,
   }) : super(key: key);
 
   @override
@@ -265,17 +293,18 @@ class _ItemFiltersListSmallScreens extends StatelessWidget {
                 title: e.title,
                 assetName: e.assetName ?? 'null',
                 onTap: () {
-                  final filteredByType = filtersTable.sightList.where((sight) => sight.type.contains(e.title)).toList();
+                  final filteredByType =
+                      filtersTable.placeList.where((sight) => sight.placeType.contains(e.title)).toList();
                   if (!e.isEnabled) {
-                    FiltersTable.filteredMocks.addAll(filteredByType);
+                    PlaceInteractor.filteredMocks.addAll(filteredByType);
                   } else {
-                    FiltersTable.filteredMocks.clear();
-                    FiltersTable.filtersWithDistance.clear();
-                    debugPrint('🟡---------Добавленные места: ${FiltersTable.filteredMocks}');
+                    PlaceInteractor.filteredMocks.clear();
+                    PlaceInteractor.filtersWithDistance.clear();
+                    debugPrint('🟡---------Добавленные места: ${PlaceInteractor.filteredMocks}');
                   }
-                  context.read<FiltersSettings>().showCount();
+                  context.read<FilterDataProvider>().showCount(placeList: placeList);
 
-                  return context.read<FiltersSettings>().saveFilters(i);
+                  return context.read<FilterDataProvider>().saveFilters(i);
                 },
               ),
             ),
@@ -383,10 +412,10 @@ class _ItemFilterState extends State<_ItemFilter> {
 }
 
 class _DistanceSlider extends StatefulWidget {
-  final List<Sight> sightList;
+  final List<Place> placeList;
   const _DistanceSlider({
     Key? key,
-    required this.sightList,
+    required this.placeList,
   }) : super(key: key);
 
   @override
@@ -422,8 +451,8 @@ class _DistanceSliderState extends State<_DistanceSlider> {
           min: min,
           max: max,
           onChanged: (values) {
-            context.read<FiltersSettings>().changeArea(start: values.start, end: values.end);
-            context.read<FiltersSettings>().showCount();
+            context.read<FilterDataProvider>().changeArea(start: values.start, end: values.end);
+            context.read<FilterDataProvider>().showCount(placeList: widget.placeList);
           },
         ),
       ],

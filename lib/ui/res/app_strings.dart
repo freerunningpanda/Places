@@ -1,4 +1,5 @@
 abstract class AppString {
+  static const places = 'Places';
   static const appTitle = 'Список интересных мест';
   static const goButtonTitle = 'Построить маршрут';
   static const schedule = 'Запланировать';

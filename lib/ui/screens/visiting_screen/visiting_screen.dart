@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:places/data/api/api_places.dart';
 
-import 'package:places/appsettings.dart';
-import 'package:places/data/sight.dart';
+import 'package:places/data/interactor/place_interactor.dart';
+import 'package:places/data/model/place.dart';
+import 'package:places/data/repository/place_repository.dart';
+import 'package:places/providers/dismissible_data_provider.dart';
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_card_size.dart';
 import 'package:places/ui/res/app_strings.dart';
@@ -20,10 +23,19 @@ class VisitingScreen extends StatefulWidget {
 }
 
 class _VisitingScreenState extends State<VisitingScreen> with TickerProviderStateMixin {
+  late final Set<Place> sightsToVisit;
+  late final Set<Place> visitedSights;
+
+  @override
+  void initState() {
+    getFavoritePlaces();
+    getVisitPlaces();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
-    final sightsToVisit = context.watch<AppSettings>().sightsToVisit;
-    final visitedSights = context.watch<AppSettings>().visitedSights;
+    context.watch<DismissibleDataProvider>();
 
     return Padding(
       padding: const EdgeInsets.only(left: 16.0, right: 16.0),
@@ -40,7 +52,7 @@ class _VisitingScreenState extends State<VisitingScreen> with TickerProviderStat
                     children: [
                       if (sightsToVisit.isNotEmpty)
                         _WantToVisitWidget(
-                          sightsToVisit: sightsToVisit,
+                          sightsToVisit: sightsToVisit.toList(),
                           key: const PageStorageKey('WantToVisitScrollPosition'),
                         )
                       else
@@ -50,7 +62,7 @@ class _VisitingScreenState extends State<VisitingScreen> with TickerProviderStat
                         ),
                       if (visitedSights.isNotEmpty)
                         _VisitedWidget(
-                          visitedSights: visitedSights,
+                          visitedSights: visitedSights.toList(),
                           key: const PageStorageKey('VisitedScrollPosition'),
                         )
                       else
@@ -69,6 +81,24 @@ class _VisitingScreenState extends State<VisitingScreen> with TickerProviderStat
         ),
       ),
     );
+  }
+
+  // Получить список избранных мест
+  void getFavoritePlaces() {
+    sightsToVisit = PlaceInteractor(
+      repository: PlaceRepository(
+        apiPlaces: ApiPlaces(),
+      ),
+    ).getFavoritesPlaces();
+  }
+
+  // Показать посещённые места
+  void getVisitPlaces() {
+    visitedSights = PlaceInteractor(
+      repository: PlaceRepository(
+        apiPlaces: ApiPlaces(),
+      ),
+    ).getVisitPlaces();
   }
 }
 
@@ -142,7 +172,7 @@ class _TabBarWidgetState extends State<_TabBarWidget> with TickerProviderStateMi
 }
 
 class _WantToVisitWidget extends StatelessWidget {
-  final List<Sight> sightsToVisit;
+  final List<Place> sightsToVisit;
   const _WantToVisitWidget({Key? key, required this.sightsToVisit}) : super(key: key);
 
   @override
@@ -152,7 +182,7 @@ class _WantToVisitWidget extends StatelessWidget {
     return ReorderableListView(
       onReorder: (oldIndex, newIndex) {
         if (newIndex > oldIndex) newIndex--;
-        context.read<AppSettings>().dragCard(sightsToVisit, oldIndex, newIndex);
+        context.read<DismissibleDataProvider>().dragCard(sightsToVisit, oldIndex, newIndex);
       },
       children: [
         for (var i = 0; i < sightsToVisit.length; i++)
@@ -179,7 +209,7 @@ class _WantToVisitWidget extends StatelessWidget {
 }
 
 class _VisitedWidget extends StatelessWidget {
-  final List<Sight> visitedSights;
+  final List<Place> visitedSights;
   const _VisitedWidget({Key? key, required this.visitedSights}) : super(key: key);
 
   @override
@@ -189,12 +219,11 @@ class _VisitedWidget extends StatelessWidget {
     return ReorderableListView(
       onReorder: (oldIndex, newIndex) {
         if (newIndex > oldIndex) newIndex--;
-        context.read<AppSettings>().dragCard(visitedSights, oldIndex, newIndex);
+        context.read<DismissibleDataProvider>().dragCard(visitedSights, oldIndex, newIndex);
       },
       children: [
         for (var i = 0; i < visitedSights.length; i++)
           _DismissibleWidget(
-            key: ObjectKey(visitedSights[i]),
             i: i,
             sightsToVisit: visitedSights,
             theme: theme,
@@ -214,7 +243,7 @@ class _VisitedWidget extends StatelessWidget {
 
 class _DismissibleWidget extends StatelessWidget {
   final int i;
-  final List<Sight> sightsToVisit;
+  final List<Place> sightsToVisit;
   final ThemeData theme;
   final Key uniqueKey;
   final Widget actionTwo;
@@ -271,17 +300,17 @@ class _DismissibleWidget extends StatelessWidget {
         ),
         Dismissible(
           key: uniqueKey,
-          onDismissed: (direction) => context.read<AppSettings>().deleteSight(i, sightsToVisit),
+          onDismissed: (direction) => context.read<DismissibleDataProvider>().deleteSight(i, sightsToVisit),
           background: const SizedBox.shrink(),
           direction: DismissDirection.endToStart,
           child: Padding(
             padding: const EdgeInsets.only(bottom: 11.0),
             child: SightCard(
-              removeSight: () => context.read<AppSettings>().deleteSight(i, sightsToVisit),
+              removeSight: () => context.read<DismissibleDataProvider>().deleteSight(i, sightsToVisit),
               isVisitingScreen: true,
               item: sightsToVisit[i],
-              url: sightsToVisit[i].url ?? 'no_url',
-              type: sightsToVisit[i].type,
+              url: sightsToVisit[i].urls[0],
+              type: sightsToVisit[i].placeType,
               name: sightsToVisit[i].name,
               aspectRatio: AppCardSize.visitingCard,
               details: [

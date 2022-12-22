@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
-class FilterModel {
+class Filter {
   final List<String> category;
   final RangeValues values;
 
-  FilterModel({
+  Filter({
     required this.category,
     required this.values,
   });

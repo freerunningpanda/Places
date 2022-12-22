@@ -1,8 +1,11 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:places/data/api/api_places.dart';
+import 'package:places/data/interactor/place_interactor.dart';
+import 'package:places/data/model/place.dart';
+import 'package:places/data/repository/place_repository.dart';
 
-import 'package:places/data/sight.dart';
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_colors.dart';
 import 'package:places/ui/res/app_strings.dart';
@@ -11,11 +14,11 @@ import 'package:places/ui/widgets/close_bottom_sheet.dart';
 import 'package:places/ui/widgets/sight_icons.dart';
 
 class SightDetails extends StatefulWidget {
-  final Sight sight;
+  final Place place;
   final double height;
   const SightDetails({
     Key? key,
-    required this.sight,
+    required this.place,
     required this.height,
   }) : super(key: key);
 
@@ -35,7 +38,7 @@ class _SightDetailsState extends State<SightDetails> {
       ),
       (timer) {
         currentIndex++;
-        if (currentIndex > 2) {
+        if (currentIndex > widget.place.urls.length) {
           currentIndex = 0;
         }
         if (_pageController.hasClients) {
@@ -47,7 +50,7 @@ class _SightDetailsState extends State<SightDetails> {
         }
       },
     );
-
+    getPlaces();
     super.initState();
   }
 
@@ -71,23 +74,27 @@ class _SightDetailsState extends State<SightDetails> {
           const SizedBox(height: 12),
           _SightDetailsClosed(
             height: widget.height,
-            sight: widget.sight,
+            place: widget.place,
             pageController: _pageController,
           ),
         ],
       ),
     );
   }
+
+  Future<void> getPlaces() async {
+    await PlaceInteractor(repository: PlaceRepository(apiPlaces: ApiPlaces())).getPlaceDetails(widget.place);
+  }
 }
 
 class _SightDetailsFull extends StatelessWidget {
-  final Sight sight;
+  final Place place;
   final double height;
   final PageController _pageController;
 
   const _SightDetailsFull({
     Key? key,
-    required this.sight,
+    required this.place,
     required this.height,
     required PageController pageController,
   })  : _pageController = pageController,
@@ -96,6 +103,7 @@ class _SightDetailsFull extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final orientation = MediaQuery.of(context).orientation == Orientation.portrait;
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.end,
@@ -123,19 +131,19 @@ class _SightDetailsFull extends StatelessWidget {
                   topLeft: Radius.circular(12.0),
                   topRight: Radius.circular(12.0),
                 ),
-                color: theme.sliderTheme.thumbColor,
+                color: theme.scaffoldBackgroundColor,
               ),
               child: ConstrainedBox(
                 constraints: BoxConstraints(
-                  maxHeight: MediaQuery.of(context).orientation == Orientation.portrait ? 629 : 350,
+                  maxHeight: orientation ? 629 : 350,
                 ),
                 child: ListView(
                   children: [
                     ClipRRect(
                       borderRadius: BorderRadius.circular(12),
                       child: _SightDetailsGallery(
+                        images: place.urls,
                         height: height,
-                        sight: sight,
                         pageController: _pageController,
                       ),
                     ),
@@ -144,16 +152,16 @@ class _SightDetailsFull extends StatelessWidget {
                       child: Column(
                         children: [
                           _DetailsScreenTitle(
-                            sight: sight,
+                            sight: place,
                           ),
                           const SizedBox(height: 24),
-                          _DetailsScreenDescription(sight: sight),
+                          _DetailsScreenDescription(sight: place),
                           const SizedBox(height: 24),
-                          _SightDetailsBuildRouteBtn(sight: sight),
+                          _SightDetailsBuildRouteBtn(sight: place),
                           const SizedBox(height: 16),
                           const Divider(),
                           const SizedBox(height: 8),
-                          const _SightDetailsBottom(),
+                          _SightDetailsBottom(place: place),
                           const SizedBox(height: 16),
                         ],
                       ),
@@ -170,13 +178,13 @@ class _SightDetailsFull extends StatelessWidget {
 }
 
 class _SightDetailsClosed extends StatefulWidget {
-  final Sight sight;
+  final Place place;
   final double height;
   final PageController _pageController;
 
   const _SightDetailsClosed({
     Key? key,
-    required this.sight,
+    required this.place,
     required this.height,
     required PageController pageController,
   })  : _pageController = pageController,
@@ -191,46 +199,43 @@ class _SightDetailsClosedState extends State<_SightDetailsClosed> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final size = MediaQuery.of(context).size;
+    final orientation = MediaQuery.of(context).orientation == Orientation.portrait;
 
     return Column(
       children: [
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
-          child: Stack(
-            clipBehavior: Clip.none,
+          child: Column(
+            // clipBehavior: Clip.none,
             children: [
-              Positioned(
-                left: size.width / 2.5,
-                right: size.width / 2.5,
-                child: GestureDetector(
-                  onTap: _showGallery,
-                  child: Container(
-                    width: 40,
-                    height: 3,
-                    decoration: BoxDecoration(
-                      borderRadius: const BorderRadius.all(Radius.circular(8.0)),
-                      color: theme.iconTheme.color,
-                    ),
+              GestureDetector(
+                onTap: _showGallery,
+                child: Container(
+                  width: 60,
+                  height: 3,
+                  decoration: BoxDecoration(
+                    borderRadius: const BorderRadius.all(Radius.circular(8.0)),
+                    color: theme.iconTheme.color,
                   ),
                 ),
               ),
               SizedBox(
-                height:
-                    MediaQuery.of(context).orientation == Orientation.portrait ? size.height / 2.0 : size.height / 1.5,
-                child: Column(
+                height: orientation ? size.height / 2.0 : size.height / 1.5,
+                child: ListView(
+                  shrinkWrap: true,
                   children: [
                     const SizedBox(height: 8),
                     _DetailsScreenTitle(
-                      sight: widget.sight,
+                      sight: widget.place,
                     ),
                     const SizedBox(height: 24),
-                    _DetailsScreenDescription(sight: widget.sight),
+                    _DetailsScreenDescription(sight: widget.place),
                     const SizedBox(height: 24),
-                    _SightDetailsBuildRouteBtn(sight: widget.sight),
+                    _SightDetailsBuildRouteBtn(sight: widget.place),
                     const SizedBox(height: 16),
                     const Divider(),
                     const SizedBox(height: 8),
-                    const _SightDetailsBottom(),
+                    _SightDetailsBottom(place: widget.place),
                     const SizedBox(height: 16),
                   ],
                 ),
@@ -247,7 +252,7 @@ class _SightDetailsClosedState extends State<_SightDetailsClosed> {
       context: context,
       builder: (_) => _SightDetailsFull(
         height: widget.height,
-        sight: widget.sight,
+        place: widget.place,
         pageController: widget._pageController,
       ),
       isScrollControlled: true,
@@ -255,18 +260,25 @@ class _SightDetailsClosedState extends State<_SightDetailsClosed> {
   }
 }
 
-class _SightDetailsGallery extends StatelessWidget {
-  final Sight sight;
+class _SightDetailsGallery extends StatefulWidget {
+  final List<String> images;
   final double height;
   final PageController _pageController;
 
   const _SightDetailsGallery({
     Key? key,
-    required this.sight,
+    required this.images,
     required this.height,
     required PageController pageController,
   })  : _pageController = pageController,
         super(key: key);
+
+  @override
+  State<_SightDetailsGallery> createState() => _SightDetailsGalleryState();
+}
+
+class _SightDetailsGalleryState extends State<_SightDetailsGallery> {
+  final scrollController = ScrollController();
 
   @override
   Widget build(BuildContext context) {
@@ -276,33 +288,33 @@ class _SightDetailsGallery extends StatelessWidget {
     return SizedBox(
       height: MediaQuery.of(context).size.height / 1.8,
       child: CustomScrollView(
+        // controller: scrollController,
         slivers: [
           SliverAppBar(
             automaticallyImplyLeading: false,
-            expandedHeight: height,
+            expandedHeight: widget.height,
             flexibleSpace: Stack(
               children: [
                 SizedBox(
                   width: double.infinity,
-                  height: height,
+                  height: widget.height,
                   child: Scrollbar(
-                    controller: _pageController,
+                    controller: widget._pageController,
                     child: PageView(
-                      controller: _pageController,
-                      children: [
-                        _SightDetailsImage(
-                          sight: sight,
-                          height: height,
-                        ),
-                        _SightDetailsImage(
-                          sight: sight,
-                          height: height,
-                        ),
-                        _SightDetailsImage(
-                          sight: sight,
-                          height: height,
-                        ),
-                      ],
+                      controller: widget._pageController,
+                      children: widget.images
+                          .asMap()
+                          .map(
+                            (i, e) => MapEntry(
+                              i,
+                              _SightDetailsImage(
+                                height: widget.height,
+                                image: e,
+                              ),
+                            ),
+                          )
+                          .values
+                          .toList(),
                     ),
                   ),
                 ),
@@ -340,7 +352,7 @@ class _SightDetailsGallery extends StatelessWidget {
 }
 
 class _DetailsScreenTitle extends StatelessWidget {
-  final Sight sight;
+  final Place sight;
 
   const _DetailsScreenTitle({
     Key? key,
@@ -364,7 +376,7 @@ class _DetailsScreenTitle extends StatelessWidget {
         Row(
           children: [
             Text(
-              sight.type,
+              sight.placeType,
               style: theme.textTheme.titleSmall,
             ),
             const SizedBox(width: 16),
@@ -380,11 +392,11 @@ class _DetailsScreenTitle extends StatelessWidget {
 }
 
 class _SightDetailsImage extends StatelessWidget {
-  final Sight sight;
+  final String image;
   final double height;
   const _SightDetailsImage({
     Key? key,
-    required this.sight,
+    required this.image,
     required this.height,
   }) : super(key: key);
 
@@ -393,7 +405,7 @@ class _SightDetailsImage extends StatelessWidget {
     return SizedBox(
       height: height,
       child: Image.network(
-        sight.url ?? 'no_url',
+        image,
         fit: BoxFit.cover,
         loadingBuilder: (context, child, loadingProgress) {
           if (loadingProgress == null) return child;
@@ -408,7 +420,7 @@ class _SightDetailsImage extends StatelessWidget {
 }
 
 class _DetailsScreenDescription extends StatelessWidget {
-  final Sight sight;
+  final Place sight;
   const _DetailsScreenDescription({
     Key? key,
     required this.sight,
@@ -420,7 +432,7 @@ class _DetailsScreenDescription extends StatelessWidget {
 
     return SizedBox(
       child: Text(
-        sight.details,
+        sight.description,
         style: theme.textTheme.displaySmall,
       ),
     );
@@ -428,7 +440,7 @@ class _DetailsScreenDescription extends StatelessWidget {
 }
 
 class _SightDetailsBuildRouteBtn extends StatelessWidget {
-  final Sight sight;
+  final Place sight;
   const _SightDetailsBuildRouteBtn({
     Key? key,
     required this.sight,
@@ -470,7 +482,9 @@ class _SightDetailsBuildRouteBtn extends StatelessWidget {
 }
 
 class _SightDetailsBottom extends StatelessWidget {
+  final Place place;
   const _SightDetailsBottom({
+    required this.place,
     Key? key,
   }) : super(key: key);
 
@@ -481,7 +495,7 @@ class _SightDetailsBottom extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        GestureDetector(
+        InkWell(
           onTap: () => debugPrint('🟡---------Schedule pressed'),
           child: Row(
             children: const [
@@ -500,8 +514,12 @@ class _SightDetailsBottom extends StatelessWidget {
             ],
           ),
         ),
-        GestureDetector(
-          onTap: () => debugPrint('🟡---------To favourite pressed'),
+        InkWell(
+          onTap: () => PlaceInteractor(
+            repository: PlaceRepository(
+              apiPlaces: ApiPlaces(),
+            ),
+          ).addToFavorites(place: place),
           child: Row(
             children: [
               SightIcons(

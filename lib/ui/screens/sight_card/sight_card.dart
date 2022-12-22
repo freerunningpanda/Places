@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:places/data/sight.dart';
+import 'package:places/data/model/place.dart';
 
 import 'package:places/ui/res/app_card_size.dart';
 import 'package:places/ui/res/app_typography.dart';
@@ -18,9 +18,10 @@ class SightCard extends StatelessWidget {
   final Widget actionOne;
   final Widget? actionTwo;
   final double? aspectRatio;
-  final Sight item;
+  final Place item;
   final bool isVisitingScreen;
   final VoidCallback? removeSight;
+  final VoidCallback? addSight;
 
   const SightCard({
     Key? key,
@@ -34,6 +35,7 @@ class SightCard extends StatelessWidget {
     required this.item,
     required this.isVisitingScreen,
     this.removeSight,
+    this.addSight,
   }) : super(key: key);
 
   @override
@@ -75,7 +77,10 @@ class SightCard extends StatelessWidget {
                   actionTwo: actionTwo ?? const SizedBox(),
                 )
               else
-                RippleIcon(actionOne: actionOne),
+                RippleIcon(
+                  actionOne: actionOne,
+                  addSight: addSight,
+                ),
             ],
           ),
         ),
@@ -86,10 +91,12 @@ class SightCard extends StatelessWidget {
 
 class RippleIcon extends StatelessWidget {
   final Widget actionOne;
+  final VoidCallback? addSight;
 
   const RippleIcon({
     Key? key,
     required this.actionOne,
+    required this.addSight,
   }) : super(key: key);
 
   @override
@@ -104,9 +111,7 @@ class RippleIcon extends StatelessWidget {
           height: 22,
           child: InkWell(
             borderRadius: BorderRadius.circular(16.0),
-            onTap: () {
-              debugPrint('🟡---------like pressed');
-            },
+            onTap: addSight,
             child: actionOne,
           ),
         ),
@@ -185,7 +190,7 @@ class RippleIcons extends StatelessWidget {
 }
 
 class RippleCardFull extends StatelessWidget {
-  final Sight item;
+  final Place item;
 
   const RippleCardFull({
     Key? key,
@@ -204,7 +209,7 @@ class RippleCardFull extends StatelessWidget {
               MaterialPageRoute<SightDetails>(
                 builder: (context) => SightDetails(
                   height: 360,
-                  sight: item,
+                  place: item,
                 ),
               ),
             );
