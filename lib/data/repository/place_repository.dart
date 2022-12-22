@@ -27,10 +27,19 @@ class PlaceRepository {
 
   Set<Place> getFavoritesPlaces() => apiPlaces.getFavoritesPlaces();
 
-  void addToFavorites({required Place place}) {
-    PlaceInteractor.favoritePlaces.add(place);
-    debugPrint('🟡--------- Добавлено в избранное: ${PlaceInteractor.favoritePlaces}');
-    debugPrint('🟡--------- Длина: ${PlaceInteractor.favoritePlaces.length}');
+   Stream<bool> addToFavorites({required Place place}) async* {
+    if (!place.isFavorite) {
+      final list = PlaceInteractor.favoritePlaces.add(place);
+      debugPrint('🟡--------- Добавлено в избранное: ${PlaceInteractor.favoritePlaces}');
+      debugPrint('🟡--------- Длина: ${PlaceInteractor.favoritePlaces.length}');
+      place.isFavorite = true;
+      yield list;
+    } else {
+      final list = PlaceInteractor.favoritePlaces.remove(place);
+      debugPrint('🟡--------- Длина: ${PlaceInteractor.favoritePlaces.length}');
+      place.isFavorite = false;
+      yield list;
+    }
   }
 
   void removeFromFavorites({required Place place}) {

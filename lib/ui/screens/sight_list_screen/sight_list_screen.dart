@@ -138,27 +138,12 @@ class _SightListWidgetPortraitState extends State<_SightListWidgetPortrait> {
                   SightCard(
                     addSight: () {
                       _controller.sink.addStream(
-                        addToFavorites(place: place),
+                        PlaceInteractor(
+                          repository: PlaceRepository(
+                            apiPlaces: ApiPlaces(),
+                          ),
+                        ).addToFavorites(place: place),
                       );
-                      // if (!place.isFavorite) {
-                      //   PlaceInteractor(
-                      //     repository: PlaceRepository(
-                      //       apiPlaces: ApiPlaces(),
-                      //     ),
-                      //   ).addToFavorites(place: place);
-                      //   setState(() {
-                      //     place.isFavorite = true;
-                      //   });
-                      // } else {
-                      //   PlaceInteractor(
-                      //     repository: PlaceRepository(
-                      //       apiPlaces: ApiPlaces(),
-                      //     ),
-                      //   ).removeFromFavorites(place: place);
-                      //   setState(() {
-                      //     place.isFavorite = false;
-                      //   });
-                      // }
                     },
                     isVisitingScreen: false,
                     aspectRatio: 3 / 2,
@@ -208,21 +193,6 @@ class _SightListWidgetPortraitState extends State<_SightListWidgetPortrait> {
   void dispose() {
     _controller.close();
     super.dispose();
-  }
-
-  Stream<bool> addToFavorites({required Place place}) async* {
-    if (!place.isFavorite) {
-      final list = PlaceInteractor.favoritePlaces.add(place);
-      debugPrint('🟡--------- Добавлено в избранное: ${PlaceInteractor.favoritePlaces}');
-      debugPrint('🟡--------- Длина: ${PlaceInteractor.favoritePlaces.length}');
-      place.isFavorite = true;
-      yield list;
-    } else {
-      final list = PlaceInteractor.favoritePlaces.remove(place);
-      debugPrint('🟡--------- Длина: ${PlaceInteractor.favoritePlaces.length}');
-      place.isFavorite = false;
-      yield list;
-    }
   }
 }
 
