@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -26,13 +27,13 @@ class _SightListScreenState extends State<SightListScreen> {
   final isEnabled = true;
   final isSearchPage = false;
   final isPortrait = true;
+  final _controller = StreamController<List<Place>>();
   late List<Place> placeList;
-  bool isLoading = false;
 
   @override
   void initState() {
     super.initState();
-    getPlaces();
+    getPlacesStream();
   }
 
   @override
@@ -54,29 +55,28 @@ class _SightListScreenState extends State<SightListScreen> {
               ),
             ),
           ],
-          body: isLoading
-              ? Column(
-                  children: [
-                    if (orientation)
-                      SearchBar(
-                        isSearchPage: isSearchPage,
-                        readOnly: readOnly,
-                      )
-                    else
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 18.0),
-                        child: SearchBar(
-                          isSearchPage: isSearchPage,
-                          readOnly: readOnly,
-                        ),
-                      ),
-                    if (orientation)
-                      _SightListWidgetPortrait(placeList: placeList, theme: theme)
-                    else
-                      _SightListWidgetLandscape(placeList: placeList, theme: theme),
-                  ],
-                )
-              : const Center(child: CircularProgressIndicator()),
+          body: StreamBuilder<List<Place>>(
+            stream: getPlacesStream(),
+            builder: (context, snapshot) {
+              return snapshot.hasData
+                  ? Column(
+                      children: [
+                        if (orientation)
+                          SearchBar(isSearchPage: isSearchPage, readOnly: readOnly)
+                        else
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 18.0),
+                            child: SearchBar(isSearchPage: isSearchPage, readOnly: readOnly),
+                          ),
+                        if (orientation)
+                          _SightListWidgetPortrait(placeList: placeList, theme: theme)
+                        else
+                          _SightListWidgetLandscape(placeList: placeList, theme: theme),
+                      ],
+                    )
+                  : const Center(child: CircularProgressIndicator());
+            },
+          ),
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
@@ -84,15 +84,20 @@ class _SightListScreenState extends State<SightListScreen> {
     );
   }
 
-  Future<void> getPlaces() async {
+  @override
+  void dispose() {
+    super.dispose();
+    _controller.close();
+  }
+
+  Stream<List<Place>> getPlacesStream() async* {
     placeList = await PlaceInteractor(
       repository: PlaceRepository(
         apiPlaces: ApiPlaces(),
       ),
     ).getPlaces();
-    setState(() {
-      isLoading = true;
-    });
+
+    yield placeList;
   }
 }
 
@@ -111,6 +116,8 @@ class _SightListWidgetPortrait extends StatefulWidget {
 }
 
 class _SightListWidgetPortraitState extends State<_SightListWidgetPortrait> {
+  final _controller = StreamController<bool>.broadcast();
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -123,70 +130,69 @@ class _SightListWidgetPortraitState extends State<_SightListWidgetPortrait> {
         itemBuilder: (context, index) {
           final place = widget.placeList[index];
 
-          return Column(
-            children: [
-              SightCard(
-                addSight: () {
-                  if (!place.isFavorite) {
-                    PlaceInteractor(
-                      repository: PlaceRepository(
-                        apiPlaces: ApiPlaces(),
+          return StreamBuilder<bool>(
+            stream: _controller.stream,
+            builder: (context, snapshot) {
+              return Column(
+                children: [
+                  SightCard(
+                    addSight: () {
+                      _controller.sink.addStream(
+                        PlaceInteractor(
+                          repository: PlaceRepository(
+                            apiPlaces: ApiPlaces(),
+                          ),
+                        ).addToFavorites(place: place),
+                      );
+                    },
+                    isVisitingScreen: false,
+                    aspectRatio: 3 / 2,
+                    actionOne: !place.isFavorite
+                        ? const SightIcons(
+                            assetName: AppAssets.favourite,
+                            width: 22,
+                            height: 22,
+                          )
+                        : const SightIcons(
+                            assetName: AppAssets.heartFull,
+                            width: 22,
+                            height: 22,
+                          ),
+                    url: place.urls[0],
+                    type: place.placeType,
+                    name: place.name,
+                    item: place,
+                    details: [
+                      Text(
+                        place.name,
+                        maxLines: 2,
+                        style: widget.theme.textTheme.headlineSmall,
                       ),
-                    ).addToFavorites(place: place);
-                    setState(() {
-                      place.isFavorite = true;
-                    });
-                  } else {
-                    PlaceInteractor(
-                      repository: PlaceRepository(
-                        apiPlaces: ApiPlaces(),
+                      const SizedBox(height: 2),
+                      SizedBox(
+                        height: size.height / 7,
+                        child: Text(
+                          place.description,
+                          overflow: TextOverflow.ellipsis,
+                          style: AppTypography.textText16Regular,
+                        ),
                       ),
-                    ).removeFromFavorites(place: place);
-                    setState(() {
-                      place.isFavorite = false;
-                    });
-                  }
-                },
-                isVisitingScreen: false,
-                aspectRatio: 3 / 2,
-                actionOne: !place.isFavorite
-                    ? const SightIcons(
-                        assetName: AppAssets.favourite,
-                        width: 22,
-                        height: 22,
-                      )
-                    : const SightIcons(
-                        assetName: AppAssets.heartFull,
-                        width: 22,
-                        height: 22,
-                      ),
-                url: place.urls[0],
-                type: place.placeType,
-                name: place.name,
-                item: place,
-                details: [
-                  Text(
-                    place.name,
-                    maxLines: 2,
-                    style: widget.theme.textTheme.headlineSmall,
+                    ],
                   ),
-                  const SizedBox(height: 2),
-                  SizedBox(
-                    height: size.height / 7,
-                    child: Text(
-                      place.description,
-                      overflow: TextOverflow.ellipsis,
-                      style: AppTypography.textText16Regular,
-                    ),
-                  ),
+                  const SizedBox(height: 11),
                 ],
-              ),
-              const SizedBox(height: 11),
-            ],
+              );
+            },
           );
         },
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _controller.close();
+    super.dispose();
   }
 }
 

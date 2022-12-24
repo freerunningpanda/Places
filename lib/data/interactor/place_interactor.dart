@@ -23,7 +23,7 @@ class PlaceInteractor {
 
   Set<Place> getFavoritesPlaces() => repository.getFavoritesPlaces();
 
-  void addToFavorites({required Place place}) => repository.addToFavorites(place: place);
+  Stream<bool> addToFavorites({required Place place}) => repository.addToFavorites(place: place);
 
   void removeFromFavorites({required Place place}) => repository.removeFromFavorites(place: place);
 
