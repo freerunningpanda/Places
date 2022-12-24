@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide ErrorWidget;
 import 'package:places/data/api/api_places.dart';
 import 'package:places/data/interactor/place_interactor.dart';
 import 'package:places/data/model/place.dart';
@@ -11,6 +11,7 @@ import 'package:places/ui/res/app_colors.dart';
 import 'package:places/ui/res/app_strings.dart';
 import 'package:places/ui/res/app_typography.dart';
 import 'package:places/ui/widgets/close_bottom_sheet.dart';
+import 'package:places/ui/widgets/error_widget.dart';
 import 'package:places/ui/widgets/sight_icons.dart';
 
 class SightDetails extends StatefulWidget {
@@ -50,7 +51,7 @@ class _SightDetailsState extends State<SightDetails> {
         }
       },
     );
-    getPlaces();
+    getPlaceDetails();
     super.initState();
   }
 
@@ -63,27 +64,39 @@ class _SightDetailsState extends State<SightDetails> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        children: [
-          Expanded(
-            child: ColoredBox(
-              child: Container(),
-              color: AppColors.detailsScreenBackground,
-            ),
-          ),
-          const SizedBox(height: 12),
-          _SightDetailsClosed(
-            height: widget.height,
-            place: widget.place,
-            pageController: _pageController,
-          ),
-        ],
+      body: FutureBuilder<Object>(
+        future: getPlaceDetails(),
+        builder: (context, snapshot) {
+          if (snapshot.hasError) {
+            return const ErrorWidget();
+          }
+
+          return Column(
+            children: [
+              Expanded(
+                child: ColoredBox(
+                  child: Container(),
+                  color: AppColors.detailsScreenBackground,
+                ),
+              ),
+              const SizedBox(height: 12),
+              _SightDetailsClosed(
+                height: widget.height,
+                place: widget.place,
+                pageController: _pageController,
+              ),
+            ],
+          );
+        },
       ),
     );
   }
 
-  Future<void> getPlaces() async {
-    await PlaceInteractor(repository: PlaceRepository(apiPlaces: ApiPlaces())).getPlaceDetails(widget.place);
+  Future<Place> getPlaceDetails() async {
+    final detailedPlace =
+        await PlaceInteractor(repository: PlaceRepository(apiPlaces: ApiPlaces())).getPlaceDetails(widget.place);
+
+    return detailedPlace;
   }
 }
 

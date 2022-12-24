@@ -13,6 +13,7 @@ import 'package:places/mocks.dart';
 class ApiPlaces {
   Future<List<PlaceResponse>> getPlaces({required String category, required int radius}) async {
     initInterceptors();
+
     try {
       final response = await dio.post<String>(
         '/filtered_places',
