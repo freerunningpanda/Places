@@ -57,4 +57,6 @@ abstract class AppString {
   static const camera = 'Камера';
   static const photo = 'Фотография';
   static const file = 'Файл';
+  static const error = 'Ошибка';
+  static const errorDescription = 'Что то пошло не так\nПопробуйте позже.';
 }

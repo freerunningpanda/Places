@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide ErrorWidget;
 import 'package:places/data/api/api_places.dart';
 
 import 'package:places/data/interactor/place_interactor.dart';
@@ -12,6 +12,7 @@ import 'package:places/ui/res/app_strings.dart';
 import 'package:places/ui/res/app_typography.dart';
 import 'package:places/ui/screens/sight_card/sight_card.dart';
 import 'package:places/ui/widgets/add_new_place_button.dart';
+import 'package:places/ui/widgets/error_widget.dart';
 import 'package:places/ui/widgets/search_bar.dart';
 import 'package:places/ui/widgets/sight_icons.dart';
 
@@ -58,6 +59,10 @@ class _SightListScreenState extends State<SightListScreen> {
           body: StreamBuilder<List<Place>>(
             stream: getPlacesStream(),
             builder: (context, snapshot) {
+              if (snapshot.hasError) {
+                return const ErrorWidget();
+              }
+
               return snapshot.hasData
                   ? Column(
                       children: [
