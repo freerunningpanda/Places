@@ -76,7 +76,7 @@ class ApiPlaces {
             'name': 'Место',
             'urls': ['http://test.com'],
             'placeType': 'temple',
-            'description': 'Описание!',
+            'description': 'Описание',
           },
         ),
       );
