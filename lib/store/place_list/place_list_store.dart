@@ -24,13 +24,13 @@ abstract class PlaceListStoreBase with Store {
 
   @action
   Future<void> getPlaces({bool isHidden = false}) async {
-    final future = _placeRepository.getPlaces();
+    final places = _placeRepository.getPlaces();
 
     if (isHidden) {
-      final res = await future;
+      final res = await places;
       getPlacesFuture = ObservableFuture.value(res);
     } else {
-      getPlacesFuture = ObservableFuture(future);
+      getPlacesFuture = ObservableFuture(places);
     }
   }
 }
