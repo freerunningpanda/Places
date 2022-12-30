@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:places/data/api/api_places.dart';
+import 'package:places/data/repository/place_repository.dart';
 
 import 'package:places/providers/add_place_data_provider.dart';
 import 'package:places/providers/category_data_provider.dart';
@@ -7,6 +9,7 @@ import 'package:places/providers/filter_data_provider.dart';
 import 'package:places/providers/image_data_provider.dart';
 import 'package:places/providers/search_data_provider.dart';
 import 'package:places/providers/theme_data_provider.dart';
+import 'package:places/store/place_list/place_list_store.dart';
 import 'package:places/ui/res/app_strings.dart';
 import 'package:places/ui/screens/res/app_theme.dart';
 import 'package:places/ui/screens/splash_screen/splash_screen.dart';
@@ -39,6 +42,18 @@ void main() {
         ),
         ChangeNotifierProvider<DismissibleDataProvider>(
           create: (_) => DismissibleDataProvider(),
+        ),
+        Provider<PlaceRepository>(
+          create: (_) => PlaceRepository(
+            apiPlaces: ApiPlaces(),
+          ),
+        ),
+        Provider<PlaceListStore>(
+          create: (_) => PlaceListStore(
+            placeRepository: PlaceRepository(
+              apiPlaces: ApiPlaces(),
+            ),
+          ),
         ),
       ],
       child: const App(),
