@@ -40,7 +40,6 @@ class _SightListScreenState extends State<SightListScreen> {
   void initState() {
     super.initState();
     _store = PlaceListStore(placeRepository: context.read<PlaceRepository>());
-    context.read<PlaceListStore>().getPlaces();
   }
 
   @override
