@@ -39,7 +39,6 @@ class _SightListScreenState extends State<SightListScreen> {
   @override
   void initState() {
     super.initState();
-    // getPlacesStream();
     _store = PlaceListStore(placeRepository: context.read<PlaceRepository>());
     context.read<PlaceListStore>().getPlaces();
   }
@@ -66,7 +65,6 @@ class _SightListScreenState extends State<SightListScreen> {
           body: Provider<PlaceListStore>(
             create: (context) => _store,
             child: Observer(
-              // stream: getPlacesStream(),
               builder: (_) {
                 final store = context.read<PlaceListStore>();
                 if (store.getPlacesFuture.status == FutureStatus.rejected) {
@@ -105,16 +103,6 @@ class _SightListScreenState extends State<SightListScreen> {
     super.dispose();
     _controller.close();
   }
-
-  // Stream<List<Place>> getPlacesStream() async* {
-  //   placeList = await PlaceInteractor(
-  //     repository: PlaceRepository(
-  //       apiPlaces: ApiPlaces(),
-  //     ),
-  //   ).getPlaces();
-
-  //   yield placeList;
-  // }
 }
 
 class _SightListWidgetPortrait extends StatefulWidget {
