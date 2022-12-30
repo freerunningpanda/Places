@@ -2,11 +2,14 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/material.dart' hide ErrorWidget;
+import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:mobx/mobx.dart';
 import 'package:places/data/api/api_places.dart';
 
 import 'package:places/data/interactor/place_interactor.dart';
 import 'package:places/data/model/place.dart';
 import 'package:places/data/repository/place_repository.dart';
+import 'package:places/store/place_list/place_list_store.dart';
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_strings.dart';
 import 'package:places/ui/res/app_typography.dart';
@@ -15,6 +18,7 @@ import 'package:places/ui/widgets/add_new_place_button.dart';
 import 'package:places/ui/widgets/error_widget.dart';
 import 'package:places/ui/widgets/search_bar.dart';
 import 'package:places/ui/widgets/sight_icons.dart';
+import 'package:provider/provider.dart';
 
 class SightListScreen extends StatefulWidget {
   const SightListScreen({Key? key}) : super(key: key);
@@ -30,11 +34,12 @@ class _SightListScreenState extends State<SightListScreen> {
   final isPortrait = true;
   final _controller = StreamController<List<Place>>();
   late List<Place> placeList;
+  late PlaceListStore _store;
 
   @override
   void initState() {
     super.initState();
-    getPlacesStream();
+    _store = PlaceListStore(placeRepository: context.read<PlaceRepository>());
   }
 
   @override
@@ -56,31 +61,34 @@ class _SightListScreenState extends State<SightListScreen> {
               ),
             ),
           ],
-          body: StreamBuilder<List<Place>>(
-            stream: getPlacesStream(),
-            builder: (context, snapshot) {
-              if (snapshot.hasError) {
-                return const ErrorWidget();
-              }
-
-              return snapshot.hasData
-                  ? Column(
-                      children: [
-                        if (orientation)
-                          SearchBar(isSearchPage: isSearchPage, readOnly: readOnly)
-                        else
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 18.0),
-                            child: SearchBar(isSearchPage: isSearchPage, readOnly: readOnly),
-                          ),
-                        if (orientation)
-                          _SightListWidgetPortrait(placeList: placeList, theme: theme)
-                        else
-                          _SightListWidgetLandscape(placeList: placeList, theme: theme),
-                      ],
-                    )
-                  : const Center(child: CircularProgressIndicator());
-            },
+          body: Provider<PlaceListStore>(
+            create: (context) => _store,
+            child: Observer(
+              builder: (_) {
+                final store = context.read<PlaceListStore>();
+                if (store.getPlacesFuture.status == FutureStatus.rejected) {
+                  return const ErrorWidget();
+                } else if (store.getPlacesFuture.status == FutureStatus.pending) {
+                  return const Center(child: CircularProgressIndicator());
+                } else {
+                  return Column(
+                    children: [
+                      if (orientation)
+                        SearchBar(isSearchPage: isSearchPage, readOnly: readOnly)
+                      else
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 18.0),
+                          child: SearchBar(isSearchPage: isSearchPage, readOnly: readOnly),
+                        ),
+                      if (orientation)
+                        _SightListWidgetPortrait(placeList: store.getPlacesFuture.value ?? [], theme: theme)
+                      else
+                        _SightListWidgetLandscape(placeList: store.getPlacesFuture.value ?? [], theme: theme),
+                    ],
+                  );
+                }
+              },
+            ),
           ),
         ),
       ),
@@ -93,16 +101,6 @@ class _SightListScreenState extends State<SightListScreen> {
   void dispose() {
     super.dispose();
     _controller.close();
-  }
-
-  Stream<List<Place>> getPlacesStream() async* {
-    placeList = await PlaceInteractor(
-      repository: PlaceRepository(
-        apiPlaces: ApiPlaces(),
-      ),
-    ).getPlaces();
-
-    yield placeList;
   }
 }
 
