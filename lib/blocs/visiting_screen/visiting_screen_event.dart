@@ -2,7 +2,7 @@ import 'package:equatable/equatable.dart';
 
 import 'package:places/data/model/place.dart';
 
-class VisitingScreenEvent extends Equatable {
+abstract class VisitingScreenEvent extends Equatable {
   @override
   List<Object?> get props => [];
 
