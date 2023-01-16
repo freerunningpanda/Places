@@ -63,9 +63,6 @@ void main() {
         create: (context) => VisitingScreenBloc()
           ..add(
             VisitingScreenLoad(),
-          )
-          ..add(
-            VisitingScreenLoadedEvent(),
           ),
         child: const App(),
       ),
