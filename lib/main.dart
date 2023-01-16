@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:places/blocs/visiting_screen/visiting_screen_bloc.dart';
+import 'package:places/blocs/visiting_screen/visiting_screen_event.dart';
 import 'package:places/data/api/api_places.dart';
 import 'package:places/data/repository/place_repository.dart';
 
@@ -56,7 +59,16 @@ void main() {
           ),
         ),
       ],
-      child: const App(),
+      child: BlocProvider<VisitingScreenBloc>(
+        create: (context) => VisitingScreenBloc()
+          ..add(
+            VisitingScreenLoad(),
+          )
+          ..add(
+            VisitingScreenLoadedEvent(),
+          ),
+        child: const App(),
+      ),
     ),
   );
 }

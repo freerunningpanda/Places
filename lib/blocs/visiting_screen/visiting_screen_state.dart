@@ -10,21 +10,23 @@ abstract class VisitingScreenState extends Equatable {
 }
 
 // Состояние пустого экрана
-class VisitingScreenEmpty extends VisitingScreenState {}
+class VisitingScreenIsEmpty extends VisitingScreenState {}
 
 // Состояние добавленных мест
-class VisitingScreenIsNotEmpty extends VisitingScreenState {
-  final Set<Place> places;
+class VisitingScreenLoaded extends VisitingScreenState {
+  final Set<Place> favoritePlaces;
+  final Set<Place> visitedPlaces;
 
   @override
-  List<Object?> get props => [places];
+  List<Object?> get props => [favoritePlaces, visitedPlaces];
 
-  const VisitingScreenIsNotEmpty({
-    required this.places,
+  const VisitingScreenLoaded({
+    required this.favoritePlaces,
+    required this.visitedPlaces,
   });
 
   @override
   String toString() {
-    return 'VisitingScreenIsNotEmpty {places: $places}';
+    return 'VisitingScreenIsNotEmpty {places: $favoritePlaces}';
   }
 }
