@@ -1,13 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:places/blocs/visiting_screen/visiting_screen_bloc.dart';
-import 'package:places/blocs/visiting_screen/visiting_screen_event.dart';
 import 'package:places/blocs/visiting_screen/visiting_screen_state.dart';
-import 'package:places/data/api/api_places.dart';
 
-import 'package:places/data/interactor/place_interactor.dart';
 import 'package:places/data/model/place.dart';
-import 'package:places/data/repository/place_repository.dart';
 import 'package:places/providers/dismissible_data_provider.dart';
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_card_size.dart';
@@ -17,7 +13,6 @@ import 'package:places/ui/screens/res/custom_colors.dart';
 import 'package:places/ui/screens/sight_card/sight_card.dart';
 import 'package:places/ui/widgets/add_new_place_button.dart';
 import 'package:places/ui/widgets/sight_icons.dart';
-import 'package:provider/provider.dart';
 
 class VisitingScreen extends StatefulWidget {
   const VisitingScreen({Key? key}) : super(key: key);
@@ -27,13 +22,8 @@ class VisitingScreen extends StatefulWidget {
 }
 
 class _VisitingScreenState extends State<VisitingScreen> with TickerProviderStateMixin {
-  // late final Set<Place> sightsToVisit;
-  // late final Set<Place> visitedSights;
-
   @override
   void initState() {
-    // getFavoritePlaces();
-    // getVisitPlaces();
     super.initState();
   }
 
@@ -82,10 +72,15 @@ class _VisitingScreenState extends State<VisitingScreen> with TickerProviderStat
                             );
                           }
                           if (state is VisitingScreenLoaded) {
-                            return _VisitedWidget(
-                              visitedSights: state.visitedPlaces.toList(),
-                              key: const PageStorageKey('VisitedScrollPosition'),
-                            );
+                            return state.visitedPlaces.isEmpty
+                                ? const _EmptyList(
+                                    icon: AppAssets.goIconTransparent,
+                                    description: AppString.finishRoute,
+                                  )
+                                : _VisitedWidget(
+                                    visitedSights: state.visitedPlaces.toList(),
+                                    key: const PageStorageKey('VisitedScrollPosition'),
+                                  );
                           }
                           throw ArgumentError('Error');
                         },
@@ -102,24 +97,6 @@ class _VisitingScreenState extends State<VisitingScreen> with TickerProviderStat
       ),
     );
   }
-
-  // Получить список избранных мест
-  // void getFavoritePlaces() {
-  //   sightsToVisit = PlaceInteractor(
-  //     repository: PlaceRepository(
-  //       apiPlaces: ApiPlaces(),
-  //     ),
-  //   ).getFavoritesPlaces();
-  // }
-
-  // Показать посещённые места
-  // void getVisitPlaces() {
-  //   visitedSights = PlaceInteractor(
-  //     repository: PlaceRepository(
-  //       apiPlaces: ApiPlaces(),
-  //     ),
-  //   ).getVisitPlaces();
-  // }
 }
 
 class _AppBar extends StatefulWidget implements PreferredSizeWidget {
