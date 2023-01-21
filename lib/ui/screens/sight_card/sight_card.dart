@@ -42,9 +42,10 @@ class SightCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final customColors = Theme.of(context).extension<CustomColors>()!;
     final size = MediaQuery.of(context).size;
+    final orientation = MediaQuery.of(context).orientation == Orientation.portrait;
 
     return SizedBox(
-      height: size.height / 2.5,
+      height: orientation ? size.height / 2.5 : size.height / 2.0,
       width: size.width,
       child: AspectRatio(
         aspectRatio: aspectRatio ?? AppCardSize.sightCard,
