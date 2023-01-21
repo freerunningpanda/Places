@@ -7,25 +7,51 @@ abstract class SearchAction extends Equatable {
 }
 
 class SetQueryAction extends SearchAction {
-  final String query;
+  final String value;
   final TextEditingController controller;
 
   @override
-  List<Object?> get props => [query];
+  List<Object?> get props => [value];
 
   SetQueryAction({
-    required this.query,
+    required this.value,
     required this.controller,
   });
 }
 
-class ResetQueryAction extends SearchAction {
+class ClearQueryAction extends SearchAction {
   final TextEditingController controller;
 
   @override
   List<Object?> get props => [controller];
 
-  ResetQueryAction({
+  ClearQueryAction({
     required this.controller,
   });
 }
+
+class SaveSearchHistoryAction extends SearchAction {
+  final String value;
+  final TextEditingController controller;
+
+  @override
+  List<Object?> get props => [value];
+
+  SaveSearchHistoryAction({
+    required this.value,
+    required this.controller,
+  });
+}
+
+class RemoveItemFromHistoryAction extends SearchAction {
+  final String index;
+
+  @override
+  List<Object?> get props => [index];
+
+  RemoveItemFromHistoryAction({
+    required this.index,
+  });
+}
+
+class RemoveAllItemsFromHistoryAction extends SearchAction {}
