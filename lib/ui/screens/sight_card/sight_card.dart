@@ -41,47 +41,52 @@ class SightCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final customColors = Theme.of(context).extension<CustomColors>()!;
+    final size = MediaQuery.of(context).size;
 
-    return AspectRatio(
-      aspectRatio: aspectRatio ?? AppCardSize.sightCard,
-      child: ClipRRect(
-        borderRadius: const BorderRadius.all(
-          Radius.circular(16.0),
-        ),
-        child: DecoratedBox(
-          decoration: BoxDecoration(
-            color: customColors.color,
+    return SizedBox(
+      height: size.height / 2.5,
+      width: size.width,
+      child: AspectRatio(
+        aspectRatio: aspectRatio ?? AppCardSize.sightCard,
+        child: ClipRRect(
+          borderRadius: const BorderRadius.all(
+            Radius.circular(16.0),
           ),
-          child: Stack(
-            children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  _SightCardTop(
-                    actionOne: actionOne,
-                    type: type,
-                    url: url,
-                  ),
-                  const SizedBox(height: 16),
-                  _SightCardBottom(
-                    name: name,
-                    details: details,
-                  ),
-                ],
-              ),
-              RippleCardFull(item: item),
-              if (isVisitingScreen)
-                RippleIcons(
-                  removeSight: removeSight,
-                  actionOne: actionOne,
-                  actionTwo: actionTwo ?? const SizedBox(),
-                )
-              else
-                RippleIcon(
-                  actionOne: actionOne,
-                  addSight: addSight,
+          child: DecoratedBox(
+            decoration: BoxDecoration(
+              color: customColors.color,
+            ),
+            child: Stack(
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _SightCardTop(
+                      actionOne: actionOne,
+                      type: type,
+                      url: url,
+                    ),
+                    const SizedBox(height: 16),
+                    _SightCardBottom(
+                      name: name,
+                      details: details,
+                    ),
+                  ],
                 ),
-            ],
+                RippleCardFull(item: item),
+                if (isVisitingScreen)
+                  RippleIcons(
+                    removeSight: removeSight,
+                    actionOne: actionOne,
+                    actionTwo: actionTwo ?? const SizedBox(),
+                  )
+                else
+                  RippleIcon(
+                    actionOne: actionOne,
+                    addSight: addSight,
+                  ),
+              ],
+            ),
           ),
         ),
       ),

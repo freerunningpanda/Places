@@ -138,49 +138,51 @@ class _SightListWidgetPortraitState extends State<_SightListWidgetPortrait> {
             builder: (context, snapshot) {
               return Column(
                 children: [
-                  SightCard(
-                    addSight: () {
-                      _controller.sink.addStream(
-                        PlaceInteractor(
-                          repository: PlaceRepository(
-                            apiPlaces: ApiPlaces(),
-                          ),
-                        ).addToFavorites(place: place),
-                      );
-                    },
-                    isVisitingScreen: false,
-                    aspectRatio: 3 / 2,
-                    actionOne: !place.isFavorite
-                        ? const SightIcons(
-                            assetName: AppAssets.favourite,
-                            width: 22,
-                            height: 22,
-                          )
-                        : const SightIcons(
-                            assetName: AppAssets.heartFull,
-                            width: 22,
-                            height: 22,
-                          ),
-                    url: place.urls[0],
-                    type: place.placeType,
-                    name: place.name,
-                    item: place,
-                    details: [
-                      Text(
-                        place.name,
-                        maxLines: 2,
-                        style: widget.theme.textTheme.headlineSmall,
-                      ),
-                      const SizedBox(height: 2),
-                      SizedBox(
-                        height: size.height / 7,
-                        child: Text(
-                          place.description,
-                          overflow: TextOverflow.ellipsis,
-                          style: AppTypography.textText16Regular,
+                  FittedBox(
+                    child: SightCard(
+                      addSight: () {
+                        _controller.sink.addStream(
+                          PlaceInteractor(
+                            repository: PlaceRepository(
+                              apiPlaces: ApiPlaces(),
+                            ),
+                          ).addToFavorites(place: place),
+                        );
+                      },
+                      isVisitingScreen: false,
+                      aspectRatio: 3 / 2,
+                      actionOne: !place.isFavorite
+                          ? const SightIcons(
+                              assetName: AppAssets.favourite,
+                              width: 22,
+                              height: 22,
+                            )
+                          : const SightIcons(
+                              assetName: AppAssets.heartFull,
+                              width: 22,
+                              height: 22,
+                            ),
+                      url: place.urls[0],
+                      type: place.placeType,
+                      name: place.name,
+                      item: place,
+                      details: [
+                        Text(
+                          place.name,
+                          maxLines: 2,
+                          style: widget.theme.textTheme.headlineSmall,
                         ),
-                      ),
-                    ],
+                        const SizedBox(height: 2),
+                        SizedBox(
+                          height: size.height / 7,
+                          child: Text(
+                            place.description,
+                            overflow: TextOverflow.ellipsis,
+                            style: AppTypography.textText16Regular,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                   const SizedBox(height: 11),
                 ],
