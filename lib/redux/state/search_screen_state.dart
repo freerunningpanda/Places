@@ -11,7 +11,10 @@ class SearchScreenEmptyState extends SearchScreenState {}
 
 class SeacrhScreenFindedPlacesState extends SearchScreenState {
   final Set<Place> places;
-  
+
+  @override
+  List<Object?> get props => [places];
+
   SeacrhScreenFindedPlacesState({
     required this.places,
   });
