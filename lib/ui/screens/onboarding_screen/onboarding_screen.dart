@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import 'package:places/main.dart';
 import 'package:places/providers/theme_data_provider.dart';
@@ -22,6 +23,10 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   var _currentIndex = 0;
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setPreferredOrientations([
+        DeviceOrientation.portraitUp,
+        DeviceOrientation.portraitDown,
+      ]);
     final isDarkMode = context.watch<ThemeDataProvider>().isDarkMode;
     final theme = Theme.of(context);
 
