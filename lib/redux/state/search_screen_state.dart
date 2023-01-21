@@ -2,7 +2,7 @@ import 'package:equatable/equatable.dart';
 
 import 'package:places/data/model/place.dart';
 
-class SearchScreenState extends Equatable {
+abstract class SearchScreenState extends Equatable {
   @override
   List<Object?> get props => [];
 }

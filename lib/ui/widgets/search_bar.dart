@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_redux/flutter_redux.dart';
 
 import 'package:places/data/interactor/place_interactor.dart';
 import 'package:places/providers/add_place_data_provider.dart';
 import 'package:places/providers/search_data_provider.dart';
+import 'package:places/redux/state/search_bar_state.dart';
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_typography.dart';
 import 'package:places/ui/screens/filters_screen/filters_screen.dart';
@@ -37,6 +39,7 @@ class _SearchBarState extends State<SearchBar> {
     final theme = Theme.of(context);
     final filteredPlaces = PlaceInteractor.filteredPlaces;
     final controller = context.read<AddPlaceDataProvider>().searchController;
+    final store = StoreProvider.of<SearchBarHasValueState>(context);
 
     context.watch<SearchDataProvider>();
 
@@ -62,65 +65,69 @@ class _SearchBarState extends State<SearchBar> {
                 ),
                 const SizedBox(width: 14),
                 Expanded(
-                  child: TextField(
-                    // inputFormatters: [
-                    //   FilteringTextInputFormatter.deny(RegExp('[ ]')),
-                    // ],
-                    style: theme.textTheme.bodyLarge,
-                    textCapitalization: TextCapitalization.sentences,
-                    controller: controller,
-                    autofocus: autofocus,
-                    focusNode: focusNode,
-                    readOnly: widget.readOnly ?? true,
-                    onChanged: (value) {
-                      context.read<SearchDataProvider>()
-                        ..activeFocus(isActive: true)
-                        ..searchPlaces(value, controller);
+                  child: StoreConnector<SearchBarHasValueState, SearchBarHasValueState>(
+                    converter: (store) => store.state,
+                    builder: (context, state) => TextField(
+                      // inputFormatters: [
+                      //   FilteringTextInputFormatter.deny(RegExp('[ ]')),
+                      // ],
+                      style: theme.textTheme.bodyLarge,
+                      textCapitalization: TextCapitalization.sentences,
+                      controller: controller,
+                      autofocus: autofocus,
+                      focusNode: focusNode,
+                      readOnly: widget.readOnly ?? true,
+                      onChanged: (value) {
+                        state.value = value;
+                        context.read<SearchDataProvider>()
+                          ..activeFocus(isActive: true)
+                          ..searchPlaces(state.value, controller);
 
-                      if (controller.text.isEmpty) {
-                        filteredPlaces.clear();
-                      }
-                    },
-                    onTap: () {
-                      context.read<SearchDataProvider>().activeFocus(isActive: true);
-                      if (!widget.isSearchPage) {
-                        Navigator.of(context).push(
-                          MaterialPageRoute<SightSearchScreen>(
-                            builder: (context) => const SightSearchScreen(),
-                          ),
-                        );
-                      } else {
-                        return;
-                      }
-                    },
-                    onSubmitted: (value) {
-                      context.read<SearchDataProvider>()
-                        ..activeFocus(isActive: false)
-                        ..saveSearchHistory(value, controller);
-                      controller.clear();
-                    },
-                    decoration: InputDecoration(
-                      border: InputBorder.none,
-                      prefixIconConstraints: const BoxConstraints(
-                        maxWidth: 24,
-                        maxHeight: 24,
-                      ),
-                      hintText: 'Поиск',
-                      hintStyle: AppTypography.textText16Search,
-                      suffixIcon: focusNode.hasFocus
-                          ? SuffixIcon(controller: controller, theme: theme)
-                          : IconButton(
-                              onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute<FilterScreen>(
-                                    builder: (context) => const FilterScreen(),
-                                  ),
-                                );
-                                debugPrint('🟡---------filters button pressed');
-                              },
-                              icon: const SightIcons(assetName: AppAssets.filter, width: 24, height: 24),
+                        if (controller.text.isEmpty) {
+                          filteredPlaces.clear();
+                        }
+                      },
+                      onTap: () {
+                        context.read<SearchDataProvider>().activeFocus(isActive: true);
+                        if (!widget.isSearchPage) {
+                          Navigator.of(context).push(
+                            MaterialPageRoute<SightSearchScreen>(
+                              builder: (context) => const SightSearchScreen(),
                             ),
+                          );
+                        } else {
+                          return;
+                        }
+                      },
+                      onSubmitted: (value) {
+                        context.read<SearchDataProvider>()
+                          ..activeFocus(isActive: false)
+                          ..saveSearchHistory(value, controller);
+                        controller.clear();
+                      },
+                      decoration: InputDecoration(
+                        border: InputBorder.none,
+                        prefixIconConstraints: const BoxConstraints(
+                          maxWidth: 24,
+                          maxHeight: 24,
+                        ),
+                        hintText: 'Поиск',
+                        hintStyle: AppTypography.textText16Search,
+                        suffixIcon: focusNode.hasFocus
+                            ? SuffixIcon(controller: controller, theme: theme)
+                            : IconButton(
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute<FilterScreen>(
+                                      builder: (context) => const FilterScreen(),
+                                    ),
+                                  );
+                                  debugPrint('🟡---------filters button pressed');
+                                },
+                                icon: const SightIcons(assetName: AppAssets.filter, width: 24, height: 24),
+                              ),
+                      ),
                     ),
                   ),
                 ),
