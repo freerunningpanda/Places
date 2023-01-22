@@ -110,6 +110,15 @@ class _SearchBarState extends State<SearchBar> {
                       }
                     },
                     onSubmitted: (value) {
+                      if (filteredPlaces.isNotEmpty) {
+                        store.dispatch(
+                          PlacesFoundAction(filteredPlaces: filteredPlaces),
+                        );
+                      } else {
+                        store.dispatch(
+                          PlacesEmptyAction(filteredPlaces: const []),
+                        );
+                      }
                       context.read<SearchDataProvider>()
                         ..activeFocus(isActive: false)
                         ..saveSearchHistory(value, controller);
