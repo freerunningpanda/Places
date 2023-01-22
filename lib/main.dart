@@ -26,7 +26,6 @@ final ThemeData _lightTheme = AppTheme.buildTheme();
 final ThemeData _darkTheme = AppTheme.buildThemeDark();
 
 void main() {
-  final store = Store<SearchBarHasValueState>(reducer, initialState: SearchBarHasValueState(value: ''),);
 
   runApp(
     MultiProvider(
@@ -70,15 +69,14 @@ void main() {
           ..add(
             VisitingScreenLoad(),
           ),
-        child: App(store: store,),
+        child: App(),
       ),
     ),
   );
 }
 
 class App extends StatefulWidget {
-  final Store<SearchBarHasValueState> store;
-  const App({Key? key, required this.store}) : super(key: key);
+  const App({Key? key}) : super(key: key);
 
   @override
   State<App> createState() => _AppState();
@@ -89,14 +87,11 @@ class _AppState extends State<App> {
   Widget build(BuildContext context) {
     final isDarkMode = context.watch<ThemeDataProvider>().isDarkMode;
 
-    return StoreProvider<SearchBarHasValueState>(
-      store: widget.store,
-      child: MaterialApp(
+    return MaterialApp(
         theme: isDarkMode ? _darkTheme : _lightTheme,
         debugShowCheckedModeBanner: false,
         title: AppString.places,
         home: const MainScreen(),
-      ),
     );
   }
 }

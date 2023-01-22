@@ -39,7 +39,6 @@ class _SearchBarState extends State<SearchBar> {
     final theme = Theme.of(context);
     final filteredPlaces = PlaceInteractor.filteredPlaces;
     final controller = context.read<AddPlaceDataProvider>().searchController;
-    final store = StoreProvider.of<SearchBarHasValueState>(context);
 
     context.watch<SearchDataProvider>();
 
@@ -65,9 +64,7 @@ class _SearchBarState extends State<SearchBar> {
                 ),
                 const SizedBox(width: 14),
                 Expanded(
-                  child: StoreConnector<SearchBarHasValueState, SearchBarHasValueState>(
-                    converter: (store) => store.state,
-                    builder: (context, state) => TextField(
+                  child: TextField(
                       // inputFormatters: [
                       //   FilteringTextInputFormatter.deny(RegExp('[ ]')),
                       // ],
@@ -78,10 +75,10 @@ class _SearchBarState extends State<SearchBar> {
                       focusNode: focusNode,
                       readOnly: widget.readOnly ?? true,
                       onChanged: (value) {
-                        state.value = value;
+    
                         context.read<SearchDataProvider>()
                           ..activeFocus(isActive: true)
-                          ..searchPlaces(state.value, controller);
+                          ..searchPlaces(value, controller);
 
                         if (controller.text.isEmpty) {
                           filteredPlaces.clear();
@@ -130,7 +127,6 @@ class _SearchBarState extends State<SearchBar> {
                       ),
                     ),
                   ),
-                ),
               ],
             ),
           ],

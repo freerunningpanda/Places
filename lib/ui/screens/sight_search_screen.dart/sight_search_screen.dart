@@ -20,7 +20,7 @@ class SightSearchScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final sightList = PlaceInteractor.filteredPlaces;
+    final filteredPlaces = PlaceInteractor.filteredPlaces;
     const readOnly = false;
     const isSearchPage = true;
     final showHistoryList = context.read<SearchDataProvider>().hasFocus;
@@ -60,7 +60,7 @@ class SightSearchScreen extends StatelessWidget {
                         )
                       else
                         const SizedBox(),
-                      _SightListWidget(sightList: sightList, theme: theme),
+                      _SightListWidget(filteredPlaces: filteredPlaces, theme: theme),
                     ],
                   ),
                 ),
@@ -74,15 +74,14 @@ class SightSearchScreen extends StatelessWidget {
 }
 
 class _SightListWidget extends StatelessWidget {
-  final List<Place> sightList;
+  final List<Place> filteredPlaces;
   final ThemeData theme;
-  const _SightListWidget({Key? key, required this.sightList, required this.theme}) : super(key: key);
+  const _SightListWidget({Key? key, required this.filteredPlaces, required this.theme}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
-    final filteredPlaces = PlaceInteractor.filteredPlaces;
 
     return filteredPlaces.isEmpty
         ? _EmptyListWidget(
@@ -93,9 +92,9 @@ class _SightListWidget extends StatelessWidget {
         : ListView.builder(
             physics: Platform.isAndroid ? const ClampingScrollPhysics() : const BouncingScrollPhysics(),
             shrinkWrap: true,
-            itemCount: sightList.length,
+            itemCount: filteredPlaces.length,
             itemBuilder: (context, index) {
-              final sight = sightList[index];
+              final sight = filteredPlaces[index];
 
               return _SightCardWidget(
                 sight: sight,
