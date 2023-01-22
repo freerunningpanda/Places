@@ -7,15 +7,24 @@ abstract class SearchScreenState extends Equatable {
   List<Object?> get props => [];
 }
 
-class SearchScreenEmptyState extends SearchScreenState {}
-
-class SeacrhScreenFindedPlacesState extends SearchScreenState {
-  final Set<Place> places;
+class SearchScreenEmptyState extends SearchScreenState {
+  final List<Place> filteredPlaces;
 
   @override
-  List<Object?> get props => [places];
+  List<Object?> get props => [filteredPlaces];
 
-  SeacrhScreenFindedPlacesState({
-    required this.places,
+  SearchScreenEmptyState({
+    required this.filteredPlaces,
+  });
+}
+
+class SeacrhScreenFoundPlacesState extends SearchScreenState {
+  final List<Place> filteredPlaces;
+
+  @override
+  List<Object?> get props => [filteredPlaces];
+
+  SeacrhScreenFoundPlacesState({
+    required this.filteredPlaces,
   });
 }

@@ -1,57 +1,81 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 
+import 'package:places/data/model/place.dart';
+
 abstract class SearchAction extends Equatable {
   @override
   List<Object?> get props => [];
 }
 
-class SetQueryAction extends SearchAction {
-  final String value;
-  final TextEditingController controller;
+class PlacesFoundAction extends SearchAction {
+  final List<Place> filteredPlaces;
 
   @override
-  List<Object?> get props => [value];
+  List<Object?> get props => [filteredPlaces];
 
-  SetQueryAction({
-    required this.value,
-    required this.controller,
+  PlacesFoundAction({
+    required this.filteredPlaces,
   });
 }
 
-class ClearQueryAction extends SearchAction {
-  final TextEditingController controller;
+class PlacesEmptyAction extends SearchAction {
+  final List<Place> filteredPlaces;
 
   @override
-  List<Object?> get props => [controller];
+  List<Object?> get props => [filteredPlaces];
 
-  ClearQueryAction({
-    required this.controller,
+  PlacesEmptyAction({
+    required this.filteredPlaces,
   });
 }
 
-class SaveSearchHistoryAction extends SearchAction {
-  final String value;
-  final TextEditingController controller;
+// class SetQueryAction extends SearchAction {
+//   final String value;
+//   final TextEditingController controller;
 
-  @override
-  List<Object?> get props => [value];
+//   @override
+//   List<Object?> get props => [value];
 
-  SaveSearchHistoryAction({
-    required this.value,
-    required this.controller,
-  });
-}
+//   SetQueryAction({
+//     required this.value,
+//     required this.controller,
+//   });
+// }
 
-class RemoveItemFromHistoryAction extends SearchAction {
-  final String index;
+// class ClearQueryAction extends SearchAction {
+//   final TextEditingController controller;
 
-  @override
-  List<Object?> get props => [index];
+//   @override
+//   List<Object?> get props => [controller];
 
-  RemoveItemFromHistoryAction({
-    required this.index,
-  });
-}
+//   ClearQueryAction({
+//     required this.controller,
+//   });
+// }
 
-class RemoveAllItemsFromHistoryAction extends SearchAction {}
+// class SaveSearchHistoryAction extends SearchAction {
+//   final String value;
+//   final TextEditingController controller;
+
+//   @override
+//   List<Object?> get props => [value];
+
+//   SaveSearchHistoryAction({
+//     required this.value,
+//     required this.controller,
+//   });
+// }
+
+// class RemoveItemFromHistoryAction extends SearchAction {
+//   final String index;
+
+//   @override
+//   List<Object?> get props => [index];
+
+//   RemoveItemFromHistoryAction({
+//     required this.index,
+//   });
+// }
+
+// class RemoveAllItemsFromHistoryAction extends SearchAction {}

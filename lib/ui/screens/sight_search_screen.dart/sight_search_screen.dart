@@ -1,10 +1,12 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_redux/flutter_redux.dart';
 import 'package:places/data/interactor/place_interactor.dart';
 import 'package:places/data/model/place.dart';
 import 'package:places/providers/add_place_data_provider.dart';
 import 'package:places/providers/search_data_provider.dart';
+import 'package:places/redux/state/search_screen_state.dart';
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_strings.dart';
 import 'package:places/ui/res/app_typography.dart';
@@ -83,18 +85,22 @@ class _SightListWidget extends StatelessWidget {
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
 
-    return filteredPlaces.isEmpty
-        ? _EmptyListWidget(
+
+    return StoreConnector<SearchScreenState, SearchScreenState>(
+      builder: (context, vm) {
+        if (vm is SearchScreenEmptyState) {
+          return _EmptyListWidget(
             height: height,
             width: width,
             theme: theme,
-          )
-        : ListView.builder(
+          );
+        } else if (vm is SeacrhScreenFoundPlacesState) {
+          return ListView.builder(
             physics: Platform.isAndroid ? const ClampingScrollPhysics() : const BouncingScrollPhysics(),
             shrinkWrap: true,
-            itemCount: filteredPlaces.length,
+            itemCount: vm.filteredPlaces.length,
             itemBuilder: (context, index) {
-              final sight = filteredPlaces[index];
+              final sight = vm.filteredPlaces[index];
 
               return _SightCardWidget(
                 sight: sight,
@@ -103,6 +109,36 @@ class _SightListWidget extends StatelessWidget {
               );
             },
           );
+        }
+
+        return _EmptyListWidget(
+          height: height,
+          width: width,
+          theme: theme,
+        );
+      },
+      converter: (store) => store.state,
+    );
+    //  filteredPlaces.isEmpty
+    //     ? _EmptyListWidget(
+    //         height: height,
+    //         width: width,
+    //         theme: theme,
+    //       )
+    //     : ListView.builder(
+    //         physics: Platform.isAndroid ? const ClampingScrollPhysics() : const BouncingScrollPhysics(),
+    //         shrinkWrap: true,
+    //         itemCount: filteredPlaces.length,
+    //         itemBuilder: (context, index) {
+    //           final sight = filteredPlaces[index];
+
+    //           return _SightCardWidget(
+    //             sight: sight,
+    //             width: width,
+    //             theme: theme,
+    //           );
+    //         },
+    //       );
   }
 }
 
