@@ -26,8 +26,7 @@ class SightSearchScreen extends StatelessWidget {
     final filteredPlaces = PlaceInteractor.filteredPlaces;
     const readOnly = false;
     const isSearchPage = true;
-    final showHistoryList = context.read<SearchDataProvider>().hasFocus;
-    final searchStoryList = PlaceInteractor.searchHistoryList;
+
     final width = MediaQuery.of(context).size.width;
 
     context.watch<SearchDataProvider>();
@@ -55,15 +54,41 @@ class SightSearchScreen extends StatelessWidget {
                 child: SingleChildScrollView(
                   child: Column(
                     children: [
-                      if (showHistoryList && searchStoryList.isNotEmpty)
-                        _SearchHistoryList(
-                          theme: theme,
-                          searchStoryList: searchStoryList,
-                          width: width,
-                        )
-                      else
-                        const SizedBox(),
-                      _SightListWidget(filteredPlaces: filteredPlaces, theme: theme),
+                      StoreConnector<AppState, SearchScreenState>(
+                        builder: (context, vm) {
+                          if (vm is SearchHistoryEmptyState) {
+                            return Column(
+                              children: [
+                                const SizedBox(),
+                                _SightListWidget(filteredPlaces: filteredPlaces, theme: theme),
+                              ],
+                            );
+                          } else if (vm is SearchHistoryHasValueState) {
+                            return _SearchHistoryList(
+                              theme: theme,
+                              searchStoryList: vm.searchStoryList,
+                              width: width,
+                            );
+                          } else {
+                            return Column(
+                              children: [
+                                const SizedBox(),
+                                _SightListWidget(filteredPlaces: filteredPlaces, theme: theme),
+                              ],
+                            );
+                          }
+                        },
+                        converter: (store) => store.state.searchScreenState,
+                      ),
+                      // if (showHistoryList && searchStoryList.isNotEmpty)
+                      //   _SearchHistoryList(
+                      //     theme: theme,
+                      //     searchStoryList: searchStoryList,
+                      //     width: width,
+                      //   )
+                      // else
+                      //   const SizedBox(),
+                      // _SightListWidget(filteredPlaces: filteredPlaces, theme: theme),
                     ],
                   ),
                 ),
@@ -85,7 +110,6 @@ class _SightListWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
-
 
     return StoreConnector<AppState, SearchScreenState>(
       builder: (context, vm) {
@@ -120,26 +144,6 @@ class _SightListWidget extends StatelessWidget {
       },
       converter: (store) => store.state.searchScreenState,
     );
-    //  filteredPlaces.isEmpty
-    //     ? _EmptyListWidget(
-    //         height: height,
-    //         width: width,
-    //         theme: theme,
-    //       )
-    //     : ListView.builder(
-    //         physics: Platform.isAndroid ? const ClampingScrollPhysics() : const BouncingScrollPhysics(),
-    //         shrinkWrap: true,
-    //         itemCount: filteredPlaces.length,
-    //         itemBuilder: (context, index) {
-    //           final sight = filteredPlaces[index];
-
-    //           return _SightCardWidget(
-    //             sight: sight,
-    //             width: width,
-    //             theme: theme,
-    //           );
-    //         },
-    //       );
   }
 }
 

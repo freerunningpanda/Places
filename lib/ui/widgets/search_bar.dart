@@ -5,6 +5,7 @@ import 'package:places/data/interactor/place_interactor.dart';
 import 'package:places/providers/add_place_data_provider.dart';
 import 'package:places/providers/search_data_provider.dart';
 import 'package:places/redux/action/action.dart';
+import 'package:places/redux/action/search_action.dart';
 import 'package:places/redux/state/appstate.dart';
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_typography.dart';
@@ -40,6 +41,8 @@ class _SearchBarState extends State<SearchBar> {
     final theme = Theme.of(context);
     final filteredPlaces = PlaceInteractor.filteredPlaces;
     final controller = context.read<AddPlaceDataProvider>().searchController;
+    final showHistoryList = context.read<SearchDataProvider>().hasFocus;
+    final searchStoryList = PlaceInteractor.searchHistoryList;
 
     final store = StoreProvider.of<AppState>(context);
 
@@ -98,6 +101,19 @@ class _SearchBarState extends State<SearchBar> {
                     },
                     onTap: () {
                       context.read<SearchDataProvider>().activeFocus(isActive: true);
+                      if (searchStoryList.isNotEmpty) {
+                        store.dispatch(
+                          SearchHistoryHasValueAction(
+                            searchStoryList: searchStoryList,
+                            showHistoryList: showHistoryList,
+                          ),
+                        );
+                      } else {
+                        store.dispatch(
+                          SearchHistoryEmptyAction(),
+                        );
+                      }
+
                       if (!widget.isSearchPage) {
                         Navigator.of(context).push(
                           MaterialPageRoute<SightSearchScreen>(

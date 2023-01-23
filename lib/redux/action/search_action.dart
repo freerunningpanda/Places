@@ -8,6 +8,21 @@ abstract class SearchAction extends Equatable {
   List<Object?> get props => [];
 }
 
+class SearchHistoryEmptyAction extends SearchAction {}
+
+class SearchHistoryHasValueAction extends SearchAction {
+  final Set<String> searchStoryList;
+  final bool showHistoryList;
+
+  @override
+  List<Object?> get props => [searchStoryList];
+
+  SearchHistoryHasValueAction({
+    required this.searchStoryList,
+    required this.showHistoryList,
+  });
+}
+
 class EmptyPlacesAction extends SearchAction {}
 
 class FoundedPlacesAction extends SearchAction {
