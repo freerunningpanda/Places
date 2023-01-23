@@ -101,17 +101,19 @@ class _SearchBarState extends State<SearchBar> {
                     },
                     onTap: () {
                       context.read<SearchDataProvider>().activeFocus(isActive: true);
-                      if (searchStoryList.isNotEmpty) {
-                        store.dispatch(
-                          SearchHistoryHasValueAction(
-                            searchStoryList: searchStoryList,
-                            showHistoryList: showHistoryList,
-                          ),
-                        );
-                      } else {
-                        store.dispatch(
-                          SearchHistoryEmptyAction(),
-                        );
+                      if (widget.isSearchPage) {
+                        if (searchStoryList.isNotEmpty) {
+                          store.dispatch(
+                            SearchHistoryHasValueAction(
+                              searchStoryList: searchStoryList,
+                              showHistoryList: showHistoryList,
+                            ),
+                          );
+                        } else {
+                          store.dispatch(
+                            PlacesFoundAction(filteredPlaces: filteredPlaces),
+                          );
+                        }
                       }
 
                       if (!widget.isSearchPage) {
