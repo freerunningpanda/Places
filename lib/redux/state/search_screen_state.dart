@@ -1,6 +1,7 @@
 import 'package:equatable/equatable.dart';
 
 import 'package:places/data/model/place.dart';
+import 'package:places/redux/action/action.dart';
 
 abstract class SearchScreenState extends Equatable {
   @override
@@ -8,13 +9,10 @@ abstract class SearchScreenState extends Equatable {
 }
 
 class SearchScreenEmptyState extends SearchScreenState {
-  final List<Place> filteredPlaces;
-
-  @override
-  List<Object?> get props => [filteredPlaces];
-
+  final PlacesEmptyAction action;
+  
   SearchScreenEmptyState({
-    required this.filteredPlaces,
+    required this.action,
   });
 }
 

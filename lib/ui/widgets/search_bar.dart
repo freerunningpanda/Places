@@ -6,8 +6,6 @@ import 'package:places/providers/add_place_data_provider.dart';
 import 'package:places/providers/search_data_provider.dart';
 import 'package:places/redux/action/action.dart';
 import 'package:places/redux/state/appstate.dart';
-import 'package:places/redux/state/search_bar_state.dart';
-import 'package:places/redux/state/search_screen_state.dart';
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_typography.dart';
 import 'package:places/ui/screens/filters_screen/filters_screen.dart';
@@ -86,7 +84,7 @@ class _SearchBarState extends State<SearchBar> {
                         );
                       } else {
                         store.dispatch(
-                          PlacesEmptyAction(filteredPlaces: const []),
+                          PlacesEmptyAction(),
                         );
                       }
 
@@ -117,7 +115,7 @@ class _SearchBarState extends State<SearchBar> {
                         );
                       } else {
                         store.dispatch(
-                          PlacesEmptyAction(filteredPlaces: const []),
+                          PlacesEmptyAction(),
                         );
                       }
                       context.read<SearchDataProvider>()

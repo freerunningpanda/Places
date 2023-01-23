@@ -1,5 +1,4 @@
 import 'package:equatable/equatable.dart';
-import 'package:flutter/material.dart';
 
 import 'package:places/data/model/place.dart';
 
@@ -19,16 +18,7 @@ class PlacesFoundAction extends SearchAction {
   });
 }
 
-class PlacesEmptyAction extends SearchAction {
-  final List<Place> filteredPlaces;
-
-  @override
-  List<Object?> get props => [filteredPlaces];
-
-  PlacesEmptyAction({
-    required this.filteredPlaces,
-  });
-}
+class PlacesEmptyAction extends SearchAction {}
 
 // class SetQueryAction extends SearchAction {
 //   final String value;
