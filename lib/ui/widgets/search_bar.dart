@@ -5,6 +5,7 @@ import 'package:places/data/interactor/place_interactor.dart';
 import 'package:places/providers/add_place_data_provider.dart';
 import 'package:places/providers/search_data_provider.dart';
 import 'package:places/redux/action/action.dart';
+import 'package:places/redux/state/appstate.dart';
 import 'package:places/redux/state/search_bar_state.dart';
 import 'package:places/redux/state/search_screen_state.dart';
 import 'package:places/ui/res/app_assets.dart';
@@ -42,7 +43,7 @@ class _SearchBarState extends State<SearchBar> {
     final filteredPlaces = PlaceInteractor.filteredPlaces;
     final controller = context.read<AddPlaceDataProvider>().searchController;
 
-    final store = StoreProvider.of<SearchScreenState>(context);
+    final store = StoreProvider.of<AppState>(context);
 
     context.watch<SearchDataProvider>();
 

@@ -6,6 +6,7 @@ import 'package:places/data/interactor/place_interactor.dart';
 import 'package:places/data/model/place.dart';
 import 'package:places/providers/add_place_data_provider.dart';
 import 'package:places/providers/search_data_provider.dart';
+import 'package:places/redux/state/appstate.dart';
 import 'package:places/redux/state/search_screen_state.dart';
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_strings.dart';
@@ -86,7 +87,7 @@ class _SightListWidget extends StatelessWidget {
     final height = MediaQuery.of(context).size.height;
 
 
-    return StoreConnector<SearchScreenState, SearchScreenState>(
+    return StoreConnector<AppState, SearchScreenState>(
       builder: (context, vm) {
         if (vm is SearchScreenEmptyState) {
           return _EmptyListWidget(
@@ -94,7 +95,7 @@ class _SightListWidget extends StatelessWidget {
             width: width,
             theme: theme,
           );
-        } else if (vm is SeacrhScreenFoundPlacesState) {
+        } else if (vm is SearchScreenFoundPlacesState) {
           return ListView.builder(
             physics: Platform.isAndroid ? const ClampingScrollPhysics() : const BouncingScrollPhysics(),
             shrinkWrap: true,
@@ -117,7 +118,7 @@ class _SightListWidget extends StatelessWidget {
           theme: theme,
         );
       },
-      converter: (store) => store.state,
+      converter: (store) => store.state.searchScreenState,
     );
     //  filteredPlaces.isEmpty
     //     ? _EmptyListWidget(

@@ -14,6 +14,7 @@ import 'package:places/providers/image_data_provider.dart';
 import 'package:places/providers/search_data_provider.dart';
 import 'package:places/providers/theme_data_provider.dart';
 import 'package:places/redux/reducer/reducer.dart';
+import 'package:places/redux/state/appstate.dart';
 import 'package:places/redux/state/search_bar_state.dart';
 import 'package:places/redux/state/search_screen_state.dart';
 import 'package:places/store/place_list/place_list_store.dart';
@@ -26,8 +27,16 @@ import 'package:redux/redux.dart';
 final ThemeData _lightTheme = AppTheme.buildTheme();
 final ThemeData _darkTheme = AppTheme.buildThemeDark();
 
+// ignore: long-method
 void main() {
-  final store = Store<SearchScreenState>(reducer, initialState: SearchScreenEmptyState(filteredPlaces: []));
+  final store = Store<AppState>(
+    reducer,
+    initialState: AppState(
+      searchScreenState: SearchScreenEmptyState(
+        filteredPlaces: [],
+      ),
+    ),
+  );
   runApp(
     MultiProvider(
       providers: [
@@ -77,7 +86,7 @@ void main() {
 }
 
 class App extends StatefulWidget {
-  final Store<SearchScreenState> store;
+  final Store<AppState> store;
   const App({Key? key, required this.store}) : super(key: key);
 
   @override
@@ -89,7 +98,7 @@ class _AppState extends State<App> {
   Widget build(BuildContext context) {
     final isDarkMode = context.watch<ThemeDataProvider>().isDarkMode;
 
-    return StoreProvider(
+    return StoreProvider<AppState>(
       store: widget.store,
       child: MaterialApp(
         theme: isDarkMode ? _darkTheme : _lightTheme,
