@@ -9,6 +9,7 @@ abstract class SearchScreenState extends Equatable {
   List<Object?> get props => [];
 }
 
+// Состояние пустого экрана найденных мест
 class SearchScreenEmptyState extends SearchScreenState {
   final PlacesEmptyAction action;
 
@@ -17,6 +18,7 @@ class SearchScreenEmptyState extends SearchScreenState {
   });
 }
 
+// Состояние экрана в котором найдены места
 class SearchScreenFoundPlacesState extends SearchScreenState {
   final List<Place> filteredPlaces;
 
@@ -28,6 +30,7 @@ class SearchScreenFoundPlacesState extends SearchScreenState {
   });
 }
 
+// Пустое состояние истории поиска
 class SearchHistoryEmptyState extends SearchScreenState {
   final SearchHistoryEmptyAction action;
 
@@ -36,6 +39,7 @@ class SearchHistoryEmptyState extends SearchScreenState {
   });
 }
 
+// Состояние истории поиска с данными
 class SearchHistoryHasValueState extends SearchScreenState {
   final Set<String> searchStoryList;
   final bool showHistoryList;
@@ -49,6 +53,7 @@ class SearchHistoryHasValueState extends SearchScreenState {
   });
 }
 
+// Состояние удаления всех элементов истории поиска
 class RemoveAllItemsFromHistoryState extends SearchScreenState {
   final Set<String> historyList;
 

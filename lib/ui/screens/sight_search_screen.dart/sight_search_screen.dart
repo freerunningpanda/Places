@@ -57,6 +57,7 @@ class SightSearchScreen extends StatelessWidget {
                     children: [
                       StoreConnector<AppState, SearchScreenState>(
                         builder: (context, vm) {
+                          // Если история поиска пуста, показываем просто список найденных мест
                           if (vm is SearchHistoryEmptyState) {
                             return Column(
                               children: [
@@ -64,13 +65,16 @@ class SightSearchScreen extends StatelessWidget {
                                 _SightListWidget(filteredPlaces: filteredPlaces, theme: theme),
                               ],
                             );
-                          } else if (vm is SearchHistoryHasValueState) {
+                          } 
+                          // Если история не пустая то берём её из state и отображаем на экране
+                          else if (vm is SearchHistoryHasValueState) {
                             return _SearchHistoryList(
                               theme: theme,
                               searchStoryList: vm.searchStoryList,
                               width: width,
                             );
                           } else {
+                          // В противном случае показываем список найденных мест
                             return Column(
                               children: [
                                 const SizedBox(),
@@ -81,15 +85,6 @@ class SightSearchScreen extends StatelessWidget {
                         },
                         converter: (store) => store.state.searchScreenState,
                       ),
-                      // if (showHistoryList && searchStoryList.isNotEmpty)
-                      //   _SearchHistoryList(
-                      //     theme: theme,
-                      //     searchStoryList: searchStoryList,
-                      //     width: width,
-                      //   )
-                      // else
-                      //   const SizedBox(),
-                      // _SightListWidget(filteredPlaces: filteredPlaces, theme: theme),
                     ],
                   ),
                 ),
@@ -114,12 +109,14 @@ class _SightListWidget extends StatelessWidget {
 
     return StoreConnector<AppState, SearchScreenState>(
       builder: (context, vm) {
+        // Начальное состояние экрана пустого списка найденных мест
         if (vm is SearchScreenEmptyState) {
           return _EmptyListWidget(
             height: height,
             width: width,
             theme: theme,
           );
+        // Если места найдены, берём их из state и отображаем на экране
         } else if (vm is SearchScreenFoundPlacesState) {
           return ListView.builder(
             physics: Platform.isAndroid ? const ClampingScrollPhysics() : const BouncingScrollPhysics(),
@@ -213,7 +210,6 @@ class _ClearHistoryButton extends StatelessWidget {
           historyList: const {},
         ),
       ),
-      // context.read<SearchDataProvider>().removeAllItemsFromHistory(),
       child: const Align(
         alignment: Alignment.centerLeft,
         child: Text(

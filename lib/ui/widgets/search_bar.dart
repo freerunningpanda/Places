@@ -101,7 +101,9 @@ class _SearchBarState extends State<SearchBar> {
                     },
                     onTap: () {
                       context.read<SearchDataProvider>().activeFocus(isActive: true);
+                      // Если страница поиска
                       if (widget.isSearchPage) {
+                        // Если история поиска не пустая, то отправляем в action список из истории поиска
                         if (searchStoryList.isNotEmpty) {
                           store.dispatch(
                             SearchHistoryHasValueAction(
@@ -110,6 +112,7 @@ class _SearchBarState extends State<SearchBar> {
                             ),
                           );
                         } else {
+                          // Иначе просто отправляем в action список найденных мест
                           store.dispatch(
                             PlacesFoundAction(filteredPlaces: filteredPlaces),
                           );
