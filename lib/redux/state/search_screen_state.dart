@@ -48,3 +48,12 @@ class SearchHistoryHasValueState extends SearchScreenState {
     required this.showHistoryList,
   });
 }
+
+class RemoveAllItemsFromHistoryState extends SearchScreenState {
+  final Set<String> historyList;
+
+  @override
+  List<Object?> get props => [historyList];
+
+  RemoveAllItemsFromHistoryState({required this.historyList});
+}

@@ -86,4 +86,11 @@ class RemoveItemFromHistoryAction extends SearchAction {
   });
 }
 
-class RemoveAllItemsFromHistoryAction extends SearchAction {}
+class RemoveAllItemsFromHistoryAction extends SearchAction {
+  final Set<String> historyList;
+
+  @override
+  List<Object?> get props => [historyList];
+
+  RemoveAllItemsFromHistoryAction({required this.historyList});
+}
