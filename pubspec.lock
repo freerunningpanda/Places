@@ -527,6 +527,20 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "5.0.0"
+  relation:
+    dependency: "direct main"
+    description:
+      name: relation
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "3.1.0"
+  rxdart:
+    dependency: transitive
+    description:
+      name: rxdart
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.27.7"
   shelf:
     dependency: transitive
     description:
