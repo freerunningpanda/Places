@@ -3,13 +3,14 @@ import 'package:mwwm/mwwm.dart';
 
 // VM для AddSightScreen
 class AddSightScreenWidgetModel extends WidgetModel {
-  AddSightScreenWidgetModel(WidgetModelDependencies baseDependencies) : super(baseDependencies);
+  // ignore: avoid_unused_constructor_parameters
+  AddSightScreenWidgetModel(WidgetModelDependencies baseDependencies, BuildContext context) : super(baseDependencies);
 }
 
 WidgetModel buildAddSightScreenWM(BuildContext context) => AddSightScreenWidgetModel(
       const WidgetModelDependencies(),
+      context,
     );
-
 
 class AddSightScreenViewModel extends ChangeNotifier {
   final titleController = TextEditingController();
