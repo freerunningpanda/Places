@@ -265,7 +265,7 @@ class _SearchItem extends StatelessWidget {
                   children: [
                     InkWell(
                       borderRadius: BorderRadius.circular(12),
-                      onTap: () => context.read<ViewModel>().searchController.text = e,
+                      onTap: () => context.read<AddSightScreenViewModel>().searchController.text = e,
                       child: SizedBox(
                         width: width * 0.7,
                         child: Text(

@@ -1,24 +1,9 @@
 
 import 'package:flutter/material.dart';
 
-import 'package:places/data/api/api_places.dart';
-import 'package:places/data/interactor/place_interactor.dart';
 
-import 'package:places/data/repository/place_repository.dart';
-
-
-// WM для AddSightScreen
-class AddSightWidgetModel {
-  final placeIntertor = PlaceInteractor(
-    repository: PlaceRepository(
-      apiPlaces: ApiPlaces(),
-    ),
-  );
-
-
-}
-
-class ViewModel extends ChangeNotifier {
+// VM для AddSightScreen
+class AddSightScreenViewModel extends ChangeNotifier {
   final titleController = TextEditingController();
   final descriptionController = TextEditingController();
   final searchController = TextEditingController();

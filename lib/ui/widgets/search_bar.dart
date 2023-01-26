@@ -40,7 +40,7 @@ class _SearchBarState extends State<SearchBar> {
     final customColors = Theme.of(context).extension<CustomColors>()!;
     final theme = Theme.of(context);
     final filteredPlaces = PlaceInteractor.filteredPlaces;
-    final controller = context.read<ViewModel>().searchController;
+    final controller = context.read<AddSightScreenViewModel>().searchController;
     final showHistoryList = context.read<SearchDataProvider>().hasFocus;
     final searchStoryList = PlaceInteractor.searchHistoryList;
 

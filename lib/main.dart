@@ -6,7 +6,6 @@ import 'package:places/blocs/visiting_screen/visiting_screen_event.dart';
 import 'package:places/data/api/api_places.dart';
 import 'package:places/data/repository/place_repository.dart';
 
-import 'package:places/providers/category_data_provider.dart';
 import 'package:places/providers/dismissible_data_provider.dart';
 import 'package:places/providers/filter_data_provider.dart';
 import 'package:places/providers/image_data_provider.dart';
@@ -19,6 +18,7 @@ import 'package:places/redux/state/search_screen_state.dart';
 import 'package:places/store/place_list/place_list_store.dart';
 import 'package:places/ui/res/app_strings.dart';
 import 'package:places/ui/screens/add_sight_screen/add_sight_vm.dart';
+import 'package:places/ui/screens/add_sight_screen/category_data_vm.dart';
 import 'package:places/ui/screens/res/app_theme.dart';
 import 'package:places/ui/screens/splash_screen/splash_screen.dart';
 import 'package:provider/provider.dart';
@@ -38,11 +38,11 @@ void main() {
   runApp(
     MultiProvider(
       providers: [
-        ChangeNotifierProvider<CategoryDataProvider>(
-          create: (_) => CategoryDataProvider(),
+        ChangeNotifierProvider<CategoryDataViewModel>(
+          create: (_) => CategoryDataViewModel(),
         ),
-        ChangeNotifierProvider<ViewModel>(
-          create: (_) => ViewModel(),
+        ChangeNotifierProvider<AddSightScreenViewModel>(
+          create: (_) => AddSightScreenViewModel(),
         ),
         ChangeNotifierProvider<ImageDataProvider>(
           create: (_) => ImageDataProvider(),
