@@ -5,6 +5,7 @@ import 'package:places/ui/res/app_colors.dart';
 import 'package:places/ui/res/app_strings.dart';
 import 'package:places/ui/res/app_typography.dart';
 import 'package:places/ui/screens/add_sight_screen/add_sight_screen.dart';
+import 'package:places/ui/screens/add_sight_screen/add_sight_vm.dart';
 import 'package:places/ui/widgets/sight_icons.dart';
 
 class AddNewPlaceButton extends StatelessWidget {
@@ -18,7 +19,7 @@ class AddNewPlaceButton extends StatelessWidget {
       onTap: () {
         Navigator.of(context).push<AddSightScreen>(
           MaterialPageRoute(
-            builder: (context) => const AddSightScreen(),
+            builder: (context) => const AddSightScreen(widgetModelBuilder: buildAddSightScreenWM),
           ),
         );
         debugPrint('🟡---------Add new place button pressed');

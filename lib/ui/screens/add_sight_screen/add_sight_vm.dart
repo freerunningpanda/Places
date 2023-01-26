@@ -1,8 +1,16 @@
-
 import 'package:flutter/material.dart';
-
+import 'package:mwwm/mwwm.dart';
 
 // VM для AddSightScreen
+class AddSightScreenWidgetModel extends WidgetModel {
+  AddSightScreenWidgetModel(WidgetModelDependencies baseDependencies) : super(baseDependencies);
+}
+
+WidgetModel buildAddSightScreenWM(BuildContext context) => AddSightScreenWidgetModel(
+      const WidgetModelDependencies(),
+    );
+
+
 class AddSightScreenViewModel extends ChangeNotifier {
   final titleController = TextEditingController();
   final descriptionController = TextEditingController();
