@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mwwm/mwwm.dart';
 
-// VM для AddSightScreen
+// WM для AddSightScreen
 class AddSightScreenWidgetModel extends WidgetModel {
   // ignore: avoid_unused_constructor_parameters
   AddSightScreenWidgetModel(WidgetModelDependencies baseDependencies, BuildContext context) : super(baseDependencies);
@@ -11,6 +11,8 @@ WidgetModel buildAddSightScreenWM(BuildContext context) => AddSightScreenWidgetM
       const WidgetModelDependencies(),
       context,
     );
+
+    
 
 class AddSightScreenViewModel extends ChangeNotifier {
   final titleController = TextEditingController();
