@@ -4,13 +4,13 @@ import 'package:places/data/api/api_places.dart';
 import 'package:places/data/interactor/place_interactor.dart';
 import 'package:places/data/model/place.dart';
 import 'package:places/data/repository/place_repository.dart';
-import 'package:places/providers/add_place_data_provider.dart';
 import 'package:places/providers/category_data_provider.dart';
 import 'package:places/providers/image_data_provider.dart' as image_provider;
 import 'package:places/providers/image_data_provider.dart';
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_strings.dart';
 import 'package:places/ui/res/app_typography.dart';
+import 'package:places/ui/screens/add_sight_screen/add_sight_vm.dart';
 import 'package:places/ui/screens/add_sight_screen/choose_category_screen.dart';
 import 'package:places/ui/widgets/create_button.dart';
 import 'package:places/ui/widgets/new_place_app_bar_widget.dart';
@@ -30,14 +30,14 @@ class AddSightScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final latController = context.read<AddPlaceDataProvider>().latController;
-    final lotController = context.read<AddPlaceDataProvider>().lotController;
-    final latFocus = context.read<AddPlaceDataProvider>().latFocus;
-    final lotFocus = context.read<AddPlaceDataProvider>().lotFocus;
-    final titleController = context.read<AddPlaceDataProvider>().titleController;
-    final descriptionController = context.read<AddPlaceDataProvider>().descriptionController;
-    final titleFocus = context.read<AddPlaceDataProvider>().titleFocus;
-    final descriptionFocus = context.read<AddPlaceDataProvider>().descriptionFocus;
+    final latController = context.read<ViewModel>().latController;
+    final lotController = context.read<ViewModel>().lotController;
+    final latFocus = context.read<ViewModel>().latFocus;
+    final lotFocus = context.read<ViewModel>().lotFocus;
+    final titleController = context.read<ViewModel>().titleController;
+    final descriptionController = context.read<ViewModel>().descriptionController;
+    final titleFocus = context.read<ViewModel>().titleFocus;
+    final descriptionFocus = context.read<ViewModel>().descriptionFocus;
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
     final theme = Theme.of(context);
@@ -430,7 +430,7 @@ class _CoordinatsInputWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final focus = context.watch<AddPlaceDataProvider>();
+    final focus = context.watch<ViewModel>();
 
     return Row(
       children: [
