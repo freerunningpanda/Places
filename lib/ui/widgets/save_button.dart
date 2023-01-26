@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
 import 'package:places/data/model/category.dart';
+import 'package:places/providers/category_data_provider.dart';
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_typography.dart';
-import 'package:places/ui/screens/add_sight_screen/category_data_vm.dart';
 import 'package:places/ui/screens/res/custom_colors.dart';
 import 'package:places/ui/widgets/sight_icons.dart';
 
@@ -32,7 +32,7 @@ class SaveButton extends StatelessWidget {
           height: 48,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(12),
-            color: CategoryDataViewModel.chosenCategory.isEmpty ? customColors?.color : theme.sliderTheme.activeTrackColor,
+            color: CategoryDataProvider.chosenCategory.isEmpty ? customColors?.color : theme.sliderTheme.activeTrackColor,
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -48,7 +48,7 @@ class SaveButton extends StatelessWidget {
               const SizedBox(width: 8),
               Text(
                 title,
-                style: CategoryDataViewModel.chosenCategory.isEmpty
+                style: CategoryDataProvider.chosenCategory.isEmpty
                     ? AppTypography.sightDetailsButtonNameInnactive
                     : AppTypography.sightDetailsButtonName,
               ),

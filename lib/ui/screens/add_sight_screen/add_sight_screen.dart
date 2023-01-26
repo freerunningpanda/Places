@@ -5,13 +5,13 @@ import 'package:places/data/api/api_places.dart';
 import 'package:places/data/interactor/place_interactor.dart';
 import 'package:places/data/model/place.dart';
 import 'package:places/data/repository/place_repository.dart';
+import 'package:places/providers/add_sight_provider.dart';
+import 'package:places/providers/category_data_provider.dart';
 import 'package:places/providers/image_data_provider.dart' as image_provider;
 import 'package:places/providers/image_data_provider.dart';
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_strings.dart';
 import 'package:places/ui/res/app_typography.dart';
-import 'package:places/ui/screens/add_sight_screen/add_sight_vm.dart';
-import 'package:places/ui/screens/add_sight_screen/category_data_vm.dart';
 import 'package:places/ui/screens/add_sight_screen/choose_category_screen.dart';
 import 'package:places/ui/widgets/create_button.dart';
 import 'package:places/ui/widgets/new_place_app_bar_widget.dart';
@@ -41,18 +41,18 @@ class _AddSightScreenState extends WidgetState<CoreMwwmWidget<WidgetModel>, Widg
 
   @override
   Widget build(BuildContext context) {
-    final latController = context.read<AddSightScreenViewModel>().latController;
-    final lotController = context.read<AddSightScreenViewModel>().lotController;
-    final latFocus = context.read<AddSightScreenViewModel>().latFocus;
-    final lotFocus = context.read<AddSightScreenViewModel>().lotFocus;
-    final titleController = context.read<AddSightScreenViewModel>().titleController;
-    final descriptionController = context.read<AddSightScreenViewModel>().descriptionController;
-    final titleFocus = context.read<AddSightScreenViewModel>().titleFocus;
-    final descriptionFocus = context.read<AddSightScreenViewModel>().descriptionFocus;
+    final latController = context.read<AddSightScreenProvider>().latController;
+    final lotController = context.read<AddSightScreenProvider>().lotController;
+    final latFocus = context.read<AddSightScreenProvider>().latFocus;
+    final lotFocus = context.read<AddSightScreenProvider>().lotFocus;
+    final titleController = context.read<AddSightScreenProvider>().titleController;
+    final descriptionController = context.read<AddSightScreenProvider>().descriptionController;
+    final titleFocus = context.read<AddSightScreenProvider>().titleFocus;
+    final descriptionFocus = context.read<AddSightScreenProvider>().descriptionFocus;
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
     final theme = Theme.of(context);
-    final chosenCategory = CategoryDataViewModel.chosenCategory;
+    final chosenCategory = CategoryDataProvider.chosenCategory;
 
     return Scaffold(
       body: GestureDetector(
@@ -135,7 +135,7 @@ class _AddSightScreenState extends WidgetState<CoreMwwmWidget<WidgetModel>, Widg
                             latController.clear();
                             lotController.clear();
                             debugPrint('🟡---------Создан объект: ${PlaceInteractor.newPlaces.toList()}');
-                            context.read<CategoryDataViewModel>().clearCategory(activeCategories: chosenCategory);
+                            context.read<CategoryDataProvider>().clearCategory(activeCategories: chosenCategory);
                           },
                           titleController: titleController,
                           latController: latController,
@@ -441,7 +441,7 @@ class _CoordinatsInputWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final focus = context.watch<AddSightScreenViewModel>();
+    final focus = context.watch<AddSightScreenProvider>();
 
     return Row(
       children: [
@@ -567,7 +567,7 @@ class _CategoryChooseWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    context.watch<CategoryDataViewModel>().updateCategory();
+    context.watch<CategoryDataProvider>().updateCategory();
 
     return Column(
       children: [
@@ -591,14 +591,14 @@ class _CategoryChooseWidget extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                if (CategoryDataViewModel.chosenCategory.isEmpty)
+                if (CategoryDataProvider.chosenCategory.isEmpty)
                   Text(
                     AppString.nochoose,
                     style: theme.textTheme.titleMedium,
                   )
                 else
                   Text(
-                    CategoryDataViewModel.chosenCategory[0].title,
+                    CategoryDataProvider.chosenCategory[0].title,
                     style: theme.textTheme.titleMedium,
                   ),
                 const Icon(

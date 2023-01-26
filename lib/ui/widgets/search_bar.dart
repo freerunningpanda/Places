@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 
 import 'package:places/data/interactor/place_interactor.dart';
+import 'package:places/providers/add_sight_provider.dart';
 import 'package:places/providers/search_data_provider.dart';
 import 'package:places/redux/action/action.dart';
 import 'package:places/redux/action/search_action.dart';
 import 'package:places/redux/state/appstate.dart';
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_typography.dart';
-import 'package:places/ui/screens/add_sight_screen/add_sight_vm.dart';
 import 'package:places/ui/screens/filters_screen/filters_screen.dart';
 import 'package:places/ui/screens/res/custom_colors.dart';
 import 'package:places/ui/screens/sight_search_screen.dart/sight_search_screen.dart';
@@ -40,7 +40,7 @@ class _SearchBarState extends State<SearchBar> {
     final customColors = Theme.of(context).extension<CustomColors>()!;
     final theme = Theme.of(context);
     final filteredPlaces = PlaceInteractor.filteredPlaces;
-    final controller = context.read<AddSightScreenViewModel>().searchController;
+    final controller = context.read<AddSightScreenProvider>().searchController;
     final showHistoryList = context.read<SearchDataProvider>().hasFocus;
     final searchStoryList = PlaceInteractor.searchHistoryList;
 
