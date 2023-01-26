@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import 'package:places/data/model/category.dart';
 import 'package:places/ui/res/app_strings.dart';
 import 'package:places/utils/place_type.dart';
