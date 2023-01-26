@@ -1,10 +1,14 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_redux/flutter_redux.dart';
 import 'package:places/data/interactor/place_interactor.dart';
 import 'package:places/data/model/place.dart';
 import 'package:places/providers/add_place_data_provider.dart';
 import 'package:places/providers/search_data_provider.dart';
+import 'package:places/redux/action/search_action.dart';
+import 'package:places/redux/state/appstate.dart';
+import 'package:places/redux/state/search_screen_state.dart';
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_strings.dart';
 import 'package:places/ui/res/app_typography.dart';
@@ -20,11 +24,10 @@ class SightSearchScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final sightList = PlaceInteractor.filteredPlaces;
+    final filteredPlaces = PlaceInteractor.filteredPlaces;
     const readOnly = false;
     const isSearchPage = true;
-    final showHistoryList = context.read<SearchDataProvider>().hasFocus;
-    final searchStoryList = PlaceInteractor.searchHistoryList;
+
     final width = MediaQuery.of(context).size.width;
 
     context.watch<SearchDataProvider>();
@@ -52,15 +55,36 @@ class SightSearchScreen extends StatelessWidget {
                 child: SingleChildScrollView(
                   child: Column(
                     children: [
-                      if (showHistoryList && searchStoryList.isNotEmpty)
-                        _SearchHistoryList(
-                          theme: theme,
-                          searchStoryList: searchStoryList,
-                          width: width,
-                        )
-                      else
-                        const SizedBox(),
-                      _SightListWidget(sightList: sightList, theme: theme),
+                      StoreConnector<AppState, SearchScreenState>(
+                        builder: (context, vm) {
+                          // Если история поиска пуста, показываем просто список найденных мест
+                          if (vm is SearchHistoryEmptyState) {
+                            return Column(
+                              children: [
+                                const SizedBox(),
+                                _SightListWidget(filteredPlaces: filteredPlaces, theme: theme),
+                              ],
+                            );
+                          } 
+                          // Если история не пустая то берём её из state и отображаем на экране
+                          else if (vm is SearchHistoryHasValueState) {
+                            return _SearchHistoryList(
+                              theme: theme,
+                              searchStoryList: vm.searchStoryList,
+                              width: width,
+                            );
+                          } else {
+                          // В противном случае показываем список найденных мест
+                            return Column(
+                              children: [
+                                const SizedBox(),
+                                _SightListWidget(filteredPlaces: filteredPlaces, theme: theme),
+                              ],
+                            );
+                          }
+                        },
+                        converter: (store) => store.state.searchScreenState,
+                      ),
                     ],
                   ),
                 ),
@@ -74,28 +98,32 @@ class SightSearchScreen extends StatelessWidget {
 }
 
 class _SightListWidget extends StatelessWidget {
-  final List<Place> sightList;
+  final List<Place> filteredPlaces;
   final ThemeData theme;
-  const _SightListWidget({Key? key, required this.sightList, required this.theme}) : super(key: key);
+  const _SightListWidget({Key? key, required this.filteredPlaces, required this.theme}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
-    final filteredPlaces = PlaceInteractor.filteredPlaces;
 
-    return filteredPlaces.isEmpty
-        ? _EmptyListWidget(
+    return StoreConnector<AppState, SearchScreenState>(
+      builder: (context, vm) {
+        // Начальное состояние экрана пустого списка найденных мест
+        if (vm is SearchScreenEmptyState) {
+          return _EmptyListWidget(
             height: height,
             width: width,
             theme: theme,
-          )
-        : ListView.builder(
+          );
+        // Если места найдены, берём их из state и отображаем на экране
+        } else if (vm is SearchScreenFoundPlacesState) {
+          return ListView.builder(
             physics: Platform.isAndroid ? const ClampingScrollPhysics() : const BouncingScrollPhysics(),
             shrinkWrap: true,
-            itemCount: sightList.length,
+            itemCount: vm.filteredPlaces.length,
             itemBuilder: (context, index) {
-              final sight = sightList[index];
+              final sight = vm.filteredPlaces[index];
 
               return _SightCardWidget(
                 sight: sight,
@@ -104,6 +132,16 @@ class _SightListWidget extends StatelessWidget {
               );
             },
           );
+        }
+
+        return _EmptyListWidget(
+          height: height,
+          width: width,
+          theme: theme,
+        );
+      },
+      converter: (store) => store.state.searchScreenState,
+    );
   }
 }
 
@@ -164,8 +202,14 @@ class _ClearHistoryButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final store = StoreProvider.of<AppState>(context);
+
     return TextButton(
-      onPressed: () => context.read<SearchDataProvider>().removeAllItemsFromHistory(),
+      onPressed: () => store.dispatch(
+        RemoveAllItemsFromHistoryAction(
+          historyList: const {},
+        ),
+      ),
       child: const Align(
         alignment: Alignment.centerLeft,
         child: Text(

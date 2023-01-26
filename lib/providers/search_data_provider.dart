@@ -71,9 +71,4 @@ class SearchDataProvider extends ChangeNotifier {
     PlaceInteractor.searchHistoryList.remove(index);
     notifyListeners();
   }
-
-  void removeAllItemsFromHistory() {
-    PlaceInteractor.searchHistoryList.clear();
-    notifyListeners();
-  }
 }
