@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:mwwm/mwwm.dart';
 import 'package:places/data/interactor/place_interactor.dart';
 import 'package:places/data/model/place.dart';
 import 'package:places/providers/add_sight_provider.dart';
@@ -12,6 +13,7 @@ import 'package:places/redux/state/search_screen_state.dart';
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_strings.dart';
 import 'package:places/ui/res/app_typography.dart';
+import 'package:places/ui/screens/add_sight_screen/add_sight_vm.dart';
 import 'package:places/ui/screens/sight_details/sight_details.dart';
 import 'package:places/ui/widgets/search_appbar.dart';
 import 'package:places/ui/widgets/search_bar.dart';
@@ -265,7 +267,7 @@ class _SearchItem extends StatelessWidget {
                   children: [
                     InkWell(
                       borderRadius: BorderRadius.circular(12),
-                      onTap: () => context.read<AddSightScreenProvider>().searchController.text = e,
+                      onTap: () => AddSightScreenWidgetModel(const WidgetModelDependencies()).searchController.text = e,
                       child: SizedBox(
                         width: width * 0.7,
                         child: Text(

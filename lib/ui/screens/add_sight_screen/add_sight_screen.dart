@@ -12,6 +12,7 @@ import 'package:places/providers/image_data_provider.dart';
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_strings.dart';
 import 'package:places/ui/res/app_typography.dart';
+import 'package:places/ui/screens/add_sight_screen/add_sight_vm.dart';
 import 'package:places/ui/screens/add_sight_screen/choose_category_screen.dart';
 import 'package:places/ui/widgets/create_button.dart';
 import 'package:places/ui/widgets/new_place_app_bar_widget.dart';
@@ -38,17 +39,17 @@ class AddSightScreen extends CoreMwwmWidget {
 }
 
 class _AddSightScreenState extends WidgetState<CoreMwwmWidget<WidgetModel>, WidgetModel> {
+  final latController = AddSightScreenWidgetModel(const WidgetModelDependencies()).latController;
+  final lotController = AddSightScreenWidgetModel(const WidgetModelDependencies()).lotController;
+  final latFocus = AddSightScreenWidgetModel(const WidgetModelDependencies()).latFocus;
+  final lotFocus = AddSightScreenWidgetModel(const WidgetModelDependencies()).lotFocus;
+  final titleController = AddSightScreenWidgetModel(const WidgetModelDependencies()).titleController;
+  final descriptionController = AddSightScreenWidgetModel(const WidgetModelDependencies()).descriptionController;
+  final titleFocus = AddSightScreenWidgetModel(const WidgetModelDependencies()).titleFocus;
+  final descriptionFocus = AddSightScreenWidgetModel(const WidgetModelDependencies()).descriptionFocus;
 
   @override
   Widget build(BuildContext context) {
-    final latController = context.read<AddSightScreenProvider>().latController;
-    final lotController = context.read<AddSightScreenProvider>().lotController;
-    final latFocus = context.read<AddSightScreenProvider>().latFocus;
-    final lotFocus = context.read<AddSightScreenProvider>().lotFocus;
-    final titleController = context.read<AddSightScreenProvider>().titleController;
-    final descriptionController = context.read<AddSightScreenProvider>().descriptionController;
-    final titleFocus = context.read<AddSightScreenProvider>().titleFocus;
-    final descriptionFocus = context.read<AddSightScreenProvider>().descriptionFocus;
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
     final theme = Theme.of(context);
@@ -99,6 +100,7 @@ class _AddSightScreenState extends WidgetState<CoreMwwmWidget<WidgetModel>, Widg
                           theme: theme,
                           latFocus: latFocus,
                           lotFocus: lotFocus,
+                          descriptionFocus: descriptionFocus,
                         ),
                         const SizedBox(height: 15),
                         const _PointOnMapWidget(),
@@ -118,6 +120,7 @@ class _AddSightScreenState extends WidgetState<CoreMwwmWidget<WidgetModel>, Widg
                         CreateButton(
                           title: AppString.create,
                           onTap: () {
+                            setState(() {});
                             debugPrint('🟡---------create btn pressed');
                             PlaceInteractor(repository: PlaceRepository(apiPlaces: ApiPlaces())).addNewPlace(
                               place: Place(
@@ -423,12 +426,13 @@ class _PointOnMapWidget extends StatelessWidget {
   }
 }
 
-class _CoordinatsInputWidget extends StatelessWidget {
+class _CoordinatsInputWidget extends StatefulWidget {
   final ThemeData theme;
   final TextEditingController latController;
   final TextEditingController lotController;
   final FocusNode latFocus;
   final FocusNode lotFocus;
+  final FocusNode descriptionFocus;
 
   const _CoordinatsInputWidget({
     Key? key,
@@ -437,22 +441,37 @@ class _CoordinatsInputWidget extends StatelessWidget {
     required this.lotController,
     required this.latFocus,
     required this.lotFocus,
+    required this.descriptionFocus,
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    final focus = context.watch<AddSightScreenProvider>();
+  State<_CoordinatsInputWidget> createState() => _CoordinatsInputWidgetState();
+}
 
+class _CoordinatsInputWidgetState extends State<_CoordinatsInputWidget> {
+  final focus = AddSightScreenWidgetModel(const WidgetModelDependencies());
+  bool isLat = AddSightScreenWidgetModel(const WidgetModelDependencies()).isLat;
+  @override
+  Widget build(BuildContext context) {
     return Row(
       children: [
         Expanded(
           child: _LatLotWidget(
-            focusNode: latFocus,
-            theme: theme,
+            focusNode: widget.latFocus,
+            theme: widget.theme,
             title: AppString.lat,
-            onSubmitted: (v) => focus.goToLat(),
-            controller: latController,
-            onTap: focus.tapOnLat,
+            onSubmitted: (v) {
+              setState(() {});
+              FocusScope.of(context).requestFocus(widget.lotFocus);
+            },
+            controller: widget.latController,
+            onTap: () {
+              setState(() {
+                isLat = true;
+              });
+            }
+            // focus.tapOnLat
+            ,
             onChanged: (value) {
               if (double.tryParse(value) != null) {
                 lat = double.parse(value);
@@ -463,12 +482,16 @@ class _CoordinatsInputWidget extends StatelessWidget {
         const SizedBox(width: 16),
         Expanded(
           child: _LatLotWidget(
-            focusNode: lotFocus,
-            theme: theme,
+            focusNode: widget.lotFocus,
+            theme: widget.theme,
             title: AppString.lot,
-            onSubmitted: (v) => focus.goToDescription(),
-            controller: lotController,
-            onTap: focus.tapOnLot,
+            onSubmitted: (v) => FocusScope.of(context).requestFocus(widget.descriptionFocus),
+            controller: widget.lotController,
+            onTap: () {
+              setState(() {
+                isLat = false;
+              });
+            },
             onChanged: (value) {
               if (double.tryParse(value) != null) {
                 lot = double.parse(value);
@@ -522,7 +545,7 @@ class _LatLotWidgetState extends State<_LatLotWidget> {
         const SizedBox(height: 12),
         SizedBox(
           height: 40,
-          child: TextField(
+          child: TextFormField(
             onChanged: widget.onChanged,
             onTap: widget.onTap,
             focusNode: widget.focusNode,
@@ -532,7 +555,7 @@ class _LatLotWidgetState extends State<_LatLotWidget> {
             cursorWidth: 1,
             style: widget.theme.textTheme.bodyLarge,
             textInputAction: TextInputAction.next,
-            onSubmitted: widget.onSubmitted,
+            onFieldSubmitted: widget.onSubmitted,
             decoration: InputDecoration(
               contentPadding: const EdgeInsets.only(left: 16.0),
               focusedBorder: OutlineInputBorder(
