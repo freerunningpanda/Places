@@ -88,7 +88,7 @@ class _SearchBarState extends State<SearchBar> {
                     focusNode: focusNode,
                     readOnly: widget.readOnly ?? true,
                     onChanged: (value) {
-                      final interactor = PlaceInteractor(
+                      var query = PlaceInteractor(
                         repository: PlaceRepository(
                           apiPlaces: ApiPlaces(),
                         ),
@@ -105,7 +105,7 @@ class _SearchBarState extends State<SearchBar> {
 
                       context.read<SearchScreenBloc>()
                         ..activeFocus(isActive: true)
-                        ..searchPlaces(interactor, controller);
+                        ..searchPlaces(query, controller);
 
                       context.read<SearchScreenBloc>().add(PlacesFoundEvent());
 
