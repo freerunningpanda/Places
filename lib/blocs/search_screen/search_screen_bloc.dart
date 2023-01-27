@@ -30,12 +30,6 @@ class SearchScreenBloc extends Bloc<SearchScreenEvent, SearchScreenState> {
         emit(SearchScreenEmptyState());
       }
     });
-
-    // if (filteredPlaces.isEmpty) {
-    // on<PlacesEmptyEvent>((event, emit) {
-    //   emit(SearchScreenEmptyState());
-    // });
-    // }
   }
 
   void activeFocus({required bool isActive}) {
