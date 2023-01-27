@@ -18,7 +18,7 @@ AppState _placesFound(AppState state, PlacesFoundAction action) {
 }
 
 AppState _placesEmpty(AppState state, PlacesEmptyAction action) {
-  return state.cloneWith(searchScreenState: SearchScreenEmptyState(action: action));
+  return state.cloneWith(searchScreenState: SearchScreenEmptyStateRedux(action: action));
 }
 
 AppState _historyHasValue(AppState state, SearchHistoryHasValueAction action) {

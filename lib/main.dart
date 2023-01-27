@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:places/blocs/search_screen/search_screen_bloc.dart';
 import 'package:places/blocs/visiting_screen/visiting_screen_bloc.dart';
 import 'package:places/blocs/visiting_screen/visiting_screen_event.dart';
 import 'package:places/data/api/api_places.dart';
@@ -32,7 +33,9 @@ void main() {
   final store = Store<AppState>(
     reducer,
     initialState: AppState(
-      searchScreenState: SearchScreenEmptyState(action: PlacesEmptyAction(),),
+      searchScreenState: SearchScreenEmptyStateRedux(
+        action: PlacesEmptyAction(),
+      ),
     ),
   );
   runApp(
@@ -72,11 +75,18 @@ void main() {
           ),
         ),
       ],
-      child: BlocProvider<VisitingScreenBloc>(
-        create: (context) => VisitingScreenBloc()
-          ..add(
-            VisitingScreenLoad(),
+      child: MultiBlocProvider(
+        providers: [
+          BlocProvider<VisitingScreenBloc>(
+            create: (context) => VisitingScreenBloc()
+              ..add(
+                VisitingScreenLoad(),
+              ),
           ),
+          BlocProvider<SearchScreenBloc>(
+            create: (context) => SearchScreenBloc(),
+          ),
+        ],
         child: App(store: store),
       ),
     ),

@@ -1,7 +1,9 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:places/blocs/search_screen/search_screen_bloc.dart';
 import 'package:places/data/interactor/place_interactor.dart';
 import 'package:places/data/model/place.dart';
 import 'package:places/providers/add_sight_provider.dart';
@@ -16,7 +18,6 @@ import 'package:places/ui/screens/sight_details/sight_details.dart';
 import 'package:places/ui/widgets/search_appbar.dart';
 import 'package:places/ui/widgets/search_bar.dart';
 import 'package:places/ui/widgets/sight_icons.dart';
-import 'package:provider/provider.dart';
 
 class SightSearchScreen extends StatelessWidget {
   const SightSearchScreen({Key? key}) : super(key: key);
@@ -24,7 +25,6 @@ class SightSearchScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final filteredPlaces = PlaceInteractor.filteredPlaces;
     const readOnly = false;
     const isSearchPage = true;
 
@@ -55,17 +55,17 @@ class SightSearchScreen extends StatelessWidget {
                 child: SingleChildScrollView(
                   child: Column(
                     children: [
-                      StoreConnector<AppState, SearchScreenState>(
+                      StoreConnector<AppState, SearchScreenStateRedux>(
                         builder: (context, vm) {
                           // Если история поиска пуста, показываем просто список найденных мест
                           if (vm is SearchHistoryEmptyState) {
                             return Column(
                               children: [
                                 const SizedBox(),
-                                _SightListWidget(filteredPlaces: filteredPlaces, theme: theme),
+                                _SightListWidget(theme: theme),
                               ],
                             );
-                          } 
+                          }
                           // Если история не пустая то берём её из state и отображаем на экране
                           else if (vm is SearchHistoryHasValueState) {
                             return _SearchHistoryList(
@@ -74,11 +74,11 @@ class SightSearchScreen extends StatelessWidget {
                               width: width,
                             );
                           } else {
-                          // В противном случае показываем список найденных мест
+                            // В противном случае показываем список найденных мест
                             return Column(
                               children: [
                                 const SizedBox(),
-                                _SightListWidget(filteredPlaces: filteredPlaces, theme: theme),
+                                _SightListWidget(theme: theme),
                               ],
                             );
                           }
@@ -98,32 +98,31 @@ class SightSearchScreen extends StatelessWidget {
 }
 
 class _SightListWidget extends StatelessWidget {
-  final List<Place> filteredPlaces;
   final ThemeData theme;
-  const _SightListWidget({Key? key, required this.filteredPlaces, required this.theme}) : super(key: key);
+  const _SightListWidget({Key? key, required this.theme}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
 
-    return StoreConnector<AppState, SearchScreenState>(
-      builder: (context, vm) {
+    return BlocBuilder<SearchScreenBloc, SearchScreenState>(
+      builder: (context, state) {
         // Начальное состояние экрана пустого списка найденных мест
-        if (vm is SearchScreenEmptyState) {
+        if (state is SearchScreenEmptyState) {
           return _EmptyListWidget(
             height: height,
             width: width,
             theme: theme,
           );
-        // Если места найдены, берём их из state и отображаем на экране
-        } else if (vm is SearchScreenFoundPlacesState) {
+          // Если места найдены, берём их из state и отображаем на экране
+        } else if (state is SearchScreenPlacesFoundState) {
           return ListView.builder(
             physics: Platform.isAndroid ? const ClampingScrollPhysics() : const BouncingScrollPhysics(),
             shrinkWrap: true,
-            itemCount: vm.filteredPlaces.length,
+            itemCount: state.filteredPlaces.length,
             itemBuilder: (context, index) {
-              final sight = vm.filteredPlaces[index];
+              final sight = state.filteredPlaces[index];
 
               return _SightCardWidget(
                 sight: sight,
@@ -134,13 +133,17 @@ class _SightListWidget extends StatelessWidget {
           );
         }
 
-        return _EmptyListWidget(
-          height: height,
-          width: width,
-          theme: theme,
+        return Container(
+          width: 150,
+          height: 150,
+          color: Colors.red,
         );
+        // _EmptyListWidget(
+        //   height: height,
+        //   width: width,
+        //   theme: theme,
+        // );
       },
-      converter: (store) => store.state.searchScreenState,
     );
   }
 }

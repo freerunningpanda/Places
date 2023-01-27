@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:places/blocs/search_screen/search_screen_bloc.dart';
+import 'package:places/data/api/api_places.dart';
 
 import 'package:places/data/interactor/place_interactor.dart';
+import 'package:places/data/repository/place_repository.dart';
 import 'package:places/providers/add_sight_provider.dart';
 import 'package:places/providers/search_data_provider.dart';
 import 'package:places/redux/action/action.dart';
@@ -40,7 +43,11 @@ class _SearchBarState extends State<SearchBar> {
     final customColors = Theme.of(context).extension<CustomColors>()!;
     final theme = Theme.of(context);
     final filteredPlaces = PlaceInteractor.filteredPlaces;
-    final controller = context.read<AddSightScreenProvider>().searchController;
+    final controller = PlaceInteractor(
+      repository: PlaceRepository(
+        apiPlaces: ApiPlaces(),
+      ),
+    ).controller;
     final showHistoryList = context.read<SearchDataProvider>().hasFocus;
     final searchStoryList = PlaceInteractor.searchHistoryList;
 
@@ -81,19 +88,26 @@ class _SearchBarState extends State<SearchBar> {
                     focusNode: focusNode,
                     readOnly: widget.readOnly ?? true,
                     onChanged: (value) {
-                      if (filteredPlaces.isNotEmpty) {
-                        store.dispatch(
-                          PlacesFoundAction(filteredPlaces: filteredPlaces),
-                        );
-                      } else {
-                        store.dispatch(
-                          PlacesEmptyAction(),
-                        );
-                      }
+                      final interactor = PlaceInteractor(
+                        repository: PlaceRepository(
+                          apiPlaces: ApiPlaces(),
+                        ),
+                      ).query = value;
+                      // if (filteredPlaces.isNotEmpty) {
+                      //   store.dispatch(
+                      //     PlacesFoundAction(filteredPlaces: filteredPlaces),
+                      //   );
+                      // } else {
+                      //   store.dispatch(
+                      //     PlacesEmptyAction(),
+                      //   );
+                      // }
 
-                      context.read<SearchDataProvider>()
+                      context.read<SearchScreenBloc>()
                         ..activeFocus(isActive: true)
-                        ..searchPlaces(value, controller);
+                        ..searchPlaces(interactor, controller);
+
+                      context.read<SearchScreenBloc>().add(PlacesFoundEvent());
 
                       if (controller.text.isEmpty) {
                         filteredPlaces.clear();

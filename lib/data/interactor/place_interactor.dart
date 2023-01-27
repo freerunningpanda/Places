@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:places/data/model/place.dart';
 import 'package:places/data/repository/place_repository.dart';
 
@@ -11,7 +12,8 @@ class PlaceInteractor {
   static Set<Place> visitedPlaces = {};
   static Set<Place> newPlaces = {};
   final PlaceRepository repository;
-
+  final controller = TextEditingController();
+  String query = '';
 
   PlaceInteractor({
     required this.repository,

@@ -4,22 +4,22 @@ import 'package:places/data/model/place.dart';
 import 'package:places/redux/action/action.dart';
 import 'package:places/redux/action/search_action.dart';
 
-abstract class SearchScreenState extends Equatable {
+abstract class SearchScreenStateRedux extends Equatable {
   @override
   List<Object?> get props => [];
 }
 
 // Состояние пустого экрана найденных мест
-class SearchScreenEmptyState extends SearchScreenState {
+class SearchScreenEmptyStateRedux extends SearchScreenStateRedux {
   final PlacesEmptyAction action;
 
-  SearchScreenEmptyState({
+  SearchScreenEmptyStateRedux({
     required this.action,
   });
 }
 
 // Состояние экрана в котором найдены места
-class SearchScreenFoundPlacesState extends SearchScreenState {
+class SearchScreenFoundPlacesState extends SearchScreenStateRedux {
   final List<Place> filteredPlaces;
 
   @override
@@ -31,7 +31,7 @@ class SearchScreenFoundPlacesState extends SearchScreenState {
 }
 
 // Пустое состояние истории поиска
-class SearchHistoryEmptyState extends SearchScreenState {
+class SearchHistoryEmptyState extends SearchScreenStateRedux {
   final SearchHistoryEmptyAction action;
 
   SearchHistoryEmptyState({
@@ -40,7 +40,7 @@ class SearchHistoryEmptyState extends SearchScreenState {
 }
 
 // Состояние истории поиска с данными
-class SearchHistoryHasValueState extends SearchScreenState {
+class SearchHistoryHasValueState extends SearchScreenStateRedux {
   final Set<String> searchStoryList;
   final bool showHistoryList;
 
@@ -54,7 +54,7 @@ class SearchHistoryHasValueState extends SearchScreenState {
 }
 
 // Состояние удаления всех элементов истории поиска
-class RemoveAllItemsFromHistoryState extends SearchScreenState {
+class RemoveAllItemsFromHistoryState extends SearchScreenStateRedux {
   final Set<String> historyList;
 
   @override
