@@ -42,7 +42,7 @@ class _SearchBarState extends State<SearchBar> {
   Widget build(BuildContext context) {
     final customColors = Theme.of(context).extension<CustomColors>()!;
     final theme = Theme.of(context);
-    final filteredPlaces = PlaceInteractor.filteredPlaces;
+    final filteredPlaces = SearchScreenBloc().filteredPlaces;
     final controller = PlaceInteractor(
       repository: PlaceRepository(
         apiPlaces: ApiPlaces(),
@@ -106,8 +106,20 @@ class _SearchBarState extends State<SearchBar> {
                       context.read<SearchScreenBloc>()
                         ..activeFocus(isActive: true)
                         ..searchPlaces(query, controller);
-
                       context.read<SearchScreenBloc>().add(PlacesFoundEvent());
+                      // debugPrint('Is FilteredPlacesIsEmpty: ${filteredPlaces.isEmpty}');
+                      // debugPrint('FilteredPlacesLength: ${filteredPlaces.length}');
+                      // if (filteredPlaces.isNotEmpty) {
+                      //   context.read<SearchScreenBloc>()
+                      //     ..activeFocus(isActive: true)
+                      //     ..searchPlaces(query, controller);
+                      //     debugPrint('Is FilteredPlacesIsEmptyNow: ${filteredPlaces.isEmpty}');
+                      //     debugPrint('FilteredPlacesLengthNow: ${filteredPlaces.length}');
+
+                      //   context.read<SearchScreenBloc>().add(PlacesFoundEvent());
+                      // } else {
+                      //   context.read<SearchScreenBloc>().add(PlacesEmptyEvent());
+                      // }
 
                       if (controller.text.isEmpty) {
                         filteredPlaces.clear();
