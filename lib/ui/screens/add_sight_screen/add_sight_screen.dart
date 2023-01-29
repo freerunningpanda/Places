@@ -241,6 +241,7 @@ class _SightContent extends StatelessWidget {
                 width: 72,
                 height: 72,
                 fit: BoxFit.cover,
+                errorBuilder: (context, error, stackTrace) => const Icon(Icons.error),
               ),
               const Positioned(
                 top: 4,

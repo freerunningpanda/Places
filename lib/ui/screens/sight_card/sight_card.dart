@@ -261,6 +261,7 @@ class _SightCardTop extends StatelessWidget {
                 child: CircularProgressIndicator(),
               );
             },
+            errorBuilder: (context, error, stackTrace) => const Icon(Icons.error),
           ),
           Positioned(
             left: 16,

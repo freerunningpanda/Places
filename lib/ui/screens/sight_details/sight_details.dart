@@ -427,6 +427,7 @@ class _SightDetailsImage extends StatelessWidget {
             child: CircularProgressIndicator(),
           );
         },
+        errorBuilder: (context, error, stackTrace) => const Icon(Icons.error),
       ),
     );
   }
