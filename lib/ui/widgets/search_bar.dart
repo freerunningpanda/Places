@@ -1,16 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_redux/flutter_redux.dart';
+
 import 'package:places/blocs/search_history/search_history_bloc.dart';
 import 'package:places/blocs/search_screen/search_screen_bloc.dart';
 import 'package:places/data/api/api_places.dart';
-
 import 'package:places/data/interactor/place_interactor.dart';
 import 'package:places/data/repository/place_repository.dart';
 import 'package:places/providers/search_data_provider.dart';
-import 'package:places/redux/action/action.dart';
-import 'package:places/redux/action/search_action.dart';
-import 'package:places/redux/state/appstate.dart';
 import 'package:places/ui/res/app_assets.dart';
+import 'package:places/ui/res/app_strings.dart';
 import 'package:places/ui/res/app_typography.dart';
 import 'package:places/ui/screens/filters_screen/filters_screen.dart';
 import 'package:places/ui/screens/res/custom_colors.dart';
@@ -54,7 +51,6 @@ class _SearchBarState extends State<SearchBar> {
 
     return Padding(
       padding: const EdgeInsets.only(
-        // top: 30.0,
         bottom: 34,
       ),
       child: Container(
@@ -92,63 +88,38 @@ class _SearchBarState extends State<SearchBar> {
                         filteredPlaces.clear();
                       }
                     },
+                    // По клику на поле поиска
                     onTap: () {
-                      // context.read<SearchHistoryBloc>().activeFocus(isActive: true);
-                      // Если страница поиска
-      
+                      // Если виджет searchBar на экране поиска мест
                       if (widget.isSearchPage) {
-                        // Если история поиска не пустая, то отправляем в state список из истории поиска
-         
+                        // Если история поиска не пустая, то вызываем event показа истории поиска
                         if (searchStoryList.isNotEmpty) {
-                          // interactor.hasFocus = true;
                           context.read<SearchHistoryBloc>().add(ShowHistoryEvent());
-                          // context.read<SearchHistoryBloc>().activeFocus(isActive: true);
-                          // store.dispatch(
-                          //   SearchHistoryHasValueAction(
-                          //     searchStoryList: searchStoryList,
-                          //     showHistoryList: showHistoryList,
-                          //   ),
-                          // );
-                        } else {
-                          // Иначе просто отправляем в action список найденных мест
-                          context.read<SearchScreenBloc>().add(PlacesFoundEvent());
                         }
                       }
 
+                      // Если виджет searchBar на главном экране
                       if (!widget.isSearchPage) {
+                        // Просто переходим на экран поиска мест
                         Navigator.of(context).push(
                           MaterialPageRoute<SightSearchScreen>(
                             builder: (context) => const SightSearchScreen(),
                           ),
                         );
-                      } else {
-                        return;
                       }
                     },
+                    // При отправке данных из поиска
                     onSubmitted: (value) {
-                      // interactor.hasFocus = false;
-                      // interactor.query = value;
-                      // // if (filteredPlaces.isNotEmpty) {
-                      // //   store.dispatch(
-                      // //     PlacesFoundAction(filteredPlaces: filteredPlaces),
-                      // //   );
-                      // // } else {
-                      // //   store.dispatch(
-                      // //     PlacesEmptyAction(),
-                      // //   );
-                      // // }
-                      // context.read<SearchScreenBloc>().searchPlaces(value, interactor.controller);
-                      // if (interactor.controller.text.isEmpty) {
-                      //   filteredPlaces.clear();
-                      // }
-                      // // if(!interactor.hasFocus) {
-                      // //   context.read<SearchScreenBloc>().add(PlacesFoundEvent());
-                      // // }
-                      context.read<SearchHistoryBloc>().saveSearchHistory(value, interactor.controller);
-                      // ..activeFocus(isActive: false);
-                      context.read<SearchHistoryBloc>().add(AddItemToHistoryEvent());
-                      // // context.read<SearchHistoryBloc>().add(AddItemToHistoryEvent());
+                      context.read<SearchHistoryBloc>()
+
+                        // Добавляем значение из поиска в список истории поиска
+                        ..saveSearchHistory(value, interactor.controller)
+                        // Вызываем event добавления места в историю поиска
+                        ..add(AddItemToHistoryEvent());
+
+                      // Очистить строку поиска после нажатия кнопки submit  
                       interactor.controller.clear();
+                    
                     },
                     decoration: InputDecoration(
                       border: InputBorder.none,
@@ -156,7 +127,7 @@ class _SearchBarState extends State<SearchBar> {
                         maxWidth: 24,
                         maxHeight: 24,
                       ),
-                      hintText: 'Поиск',
+                      hintText: AppString.search,
                       hintStyle: AppTypography.textText16Search,
                       suffixIcon: focusNode.hasFocus
                           ? SuffixIcon(controller: interactor.controller, theme: theme)

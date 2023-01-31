@@ -58,5 +58,6 @@ abstract class AppString {
   static const photo = 'Фотография';
   static const file = 'Файл';
   static const error = 'Ошибка';
+  static const search = 'Поиск';
   static const errorDescription = 'Что то пошло не так\nПопробуйте позже.';
 }

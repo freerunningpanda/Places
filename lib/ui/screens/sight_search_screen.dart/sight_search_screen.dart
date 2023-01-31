@@ -69,11 +69,13 @@ class SightSearchScreen extends StatelessWidget {
                           // Если история не пустая то берём её из state и отображаем на экране
                           else if (state is SearchHistoryHasValueState) {
                             return state.hasFocus
+                                // При наличии фокуса в поле ввода, показываем историю поиска (если она есть)
                                 ? _SearchHistoryList(
                                     theme: theme,
                                     searchStoryList: state.searchStoryList,
                                     width: width,
                                   )
+                                // Иначе показываем список найденных мест
                                 : Column(
                                     children: [
                                       const SizedBox(),
@@ -103,6 +105,7 @@ class SightSearchScreen extends StatelessWidget {
   }
 }
 
+// Виджет списка найденных мест
 class _SightListWidget extends StatelessWidget {
   final ThemeData theme;
   const _SightListWidget({Key? key, required this.theme}) : super(key: key);
@@ -138,22 +141,19 @@ class _SightListWidget extends StatelessWidget {
             },
           );
         }
+        // В противном случае отображаем пустой список мест 
 
-        return Container(
-          width: 150,
-          height: 150,
-          color: Colors.red,
+        return _EmptyListWidget(
+          height: height,
+          width: width,
+          theme: theme,
         );
-        // _EmptyListWidget(
-        //   height: height,
-        //   width: width,
-        //   theme: theme,
-        // );
       },
     );
   }
 }
 
+// Виджет пустого списка мест
 class _EmptyListWidget extends StatelessWidget {
   final double height;
   final double width;
@@ -172,6 +172,7 @@ class _EmptyListWidget extends StatelessWidget {
   }
 }
 
+// Виджет истории поиска
 class _SearchHistoryList extends StatelessWidget {
   final Set<String> searchStoryList;
   final ThemeData theme;
@@ -211,15 +212,10 @@ class _ClearHistoryButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // final store = StoreProvider.of<AppState>(context);
 
     return TextButton(
+      // Вызываем event очистки истории поиска
       onPressed: () => context.read<SearchHistoryBloc>().add(RemoveAllItemsFromHistory()),
-      // store.dispatch(
-      //   RemoveAllItemsFromHistoryAction(
-      //     historyList: const {},
-      //   ),
-      // ),
       child: const Align(
         alignment: Alignment.centerLeft,
         child: Text(
