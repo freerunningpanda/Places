@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:places/blocs/search_history/search_history_bloc.dart';
 import 'package:places/blocs/search_screen/search_screen_bloc.dart';
 import 'package:places/data/api/api_places.dart';
 
@@ -47,10 +48,7 @@ class _SearchBarState extends State<SearchBar> {
         apiPlaces: ApiPlaces(),
       ),
     );
-    final showHistoryList = context.read<SearchDataProvider>().hasFocus;
     final searchStoryList = PlaceInteractor.searchHistoryList;
-
-    final store = StoreProvider.of<AppState>(context);
 
     context.watch<SearchDataProvider>();
 
@@ -95,22 +93,21 @@ class _SearchBarState extends State<SearchBar> {
                       }
                     },
                     onTap: () {
-                      context.read<SearchDataProvider>().activeFocus(isActive: true);
+                      // context.read<SearchHistoryBloc>().activeFocus(isActive: true);
                       // Если страница поиска
                       if (widget.isSearchPage) {
-                        // Если история поиска не пустая, то отправляем в action список из истории поиска
+                        // Если история поиска не пустая, то отправляем в state список из истории поиска
                         if (searchStoryList.isNotEmpty) {
-                          store.dispatch(
-                            SearchHistoryHasValueAction(
-                              searchStoryList: searchStoryList,
-                              showHistoryList: showHistoryList,
-                            ),
-                          );
+                          context.read<SearchHistoryBloc>().add(AddItemToHistoryEvent());
+                          // store.dispatch(
+                          //   SearchHistoryHasValueAction(
+                          //     searchStoryList: searchStoryList,
+                          //     showHistoryList: showHistoryList,
+                          //   ),
+                          // );
                         } else {
                           // Иначе просто отправляем в action список найденных мест
-                          store.dispatch(
-                            PlacesFoundAction(filteredPlaces: filteredPlaces),
-                          );
+                          context.read<SearchScreenBloc>().add(PlacesFoundEvent());
                         }
                       }
 
@@ -125,15 +122,16 @@ class _SearchBarState extends State<SearchBar> {
                       }
                     },
                     onSubmitted: (value) {
-                      if (filteredPlaces.isNotEmpty) {
-                        store.dispatch(
-                          PlacesFoundAction(filteredPlaces: filteredPlaces),
-                        );
-                      } else {
-                        store.dispatch(
-                          PlacesEmptyAction(),
-                        );
-                      }
+                      // if (filteredPlaces.isNotEmpty) {
+                      //   store.dispatch(
+                      //     PlacesFoundAction(filteredPlaces: filteredPlaces),
+                      //   );
+                      // } else {
+                      //   store.dispatch(
+                      //     PlacesEmptyAction(),
+                      //   );
+                      // }
+                      context.read<SearchScreenBloc>().add(PlacesFoundEvent());
                       context.read<SearchDataProvider>()
                         ..activeFocus(isActive: false)
                         ..saveSearchHistory(value, interactor.controller);

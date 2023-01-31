@@ -3,13 +3,14 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:places/blocs/search_history/search_history_bloc.dart';
 import 'package:places/blocs/search_screen/search_screen_bloc.dart';
 import 'package:places/data/model/place.dart';
 import 'package:places/providers/add_sight_provider.dart';
 import 'package:places/providers/search_data_provider.dart';
 import 'package:places/redux/action/search_action.dart';
 import 'package:places/redux/state/appstate.dart';
-import 'package:places/redux/state/search_screen_state.dart';
+import 'package:places/redux/state/search_screen_state.dart' hide SearchHistoryEmptyState, SearchHistoryHasValueState;
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_strings.dart';
 import 'package:places/ui/res/app_typography.dart';
@@ -54,10 +55,10 @@ class SightSearchScreen extends StatelessWidget {
                 child: SingleChildScrollView(
                   child: Column(
                     children: [
-                      StoreConnector<AppState, SearchScreenStateRedux>(
-                        builder: (context, vm) {
+                      BlocBuilder<SearchHistoryBloc, SearchHistoryState>(
+                        builder: (context, state) {
                           // Если история поиска пуста, показываем просто список найденных мест
-                          if (vm is SearchHistoryEmptyState) {
+                          if (state is SearchHistoryEmptyState) {
                             return Column(
                               children: [
                                 const SizedBox(),
@@ -66,10 +67,10 @@ class SightSearchScreen extends StatelessWidget {
                             );
                           }
                           // Если история не пустая то берём её из state и отображаем на экране
-                          else if (vm is SearchHistoryHasValueState) {
+                          else if (state is SearchHistoryHasValueState) {
                             return _SearchHistoryList(
                               theme: theme,
-                              searchStoryList: vm.searchStoryList,
+                              searchStoryList: state.searchStoryList,
                               width: width,
                             );
                           } else {
@@ -82,7 +83,6 @@ class SightSearchScreen extends StatelessWidget {
                             );
                           }
                         },
-                        converter: (store) => store.state.searchScreenState,
                       ),
                     ],
                   ),
@@ -204,14 +204,15 @@ class _ClearHistoryButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final store = StoreProvider.of<AppState>(context);
+    // final store = StoreProvider.of<AppState>(context);
 
     return TextButton(
-      onPressed: () => store.dispatch(
-        RemoveAllItemsFromHistoryAction(
-          historyList: const {},
-        ),
-      ),
+      onPressed: () => context.read<SearchHistoryBloc>().add(RemoveAllItemsFromHistory()),
+      // store.dispatch(
+      //   RemoveAllItemsFromHistoryAction(
+      //     historyList: const {},
+      //   ),
+      // ),
       child: const Align(
         alignment: Alignment.centerLeft,
         child: Text(

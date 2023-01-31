@@ -6,3 +6,5 @@ class AddItemToHistoryEvent extends SearchHistoryEvent {}
 
 class RemoveItemFromHistory extends SearchHistoryEvent {}
 
+class RemoveAllItemsFromHistory extends SearchHistoryEvent {}
+

@@ -9,14 +9,14 @@ abstract class SearchHistoryState extends Equatable {
 class SearchHistoryEmptyState extends SearchHistoryState {}
 
 // Состояние истории поиска с данными
-class SearchHistoryHasValueAction extends SearchHistoryState {
+class SearchHistoryHasValueState extends SearchHistoryState {
   final Set<String> searchStoryList;
   final bool showHistoryList;
 
   @override
   List<Object?> get props => [searchStoryList];
 
-  SearchHistoryHasValueAction({
+  SearchHistoryHasValueState({
     required this.searchStoryList,
     required this.showHistoryList,
   });
@@ -35,14 +35,4 @@ class FoundedPlacesAction extends SearchHistoryState {
   FoundedPlacesAction({
     required this.filteredPlaces,
   });
-}
-
-// Состояние удаления всех элементов истории поиска
-class RemoveAllItemsFromHistoryAction extends SearchHistoryState {
-  final Set<String> historyList;
-
-  @override
-  List<Object?> get props => [historyList];
-
-  RemoveAllItemsFromHistoryAction({required this.historyList});
 }

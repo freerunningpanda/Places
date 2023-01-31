@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:places/blocs/search_history/search_history_bloc.dart';
 import 'package:places/blocs/search_screen/search_screen_bloc.dart';
 import 'package:places/blocs/visiting_screen/visiting_screen_bloc.dart';
 import 'package:places/blocs/visiting_screen/visiting_screen_event.dart';
@@ -85,6 +86,9 @@ void main() {
           ),
           BlocProvider<SearchScreenBloc>(
             create: (context) => SearchScreenBloc(),
+          ),
+          BlocProvider<SearchHistoryBloc>(
+            create: (context) => SearchHistoryBloc(),
           ),
         ],
         child: App(store: store),
