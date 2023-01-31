@@ -14,6 +14,7 @@ class PlaceInteractor {
   final PlaceRepository repository;
   final controller = TextEditingController();
   String query = '';
+  bool hasFocus = false;
 
   PlaceInteractor({
     required this.repository,

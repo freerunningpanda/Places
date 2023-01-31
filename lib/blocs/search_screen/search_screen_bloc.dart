@@ -35,9 +35,9 @@ class SearchScreenBloc extends Bloc<SearchScreenEvent, SearchScreenState> {
   void activeFocus({required bool isActive}) {
     // ignore: prefer-conditional-expressions
     if (isActive) {
-      hasFocus = true;
+      interactor.hasFocus = true;
     } else {
-      hasFocus = false;
+      interactor.hasFocus = false;
     }
   }
 
