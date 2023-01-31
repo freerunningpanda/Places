@@ -68,11 +68,18 @@ class SightSearchScreen extends StatelessWidget {
                           }
                           // Если история не пустая то берём её из state и отображаем на экране
                           else if (state is SearchHistoryHasValueState) {
-                            return _SearchHistoryList(
-                              theme: theme,
-                              searchStoryList: state.searchStoryList,
-                              width: width,
-                            );
+                            return state.hasFocus
+                                ? _SearchHistoryList(
+                                    theme: theme,
+                                    searchStoryList: state.searchStoryList,
+                                    width: width,
+                                  )
+                                : Column(
+                                    children: [
+                                      const SizedBox(),
+                                      _SightListWidget(theme: theme),
+                                    ],
+                                  );
                           } else {
                             // В противном случае показываем список найденных мест
                             return Column(

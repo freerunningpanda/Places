@@ -95,11 +95,14 @@ class _SearchBarState extends State<SearchBar> {
                     onTap: () {
                       // context.read<SearchHistoryBloc>().activeFocus(isActive: true);
                       // Если страница поиска
+      
                       if (widget.isSearchPage) {
                         // Если история поиска не пустая, то отправляем в state список из истории поиска
+         
                         if (searchStoryList.isNotEmpty) {
-                          context.read<SearchHistoryBloc>().add(AddItemToHistoryEvent());
-                          context.read<SearchHistoryBloc>().activeFocus(isActive: true);
+                          // interactor.hasFocus = true;
+                          context.read<SearchHistoryBloc>().add(ShowHistoryEvent());
+                          // context.read<SearchHistoryBloc>().activeFocus(isActive: true);
                           // store.dispatch(
                           //   SearchHistoryHasValueAction(
                           //     searchStoryList: searchStoryList,
@@ -123,6 +126,7 @@ class _SearchBarState extends State<SearchBar> {
                       }
                     },
                     onSubmitted: (value) {
+                      // interactor.hasFocus = false;
                       // interactor.query = value;
                       // // if (filteredPlaces.isNotEmpty) {
                       // //   store.dispatch(
@@ -140,12 +144,11 @@ class _SearchBarState extends State<SearchBar> {
                       // // if(!interactor.hasFocus) {
                       // //   context.read<SearchScreenBloc>().add(PlacesFoundEvent());
                       // // }
-                      context.read<SearchHistoryBloc>()
-                        ..saveSearchHistory(value, interactor.controller)
-                        ..activeFocus(isActive: false);
-                      context.read<SearchScreenBloc>().add(PlacesFoundEvent());
+                      context.read<SearchHistoryBloc>().saveSearchHistory(value, interactor.controller);
+                      // ..activeFocus(isActive: false);
+                      context.read<SearchHistoryBloc>().add(AddItemToHistoryEvent());
                       // // context.read<SearchHistoryBloc>().add(AddItemToHistoryEvent());
-                      // interactor.controller.clear();
+                      interactor.controller.clear();
                     },
                     decoration: InputDecoration(
                       border: InputBorder.none,

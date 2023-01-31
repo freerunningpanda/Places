@@ -18,12 +18,29 @@ class SearchHistoryBloc extends Bloc<SearchHistoryEvent, SearchHistoryState> {
   );
 
   SearchHistoryBloc() : super(SearchHistoryEmptyState()) {
-    on<AddItemToHistoryEvent>(
+    on<ShowHistoryEvent>(
       (event, emit) {
-        activeFocus(isActive: false);
+        // activeFocus(isActive: true);
         saveSearchHistory(interactor.query, interactor.controller);
         emit(
-          SearchHistoryHasValueState(searchStoryList: searchStoryList, showHistoryList: true),
+          SearchHistoryHasValueState(
+            searchStoryList: searchStoryList,
+            hasFocus: true,
+          ),
+        );
+        // debugPrint('hasFocus onTap: ${interactor.hasFocus}');
+      },
+    );
+    on<AddItemToHistoryEvent>(
+      (event, emit) {
+        // debugPrint('hasFocus onSubmitted: ${interactor.hasFocus}');
+        // activeFocus(isActive: true);
+        saveSearchHistory(interactor.query, interactor.controller);
+        emit(
+          SearchHistoryHasValueState(
+            searchStoryList: searchStoryList,
+            hasFocus: false,
+          ),
         );
       },
     );
@@ -40,14 +57,14 @@ class SearchHistoryBloc extends Bloc<SearchHistoryEvent, SearchHistoryState> {
     );
   }
 
-  void activeFocus({required bool isActive}) {
-    // ignore: prefer-conditional-expressions
-    if (isActive) {
-      interactor.hasFocus = true;
-    } else {
-      interactor.hasFocus = false;
-    }
-  }
+  // void activeFocus({required bool isActive}) {
+  //   // ignore: prefer-conditional-expressions
+  //   if (isActive) {
+  //     interactor.hasFocus = true;
+  //   } else {
+  //     interactor.hasFocus = false;
+  //   }
+  // }
 
   void saveSearchHistory(String value, TextEditingController controller) {
     if (controller.text.isEmpty) return;
