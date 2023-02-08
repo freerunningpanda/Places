@@ -19,11 +19,13 @@ import 'package:provider/provider.dart';
 class SearchBar extends StatefulWidget {
   final bool? readOnly;
   final bool isSearchPage;
+  final TextEditingController searchController;
 
   const SearchBar({
     Key? key,
     this.readOnly,
     required this.isSearchPage,
+    required this.searchController,
   }) : super(key: key);
 
   @override
@@ -70,10 +72,10 @@ class _SearchBarState extends State<SearchBar> {
                 ),
                 const SizedBox(width: 14),
                 Expanded(
-                  child: TextField(
+                  child: TextFormField(
                     style: theme.textTheme.bodyLarge,
                     textCapitalization: TextCapitalization.sentences,
-                    controller: interactor.controller,
+                    controller: widget.searchController,
                     autofocus: autofocus,
                     focusNode: focusNode,
                     readOnly: widget.readOnly ?? true,
@@ -82,9 +84,9 @@ class _SearchBarState extends State<SearchBar> {
 
                       context.read<SearchScreenBloc>()
                         ..activeFocus(isActive: true)
-                        ..searchPlaces(value, interactor.controller);
+                        ..searchPlaces(value, widget.searchController);
                       context.read<SearchScreenBloc>().add(PlacesFoundEvent());
-                      if (interactor.controller.text.isEmpty) {
+                      if (widget.searchController.text.isEmpty) {
                         filteredPlaces.clear();
                       }
                     },
@@ -109,17 +111,16 @@ class _SearchBarState extends State<SearchBar> {
                       }
                     },
                     // При отправке данных из поиска
-                    onSubmitted: (value) {
+                    onFieldSubmitted: (value) {
                       context.read<SearchHistoryBloc>()
 
                         // Добавляем значение из поиска в список истории поиска
-                        ..saveSearchHistory(value, interactor.controller)
+                        ..saveSearchHistory(value, widget.searchController)
                         // Вызываем event добавления места в историю поиска
                         ..add(AddItemToHistoryEvent());
 
-                      // Очистить строку поиска после нажатия кнопки submit  
-                      interactor.controller.clear();
-                    
+                      // Очистить строку поиска после нажатия кнопки submit
+                      widget.searchController.clear();
                     },
                     decoration: InputDecoration(
                       border: InputBorder.none,
@@ -130,7 +131,7 @@ class _SearchBarState extends State<SearchBar> {
                       hintText: AppString.search,
                       hintStyle: AppTypography.textText16Search,
                       suffixIcon: focusNode.hasFocus
-                          ? SuffixIcon(controller: interactor.controller, theme: theme)
+                          ? SuffixIcon(controller: widget.searchController, theme: theme)
                           : IconButton(
                               onPressed: () {
                                 Navigator.push(

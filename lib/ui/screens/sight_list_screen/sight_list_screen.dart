@@ -81,11 +81,19 @@ class _SightListScreenState extends State<SightListScreen> {
                   return Column(
                     children: [
                       if (orientation)
-                        SearchBar(isSearchPage: isSearchPage, readOnly: readOnly)
+                        SearchBar(
+                          isSearchPage: isSearchPage,
+                          readOnly: readOnly,
+                          searchController: TextEditingController(),
+                        )
                       else
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 18.0),
-                          child: SearchBar(isSearchPage: isSearchPage, readOnly: readOnly),
+                          child: SearchBar(
+                            isSearchPage: isSearchPage,
+                            readOnly: readOnly,
+                            searchController: TextEditingController(),
+                          ),
                         ),
                       if (orientation)
                         _SightListWidgetPortrait(placeList: store.getPlacesFuture.value ?? [], theme: theme)

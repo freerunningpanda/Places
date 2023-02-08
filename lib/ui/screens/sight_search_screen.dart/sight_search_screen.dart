@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:places/blocs/search_bar/search_bar_bloc.dart';
 import 'package:places/blocs/search_history/search_history_bloc.dart';
 import 'package:places/blocs/search_screen/search_screen_bloc.dart';
 import 'package:places/data/model/place.dart';
@@ -19,8 +20,15 @@ import 'package:places/ui/widgets/search_appbar.dart';
 import 'package:places/ui/widgets/search_bar.dart';
 import 'package:places/ui/widgets/sight_icons.dart';
 
-class SightSearchScreen extends StatelessWidget {
+class SightSearchScreen extends StatefulWidget {
   const SightSearchScreen({Key? key}) : super(key: key);
+
+  @override
+  State<SightSearchScreen> createState() => _SightSearchScreenState();
+}
+
+class _SightSearchScreenState extends State<SightSearchScreen> {
+  final searchController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -47,9 +55,24 @@ class SightSearchScreen extends StatelessWidget {
               const SizedBox(height: 16),
               const SearchAppBar(),
               const SizedBox(height: 16),
-              const SearchBar(
-                isSearchPage: isSearchPage,
-                readOnly: readOnly,
+              BlocBuilder<SearchBarBloc, SearchBarState>(
+                builder: (context, state) {
+                  if (state is SearchBarHasValueState) {
+                    return SearchBar(
+                      isSearchPage: isSearchPage,
+                      readOnly: readOnly,
+                      searchController: searchController,
+                    );
+                  } else if (state is SearchBarEmptyState) {
+                    return SearchBar(
+                      isSearchPage: isSearchPage,
+                      readOnly: readOnly,
+                      searchController: TextEditingController(),
+                    );
+                  }
+
+                  throw ArgumentError('Bad state');
+                },
               ),
               Expanded(
                 child: SingleChildScrollView(
@@ -74,6 +97,7 @@ class SightSearchScreen extends StatelessWidget {
                                     theme: theme,
                                     searchStoryList: state.searchStoryList,
                                     width: width,
+                                    controller: searchController,
                                   )
                                 // Иначе показываем список найденных мест
                                 : Column(
@@ -141,7 +165,7 @@ class _SightListWidget extends StatelessWidget {
             },
           );
         }
-        // В противном случае отображаем пустой список мест 
+        // В противном случае отображаем пустой список мест
 
         return _EmptyListWidget(
           height: height,
@@ -177,12 +201,14 @@ class _SearchHistoryList extends StatelessWidget {
   final Set<String> searchStoryList;
   final ThemeData theme;
   final double width;
+  final TextEditingController controller;
 
   const _SearchHistoryList({
     Key? key,
     required this.searchStoryList,
     required this.theme,
     required this.width,
+    required this.controller,
   }) : super(key: key);
 
   @override
@@ -197,6 +223,7 @@ class _SearchHistoryList extends StatelessWidget {
           theme: theme,
           searchStoryList: searchStoryList,
           width: width,
+          controller: controller,
         ),
         const SizedBox(height: 15),
         const _ClearHistoryButton(),
@@ -212,7 +239,6 @@ class _ClearHistoryButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return TextButton(
       // Вызываем event очистки истории поиска
       onPressed: () => context.read<SearchHistoryBloc>().add(RemoveAllItemsFromHistory()),
@@ -248,12 +274,14 @@ class _SearchItem extends StatelessWidget {
   final ThemeData theme;
   final Set<String> searchStoryList;
   final double width;
+  final TextEditingController controller;
 
   const _SearchItem({
     Key? key,
     required this.theme,
     required this.searchStoryList,
     required this.width,
+    required this.controller,
   }) : super(key: key);
 
   @override
@@ -271,7 +299,18 @@ class _SearchItem extends StatelessWidget {
                   children: [
                     InkWell(
                       borderRadius: BorderRadius.circular(12),
-                      onTap: () => context.read<AddSightScreenProvider>().searchController.text = e,
+                      onTap: () {
+                        final value = controller.text = e;
+                        context.read<SearchBarBloc>().add(SearchBarEvent(value: value));
+                        /*final provider =
+                            context.read<AddSightScreenProvider>(); // Обращаюсь к полям класса AddSightScreenProvider
+
+                        provider.searchController.text =
+                            e; // В свойство text у searchController записываю значение из истории поиска
+                        context.read<SearchBarBloc>().add(
+                              SearchBarEvent(searchController: provider.searchController),
+                            ); // Вызываю событие по нажатию на историю*/
+                      },
                       child: SizedBox(
                         width: width * 0.7,
                         child: Text(
