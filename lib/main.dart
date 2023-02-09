@@ -6,6 +6,7 @@ import 'package:places/blocs/search_history/search_history_bloc.dart';
 import 'package:places/blocs/search_screen/search_screen_bloc.dart';
 import 'package:places/blocs/visiting_screen/visiting_screen_bloc.dart';
 import 'package:places/blocs/visiting_screen/visiting_screen_event.dart';
+import 'package:places/cubits/places_list/places_list_cubit.dart';
 import 'package:places/data/api/api_places.dart';
 import 'package:places/data/repository/place_repository.dart';
 import 'package:places/providers/add_sight_provider.dart';
@@ -93,6 +94,9 @@ void main() {
           ),
           BlocProvider<SearchBarBloc>(
             create: (context) => SearchBarBloc(),
+          ),
+          BlocProvider<PlacesListCubit>(
+            create: (context) => PlacesListCubit(),
           ),
         ],
         child: App(store: store),

@@ -3,8 +3,10 @@ import 'dart:io';
 
 import 'package:flutter/material.dart' hide ErrorWidget;
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mobx/mobx.dart';
+import 'package:places/cubits/places_list/places_list_cubit.dart';
 import 'package:places/data/api/api_places.dart';
 
 import 'package:places/data/interactor/place_interactor.dart';
@@ -19,7 +21,6 @@ import 'package:places/ui/widgets/add_new_place_button.dart';
 import 'package:places/ui/widgets/error_widget.dart';
 import 'package:places/ui/widgets/search_bar.dart';
 import 'package:places/ui/widgets/sight_icons.dart';
-import 'package:provider/provider.dart';
 
 class SightListScreen extends StatefulWidget {
   const SightListScreen({Key? key}) : super(key: key);
@@ -45,6 +46,8 @@ class _SightListScreenState extends State<SightListScreen> {
 
   @override
   Widget build(BuildContext context) {
+    context.read<PlacesListCubit>().getPlaces();
+
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitUp,
@@ -68,42 +71,38 @@ class _SightListScreenState extends State<SightListScreen> {
               ),
             ),
           ],
-          body: Provider<PlaceListStore>(
-            create: (context) => _store,
-            child: Observer(
-              builder: (_) {
-                final store = context.read<PlaceListStore>();
-                if (store.getPlacesFuture.status == FutureStatus.rejected) {
-                  return const ErrorWidget();
-                } else if (store.getPlacesFuture.status == FutureStatus.pending) {
-                  return const Center(child: CircularProgressIndicator());
-                } else {
-                  return Column(
-                    children: [
-                      if (orientation)
-                        SearchBar(
+          body: BlocBuilder<PlacesListCubit, PlacesListState>(
+            builder: (_, state) {
+              if (state is PlacesListEmptyState) {
+                return const Center(child: CircularProgressIndicator());
+              } else if (state is PlacesListLoadedState) {
+                return Column(
+                  children: [
+                    if (orientation)
+                      SearchBar(
+                        isSearchPage: isSearchPage,
+                        readOnly: readOnly,
+                        searchController: TextEditingController(),
+                      )
+                    else
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 18.0),
+                        child: SearchBar(
                           isSearchPage: isSearchPage,
                           readOnly: readOnly,
                           searchController: TextEditingController(),
-                        )
-                      else
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 18.0),
-                          child: SearchBar(
-                            isSearchPage: isSearchPage,
-                            readOnly: readOnly,
-                            searchController: TextEditingController(),
-                          ),
                         ),
-                      if (orientation)
-                        _SightListWidgetPortrait(placeList: store.getPlacesFuture.value ?? [], theme: theme)
-                      else
-                        _SightListWidgetLandscape(placeList: store.getPlacesFuture.value ?? [], theme: theme),
-                    ],
-                  );
-                }
-              },
-            ),
+                      ),
+                    if (orientation)
+                      _SightListWidgetPortrait(placeList: state.places, theme: theme)
+                    else
+                      _SightListWidgetLandscape(placeList: state.places, theme: theme),
+                  ],
+                );
+              }
+
+              return const ErrorWidget();
+            },
           ),
         ),
       ),
