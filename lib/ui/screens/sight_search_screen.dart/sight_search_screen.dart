@@ -2,16 +2,11 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_redux/flutter_redux.dart';
 import 'package:places/blocs/search_bar/search_bar_bloc.dart';
 import 'package:places/blocs/search_history/search_history_bloc.dart';
 import 'package:places/blocs/search_screen/search_screen_bloc.dart';
 import 'package:places/data/model/place.dart';
-import 'package:places/providers/add_sight_provider.dart';
 import 'package:places/providers/search_data_provider.dart';
-import 'package:places/redux/action/search_action.dart';
-import 'package:places/redux/state/appstate.dart';
-import 'package:places/redux/state/search_screen_state.dart' hide SearchHistoryEmptyState, SearchHistoryHasValueState;
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_strings.dart';
 import 'package:places/ui/res/app_typography.dart';
@@ -37,8 +32,6 @@ class _SightSearchScreenState extends State<SightSearchScreen> {
     const isSearchPage = true;
 
     final width = MediaQuery.of(context).size.width;
-
-    context.watch<SearchDataProvider>();
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -286,6 +279,8 @@ class _SearchItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    // Аргументировал данное решение в search_history_event.dart стр. 12
     context.watch<SearchDataProvider>();
 
     return Column(
@@ -302,14 +297,6 @@ class _SearchItem extends StatelessWidget {
                       onTap: () {
                         final value = controller.text = e;
                         context.read<SearchBarBloc>().add(SearchBarEvent(value: value));
-                        /*final provider =
-                            context.read<AddSightScreenProvider>(); // Обращаюсь к полям класса AddSightScreenProvider
-
-                        provider.searchController.text =
-                            e; // В свойство text у searchController записываю значение из истории поиска
-                        context.read<SearchBarBloc>().add(
-                              SearchBarEvent(searchController: provider.searchController),
-                            ); // Вызываю событие по нажатию на историю*/
                       },
                       child: SizedBox(
                         width: width * 0.7,

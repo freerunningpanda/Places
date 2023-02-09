@@ -25,6 +25,16 @@ class SearchHistoryHasValueState extends SearchHistoryState {
   String toString() {
     return 'hasFocus: $hasFocus';
   }
+
+  SearchHistoryHasValueState copyWith({
+    Set<String>? searchStoryList,
+    bool? hasFocus,
+  }) {
+    return SearchHistoryHasValueState(
+      searchStoryList: searchStoryList ?? this.searchStoryList,
+      hasFocus: hasFocus ?? this.hasFocus,
+    );
+  }
 }
 
 // Состояние пустого экрана найденных мест

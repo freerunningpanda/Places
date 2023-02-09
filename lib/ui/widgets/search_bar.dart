@@ -5,7 +5,6 @@ import 'package:places/blocs/search_screen/search_screen_bloc.dart';
 import 'package:places/data/api/api_places.dart';
 import 'package:places/data/interactor/place_interactor.dart';
 import 'package:places/data/repository/place_repository.dart';
-import 'package:places/providers/search_data_provider.dart';
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_strings.dart';
 import 'package:places/ui/res/app_typography.dart';
@@ -48,8 +47,6 @@ class _SearchBarState extends State<SearchBar> {
       ),
     );
     final searchStoryList = PlaceInteractor.searchHistoryList;
-
-    context.watch<SearchDataProvider>();
 
     return Padding(
       padding: const EdgeInsets.only(

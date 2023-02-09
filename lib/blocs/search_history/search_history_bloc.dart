@@ -54,4 +54,5 @@ class SearchHistoryBloc extends Bloc<SearchHistoryEvent, SearchHistoryState> {
     if (controller.text.isEmpty) return;
     PlaceInteractor.searchHistoryList.add(value);
   }
+
 }
