@@ -2,6 +2,8 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:places/blocs/favorite/favorite_bloc.dart';
 import 'package:places/data/model/place.dart';
 
 import 'package:places/ui/res/app_card_size.dart';
@@ -18,10 +20,11 @@ class SightCard extends StatelessWidget {
   final Widget actionOne;
   final Widget? actionTwo;
   final double? aspectRatio;
-  final Place item;
+  final List<Place> item;
+  final int placeIndex;
   final bool isVisitingScreen;
   final VoidCallback? removeSight;
-  final VoidCallback? addSight;
+  // final VoidCallback? addSight;
 
   const SightCard({
     Key? key,
@@ -33,9 +36,10 @@ class SightCard extends StatelessWidget {
     this.actionTwo,
     this.aspectRatio,
     required this.item,
+    required this.placeIndex,
     required this.isVisitingScreen,
     this.removeSight,
-    this.addSight,
+    // this.addSight,
   }) : super(key: key);
 
   @override
@@ -63,7 +67,7 @@ class SightCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     _SightCardTop(
-                      actionOne: actionOne,
+                      // actionOne: actionOne,
                       type: type,
                       url: url,
                     ),
@@ -74,7 +78,7 @@ class SightCard extends StatelessWidget {
                     ),
                   ],
                 ),
-                RippleCardFull(item: item),
+                RippleCardFull(item: item[placeIndex]),
                 if (isVisitingScreen)
                   RippleIcons(
                     removeSight: removeSight,
@@ -84,7 +88,30 @@ class SightCard extends StatelessWidget {
                 else
                   RippleIcon(
                     actionOne: actionOne,
-                    addSight: addSight,
+                    addSight: () {
+                      final place = item[placeIndex];
+                      // Если место не в избранном
+                      if (!place.isFavorite) {
+                        // Добавляю место в избранное, меняя флаг isFavorite на true
+                        // Событие добавляет место в список избранного
+                        context.read<FavoriteBloc>().add(
+                              FavoriteEvent(
+                                isFavorite: place.isFavorite = true,
+                                place: place,
+                              ),
+                            );
+                        debugPrint('isFavorite ${place.isFavorite}');
+                      } else {
+                        // Если место в избранном, меняю флаг isFavorite на false.
+                        // Событие удаляет место из списка избранного
+                        context.read<FavoriteBloc>().add(
+                              FavoriteEvent(
+                                isFavorite: place.isFavorite = false,
+                                place: place,
+                              ),
+                            );
+                      }
+                    },
                   ),
               ],
             ),
@@ -227,13 +254,13 @@ class RippleCardFull extends StatelessWidget {
 }
 
 class _SightCardTop extends StatelessWidget {
-  final Widget actionOne;
+  // final Widget actionOne;
   final String type;
   final String? url;
 
   const _SightCardTop({
     Key? key,
-    required this.actionOne,
+    // required this.actionOne,
     required this.type,
     required this.url,
   }) : super(key: key);

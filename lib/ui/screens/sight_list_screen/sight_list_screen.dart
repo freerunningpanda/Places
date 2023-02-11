@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mobx/mobx.dart';
+import 'package:places/blocs/favorite/favorite_bloc.dart';
 import 'package:places/cubits/places_list/places_list_cubit.dart';
 import 'package:places/data/api/api_places.dart';
 
@@ -147,61 +148,59 @@ class _SightListWidgetPortraitState extends State<_SightListWidgetPortrait> {
         itemBuilder: (context, index) {
           final place = widget.placeList[index];
 
-          return StreamBuilder<bool>(
-            stream: _controller.stream,
-            builder: (context, snapshot) {
-              return Column(
-                children: [
-                  FittedBox(
-                    child: SightCard(
-                      addSight: () {
-                        _controller.sink.addStream(
-                          PlaceInteractor(
-                            repository: PlaceRepository(
-                              apiPlaces: ApiPlaces(),
-                            ),
-                          ).addToFavorites(place: place),
-                        );
+          return BlocProvider(
+            create: (context) => FavoriteBloc(place),
+            child: Column(
+              children: [
+                FittedBox(
+                  child: SightCard(
+                    placeIndex: index,
+                    isVisitingScreen: false,
+                    aspectRatio: 3 / 2,
+                    actionOne: BlocBuilder<FavoriteBloc, FavoriteState>(
+                      builder: (context, state) {
+                        if (state is IsFavoriteState) {
+                          return const SightIcons(
+                            assetName: AppAssets.heartFull,
+                            width: 22,
+                            height: 22,
+                          );
+                        } else if (state is IsNotFavoriteState) {
+                          return const SightIcons(
+                            assetName: AppAssets.favourite,
+                            width: 22,
+                            height: 22,
+                          );
+                        } else {
+                          return const Text('error');
+                        }
                       },
-                      isVisitingScreen: false,
-                      aspectRatio: 3 / 2,
-                      actionOne: !place.isFavorite
-                          ? const SightIcons(
-                              assetName: AppAssets.favourite,
-                              width: 22,
-                              height: 22,
-                            )
-                          : const SightIcons(
-                              assetName: AppAssets.heartFull,
-                              width: 22,
-                              height: 22,
-                            ),
-                      url: place.urls[0],
-                      type: place.placeType,
-                      name: place.name,
-                      item: place,
-                      details: [
-                        Text(
-                          place.name,
-                          maxLines: 2,
-                          style: widget.theme.textTheme.headlineSmall,
-                        ),
-                        const SizedBox(height: 2),
-                        SizedBox(
-                          height: size.height / 7,
-                          child: Text(
-                            place.description,
-                            overflow: TextOverflow.ellipsis,
-                            style: AppTypography.textText16Regular,
-                          ),
-                        ),
-                      ],
                     ),
+                    url: place.urls[0],
+                    type: place.placeType,
+                    name: place.name,
+                    item: widget.placeList,
+                    details: [
+                      Text(
+                        place.name,
+                        maxLines: 2,
+                        style: widget.theme.textTheme.headlineSmall,
+                      ),
+                      const SizedBox(height: 2),
+                      SizedBox(
+                        height: size.height / 7,
+                        child: Text(
+                          place.description,
+                          overflow: TextOverflow.ellipsis,
+                          style: AppTypography.textText16Regular,
+                        ),
+                      ),
+                    ],
                   ),
-                  const SizedBox(height: 11),
-                ],
-              );
-            },
+                ),
+                const SizedBox(height: 11),
+              ],
+            ),
           );
         },
       ),
@@ -247,6 +246,7 @@ class _SightListWidgetLandscape extends StatelessWidget {
           return Column(
             children: [
               SightCard(
+                placeIndex: index,
                 isVisitingScreen: false,
                 aspectRatio: 1.5 / 1,
                 actionOne: const SightIcons(
@@ -257,7 +257,7 @@ class _SightListWidgetLandscape extends StatelessWidget {
                 url: place.urls[0],
                 type: place.placeType,
                 name: place.name,
-                item: place,
+                item: placeList,
                 details: [
                   Text(
                     place.name,

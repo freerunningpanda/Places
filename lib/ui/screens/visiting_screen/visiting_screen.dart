@@ -303,9 +303,10 @@ class _DismissibleWidget extends StatelessWidget {
           child: Padding(
             padding: const EdgeInsets.only(bottom: 11.0),
             child: SightCard(
+              placeIndex: i,
               removeSight: () => context.read<DismissibleDataProvider>().deleteSight(i, sightsToVisit),
               isVisitingScreen: true,
-              item: sightsToVisit[i],
+              item: sightsToVisit,
               url: sightsToVisit[i].urls[0],
               type: sightsToVisit[i].placeType,
               name: sightsToVisit[i].name,
