@@ -306,7 +306,7 @@ class _DismissibleWidget extends StatelessWidget {
               placeIndex: i,
               removeSight: () => context.read<DismissibleDataProvider>().deleteSight(i, sightsToVisit),
               isVisitingScreen: true,
-              item: sightsToVisit,
+              placeList: sightsToVisit,
               url: sightsToVisit[i].urls[0],
               type: sightsToVisit[i].placeType,
               name: sightsToVisit[i].name,

@@ -20,11 +20,10 @@ class SightCard extends StatelessWidget {
   final Widget actionOne;
   final Widget? actionTwo;
   final double? aspectRatio;
-  final List<Place> item;
+  final List<Place> placeList;
   final int placeIndex;
   final bool isVisitingScreen;
   final VoidCallback? removeSight;
-  // final VoidCallback? addSight;
 
   const SightCard({
     Key? key,
@@ -35,11 +34,10 @@ class SightCard extends StatelessWidget {
     required this.actionOne,
     this.actionTwo,
     this.aspectRatio,
-    required this.item,
+    required this.placeList,
     required this.placeIndex,
     required this.isVisitingScreen,
     this.removeSight,
-    // this.addSight,
   }) : super(key: key);
 
   @override
@@ -67,7 +65,6 @@ class SightCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     _SightCardTop(
-                      // actionOne: actionOne,
                       type: type,
                       url: url,
                     ),
@@ -78,7 +75,7 @@ class SightCard extends StatelessWidget {
                     ),
                   ],
                 ),
-                RippleCardFull(item: item[placeIndex]),
+                RippleCardFull(place: placeList[placeIndex]),
                 if (isVisitingScreen)
                   RippleIcons(
                     removeSight: removeSight,
@@ -89,7 +86,7 @@ class SightCard extends StatelessWidget {
                   RippleIcon(
                     actionOne: actionOne,
                     addSight: () {
-                      final place = item[placeIndex];
+                      final place = placeList[placeIndex];
                       // Если место не в избранном
                       if (!place.isFavorite) {
                         // Добавляю место в избранное, меняя флаг isFavorite на true
@@ -97,7 +94,6 @@ class SightCard extends StatelessWidget {
                         context.read<FavoriteBloc>().add(
                               FavoriteEvent(
                                 isFavorite: place.isFavorite = true,
-                                place: place,
                               ),
                             );
                         debugPrint('isFavorite ${place.isFavorite}');
@@ -107,7 +103,6 @@ class SightCard extends StatelessWidget {
                         context.read<FavoriteBloc>().add(
                               FavoriteEvent(
                                 isFavorite: place.isFavorite = false,
-                                place: place,
                               ),
                             );
                       }
@@ -223,11 +218,11 @@ class RippleIcons extends StatelessWidget {
 }
 
 class RippleCardFull extends StatelessWidget {
-  final Place item;
+  final Place place;
 
   const RippleCardFull({
     Key? key,
-    required this.item,
+    required this.place,
   }) : super(key: key);
 
   @override
@@ -242,7 +237,7 @@ class RippleCardFull extends StatelessWidget {
               MaterialPageRoute<SightDetails>(
                 builder: (context) => SightDetails(
                   height: 360,
-                  place: item,
+                  place: place,
                 ),
               ),
             );

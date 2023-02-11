@@ -4,16 +4,9 @@ import 'dart:io';
 import 'package:flutter/material.dart' hide ErrorWidget;
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:mobx/mobx.dart';
 import 'package:places/blocs/favorite/favorite_bloc.dart';
 import 'package:places/cubits/places_list/places_list_cubit.dart';
-import 'package:places/data/api/api_places.dart';
-
-import 'package:places/data/interactor/place_interactor.dart';
 import 'package:places/data/model/place.dart';
-import 'package:places/data/repository/place_repository.dart';
-import 'package:places/store/place_list/place_list_store.dart';
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_strings.dart';
 import 'package:places/ui/res/app_typography.dart';
@@ -37,12 +30,10 @@ class _SightListScreenState extends State<SightListScreen> {
   final isPortrait = true;
   final _controller = StreamController<List<Place>>();
   late List<Place> placeList;
-  late PlaceListStore _store;
 
   @override
   void initState() {
     super.initState();
-    _store = PlaceListStore(placeRepository: context.read<PlaceRepository>());
   }
 
   @override
@@ -172,14 +163,14 @@ class _SightListWidgetPortraitState extends State<_SightListWidgetPortrait> {
                             height: 22,
                           );
                         } else {
-                          return const Text('error');
+                          return const Text('Bad state');
                         }
                       },
                     ),
                     url: place.urls[0],
                     type: place.placeType,
                     name: place.name,
-                    item: widget.placeList,
+                    placeList: widget.placeList,
                     details: [
                       Text(
                         place.name,
@@ -257,7 +248,7 @@ class _SightListWidgetLandscape extends StatelessWidget {
                 url: place.urls[0],
                 type: place.placeType,
                 name: place.name,
-                item: placeList,
+                placeList: placeList,
                 details: [
                   Text(
                     place.name,
