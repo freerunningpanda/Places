@@ -15,18 +15,18 @@ class FavoriteBloc extends Bloc<FavoriteEvent, FavoriteState> {
       apiPlaces: ApiPlaces(),
     ),
   );
-  FavoriteBloc() : super(IsNotFavoriteState(isFavorite: false)) {
+  FavoriteBloc() : super(IsNotFavoriteState()) {
     on<FavoriteEvent>(
       (event, emit) {
         if (event.isFavorite) {
           addToFavorites(place: event.place);
           emit(
-            IsFavoriteState(isFavorite: event.isFavorite),
+            IsFavoriteState(),
           );
         } else {
           removeFromFavorites(place: event.place);
           emit(
-            IsNotFavoriteState(isFavorite: event.isFavorite),
+            IsNotFavoriteState(),
           );
         }
       },
