@@ -166,7 +166,11 @@ class _ImagePickerWidget extends StatefulWidget {
 
 class _ImagePickerWidgetState extends State<_ImagePickerWidget> {
   // TODO(Alex): rewrite.
-  final sightList = PlaceInteractor.favoritePlaces;
+  final sightList = PlaceInteractor(
+      repository: PlaceRepository(
+        apiPlaces: ApiPlaces(),
+      ),
+    ).favoritePlaces;
   @override
   Widget build(BuildContext context) {
     final places = ImageDataProvider.places;

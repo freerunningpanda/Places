@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:places/blocs/favorite/favorite_bloc.dart';
 import 'package:places/blocs/search_bar/search_bar_bloc.dart';
 import 'package:places/blocs/search_history/search_history_bloc.dart';
 import 'package:places/blocs/search_screen/search_screen_bloc.dart';
@@ -96,7 +97,13 @@ void main() {
             create: (context) => SearchBarBloc(),
           ),
           BlocProvider<PlacesListCubit>(
-            create: (context) => PlacesListCubit(),
+            create: (context) {
+              
+              return PlacesListCubit();
+            },
+          ),
+          BlocProvider<FavoriteBloc>(
+            create: (context) => FavoriteBloc(),
           ),
         ],
         child: App(store: store),

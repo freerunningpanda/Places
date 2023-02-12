@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:places/cubits/places_list/places_list_cubit.dart';
 
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_colors.dart';
@@ -41,17 +43,19 @@ class _SplashScreenState extends State<SplashScreen> {
 
   /// Метод инициализации данных
   Future<void> _init() async {
-    isInitialized = false; /// изначально данные непроинициализированы.
+    isInitialized = false;
+
+    /// изначально данные непроинициализированы.
     await _loadData();
     await _navigateToNext();
   }
 
   /// Метод загрузки данных
-  Future<void> _loadData() {
-    return Future.delayed(
-      const Duration(seconds: 2),
-      () => isInitialized = true, /// загрузка данных. isInitialized меняется на true.
-    );
+  Future<void> _loadData() async {
+    await context.read<PlacesListCubit>().getPlaces();
+    isInitialized = true;
+
+    /// загрузка данных. isInitialized меняется на true.
   }
 
   /// Метод навигации

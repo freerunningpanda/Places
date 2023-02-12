@@ -28,23 +28,34 @@ class PlaceRepository {
   Set<Place> getFavoritesPlaces() => apiPlaces.getFavoritesPlaces();
 
   Stream<bool> addToFavorites({required Place place}) async* {
+      final interactor = PlaceInteractor(
+      repository: PlaceRepository(
+        apiPlaces: ApiPlaces(),
+      ),
+    );
     if (!place.isFavorite) {
-      final list = PlaceInteractor.favoritePlaces.add(place);
-      debugPrint('🟡--------- Добавлено в избранное: ${PlaceInteractor.favoritePlaces}');
-      debugPrint('🟡--------- Длина: ${PlaceInteractor.favoritePlaces.length}');
+      final list = interactor.favoritePlaces.add(place);
+      debugPrint('🟡--------- Добавлено в избранное: ${interactor.favoritePlaces}');
+      debugPrint('🟡--------- Длина: ${interactor.favoritePlaces.length}');
       place.isFavorite = true;
       yield list;
     } else {
-      final list = PlaceInteractor.favoritePlaces.remove(place);
-      debugPrint('🟡--------- Длина: ${PlaceInteractor.favoritePlaces.length}');
+      final list = interactor.favoritePlaces.remove(place);
+      debugPrint('🟡--------- Длина: ${interactor.favoritePlaces.length}');
       place.isFavorite = false;
       yield list;
     }
   }
 
   void removeFromFavorites({required Place place}) {
-    PlaceInteractor.favoritePlaces.remove(place);
-    debugPrint('🟡--------- Длина: ${PlaceInteractor.favoritePlaces.length}');
+    final interactor = PlaceInteractor(
+      repository: PlaceRepository(
+        apiPlaces: ApiPlaces(),
+      ),
+    );
+
+    interactor.favoritePlaces.remove(place);
+    debugPrint('🟡--------- Длина: ${interactor.favoritePlaces.length}');
   }
 
   Set<Place> getVisitPlaces() {

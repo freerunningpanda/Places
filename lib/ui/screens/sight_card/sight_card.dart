@@ -94,6 +94,7 @@ class SightCard extends StatelessWidget {
                         context.read<FavoriteBloc>().add(
                               FavoriteEvent(
                                 isFavorite: place.isFavorite = true,
+                                place: place,
                               ),
                             );
                         debugPrint('isFavorite ${place.isFavorite}');
@@ -103,6 +104,7 @@ class SightCard extends StatelessWidget {
                         context.read<FavoriteBloc>().add(
                               FavoriteEvent(
                                 isFavorite: place.isFavorite = false,
+                                place: place,
                               ),
                             );
                       }

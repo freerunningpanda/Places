@@ -38,7 +38,6 @@ class _SightListScreenState extends State<SightListScreen> {
 
   @override
   Widget build(BuildContext context) {
-    context.read<PlacesListCubit>().getPlaces();
 
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
@@ -139,59 +138,56 @@ class _SightListWidgetPortraitState extends State<_SightListWidgetPortrait> {
         itemBuilder: (context, index) {
           final place = widget.placeList[index];
 
-          return BlocProvider(
-            create: (context) => FavoriteBloc(place),
-            child: Column(
-              children: [
-                FittedBox(
-                  child: SightCard(
-                    placeIndex: index,
-                    isVisitingScreen: false,
-                    aspectRatio: 3 / 2,
-                    actionOne: BlocBuilder<FavoriteBloc, FavoriteState>(
-                      builder: (context, state) {
-                        if (state is IsFavoriteState) {
-                          return const SightIcons(
-                            assetName: AppAssets.heartFull,
-                            width: 22,
-                            height: 22,
-                          );
-                        } else if (state is IsNotFavoriteState) {
-                          return const SightIcons(
-                            assetName: AppAssets.favourite,
-                            width: 22,
-                            height: 22,
-                          );
-                        } else {
-                          return const Text('Bad state');
-                        }
-                      },
-                    ),
-                    url: place.urls[0],
-                    type: place.placeType,
-                    name: place.name,
-                    placeList: widget.placeList,
-                    details: [
-                      Text(
-                        place.name,
-                        maxLines: 2,
-                        style: widget.theme.textTheme.headlineSmall,
-                      ),
-                      const SizedBox(height: 2),
-                      SizedBox(
-                        height: size.height / 7,
-                        child: Text(
-                          place.description,
-                          overflow: TextOverflow.ellipsis,
-                          style: AppTypography.textText16Regular,
-                        ),
-                      ),
-                    ],
+          return Column(
+            children: [
+              FittedBox(
+                child: SightCard(
+                  placeIndex: index,
+                  isVisitingScreen: false,
+                  aspectRatio: 3 / 2,
+                  actionOne: BlocBuilder<FavoriteBloc, FavoriteState>(
+                    builder: (context, state) {
+                      if (state is IsFavoriteState) {
+                        return const SightIcons(
+                          assetName: AppAssets.heartFull,
+                          width: 22,
+                          height: 22,
+                        );
+                      } else if (state is IsNotFavoriteState) {
+                        return const SightIcons(
+                          assetName: AppAssets.favourite,
+                          width: 22,
+                          height: 22,
+                        );
+                      } else {
+                        return const Text('Bad state');
+                      }
+                    },
                   ),
+                  url: place.urls[0],
+                  type: place.placeType,
+                  name: place.name,
+                  placeList: widget.placeList,
+                  details: [
+                    Text(
+                      place.name,
+                      maxLines: 2,
+                      style: widget.theme.textTheme.headlineSmall,
+                    ),
+                    const SizedBox(height: 2),
+                    SizedBox(
+                      height: size.height / 7,
+                      child: Text(
+                        place.description,
+                        overflow: TextOverflow.ellipsis,
+                        style: AppTypography.textText16Regular,
+                      ),
+                    ),
+                  ],
                 ),
-                const SizedBox(height: 11),
-              ],
-            ),
+              ),
+              const SizedBox(height: 11),
+            ],
           );
         },
       ),

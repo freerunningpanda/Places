@@ -8,11 +8,11 @@ class PlaceInteractor {
   static final List<Place> filteredMocks = [];
   static final Set<String> searchHistoryList = {};
   static List<Place> filteredPlaces = filtersWithDistance.toList();
-  static Set<Place> favoritePlaces = {};
   static Set<Place> visitedPlaces = {};
   static Set<Place> newPlaces = {};
   final PlaceRepository repository;
   final controller = TextEditingController();
+  Set<Place> favoritePlaces = {};
   String query = '';
   bool hasFocus = false;
 
