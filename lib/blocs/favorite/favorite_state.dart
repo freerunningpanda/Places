@@ -8,7 +8,7 @@ abstract class FavoriteState extends Equatable {
 class IsNotFavoriteState extends FavoriteState {
   final int placeIndex;
 
-    @override
+  @override
   List<Object?> get props => [placeIndex];
 
   IsNotFavoriteState({
@@ -17,9 +17,9 @@ class IsNotFavoriteState extends FavoriteState {
 }
 
 class IsFavoriteState extends FavoriteState {
-    final int placeIndex;
+  final int placeIndex;
 
-    @override
+  @override
   List<Object?> get props => [placeIndex];
 
   IsFavoriteState({

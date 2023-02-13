@@ -5,20 +5,25 @@ import 'package:places/data/api/api_places.dart';
 import 'package:places/data/interactor/place_interactor.dart';
 import 'package:places/data/repository/place_repository.dart';
 
-class VisitingScreenBloc extends Bloc<VisitingScreenEvent, VisitingScreenState> {
+class VisitingScreenBloc extends Bloc<VisitingScreenEvent, WantToVisitScreenState> {
   final placeInteractor = PlaceInteractor(
     repository: PlaceRepository(apiPlaces: ApiPlaces()),
   );
 
-  VisitingScreenBloc() : super(VisitingScreenIsEmpty()) {
-    on<VisitingScreenLoad>(
+  VisitingScreenBloc() : super(WantToVisitScreenEmptyState()) {
+    on<AddToWantToVisitEvent>(
       (event, emit) async {
-        emit(
-           VisitingScreenLoaded(
-            favoritePlaces: placeInteractor.getFavoritesPlaces(),
-            visitedPlaces: placeInteractor.getVisitPlaces(),
-          ),
-        );
+        if (event.isFavorite) {
+          emit(
+            WantToVisitScreenIsNotEmpty(
+              placeIndex: event.placeIndex,
+              favoritePlaces: {event.place},
+              length: event.length,
+            ),
+          );
+        } else {
+          emit(WantToVisitScreenEmptyState());
+        }
       },
     );
   }

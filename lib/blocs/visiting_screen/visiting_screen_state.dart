@@ -2,31 +2,37 @@ import 'package:equatable/equatable.dart';
 
 import 'package:places/data/model/place.dart';
 
-abstract class VisitingScreenState extends Equatable {
+abstract class WantToVisitScreenState extends Equatable {
   @override
   List<Object?> get props => [];
 
-  const VisitingScreenState();
+  const WantToVisitScreenState();
 }
 
 // Состояние пустого экрана
-class VisitingScreenIsEmpty extends VisitingScreenState {}
+class WantToVisitScreenEmptyState extends WantToVisitScreenState {}
 
 // Состояние добавленных мест
-class VisitingScreenLoaded extends VisitingScreenState {
+class WantToVisitScreenIsNotEmpty extends WantToVisitScreenState {
+  final int placeIndex;
   final Set<Place> favoritePlaces;
-  final Set<Place> visitedPlaces;
+  final int length;
 
   @override
-  List<Object?> get props => [favoritePlaces, visitedPlaces];
+  List<Object?> get props => [
+        placeIndex,
+        favoritePlaces,
+        length,
+      ];
 
-  const VisitingScreenLoaded({
+  const WantToVisitScreenIsNotEmpty({
+    required this.placeIndex,
     required this.favoritePlaces,
-    required this.visitedPlaces,
+    required this.length,
   });
 
   @override
   String toString() {
-    return 'VisitingScreenIsNotEmpty {places: $favoritePlaces}';
+    return 'VisitingScreenIsNotEmpty {places: $placeIndex}';
   }
 }

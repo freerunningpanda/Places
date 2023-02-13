@@ -4,7 +4,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:places/blocs/favorite/favorite_bloc.dart';
+import 'package:places/blocs/visiting_screen/visiting_screen_bloc.dart';
+import 'package:places/blocs/visiting_screen/visiting_screen_event.dart';
+import 'package:places/data/api/api_places.dart';
+import 'package:places/data/interactor/place_interactor.dart';
 import 'package:places/data/model/place.dart';
+import 'package:places/data/repository/place_repository.dart';
 
 import 'package:places/ui/res/app_card_size.dart';
 import 'package:places/ui/res/app_typography.dart';
@@ -12,7 +17,7 @@ import 'package:places/ui/screens/res/custom_colors.dart';
 import 'package:places/ui/screens/sight_details/sight_details.dart';
 import 'package:places/ui/widgets/cupertino_time_widget.dart';
 
-class SightCard extends StatelessWidget {
+class SightCard extends StatefulWidget {
   final String? url;
   final String type;
   final String name;
@@ -41,6 +46,17 @@ class SightCard extends StatelessWidget {
   }) : super(key: key);
 
   @override
+  State<SightCard> createState() => _SightCardState();
+}
+
+class _SightCardState extends State<SightCard> {
+  final interactor = PlaceInteractor(
+    repository: PlaceRepository(
+      apiPlaces: ApiPlaces(),
+    ),
+  );
+
+  @override
   Widget build(BuildContext context) {
     final customColors = Theme.of(context).extension<CustomColors>()!;
     final size = MediaQuery.of(context).size;
@@ -50,7 +66,7 @@ class SightCard extends StatelessWidget {
       height: orientation ? size.height / 2.5 : size.height / 2.0,
       width: size.width,
       child: AspectRatio(
-        aspectRatio: aspectRatio ?? AppCardSize.sightCard,
+        aspectRatio: widget.aspectRatio ?? AppCardSize.sightCard,
         child: ClipRRect(
           borderRadius: const BorderRadius.all(
             Radius.circular(16.0),
@@ -65,28 +81,28 @@ class SightCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     _SightCardTop(
-                      type: type,
-                      url: url,
+                      type: widget.type,
+                      url: widget.url,
                     ),
                     const SizedBox(height: 16),
                     _SightCardBottom(
-                      name: name,
-                      details: details,
+                      name: widget.name,
+                      details: widget.details,
                     ),
                   ],
                 ),
-                RippleCardFull(place: placeList[placeIndex]),
-                if (isVisitingScreen)
+                RippleCardFull(place: widget.placeList[widget.placeIndex]),
+                if (widget.isVisitingScreen)
                   RippleIcons(
-                    removeSight: removeSight,
-                    actionOne: actionOne,
-                    actionTwo: actionTwo ?? const SizedBox(),
+                    removeSight: widget.removeSight,
+                    actionOne: widget.actionOne,
+                    actionTwo: widget.actionTwo ?? const SizedBox(),
                   )
                 else
                   RippleIcon(
-                    actionOne: actionOne,
+                    actionOne: widget.actionOne,
                     addSight: () {
-                      final place = placeList[placeIndex];
+                      final place = widget.placeList[widget.placeIndex];
                       // Если место не в избранном
                       if (!place.isFavorite) {
                         // Добавляю место в избранное, меняя флаг isFavorite на true
@@ -95,7 +111,15 @@ class SightCard extends StatelessWidget {
                               FavoriteEvent(
                                 isFavorite: place.isFavorite = true,
                                 place: place,
-                                placeIndex: placeIndex,
+                                placeIndex: widget.placeIndex,
+                              ),
+                            );
+                        context.read<VisitingScreenBloc>().add(
+                              AddToWantToVisitEvent(
+                                isFavorite: place.isFavorite = true,
+                                place: place,
+                                placeIndex: widget.placeIndex,
+                                length: interactor.favoritePlaces.length,
                               ),
                             );
                         debugPrint('isFavorite ${place.isFavorite}');
@@ -106,7 +130,15 @@ class SightCard extends StatelessWidget {
                               FavoriteEvent(
                                 isFavorite: place.isFavorite = false,
                                 place: place,
-                                placeIndex: placeIndex,
+                                placeIndex: widget.placeIndex,
+                              ),
+                            );
+                        context.read<VisitingScreenBloc>().add(
+                              AddToWantToVisitEvent(
+                                isFavorite: place.isFavorite = false,
+                                place: place,
+                                placeIndex: widget.placeIndex,
+                                length: widget.placeList.length,
                               ),
                             );
                       }

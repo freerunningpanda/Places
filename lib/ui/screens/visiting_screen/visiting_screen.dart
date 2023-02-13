@@ -14,18 +14,8 @@ import 'package:places/ui/screens/sight_card/sight_card.dart';
 import 'package:places/ui/widgets/add_new_place_button.dart';
 import 'package:places/ui/widgets/sight_icons.dart';
 
-class VisitingScreen extends StatefulWidget {
+class VisitingScreen extends StatelessWidget {
   const VisitingScreen({Key? key}) : super(key: key);
-
-  @override
-  State<VisitingScreen> createState() => _VisitingScreenState();
-}
-
-class _VisitingScreenState extends State<VisitingScreen> with TickerProviderStateMixin {
-  @override
-  void initState() {
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -44,18 +34,16 @@ class _VisitingScreenState extends State<VisitingScreen> with TickerProviderStat
                   padding: const EdgeInsets.only(top: 30),
                   child: TabBarView(
                     children: [
-                      BlocBuilder<VisitingScreenBloc, VisitingScreenState>(
+                      BlocBuilder<VisitingScreenBloc, WantToVisitScreenState>(
                         builder: (_, state) {
-                          if (state is VisitingScreenIsEmpty) {
+                          if (state is WantToVisitScreenEmptyState) {
                             return const _EmptyList(
                               icon: AppAssets.card,
                               description: AppString.likedPlaces,
                             );
                           }
-                          if (state is VisitingScreenLoaded) {
-                            return state.favoritePlaces.isEmpty
-                                ? const _EmptyList(icon: AppAssets.card, description: AppString.likedPlaces)
-                                : _WantToVisitWidget(
+                          if (state is WantToVisitScreenIsNotEmpty) {
+                            return _WantToVisitWidget(
                                     sightsToVisit: state.favoritePlaces.toList(),
                                     key: const PageStorageKey('WantToVisitScrollPosition'),
                                   );
@@ -63,22 +51,22 @@ class _VisitingScreenState extends State<VisitingScreen> with TickerProviderStat
                           throw ArgumentError('Error');
                         },
                       ),
-                      BlocBuilder<VisitingScreenBloc, VisitingScreenState>(
+                      BlocBuilder<VisitingScreenBloc, WantToVisitScreenState>(
                         builder: (_, state) {
-                          if (state is VisitingScreenIsEmpty) {
+                          if (state is WantToVisitScreenEmptyState) {
                             return const _EmptyList(
                               icon: AppAssets.goIconTransparent,
                               description: AppString.finishRoute,
                             );
                           }
-                          if (state is VisitingScreenLoaded) {
-                            return state.visitedPlaces.isEmpty
+                          if (state is WantToVisitScreenIsNotEmpty) {
+                            return state.favoritePlaces.isEmpty
                                 ? const _EmptyList(
                                     icon: AppAssets.goIconTransparent,
                                     description: AppString.finishRoute,
                                   )
                                 : _VisitedWidget(
-                                    visitedSights: state.visitedPlaces.toList(),
+                                    visitedSights: state.favoritePlaces.toList(),
                                     key: const PageStorageKey('VisitedScrollPosition'),
                                   );
                           }
