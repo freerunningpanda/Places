@@ -48,7 +48,7 @@ class SearchScreenBloc extends Bloc<SearchScreenEvent, SearchScreenState> {
           Mocks.mockLat,
           Mocks.mockLot,
           el.lat,
-          el.lon,
+          el.lng,
         );
         if (distance >= Mocks.rangeValues.start && distance <= Mocks.rangeValues.end) {
           filteredPlaces = PlaceInteractor.filtersWithDistance.where((sight) {
@@ -65,7 +65,7 @@ class SearchScreenBloc extends Bloc<SearchScreenEvent, SearchScreenState> {
           Mocks.mockLat,
           Mocks.mockLot,
           el.lat,
-          el.lon,
+          el.lng,
         );
         if (distance >= Mocks.rangeValues.start && distance <= Mocks.rangeValues.end) {
           filteredPlaces = PlaceInteractor.filtersWithDistance.where((sight) {

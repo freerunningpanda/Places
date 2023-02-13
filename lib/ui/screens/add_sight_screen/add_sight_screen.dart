@@ -125,7 +125,7 @@ class _AddSightScreenState extends WidgetState<CoreMwwmWidget<WidgetModel>, Widg
                                 urls: [''],
                                 name: name,
                                 lat: lat,
-                                lon: lot,
+                                lng: lot,
                                 description: details,
                                 placeType: chosenCategory[0].title,
                               ),

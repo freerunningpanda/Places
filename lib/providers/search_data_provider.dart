@@ -24,7 +24,7 @@ class SearchDataProvider extends ChangeNotifier {
           Mocks.mockLat,
           Mocks.mockLot,
           el.lat,
-          el.lon,
+          el.lng,
         );
         if (distance >= Mocks.rangeValues.start && distance <= Mocks.rangeValues.end) {
           PlaceInteractor.filteredPlaces = PlaceInteractor.filtersWithDistance.where((sight) {
@@ -41,7 +41,7 @@ class SearchDataProvider extends ChangeNotifier {
           Mocks.mockLat,
           Mocks.mockLot,
           el.lat,
-          el.lon,
+          el.lng,
         );
         if (distance >= Mocks.rangeValues.start && distance <= Mocks.rangeValues.end) {
           PlaceInteractor.filteredPlaces = PlaceInteractor.filtersWithDistance.where((sight) {

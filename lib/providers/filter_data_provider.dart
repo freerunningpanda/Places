@@ -57,7 +57,7 @@ class FilterDataProvider extends ChangeNotifier {
           Mocks.mockLat,
           Mocks.mockLot,
           el.lat,
-          el.lon,
+          el.lng,
         );
         if (distance >= Mocks.rangeValues.start && distance <= Mocks.rangeValues.end) {
           PlaceInteractor.filtersWithDistance.add(el);
@@ -76,7 +76,7 @@ class FilterDataProvider extends ChangeNotifier {
           Mocks.mockLat,
           Mocks.mockLot,
           el.lat,
-          el.lon,
+          el.lng,
         );
         if (distance >= Mocks.rangeValues.start && distance <= Mocks.rangeValues.end) {
           PlaceInteractor.filtersWithDistance.add(el);
@@ -102,7 +102,7 @@ class FilterDataProvider extends ChangeNotifier {
         Mocks.mockLat,
         Mocks.mockLot,
         el.lat,
-        el.lon,
+        el.lng,
       );
       if (Mocks.rangeValues.start > distance || Mocks.rangeValues.end < distance) {
         PlaceInteractor.filtersWithDistance.clear();
