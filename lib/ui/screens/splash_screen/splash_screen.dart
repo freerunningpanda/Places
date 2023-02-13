@@ -25,17 +25,19 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return const DecoratedBox(
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: AppColors.splashScreenBackground,
+    return const Scaffold(
+      body: DecoratedBox(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: AppColors.splashScreenBackground,
+          ),
         ),
-      ),
-      child: Center(
-        child: SightIcons(
-          assetName: AppAssets.subtract,
-          width: 160,
-          height: 160,
+        child: Center(
+          child: SightIcons(
+            assetName: AppAssets.subtract,
+            width: 160,
+            height: 160,
+          ),
         ),
       ),
     );
