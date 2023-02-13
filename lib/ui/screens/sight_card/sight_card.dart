@@ -95,6 +95,7 @@ class SightCard extends StatelessWidget {
                               FavoriteEvent(
                                 isFavorite: place.isFavorite = true,
                                 place: place,
+                                placeIndex: placeIndex,
                               ),
                             );
                         debugPrint('isFavorite ${place.isFavorite}');
@@ -105,6 +106,7 @@ class SightCard extends StatelessWidget {
                               FavoriteEvent(
                                 isFavorite: place.isFavorite = false,
                                 place: place,
+                                placeIndex: placeIndex,
                               ),
                             );
                       }

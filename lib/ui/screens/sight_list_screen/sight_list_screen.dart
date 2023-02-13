@@ -38,7 +38,6 @@ class _SightListScreenState extends State<SightListScreen> {
 
   @override
   Widget build(BuildContext context) {
-
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitUp,
@@ -148,17 +147,29 @@ class _SightListWidgetPortraitState extends State<_SightListWidgetPortrait> {
                   actionOne: BlocBuilder<FavoriteBloc, FavoriteState>(
                     builder: (context, state) {
                       if (state is IsFavoriteState) {
-                        return const SightIcons(
-                          assetName: AppAssets.heartFull,
-                          width: 22,
-                          height: 22,
-                        );
+                        return place.isFavorite
+                            ? const SightIcons(
+                                assetName: AppAssets.heartFull,
+                                width: 22,
+                                height: 22,
+                              )
+                            : const SightIcons(
+                                assetName: AppAssets.favourite,
+                                width: 22,
+                                height: 22,
+                              );
                       } else if (state is IsNotFavoriteState) {
-                        return const SightIcons(
-                          assetName: AppAssets.favourite,
-                          width: 22,
-                          height: 22,
-                        );
+                        return place.isFavorite
+                            ? const SightIcons(
+                                assetName: AppAssets.heartFull,
+                                width: 22,
+                                height: 22,
+                              )
+                            : const SightIcons(
+                                assetName: AppAssets.favourite,
+                                width: 22,
+                                height: 22,
+                              );
                       } else {
                         return const Text('Bad state');
                       }

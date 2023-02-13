@@ -5,6 +5,24 @@ abstract class FavoriteState extends Equatable {
   List<Object?> get props => [];
 }
 
-class IsNotFavoriteState extends FavoriteState {}
+class IsNotFavoriteState extends FavoriteState {
+  final int placeIndex;
 
-class IsFavoriteState extends FavoriteState {}
+    @override
+  List<Object?> get props => [placeIndex];
+
+  IsNotFavoriteState({
+    required this.placeIndex,
+  });
+}
+
+class IsFavoriteState extends FavoriteState {
+    final int placeIndex;
+
+    @override
+  List<Object?> get props => [placeIndex];
+
+  IsFavoriteState({
+    required this.placeIndex,
+  });
+}

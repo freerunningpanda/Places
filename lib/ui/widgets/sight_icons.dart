@@ -7,26 +7,21 @@ class SightIcons extends StatelessWidget {
   final double width;
   final double height;
   final Color? color;
-  final VoidCallback? onTap;
   const SightIcons({
     Key? key,
     required this.assetName,
     required this.width,
     required this.height,
     this.color,
-    this.onTap,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: onTap,
-      child: SvgPicture.asset(
-        assetName,
-        width: width,
-        height: height,
-        color: color,
-      ),
+    return SvgPicture.asset(
+      assetName,
+      width: width,
+      height: height,
+      color: color,
     );
   }
 }
