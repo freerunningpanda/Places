@@ -20,7 +20,7 @@ class PlaceInteractor {
     required this.repository,
   });
 
-  Future<List<Place>> getPlaces() async => repository.getPlaces();
+  Future<List<Place>> getPlaces() => repository.getPlaces();
 
   Future<Place> getPlaceDetails(Place place) => repository.getPlaceDetails(place);
 

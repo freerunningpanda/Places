@@ -3,7 +3,6 @@ import 'package:places/data/api/api_places.dart';
 import 'package:places/data/interactor/place_interactor.dart';
 import 'package:places/data/model/place.dart';
 import 'package:places/data/repository/mapper.dart';
-import 'package:places/mocks.dart';
 
 class PlaceRepository {
   static final List<Place> places = [];
@@ -14,19 +13,21 @@ class PlaceRepository {
   });
 
   // Преобразовать все места из Dto в места для UI
-  // Future<List<Place>> getPlaces() async {
-  //   final places = await apiPlaces.getPlaces(
-  //     category: '',
-  //     radius: 15000,
-  //   );
-
-  //   return places.map(Mapper.placesFromApiToUi).toList();
-  // }
   Future<List<Place>> getPlaces() async {
-    final places = Mocks.mocks;
+    final places = await apiPlaces.getPlaces(
+      category: '',
+      radius: 15000,
+    );
 
-    return places;
+    return places.map(Mapper.placesFromApiToUi).toList();
   }
+
+  // Получить моковые места
+  // Future<List<Place>> getPlaces() async {
+  //   final places = Mocks.mocks;
+
+  //   return places;
+  // }
 
   // Преобразовать одно место из Dto в место для UI
   Future<Place> getPlaceDetails(Place place) => apiPlaces.getPlaceDetails(place.id).then(Mapper.detailPlaceFromApiToUi);
