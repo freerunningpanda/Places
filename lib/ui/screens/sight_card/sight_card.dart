@@ -61,6 +61,9 @@ class _SightCardState extends State<SightCard> {
     final customColors = Theme.of(context).extension<CustomColors>()!;
     final size = MediaQuery.of(context).size;
     final orientation = MediaQuery.of(context).orientation == Orientation.portrait;
+    final interactor = PlaceInteractor(
+      repository: PlaceRepository(apiPlaces: ApiPlaces()),
+    );
 
     return SizedBox(
       height: orientation ? size.height / 2.5 : size.height / 2.0,
@@ -123,6 +126,7 @@ class _SightCardState extends State<SightCard> {
                               ),
                             );
                         debugPrint('isFavorite ${place.isFavorite}');
+                        debugPrint('Добавлены в избранное: $place');
                       } else {
                         // Если место в избранном, меняю флаг isFavorite на false.
                         // Событие удаляет место из списка избранного
