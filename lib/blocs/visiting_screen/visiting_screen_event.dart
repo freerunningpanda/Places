@@ -1,5 +1,4 @@
-import 'package:equatable/equatable.dart';
-import 'package:places/data/model/place.dart';
+part of 'visiting_screen_bloc.dart';
 
 abstract class VisitingScreenEvent extends Equatable {
   @override
@@ -9,6 +8,8 @@ abstract class VisitingScreenEvent extends Equatable {
 }
 
 // Пустой список мест
+class FavoriteListIsEmpty extends VisitingScreenEvent {}
+
 class AddToWantToVisitEvent extends VisitingScreenEvent {
   final bool isFavorite;
   final int placeIndex;

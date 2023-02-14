@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:places/blocs/favorite/favorite_bloc.dart';
 import 'package:places/blocs/visiting_screen/visiting_screen_bloc.dart';
-import 'package:places/blocs/visiting_screen/visiting_screen_event.dart';
 import 'package:places/data/api/api_places.dart';
 import 'package:places/data/interactor/place_interactor.dart';
 import 'package:places/data/model/place.dart';
@@ -105,42 +104,42 @@ class _SightCardState extends State<SightCard> {
                   RippleIcon(
                     actionOne: widget.actionOne,
                     addSight: () {
-                      final place = widget.placeList[widget.placeIndex];
+                      final placeList = widget.placeList[widget.placeIndex];
                       // Если место не в избранном
-                      if (!place.isFavorite) {
+                      if (!placeList.isFavorite) {
                         // Добавляю место в избранное, меняя флаг isFavorite на true
                         // Событие добавляет место в список избранного
                         context.read<FavoriteBloc>().add(
                               FavoriteEvent(
-                                isFavorite: place.isFavorite = true,
-                                place: place,
+                                isFavorite: placeList.isFavorite = true,
+                                place: placeList,
                                 placeIndex: widget.placeIndex,
                               ),
                             );
                         context.read<VisitingScreenBloc>().add(
                               AddToWantToVisitEvent(
-                                isFavorite: place.isFavorite = true,
-                                place: place,
+                                isFavorite: placeList.isFavorite = true,
+                                place: placeList,
                                 placeIndex: widget.placeIndex,
                                 length: interactor.favoritePlaces.length,
                               ),
                             );
-                        debugPrint('isFavorite ${place.isFavorite}');
-                        debugPrint('Добавлены в избранное: $place');
+                        debugPrint('isFavorite ${placeList.isFavorite}');
+                        debugPrint('Добавлены в избранное: $placeList');
                       } else {
                         // Если место в избранном, меняю флаг isFavorite на false.
                         // Событие удаляет место из списка избранного
                         context.read<FavoriteBloc>().add(
                               FavoriteEvent(
-                                isFavorite: place.isFavorite = false,
-                                place: place,
+                                isFavorite: placeList.isFavorite = false,
+                                place: placeList,
                                 placeIndex: widget.placeIndex,
                               ),
                             );
                         context.read<VisitingScreenBloc>().add(
                               AddToWantToVisitEvent(
-                                isFavorite: place.isFavorite = false,
-                                place: place,
+                                isFavorite: placeList.isFavorite = false,
+                                place: placeList,
                                 placeIndex: widget.placeIndex,
                                 length: widget.placeList.length,
                               ),

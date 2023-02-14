@@ -1,6 +1,4 @@
-import 'package:equatable/equatable.dart';
-
-import 'package:places/data/model/place.dart';
+part of 'visiting_screen_bloc.dart';
 
 abstract class WantToVisitScreenState extends Equatable {
   @override

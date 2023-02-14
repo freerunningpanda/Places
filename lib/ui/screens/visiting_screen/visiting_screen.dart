@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:places/blocs/visiting_screen/visiting_screen_bloc.dart';
-import 'package:places/blocs/visiting_screen/visiting_screen_state.dart';
 
 import 'package:places/data/model/place.dart';
 import 'package:places/providers/dismissible_data_provider.dart';
@@ -43,10 +42,17 @@ class VisitingScreen extends StatelessWidget {
                             );
                           }
                           if (state is WantToVisitScreenIsNotEmpty) {
+                            if (state.favoritePlaces.isEmpty) {
+                              return const _EmptyList(
+                                icon: AppAssets.card,
+                                description: AppString.likedPlaces,
+                              );
+                            }
+
                             return _WantToVisitWidget(
-                                    sightsToVisit: state.favoritePlaces.toList(),
-                                    key: const PageStorageKey('WantToVisitScrollPosition'),
-                                  );
+                              sightsToVisit: state.favoritePlaces.toList(),
+                              key: const PageStorageKey('WantToVisitScrollPosition'),
+                            );
                           }
                           throw ArgumentError('Error');
                         },

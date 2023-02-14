@@ -1,11 +1,13 @@
+import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:places/blocs/visiting_screen/visiting_screen_event.dart';
-import 'package:places/blocs/visiting_screen/visiting_screen_state.dart';
 import 'package:places/data/api/api_places.dart';
 import 'package:places/data/interactor/place_interactor.dart';
 import 'package:places/data/model/place.dart';
 import 'package:places/data/repository/place_repository.dart';
+
+part 'visiting_screen_event.dart';
+part 'visiting_screen_state.dart';
 
 class VisitingScreenBloc extends Bloc<VisitingScreenEvent, WantToVisitScreenState> {
   final interactor = PlaceInteractor(
@@ -35,6 +37,11 @@ class VisitingScreenBloc extends Bloc<VisitingScreenEvent, WantToVisitScreenStat
           );
         }
       },
+    );
+    on<FavoriteListIsEmpty>(
+      (event, emit) => emit(
+        WantToVisitScreenEmptyState(),
+      ),
     );
   }
 
