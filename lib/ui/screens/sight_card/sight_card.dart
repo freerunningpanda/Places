@@ -5,10 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:places/blocs/favorite/favorite_bloc.dart';
 import 'package:places/blocs/visiting_screen/visiting_screen_bloc.dart';
-import 'package:places/data/api/api_places.dart';
-import 'package:places/data/interactor/place_interactor.dart';
 import 'package:places/data/model/place.dart';
-import 'package:places/data/repository/place_repository.dart';
 
 import 'package:places/ui/res/app_card_size.dart';
 import 'package:places/ui/res/app_typography.dart';
@@ -49,9 +46,6 @@ class SightCard extends StatelessWidget {
     final customColors = Theme.of(context).extension<CustomColors>()!;
     final size = MediaQuery.of(context).size;
     final orientation = MediaQuery.of(context).orientation == Orientation.portrait;
-    final interactor = PlaceInteractor(
-      repository: PlaceRepository(apiPlaces: ApiPlaces()),
-    );
 
     return SizedBox(
       height: orientation ? size.height / 2.5 : size.height / 2.0,
@@ -102,7 +96,8 @@ class SightCard extends StatelessWidget {
                               FavoriteEvent(
                                 isFavorite: place.isFavorite = true,
                                 place: place,
-                                placeIndex: place.id,
+                                placeIndex: place.id, // Для того чтобы связать места по его id с бэка
+                                // Это позволит при перемешивании позиции места в списке удалять нужное место
                               ),
                             );
                         context.read<VisitingScreenBloc>().add(

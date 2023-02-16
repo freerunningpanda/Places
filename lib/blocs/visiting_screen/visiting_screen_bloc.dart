@@ -44,12 +44,10 @@ class VisitingScreenBloc extends Bloc<VisitingScreenEvent, WantToVisitScreenStat
 
     debugPrint('🟡--------- Добавлено в избранное: ${interactor.favoritePlaces}');
     debugPrint('🟡--------- Длина: ${interactor.favoritePlaces.length}');
-    // place.isFavorite = true;
   }
 
   void removeFromFavorites({required Place place}) {
     interactor.favoritePlaces.remove(place);
     debugPrint('🟡--------- Длина: ${interactor.favoritePlaces.length}');
-    // place.isFavorite = false;
   }
 }
