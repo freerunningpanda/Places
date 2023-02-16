@@ -36,6 +36,16 @@ class VisitingScreenBloc extends Bloc<VisitingScreenEvent, WantToVisitScreenStat
         ),
       );
     });
+    on<DragCardOnWantToVisitEvent>((event, emit) {
+      dragCard(event.place, event.oldIndex, event.newIndex);
+      emit(
+        WantToVisitScreenIsNotEmpty(
+          placeIndex: event.oldIndex,
+          favoritePlaces: interactor.favoritePlaces,
+          length: interactor.favoritePlaces.length,
+        ),
+      );
+    });
   }
 
   void addToFavorites({required Place place}) {
@@ -44,5 +54,10 @@ class VisitingScreenBloc extends Bloc<VisitingScreenEvent, WantToVisitScreenStat
 
   void removeFromFavorites({required Place place}) {
     interactor.favoritePlaces.remove(place);
+  }
+
+  void dragCard(List<Place> place, int oldIndex, int newIndex) {
+    final sight = place.removeAt(oldIndex);
+    place.insert(newIndex, sight);
   }
 }

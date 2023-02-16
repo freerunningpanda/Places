@@ -33,3 +33,15 @@ class RemoveFromWantToVisitEvent extends VisitingScreenEvent {
     required this.place,
   });
 }
+
+class DragCardOnWantToVisitEvent extends VisitingScreenEvent {
+  final List<Place> place;
+  final int oldIndex;
+  final int newIndex;
+
+  const DragCardOnWantToVisitEvent({
+    required this.place,
+    required this.oldIndex,
+    required this.newIndex,
+  });
+}
