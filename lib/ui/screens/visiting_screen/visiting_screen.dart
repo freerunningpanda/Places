@@ -295,20 +295,44 @@ class _DismissibleWidget extends StatelessWidget {
         ),
         Dismissible(
           key: uniqueKey,
-          onDismissed: (direction) => context.read<DismissibleDataProvider>().deleteSight(place: sightsToVisit[i]),
+          onDismissed: (direction) {
+            context.read<VisitingScreenBloc>().add(
+                      RemoveFromWantToVisitEvent(
+                        isFavorite: sightsToVisit[i].isFavorite = false,
+                        place: sightsToVisit[i],
+                        placeIndex: i,
+                      ),
+                    );
+                context.read<FavoriteBloc>().add(
+                      FavoriteEvent(
+                        isFavorite: sightsToVisit[i].isFavorite = false,
+                        place: sightsToVisit[i],
+                        placeIndex: i,
+                      ),
+                    );
+          },
           background: const SizedBox.shrink(),
           direction: DismissDirection.endToStart,
           child: Padding(
             padding: const EdgeInsets.only(bottom: 11.0),
             child: SightCard(
               placeIndex: i,
-              removeSight: () => context.read<VisitingScreenBloc>().add(
+              removeSight: () {
+                context.read<VisitingScreenBloc>().add(
                       RemoveFromWantToVisitEvent(
                         isFavorite: sightsToVisit[i].isFavorite = false,
                         place: sightsToVisit[i],
                         placeIndex: i,
                       ),
-                    ),
+                    );
+                context.read<FavoriteBloc>().add(
+                      FavoriteEvent(
+                        isFavorite: sightsToVisit[i].isFavorite = false,
+                        place: sightsToVisit[i],
+                        placeIndex: i,
+                      ),
+                    );
+              },
               isVisitingScreen: true,
               placeList: sightsToVisit,
               url: sightsToVisit[i].urls[0],

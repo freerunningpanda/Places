@@ -35,14 +35,14 @@ class FavoriteBloc extends Bloc<FavoriteEvent, FavoriteState> {
 
   void addToFavorites({required Place place}) {
     interactor.favoritePlaces.add(place);
-    debugPrint('🟡--------- Добавлено в избранное: ${interactor.favoritePlaces}');
-    debugPrint('🟡--------- Длина: ${interactor.favoritePlaces.length}');
+    // debugPrint('🟡--------- Добавлено в избранное: ${interactor.favoritePlaces}');
+    // debugPrint('🟡--------- Длина: ${interactor.favoritePlaces.length}');
     // place.isFavorite = true;
   }
 
   void removeFromFavorites({required Place place}) {
     interactor.favoritePlaces.remove(place);
-    debugPrint('🟡--------- Длина: ${interactor.favoritePlaces.length}');
+    // debugPrint('🟡--------- Длина: ${interactor.favoritePlaces.length}');
     // place.isFavorite = false;
   }
 }

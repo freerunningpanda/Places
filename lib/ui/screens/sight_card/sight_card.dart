@@ -131,6 +131,8 @@ class SightCard extends StatelessWidget {
                                 placeIndex: placeIndex,
                               ),
                             );
+                        debugPrint('isFavorite ${place.isFavorite}');
+                        debugPrint('Удалено из избранного: $place');
                       }
                     },
                   ),
