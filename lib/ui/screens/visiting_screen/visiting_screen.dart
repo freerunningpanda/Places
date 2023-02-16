@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:places/blocs/favorite/favorite_bloc.dart';
 import 'package:places/blocs/visiting_screen/visiting_screen_bloc.dart';
 
 import 'package:places/data/model/place.dart';
@@ -42,12 +43,15 @@ class VisitingScreen extends StatelessWidget {
                             );
                           }
                           if (state is WantToVisitScreenIsNotEmpty) {
+                            // Места могут быть удалены из избранного
+                            // В этом случае показываем опять пустое состояние экрана
                             if (state.favoritePlaces.isEmpty) {
                               return const _EmptyList(
                                 icon: AppAssets.card,
                                 description: AppString.likedPlaces,
                               );
                             }
+                            debugPrint('Места (BlocBuilder): ${state.favoritePlaces}');
 
                             return _WantToVisitWidget(
                               sightsToVisit: state.favoritePlaces.toList(),
@@ -291,14 +295,22 @@ class _DismissibleWidget extends StatelessWidget {
         ),
         Dismissible(
           key: uniqueKey,
-          onDismissed: (direction) => context.read<DismissibleDataProvider>().deleteSight(i, sightsToVisit),
+          onDismissed: (direction) => context.read<DismissibleDataProvider>().deleteSight(place: sightsToVisit[i]),
           background: const SizedBox.shrink(),
           direction: DismissDirection.endToStart,
           child: Padding(
             padding: const EdgeInsets.only(bottom: 11.0),
             child: SightCard(
               placeIndex: i,
-              removeSight: () => context.read<DismissibleDataProvider>().deleteSight(i, sightsToVisit),
+              removeSight: () {
+                context.read<VisitingScreenBloc>().add(
+                      RemoveFromWantToVisitEvent(
+                        isFavorite: sightsToVisit[i].isFavorite = false,
+                        place: sightsToVisit[i],
+                        placeIndex: i,
+                      ),
+                    );
+              },
               isVisitingScreen: true,
               placeList: sightsToVisit,
               url: sightsToVisit[i].urls[0],

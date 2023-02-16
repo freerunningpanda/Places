@@ -14,12 +14,22 @@ class AddToWantToVisitEvent extends VisitingScreenEvent {
   final bool isFavorite;
   final int placeIndex;
   final Place place;
-  final int length;
 
   const AddToWantToVisitEvent({
     required this.isFavorite,
     required this.placeIndex,
     required this.place,
-    required this.length,
+  });
+}
+
+class RemoveFromWantToVisitEvent extends VisitingScreenEvent {
+  final bool isFavorite;
+  final int placeIndex;
+  final Place place;
+
+  const RemoveFromWantToVisitEvent({
+    required this.isFavorite,
+    required this.placeIndex,
+    required this.place,
   });
 }

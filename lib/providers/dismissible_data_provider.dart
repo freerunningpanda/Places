@@ -5,15 +5,33 @@ import 'package:places/data/model/place.dart';
 import 'package:places/data/repository/place_repository.dart';
 
 class DismissibleDataProvider extends ChangeNotifier {
-  
-  void deleteSight(int index, List<Place> sight) {
-    PlaceInteractor(repository: PlaceRepository(apiPlaces: ApiPlaces())).removeFromFavorites(
-      place: sight[index],
-    );
+  final interactor = PlaceInteractor(
+    repository: PlaceRepository(apiPlaces: ApiPlaces()),
+  );
+  // void deleteSight(int index, List<Place> sightsToVisit) {
+  //   debugPrint('🟡--------- Длина перед удалением: ${sightsToVisit.length}');
+  //   debugPrint('🟡--------- Место удалено: $sightsToVisit');
+  //   sightsToVisit.removeAt(index);
+  //   debugPrint('🟡--------- Длина после удаления: ${sightsToVisit.length}');
+  //   notifyListeners();
+  // }
+
+  // void dragCard(List<Place> sights, int oldIndex, int newIndex) {
+  //   if (oldIndex < newIndex) {
+  //     newIndex -= 1;
+  //   }
+
+  //   final place = sights.removeAt(oldIndex);
+  //   sights.insert(newIndex, place);
+  //   notifyListeners();
+  // }
+  void deleteSight({required Place place}) {
+    interactor.favoritePlaces.remove(place);
+    debugPrint('🟡--------- Длина: ${interactor.favoritePlaces.length}');
     notifyListeners();
   }
 
-    void dragCard(List<Place> sights, int oldIndex, int newIndex) {
+  void dragCard(List<Place> sights, int oldIndex, int newIndex) {
     final sight = sights.removeAt(oldIndex);
     sights.insert(newIndex, sight);
     notifyListeners();

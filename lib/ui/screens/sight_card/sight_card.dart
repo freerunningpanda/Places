@@ -16,7 +16,7 @@ import 'package:places/ui/screens/res/custom_colors.dart';
 import 'package:places/ui/screens/sight_details/sight_details.dart';
 import 'package:places/ui/widgets/cupertino_time_widget.dart';
 
-class SightCard extends StatefulWidget {
+class SightCard extends StatelessWidget {
   final String? url;
   final String type;
   final String name;
@@ -45,17 +45,6 @@ class SightCard extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<SightCard> createState() => _SightCardState();
-}
-
-class _SightCardState extends State<SightCard> {
-  final interactor = PlaceInteractor(
-    repository: PlaceRepository(
-      apiPlaces: ApiPlaces(),
-    ),
-  );
-
-  @override
   Widget build(BuildContext context) {
     final customColors = Theme.of(context).extension<CustomColors>()!;
     final size = MediaQuery.of(context).size;
@@ -68,7 +57,7 @@ class _SightCardState extends State<SightCard> {
       height: orientation ? size.height / 2.5 : size.height / 2.0,
       width: size.width,
       child: AspectRatio(
-        aspectRatio: widget.aspectRatio ?? AppCardSize.sightCard,
+        aspectRatio: aspectRatio ?? AppCardSize.sightCard,
         child: ClipRRect(
           borderRadius: const BorderRadius.all(
             Radius.circular(16.0),
@@ -83,65 +72,63 @@ class _SightCardState extends State<SightCard> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     _SightCardTop(
-                      type: widget.type,
-                      url: widget.url,
+                      type: type,
+                      url: url,
                     ),
                     const SizedBox(height: 16),
                     _SightCardBottom(
-                      name: widget.name,
-                      details: widget.details,
+                      name: name,
+                      details: details,
                     ),
                   ],
                 ),
-                RippleCardFull(place: widget.placeList[widget.placeIndex]),
-                if (widget.isVisitingScreen)
+                RippleCardFull(place: placeList[placeIndex]),
+                if (isVisitingScreen)
                   RippleIcons(
-                    removeSight: widget.removeSight,
-                    actionOne: widget.actionOne,
-                    actionTwo: widget.actionTwo ?? const SizedBox(),
+                    removeSight: removeSight,
+                    actionOne: actionOne,
+                    actionTwo: actionTwo ?? const SizedBox(),
                   )
                 else
                   RippleIcon(
-                    actionOne: widget.actionOne,
+                    actionOne: actionOne,
                     addSight: () {
-                      final placeList = widget.placeList[widget.placeIndex];
+                      final place = placeList[placeIndex];
                       // Если место не в избранном
-                      if (!placeList.isFavorite) {
+                      if (!place.isFavorite) {
                         // Добавляю место в избранное, меняя флаг isFavorite на true
                         // Событие добавляет место в список избранного
                         context.read<FavoriteBloc>().add(
                               FavoriteEvent(
-                                isFavorite: placeList.isFavorite = true,
-                                place: placeList,
-                                placeIndex: widget.placeIndex,
+                                isFavorite: place.isFavorite = true,
+                                place: place,
+                                placeIndex: placeIndex,
                               ),
                             );
                         context.read<VisitingScreenBloc>().add(
                               AddToWantToVisitEvent(
-                                isFavorite: placeList.isFavorite = true,
-                                place: placeList,
-                                placeIndex: widget.placeIndex,
-                                length: interactor.favoritePlaces.length,
+                                isFavorite: place.isFavorite = true,
+                                place: place,
+                                placeIndex: placeIndex,
                               ),
                             );
-                        debugPrint('isFavorite ${placeList.isFavorite}');
-                        debugPrint('Добавлены в избранное: $placeList');
+                        debugPrint('isFavorite ${place.isFavorite}');
+                        debugPrint('Добавлены в избранное: $place');
                       } else {
                         // Если место в избранном, меняю флаг isFavorite на false.
                         // Событие удаляет место из списка избранного
                         context.read<FavoriteBloc>().add(
                               FavoriteEvent(
-                                isFavorite: placeList.isFavorite = false,
-                                place: placeList,
-                                placeIndex: widget.placeIndex,
+                                isFavorite: place.isFavorite = false,
+                                place: place,
+                                placeIndex: placeIndex,
                               ),
                             );
                         context.read<VisitingScreenBloc>().add(
                               AddToWantToVisitEvent(
-                                isFavorite: placeList.isFavorite = false,
-                                place: placeList,
-                                placeIndex: widget.placeIndex,
-                                length: widget.placeList.length,
+                                isFavorite: place.isFavorite = false,
+                                place: place,
+                                placeIndex: placeIndex,
                               ),
                             );
                       }
