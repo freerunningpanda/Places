@@ -17,31 +17,15 @@ class VisitingScreenBloc extends Bloc<VisitingScreenEvent, WantToVisitScreenStat
   VisitingScreenBloc() : super(WantToVisitScreenEmptyState()) {
     on<AddToWantToVisitEvent>(
       (event, emit) async {
-        if (event.isFavorite) {
-          addToFavorites(place: event.place);
-          emit(
-            WantToVisitScreenIsNotEmpty(
-              placeIndex: event.placeIndex,
-              favoritePlaces: interactor.favoritePlaces,
-              length: interactor.favoritePlaces.length,
-            ),
-          );
-        } else {
-          removeFromFavorites(place: event.place);
-          emit(
-            WantToVisitScreenIsNotEmpty(
-              placeIndex: event.placeIndex,
-              favoritePlaces: interactor.favoritePlaces,
-              length: interactor.favoritePlaces.length,
-            ),
-          );
-        }
+        addToFavorites(place: event.place);
+        emit(
+          WantToVisitScreenIsNotEmpty(
+            placeIndex: event.placeIndex,
+            favoritePlaces: interactor.favoritePlaces,
+            length: interactor.favoritePlaces.length,
+          ),
+        );
       },
-    );
-    on<FavoriteListIsEmpty>(
-      (event, emit) => emit(
-        WantToVisitScreenEmptyState(),
-      ),
     );
     on<RemoveFromWantToVisitEvent>((event, emit) {
       removeFromFavorites(place: event.place);

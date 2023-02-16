@@ -125,7 +125,7 @@ class SightCard extends StatelessWidget {
                               ),
                             );
                         context.read<VisitingScreenBloc>().add(
-                              AddToWantToVisitEvent(
+                              RemoveFromWantToVisitEvent(
                                 isFavorite: place.isFavorite = false,
                                 place: place,
                                 placeIndex: placeIndex,

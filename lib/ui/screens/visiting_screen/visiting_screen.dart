@@ -302,15 +302,13 @@ class _DismissibleWidget extends StatelessWidget {
             padding: const EdgeInsets.only(bottom: 11.0),
             child: SightCard(
               placeIndex: i,
-              removeSight: () {
-                context.read<VisitingScreenBloc>().add(
+              removeSight: () => context.read<VisitingScreenBloc>().add(
                       RemoveFromWantToVisitEvent(
                         isFavorite: sightsToVisit[i].isFavorite = false,
                         place: sightsToVisit[i],
                         placeIndex: i,
                       ),
-                    );
-              },
+                    ),
               isVisitingScreen: true,
               placeList: sightsToVisit,
               url: sightsToVisit[i].urls[0],
