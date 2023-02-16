@@ -102,14 +102,14 @@ class SightCard extends StatelessWidget {
                               FavoriteEvent(
                                 isFavorite: place.isFavorite = true,
                                 place: place,
-                                placeIndex: placeIndex,
+                                placeIndex: place.id,
                               ),
                             );
                         context.read<VisitingScreenBloc>().add(
                               AddToWantToVisitEvent(
                                 isFavorite: place.isFavorite = true,
                                 place: place,
-                                placeIndex: placeIndex,
+                                placeIndex: place.id,
                               ),
                             );
                         debugPrint('isFavorite ${place.isFavorite}');
@@ -121,14 +121,14 @@ class SightCard extends StatelessWidget {
                               FavoriteEvent(
                                 isFavorite: place.isFavorite = false,
                                 place: place,
-                                placeIndex: placeIndex,
+                                placeIndex: place.id,
                               ),
                             );
                         context.read<VisitingScreenBloc>().add(
                               RemoveFromWantToVisitEvent(
                                 isFavorite: place.isFavorite = false,
                                 place: place,
-                                placeIndex: placeIndex,
+                                placeIndex: place.id,
                               ),
                             );
                         debugPrint('isFavorite ${place.isFavorite}');

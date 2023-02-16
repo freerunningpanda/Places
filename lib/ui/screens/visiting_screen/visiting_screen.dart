@@ -300,14 +300,14 @@ class _DismissibleWidget extends StatelessWidget {
                       RemoveFromWantToVisitEvent(
                         isFavorite: sightsToVisit[i].isFavorite = false,
                         place: sightsToVisit[i],
-                        placeIndex: i,
+                        placeIndex: sightsToVisit[i].id,
                       ),
                     );
                 context.read<FavoriteBloc>().add(
                       FavoriteEvent(
                         isFavorite: sightsToVisit[i].isFavorite = false,
                         place: sightsToVisit[i],
-                        placeIndex: i,
+                        placeIndex: sightsToVisit[i].id,
                       ),
                     );
           },
