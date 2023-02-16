@@ -92,6 +92,7 @@ class SightCard extends StatelessWidget {
                       if (!place.isFavorite) {
                         // Добавляю место в избранное, меняя флаг isFavorite на true
                         // Событие добавляет место в список избранного
+                        // Отвечает за обновление состояние лайка
                         context.read<FavoriteBloc>().add(
                               FavoriteEvent(
                                 isFavorite: place.isFavorite = true,
@@ -100,6 +101,7 @@ class SightCard extends StatelessWidget {
                                 // Это позволит при перемешивании позиции места в списке удалять нужное место
                               ),
                             );
+                          // Отвечает за отображение списка мест в избранном
                         context.read<VisitingScreenBloc>().add(
                               AddToWantToVisitEvent(
                                 isFavorite: place.isFavorite = true,

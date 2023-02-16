@@ -1,5 +1,4 @@
 import 'package:equatable/equatable.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:places/data/api/api_places.dart';
 import 'package:places/data/interactor/place_interactor.dart';
@@ -41,13 +40,9 @@ class VisitingScreenBloc extends Bloc<VisitingScreenEvent, WantToVisitScreenStat
 
   void addToFavorites({required Place place}) {
     interactor.favoritePlaces.add(place);
-
-    debugPrint('🟡--------- Добавлено в избранное: ${interactor.favoritePlaces}');
-    debugPrint('🟡--------- Длина: ${interactor.favoritePlaces.length}');
   }
 
   void removeFromFavorites({required Place place}) {
     interactor.favoritePlaces.remove(place);
-    debugPrint('🟡--------- Длина: ${interactor.favoritePlaces.length}');
   }
 }
