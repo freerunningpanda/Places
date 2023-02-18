@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:places/blocs/details_screen/details_screen_bloc.dart';
 import 'package:places/blocs/favorite/favorite_bloc.dart';
 import 'package:places/blocs/want_to_visit/want_to_visit_bloc.dart';
 import 'package:places/data/model/place.dart';
@@ -98,7 +99,7 @@ class SightCard extends StatelessWidget {
                               // Это позволит при перемешивании позиции места в списке удалять нужное место
                             ),
                           );
-                        // Отвечает за отображение списка мест в избранном
+                      // Отвечает за отображение списка мест в избранном
                       context.read<WantToVisitBloc>().add(
                             AddToWantToVisitEvent(
                               isFavorite: place.isFavorite = true,
@@ -254,6 +255,7 @@ class RippleCardFull extends StatelessWidget {
         child: InkWell(
           onTap: () {
             debugPrint('🟡---------to details screen');
+            context.read<DetailsScreenBloc>().add(DetailsScreenEvent(place: place));
             Navigator.of(context).push(
               MaterialPageRoute<SightDetails>(
                 builder: (context) => SightDetails(

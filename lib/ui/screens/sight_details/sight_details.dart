@@ -1,6 +1,8 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart' hide ErrorWidget;
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:places/blocs/details_screen/details_screen_bloc.dart';
 import 'package:places/data/api/api_places.dart';
 import 'package:places/data/interactor/place_interactor.dart';
 import 'package:places/data/model/place.dart';
@@ -51,7 +53,7 @@ class _SightDetailsState extends State<SightDetails> {
         }
       },
     );
-    getPlaceDetails();
+
     super.initState();
   }
 
@@ -64,39 +66,37 @@ class _SightDetailsState extends State<SightDetails> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: FutureBuilder<Object>(
-        future: getPlaceDetails(),
-        builder: (context, snapshot) {
-          if (snapshot.hasError) {
-            return const ErrorWidget();
-          }
-
-          return Column(
-            children: [
-              Expanded(
-                child: ColoredBox(
-                  child: Container(),
-                  color: AppColors.detailsScreenBackground,
+      body: BlocBuilder<DetailsScreenBloc, DetailsScreenState>(
+        builder: (_, state) {
+          if (state is DetailsScreenLoadingState) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          } else if (state is DetailsScreenLoadedState) {
+            return Column(
+              children: [
+                Expanded(
+                  child: ColoredBox(
+                    child: Container(),
+                    color: AppColors.detailsScreenBackground,
+                  ),
                 ),
-              ),
-              const SizedBox(height: 12),
-              _SightDetailsClosed(
-                height: widget.height,
-                place: widget.place,
-                pageController: _pageController,
-              ),
-            ],
+                const SizedBox(height: 12),
+                _SightDetailsClosed(
+                  height: widget.height,
+                  place: widget.place,
+                  pageController: _pageController,
+                ),
+              ],
+            );
+          }
+          
+          return const Center(
+            child: ErrorWidget(),
           );
         },
       ),
     );
-  }
-
-  Future<Place> getPlaceDetails() async {
-    final detailedPlace =
-        await PlaceInteractor(repository: PlaceRepository(apiPlaces: ApiPlaces())).getPlaceDetails(widget.place);
-
-    return detailedPlace;
   }
 }
 
