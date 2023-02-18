@@ -34,3 +34,28 @@ class WantToVisitScreenIsNotEmpty extends WantToVisitScreenState {
     return 'VisitingScreenIsNotEmpty {places: $placeIndex}';
   }
 }
+
+// Состояние списка после переноса места
+class WantToVisitAfterDragState extends WantToVisitScreenState {
+  final int oldIndex;
+  final int newIndex;
+  final List<Place> favoritePlaces;
+
+  @override
+  List<Object?> get props => [
+        oldIndex,
+        newIndex,
+        favoritePlaces,
+      ];
+
+  const WantToVisitAfterDragState({
+    required this.oldIndex,
+    required this.newIndex,
+    required this.favoritePlaces,
+  });
+
+  @override
+  String toString() {
+    return 'newIndex $newIndex}';
+  }
+}

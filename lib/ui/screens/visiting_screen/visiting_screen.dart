@@ -58,7 +58,13 @@ class VisitingScreen extends StatelessWidget {
                               key: const PageStorageKey('WantToVisitScrollPosition'),
                             );
                           }
-                          throw ArgumentError('Error');
+                          if (state is WantToVisitAfterDragState) {
+                            return _WantToVisitWidget(
+                              sightsToVisit: state.favoritePlaces,
+                              key: const PageStorageKey('WantToVisitScrollPosition'),
+                            );
+                          }
+                          throw ArgumentError('Bad State');
                         },
                       ),
                       BlocBuilder<VisitingScreenBloc, WantToVisitScreenState>(
@@ -166,44 +172,32 @@ class _TabBarWidgetState extends State<_TabBarWidget> with TickerProviderStateMi
   }
 }
 
-class _WantToVisitWidget extends StatefulWidget {
+class _WantToVisitWidget extends StatelessWidget {
   final List<Place> sightsToVisit;
   const _WantToVisitWidget({Key? key, required this.sightsToVisit}) : super(key: key);
 
-  @override
-  State<_WantToVisitWidget> createState() => _WantToVisitWidgetState();
-}
-
-class _WantToVisitWidgetState extends State<_WantToVisitWidget> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
     return ReorderableListView(
       onReorder: (oldIndex, newIndex) {
-        setState(() {
-          if (newIndex > oldIndex) newIndex--;
-
-          final sight = widget.sightsToVisit.removeAt(oldIndex);
-          widget.sightsToVisit.insert(newIndex, sight);
-        });
-
-        // context.read<VisitingScreenBloc>().add(
-        //       DragCardOnWantToVisitEvent(
-        //         newIndex: newIndex,
-        //         oldIndex: oldIndex,
-        //         place: widget.sightsToVisit,
-        //       ),
-        //     );
+        context.read<VisitingScreenBloc>().add(
+              DragCardOnWantToVisitEvent(
+                newIndex: newIndex,
+                oldIndex: oldIndex,
+                places: sightsToVisit,
+              ),
+            );
       },
       children: [
-        for (var i = 0; i < widget.sightsToVisit.length; i++)
+        for (var i = 0; i < sightsToVisit.length; i++)
           ClipRRect(
-            key: ObjectKey(widget.sightsToVisit[i]),
+            key: ObjectKey(sightsToVisit[i]),
             borderRadius: BorderRadius.circular(16.0),
             child: _DismissibleWidget(
               i: i,
-              sightsToVisit: widget.sightsToVisit,
+              sightsToVisit: sightsToVisit,
               theme: theme,
               uniqueKey: UniqueKey(),
               actionTwo: const SightIcons(
