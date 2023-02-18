@@ -8,6 +8,7 @@ import 'package:places/blocs/favorite/favorite_bloc.dart';
 import 'package:places/cubits/places_list/places_list_cubit.dart';
 import 'package:places/data/model/place.dart';
 import 'package:places/ui/res/app_assets.dart';
+import 'package:places/ui/res/app_card_size.dart';
 import 'package:places/ui/res/app_strings.dart';
 import 'package:places/ui/res/app_typography.dart';
 import 'package:places/ui/screens/sight_card/sight_card.dart';
@@ -143,7 +144,7 @@ class _SightListWidgetPortraitState extends State<_SightListWidgetPortrait> {
                 child: SightCard(
                   placeIndex: index,
                   isVisitingScreen: false,
-                  aspectRatio: 3 / 2,
+                  aspectRatio: AppCardSize.sightCard,
                   actionOne: BlocBuilder<FavoriteBloc, FavoriteState>(
                     builder: (context, state) {
                       if (state is IsFavoriteState) {

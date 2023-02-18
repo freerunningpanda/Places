@@ -272,7 +272,7 @@ class _DismissibleWidget extends StatelessWidget {
     return Stack(
       children: [
         AspectRatio(
-          aspectRatio: AppCardSize.visitingCard,
+          aspectRatio: AppCardSize.visitingCardDismiss,
           child: Padding(
             padding: const EdgeInsets.only(bottom: 1),
             child: DecoratedBox(
@@ -304,90 +304,93 @@ class _DismissibleWidget extends StatelessWidget {
             ),
           ),
         ),
-        Dismissible(
-          key: uniqueKey,
-          onDismissed: (direction) {
-            // Отправляю в эвент удаления карточки id свойство текущего места, само место
-            // и меняю свойство isFavorite на false
-            // Благодаря чему стейт видит обновление состояния и теперь виджет перерисовывается
-            // P.S.: раньше не обновлялся UI при попытке удалить карточку из-за того что
-            // Я отправлял в эвент только индекс элемента в списке (а не индекс свойства места) и список избранного,
-            // Из-за чего блок не видел смены состояния, из-за особенности Equatable,
-            // который не видит изменений если количество элементов в списке изменилось
-            // так список для него иммутабелен,
-            // а сейчас я добавил флаг isFavorite
-            // И передаю в эвент само место в избранном, а не весь список избранного
-            context.read<VisitingScreenBloc>().add(
-                  RemoveFromWantToVisitEvent(
-                    isFavorite: sightsToVisit[i].isFavorite = false,
-                    place: sightsToVisit[i],
-                    placeIndex: sightsToVisit[i].id,
+        AspectRatio(
+          aspectRatio: AppCardSize.visitingCard,
+          child: Dismissible(
+            key: uniqueKey,
+            onDismissed: (direction) {
+              // Отправляю в эвент удаления карточки id свойство текущего места, само место
+              // и меняю свойство isFavorite на false
+              // Благодаря чему стейт видит обновление состояния и теперь виджет перерисовывается
+              // P.S.: раньше не обновлялся UI при попытке удалить карточку из-за того что
+              // Я отправлял в эвент только индекс элемента в списке (а не индекс свойства места) и список избранного,
+              // Из-за чего блок не видел смены состояния, из-за особенности Equatable,
+              // который не видит изменений если количество элементов в списке изменилось
+              // так список для него иммутабелен,
+              // а сейчас я добавил флаг isFavorite
+              // И передаю в эвент само место в избранном, а не весь список избранного
+              context.read<VisitingScreenBloc>().add(
+                    RemoveFromWantToVisitEvent(
+                      isFavorite: sightsToVisit[i].isFavorite = false,
+                      place: sightsToVisit[i],
+                      placeIndex: sightsToVisit[i].id,
+                    ),
+                  );
+              context.read<FavoriteBloc>().add(
+                    FavoriteEvent(
+                      isFavorite: sightsToVisit[i].isFavorite = false,
+                      place: sightsToVisit[i],
+                      placeIndex: sightsToVisit[i].id,
+                    ),
+                  );
+            },
+            background: const SizedBox.shrink(),
+            direction: DismissDirection.endToStart,
+            child: Padding(
+              padding: const EdgeInsets.only(bottom: 11.0),
+              child: SightCard(
+                placeIndex: i,
+                removeSight: () {
+                  context.read<VisitingScreenBloc>().add(
+                        RemoveFromWantToVisitEvent(
+                          isFavorite: sightsToVisit[i].isFavorite = false,
+                          place: sightsToVisit[i],
+                          placeIndex: i,
+                        ),
+                      );
+                  context.read<FavoriteBloc>().add(
+                        FavoriteEvent(
+                          isFavorite: sightsToVisit[i].isFavorite = false,
+                          place: sightsToVisit[i],
+                          placeIndex: i,
+                        ),
+                      );
+                },
+                isVisitingScreen: true,
+                placeList: sightsToVisit,
+                url: sightsToVisit[i].urls[0],
+                type: sightsToVisit[i].placeType,
+                name: sightsToVisit[i].name,
+                aspectRatio: AppCardSize.visitingCardDismiss,
+                details: [
+                  Text(
+                    sightsToVisit[i].name,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: theme.textTheme.headlineSmall,
                   ),
-                );
-            context.read<FavoriteBloc>().add(
-                  FavoriteEvent(
-                    isFavorite: sightsToVisit[i].isFavorite = false,
-                    place: sightsToVisit[i],
-                    placeIndex: sightsToVisit[i].id,
+                  const SizedBox(height: 2),
+                  Text(
+                    '$target 12 окт. 2022',
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: style,
                   ),
-                );
-          },
-          background: const SizedBox.shrink(),
-          direction: DismissDirection.endToStart,
-          child: Padding(
-            padding: const EdgeInsets.only(bottom: 11.0),
-            child: SightCard(
-              placeIndex: i,
-              removeSight: () {
-                context.read<VisitingScreenBloc>().add(
-                      RemoveFromWantToVisitEvent(
-                        isFavorite: sightsToVisit[i].isFavorite = false,
-                        place: sightsToVisit[i],
-                        placeIndex: i,
-                      ),
-                    );
-                context.read<FavoriteBloc>().add(
-                      FavoriteEvent(
-                        isFavorite: sightsToVisit[i].isFavorite = false,
-                        place: sightsToVisit[i],
-                        placeIndex: i,
-                      ),
-                    );
-              },
-              isVisitingScreen: true,
-              placeList: sightsToVisit,
-              url: sightsToVisit[i].urls[0],
-              type: sightsToVisit[i].placeType,
-              name: sightsToVisit[i].name,
-              aspectRatio: AppCardSize.visitingCard,
-              details: [
-                Text(
-                  sightsToVisit[i].name,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: theme.textTheme.headlineSmall,
+                  const SizedBox(height: 10),
+                  const Text(
+                    '${AppString.closed} 09:00',
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: AppTypography.textText16Regular,
+                  ),
+                ],
+                actionOne: const SightIcons(
+                  assetName: AppAssets.calendarWhite,
+                  width: 24,
+                  height: 24,
                 ),
-                const SizedBox(height: 2),
-                Text(
-                  '$target 12 окт. 2022',
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: style,
-                ),
-                const SizedBox(height: 10),
-                const Text(
-                  '${AppString.closed} 09:00',
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: AppTypography.textText16Regular,
-                ),
-              ],
-              actionOne: const SightIcons(
-                assetName: AppAssets.calendarWhite,
-                width: 24,
-                height: 24,
+                actionTwo: actionTwo,
               ),
-              actionTwo: actionTwo,
             ),
           ),
         ),
