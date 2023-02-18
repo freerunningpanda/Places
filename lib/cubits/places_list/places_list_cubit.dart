@@ -8,6 +8,9 @@ import 'package:places/data/repository/place_repository.dart';
 part 'places_list_state.dart';
 
 class PlacesListCubit extends Cubit<PlacesListState> {
+  final bool readOnly = true;
+  final isSearchPage = false;
+  final isPortrait = true;
   final interactor = PlaceInteractor(
     repository: PlaceRepository(
       apiPlaces: ApiPlaces(),

@@ -1,42 +1,42 @@
-part of 'visiting_screen_bloc.dart';
+part of 'visited_screen_bloc.dart';
 
-abstract class WantToVisitScreenState extends Equatable {
+abstract class VisitedScreenState extends Equatable {
   @override
   List<Object?> get props => [];
 
-  const WantToVisitScreenState();
+  const VisitedScreenState();
 }
 
 // Состояние пустого экрана
-class WantToVisitScreenEmptyState extends WantToVisitScreenState {}
+class VisitedEmptyState extends VisitedScreenState {}
 
 // Состояние добавленных мест
-class WantToVisitScreenIsNotEmpty extends WantToVisitScreenState {
+class VisitedIsNotEmpty extends VisitedScreenState {
   final int placeIndex;
-  final Set<Place> favoritePlaces;
+  final Set<Place> visitedPlaces;
   final int length;
 
   @override
   List<Object?> get props => [
         placeIndex,
-        favoritePlaces,
+        visitedPlaces,
         length,
       ];
 
-  const WantToVisitScreenIsNotEmpty({
+  const VisitedIsNotEmpty({
     required this.placeIndex,
-    required this.favoritePlaces,
+    required this.visitedPlaces,
     required this.length,
   });
 
   @override
   String toString() {
-    return 'VisitingScreenIsNotEmpty {places: $placeIndex}';
+    return 'VisitedIsNotEmpty {places: $placeIndex}';
   }
 }
 
 // Состояние списка после переноса места
-class WantToVisitAfterDragState extends WantToVisitScreenState {
+class VisitedAfterDragState extends VisitedScreenState {
   final int oldIndex;
   final int newIndex;
   final List<Place> favoritePlaces;
@@ -48,7 +48,7 @@ class WantToVisitAfterDragState extends WantToVisitScreenState {
         favoritePlaces,
       ];
 
-  const WantToVisitAfterDragState({
+  const VisitedAfterDragState({
     required this.oldIndex,
     required this.newIndex,
     required this.favoritePlaces,

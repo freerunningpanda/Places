@@ -65,14 +65,6 @@ class PlaceRepository {
     debugPrint('🟡--------- Длина: ${interactor.favoritePlaces.length}');
   }
 
-  Set<Place> getVisitPlaces() {
-    return PlaceInteractor.visitedPlaces;
-  }
-
-  void addToVisitingPlaces({required Place place}) {
-    PlaceInteractor.visitedPlaces.add(place);
-  }
-
   void addNewPlace({required Place place}) {
     PlaceInteractor.newPlaces.add(place);
   }

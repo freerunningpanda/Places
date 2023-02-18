@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/material.dart' hide ErrorWidget;
@@ -17,25 +16,8 @@ import 'package:places/ui/widgets/error_widget.dart';
 import 'package:places/ui/widgets/search_bar.dart';
 import 'package:places/ui/widgets/sight_icons.dart';
 
-class SightListScreen extends StatefulWidget {
+class SightListScreen extends StatelessWidget {
   const SightListScreen({Key? key}) : super(key: key);
-
-  @override
-  State<SightListScreen> createState() => _SightListScreenState();
-}
-
-class _SightListScreenState extends State<SightListScreen> {
-  final bool readOnly = true;
-  final isEnabled = true;
-  final isSearchPage = false;
-  final isPortrait = true;
-  final _controller = StreamController<List<Place>>();
-  late List<Place> placeList;
-
-  @override
-  void initState() {
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -47,6 +29,9 @@ class _SightListScreenState extends State<SightListScreen> {
     ]);
     final theme = Theme.of(context);
     final orientation = MediaQuery.of(context).orientation == Orientation.portrait;
+    final isPortrait = context.read<PlacesListCubit>().isPortrait;
+    final isSearchPage = context.read<PlacesListCubit>().isSearchPage;
+    final readOnly = context.read<PlacesListCubit>().readOnly;
 
     return Scaffold(
       body: Padding(
@@ -101,12 +86,6 @@ class _SightListScreenState extends State<SightListScreen> {
       floatingActionButton: const AddNewPlaceButton(),
     );
   }
-
-  @override
-  void dispose() {
-    super.dispose();
-    _controller.close();
-  }
 }
 
 class _SightListWidgetPortrait extends StatefulWidget {
@@ -124,7 +103,6 @@ class _SightListWidgetPortrait extends StatefulWidget {
 }
 
 class _SightListWidgetPortraitState extends State<_SightListWidgetPortrait> {
-
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -242,36 +220,36 @@ class _SightListWidgetLandscape extends StatelessWidget {
                 isVisitingScreen: false,
                 aspectRatio: 1.5 / 1,
                 actionOne: BlocBuilder<FavoriteBloc, FavoriteState>(
-                    builder: (context, state) {
-                      if (state is IsFavoriteState) {
-                        return place.isFavorite
-                            ? const SightIcons(
-                                assetName: AppAssets.heartFull,
-                                width: 22,
-                                height: 22,
-                              )
-                            : const SightIcons(
-                                assetName: AppAssets.favourite,
-                                width: 22,
-                                height: 22,
-                              );
-                      } else if (state is IsNotFavoriteState) {
-                        return place.isFavorite
-                            ? const SightIcons(
-                                assetName: AppAssets.heartFull,
-                                width: 22,
-                                height: 22,
-                              )
-                            : const SightIcons(
-                                assetName: AppAssets.favourite,
-                                width: 22,
-                                height: 22,
-                              );
-                      } else {
-                        return const Text('Bad state');
-                      }
-                    },
-                  ),
+                  builder: (context, state) {
+                    if (state is IsFavoriteState) {
+                      return place.isFavorite
+                          ? const SightIcons(
+                              assetName: AppAssets.heartFull,
+                              width: 22,
+                              height: 22,
+                            )
+                          : const SightIcons(
+                              assetName: AppAssets.favourite,
+                              width: 22,
+                              height: 22,
+                            );
+                    } else if (state is IsNotFavoriteState) {
+                      return place.isFavorite
+                          ? const SightIcons(
+                              assetName: AppAssets.heartFull,
+                              width: 22,
+                              height: 22,
+                            )
+                          : const SightIcons(
+                              assetName: AppAssets.favourite,
+                              width: 22,
+                              height: 22,
+                            );
+                    } else {
+                      return const Text('Bad state');
+                    }
+                  },
+                ),
                 url: place.urls[0],
                 type: place.placeType,
                 name: place.name,

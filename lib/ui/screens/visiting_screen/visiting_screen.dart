@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:places/blocs/favorite/favorite_bloc.dart';
-import 'package:places/blocs/visiting_screen/visiting_screen_bloc.dart';
+import 'package:places/blocs/visited/visited_screen_bloc.dart';
+import 'package:places/blocs/want_to_visit/want_to_visit_bloc.dart';
 
 import 'package:places/data/model/place.dart';
 import 'package:places/providers/dismissible_data_provider.dart';
@@ -34,7 +35,7 @@ class VisitingScreen extends StatelessWidget {
                   padding: const EdgeInsets.only(top: 30),
                   child: TabBarView(
                     children: [
-                      BlocBuilder<VisitingScreenBloc, WantToVisitScreenState>(
+                      BlocBuilder<WantToVisitBloc, WantToVisitScreenState>(
                         builder: (_, state) {
                           if (state is WantToVisitScreenEmptyState) {
                             return const _EmptyList(
@@ -67,22 +68,22 @@ class VisitingScreen extends StatelessWidget {
                           throw ArgumentError('Bad State');
                         },
                       ),
-                      BlocBuilder<VisitingScreenBloc, WantToVisitScreenState>(
+                      BlocBuilder<VisitedScreenBloc, VisitedScreenState>(
                         builder: (_, state) {
-                          if (state is WantToVisitScreenEmptyState) {
+                          if (state is VisitedEmptyState) {
                             return const _EmptyList(
                               icon: AppAssets.goIconTransparent,
                               description: AppString.finishRoute,
                             );
                           }
-                          if (state is WantToVisitScreenIsNotEmpty) {
-                            return state.favoritePlaces.isEmpty
+                          if (state is VisitedIsNotEmpty) {
+                            return state.visitedPlaces.isEmpty
                                 ? const _EmptyList(
                                     icon: AppAssets.goIconTransparent,
                                     description: AppString.finishRoute,
                                   )
                                 : _VisitedWidget(
-                                    visitedSights: state.favoritePlaces.toList(),
+                                    visitedSights: state.visitedPlaces.toList(),
                                     key: const PageStorageKey('VisitedScrollPosition'),
                                   );
                           }
@@ -182,7 +183,7 @@ class _WantToVisitWidget extends StatelessWidget {
 
     return ReorderableListView(
       onReorder: (oldIndex, newIndex) {
-        context.read<VisitingScreenBloc>().add(
+        context.read<WantToVisitBloc>().add(
               DragCardOnWantToVisitEvent(
                 newIndex: newIndex,
                 oldIndex: oldIndex,
@@ -321,7 +322,7 @@ class _DismissibleWidget extends StatelessWidget {
               // так список для него иммутабелен,
               // а сейчас я добавил флаг isFavorite
               // И передаю в эвент само место в избранном, а не весь список избранного
-              context.read<VisitingScreenBloc>().add(
+              context.read<WantToVisitBloc>().add(
                     RemoveFromWantToVisitEvent(
                       isFavorite: sightsToVisit[i].isFavorite = false,
                       place: sightsToVisit[i],
@@ -343,7 +344,7 @@ class _DismissibleWidget extends StatelessWidget {
               child: SightCard(
                 placeIndex: i,
                 removeSight: () {
-                  context.read<VisitingScreenBloc>().add(
+                  context.read<WantToVisitBloc>().add(
                         RemoveFromWantToVisitEvent(
                           isFavorite: sightsToVisit[i].isFavorite = false,
                           place: sightsToVisit[i],

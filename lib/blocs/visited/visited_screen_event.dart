@@ -1,45 +1,45 @@
-part of 'visiting_screen_bloc.dart';
+part of 'visited_screen_bloc.dart';
 
-abstract class VisitingScreenEvent extends Equatable {
+abstract class VisitedScreenEvent extends Equatable {
   @override
   List<Object?> get props => [];
 
-  const VisitingScreenEvent();
+  const VisitedScreenEvent();
 }
 
 // Пустой список мест
-class FavoriteListIsEmpty extends VisitingScreenEvent {}
+class VisitedListIsEmpty extends VisitedScreenEvent {}
 
-class AddToWantToVisitEvent extends VisitingScreenEvent {
+class AddToVisitedEvent extends VisitedScreenEvent {
   final bool isFavorite;
   final int placeIndex;
   final Place place;
 
-  const AddToWantToVisitEvent({
+  const AddToVisitedEvent({
     required this.isFavorite,
     required this.placeIndex,
     required this.place,
   });
 }
 
-class RemoveFromWantToVisitEvent extends VisitingScreenEvent {
+class RemoveFromVisitedEvent extends VisitedScreenEvent {
   final bool isFavorite;
   final int placeIndex;
   final Place place;
 
-  const RemoveFromWantToVisitEvent({
+  const RemoveFromVisitedEvent({
     required this.isFavorite,
     required this.placeIndex,
     required this.place,
   });
 }
 
-class DragCardOnWantToVisitEvent extends VisitingScreenEvent {
+class DragCardOnVisitedEvent extends VisitedScreenEvent {
   final List<Place> places;
   final int oldIndex;
   final int newIndex;
 
-  const DragCardOnWantToVisitEvent({
+  const DragCardOnVisitedEvent({
     required this.places,
     required this.oldIndex,
     required this.newIndex,

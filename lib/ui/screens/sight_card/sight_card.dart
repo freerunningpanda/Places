@@ -4,7 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:places/blocs/favorite/favorite_bloc.dart';
-import 'package:places/blocs/visiting_screen/visiting_screen_bloc.dart';
+import 'package:places/blocs/want_to_visit/want_to_visit_bloc.dart';
 import 'package:places/data/model/place.dart';
 
 import 'package:places/ui/res/app_typography.dart';
@@ -99,7 +99,7 @@ class SightCard extends StatelessWidget {
                             ),
                           );
                         // Отвечает за отображение списка мест в избранном
-                      context.read<VisitingScreenBloc>().add(
+                      context.read<WantToVisitBloc>().add(
                             AddToWantToVisitEvent(
                               isFavorite: place.isFavorite = true,
                               place: place,
@@ -118,7 +118,7 @@ class SightCard extends StatelessWidget {
                               placeIndex: place.id,
                             ),
                           );
-                      context.read<VisitingScreenBloc>().add(
+                      context.read<WantToVisitBloc>().add(
                             RemoveFromWantToVisitEvent(
                               isFavorite: place.isFavorite = false,
                               place: place,

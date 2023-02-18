@@ -5,15 +5,15 @@ import 'package:places/data/interactor/place_interactor.dart';
 import 'package:places/data/model/place.dart';
 import 'package:places/data/repository/place_repository.dart';
 
-part 'visiting_screen_event.dart';
-part 'visiting_screen_state.dart';
+part 'want_to_visit_event.dart';
+part 'want_to_visit_state.dart';
 
-class VisitingScreenBloc extends Bloc<VisitingScreenEvent, WantToVisitScreenState> {
+class WantToVisitBloc extends Bloc<VisitingScreenEvent, WantToVisitScreenState> {
   final interactor = PlaceInteractor(
     repository: PlaceRepository(apiPlaces: ApiPlaces()),
   );
 
-  VisitingScreenBloc() : super(WantToVisitScreenEmptyState()) {
+  WantToVisitBloc() : super(WantToVisitScreenEmptyState()) {
     on<AddToWantToVisitEvent>(
       (event, emit) async {
         addToFavorites(place: event.place);
