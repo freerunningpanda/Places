@@ -269,10 +269,12 @@ class _DismissibleWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final orientation = MediaQuery.of(context).orientation == Orientation.portrait;
+
     return Stack(
       children: [
         AspectRatio(
-          aspectRatio: AppCardSize.visitingCardDismiss,
+          aspectRatio: orientation ? AppCardSize.visitingCardDismiss : AppCardSize.visitingCardDismissLandscape,
           child: Padding(
             padding: const EdgeInsets.only(bottom: 1),
             child: DecoratedBox(
@@ -305,7 +307,7 @@ class _DismissibleWidget extends StatelessWidget {
           ),
         ),
         AspectRatio(
-          aspectRatio: AppCardSize.visitingCard,
+          aspectRatio: orientation ? AppCardSize.visitingCard : AppCardSize.visitingCardLandscape,
           child: Dismissible(
             key: uniqueKey,
             onDismissed: (direction) {

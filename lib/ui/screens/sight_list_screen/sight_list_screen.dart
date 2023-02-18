@@ -124,7 +124,6 @@ class _SightListWidgetPortrait extends StatefulWidget {
 }
 
 class _SightListWidgetPortraitState extends State<_SightListWidgetPortrait> {
-  final _controller = StreamController<bool>.broadcast();
 
   @override
   Widget build(BuildContext context) {
@@ -205,12 +204,6 @@ class _SightListWidgetPortraitState extends State<_SightListWidgetPortrait> {
       ),
     );
   }
-
-  @override
-  void dispose() {
-    _controller.close();
-    super.dispose();
-  }
 }
 
 class _SightListWidgetLandscape extends StatelessWidget {
@@ -248,11 +241,37 @@ class _SightListWidgetLandscape extends StatelessWidget {
                 placeIndex: index,
                 isVisitingScreen: false,
                 aspectRatio: 1.5 / 1,
-                actionOne: const SightIcons(
-                  assetName: AppAssets.favourite,
-                  width: 22,
-                  height: 22,
-                ),
+                actionOne: BlocBuilder<FavoriteBloc, FavoriteState>(
+                    builder: (context, state) {
+                      if (state is IsFavoriteState) {
+                        return place.isFavorite
+                            ? const SightIcons(
+                                assetName: AppAssets.heartFull,
+                                width: 22,
+                                height: 22,
+                              )
+                            : const SightIcons(
+                                assetName: AppAssets.favourite,
+                                width: 22,
+                                height: 22,
+                              );
+                      } else if (state is IsNotFavoriteState) {
+                        return place.isFavorite
+                            ? const SightIcons(
+                                assetName: AppAssets.heartFull,
+                                width: 22,
+                                height: 22,
+                              )
+                            : const SightIcons(
+                                assetName: AppAssets.favourite,
+                                width: 22,
+                                height: 22,
+                              );
+                      } else {
+                        return const Text('Bad state');
+                      }
+                    },
+                  ),
                 url: place.urls[0],
                 type: place.placeType,
                 name: place.name,
