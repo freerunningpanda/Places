@@ -16,7 +16,6 @@ import 'package:places/providers/filter_data_provider.dart';
 import 'package:places/providers/image_data_provider.dart';
 import 'package:places/providers/search_data_provider.dart';
 import 'package:places/providers/theme_data_provider.dart';
-import 'package:places/store/place_list/place_list_store.dart';
 import 'package:places/ui/res/app_strings.dart';
 import 'package:places/ui/screens/res/app_theme.dart';
 import 'package:places/ui/screens/splash_screen/splash_screen.dart';
@@ -54,13 +53,6 @@ void main() {
         Provider<PlaceRepository>(
           create: (_) => PlaceRepository(
             apiPlaces: ApiPlaces(),
-          ),
-        ),
-        Provider<PlaceListStore>(
-          create: (_) => PlaceListStore(
-            placeRepository: PlaceRepository(
-              apiPlaces: ApiPlaces(),
-            ),
           ),
         ),
       ],
