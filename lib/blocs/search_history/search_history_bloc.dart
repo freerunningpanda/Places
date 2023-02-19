@@ -25,6 +25,7 @@ class SearchHistoryBloc extends Bloc<SearchHistoryEvent, SearchHistoryState> {
           SearchHistoryHasValueState(
             searchStoryList: searchStoryList,
             hasFocus: true,
+            isDeleted: event.isDeleted,
           ),
         );
       },
@@ -36,6 +37,21 @@ class SearchHistoryBloc extends Bloc<SearchHistoryEvent, SearchHistoryState> {
           SearchHistoryHasValueState(
             searchStoryList: searchStoryList,
             hasFocus: false,
+            isDeleted: event.isDeleted,
+            index: event.index,
+          ),
+        );
+      },
+    );
+    on<RemoveItemFromHistory>(
+      (event, emit) {
+        removeItemFromHistory(event.index);
+        emit(
+          SearchHistoryHasValueState(
+            searchStoryList: searchStoryList,
+            hasFocus: true,
+            isDeleted: event.isDeleted,
+            index: event.index,
           ),
         );
       },
@@ -55,4 +71,7 @@ class SearchHistoryBloc extends Bloc<SearchHistoryEvent, SearchHistoryState> {
     PlaceInteractor.searchHistoryList.add(value);
   }
 
+  void removeItemFromHistory(String index) {
+    PlaceInteractor.searchHistoryList.remove(index);
+  }
 }

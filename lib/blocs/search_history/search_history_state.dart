@@ -10,31 +10,20 @@ class SearchHistoryEmptyState extends SearchHistoryState {}
 
 // Состояние истории поиска с данными
 class SearchHistoryHasValueState extends SearchHistoryState {
+  final String? index;
   final Set<String> searchStoryList;
   final bool hasFocus;
+  final bool isDeleted;
 
   @override
-  List<Object?> get props => [searchStoryList, hasFocus];
+  List<Object?> get props => [index, searchStoryList, hasFocus, isDeleted];
 
   SearchHistoryHasValueState({
+    this.index,
     required this.searchStoryList,
     required this.hasFocus,
+    required this.isDeleted,
   });
-
-  @override
-  String toString() {
-    return 'hasFocus: $hasFocus';
-  }
-
-  SearchHistoryHasValueState copyWith({
-    Set<String>? searchStoryList,
-    bool? hasFocus,
-  }) {
-    return SearchHistoryHasValueState(
-      searchStoryList: searchStoryList ?? this.searchStoryList,
-      hasFocus: hasFocus ?? this.hasFocus,
-    );
-  }
 }
 
 // Состояние пустого экрана найденных мест

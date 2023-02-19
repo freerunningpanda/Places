@@ -93,7 +93,9 @@ class _SearchBarState extends State<SearchBar> {
                       if (widget.isSearchPage) {
                         // Если история поиска не пустая, то вызываем event показа истории поиска
                         if (searchStoryList.isNotEmpty) {
-                          context.read<SearchHistoryBloc>().add(ShowHistoryEvent());
+                          context.read<SearchHistoryBloc>().add(
+                                ShowHistoryEvent(isDeleted: false),
+                              );
                         }
                       }
 
@@ -114,7 +116,12 @@ class _SearchBarState extends State<SearchBar> {
                         // Добавляем значение из поиска в список истории поиска
                         ..saveSearchHistory(value, widget.searchController)
                         // Вызываем event добавления места в историю поиска
-                        ..add(AddItemToHistoryEvent());
+                        ..add(
+                          AddItemToHistoryEvent(
+                            isDeleted: false,
+                            index: widget.searchController.text,
+                          ),
+                        );
 
                       // Очистить строку поиска после нажатия кнопки submit
                       widget.searchController.clear();
