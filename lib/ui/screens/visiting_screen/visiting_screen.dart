@@ -5,7 +5,6 @@ import 'package:places/blocs/visited/visited_screen_bloc.dart';
 import 'package:places/blocs/want_to_visit/want_to_visit_bloc.dart';
 
 import 'package:places/data/model/place.dart';
-import 'package:places/providers/dismissible_data_provider.dart';
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_card_size.dart';
 import 'package:places/ui/res/app_strings.dart';
@@ -20,7 +19,6 @@ class VisitingScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    context.watch<DismissibleDataProvider>();
 
     return Padding(
       padding: const EdgeInsets.only(left: 16.0, right: 16.0),
@@ -225,8 +223,13 @@ class _VisitedWidget extends StatelessWidget {
 
     return ReorderableListView(
       onReorder: (oldIndex, newIndex) {
-        if (newIndex > oldIndex) newIndex--;
-        context.read<DismissibleDataProvider>().dragCard(visitedSights, oldIndex, newIndex);
+        context.read<VisitedScreenBloc>().add(
+              DragCardOnVisitedEvent(
+                newIndex: newIndex,
+                oldIndex: oldIndex,
+                places: visitedSights,
+              ),
+            );
       },
       children: [
         for (var i = 0; i < visitedSights.length; i++)

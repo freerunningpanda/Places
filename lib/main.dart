@@ -13,7 +13,6 @@ import 'package:places/data/repository/place_repository.dart';
 import 'package:places/providers/add_sight_provider.dart';
 import 'package:places/providers/category_data_provider.dart';
 
-import 'package:places/providers/dismissible_data_provider.dart';
 import 'package:places/providers/filter_data_provider.dart';
 import 'package:places/providers/image_data_provider.dart';
 import 'package:places/providers/search_data_provider.dart';
@@ -48,9 +47,6 @@ void main() {
         ),
         ChangeNotifierProvider<FilterDataProvider>(
           create: (_) => FilterDataProvider(),
-        ),
-        ChangeNotifierProvider<DismissibleDataProvider>(
-          create: (_) => DismissibleDataProvider(),
         ),
         Provider<PlaceRepository>(
           create: (_) => PlaceRepository(

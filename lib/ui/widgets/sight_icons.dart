@@ -21,7 +21,7 @@ class SightIcons extends StatelessWidget {
       assetName,
       width: width,
       height: height,
-      color: color,
+      theme: SvgTheme(currentColor: color),
     );
   }
 }

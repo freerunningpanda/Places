@@ -80,7 +80,6 @@ abstract class AppTheme {
       iconTheme: const IconThemeData(
         color: AppColors.darkThemeBgColor,
       ),
-      toggleableActiveColor: AppColors.backgroundColor,
       highlightColor: AppColors.inactiveBlack,
       canvasColor: AppColors.lightGreen,
       focusColor: AppColors.chevroneColor,
@@ -159,7 +158,6 @@ abstract class AppTheme {
       iconTheme: const IconThemeData(
         color: AppColors.backgroundColor,
       ),
-      toggleableActiveColor: AppColors.textColor,
       highlightColor: AppColors.inactiveBlack,
       canvasColor: AppColors.lightGreen,
       focusColor: AppColors.chevroneColor,
