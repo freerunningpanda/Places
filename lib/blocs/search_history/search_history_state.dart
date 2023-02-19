@@ -10,10 +10,11 @@ class SearchHistoryEmptyState extends SearchHistoryState {}
 
 // Состояние истории поиска с данными
 class SearchHistoryHasValueState extends SearchHistoryState {
-  final String? index;
+  
+  final String? index; // Берётся значение text из контроллера. Нужен для обновления стейта после удаления элемента из списка.
   final Set<String> searchStoryList;
   final bool hasFocus;
-  final bool isDeleted;
+  final bool isDeleted; // Нужен для обновления стейта после удаления элемента из списка.
 
   @override
   List<Object?> get props => [index, searchStoryList, hasFocus, isDeleted];

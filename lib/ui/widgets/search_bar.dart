@@ -33,7 +33,11 @@ class SearchBar extends StatefulWidget {
 
 class _SearchBarState extends State<SearchBar> {
   final FocusNode focusNode = FocusNode();
-
+  PlaceInteractor interactor = PlaceInteractor(
+    repository: PlaceRepository(
+      apiPlaces: ApiPlaces(),
+    ),
+  );
   bool autofocus = true;
 
   @override
@@ -94,7 +98,10 @@ class _SearchBarState extends State<SearchBar> {
                         // Если история поиска не пустая, то вызываем event показа истории поиска
                         if (searchStoryList.isNotEmpty) {
                           context.read<SearchHistoryBloc>().add(
-                                ShowHistoryEvent(isDeleted: false),
+                                ShowHistoryEvent(
+                                  isDeleted: false,
+                                  hasFocus: true,
+                                ),
                               );
                         }
                       }
@@ -120,6 +127,7 @@ class _SearchBarState extends State<SearchBar> {
                           AddItemToHistoryEvent(
                             isDeleted: false,
                             index: widget.searchController.text,
+                            hasFocus: false,
                           ),
                         );
 

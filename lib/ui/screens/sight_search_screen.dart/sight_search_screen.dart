@@ -6,7 +6,6 @@ import 'package:places/blocs/search_bar/search_bar_bloc.dart';
 import 'package:places/blocs/search_history/search_history_bloc.dart';
 import 'package:places/blocs/search_screen/search_screen_bloc.dart';
 import 'package:places/data/model/place.dart';
-import 'package:places/providers/search_data_provider.dart';
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_strings.dart';
 import 'package:places/ui/res/app_typography.dart';
@@ -263,8 +262,6 @@ class _SearchHistoryTitle extends StatelessWidget {
   }
 }
 
-/// Аргументировал данное решение в [SearchHistoryEvent] search_history_event.dart стр. 12
-
 class _SearchItem extends StatelessWidget {
   final ThemeData theme;
   final Set<String> searchStoryList;
@@ -281,8 +278,6 @@ class _SearchItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Аргументировал данное решение выше
-    context.watch<SearchDataProvider>();
 
     return Column(
       children: searchStoryList
@@ -314,6 +309,7 @@ class _SearchItem extends StatelessWidget {
                               RemoveItemFromHistory(
                                 index: e,
                                 isDeleted: true,
+                                hasFocus: true,
                               ),
                             );
                         // context.read<SearchDataProvider>().removeItemFromHistory(e);

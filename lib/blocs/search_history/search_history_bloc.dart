@@ -1,3 +1,4 @@
+
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
@@ -10,7 +11,7 @@ part 'search_history_event.dart';
 part 'search_history_state.dart';
 
 class SearchHistoryBloc extends Bloc<SearchHistoryEvent, SearchHistoryState> {
-  final searchStoryList = PlaceInteractor.searchHistoryList;
+  final searchHistoryList = PlaceInteractor.searchHistoryList;
   PlaceInteractor interactor = PlaceInteractor(
     repository: PlaceRepository(
       apiPlaces: ApiPlaces(),
@@ -23,8 +24,8 @@ class SearchHistoryBloc extends Bloc<SearchHistoryEvent, SearchHistoryState> {
         saveSearchHistory(interactor.query, interactor.controller);
         emit(
           SearchHistoryHasValueState(
-            searchStoryList: searchStoryList,
-            hasFocus: true,
+            searchStoryList: searchHistoryList,
+            hasFocus: event.hasFocus,
             isDeleted: event.isDeleted,
           ),
         );
@@ -35,8 +36,8 @@ class SearchHistoryBloc extends Bloc<SearchHistoryEvent, SearchHistoryState> {
         saveSearchHistory(interactor.query, interactor.controller);
         emit(
           SearchHistoryHasValueState(
-            searchStoryList: searchStoryList,
-            hasFocus: false,
+            searchStoryList: searchHistoryList,
+            hasFocus: event.hasFocus,
             isDeleted: event.isDeleted,
             index: event.index,
           ),
@@ -48,8 +49,8 @@ class SearchHistoryBloc extends Bloc<SearchHistoryEvent, SearchHistoryState> {
         removeItemFromHistory(event.index);
         emit(
           SearchHistoryHasValueState(
-            searchStoryList: searchStoryList,
-            hasFocus: true,
+            searchStoryList: searchHistoryList,
+            hasFocus: event.hasFocus,
             isDeleted: event.isDeleted,
             index: event.index,
           ),
@@ -58,7 +59,7 @@ class SearchHistoryBloc extends Bloc<SearchHistoryEvent, SearchHistoryState> {
     );
     on<RemoveAllItemsFromHistory>(
       (event, emit) {
-        searchStoryList.clear();
+        searchHistoryList.clear();
         emit(
           SearchHistoryEmptyState(),
         );
