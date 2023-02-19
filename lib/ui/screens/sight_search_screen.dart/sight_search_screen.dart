@@ -263,6 +263,8 @@ class _SearchHistoryTitle extends StatelessWidget {
   }
 }
 
+/// Аргументировал данное решение в [SearchHistoryEvent] search_history_event.dart стр. 12
+
 class _SearchItem extends StatelessWidget {
   final ThemeData theme;
   final Set<String> searchStoryList;
@@ -279,8 +281,7 @@ class _SearchItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
-    // Аргументировал данное решение в search_history_event.dart стр. 12
+    // Аргументировал данное решение выше
     context.watch<SearchDataProvider>();
 
     return Column(
