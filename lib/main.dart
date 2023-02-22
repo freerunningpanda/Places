@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:places/blocs/add_sight_screen/choose_category/choose_category_bloc.dart';
 import 'package:places/blocs/details_screen/details_screen_bloc.dart';
 import 'package:places/blocs/favorite/favorite_bloc.dart';
 import 'package:places/blocs/search_bar/search_bar_bloc.dart';
@@ -75,6 +76,9 @@ void main() {
           ),
           BlocProvider<FavoriteBloc>(
             create: (context) => FavoriteBloc(),
+          ),
+          BlocProvider<ChooseCategoryBloc>(
+            create: (context) => ChooseCategoryBloc(),
           ),
         ],
         child: const App(),
