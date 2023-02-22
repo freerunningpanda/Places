@@ -1,9 +1,23 @@
 part of 'choose_category_bloc.dart';
 
-class CategoryEvent {
-  final Category category;
+abstract class CategoryEvent {}
 
-  CategoryEvent({
+class AddCategoryEvent extends CategoryEvent {
+  final Category category;
+  final bool isEnabled;
+
+  AddCategoryEvent({
     required this.category,
+    required this.isEnabled,
+  });
+}
+
+class RemoveCategoryEvent extends CategoryEvent {
+  final Category category;
+  final bool isEnabled;
+
+  RemoveCategoryEvent({
+    required this.category,
+    required this.isEnabled,
   });
 }

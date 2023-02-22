@@ -9,21 +9,27 @@ part 'choose_category_event.dart';
 part 'choose_category_state.dart';
 
 class ChooseCategoryBloc extends Bloc<CategoryEvent, ChooseCategoryState> {
-  ChooseCategoryBloc() : super(const ChooseCategoryState()) {
-    on<CategoryEvent>(
+  ChooseCategoryBloc() : super(const NotChosenCategoryState(isEnabled: false)) {
+    on<AddCategoryEvent>(
       (event, emit) {
         addToActive(category: event.category);
         emit(
-          state.copyWith(selectedCategory: event.category),
+          ChosenCategoryState(
+            isEnabled: event.isEnabled,
+            selectedCategory: event.category,
+          ),
         );
       },
     );
-    // on<RemoveCategoryEvent>((event, emit) {
-    //   disableCategory(category: event.category);
-    //   emit(
-    //     UnchosenCategoryState(),
-    //   );
-    // });
+    on<RemoveCategoryEvent>((event, emit) {
+      disableCategory(category: event.category);
+      emit(
+        NotChosenCategoryState(
+          isEnabled: event.isEnabled,
+          selectedCategory: event.category,
+        ),
+      );
+    });
   }
 
   void addToActive({required Category category}) {
@@ -39,10 +45,9 @@ class ChooseCategoryBloc extends Bloc<CategoryEvent, ChooseCategoryState> {
   }
 
   void disableCategory({required Category category}) {
-    final chosenCategory = CategoryDataProvider.chosenCategory;
     // Удаляю категорию из списка выбранных категорий
 
-    CategoryDataProvider.chosenCategory.clear();
+    CategoryDataProvider.chosenCategory.remove(category);
     debugPrint('🟡--------- Удалена категория: ${category.title}');
     debugPrint('🟡--------- Длина: ${CategoryDataProvider.chosenCategory.length}');
   }

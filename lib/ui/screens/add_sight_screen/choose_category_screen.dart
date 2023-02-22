@@ -35,51 +35,133 @@ class _ChooseCategoryWidgetState extends State<ChooseCategoryWidget> {
           padding: const EdgeInsets.only(left: 16.0, top: 18, right: 16.0, bottom: 8.0),
           child: BlocBuilder<ChooseCategoryBloc, ChooseCategoryState>(
             builder: (_, state) {
-              return Column(
-                children: [
-                  NewPlaceAppBarWidget(
-                    theme: theme,
-                    width: width / 3.5,
-                    leading: const _BackButtonWidget(),
-                    title: AppString.category,
-                  ),
-                  const SizedBox(height: 40),
-                  Expanded(
-                    child: SingleChildScrollView(
-                      child: ListView.separated(
-                        physics: Platform.isAndroid ? const ClampingScrollPhysics() : const BouncingScrollPhysics(),
-                        shrinkWrap: true,
-                        itemBuilder: (context, index) {
-                          final category = categories[index];
+              if (state is ChosenCategoryState) {
+                return Column(
+                  children: [
+                    NewPlaceAppBarWidget(
+                      theme: theme,
+                      width: width / 3.5,
+                      leading: const _BackButtonWidget(),
+                      title: AppString.category,
+                    ),
+                    const SizedBox(height: 40),
+                    Expanded(
+                      child: SingleChildScrollView(
+                        child: ListView.separated(
+                          physics: Platform.isAndroid ? const ClampingScrollPhysics() : const BouncingScrollPhysics(),
+                          shrinkWrap: true,
+                          itemBuilder: (context, index) {
+                            final category = categories[index];
+                            final isEnabled = category == state.selectedCategory;
 
-                          return _ItemCategory(
-                            name: category.title,
-                            theme: theme,
-                            isEnabled: category == state.selectedCategory,
-                            category: category,
-                            onSelect: (activeCategory) {
-                              context.read<ChooseCategoryBloc>().add(
-                                    CategoryEvent(category: activeCategory),
-                                  );
-                            },
-                          );
-                        },
-                        separatorBuilder: (context, index) {
-                          return const Divider();
-                        },
-                        itemCount: categories.length,
+                            return _ItemCategory(
+                              index: index,
+                              name: category.title,
+                              theme: theme,
+                              isEnabled: category.isEnabled,
+                              categoryList: categories,
+                              onSelect: (activeCategory) {
+                                if (!activeCategory.isEnabled) {
+                                  context.read<ChooseCategoryBloc>().add(
+                                        AddCategoryEvent(
+                                          category: activeCategory,
+                                          isEnabled: category.isEnabled = true,
+                                        ),
+                                      );
+                                  debugPrint('Category was added: ${category.isEnabled}');
+                                } else {
+                                  context.read<ChooseCategoryBloc>().add(
+                                        RemoveCategoryEvent(
+                                          category: activeCategory,
+                                          isEnabled: category.isEnabled = false,
+                                        ),
+                                      );
+                                  debugPrint('Category was removed: ${!category.isEnabled}');
+                                }
+                              },
+                            );
+                          },
+                          separatorBuilder: (context, index) {
+                            return const Divider();
+                          },
+                          itemCount: categories.length,
+                        ),
                       ),
                     ),
-                  ),
-                  const Divider(),
-                  SizedBox(height: height * 0.3),
-                  SaveButton(
-                    chosenCategory: state.selectedCategory,
-                    title: AppString.save,
-                    onTap: () => Navigator.pop(context),
-                  ),
-                ],
-              );
+                    const Divider(),
+                    SizedBox(height: height * 0.3),
+                    SaveButton(
+                      chosenCategory: state.selectedCategory,
+                      title: AppString.save,
+                      onTap: () => Navigator.pop(context),
+                    ),
+                  ],
+                );
+              } else if (state is NotChosenCategoryState) {
+                return Column(
+                  children: [
+                    NewPlaceAppBarWidget(
+                      theme: theme,
+                      width: width / 3.5,
+                      leading: const _BackButtonWidget(),
+                      title: AppString.category,
+                    ),
+                    const SizedBox(height: 40),
+                    Expanded(
+                      child: SingleChildScrollView(
+                        child: ListView.separated(
+                          physics: Platform.isAndroid ? const ClampingScrollPhysics() : const BouncingScrollPhysics(),
+                          shrinkWrap: true,
+                          itemBuilder: (context, index) {
+                            final category = categories[index];
+                            final isEnabled = category == state.selectedCategory;
+
+                            return _ItemCategory(
+                              index: index,
+                              name: category.title,
+                              theme: theme,
+                              isEnabled: isEnabled,
+                              categoryList: categories,
+                              onSelect: (activeCategory) {
+                                if (!activeCategory.isEnabled) {
+                                  context.read<ChooseCategoryBloc>().add(
+                                        AddCategoryEvent(
+                                          category: activeCategory,
+                                          isEnabled: category.isEnabled = true,
+                                        ),
+                                      );
+                                  debugPrint('Category was added: ${category.isEnabled}');
+                                } else {
+                                  context.read<ChooseCategoryBloc>().add(
+                                        RemoveCategoryEvent(
+                                          category: activeCategory,
+                                          isEnabled: category.isEnabled = false,
+                                        ),
+                                      );
+                                  debugPrint('Category was removed: ${!category.isEnabled}');
+                                }
+                              },
+                            );
+                          },
+                          separatorBuilder: (context, index) {
+                            return const Divider();
+                          },
+                          itemCount: categories.length,
+                        ),
+                      ),
+                    ),
+                    const Divider(),
+                    SizedBox(height: height * 0.3),
+                    SaveButton(
+                      chosenCategory: state.selectedCategory,
+                      title: AppString.save,
+                      onTap: () => Navigator.pop(context),
+                    ),
+                  ],
+                );
+              }
+
+              throw ArgumentError('Bad State');
             },
           ),
         ),
@@ -109,25 +191,29 @@ class _BackButtonWidget extends StatelessWidget {
 }
 
 class _ItemCategory extends StatelessWidget {
+  final int index;
   final String name;
   final ThemeData theme;
   final bool isEnabled;
-  final Category category;
+  final List<Category> categoryList;
   final Function(Category) onSelect;
 
   const _ItemCategory({
     Key? key,
+    required this.index,
     required this.name,
     required this.theme,
     required this.isEnabled,
-    required this.category,
+    required this.categoryList,
     required this.onSelect,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final category = categoryList[index];
+
     return InkWell(
-      onTap: !isEnabled ? () => onSelect(category) : null,
+      onTap: () => onSelect(category),
       child: SizedBox(
         height: 38,
         child: Row(
@@ -137,7 +223,21 @@ class _ItemCategory extends StatelessWidget {
               name,
               style: theme.textTheme.bodyLarge,
             ),
-            if (isEnabled) const SightIcons(assetName: AppAssets.tick, width: 24, height: 24) else const SizedBox(),
+            BlocBuilder<ChooseCategoryBloc, ChooseCategoryState>(
+              builder: (context, state) {
+                if (state is ChosenCategoryState) {
+                  return category.isEnabled
+                      ? const SightIcons(assetName: AppAssets.tick, width: 24, height: 24)
+                      : const SizedBox();
+                } else if (state is NotChosenCategoryState) {
+                  return category.isEnabled
+                      ? const SightIcons(assetName: AppAssets.tick, width: 24, height: 24)
+                      : const SizedBox();
+                }
+
+                throw ArgumentError('Bad State');
+              },
+            ),
           ],
         ),
       ),
