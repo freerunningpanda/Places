@@ -9,6 +9,7 @@ abstract class ChooseCategoryState extends Equatable {
 class ChosenCategoryState extends ChooseCategoryState {
   final Category? selectedCategory;
   final bool isEnabled;
+  final int index;
 
   @override
   List<Object?> get props => [selectedCategory];
@@ -16,15 +17,18 @@ class ChosenCategoryState extends ChooseCategoryState {
   const ChosenCategoryState({
     this.selectedCategory,
     required this.isEnabled,
+    required this.index,
   });
 
   ChosenCategoryState copyWith({
     Category? selectedCategory,
     bool? isEnabled,
+    int? index,
   }) {
     return ChosenCategoryState(
       selectedCategory: selectedCategory ?? this.selectedCategory,
       isEnabled: isEnabled ?? this.isEnabled,
+      index: index ?? this.index,
     );
   }
 }
@@ -32,6 +36,7 @@ class ChosenCategoryState extends ChooseCategoryState {
 class NotChosenCategoryState extends ChooseCategoryState {
   final Category? selectedCategory;
   final bool isEnabled;
+  final int index;
 
   @override
   List<Object?> get props => [selectedCategory];
@@ -39,15 +44,18 @@ class NotChosenCategoryState extends ChooseCategoryState {
   const NotChosenCategoryState({
     this.selectedCategory,
     required this.isEnabled,
+    required this.index,
   });
 
   NotChosenCategoryState copyWith({
     Category? selectedCategory,
     bool? isEnabled,
+    int? index,
   }) {
     return NotChosenCategoryState(
       selectedCategory: selectedCategory ?? this.selectedCategory,
       isEnabled: isEnabled ?? this.isEnabled,
+      index: index ?? this.index,
     );
   }
 }

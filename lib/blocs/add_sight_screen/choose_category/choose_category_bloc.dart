@@ -9,7 +9,13 @@ part 'choose_category_event.dart';
 part 'choose_category_state.dart';
 
 class ChooseCategoryBloc extends Bloc<CategoryEvent, ChooseCategoryState> {
-  ChooseCategoryBloc() : super(const NotChosenCategoryState(isEnabled: false)) {
+  ChooseCategoryBloc()
+      : super(
+          const NotChosenCategoryState(
+            isEnabled: false,
+            index: 0,
+          ),
+        ) {
     on<AddCategoryEvent>(
       (event, emit) {
         addToActive(category: event.category);
@@ -17,19 +23,23 @@ class ChooseCategoryBloc extends Bloc<CategoryEvent, ChooseCategoryState> {
           ChosenCategoryState(
             isEnabled: event.isEnabled,
             selectedCategory: event.category,
+            index: event.index,
           ),
         );
       },
     );
-    on<RemoveCategoryEvent>((event, emit) {
-      disableCategory(category: event.category);
-      emit(
-        NotChosenCategoryState(
-          isEnabled: event.isEnabled,
-          selectedCategory: event.category,
-        ),
-      );
-    });
+    on<RemoveCategoryEvent>(
+      (event, emit) {
+        disableCategory(category: event.category);
+        emit(
+          NotChosenCategoryState(
+            isEnabled: event.isEnabled,
+            selectedCategory: event.category,
+            index: event.index,
+          ),
+        );
+      },
+    );
   }
 
   void addToActive({required Category category}) {

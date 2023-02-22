@@ -22,6 +22,7 @@ class ChooseCategoryWidget extends StatefulWidget {
 
 class _ChooseCategoryWidgetState extends State<ChooseCategoryWidget> {
   final categories = CategoryDataProvider.categories;
+  int? selectedIndex;
 
   @override
   Widget build(BuildContext context) {
@@ -35,133 +36,57 @@ class _ChooseCategoryWidgetState extends State<ChooseCategoryWidget> {
           padding: const EdgeInsets.only(left: 16.0, top: 18, right: 16.0, bottom: 8.0),
           child: BlocBuilder<ChooseCategoryBloc, ChooseCategoryState>(
             builder: (_, state) {
-              if (state is ChosenCategoryState) {
-                return Column(
-                  children: [
-                    NewPlaceAppBarWidget(
-                      theme: theme,
-                      width: width / 3.5,
-                      leading: const _BackButtonWidget(),
-                      title: AppString.category,
-                    ),
-                    const SizedBox(height: 40),
-                    Expanded(
-                      child: SingleChildScrollView(
-                        child: ListView.separated(
-                          physics: Platform.isAndroid ? const ClampingScrollPhysics() : const BouncingScrollPhysics(),
-                          shrinkWrap: true,
-                          itemBuilder: (context, index) {
-                            final category = categories[index];
-                            final isEnabled = category == state.selectedCategory;
+              return Column(
+                children: [
+                  NewPlaceAppBarWidget(
+                    theme: theme,
+                    width: width / 3.5,
+                    leading: const _BackButtonWidget(),
+                    title: AppString.category,
+                  ),
+                  const SizedBox(height: 40),
+                  Expanded(
+                    child: SingleChildScrollView(
+                      child: ListView.separated(
+                        physics: Platform.isAndroid ? const ClampingScrollPhysics() : const BouncingScrollPhysics(),
+                        shrinkWrap: true,
+                        itemBuilder: (context, index) {
+                          final category = categories[index];
 
-                            return _ItemCategory(
-                              index: index,
-                              name: category.title,
-                              theme: theme,
-                              isEnabled: category.isEnabled,
-                              categoryList: categories,
-                              onSelect: (activeCategory) {
-                                if (!activeCategory.isEnabled) {
-                                  context.read<ChooseCategoryBloc>().add(
-                                        AddCategoryEvent(
-                                          category: activeCategory,
-                                          isEnabled: category.isEnabled = true,
-                                        ),
-                                      );
-                                  debugPrint('Category was added: ${category.isEnabled}');
-                                } else {
-                                  context.read<ChooseCategoryBloc>().add(
-                                        RemoveCategoryEvent(
-                                          category: activeCategory,
-                                          isEnabled: category.isEnabled = false,
-                                        ),
-                                      );
-                                  debugPrint('Category was removed: ${!category.isEnabled}');
-                                }
-                              },
-                            );
-                          },
-                          separatorBuilder: (context, index) {
-                            return const Divider();
-                          },
-                          itemCount: categories.length,
-                        ),
+                          return ListTile(
+                            onTap: () {
+                              selectedIndex = index;
+                              context.read<ChooseCategoryBloc>().add(
+                                    AddCategoryEvent(
+                                      category: category,
+                                      isEnabled: category.isEnabled = true,
+                                      index: index,
+                                    ),
+                                  );
+                            },
+                            title: Text(
+                              category.title,
+                              style: theme.textTheme.bodyLarge,
+                            ),
+                            trailing: selectedIndex == index
+                                ? const SightIcons(assetName: AppAssets.tick, width: 24, height: 24)
+                                : const SizedBox(),
+                          );
+                        },
+                        separatorBuilder: (context, index) {
+                          return const Divider();
+                        },
+                        itemCount: categories.length,
                       ),
                     ),
-                    const Divider(),
-                    SizedBox(height: height * 0.3),
-                    SaveButton(
-                      chosenCategory: state.selectedCategory,
-                      title: AppString.save,
-                      onTap: () => Navigator.pop(context),
-                    ),
-                  ],
-                );
-              } else if (state is NotChosenCategoryState) {
-                return Column(
-                  children: [
-                    NewPlaceAppBarWidget(
-                      theme: theme,
-                      width: width / 3.5,
-                      leading: const _BackButtonWidget(),
-                      title: AppString.category,
-                    ),
-                    const SizedBox(height: 40),
-                    Expanded(
-                      child: SingleChildScrollView(
-                        child: ListView.separated(
-                          physics: Platform.isAndroid ? const ClampingScrollPhysics() : const BouncingScrollPhysics(),
-                          shrinkWrap: true,
-                          itemBuilder: (context, index) {
-                            final category = categories[index];
-                            final isEnabled = category == state.selectedCategory;
-
-                            return _ItemCategory(
-                              index: index,
-                              name: category.title,
-                              theme: theme,
-                              isEnabled: isEnabled,
-                              categoryList: categories,
-                              onSelect: (activeCategory) {
-                                if (!activeCategory.isEnabled) {
-                                  context.read<ChooseCategoryBloc>().add(
-                                        AddCategoryEvent(
-                                          category: activeCategory,
-                                          isEnabled: category.isEnabled = true,
-                                        ),
-                                      );
-                                  debugPrint('Category was added: ${category.isEnabled}');
-                                } else {
-                                  context.read<ChooseCategoryBloc>().add(
-                                        RemoveCategoryEvent(
-                                          category: activeCategory,
-                                          isEnabled: category.isEnabled = false,
-                                        ),
-                                      );
-                                  debugPrint('Category was removed: ${!category.isEnabled}');
-                                }
-                              },
-                            );
-                          },
-                          separatorBuilder: (context, index) {
-                            return const Divider();
-                          },
-                          itemCount: categories.length,
-                        ),
-                      ),
-                    ),
-                    const Divider(),
-                    SizedBox(height: height * 0.3),
-                    SaveButton(
-                      chosenCategory: state.selectedCategory,
-                      title: AppString.save,
-                      onTap: () => Navigator.pop(context),
-                    ),
-                  ],
-                );
-              }
-
-              throw ArgumentError('Bad State');
+                  ),
+                  const Divider(),
+                  SaveButton(
+                    title: AppString.save,
+                    onTap: () => Navigator.pop(context),
+                  ),
+                ],
+              );
             },
           ),
         ),

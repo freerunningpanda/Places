@@ -11,14 +11,14 @@ class SaveButton extends StatelessWidget {
   final String? assetName;
   final String title;
   final VoidCallback? onTap;
-  final Category? chosenCategory;
+
 
   const SaveButton({
     Key? key,
     this.assetName,
     required this.title,
     required this.onTap,
-    required this.chosenCategory,
+
   }) : super(key: key);
 
   @override
@@ -32,7 +32,7 @@ class SaveButton extends StatelessWidget {
           height: 48,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(12),
-            color: chosenCategory == null || CategoryDataProvider.chosenCategory.isEmpty
+            color: CategoryDataProvider.chosenCategory.isEmpty
                 ? customColors?.color
                 : theme.sliderTheme.activeTrackColor,
           ),
@@ -60,7 +60,7 @@ class SaveButton extends StatelessWidget {
         Positioned.fill(
           child: Material(
             type: MaterialType.transparency,
-            child: chosenCategory == null || CategoryDataProvider.chosenCategory.isEmpty
+            child: CategoryDataProvider.chosenCategory.isEmpty
                 ? null
                 : InkWell(
                     borderRadius: BorderRadius.circular(12.0),
