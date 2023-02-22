@@ -21,7 +21,6 @@ class ChooseCategoryWidget extends StatefulWidget {
 
 class _ChooseCategoryWidgetState extends State<ChooseCategoryWidget> {
   final categories = CategoryDataProvider.categories;
-  int? selectedIndex;
 
   @override
   Widget build(BuildContext context) {
@@ -52,24 +51,16 @@ class _ChooseCategoryWidgetState extends State<ChooseCategoryWidget> {
                         itemBuilder: (context, index) {
                           final category = categories[index];
 
-                          return ListTile(
-                            onTap: () {
-                              selectedIndex = index;
+                          return _ItemCategory(
+                            name: category.title,
+                            theme: theme,
+                            isEnabled: category == state.selectedCategory,
+                            category: category,
+                            onSelect: (activeCategory) {
                               context.read<ChooseCategoryBloc>().add(
-                                    AddCategoryEvent(
-                                      category: category,
-                                      isEnabled: category.isEnabled = true,
-                                      index: index,
-                                    ),
+                                    CategoryEvent(category: activeCategory),
                                   );
                             },
-                            title: Text(
-                              category.title,
-                              style: theme.textTheme.bodyLarge,
-                            ),
-                            trailing: selectedIndex == index
-                                ? const SightIcons(assetName: AppAssets.tick, width: 24, height: 24)
-                                : const SizedBox(),
                           );
                         },
                         separatorBuilder: (context, index) {
@@ -80,7 +71,9 @@ class _ChooseCategoryWidgetState extends State<ChooseCategoryWidget> {
                     ),
                   ),
                   const Divider(),
+                  SizedBox(height: height * 0.3),
                   SaveButton(
+                    chosenCategory: state.selectedCategory,
                     title: AppString.save,
                     onTap: () => Navigator.pop(context),
                   ),
@@ -115,29 +108,25 @@ class _BackButtonWidget extends StatelessWidget {
 }
 
 class _ItemCategory extends StatelessWidget {
-  final int index;
   final String name;
   final ThemeData theme;
   final bool isEnabled;
-  final List<Category> categoryList;
+  final Category category;
   final Function(Category) onSelect;
 
   const _ItemCategory({
     Key? key,
-    required this.index,
     required this.name,
     required this.theme,
     required this.isEnabled,
-    required this.categoryList,
+    required this.category,
     required this.onSelect,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final category = categoryList[index];
-
     return InkWell(
-      onTap: () => onSelect(category),
+      onTap: !isEnabled ? () => onSelect(category) : null,
       child: SizedBox(
         height: 38,
         child: Row(
@@ -147,21 +136,7 @@ class _ItemCategory extends StatelessWidget {
               name,
               style: theme.textTheme.bodyLarge,
             ),
-            BlocBuilder<ChooseCategoryBloc, ChooseCategoryState>(
-              builder: (context, state) {
-                if (state is ChosenCategoryState) {
-                  return category.isEnabled
-                      ? const SightIcons(assetName: AppAssets.tick, width: 24, height: 24)
-                      : const SizedBox();
-                } else if (state is NotChosenCategoryState) {
-                  return category.isEnabled
-                      ? const SightIcons(assetName: AppAssets.tick, width: 24, height: 24)
-                      : const SizedBox();
-                }
-
-                throw ArgumentError('Bad State');
-              },
-            ),
+            if (isEnabled) const SightIcons(assetName: AppAssets.tick, width: 24, height: 24) else const SizedBox(),
           ],
         ),
       ),
