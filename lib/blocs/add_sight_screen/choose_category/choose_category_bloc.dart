@@ -55,9 +55,10 @@ class ChooseCategoryBloc extends Bloc<CategoryEvent, ChooseCategoryState> {
   }
 
   void disableCategory({required Category category}) {
+    final chosenCategory = CategoryDataProvider.chosenCategory;
     // Удаляю категорию из списка выбранных категорий
 
-    CategoryDataProvider.chosenCategory.remove(category);
+    CategoryDataProvider.chosenCategory.clear();
     debugPrint('🟡--------- Удалена категория: ${category.title}');
     debugPrint('🟡--------- Длина: ${CategoryDataProvider.chosenCategory.length}');
   }
