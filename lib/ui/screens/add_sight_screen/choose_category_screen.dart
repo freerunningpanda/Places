@@ -11,7 +11,6 @@ import 'package:places/ui/res/app_strings.dart';
 import 'package:places/ui/widgets/new_place_app_bar_widget.dart';
 import 'package:places/ui/widgets/save_button.dart';
 import 'package:places/ui/widgets/sight_icons.dart';
-import 'package:provider/provider.dart';
 
 class ChooseCategoryWidget extends StatefulWidget {
   const ChooseCategoryWidget({Key? key}) : super(key: key);

@@ -18,12 +18,6 @@ class ChooseCategoryBloc extends Bloc<CategoryEvent, ChooseCategoryState> {
         );
       },
     );
-    // on<RemoveCategoryEvent>((event, emit) {
-    //   disableCategory(category: event.category);
-    //   emit(
-    //     UnchosenCategoryState(),
-    //   );
-    // });
   }
 
   void addToActive({required Category category}) {
@@ -37,20 +31,4 @@ class ChooseCategoryBloc extends Bloc<CategoryEvent, ChooseCategoryState> {
     debugPrint('🟡--------- Выбрана категория: ${category.title}');
     debugPrint('🟡--------- Длина: ${CategoryDataProvider.chosenCategory.length}');
   }
-
-  void disableCategory({required Category category}) {
-    final chosenCategory = CategoryDataProvider.chosenCategory;
-    // Удаляю категорию из списка выбранных категорий
-
-    CategoryDataProvider.chosenCategory.clear();
-    debugPrint('🟡--------- Удалена категория: ${category.title}');
-    debugPrint('🟡--------- Длина: ${CategoryDataProvider.chosenCategory.length}');
-  }
-}
-
-void clearCategory({required List<Category> activeCategories}) {
-  for (final i in activeCategories) {
-    i.isEnabled = false;
-  }
-  activeCategories.clear();
 }

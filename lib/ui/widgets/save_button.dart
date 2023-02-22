@@ -48,7 +48,7 @@ class SaveButton extends StatelessWidget {
               const SizedBox(width: 8),
               Text(
                 title,
-                style: CategoryDataProvider.chosenCategory.isEmpty
+                style: chosenCategory == null
                     ? AppTypography.sightDetailsButtonNameInnactive
                     : AppTypography.sightDetailsButtonName,
               ),
