@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mwwm/mwwm.dart';
 import 'package:places/blocs/add_sight_screen/choose_category/choose_category_bloc.dart';
+import 'package:places/blocs/add_sight_screen/chosen_category.dart/chosen_category_bloc.dart';
 
 import 'package:places/data/api/api_places.dart';
 import 'package:places/data/interactor/place_interactor.dart';
@@ -573,7 +574,7 @@ class _CategoryChooseWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    context.watch<CategoryDataProvider>().updateCategory();
+    // context.watch<CategoryDataProvider>().updateCategory();
 
     return Column(
       children: [
@@ -592,30 +593,45 @@ class _CategoryChooseWidget extends StatelessWidget {
               builder: (context) => const ChooseCategoryWidget(),
             ),
           ),
-          child: BlocBuilder<ChooseCategoryBloc, ChooseCategoryState>(
+          child: BlocBuilder<ChosenCategoryBloc, ChosenCategoryState>(
             builder: (_, state) {
-              return SizedBox(
-                height: 35,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    if (CategoryDataProvider.chosenCategory.isEmpty)
+              if (state is ChosenCategoryNotChooseState) {
+                return SizedBox(
+                  height: 35,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
                       Text(
                         AppString.nochoose,
                         style: theme.textTheme.titleMedium,
-                      )
-                    else
+                      ),
+                      const Icon(
+                        Icons.chevron_right,
+                        size: 25,
+                      ),
+                    ],
+                  ),
+                );
+              } else if (state is ChosenCategoryIsChooseState) {
+                return SizedBox(
+                  height: 35,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
                       Text(
                         CategoryDataProvider.chosenCategory[0].title,
                         style: theme.textTheme.titleMedium,
                       ),
-                    const Icon(
-                      Icons.chevron_right,
-                      size: 25,
-                    ),
-                  ],
-                ),
-              );
+                      const Icon(
+                        Icons.chevron_right,
+                        size: 25,
+                      ),
+                    ],
+                  ),
+                );
+              }
+
+              throw ArgumentError('Bad State');
             },
           ),
         ),

@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:places/blocs/add_sight_screen/choose_category/choose_category_bloc.dart';
+import 'package:places/blocs/add_sight_screen/chosen_category.dart/chosen_category_bloc.dart';
 
 import 'package:places/data/model/category.dart';
 import 'package:places/providers/category_data_provider.dart';
@@ -75,7 +76,17 @@ class _ChooseCategoryWidgetState extends State<ChooseCategoryWidget> {
                   SaveButton(
                     chosenCategory: state.selectedCategory,
                     title: AppString.save,
-                    onTap: () => Navigator.pop(context),
+                    onTap: () {
+                      final chosenCategory = CategoryDataProvider.chosenCategory;
+
+                      context.read<ChosenCategoryBloc>().add(
+                            ChosenCategoryEvent(
+                              activeCategories: chosenCategory,
+                              isEmpty: chosenCategory.isEmpty,
+                            ),
+                          );
+                      Navigator.pop(context);
+                    },
                   ),
                 ],
               );
@@ -99,7 +110,13 @@ class _BackButtonWidget extends StatelessWidget {
     return InkWell(
       borderRadius: BorderRadius.circular(40),
       onTap: () {
-        context.read<CategoryDataProvider>().clearCategory(activeCategories: chosenCategory);
+        context.read<ChosenCategoryBloc>().add(
+              ClearCategoryEvent(
+                activeCategories: chosenCategory,
+                isEmpty: chosenCategory.isEmpty,
+              ),
+            );
+        // context.read<CategoryDataProvider>().clearCategory(activeCategories: chosenCategory);
         Navigator.pop(context);
       },
       child: const Icon(Icons.chevron_left),
