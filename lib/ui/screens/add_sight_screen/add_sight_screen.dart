@@ -136,6 +136,12 @@ class _AddSightScreenState extends WidgetState<CoreMwwmWidget<WidgetModel>, Widg
                             lotController.clear();
                             debugPrint('🟡---------Создан объект: ${PlaceInteractor.newPlaces.toList()}');
                             context.read<CategoryDataProvider>().clearCategory(activeCategories: chosenCategory);
+                            // Для перерисовки состоянии категории на "Не выбрано"
+                            context.read<ChooseCategoryBloc>().add(
+                                  UnchosenCategoryEvent(
+                                    isEmpty: chosenCategory.isEmpty,
+                                  ),
+                                );
                           },
                           titleController: titleController,
                           latController: latController,

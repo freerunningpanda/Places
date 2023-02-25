@@ -108,6 +108,11 @@ class _BackButtonWidget extends StatelessWidget {
       borderRadius: BorderRadius.circular(40),
       onTap: () {
         context.read<CategoryDataProvider>().clearCategory(activeCategories: chosenCategory);
+        context.read<ChooseCategoryBloc>().add(
+              UnchosenCategoryEvent(
+                isEmpty: chosenCategory.isEmpty,
+              ),
+            );
         Navigator.pop(context);
       },
       child: const Icon(Icons.chevron_left),
