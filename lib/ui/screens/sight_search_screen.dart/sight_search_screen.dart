@@ -304,16 +304,13 @@ class _SearchItem extends StatelessWidget {
                     ),
                     InkWell(
                       borderRadius: BorderRadius.circular(30),
-                      onTap: () {
-                        context.read<SearchHistoryBloc>().add(
+                      onTap: () => context.read<SearchHistoryBloc>().add(
                               RemoveItemFromHistory(
                                 index: e,
                                 isDeleted: true,
                                 hasFocus: true,
                               ),
-                            );
-                        // context.read<SearchDataProvider>().removeItemFromHistory(e);
-                      },
+                            ),
                       child: const SightIcons(assetName: AppAssets.delete, width: 24, height: 24),
                     ),
                   ],

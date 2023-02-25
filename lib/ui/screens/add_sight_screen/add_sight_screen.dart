@@ -27,18 +27,9 @@ double lot = 0;
 String details = '';
 String type = '';
 
-class AddSightScreen extends CoreMwwmWidget {
-  const AddSightScreen({Key? key, required WidgetModelBuilder<WidgetModel> widgetModelBuilder})
-      : super(
-          widgetModelBuilder: widgetModelBuilder,
-          key: key,
-        );
+class AddSightScreen extends StatelessWidget {
+  const AddSightScreen({Key? key}) : super(key: key);
 
-  @override
-  WidgetState<CoreMwwmWidget<WidgetModel>, WidgetModel> createWidgetState() => _AddSightScreenState();
-}
-
-class _AddSightScreenState extends WidgetState<CoreMwwmWidget<WidgetModel>, WidgetModel> {
   @override
   Widget build(BuildContext context) {
     final latController = context.read<AddSightScreenProvider>().latController;
