@@ -11,7 +11,7 @@ class SaveButton extends StatelessWidget {
   final String? assetName;
   final String title;
   final VoidCallback? onTap;
-  final Category? chosenCategory;
+  final List<Category> chosenCategory;
 
   const SaveButton({
     Key? key,
@@ -32,7 +32,7 @@ class SaveButton extends StatelessWidget {
           height: 48,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(12),
-            color: chosenCategory == null ? customColors?.color : theme.sliderTheme.activeTrackColor,
+            color: chosenCategory.isEmpty ? customColors?.color : theme.sliderTheme.activeTrackColor,
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,

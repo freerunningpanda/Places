@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mwwm/mwwm.dart';
-import 'package:places/blocs/add_sight_screen/choose_category/choose_category_bloc.dart';
+import 'package:places/blocs/choose_category_bloc/choose_category_bloc.dart';
 
 import 'package:places/data/api/api_places.dart';
 import 'package:places/data/interactor/place_interactor.dart';
@@ -20,7 +20,6 @@ import 'package:places/ui/widgets/new_place_app_bar_widget.dart';
 import 'package:places/ui/widgets/pick_image_widget.dart';
 import 'package:places/ui/widgets/sight_icons.dart';
 import 'package:places/ui/widgets/suffix_icon.dart';
-import 'package:provider/provider.dart';
 
 String name = '';
 double lat = 0;
@@ -573,8 +572,6 @@ class _CategoryChooseWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    context.watch<CategoryDataProvider>().updateCategory();
-
     return Column(
       children: [
         Row(
@@ -592,31 +589,24 @@ class _CategoryChooseWidget extends StatelessWidget {
               builder: (context) => const ChooseCategoryWidget(),
             ),
           ),
-          child: BlocBuilder<ChooseCategoryBloc, ChooseCategoryState>(
-            builder: (_, state) {
-              return SizedBox(
-                height: 35,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    if (CategoryDataProvider.chosenCategory.isEmpty)
-                      Text(
-                        AppString.nochoose,
-                        style: theme.textTheme.titleMedium,
-                      )
-                    else
-                      Text(
-                        CategoryDataProvider.chosenCategory[0].title,
-                        style: theme.textTheme.titleMedium,
-                      ),
-                    const Icon(
-                      Icons.chevron_right,
-                      size: 25,
-                    ),
-                  ],
+          child: SizedBox(
+            height: 35,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                BlocBuilder<ChooseCategoryBloc, ChooseCategoryState>(
+                  builder: (context, state) {
+                    return state.isEmpty
+                        ? Text(AppString.nochoose, style: theme.textTheme.titleMedium)
+                        : Text(CategoryDataProvider.chosenCategory[0].title, style: theme.textTheme.titleMedium);
+                  },
                 ),
-              );
-            },
+                const Icon(
+                  Icons.chevron_right,
+                  size: 25,
+                ),
+              ],
+            ),
           ),
         ),
         const Divider(),

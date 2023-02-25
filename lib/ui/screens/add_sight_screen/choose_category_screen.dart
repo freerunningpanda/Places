@@ -1,8 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:places/blocs/add_sight_screen/choose_category/choose_category_bloc.dart';
+import 'package:places/blocs/choose_category_bloc/choose_category_bloc.dart';
 
 import 'package:places/data/model/category.dart';
 import 'package:places/providers/category_data_provider.dart';
@@ -11,6 +10,7 @@ import 'package:places/ui/res/app_strings.dart';
 import 'package:places/ui/widgets/new_place_app_bar_widget.dart';
 import 'package:places/ui/widgets/save_button.dart';
 import 'package:places/ui/widgets/sight_icons.dart';
+import 'package:provider/provider.dart';
 
 class ChooseCategoryWidget extends StatefulWidget {
   const ChooseCategoryWidget({Key? key}) : super(key: key);
@@ -28,58 +28,66 @@ class _ChooseCategoryWidgetState extends State<ChooseCategoryWidget> {
     final height = MediaQuery.of(context).size.height;
     final theme = Theme.of(context);
 
+    context.watch<CategoryDataProvider>();
+
     return Scaffold(
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.only(left: 16.0, top: 18, right: 16.0, bottom: 8.0),
-          child: BlocBuilder<ChooseCategoryBloc, ChooseCategoryState>(
-            builder: (_, state) {
-              return Column(
-                children: [
-                  NewPlaceAppBarWidget(
-                    theme: theme,
-                    width: width / 3.5,
-                    leading: const _BackButtonWidget(),
-                    title: AppString.category,
-                  ),
-                  const SizedBox(height: 40),
-                  Expanded(
-                    child: SingleChildScrollView(
-                      child: ListView.separated(
-                        physics: Platform.isAndroid ? const ClampingScrollPhysics() : const BouncingScrollPhysics(),
-                        shrinkWrap: true,
-                        itemBuilder: (context, index) {
-                          final category = categories[index];
+          child: Column(
+            children: [
+              NewPlaceAppBarWidget(
+                theme: theme,
+                width: width / 3.5,
+                leading: const _BackButtonWidget(),
+                title: AppString.category,
+              ),
+              const SizedBox(height: 40),
+              Expanded(
+                child: SingleChildScrollView(
+                  child: ListView.separated(
+                    physics: Platform.isAndroid ? const ClampingScrollPhysics() : const BouncingScrollPhysics(),
+                    shrinkWrap: true,
+                    itemBuilder: (context, index) {
+                      final category = categories[index];
 
-                          return _ItemCategory(
-                            name: category.title,
-                            theme: theme,
-                            isEnabled: category == state.selectedCategory,
-                            category: category,
-                            onSelect: (activeCategory) {
-                              context.read<ChooseCategoryBloc>().add(
-                                    CategoryEvent(category: activeCategory),
-                                  );
-                            },
-                          );
+                      return _ItemCategory(
+                        name: category.title,
+                        theme: theme,
+                        isEnabled: category.isEnabled,
+                        category: category,
+                        onTap: () {
+                          context.read<CategoryDataProvider>().chooseCategory(
+                                index: index,
+                                categories: CategoryDataProvider.categories,
+                                activeCategories: CategoryDataProvider.chosenCategory,
+                              );
                         },
-                        separatorBuilder: (context, index) {
-                          return const Divider();
-                        },
-                        itemCount: categories.length,
-                      ),
-                    ),
+                      );
+                    },
+                    separatorBuilder: (context, index) {
+                      return const Divider();
+                    },
+                    itemCount: categories.length,
                   ),
-                  const Divider(),
-                  SizedBox(height: height * 0.3),
-                  SaveButton(
-                    chosenCategory: state.selectedCategory,
-                    title: AppString.save,
-                    onTap: () => Navigator.pop(context),
-                  ),
-                ],
-              );
-            },
+                ),
+              ),
+              const Divider(),
+              SizedBox(height: height * 0.3),
+              SaveButton(
+                chosenCategory: CategoryDataProvider.chosenCategory,
+                title: AppString.save,
+                onTap: () {
+                  context.read<ChooseCategoryBloc>().add(
+                        ChosenCategoryEvent(
+                          isEmpty: CategoryDataProvider.chosenCategory.isEmpty,
+                          chosenCategory: CategoryDataProvider.chosenCategory[0],
+                        ),
+                      );
+                  Navigator.pop(context);
+                },
+              ),
+            ],
           ),
         ),
       ),
@@ -112,7 +120,7 @@ class _ItemCategory extends StatelessWidget {
   final ThemeData theme;
   final bool isEnabled;
   final Category category;
-  final Function(Category) onSelect;
+  final VoidCallback onTap;
 
   const _ItemCategory({
     Key? key,
@@ -120,13 +128,13 @@ class _ItemCategory extends StatelessWidget {
     required this.theme,
     required this.isEnabled,
     required this.category,
-    required this.onSelect,
+    required this.onTap,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: !isEnabled ? () => onSelect(category) : null,
+      onTap: onTap,
       child: SizedBox(
         height: 38,
         child: Row(
