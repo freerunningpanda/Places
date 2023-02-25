@@ -11,7 +11,6 @@ import 'package:places/ui/res/app_strings.dart';
 import 'package:places/ui/widgets/new_place_app_bar_widget.dart';
 import 'package:places/ui/widgets/save_button.dart';
 import 'package:places/ui/widgets/sight_icons.dart';
-import 'package:provider/provider.dart';
 
 class ChooseCategoryWidget extends StatefulWidget {
   const ChooseCategoryWidget({Key? key}) : super(key: key);
@@ -28,8 +27,6 @@ class _ChooseCategoryWidgetState extends State<ChooseCategoryWidget> {
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
     final theme = Theme.of(context);
-
-    // context.watch<CategoryDataProvider>();
 
     return Scaffold(
       body: SafeArea(
@@ -58,7 +55,7 @@ class _ChooseCategoryWidgetState extends State<ChooseCategoryWidget> {
                         isEnabled: category.isEnabled,
                         category: category,
                         onTap: () {
-                          context.read<CategoryDataProvider>().chooseCategory(
+                          context.read<ChooseCategoryBloc>().chooseCategory(
                                 index: index,
                                 categories: CategoryDataProvider.categories,
                                 activeCategories: CategoryDataProvider.chosenCategory,
