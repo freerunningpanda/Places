@@ -166,14 +166,14 @@ class _ItemCategory extends StatelessWidget {
             ),
             BlocBuilder<ChooseCategoryBloc, ChooseCategoryState>(
               builder: (context, state) {
-                return !category.isEnabled // Передаю категорию с текущим индексом чтобы выбиралась
+                return category.isEnabled // Передаю категорию с текущим индексом чтобы выбиралась
                     // только одна, а не все
-                    ? const SizedBox()
-                    : const SightIcons(
+                    ? const SightIcons(
                         assetName: AppAssets.tick,
                         width: 24,
                         height: 24,
-                      );
+                      )
+                    : const SizedBox();
               },
             ),
           ],
