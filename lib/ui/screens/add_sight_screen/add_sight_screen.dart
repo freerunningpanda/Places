@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mwwm/mwwm.dart';
 import 'package:places/blocs/choose_category_bloc/choose_category_bloc.dart';
+import 'package:places/cubits/add_sight_screen/add_sight_screen_cubit.dart';
 
 import 'package:places/data/api/api_places.dart';
 import 'package:places/data/interactor/place_interactor.dart';
 import 'package:places/data/model/place.dart';
 import 'package:places/data/repository/place_repository.dart';
-import 'package:places/providers/add_sight_provider.dart';
 import 'package:places/providers/category_data_provider.dart';
 import 'package:places/providers/image_data_provider.dart' as image_provider;
 import 'package:places/providers/image_data_provider.dart';
@@ -27,23 +26,33 @@ double lot = 0;
 String details = '';
 String type = '';
 
-class AddSightScreen extends StatelessWidget {
+class AddSightScreen extends StatefulWidget {
   const AddSightScreen({Key? key}) : super(key: key);
 
   @override
+  State<AddSightScreen> createState() => _AddSightScreenState();
+}
+
+class _AddSightScreenState extends State<AddSightScreen> {
+  final latController = TextEditingController();
+  final lotController = TextEditingController();
+  final latFocus = FocusNode();
+  final titleController = TextEditingController();
+  final descriptionController = TextEditingController();
+  final searchController = TextEditingController();
+
+  final titleFocus = FocusNode();
+  final searchFocus = FocusNode();
+  final descriptionFocus = FocusNode();
+  final lotFocus = FocusNode();
+
+  @override
   Widget build(BuildContext context) {
-    final latController = context.read<AddSightScreenProvider>().latController;
-    final lotController = context.read<AddSightScreenProvider>().lotController;
-    final latFocus = context.read<AddSightScreenProvider>().latFocus;
-    final lotFocus = context.read<AddSightScreenProvider>().lotFocus;
-    final titleController = context.read<AddSightScreenProvider>().titleController;
-    final descriptionController = context.read<AddSightScreenProvider>().descriptionController;
-    final titleFocus = context.read<AddSightScreenProvider>().titleFocus;
-    final descriptionFocus = context.read<AddSightScreenProvider>().descriptionFocus;
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
     final theme = Theme.of(context);
     final chosenCategory = CategoryDataProvider.chosenCategory;
+    final focus = context.read<AddSightScreenCubit>();
 
     return Scaffold(
       body: GestureDetector(
@@ -80,7 +89,7 @@ class AddSightScreen extends StatelessWidget {
                           focusNode: titleFocus,
                           controller: titleController,
                           textInputAction: TextInputAction.next,
-                          onSubmitted: (value) => latFocus.requestFocus(),
+                          onSubmitted: (value) => focus.goToLat(latFocus: latFocus),
                           onChanged: (value) => name = value,
                         ),
                         const SizedBox(height: 24),
@@ -90,6 +99,7 @@ class AddSightScreen extends StatelessWidget {
                           theme: theme,
                           latFocus: latFocus,
                           lotFocus: lotFocus,
+                          descriptionFocus: descriptionFocus,
                         ),
                         const SizedBox(height: 15),
                         const _PointOnMapWidget(),
@@ -431,6 +441,7 @@ class _CoordinatsInputWidget extends StatelessWidget {
   final TextEditingController lotController;
   final FocusNode latFocus;
   final FocusNode lotFocus;
+  final FocusNode descriptionFocus;
 
   const _CoordinatsInputWidget({
     Key? key,
@@ -439,46 +450,51 @@ class _CoordinatsInputWidget extends StatelessWidget {
     required this.lotController,
     required this.latFocus,
     required this.lotFocus,
+    required this.descriptionFocus,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final focus = context.watch<AddSightScreenProvider>();
+    final focus = context.read<AddSightScreenCubit>();
 
-    return Row(
-      children: [
-        Expanded(
-          child: _LatLotWidget(
-            focusNode: latFocus,
-            theme: theme,
-            title: AppString.lat,
-            onSubmitted: (v) => focus.goToLat(),
-            controller: latController,
-            onTap: focus.tapOnLat,
-            onChanged: (value) {
-              if (double.tryParse(value) != null) {
-                lat = double.parse(value);
-              }
-            },
-          ),
-        ),
-        const SizedBox(width: 16),
-        Expanded(
-          child: _LatLotWidget(
-            focusNode: lotFocus,
-            theme: theme,
-            title: AppString.lot,
-            onSubmitted: (v) => focus.goToDescription(),
-            controller: lotController,
-            onTap: focus.tapOnLot,
-            onChanged: (value) {
-              if (double.tryParse(value) != null) {
-                lot = double.parse(value);
-              }
-            },
-          ),
-        ),
-      ],
+    return BlocBuilder<AddSightScreenCubit, AddSightScreenState>(
+      builder: (context, state) {
+        return Row(
+          children: [
+            Expanded(
+              child: _LatLotWidget(
+                focusNode: latFocus,
+                theme: theme,
+                title: AppString.lat,
+                onSubmitted: (v) => focus.goToLot(lotFocus: lotFocus),
+                controller: latController,
+                onTap: focus.tapOnLat,
+                onChanged: (value) {
+                  if (double.tryParse(value) != null) {
+                    lat = double.parse(value);
+                  }
+                },
+              ),
+            ),
+            const SizedBox(width: 16),
+            Expanded(
+              child: _LatLotWidget(
+                focusNode: lotFocus,
+                theme: theme,
+                title: AppString.lot,
+                onSubmitted: (v) => focus.goToDescription(descriptionFocus: descriptionFocus),
+                controller: lotController,
+                onTap: focus.tapOnLot,
+                onChanged: (value) {
+                  if (double.tryParse(value) != null) {
+                    lot = double.parse(value);
+                  }
+                },
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 }
