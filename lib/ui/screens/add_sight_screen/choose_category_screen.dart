@@ -29,7 +29,7 @@ class _ChooseCategoryWidgetState extends State<ChooseCategoryWidget> {
     final height = MediaQuery.of(context).size.height;
     final theme = Theme.of(context);
 
-    context.watch<CategoryDataProvider>();
+    // context.watch<CategoryDataProvider>();
 
     return Scaffold(
       body: SafeArea(

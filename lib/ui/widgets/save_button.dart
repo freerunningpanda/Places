@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:places/blocs/choose_category_bloc/choose_category_bloc.dart';
 
 import 'package:places/data/model/category.dart';
 import 'package:places/providers/category_data_provider.dart';
@@ -26,47 +28,51 @@ class SaveButton extends StatelessWidget {
     final theme = Theme.of(context);
     final customColors = Theme.of(context).extension<CustomColors>();
 
-    return Stack(
-      children: [
-        Container(
-          height: 48,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(12),
-            color: chosenCategory.isEmpty ? customColors?.color : theme.sliderTheme.activeTrackColor,
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              if (assetName == null)
-                const SizedBox()
-              else
-                SightIcons(
-                  assetName: assetName ?? AppAssets.goIcon,
-                  width: 24,
-                  height: 24,
-                ),
-              const SizedBox(width: 8),
-              Text(
-                title,
-                style: chosenCategory.isEmpty
-                    ? AppTypography.sightDetailsButtonNameInnactive
-                    : AppTypography.sightDetailsButtonName,
+    return BlocBuilder<ChooseCategoryBloc, ChooseCategoryState>(
+      builder: (context, state) {
+        return Stack(
+          children: [
+            Container(
+              height: 48,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(12),
+                color: state.isEmpty ? customColors?.color : theme.sliderTheme.activeTrackColor,
               ),
-            ],
-          ),
-        ),
-        Positioned.fill(
-          child: Material(
-            type: MaterialType.transparency,
-            child: chosenCategory.isEmpty
-                ? null
-                : InkWell(
-                    borderRadius: BorderRadius.circular(12.0),
-                    onTap: onTap,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  if (assetName == null)
+                    const SizedBox()
+                  else
+                    SightIcons(
+                      assetName: assetName ?? AppAssets.goIcon,
+                      width: 24,
+                      height: 24,
+                    ),
+                  const SizedBox(width: 8),
+                  Text(
+                    title,
+                    style: state.isEmpty
+                        ? AppTypography.sightDetailsButtonNameInnactive
+                        : AppTypography.sightDetailsButtonName,
                   ),
-          ),
-        ),
-      ],
+                ],
+              ),
+            ),
+            Positioned.fill(
+              child: Material(
+                type: MaterialType.transparency,
+                child: state.isEmpty
+                    ? null
+                    : InkWell(
+                        borderRadius: BorderRadius.circular(12.0),
+                        onTap: onTap,
+                      ),
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 }
