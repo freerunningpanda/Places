@@ -604,7 +604,8 @@ class _CategoryChooseWidget extends StatelessWidget {
                   builder: (context, state) {
                     return state.isEmpty
                         ? Text(AppString.nochoose, style: theme.textTheme.titleMedium)
-                        : Text(CategoryDataProvider.chosenCategory[0].title, style: theme.textTheme.titleMedium);
+                        // null быть не может, так как при сохранении категории она прокинется в стэйт
+                        : Text(state.chosenCategory!.title, style: theme.textTheme.titleMedium);
                   },
                 ),
                 const Icon(

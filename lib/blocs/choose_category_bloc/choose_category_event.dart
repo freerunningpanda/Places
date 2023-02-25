@@ -4,7 +4,7 @@ abstract class ChooseCategoryEvent {}
 
 class ChosenCategoryEvent extends ChooseCategoryEvent {
   final bool isEmpty;
-  final Category chosenCategory;
+  final Category chosenCategory; // Чтобы в стэйт прокинуть имя выбранной категории
 
   ChosenCategoryEvent({
     required this.isEmpty,

@@ -48,7 +48,7 @@ class SaveButton extends StatelessWidget {
               const SizedBox(width: 8),
               Text(
                 title,
-                style: chosenCategory == null
+                style: chosenCategory.isEmpty
                     ? AppTypography.sightDetailsButtonNameInnactive
                     : AppTypography.sightDetailsButtonName,
               ),
@@ -58,7 +58,7 @@ class SaveButton extends StatelessWidget {
         Positioned.fill(
           child: Material(
             type: MaterialType.transparency,
-            child: chosenCategory == null
+            child: chosenCategory.isEmpty
                 ? null
                 : InkWell(
                     borderRadius: BorderRadius.circular(12.0),
