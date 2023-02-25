@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:places/blocs/choose_category_bloc/choose_category_bloc.dart';
 
 import 'package:places/data/model/category.dart';
@@ -62,6 +63,20 @@ class _ChooseCategoryWidgetState extends State<ChooseCategoryWidget> {
                                 categories: CategoryDataProvider.categories,
                                 activeCategories: CategoryDataProvider.chosenCategory,
                               );
+                          if (CategoryDataProvider.chosenCategory.isNotEmpty) {
+                            context.read<ChooseCategoryBloc>().add(
+                                  ChosenCategoryEvent(
+                                    isEmpty: CategoryDataProvider.chosenCategory.isEmpty,
+                                    chosenCategory: CategoryDataProvider.chosenCategory[0],
+                                  ),
+                                );
+                          } else {
+                            context.read<ChooseCategoryBloc>().add(
+                                  UnchosenCategoryEvent(
+                                    isEmpty: CategoryDataProvider.chosenCategory.isEmpty,
+                                  ),
+                                );
+                          }
                         },
                       );
                     },
@@ -149,7 +164,18 @@ class _ItemCategory extends StatelessWidget {
               name,
               style: theme.textTheme.bodyLarge,
             ),
-            if (isEnabled) const SightIcons(assetName: AppAssets.tick, width: 24, height: 24) else const SizedBox(),
+            BlocBuilder<ChooseCategoryBloc, ChooseCategoryState>(
+              builder: (context, state) {
+                return !category.isEnabled // Передаю категорию с текущим индексом чтобы выбиралась
+                    // только одна, а не все
+                    ? const SizedBox()
+                    : const SightIcons(
+                        assetName: AppAssets.tick,
+                        width: 24,
+                        height: 24,
+                      );
+              },
+            ),
           ],
         ),
       ),
