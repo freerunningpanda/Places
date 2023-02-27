@@ -14,21 +14,22 @@ class PlaceRepository {
   });
 
   // Преобразовать все места из Dto в места для UI
-  // Future<List<Place>> getPlaces() async {
-  //   final places = await apiPlaces.getPlaces(
-  //     category: '',
-  //     radius: 15000,
-  //   );
+  // Получить реальные места
+  Future<List<Place>> getPlaces() async {
+    final places = await apiPlaces.getPlaces(
+      category: '',
+      radius: 15000,
+    );
 
-  //   return places.map(Mapper.placesFromApiToUi).toList();
-  // }
+    return places.map(Mapper.placesFromApiToUi).toList();
+  }
 
   // Получить моковые места
-  Future<List<Place>> getPlaces() async {
-    final places = Mocks.mocks;
+  // Future<List<Place>> getPlaces() async {
+  //   final places = Mocks.mocks;
 
-    return places;
-  }
+  //   return places;
+  // }
 
   // Преобразовать одно место из Dto в место для UI
   Future<Place> getPlaceDetails(Place place) => apiPlaces.getPlaceDetails(place.id).then(Mapper.detailPlaceFromApiToUi);
