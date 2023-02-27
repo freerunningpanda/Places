@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:places/blocs/choose_category_bloc/choose_category_bloc.dart';
+import 'package:places/cubits/create_place/create_place_button_cubit.dart';
 
 import 'package:places/data/model/category.dart';
 import 'package:places/providers/category_data_provider.dart';
@@ -96,6 +97,12 @@ class _ChooseCategoryWidgetState extends State<ChooseCategoryWidget> {
                           chosenCategory: CategoryDataProvider.chosenCategory[0],
                         ),
                       );
+                  context.read<CreatePlaceButtonCubit>().updateButtonState(
+                        titleValue: '',
+                        descriptionValue: '',
+                        latValue: '',
+                        lotValue: '',
+                      );
                   Navigator.pop(context);
                 },
               ),
@@ -119,6 +126,12 @@ class _BackButtonWidget extends StatelessWidget {
     return InkWell(
       borderRadius: BorderRadius.circular(40),
       onTap: () {
+        context.read<CreatePlaceButtonCubit>().updateButtonState(
+              titleValue: '',
+              descriptionValue: '',
+              latValue: '',
+              lotValue: '',
+            );
         context.read<CategoryDataProvider>().clearCategory(activeCategories: chosenCategory);
         context.read<ChooseCategoryBloc>().add(
               UnchosenCategoryEvent(
