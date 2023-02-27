@@ -7,9 +7,9 @@ final dio = Dio(baseoptions);
 
 BaseOptions baseoptions = BaseOptions(
   baseUrl: url,
-  connectTimeout: const Duration(milliseconds: 50000),
-  receiveTimeout: const Duration(milliseconds: 50000),
-  sendTimeout: const Duration(milliseconds: 50000),
+  connectTimeout: 5000,
+  receiveTimeout: 5000,
+  sendTimeout: 5000,
   // ignore: avoid_redundant_argument_values
   responseType: ResponseType.json,
 );
