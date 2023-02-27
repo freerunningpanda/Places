@@ -58,4 +58,13 @@ class CreatePlaceButtonCubit extends Cubit<CreatePlaceButtonState> {
       ),
     );
   }
+
+  // Метод отвечающий за изменение состояния кнопки создания нового места
+  bool buttonStyle({required CreatePlaceButtonState state}) {
+    return state.chosenCategory.isEmpty ||
+        state.titleValue.isEmpty ||
+        state.descriptionValue.isEmpty ||
+        state.latValue.isEmpty ||
+        state.lotValue.isEmpty;
+  }
 }

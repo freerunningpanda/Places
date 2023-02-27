@@ -13,11 +13,6 @@ class CreateButton extends StatelessWidget {
   final VoidCallback? onTap;
   final List<String>? activeFilters;
   final RangeValues? rangeValues;
-  // final TextEditingController titleController;
-  // final TextEditingController latController;
-  // final TextEditingController lotController;
-  // final TextEditingController descriptionController;
-  // final List<Category> chosenCategory;
 
   const CreateButton({
     Key? key,
@@ -26,11 +21,6 @@ class CreateButton extends StatelessWidget {
     required this.onTap,
     this.activeFilters,
     this.rangeValues,
-    // required this.titleController,
-    // required this.latController,
-    // required this.lotController,
-    // required this.descriptionController,
-    // required this.chosenCategory,
   }) : super(key: key);
 
   @override
@@ -40,13 +30,15 @@ class CreateButton extends StatelessWidget {
 
     return BlocBuilder<CreatePlaceButtonCubit, CreatePlaceButtonState>(
       builder: (context, state) {
+        final buttonStyle = context.read<CreatePlaceButtonCubit>().buttonStyle(state: state);
+
         return Stack(
           children: [
             Container(
               height: 48,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(12),
-                color: buttonStyle(state: state) ? customColors?.color : theme.sliderTheme.activeTrackColor,
+                color: buttonStyle ? customColors?.color : theme.sliderTheme.activeTrackColor,
               ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -62,7 +54,7 @@ class CreateButton extends StatelessWidget {
                   const SizedBox(width: 8),
                   Text(
                     title,
-                    style: buttonStyle(state: state)
+                    style: buttonStyle
                         ? AppTypography.sightDetailsButtonNameInnactive
                         : AppTypography.sightDetailsButtonName,
                   ),
@@ -74,7 +66,7 @@ class CreateButton extends StatelessWidget {
                 type: MaterialType.transparency,
                 child: InkWell(
                   borderRadius: BorderRadius.circular(12.0),
-                  onTap: buttonStyle(state: state) ? null : onTap,
+                  onTap: buttonStyle ? null : onTap,
                 ),
               ),
             ),
@@ -82,13 +74,5 @@ class CreateButton extends StatelessWidget {
         );
       },
     );
-  }
-
-  bool buttonStyle({required CreatePlaceButtonState state}) {
-    return state.chosenCategory.isEmpty ||
-        state.titleValue.isEmpty ||
-        state.descriptionValue.isEmpty ||
-        state.latValue.isEmpty ||
-        state.lotValue.isEmpty;
   }
 }
