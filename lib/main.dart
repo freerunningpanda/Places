@@ -9,6 +9,7 @@ import 'package:places/blocs/search_screen/search_screen_bloc.dart';
 import 'package:places/blocs/visited/visited_screen_bloc.dart';
 import 'package:places/blocs/want_to_visit/want_to_visit_bloc.dart';
 import 'package:places/cubits/add_sight_screen/add_sight_screen_cubit.dart';
+import 'package:places/cubits/create_place/create_place_button_cubit.dart';
 import 'package:places/cubits/places_list/places_list_cubit.dart';
 import 'package:places/data/api/api_places.dart';
 import 'package:places/data/repository/place_repository.dart';
@@ -86,6 +87,9 @@ void main() {
           ),
           BlocProvider<AddSightScreenCubit>(
             create: (context) => AddSightScreenCubit(),
+          ),
+          BlocProvider<CreatePlaceButtonCubit>(
+            create: (context) => CreatePlaceButtonCubit(),
           ),
         ],
         child: const App(),

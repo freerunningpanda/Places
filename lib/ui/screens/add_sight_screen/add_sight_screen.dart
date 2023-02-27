@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:places/blocs/choose_category_bloc/choose_category_bloc.dart';
 import 'package:places/cubits/add_sight_screen/add_sight_screen_cubit.dart';
+import 'package:places/cubits/create_place/create_place_button_cubit.dart';
 
 import 'package:places/data/api/api_places.dart';
 import 'package:places/data/interactor/place_interactor.dart';
@@ -19,12 +20,6 @@ import 'package:places/ui/widgets/new_place_app_bar_widget.dart';
 import 'package:places/ui/widgets/pick_image_widget.dart';
 import 'package:places/ui/widgets/sight_icons.dart';
 import 'package:places/ui/widgets/suffix_icon.dart';
-
-String name = '';
-double lat = 0;
-double lot = 0;
-String details = '';
-String type = '';
 
 class AddSightScreen extends StatefulWidget {
   const AddSightScreen({Key? key}) : super(key: key);
@@ -51,8 +46,16 @@ class _AddSightScreenState extends State<AddSightScreen> {
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
     final theme = Theme.of(context);
-    final chosenCategory = CategoryDataProvider.chosenCategory;
+
     final focus = context.read<AddSightScreenCubit>();
+    final place = context.read<CreatePlaceButtonCubit>();
+
+    context.watch<CreatePlaceButtonCubit>().updateButtonState(
+      titleValue: titleController.text,
+      descriptionValue: descriptionController.text,
+      latValue: latController.text,
+      lotValue: lotController.text,
+    );
 
     return Scaffold(
       body: GestureDetector(
@@ -90,7 +93,7 @@ class _AddSightScreenState extends State<AddSightScreen> {
                           controller: titleController,
                           textInputAction: TextInputAction.next,
                           onSubmitted: (value) => focus.goToLat(latFocus: latFocus),
-                          onChanged: (value) => name = value,
+                          onChanged: (value) => place.name = value,
                         ),
                         const SizedBox(height: 24),
                         _CoordinatsInputWidget(
@@ -113,7 +116,7 @@ class _AddSightScreenState extends State<AddSightScreen> {
                           focusNode: descriptionFocus,
                           controller: descriptionController,
                           textInputAction: TextInputAction.done,
-                          onChanged: (value) => details = value,
+                          onChanged: (value) => place.details = value,
                         ),
                         SizedBox(height: height * 0.18),
                         CreateButton(
@@ -124,31 +127,33 @@ class _AddSightScreenState extends State<AddSightScreen> {
                               place: Place(
                                 id: 0,
                                 urls: [''],
-                                name: name,
-                                lat: lat,
-                                lng: lot,
-                                description: details,
-                                placeType: chosenCategory[0].title,
+                                name: place.name,
+                                lat: place.lat,
+                                lng: place.lot,
+                                description: place.details,
+                                placeType: place.chosenCategory[0].title,
                               ),
                             );
+                            // Для обновления состояния кнопки "Создать"
+
                             titleController.clear();
                             descriptionController.clear();
                             latController.clear();
                             lotController.clear();
                             debugPrint('🟡---------Создан объект: ${PlaceInteractor.newPlaces.toList()}');
-                            context.read<CategoryDataProvider>().clearCategory(activeCategories: chosenCategory);
+                            context.read<CategoryDataProvider>().clearCategory(activeCategories: place.chosenCategory);
                             // Для перерисовки состоянии категории на "Не выбрано"
                             context.read<ChooseCategoryBloc>().add(
                                   UnchosenCategoryEvent(
-                                    isEmpty: chosenCategory.isEmpty,
+                                    isEmpty: place.chosenCategory.isEmpty,
                                   ),
                                 );
                           },
-                          titleController: titleController,
-                          latController: latController,
-                          lotController: lotController,
-                          descriptionController: descriptionController,
-                          chosenCategory: chosenCategory,
+                          // titleController: titleController,
+                          // latController: latController,
+                          // lotController: lotController,
+                          // descriptionController: descriptionController,
+                          // chosenCategory: place.chosenCategory,
                         ),
                       ],
                     ),
@@ -456,6 +461,7 @@ class _CoordinatsInputWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final focus = context.read<AddSightScreenCubit>();
+    final place = context.read<CreatePlaceButtonCubit>();
 
     return BlocBuilder<AddSightScreenCubit, AddSightScreenState>(
       builder: (context, state) {
@@ -471,7 +477,7 @@ class _CoordinatsInputWidget extends StatelessWidget {
                 onTap: focus.tapOnLat,
                 onChanged: (value) {
                   if (double.tryParse(value) != null) {
-                    lat = double.parse(value);
+                    place.lat = double.parse(value);
                   }
                 },
               ),
@@ -487,7 +493,7 @@ class _CoordinatsInputWidget extends StatelessWidget {
                 onTap: focus.tapOnLot,
                 onChanged: (value) {
                   if (double.tryParse(value) != null) {
-                    lot = double.parse(value);
+                    place.lot = double.parse(value);
                   }
                 },
               ),
