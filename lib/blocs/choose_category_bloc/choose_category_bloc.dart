@@ -55,7 +55,7 @@ class ChooseCategoryBloc extends Bloc<ChooseCategoryEvent, ChooseCategoryState> 
     return activeCategory;
   }
 
-  void clearCategory({required List<Category> activeCategories}) {
+  void resetCategoryState({required List<Category> activeCategories}) {
     for (final i in activeCategories) {
       i.isEnabled = false;
     }

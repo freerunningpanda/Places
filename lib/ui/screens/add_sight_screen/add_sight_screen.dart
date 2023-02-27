@@ -134,13 +134,14 @@ class _AddSightScreenState extends State<AddSightScreen> {
                                 lotValue: '',
                               );
                             // Для обновления состояния кнопки "Создать"
+                            clearControllers();
 
-                            titleController.clear();
-                            descriptionController.clear();
-                            latController.clear();
-                            lotController.clear();
                             debugPrint('🟡---------Создан объект: ${PlaceInteractor.newPlaces.toList()}');
-                            context.read<ChooseCategoryBloc>().clearCategory(activeCategories: place.chosenCategory);
+                            // Меняю isEnabled в выбранной категории на false и затем очищаю список
+                            context.read<ChooseCategoryBloc>().resetCategoryState(
+                                  activeCategories: place.chosenCategory,
+                                );
+                            // Из-за очищенного выше списка в isEmpty упадёт true
                             // Для перерисовки состоянии категории на "Не выбрано"
                             context.read<ChooseCategoryBloc>().add(
                                   UnchosenCategoryEvent(
@@ -148,11 +149,6 @@ class _AddSightScreenState extends State<AddSightScreen> {
                                   ),
                                 );
                           },
-                          // titleController: titleController,
-                          // latController: latController,
-                          // lotController: lotController,
-                          // descriptionController: descriptionController,
-                          // chosenCategory: place.chosenCategory,
                         ),
                       ],
                     ),
@@ -164,6 +160,13 @@ class _AddSightScreenState extends State<AddSightScreen> {
         ),
       ),
     );
+  }
+
+  void clearControllers() {
+    titleController.clear();
+    descriptionController.clear();
+    latController.clear();
+    lotController.clear();
   }
 }
 
