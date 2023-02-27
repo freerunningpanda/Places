@@ -25,10 +25,9 @@ class ChooseCategoryBloc extends Bloc<ChooseCategoryEvent, ChooseCategoryState> 
     );
   }
 
-
-    // Раньше не работало, потому что я с ивента прокидывал в этот метод значения и вызывал его в методе on
-    // Нужно было просто его вызывать через context
-    List<Category> chooseCategory({
+  // Раньше не работало, потому что я с ивента прокидывал в этот метод значения и вызывал его в методе on
+  // Нужно было просто его вызывать через context
+  List<Category> chooseCategory({
     required int index,
     required List<Category> categories,
     required List<Category> activeCategories,
@@ -54,5 +53,12 @@ class ChooseCategoryBloc extends Bloc<ChooseCategoryEvent, ChooseCategoryState> 
     }
 
     return activeCategory;
+  }
+
+  void clearCategory({required List<Category> activeCategories}) {
+    for (final i in activeCategories) {
+      i.isEnabled = false;
+    }
+    activeCategories.clear();
   }
 }

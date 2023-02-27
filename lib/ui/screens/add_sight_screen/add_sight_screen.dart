@@ -140,7 +140,7 @@ class _AddSightScreenState extends State<AddSightScreen> {
                             latController.clear();
                             lotController.clear();
                             debugPrint('🟡---------Создан объект: ${PlaceInteractor.newPlaces.toList()}');
-                            context.read<CategoryDataProvider>().clearCategory(activeCategories: place.chosenCategory);
+                            context.read<ChooseCategoryBloc>().clearCategory(activeCategories: place.chosenCategory);
                             // Для перерисовки состоянии категории на "Не выбрано"
                             context.read<ChooseCategoryBloc>().add(
                                   UnchosenCategoryEvent(
