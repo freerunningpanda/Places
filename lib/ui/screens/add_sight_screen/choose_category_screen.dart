@@ -6,22 +6,20 @@ import 'package:places/blocs/choose_category_bloc/choose_category_bloc.dart';
 import 'package:places/cubits/create_place/create_place_button_cubit.dart';
 
 import 'package:places/data/model/category.dart';
-import 'package:places/providers/category_data_provider.dart';
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_strings.dart';
 import 'package:places/ui/widgets/new_place_app_bar_widget.dart';
 import 'package:places/ui/widgets/save_button.dart';
 import 'package:places/ui/widgets/sight_icons.dart';
 
-class ChooseCategoryWidget extends StatefulWidget {
-  const ChooseCategoryWidget({Key? key}) : super(key: key);
-
-  @override
-  State<ChooseCategoryWidget> createState() => _ChooseCategoryWidgetState();
-}
-
-class _ChooseCategoryWidgetState extends State<ChooseCategoryWidget> {
-  final categories = CategoryDataProvider.categories;
+class ChooseCategoryWidget extends StatelessWidget {
+  final List<Category> categories;
+  final List<Category> chosenCategories;
+  const ChooseCategoryWidget({
+    Key? key,
+    required this.categories,
+    required this.chosenCategories,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +36,9 @@ class _ChooseCategoryWidgetState extends State<ChooseCategoryWidget> {
               NewPlaceAppBarWidget(
                 theme: theme,
                 width: width / 3.5,
-                leading: const _BackButtonWidget(),
+                leading: _BackButtonWidget(
+                  chosenCategory: chosenCategories,
+                ),
                 title: AppString.category,
               ),
               const SizedBox(height: 40),
@@ -58,20 +58,20 @@ class _ChooseCategoryWidgetState extends State<ChooseCategoryWidget> {
                         onTap: () {
                           context.read<ChooseCategoryBloc>().chooseCategory(
                                 index: index,
-                                categories: CategoryDataProvider.categories,
-                                activeCategories: CategoryDataProvider.chosenCategory,
+                                categories: categories,
+                                activeCategories: chosenCategories,
                               );
-                          if (CategoryDataProvider.chosenCategory.isNotEmpty) {
+                          if (chosenCategories.isNotEmpty) {
                             context.read<ChooseCategoryBloc>().add(
                                   ChosenCategoryEvent(
-                                    isEmpty: CategoryDataProvider.chosenCategory.isEmpty,
-                                    chosenCategory: CategoryDataProvider.chosenCategory[0],
+                                    isEmpty: chosenCategories.isEmpty,
+                                    chosenCategory: chosenCategories[0],
                                   ),
                                 );
                           } else {
                             context.read<ChooseCategoryBloc>().add(
                                   UnchosenCategoryEvent(
-                                    isEmpty: CategoryDataProvider.chosenCategory.isEmpty,
+                                    isEmpty: chosenCategories.isEmpty,
                                   ),
                                 );
                           }
@@ -88,13 +88,13 @@ class _ChooseCategoryWidgetState extends State<ChooseCategoryWidget> {
               const Divider(),
               SizedBox(height: height * 0.3),
               SaveButton(
-                chosenCategory: CategoryDataProvider.chosenCategory,
+                chosenCategory: chosenCategories,
                 title: AppString.save,
                 onTap: () {
                   context.read<ChooseCategoryBloc>().add(
                         ChosenCategoryEvent(
-                          isEmpty: CategoryDataProvider.chosenCategory.isEmpty,
-                          chosenCategory: CategoryDataProvider.chosenCategory[0],
+                          isEmpty: chosenCategories.isEmpty,
+                          chosenCategory: chosenCategories[0],
                         ),
                       );
                   context.read<CreatePlaceButtonCubit>().updateButtonState(
@@ -115,14 +115,14 @@ class _ChooseCategoryWidgetState extends State<ChooseCategoryWidget> {
 }
 
 class _BackButtonWidget extends StatelessWidget {
+  final List<Category> chosenCategory;
   const _BackButtonWidget({
     Key? key,
+    required this.chosenCategory,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final chosenCategory = CategoryDataProvider.chosenCategory;
-
     return InkWell(
       borderRadius: BorderRadius.circular(40),
       onTap: () {
@@ -132,7 +132,7 @@ class _BackButtonWidget extends StatelessWidget {
               latValue: '',
               lotValue: '',
             );
-        context.read<CategoryDataProvider>().clearCategory(activeCategories: chosenCategory);
+        context.read<ChooseCategoryBloc>().resetCategoryState(activeCategories: chosenCategory);
         context.read<ChooseCategoryBloc>().add(
               UnchosenCategoryEvent(
                 isEmpty: chosenCategory.isEmpty,

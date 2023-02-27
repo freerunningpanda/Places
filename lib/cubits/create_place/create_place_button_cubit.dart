@@ -4,14 +4,14 @@ import 'package:places/data/api/api_places.dart';
 import 'package:places/data/interactor/place_interactor.dart';
 import 'package:places/data/model/category.dart';
 import 'package:places/data/model/place.dart';
+import 'package:places/data/repository/category_repository.dart';
 import 'package:places/data/repository/place_repository.dart';
-import 'package:places/providers/category_data_provider.dart';
 
 part 'create_place_button_state.dart';
 
 class CreatePlaceButtonCubit extends Cubit<CreatePlaceButtonState> {
   final PlaceInteractor placeInteractor = PlaceInteractor(repository: PlaceRepository(apiPlaces: ApiPlaces()));
-  final chosenCategory = CategoryDataProvider.chosenCategory;
+  final chosenCategory = CategoryRepository.chosenCategories;
   String name = '';
   double lat = 0;
   double lot = 0;

@@ -14,7 +14,6 @@ import 'package:places/cubits/places_list/places_list_cubit.dart';
 import 'package:places/data/api/api_places.dart';
 import 'package:places/data/repository/place_repository.dart';
 import 'package:places/providers/add_sight_provider.dart';
-import 'package:places/providers/category_data_provider.dart';
 
 import 'package:places/providers/filter_data_provider.dart';
 import 'package:places/providers/image_data_provider.dart';
@@ -32,9 +31,6 @@ void main() {
   runApp(
     MultiProvider(
       providers: [
-        ChangeNotifierProvider<CategoryDataProvider>(
-          create: (_) => CategoryDataProvider(),
-        ),
         ChangeNotifierProvider<AddSightScreenProvider>(
           create: (_) => AddSightScreenProvider(),
         ),

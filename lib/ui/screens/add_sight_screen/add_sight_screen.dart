@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:places/blocs/choose_category_bloc/choose_category_bloc.dart';
 import 'package:places/cubits/add_sight_screen/add_sight_screen_cubit.dart';
 import 'package:places/cubits/create_place/create_place_button_cubit.dart';
-
 import 'package:places/data/api/api_places.dart';
 import 'package:places/data/interactor/place_interactor.dart';
 import 'package:places/data/model/place.dart';
+import 'package:places/data/repository/category_repository.dart';
 import 'package:places/data/repository/place_repository.dart';
-import 'package:places/providers/category_data_provider.dart';
 import 'package:places/providers/image_data_provider.dart' as image_provider;
 import 'package:places/providers/image_data_provider.dart';
 import 'package:places/ui/res/app_assets.dart';
@@ -29,6 +29,7 @@ class AddSightScreen extends StatefulWidget {
 }
 
 class _AddSightScreenState extends State<AddSightScreen> {
+  final categoryRepository = CategoryRepository();
   final latController = TextEditingController();
   final lotController = TextEditingController();
   final latFocus = FocusNode();
@@ -82,7 +83,9 @@ class _AddSightScreenState extends State<AddSightScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        _CategoryChooseWidget(theme: theme),
+                        _CategoryChooseWidget(
+                          theme: theme,
+                        ),
                         const SizedBox(height: 16),
                         _TextInputWidget(
                           theme: theme,
@@ -593,6 +596,8 @@ class _CategoryChooseWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final cubit = context.read<AddSightScreenCubit>();
+
     return Column(
       children: [
         Row(
@@ -607,7 +612,10 @@ class _CategoryChooseWidget extends StatelessWidget {
         InkWell(
           onTap: () => Navigator.of(context).push<ChooseCategoryWidget>(
             MaterialPageRoute(
-              builder: (context) => const ChooseCategoryWidget(),
+              builder: (context) => ChooseCategoryWidget(
+                chosenCategories: cubit.chosenCategories,
+                categories: cubit.categories,
+              ),
             ),
           ),
           child: SizedBox(
