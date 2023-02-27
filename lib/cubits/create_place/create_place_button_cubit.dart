@@ -28,33 +28,19 @@ class CreatePlaceButtonCubit extends Cubit<CreatePlaceButtonState> {
           ),
         );
 
-  // void addNewPlace({
-  //   required String titleValue,
-  //   required String descriptionValue,
-  //   required String latValue,
-  //   required String lotValue,
-  // }) {
-  //   placeInteractor.addNewPlace(
-  //     place: Place(
-  //       id: 0,
-  //       urls: [''],
-  //       name: name,
-  //       lat: lat,
-  //       lng: lot,
-  //       description: details,
-  //       placeType: chosenCategory[0].title,
-  //     ),
-  //   );
-  //   emit(
-  //     CreatePlaceButtonState(
-  //       chosenCategory: chosenCategory.isEmpty,
-  //       titleValue: titleValue.isEmpty,
-  //       descriptionValue: descriptionValue.isEmpty,
-  //       latValue: latValue.isEmpty,
-  //       lotValue: lotValue.isEmpty,
-  //     ),
-  //   );
-  // }
+  void addNewPlace() {
+    placeInteractor.addNewPlace(
+      place: Place(
+        id: 0,
+        urls: [''],
+        name: name,
+        lat: lat,
+        lng: lot,
+        description: details,
+        placeType: chosenCategory[0].title,
+      ),
+    );
+  }
 
   void updateButtonState({
     required String titleValue,

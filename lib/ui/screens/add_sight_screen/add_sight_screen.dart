@@ -123,23 +123,16 @@ class _AddSightScreenState extends State<AddSightScreen> {
                           title: AppString.create,
                           onTap: () {
                             debugPrint('🟡---------create btn pressed');
-                            PlaceInteractor(repository: PlaceRepository(apiPlaces: ApiPlaces())).addNewPlace(
-                              place: Place(
-                                id: 0,
-                                urls: [''],
-                                name: place.name,
-                                lat: place.lat,
-                                lng: place.lot,
-                                description: place.details,
-                                placeType: place.chosenCategory[0].title,
-                              ),
-                            );
-                            context.read<CreatePlaceButtonCubit>().updateButtonState(
-                                  titleValue: '',
-                                  descriptionValue: '',
-                                  latValue: '',
-                                  lotValue: '',
-                                );
+                            place
+                              ..addNewPlace()
+                              // После добавления места, отправляю пустые данные в поля, чтобы сменить состояние
+                              // кнопки на неактивную
+                              ..updateButtonState(
+                                titleValue: '',
+                                descriptionValue: '',
+                                latValue: '',
+                                lotValue: '',
+                              );
                             // Для обновления состояния кнопки "Создать"
 
                             titleController.clear();
