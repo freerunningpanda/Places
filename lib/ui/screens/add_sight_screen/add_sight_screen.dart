@@ -51,11 +51,11 @@ class _AddSightScreenState extends State<AddSightScreen> {
     final place = context.read<CreatePlaceButtonCubit>();
 
     context.watch<CreatePlaceButtonCubit>().updateButtonState(
-      titleValue: titleController.text,
-      descriptionValue: descriptionController.text,
-      latValue: latController.text,
-      lotValue: lotController.text,
-    );
+          titleValue: titleController.text,
+          descriptionValue: descriptionController.text,
+          latValue: latController.text,
+          lotValue: lotController.text,
+        );
 
     return Scaffold(
       body: GestureDetector(
@@ -134,6 +134,12 @@ class _AddSightScreenState extends State<AddSightScreen> {
                                 placeType: place.chosenCategory[0].title,
                               ),
                             );
+                            context.read<CreatePlaceButtonCubit>().updateButtonState(
+                                  titleValue: '',
+                                  descriptionValue: '',
+                                  latValue: '',
+                                  lotValue: '',
+                                );
                             // Для обновления состояния кнопки "Создать"
 
                             titleController.clear();
