@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:places/cubits/filters_screen_cubit.dart/filters_screen_cubit.dart';
 import 'package:places/cubits/places_list/places_list_cubit.dart';
 import 'package:places/data/api/api_places.dart';
 
@@ -293,7 +294,7 @@ class _ItemFiltersListSmallScreens extends StatelessWidget {
                   }
                   context.read<FilterDataProvider>().showCount(places: placeList);
 
-                  return context.read<FilterDataProvider>().saveFilters(i);
+                  return context.read<FiltersScreenCubit>().saveFilters(i);
                 },
               ),
             ),
@@ -340,26 +341,50 @@ class _ItemFilterState extends State<_ItemFilter> {
                 child: SizedBox(
                   height: 64,
                   width: 64,
-                  child: !widget.isEnabled
-                      ? CircleAvatar(
-                          backgroundColor: theme.canvasColor,
-                          child: SightIcons(
-                            assetName: widget.assetName,
-                            width: 32,
-                            height: 32,
-                          ),
-                        )
-                      : Opacity(
-                          opacity: 0.5,
-                          child: CircleAvatar(
-                            backgroundColor: theme.canvasColor,
-                            child: SightIcons(
-                              assetName: widget.assetName,
-                              width: 32,
-                              height: 32,
-                            ),
-                          ),
-                        ),
+                  child: BlocBuilder<FiltersScreenCubit, FiltersScreenState>(
+                    builder: (context, state) {
+                      return state.isEnabled
+                          ? Opacity(
+                              opacity: 0.5,
+                              child: CircleAvatar(
+                                backgroundColor: theme.canvasColor,
+                                child: SightIcons(
+                                  assetName: widget.assetName,
+                                  width: 32,
+                                  height: 32,
+                                ),
+                              ),
+                            )
+                          : CircleAvatar(
+                              backgroundColor: theme.canvasColor,
+                              child: SightIcons(
+                                assetName: widget.assetName,
+                                width: 32,
+                                height: 32,
+                              ),
+                            );
+                    },
+                  ),
+                  // !widget.isEnabled
+                  //     ? CircleAvatar(
+                  //         backgroundColor: theme.canvasColor,
+                  //         child: SightIcons(
+                  //           assetName: widget.assetName,
+                  //           width: 32,
+                  //           height: 32,
+                  //         ),
+                  //       )
+                  //     : Opacity(
+                  //         opacity: 0.5,
+                  //         child: CircleAvatar(
+                  //           backgroundColor: theme.canvasColor,
+                  //           child: SightIcons(
+                  //             assetName: widget.assetName,
+                  //             width: 32,
+                  //             height: 32,
+                  //           ),
+                  //         ),
+                  //       ),
                 ),
               ),
               const SizedBox(height: 12),
