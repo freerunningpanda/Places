@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:places/cubits/places_list/places_list_cubit.dart';
 import 'package:places/data/api/api_places.dart';
 
 import 'package:places/data/interactor/place_interactor.dart';
@@ -14,26 +16,12 @@ import 'package:places/ui/widgets/action_button.dart';
 import 'package:places/ui/widgets/sight_icons.dart';
 import 'package:provider/provider.dart';
 
-class FilterScreen extends StatefulWidget {
+class FilterScreen extends StatelessWidget {
   final VoidCallback? onPressed;
   const FilterScreen({
     Key? key,
     this.onPressed,
   }) : super(key: key);
-
-  @override
-  State<FilterScreen> createState() => _FilterScreenState();
-}
-
-class _FilterScreenState extends State<FilterScreen> {
-  late final List<Place> placeList;
-  bool isLoading = false;
-
-  @override
-  void initState() {
-    getPlaces();
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -54,21 +42,25 @@ class _FilterScreenState extends State<FilterScreen> {
           right: 16,
           bottom: 8.0,
         ),
-        child: isLoading
-            ? Column(
+        child: BlocBuilder<PlacesListCubit, PlacesListState>(
+          builder: (context, state) {
+            if (state is PlacesListEmptyState) {
+              return const Center(child: CircularProgressIndicator());
+            } else if (state is PlacesListLoadedState) {
+              return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const _Title(),
                   const SizedBox(height: 24),
                   _FiltersTable(
-                    placeList: placeList,
+                    places: state.places,
                     filters: FilterDataProvider.filters,
                     activeFilters: PlaceInteractor.activeFilters,
                   ),
                   if (size.width <= 320) SizedBox(height: size.height / 10) else SizedBox(height: size.height / 3.5),
                   Expanded(
                     child: _DistanceSlider(
-                      placeList: placeList,
+                      places: state.places,
                     ),
                   ),
                   if (size.width <= 320)
@@ -79,8 +71,8 @@ class _FilterScreenState extends State<FilterScreen> {
                         title: '${AppString.showPlaces} (${PlaceInteractor.filtersWithDistance.length})',
                         rangeValues: Mocks.rangeValues,
                         onTap: () {
-                          context.read<FilterDataProvider>().showCount(placeList: placeList);
-                          context.read<FilterDataProvider>().clearSight(placeList: placeList);
+                          context.read<FilterDataProvider>().showCount(places: state.places);
+                          context.read<FilterDataProvider>().clearSight(places: state.places);
                           debugPrint('🟡---------Длина: ${PlaceInteractor.filtersWithDistance.length}');
                         },
                       ),
@@ -92,23 +84,20 @@ class _FilterScreenState extends State<FilterScreen> {
                       title: '${AppString.showPlaces} (${PlaceInteractor.filtersWithDistance.length})',
                       rangeValues: Mocks.rangeValues,
                       onTap: () {
-                        context.read<FilterDataProvider>().showCount(placeList: placeList);
-                        context.read<FilterDataProvider>().clearSight(placeList: placeList);
+                        context.read<FilterDataProvider>().showCount(places: state.places);
+                        context.read<FilterDataProvider>().clearSight(places: state.places);
                         debugPrint('🟡---------Длина: ${PlaceInteractor.filtersWithDistance.length}');
                       },
                     ),
                 ],
-              )
-            : const Center(child: CircularProgressIndicator()),
+              );
+            } else {
+              throw ArgumentError('Bad State');
+            }
+          },
+        ),
       ),
     );
-  }
-
-  Future<void> getPlaces() async {
-    placeList = await PlaceInteractor(repository: PlaceRepository(apiPlaces: ApiPlaces())).getPlaces();
-    setState(() {
-      isLoading = true;
-    });
   }
 }
 
@@ -181,12 +170,12 @@ class _ClearButtonWidgetState extends State<_ClearButtonWidget> {
 class _FiltersTable extends StatefulWidget {
   final List<Category> filters;
   final List<String> activeFilters;
-  final List<Place> placeList;
+  final List<Place> places;
   const _FiltersTable({
     Key? key,
     required this.filters,
     required this.activeFilters,
-    required this.placeList,
+    required this.places,
   }) : super(key: key);
 
   @override
@@ -209,11 +198,11 @@ class _FiltersTableState extends State<_FiltersTable> {
           return size.width <= 320
               ? _ItemFiltersListSmallScreens(
                   filtersTable: widget,
-                  placeList: widget.placeList,
+                  placeList: widget.places,
                 )
               : _ItemFiltersListBigScreens(
                   filtersTable: widget,
-                  placeList: widget.placeList,
+                  placeList: widget.places,
                 );
         },
       ),
@@ -248,7 +237,7 @@ class _ItemFiltersListBigScreens extends StatelessWidget {
                 assetName: e.assetName ?? 'null',
                 onTap: () {
                   final filteredByType =
-                      filtersTable.placeList.where((sight) => sight.placeType.contains(e.title)).toList();
+                      filtersTable.places.where((sight) => sight.placeType.contains(e.title)).toList();
                   if (!e.isEnabled) {
                     PlaceInteractor.filteredMocks.addAll(filteredByType);
                   } else {
@@ -256,7 +245,7 @@ class _ItemFiltersListBigScreens extends StatelessWidget {
                     PlaceInteractor.filtersWithDistance.clear();
                     debugPrint('🟡---------Добавленные места: ${PlaceInteractor.filteredMocks}');
                   }
-                  context.read<FilterDataProvider>().showCount(placeList: placeList);
+                  context.read<FilterDataProvider>().showCount(places: placeList);
 
                   return context.read<FilterDataProvider>().saveFilters(i);
                 },
@@ -294,7 +283,7 @@ class _ItemFiltersListSmallScreens extends StatelessWidget {
                 assetName: e.assetName ?? 'null',
                 onTap: () {
                   final filteredByType =
-                      filtersTable.placeList.where((sight) => sight.placeType.contains(e.title)).toList();
+                      filtersTable.places.where((sight) => sight.placeType.contains(e.title)).toList();
                   if (!e.isEnabled) {
                     PlaceInteractor.filteredMocks.addAll(filteredByType);
                   } else {
@@ -302,7 +291,7 @@ class _ItemFiltersListSmallScreens extends StatelessWidget {
                     PlaceInteractor.filtersWithDistance.clear();
                     debugPrint('🟡---------Добавленные места: ${PlaceInteractor.filteredMocks}');
                   }
-                  context.read<FilterDataProvider>().showCount(placeList: placeList);
+                  context.read<FilterDataProvider>().showCount(places: placeList);
 
                   return context.read<FilterDataProvider>().saveFilters(i);
                 },
@@ -412,10 +401,10 @@ class _ItemFilterState extends State<_ItemFilter> {
 }
 
 class _DistanceSlider extends StatefulWidget {
-  final List<Place> placeList;
+  final List<Place> places;
   const _DistanceSlider({
     Key? key,
-    required this.placeList,
+    required this.places,
   }) : super(key: key);
 
   @override
@@ -452,7 +441,7 @@ class _DistanceSliderState extends State<_DistanceSlider> {
           max: max,
           onChanged: (values) {
             context.read<FilterDataProvider>().changeArea(start: values.start, end: values.end);
-            context.read<FilterDataProvider>().showCount(placeList: widget.placeList);
+            context.read<FilterDataProvider>().showCount(places: widget.places);
           },
         ),
       ],

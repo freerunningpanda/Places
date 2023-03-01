@@ -49,10 +49,10 @@ class FilterDataProvider extends ChangeNotifier {
     return activeFilters;
   }
 
-  void showCount({required List<Place> placeList}) {
+  void showCount({required List<Place> places}) {
     if (PlaceInteractor.filteredMocks.isEmpty) {
       PlaceInteractor.filtersWithDistance.clear();
-      for (final el in placeList) {
+      for (final el in places) {
         final distance = Geolocator.distanceBetween(
           Mocks.mockLat,
           Mocks.mockLot,
@@ -96,8 +96,8 @@ class FilterDataProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void clearSight({required List<Place> placeList}) {
-    for (final el in placeList) {
+  void clearSight({required List<Place> places}) {
+    for (final el in places) {
       final distance = Geolocator.distanceBetween(
         Mocks.mockLat,
         Mocks.mockLot,
