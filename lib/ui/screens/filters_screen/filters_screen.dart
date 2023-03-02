@@ -230,16 +230,17 @@ class _ItemFiltersListBigScreens extends StatelessWidget {
       children: filtersTable.filters
           .asMap()
           .map(
-            (i, e) => MapEntry(
+            (i, category) => MapEntry(
               i,
               _ItemFilter(
-                isEnabled: e.isEnabled,
-                title: e.title,
-                assetName: e.assetName ?? 'null',
+                category: category,
+                isEnabled: category.isEnabled,
+                name: category.title,
+                assetName: category.assetName ?? 'null',
                 onTap: () {
                   final filteredByType =
-                      filtersTable.places.where((sight) => sight.placeType.contains(e.title)).toList();
-                  if (!e.isEnabled) {
+                      filtersTable.places.where((sight) => sight.placeType.contains(category.title)).toList();
+                  if (!category.isEnabled) {
                     PlaceInteractor.filteredMocks.addAll(filteredByType);
                   } else {
                     PlaceInteractor.filteredMocks.clear();
@@ -248,7 +249,7 @@ class _ItemFiltersListBigScreens extends StatelessWidget {
                   }
                   context.read<FilterDataProvider>().showCount(places: placeList);
 
-                  return context.read<FilterDataProvider>().saveFilters(i);
+                  context.read<FiltersScreenCubit>().saveFilters(i);
                 },
               ),
             ),
@@ -276,16 +277,17 @@ class _ItemFiltersListSmallScreens extends StatelessWidget {
       children: filtersTable.filters
           .asMap()
           .map(
-            (i, e) => MapEntry(
+            (i, category) => MapEntry(
               i,
               _ItemFilter(
-                isEnabled: e.isEnabled,
-                title: e.title,
-                assetName: e.assetName ?? 'null',
+                category: category,
+                isEnabled: category.isEnabled,
+                name: category.title,
+                assetName: category.assetName ?? 'null',
                 onTap: () {
                   final filteredByType =
-                      filtersTable.places.where((sight) => sight.placeType.contains(e.title)).toList();
-                  if (!e.isEnabled) {
+                      filtersTable.places.where((sight) => sight.placeType.contains(category.title)).toList();
+                  if (!category.isEnabled) {
                     PlaceInteractor.filteredMocks.addAll(filteredByType);
                   } else {
                     PlaceInteractor.filteredMocks.clear();
@@ -294,7 +296,7 @@ class _ItemFiltersListSmallScreens extends StatelessWidget {
                   }
                   context.read<FilterDataProvider>().showCount(places: placeList);
 
-                  return context.read<FiltersScreenCubit>().saveFilters(i);
+                  context.read<FiltersScreenCubit>().saveFilters(i);
                 },
               ),
             ),
@@ -305,25 +307,23 @@ class _ItemFiltersListSmallScreens extends StatelessWidget {
   }
 }
 
-class _ItemFilter extends StatefulWidget {
+class _ItemFilter extends StatelessWidget {
+  final String name;
   final bool isEnabled;
-  final Function() onTap;
-  final String title;
+  final Category category;
+  final VoidCallback onTap;
   final String assetName;
 
   const _ItemFilter({
     Key? key,
+    required this.name,
     required this.isEnabled,
-    required this.title,
-    required this.assetName,
+    required this.category,
     required this.onTap,
+    required this.assetName,
   }) : super(key: key);
 
-  @override
-  State<_ItemFilter> createState() => _ItemFilterState();
-}
 
-class _ItemFilterState extends State<_ItemFilter> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -337,19 +337,20 @@ class _ItemFilterState extends State<_ItemFilter> {
             children: [
               InkWell(
                 borderRadius: BorderRadius.circular(50),
-                onTap: widget.onTap,
+                onTap: onTap,
                 child: SizedBox(
                   height: 64,
                   width: 64,
                   child: BlocBuilder<FiltersScreenCubit, FiltersScreenState>(
                     builder: (context, state) {
-                      return state.isEnabled
+                      return category.isEnabled // Передаю категорию с текущим индексом чтобы выбиралась
+                    // только одна, а не все
                           ? Opacity(
                               opacity: 0.5,
                               child: CircleAvatar(
                                 backgroundColor: theme.canvasColor,
                                 child: SightIcons(
-                                  assetName: widget.assetName,
+                                  assetName: assetName,
                                   width: 32,
                                   height: 32,
                                 ),
@@ -358,7 +359,7 @@ class _ItemFilterState extends State<_ItemFilter> {
                           : CircleAvatar(
                               backgroundColor: theme.canvasColor,
                               child: SightIcons(
-                                assetName: widget.assetName,
+                                assetName: assetName,
                                 width: 32,
                                 height: 32,
                               ),
@@ -389,14 +390,14 @@ class _ItemFilterState extends State<_ItemFilter> {
               ),
               const SizedBox(height: 12),
               Text(
-                widget.title,
+                name,
                 textAlign: TextAlign.center,
                 style: theme.textTheme.labelSmall,
               ),
             ],
           ),
         ),
-        if (widget.isEnabled)
+        if (isEnabled)
           Positioned(
             right: 16,
             bottom: 25,

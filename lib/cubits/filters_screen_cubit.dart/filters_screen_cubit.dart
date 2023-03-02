@@ -10,18 +10,18 @@ class FiltersScreenCubit extends Cubit<FiltersScreenState> {
   FiltersScreenCubit() : super(const FiltersScreenState(isEnabled: false));
 
   List<String> saveFilters(int index) {
-    final filters = FilterDataProvider.filters[index];
+    final filter = FilterDataProvider.filters[index];
     final activeFilters = PlaceInteractor.activeFilters;
     var isEnabled = !FilterDataProvider.filters[index].isEnabled;
     isEnabled = !isEnabled;
     if (!isEnabled) {
-      activeFilters.add(filters.title);
-      filters.isEnabled = true;
+      activeFilters.add(filter.title);
+      filter.isEnabled = true;
 
       emit(FiltersScreenState(isEnabled: isEnabled),);
     } else {
       activeFilters.removeLast();
-      filters.isEnabled = false;
+      filter.isEnabled = false;
       emit(FiltersScreenState(isEnabled: isEnabled),);
     }
 
