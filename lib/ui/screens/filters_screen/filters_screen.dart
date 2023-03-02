@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:places/cubits/distance_slider_cubit/distance_slider_cubit.dart';
 import 'package:places/cubits/filters_screen_cubit.dart/filters_screen_cubit.dart';
 import 'package:places/cubits/places_list/places_list_cubit.dart';
 import 'package:places/data/api/api_places.dart';
@@ -323,7 +324,6 @@ class _ItemFilter extends StatelessWidget {
     required this.assetName,
   }) : super(key: key);
 
-
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -344,7 +344,7 @@ class _ItemFilter extends StatelessWidget {
                   child: BlocBuilder<FiltersScreenCubit, FiltersScreenState>(
                     builder: (context, state) {
                       return category.isEnabled // Передаю категорию с текущим индексом чтобы выбиралась
-                    // только одна, а не все
+                          // только одна, а не все
                           ? Opacity(
                               opacity: 0.5,
                               child: CircleAvatar(
@@ -445,32 +445,36 @@ class _DistanceSliderState extends State<_DistanceSlider> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    return Column(
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return BlocBuilder<DistanceSliderCubit, DistanceSliderState>(
+      builder: (context, state) {
+        return Column(
           children: [
-            Text(
-              AppString.distantion,
-              style: theme.textTheme.displayMedium,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  AppString.distantion,
+                  style: theme.textTheme.displayMedium,
+                ),
+                Text(
+                  'от ${state.rangeValues.start.toInt()} до ${state.rangeValues.end.toInt()} м',
+                  style: theme.textTheme.titleMedium,
+                ),
+              ],
             ),
-            Text(
-              'от ${Mocks.rangeValues.start.toInt()} до ${Mocks.rangeValues.end.toInt()} м',
-              style: theme.textTheme.titleMedium,
+            const SizedBox(height: 24),
+            RangeSlider(
+              values: state.rangeValues,
+              min: min,
+              max: max,
+              onChanged: (values) {
+                context.read<DistanceSliderCubit>().changeArea(start: values.start, end: values.end);
+                context.read<FilterDataProvider>().showCount(places: widget.places);
+              },
             ),
           ],
-        ),
-        const SizedBox(height: 24),
-        RangeSlider(
-          values: Mocks.rangeValues,
-          min: min,
-          max: max,
-          onChanged: (values) {
-            context.read<FilterDataProvider>().changeArea(start: values.start, end: values.end);
-            context.read<FilterDataProvider>().showCount(places: widget.places);
-          },
-        ),
-      ],
+        );
+      },
     );
   }
 }
