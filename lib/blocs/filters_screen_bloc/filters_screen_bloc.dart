@@ -35,12 +35,12 @@ class FiltersScreenBloc extends Bloc<FiltersScreenEvent, FiltersScreenState> {
 
   void addToActiveFilters({required Category category}) {
     PlaceInteractor.activeFilters.add(category);
-    debugPrint('🟡--------- Активна категория: ${interactor.favoritePlaces}');
-    debugPrint('🟡--------- Длина: ${interactor.favoritePlaces.length}');
+    debugPrint('🟡--------- Активна категория: ${PlaceInteractor.activeFilters}');
+    debugPrint('🟡--------- Длина: ${PlaceInteractor.activeFilters.length}');
   }
 
   void removeFromFavorites({required Category category}) {
     PlaceInteractor.activeFilters.remove(category);
-    debugPrint('🟡--------- Длина: ${interactor.favoritePlaces.length}');
+    debugPrint('🟡--------- Длина списка активных категорий: ${PlaceInteractor.activeFilters.length}');
   }
 }
