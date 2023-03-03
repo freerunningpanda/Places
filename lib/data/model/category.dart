@@ -10,4 +10,9 @@ class Category {
     this.isEnabled = false,
     required this.placeType,
   });
+
+  @override
+  String toString() {
+    return 'Имя категории: $title, Тип категории: $placeType\n';
+  }
 }

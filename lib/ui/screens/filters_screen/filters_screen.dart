@@ -263,8 +263,8 @@ class _ItemFiltersListBigScreens extends StatelessWidget {
                             categoryIndex: i,
                           ),
                         );
-                    debugPrint('isEnabled ${category.isEnabled}');
-                    debugPrint('Удалена из активных категорий: $category');
+                    debugPrint('🟡--------- isEnabled ${category.isEnabled}');
+                    debugPrint('🟡--------- Удалена из активных категорий: $category');
                   }
                 },
               ),
