@@ -1,9 +1,10 @@
 import 'package:flutter/cupertino.dart';
+import 'package:places/data/model/category.dart';
 import 'package:places/data/model/place.dart';
 import 'package:places/data/repository/place_repository.dart';
 
 class PlaceInteractor {
-  static final List<String> activeFilters = [];
+  static final List<Category> activeFilters = [];
   static final Set<Place> filtersWithDistance = {};
   static final List<Place> filteredMocks = [];
   static final Set<String> searchHistoryList = {};

@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:places/blocs/favorite/favorite_bloc.dart';
+import 'package:places/blocs/filters_screen_bloc/filters_screen_bloc.dart';
 import 'package:places/cubits/distance_slider_cubit/distance_slider_cubit.dart';
-import 'package:places/cubits/filters_screen_cubit.dart/filters_screen_cubit.dart';
 import 'package:places/cubits/places_list/places_list_cubit.dart';
-import 'package:places/data/api/api_places.dart';
+import 'package:places/cubits/show_places_button/show_places_button_cubit.dart';
 
 import 'package:places/data/interactor/place_interactor.dart';
 import 'package:places/data/model/category.dart';
 import 'package:places/data/model/place.dart';
-import 'package:places/data/repository/place_repository.dart';
 import 'package:places/mocks.dart';
 import 'package:places/providers/filter_data_provider.dart';
 import 'package:places/ui/res/app_assets.dart';
@@ -16,7 +16,6 @@ import 'package:places/ui/res/app_strings.dart';
 import 'package:places/ui/res/app_typography.dart';
 import 'package:places/ui/widgets/action_button.dart';
 import 'package:places/ui/widgets/sight_icons.dart';
-import 'package:provider/provider.dart';
 
 class FilterScreen extends StatelessWidget {
   final VoidCallback? onPressed;
@@ -68,12 +67,11 @@ class FilterScreen extends StatelessWidget {
                   if (size.width <= 320)
                     Expanded(
                       child: ActionButton(
-                        counterValue: PlaceInteractor.filtersWithDistance.length,
                         activeFilters: PlaceInteractor.activeFilters,
-                        title: '${AppString.showPlaces} (${PlaceInteractor.filtersWithDistance.length})',
+                        title: AppString.showPlaces,
                         rangeValues: Mocks.rangeValues,
                         onTap: () {
-                          context.read<FilterDataProvider>().showCount(places: state.places);
+                          context.read<ShowPlacesButtonCubit>().showCount(places: state.places);
                           context.read<FilterDataProvider>().clearSight(places: state.places);
                           debugPrint('🟡---------Длина: ${PlaceInteractor.filtersWithDistance.length}');
                         },
@@ -81,12 +79,11 @@ class FilterScreen extends StatelessWidget {
                     )
                   else
                     ActionButton(
-                      counterValue: PlaceInteractor.filtersWithDistance.length,
                       activeFilters: PlaceInteractor.activeFilters,
-                      title: '${AppString.showPlaces} (${PlaceInteractor.filtersWithDistance.length})',
+                      title: AppString.showPlaces,
                       rangeValues: Mocks.rangeValues,
                       onTap: () {
-                        context.read<FilterDataProvider>().showCount(places: state.places);
+                        context.read<ShowPlacesButtonCubit>().showCount(places: state.places);
                         context.read<FilterDataProvider>().clearSight(places: state.places);
                         debugPrint('🟡---------Длина: ${PlaceInteractor.filtersWithDistance.length}');
                       },
@@ -171,7 +168,7 @@ class _ClearButtonWidgetState extends State<_ClearButtonWidget> {
 
 class _FiltersTable extends StatefulWidget {
   final List<Category> filters;
-  final List<String> activeFilters;
+  final List<Category> activeFilters;
   final List<Place> places;
   const _FiltersTable({
     Key? key,
@@ -248,9 +245,27 @@ class _ItemFiltersListBigScreens extends StatelessWidget {
                     PlaceInteractor.filtersWithDistance.clear();
                     debugPrint('🟡---------Добавленные места: ${PlaceInteractor.filteredMocks}');
                   }
-                  context.read<FilterDataProvider>().showCount(places: placeList);
+                  context.read<ShowPlacesButtonCubit>().showCount(places: placeList);
 
-                  context.read<FiltersScreenCubit>().saveFilters(i);
+                  if (!category.isEnabled) {
+                    context.read<FiltersScreenBloc>().add(
+                          FiltersScreenEvent(
+                            category: category,
+                            isEnabled: category.isEnabled = true,
+                            categoryIndex: i,
+                          ),
+                        );
+                  } else {
+                    context.read<FiltersScreenBloc>().add(
+                          FiltersScreenEvent(
+                            category: category,
+                            isEnabled: category.isEnabled = false,
+                            categoryIndex: i,
+                          ),
+                        );
+                    debugPrint('isEnabled ${category.isEnabled}');
+                    debugPrint('Удалена из активных категорий: $category');
+                  }
                 },
               ),
             ),
@@ -295,9 +310,27 @@ class _ItemFiltersListSmallScreens extends StatelessWidget {
                     PlaceInteractor.filtersWithDistance.clear();
                     debugPrint('🟡---------Добавленные места: ${PlaceInteractor.filteredMocks}');
                   }
-                  context.read<FilterDataProvider>().showCount(places: placeList);
+                  context.read<ShowPlacesButtonCubit>().showCount(places: placeList);
 
-                  context.read<FiltersScreenCubit>().saveFilters(i);
+                  if (!category.isEnabled) {
+                    context.read<FiltersScreenBloc>().add(
+                          FiltersScreenEvent(
+                            category: category,
+                            isEnabled: category.isEnabled = true,
+                            categoryIndex: i,
+                          ),
+                        );
+                  } else {
+                    context.read<FiltersScreenBloc>().add(
+                          FiltersScreenEvent(
+                            category: category,
+                            isEnabled: category.isEnabled = false,
+                            categoryIndex: i,
+                          ),
+                        );
+                    debugPrint('isEnabled ${category.isEnabled}');
+                    debugPrint('Удалена из активных категорий: $category');
+                  }
                 },
               ),
             ),
@@ -341,51 +374,54 @@ class _ItemFilter extends StatelessWidget {
                 child: SizedBox(
                   height: 64,
                   width: 64,
-                  child: BlocBuilder<FiltersScreenCubit, FiltersScreenState>(
+                  child: BlocBuilder<FiltersScreenBloc, FiltersScreenState>(
                     builder: (context, state) {
-                      return category.isEnabled // Передаю категорию с текущим индексом чтобы выбиралась
-                          // только одна, а не все
-                          ? Opacity(
-                              opacity: 0.5,
-                              child: CircleAvatar(
+                      if (state is IsEnabledState) {
+                        return category.isEnabled
+                            ? Opacity(
+                                opacity: 0.5,
+                                child: CircleAvatar(
+                                  backgroundColor: theme.canvasColor,
+                                  child: SightIcons(
+                                    assetName: assetName,
+                                    width: 32,
+                                    height: 32,
+                                  ),
+                                ),
+                              )
+                            : CircleAvatar(
                                 backgroundColor: theme.canvasColor,
                                 child: SightIcons(
                                   assetName: assetName,
                                   width: 32,
                                   height: 32,
                                 ),
-                              ),
-                            )
-                          : CircleAvatar(
-                              backgroundColor: theme.canvasColor,
-                              child: SightIcons(
-                                assetName: assetName,
-                                width: 32,
-                                height: 32,
-                              ),
-                            );
+                              );
+                      } else if (state is IsNotEnabledState) {
+                        return category.isEnabled
+                            ? Opacity(
+                                opacity: 0.5,
+                                child: CircleAvatar(
+                                  backgroundColor: theme.canvasColor,
+                                  child: SightIcons(
+                                    assetName: assetName,
+                                    width: 32,
+                                    height: 32,
+                                  ),
+                                ),
+                              )
+                            : CircleAvatar(
+                                backgroundColor: theme.canvasColor,
+                                child: SightIcons(
+                                  assetName: assetName,
+                                  width: 32,
+                                  height: 32,
+                                ),
+                              );
+                      }
+                      throw ArgumentError('Bad state');
                     },
                   ),
-                  // !widget.isEnabled
-                  //     ? CircleAvatar(
-                  //         backgroundColor: theme.canvasColor,
-                  //         child: SightIcons(
-                  //           assetName: widget.assetName,
-                  //           width: 32,
-                  //           height: 32,
-                  //         ),
-                  //       )
-                  //     : Opacity(
-                  //         opacity: 0.5,
-                  //         child: CircleAvatar(
-                  //           backgroundColor: theme.canvasColor,
-                  //           child: SightIcons(
-                  //             assetName: widget.assetName,
-                  //             width: 32,
-                  //             height: 32,
-                  //           ),
-                  //         ),
-                  //       ),
                 ),
               ),
               const SizedBox(height: 12),
@@ -397,30 +433,61 @@ class _ItemFilter extends StatelessWidget {
             ],
           ),
         ),
-        if (isEnabled)
-          Positioned(
-            right: 16,
-            bottom: 25,
-            child: Container(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 2,
-                vertical: 2,
-              ),
-              width: 16,
-              height: 16,
-              decoration: BoxDecoration(
-                color: theme.focusColor,
-                borderRadius: BorderRadius.circular(16),
-              ),
-              child: const SightIcons(
-                assetName: AppAssets.check,
-                width: 16,
-                height: 16,
-              ),
-            ),
-          )
-        else
-          const SizedBox(),
+        BlocBuilder<FiltersScreenBloc, FiltersScreenState>(
+          builder: (context, state) {
+            if (state is IsEnabledState) {
+              return category.isEnabled
+                  ? Positioned(
+                      right: 16,
+                      bottom: 25,
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 2,
+                          vertical: 2,
+                        ),
+                        width: 16,
+                        height: 16,
+                        decoration: BoxDecoration(
+                          color: theme.focusColor,
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                        child: const SightIcons(
+                          assetName: AppAssets.check,
+                          width: 16,
+                          height: 16,
+                        ),
+                      ),
+                    )
+                  : const SizedBox();
+            } else if (state is IsNotEnabledState) {
+              return category.isEnabled
+                  ? Positioned(
+                      right: 16,
+                      bottom: 25,
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 2,
+                          vertical: 2,
+                        ),
+                        width: 16,
+                        height: 16,
+                        decoration: BoxDecoration(
+                          color: theme.focusColor,
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                        child: const SightIcons(
+                          assetName: AppAssets.check,
+                          width: 16,
+                          height: 16,
+                        ),
+                      ),
+                    )
+                  : const SizedBox();
+            } else {
+              throw ArgumentError('Bad state');
+            }
+          },
+        ),
       ],
     );
   }
@@ -469,7 +536,7 @@ class _DistanceSliderState extends State<_DistanceSlider> {
               max: max,
               onChanged: (values) {
                 context.read<DistanceSliderCubit>().changeArea(start: values.start, end: values.end);
-                context.read<FilterDataProvider>().showCount(places: widget.places);
+                context.read<ShowPlacesButtonCubit>().showCount(places: widget.places);
               },
             ),
           ],

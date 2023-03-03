@@ -10,7 +10,13 @@ import 'package:places/mocks.dart';
 part 'show_places_button_state.dart';
 
 class ShowPlacesButtonCubit extends Cubit<ShowPlacesButtonState> {
-  ShowPlacesButtonCubit() : super(const ShowPlacesButtonState(placesFound: 0));
+  ShowPlacesButtonCubit()
+      : super(
+          const ShowPlacesButtonState(
+            isEmpty: true,
+            foundPlacesLength: 0,
+          ),
+        );
 
   void showCount({required List<Place> places}) {
     if (PlaceInteractor.filteredMocks.isEmpty) {
@@ -25,8 +31,11 @@ class ShowPlacesButtonCubit extends Cubit<ShowPlacesButtonState> {
         if (distance >= Mocks.rangeValues.start && distance <= Mocks.rangeValues.end) {
           PlaceInteractor.filtersWithDistance.add(el);
           debugPrint('🟡---------Добавленные места: ${PlaceInteractor.filtersWithDistance}');
-          final placesFound = PlaceInteractor.filtersWithDistance.length;
-          ShowPlacesButtonState(placesFound: placesFound);
+          final isEmpty = PlaceInteractor.filtersWithDistance.isEmpty;
+          final length = PlaceInteractor.filtersWithDistance.length;
+
+          emit(ShowPlacesButtonState(isEmpty: isEmpty, foundPlacesLength: length));
+          debugPrint('🟡---------Добавленные места. Длина: ${PlaceInteractor.filtersWithDistance.length}');
         }
       }
     } else {
@@ -41,12 +50,12 @@ class ShowPlacesButtonCubit extends Cubit<ShowPlacesButtonState> {
         if (distance >= Mocks.rangeValues.start && distance <= Mocks.rangeValues.end) {
           PlaceInteractor.filtersWithDistance.add(el);
           debugPrint('🟡---------Добавленные места: ${PlaceInteractor.filtersWithDistance}');
-          final placesFound = PlaceInteractor.filtersWithDistance.length;
-          ShowPlacesButtonState(placesFound: placesFound);
+          final isEmpty = PlaceInteractor.filtersWithDistance.isEmpty;
+          final length = PlaceInteractor.filtersWithDistance.length;
+          debugPrint('🟡---------Добавленные места. Длина: ${PlaceInteractor.filtersWithDistance.length}');
+          emit(ShowPlacesButtonState(isEmpty: isEmpty, foundPlacesLength: length));
         }
       }
     }
   }
-
-
 }

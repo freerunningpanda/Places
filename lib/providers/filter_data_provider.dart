@@ -30,24 +30,24 @@ class FilterDataProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  List<String> saveFilters(int index) {
-    final filters = FilterDataProvider.filters[index];
-    final activeFilters = PlaceInteractor.activeFilters;
-    var isEnabled = !FilterDataProvider.filters[index].isEnabled;
-    isEnabled = !isEnabled;
-    if (!isEnabled) {
-      activeFilters.add(filters.title);
-      filters.isEnabled = true;
+  // List<String> saveFilters(int index) {
+  //   final filters = FilterDataProvider.filters[index];
+  //   final activeFilters = PlaceInteractor.activeFilters;
+  //   var isEnabled = !FilterDataProvider.filters[index].isEnabled;
+  //   isEnabled = !isEnabled;
+  //   if (!isEnabled) {
+  //     activeFilters.add(filters.title);
+  //     filters.isEnabled = true;
 
-      notifyListeners();
-    } else {
-      activeFilters.removeLast();
-      filters.isEnabled = false;
-      notifyListeners();
-    }
+  //     notifyListeners();
+  //   } else {
+  //     activeFilters.removeLast();
+  //     filters.isEnabled = false;
+  //     notifyListeners();
+  //   }
 
-    return activeFilters;
-  }
+  //   return activeFilters;
+  // }
 
   void showCount({required List<Place> places}) {
     if (PlaceInteractor.filteredMocks.isEmpty) {
@@ -91,10 +91,10 @@ class FilterDataProvider extends ChangeNotifier {
     }
   }
 
-  void changeArea({required double start, required double end}) {
-    Mocks.rangeValues = RangeValues(start, end);
-    notifyListeners();
-  }
+  // void changeArea({required double start, required double end}) {
+  //   Mocks.rangeValues = RangeValues(start, end);
+  //   notifyListeners();
+  // }
 
   void clearSight({required List<Place> places}) {
     for (final el in places) {

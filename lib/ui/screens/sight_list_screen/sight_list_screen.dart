@@ -149,7 +149,7 @@ class _SightListWidgetPortraitState extends State<_SightListWidgetPortrait> {
                                 height: 22,
                               );
                       } else {
-                        return const Text('Bad state');
+                        throw ArgumentError('Bad state');
                       }
                     },
                   ),

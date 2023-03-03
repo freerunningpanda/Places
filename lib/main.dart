@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:places/blocs/choose_category_bloc/choose_category_bloc.dart';
 import 'package:places/blocs/details_screen/details_screen_bloc.dart';
 import 'package:places/blocs/favorite/favorite_bloc.dart';
+import 'package:places/blocs/filters_screen_bloc/filters_screen_bloc.dart';
 import 'package:places/blocs/search_bar/search_bar_bloc.dart';
 import 'package:places/blocs/search_history/search_history_bloc.dart';
 import 'package:places/blocs/search_screen/search_screen_bloc.dart';
@@ -13,6 +14,7 @@ import 'package:places/cubits/create_place/create_place_button_cubit.dart';
 import 'package:places/cubits/distance_slider_cubit/distance_slider_cubit.dart';
 import 'package:places/cubits/filters_screen_cubit.dart/filters_screen_cubit.dart';
 import 'package:places/cubits/places_list/places_list_cubit.dart';
+import 'package:places/cubits/show_places_button/show_places_button_cubit.dart';
 import 'package:places/data/api/api_places.dart';
 import 'package:places/data/repository/place_repository.dart';
 
@@ -85,11 +87,14 @@ void main() {
           BlocProvider<CreatePlaceButtonCubit>(
             create: (context) => CreatePlaceButtonCubit(),
           ),
-          BlocProvider<FiltersScreenCubit>(
-            create: (context) => FiltersScreenCubit(),
+          BlocProvider<FiltersScreenBloc>(
+            create: (context) => FiltersScreenBloc(),
           ),
           BlocProvider<DistanceSliderCubit>(
             create: (context) => DistanceSliderCubit(),
+          ),
+          BlocProvider<ShowPlacesButtonCubit>(
+            create: (context) => ShowPlacesButtonCubit(),
           ),
         ],
         child: const App(),
