@@ -7,6 +7,12 @@ class PlaceInteractor {
   static final List<Category> activeFilters = [];
   static final Set<Place> filtersWithDistance = {};
   static final List<Place> filteredMocks = [];
+  static final List<Place> filteredPlacesByHotel = [];
+  static final List<Place> filteredPlacesByRestaurant = [];
+  static final List<Place> filteredPlacesOther = [];
+  static final List<Place> filteredPlacesByPark = [];
+  static final List<Place> filteredPlacesByMuseum = [];
+  static final List<Place> filteredPlacesByCafe = [];
   static final Set<String> searchHistoryList = {};
   static List<Place> filteredPlaces = filtersWithDistance.toList();
   static Set<Place> newPlaces = {};

@@ -237,7 +237,7 @@ class _ItemFiltersListBigScreens extends StatelessWidget {
                 assetName: category.assetName ?? 'null',
                 onTap: () {
                   final filteredByType =
-                      filtersTable.places.where((sight) => sight.placeType.contains(category.title)).toList();
+                      filtersTable.places.where((place) => place.placeType.contains(category.placeType)).toList();
                   context.read<FiltersScreenBloc>().addToFilteredList(
                         category: category,
                         filteredByType: filteredByType,
@@ -299,7 +299,8 @@ class _ItemFiltersListSmallScreens extends StatelessWidget {
                 assetName: category.assetName ?? 'null',
                 onTap: () {
                   final filteredByType =
-                      filtersTable.places.where((sight) => sight.placeType.contains(category.title)).toList();
+                      filtersTable.places.where((place) => place.placeType.contains(category.placeType)).toList();
+                  debugPrint('>>>>Sorted places by filter: ${filteredByType.length}');
                   context.read<FiltersScreenBloc>().addToFilteredList(
                         category: category,
                         filteredByType: filteredByType,
@@ -322,8 +323,8 @@ class _ItemFiltersListSmallScreens extends StatelessWidget {
                             categoryIndex: i,
                           ),
                         );
-                    debugPrint('isEnabled ${category.isEnabled}');
-                    debugPrint('Удалена из активных категорий: $category');
+                    debugPrint('🟡--------- isEnabled ${category.isEnabled}');
+                    debugPrint('🟡--------- Удалена из активных категорий: $category');
                   }
                 },
               ),

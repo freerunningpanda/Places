@@ -48,11 +48,17 @@ class FiltersScreenBloc extends Bloc<FiltersScreenEvent, FiltersScreenState> {
 
   void addToFilteredList({required Category category, required List<Place> filteredByType}) {
     if (!category.isEnabled) {
+      // Если категория не активна, добавляю отфильтрованные по категории места filteredByType
+      // В список вообще отфильтрованных мест
       PlaceInteractor.filteredMocks.addAll(filteredByType);
+      debugPrint('🟡---------Количество добавленных мест (фильтр вкл.): ${PlaceInteractor.filteredMocks.length}');
     } else {
-      PlaceInteractor.filteredMocks.clear();
-      PlaceInteractor.filtersWithDistance.clear();
-      debugPrint('🟡---------Добавленные места: ${PlaceInteractor.filteredMocks}');
+      // Если категория активна, удаляю из списка вообще отфильтрованных мест только те места
+      // Тип которых соотвествует заявленому фильтру
+      // фильтр передаётся из списка, значит он под верным индексом
+      PlaceInteractor.filteredMocks.removeWhere((place) => place.placeType.contains(category.placeType));
+      PlaceInteractor.filtersWithDistance.clear(); // Дописать
+      debugPrint('🟡---------Количество добавленных мест (фильтр откл.): ${PlaceInteractor.filteredMocks.length}');
     }
   }
 }
