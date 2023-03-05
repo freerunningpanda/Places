@@ -16,18 +16,24 @@ class FiltersScreenBloc extends Bloc<FiltersScreenEvent, FiltersScreenState> {
       apiPlaces: ApiPlaces(),
     ),
   );
-  FiltersScreenBloc() : super(IsNotEnabledState(filterIndex: 0)) {
+  FiltersScreenBloc() : super(IsNotEnabledState(filterIndex: 0, isEnabled: false)) {
     on<FiltersScreenEvent>(
       (event, emit) {
         if (event.isEnabled) {
           addToActiveFilters(category: event.category);
           emit(
-            IsEnabledState(filterIndex: event.categoryIndex),
+            IsEnabledState(
+              filterIndex: event.categoryIndex,
+              isEnabled: event.isEnabled,
+            ),
           );
         } else {
           removeFromFavorites(category: event.category);
           emit(
-            IsNotEnabledState(filterIndex: event.categoryIndex),
+            IsNotEnabledState(
+              filterIndex: event.categoryIndex,
+              isEnabled: event.isEnabled,
+            ),
           );
         }
       },
@@ -51,7 +57,7 @@ class FiltersScreenBloc extends Bloc<FiltersScreenEvent, FiltersScreenState> {
       // Если категория не активна, добавляю отфильтрованные по категории места filteredByType
       // В список вообще отфильтрованных мест
       PlaceInteractor.filteredMocks.addAll(filteredByType);
-      debugPrint('🟡---------Добавленных места (фильтр вкл.): ${PlaceInteractor.filteredMocks}');
+      debugPrint('🟡---------Добавленные места (фильтр вкл.): ${PlaceInteractor.filteredMocks}');
       debugPrint('🟡---------Добавленные места (дистанция): ${PlaceInteractor.filtersWithDistance}');
       debugPrint('🟡---------Количество добавленных мест (дистанция): ${PlaceInteractor.filtersWithDistance.length}');
     } else {
@@ -59,6 +65,9 @@ class FiltersScreenBloc extends Bloc<FiltersScreenEvent, FiltersScreenState> {
       // Тип которых соответствует заявленному фильтру
       // фильтр передаётся из списка, значит он под верным индексом
       PlaceInteractor.filteredMocks.removeWhere((place) => place.placeType.contains(category.placeType));
+      PlaceInteractor.filtersWithDistance.removeWhere((place) => place.placeType.contains(category.placeType));
+      debugPrint('Длина списка с дистанцией: ${PlaceInteractor.filtersWithDistance.length}');
+      // emit(state);
       PlaceInteractor.filtersWithDistance.clear(); // Дописать
       debugPrint('🟡---------Количество добавленных мест (фильтр откл.): ${PlaceInteractor.filteredMocks.length}');
     }

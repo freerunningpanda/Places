@@ -19,42 +19,59 @@ class ShowPlacesButtonCubit extends Cubit<ShowPlacesButtonState> {
         );
 
   void showCount({required List<Place> places}) {
-    if (PlaceInteractor.filteredMocks.isEmpty) {
-      PlaceInteractor.filtersWithDistance.clear();
-      // Если отсортированный по фильтрам список мест пуст. То пройтись вообще по всем местам.
-      for (final el in places) {
-        final distance = Geolocator.distanceBetween(
-          Mocks.mockLat,
-          Mocks.mockLot,
-          el.lat,
-          el.lng,
-        );
-        if (distance >= Mocks.rangeValues.start && distance <= Mocks.rangeValues.end) {
-          PlaceInteractor.filtersWithDistance.add(el);
-          debugPrint('🟡---------Добавленные места: ${PlaceInteractor.filtersWithDistance}');
-          final isEmpty = PlaceInteractor.filtersWithDistance.isEmpty;
-          final length = PlaceInteractor.filtersWithDistance.length;
+    // if (PlaceInteractor.filteredMocks.isEmpty) {
+    //   PlaceInteractor.filtersWithDistance.clear();
+    //   // Если отсортированный по фильтрам список мест пуст. То пройтись вообще по всем местам.
+    //   for (final el in places) {
+    //     final distance = Geolocator.distanceBetween(
+    //       Mocks.mockLat,
+    //       Mocks.mockLot,
+    //       el.lat,
+    //       el.lng,
+    //     );
+    //     if (distance >= Mocks.rangeValues.start && distance <= Mocks.rangeValues.end) {
+    //       PlaceInteractor.filtersWithDistance.add(el);
+    //       debugPrint('🟡---------Добавленные места: ${PlaceInteractor.filtersWithDistance}');
+    //       final isEmpty = PlaceInteractor.filtersWithDistance.isEmpty;
+    //       final length = PlaceInteractor.filtersWithDistance.length;
 
-          emit(ShowPlacesButtonState(isEmpty: isEmpty, foundPlacesLength: length));
-          debugPrint('🟡---------Добавленные места. Длина: ${PlaceInteractor.filtersWithDistance.length}');
-        }
-      }
-    } else {
-      PlaceInteractor.filtersWithDistance.clear();
-      // Если есть места в сортированном по фильтрам списке мест то пройтись по нему
-      for (final el in PlaceInteractor.filteredMocks) {
-        final distance = Geolocator.distanceBetween(
-          Mocks.mockLat,
-          Mocks.mockLot,
-          el.lat,
-          el.lng,
-        );
-        if (distance >= Mocks.rangeValues.start && distance <= Mocks.rangeValues.end) {
-          PlaceInteractor.filtersWithDistance.add(el);
-          final isEmpty = PlaceInteractor.filtersWithDistance.isEmpty;
-          final length = PlaceInteractor.filtersWithDistance.length;
-          emit(ShowPlacesButtonState(isEmpty: isEmpty, foundPlacesLength: length));
-        }
+    //       emit(ShowPlacesButtonState(isEmpty: isEmpty, foundPlacesLength: length));
+    //       debugPrint('🟡---------Добавленные места. Длина: ${PlaceInteractor.filtersWithDistance.length}');
+    //     }
+    //   }
+    // } else
+    //  {
+    //   PlaceInteractor.filtersWithDistance.clear();
+    //   // Если есть места в сортированном по фильтрам списке мест то пройтись по нему
+    //   for (final el in PlaceInteractor.filteredMocks) {
+    //     final distance = Geolocator.distanceBetween(
+    //       Mocks.mockLat,
+    //       Mocks.mockLot,
+    //       el.lat,
+    //       el.lng,
+    //     );
+    //     if (distance >= Mocks.rangeValues.start && distance <= Mocks.rangeValues.end) {
+    //       PlaceInteractor.filtersWithDistance.add(el);
+    //       final isEmpty = PlaceInteractor.filtersWithDistance.isEmpty;
+    //       final length = PlaceInteractor.filtersWithDistance.length;
+    //       emit(ShowPlacesButtonState(isEmpty: isEmpty, foundPlacesLength: length));
+    //     }
+    //   }
+    // }
+    PlaceInteractor.filtersWithDistance.clear();
+    // Если есть места в сортированном по фильтрам списке мест то пройтись по нему
+    for (final el in PlaceInteractor.filteredMocks) {
+      final distance = Geolocator.distanceBetween(
+        Mocks.mockLat,
+        Mocks.mockLot,
+        el.lat,
+        el.lng,
+      );
+      if (distance >= Mocks.rangeValues.start && distance <= Mocks.rangeValues.end) {
+        PlaceInteractor.filtersWithDistance.add(el);
+        final isEmpty = PlaceInteractor.filtersWithDistance.isEmpty;
+        final length = PlaceInteractor.filtersWithDistance.length;
+        emit(ShowPlacesButtonState(isEmpty: isEmpty, foundPlacesLength: length));
       }
     }
   }
