@@ -238,13 +238,10 @@ class _ItemFiltersListBigScreens extends StatelessWidget {
                 onTap: () {
                   final filteredByType =
                       filtersTable.places.where((sight) => sight.placeType.contains(category.title)).toList();
-                  if (!category.isEnabled) {
-                    PlaceInteractor.filteredMocks.addAll(filteredByType);
-                  } else {
-                    PlaceInteractor.filteredMocks.clear();
-                    PlaceInteractor.filtersWithDistance.clear();
-                    debugPrint('🟡---------Добавленные места: ${PlaceInteractor.filteredMocks}');
-                  }
+                  context.read<FiltersScreenBloc>().addToFilteredList(
+                        category: category,
+                        filteredByType: filteredByType,
+                      );
                   context.read<ShowPlacesButtonCubit>().showCount(places: placeList);
 
                   if (!category.isEnabled) {
@@ -303,13 +300,10 @@ class _ItemFiltersListSmallScreens extends StatelessWidget {
                 onTap: () {
                   final filteredByType =
                       filtersTable.places.where((sight) => sight.placeType.contains(category.title)).toList();
-                  if (!category.isEnabled) {
-                    PlaceInteractor.filteredMocks.addAll(filteredByType);
-                  } else {
-                    PlaceInteractor.filteredMocks.clear();
-                    PlaceInteractor.filtersWithDistance.clear();
-                    debugPrint('🟡---------Добавленные места: ${PlaceInteractor.filteredMocks}');
-                  }
+                  context.read<FiltersScreenBloc>().addToFilteredList(
+                        category: category,
+                        filteredByType: filteredByType,
+                      );
                   context.read<ShowPlacesButtonCubit>().showCount(places: placeList);
 
                   if (!category.isEnabled) {
