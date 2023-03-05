@@ -21,6 +21,7 @@ class ShowPlacesButtonCubit extends Cubit<ShowPlacesButtonState> {
   void showCount({required List<Place> places}) {
     if (PlaceInteractor.filteredMocks.isEmpty) {
       PlaceInteractor.filtersWithDistance.clear();
+      // Если отсортированный по фильтрам список мест пуст. То пройтись вообще по всем местам.
       for (final el in places) {
         final distance = Geolocator.distanceBetween(
           Mocks.mockLat,
@@ -40,6 +41,7 @@ class ShowPlacesButtonCubit extends Cubit<ShowPlacesButtonState> {
       }
     } else {
       PlaceInteractor.filtersWithDistance.clear();
+      // Если есть места в сортированном по фильтрам списке мест то пройтись по нему
       for (final el in PlaceInteractor.filteredMocks) {
         final distance = Geolocator.distanceBetween(
           Mocks.mockLat,

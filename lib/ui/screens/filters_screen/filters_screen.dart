@@ -300,7 +300,6 @@ class _ItemFiltersListSmallScreens extends StatelessWidget {
                 onTap: () {
                   final filteredByType =
                       filtersTable.places.where((place) => place.placeType.contains(category.placeType)).toList();
-                  debugPrint('>>>>Sorted places by filter: ${filteredByType.length}');
                   context.read<FiltersScreenBloc>().addToFilteredList(
                         category: category,
                         filteredByType: filteredByType,
