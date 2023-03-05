@@ -51,10 +51,8 @@ class ShowPlacesButtonCubit extends Cubit<ShowPlacesButtonState> {
         );
         if (distance >= Mocks.rangeValues.start && distance <= Mocks.rangeValues.end) {
           PlaceInteractor.filtersWithDistance.add(el);
-          debugPrint('🟡---------Добавленные места: ${PlaceInteractor.filtersWithDistance}');
           final isEmpty = PlaceInteractor.filtersWithDistance.isEmpty;
           final length = PlaceInteractor.filtersWithDistance.length;
-          debugPrint('🟡---------Добавленные места. Длина: ${PlaceInteractor.filtersWithDistance.length}');
           emit(ShowPlacesButtonState(isEmpty: isEmpty, foundPlacesLength: length));
         }
       }
