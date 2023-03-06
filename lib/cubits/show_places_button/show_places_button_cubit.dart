@@ -40,6 +40,8 @@ class ShowPlacesButtonCubit extends Cubit<ShowPlacesButtonState> {
         } else {
           // Эмитить пустые места, если они не входят в диапазон поиска
           // Чтобы состояние кнопки менялось, когда места не найдены
+          PlaceInteractor.filtersWithDistance.clear();
+          debugPrint('🟡---------Добавленные места (дистанция): ${PlaceInteractor.filtersWithDistance}');
           emit(const ShowPlacesButtonState(isEmpty: true, foundPlacesLength: 0));
         }
       }
@@ -57,10 +59,13 @@ class ShowPlacesButtonCubit extends Cubit<ShowPlacesButtonState> {
           PlaceInteractor.filtersWithDistance.add(el);
           final isEmpty = PlaceInteractor.filtersWithDistance.isEmpty;
           final length = PlaceInteractor.filtersWithDistance.length;
+          debugPrint('🟡---------Добавленные места (дистанция): ${PlaceInteractor.filtersWithDistance}');
           emit(ShowPlacesButtonState(isEmpty: isEmpty, foundPlacesLength: length));
         } else {
           // Эмитить пустые места, если они не входят в диапазон поиска
           // Чтобы состояние кнопки менялось, когда места не найдены
+          PlaceInteractor.filtersWithDistance.clear();
+          debugPrint('🟡---------Добавленные места (дистанция): ${PlaceInteractor.filtersWithDistance}');
           emit(const ShowPlacesButtonState(isEmpty: true, foundPlacesLength: 0));
         }
       }

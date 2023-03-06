@@ -58,7 +58,6 @@ class FiltersScreenBloc extends Bloc<FiltersScreenEvent, FiltersScreenState> {
       // В список вообще отфильтрованных мест
       PlaceInteractor.filteredMocks.addAll(filteredByType);
       debugPrint('🟡---------Добавленные места (фильтр вкл.): ${PlaceInteractor.filteredMocks}');
-      debugPrint('🟡---------Добавленные места (дистанция): ${PlaceInteractor.filtersWithDistance}');
       debugPrint('🟡---------Количество добавленных мест (дистанция): ${PlaceInteractor.filtersWithDistance.length}');
     } else {
       // Если категория активна, удаляю из списка вообще отфильтрованных мест только те места
