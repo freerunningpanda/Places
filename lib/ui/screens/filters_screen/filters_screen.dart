@@ -14,6 +14,7 @@ import 'package:places/providers/filter_data_provider.dart';
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_strings.dart';
 import 'package:places/ui/res/app_typography.dart';
+import 'package:places/ui/screens/sight_search_screen.dart/sight_search_screen.dart';
 import 'package:places/ui/widgets/action_button.dart';
 import 'package:places/ui/widgets/sight_icons.dart';
 
@@ -70,11 +71,7 @@ class FilterScreen extends StatelessWidget {
                         activeFilters: PlaceInteractor.activeFilters,
                         title: AppString.showPlaces,
                         rangeValues: Mocks.rangeValues,
-                        onTap: () {
-                          context.read<ShowPlacesButtonCubit>().showCount(places: state.places);
-                          context.read<FilterDataProvider>().clearSight(places: state.places);
-                          debugPrint('🟡---------Длина: ${PlaceInteractor.filtersWithDistance.length}');
-                        },
+                        onTap: () => goToSearchScreen(context),
                       ),
                     )
                   else
@@ -82,11 +79,7 @@ class FilterScreen extends StatelessWidget {
                       activeFilters: PlaceInteractor.activeFilters,
                       title: AppString.showPlaces,
                       rangeValues: Mocks.rangeValues,
-                      onTap: () {
-                        context.read<ShowPlacesButtonCubit>().showCount(places: state.places);
-                        context.read<FilterDataProvider>().clearSight(places: state.places);
-                        debugPrint('🟡---------Длина: ${PlaceInteractor.filtersWithDistance.length}');
-                      },
+                      onTap: () => goToSearchScreen(context),
                     ),
                 ],
               );
@@ -95,6 +88,14 @@ class FilterScreen extends StatelessWidget {
             }
           },
         ),
+      ),
+    );
+  }
+
+  void goToSearchScreen(BuildContext context) {
+    Navigator.of(context).push<SightSearchScreen>(
+      MaterialPageRoute(
+        builder: (context) => const SightSearchScreen(),
       ),
     );
   }
