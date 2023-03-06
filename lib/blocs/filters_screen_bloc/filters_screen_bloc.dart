@@ -65,7 +65,6 @@ class FiltersScreenBloc extends Bloc<FiltersScreenEvent, FiltersScreenState> {
       // Тип которых соответствует заявленному фильтру
       // фильтр передаётся из списка, значит он под верным индексом
       PlaceInteractor.filteredMocks.removeWhere((place) => place.placeType.contains(category.placeType));
-      PlaceInteractor.filtersWithDistance.removeWhere((place) => place.placeType.contains(category.placeType));
       debugPrint('Длина списка с дистанцией: ${PlaceInteractor.filtersWithDistance.length}');
       // emit(state);
       PlaceInteractor.filtersWithDistance.clear(); // Дописать
