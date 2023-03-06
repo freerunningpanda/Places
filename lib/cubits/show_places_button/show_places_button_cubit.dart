@@ -29,10 +29,18 @@ class ShowPlacesButtonCubit extends Cubit<ShowPlacesButtonState> {
 
   Future<void> getPlaces() async {}
 
+  // Метод для кнопки очистки всех фильтров
   Future<void> clearAllFilters() async {
     filters.map((e) => e.isEnabled = false).toList();
     PlaceInteractor.initialFilteredPlaces.clear();
+    // Получаю снова все места
+    // Пока не нашёл способа как удалить все отфильтрованные места
+    // Оставив при этом остальные
+    // Поэтому такое решение
     final places = await interactor.getPlaces();
+    // Здесь прохожусь только по всем местам
+    // Потому что при удалении фильтров нужно снова показать количество всех мест
+    // В радиусе поиска
     for (final el in places) {
       final distance = Geolocator.distanceBetween(
         Mocks.mockLat,
