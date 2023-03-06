@@ -9,11 +9,13 @@ class SearchScreenEmptyState extends SearchScreenState {}
 
 class SearchScreenPlacesFoundState extends SearchScreenState {
   final List<Place> filteredPlaces;
+  final int length;
 
   @override
-  List<Object?> get props => [filteredPlaces];
+  List<Object?> get props => [filteredPlaces, length];
 
   SearchScreenPlacesFoundState({
     required this.filteredPlaces,
+    required this.length,
   });
 }

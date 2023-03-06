@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:places/blocs/favorite/favorite_bloc.dart';
 import 'package:places/blocs/filters_screen_bloc/filters_screen_bloc.dart';
+import 'package:places/blocs/search_screen/search_screen_bloc.dart';
 import 'package:places/cubits/distance_slider_cubit/distance_slider_cubit.dart';
 import 'package:places/cubits/places_list/places_list_cubit.dart';
 import 'package:places/cubits/show_places_button/show_places_button_cubit.dart';
@@ -93,6 +94,7 @@ class FilterScreen extends StatelessWidget {
   }
 
   void goToSearchScreen(BuildContext context) {
+    context.read<SearchScreenBloc>().add(PlacesFoundEvent());
     Navigator.of(context).push<SightSearchScreen>(
       MaterialPageRoute(
         builder: (context) => const SightSearchScreen(),

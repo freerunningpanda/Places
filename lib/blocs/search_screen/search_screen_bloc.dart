@@ -24,7 +24,12 @@ class SearchScreenBloc extends Bloc<SearchScreenEvent, SearchScreenState> {
     activeFocus(isActive: true);
     searchPlaces(interactor.query, interactor.controller);
     on<PlacesFoundEvent>((event, emit) {
-      emit(SearchScreenPlacesFoundState(filteredPlaces: filteredPlaces));
+      emit(
+        SearchScreenPlacesFoundState(
+          filteredPlaces: filteredPlaces,
+          length: filteredPlaces.length,
+        ),
+      );
 
       if (filteredPlaces.isEmpty) {
         emit(SearchScreenEmptyState());
