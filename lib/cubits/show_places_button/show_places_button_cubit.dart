@@ -38,12 +38,14 @@ class ShowPlacesButtonCubit extends Cubit<ShowPlacesButtonState> {
           emit(ShowPlacesButtonState(isEmpty: isEmpty, foundPlacesLength: length));
           debugPrint('🟡---------Добавленные места. Длина: ${PlaceInteractor.filtersWithDistance.length}');
         } else {
+          // Эмитить пустые места, если они не входят в диапазон поиска
+          // Чтобы состояние кнопки менялось, когда места не найдены
           emit(const ShowPlacesButtonState(isEmpty: true, foundPlacesLength: 0));
         }
       }
     } else {
       PlaceInteractor.filtersWithDistance.clear();
-      // Если есть места в сортированном по фильтрам списке мест то пройтись по нему
+      // Если есть места в отсртированном по фильтрам списке мест то пройтись по нему
       for (final el in PlaceInteractor.filteredMocks) {
         final distance = Geolocator.distanceBetween(
           Mocks.mockLat,
@@ -57,6 +59,8 @@ class ShowPlacesButtonCubit extends Cubit<ShowPlacesButtonState> {
           final length = PlaceInteractor.filtersWithDistance.length;
           emit(ShowPlacesButtonState(isEmpty: isEmpty, foundPlacesLength: length));
         } else {
+          // Эмитить пустые места, если они не входят в диапазон поиска
+          // Чтобы состояние кнопки менялось, когда места не найдены
           emit(const ShowPlacesButtonState(isEmpty: true, foundPlacesLength: 0));
         }
       }
