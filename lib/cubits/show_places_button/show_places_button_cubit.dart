@@ -18,6 +18,7 @@ class ShowPlacesButtonCubit extends Cubit<ShowPlacesButtonState> {
           ),
         );
 
+  // ignore: long-method
   void showCount({required List<Place> places}) {
     if (PlaceInteractor.filteredMocks.isEmpty) {
       PlaceInteractor.filtersWithDistance.clear();
@@ -31,17 +32,21 @@ class ShowPlacesButtonCubit extends Cubit<ShowPlacesButtonState> {
         );
         if (distance >= Mocks.rangeValues.start && distance <= Mocks.rangeValues.end) {
           PlaceInteractor.filtersWithDistance.add(el);
-          debugPrint('🟡---------Добавленные места: ${PlaceInteractor.filtersWithDistance}');
           final isEmpty = PlaceInteractor.filtersWithDistance.isEmpty;
           final length = PlaceInteractor.filtersWithDistance.length;
-
+          debugPrint('🟡---------Добавленные места (дистанция): ${PlaceInteractor.filtersWithDistance}');
+          debugPrint(
+            '🟡---------Количество добавленных мест (дистанция): ${PlaceInteractor.filtersWithDistance.length}',
+          );
           emit(ShowPlacesButtonState(isEmpty: isEmpty, foundPlacesLength: length));
-          debugPrint('🟡---------Добавленные места. Длина: ${PlaceInteractor.filtersWithDistance.length}');
         } else {
           // Эмитить пустые места, если они не входят в диапазон поиска
           // Чтобы состояние кнопки менялось, когда места не найдены
           PlaceInteractor.filtersWithDistance.clear();
           debugPrint('🟡---------Добавленные места (дистанция): ${PlaceInteractor.filtersWithDistance}');
+          debugPrint(
+            '🟡---------Количество добавленных мест (дистанция): ${PlaceInteractor.filtersWithDistance.length}',
+          );
           emit(const ShowPlacesButtonState(isEmpty: true, foundPlacesLength: 0));
         }
       }
@@ -60,12 +65,19 @@ class ShowPlacesButtonCubit extends Cubit<ShowPlacesButtonState> {
           final isEmpty = PlaceInteractor.filtersWithDistance.isEmpty;
           final length = PlaceInteractor.filtersWithDistance.length;
           debugPrint('🟡---------Добавленные места (дистанция): ${PlaceInteractor.filtersWithDistance}');
+          debugPrint(
+            '🟡---------Количество добавленных мест (дистанция): ${PlaceInteractor.filtersWithDistance.length}',
+          );
+
           emit(ShowPlacesButtonState(isEmpty: isEmpty, foundPlacesLength: length));
         } else {
           // Эмитить пустые места, если они не входят в диапазон поиска
           // Чтобы состояние кнопки менялось, когда места не найдены
           PlaceInteractor.filtersWithDistance.clear();
           debugPrint('🟡---------Добавленные места (дистанция): ${PlaceInteractor.filtersWithDistance}');
+          debugPrint(
+            '🟡---------Количество добавленных мест (дистанция): ${PlaceInteractor.filtersWithDistance.length}',
+          );
           emit(const ShowPlacesButtonState(isEmpty: true, foundPlacesLength: 0));
         }
       }

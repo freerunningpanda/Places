@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:places/blocs/details_screen/details_screen_bloc.dart';
 import 'package:places/blocs/search_bar/search_bar_bloc.dart';
 import 'package:places/blocs/search_history/search_history_bloc.dart';
 import 'package:places/blocs/search_screen/search_screen_bloc.dart';
@@ -152,7 +153,7 @@ class _SightListWidget extends StatelessWidget {
               final sight = state.filteredPlaces[index];
 
               return _SightCardWidget(
-                sight: sight,
+                place: sight,
                 width: width,
                 theme: theme,
               );
@@ -377,13 +378,13 @@ class _EmptyStateWidget extends StatelessWidget {
 }
 
 class _SightCardWidget extends StatelessWidget {
-  final Place sight;
+  final Place place;
   final double width;
   final ThemeData theme;
 
   const _SightCardWidget({
     Key? key,
-    required this.sight,
+    required this.place,
     required this.width,
     required this.theme,
   }) : super(key: key);
@@ -397,25 +398,25 @@ class _SightCardWidget extends StatelessWidget {
           child: SizedBox(
             child: Row(
               children: [
-                _SightImage(sight: sight),
+                _PlaceImage(place: place),
                 const SizedBox(width: 16),
-                _SightContent(width: width, sight: sight, theme: theme),
+                _SightContent(width: width, sight: place, theme: theme),
               ],
             ),
           ),
         ),
-        _RippleEffect(sight: sight),
+        _RippleEffect(place: place),
       ],
     );
   }
 }
 
 class _RippleEffect extends StatelessWidget {
-  final Place sight;
+  final Place place;
 
   const _RippleEffect({
     Key? key,
-    required this.sight,
+    required this.place,
   }) : super(key: key);
 
   @override
@@ -424,14 +425,17 @@ class _RippleEffect extends StatelessWidget {
       child: Material(
         type: MaterialType.transparency,
         child: InkWell(
-          onTap: () => Navigator.of(context).push<SightDetails>(
+          onTap: () {
+            context.read<DetailsScreenBloc>().add(DetailsScreenEvent(place: place));
+            Navigator.of(context).push<SightDetails>(
             MaterialPageRoute(
               builder: (context) => SightDetails(
-                place: sight,
+                place: place,
                 height: 360,
               ),
             ),
-          ),
+          );
+          },
         ),
       ),
     );
@@ -514,12 +518,12 @@ class _SightTitle extends StatelessWidget {
   }
 }
 
-class _SightImage extends StatelessWidget {
-  final Place sight;
+class _PlaceImage extends StatelessWidget {
+  final Place place;
 
-  const _SightImage({
+  const _PlaceImage({
     Key? key,
-    required this.sight,
+    required this.place,
   }) : super(key: key);
 
   @override
@@ -532,7 +536,7 @@ class _SightImage extends StatelessWidget {
         decoration: BoxDecoration(
           image: DecorationImage(
             fit: BoxFit.cover,
-            image: NetworkImage(sight.urls[0]),
+            image: NetworkImage(place.urls[0]),
           ),
         ),
       ),
