@@ -67,7 +67,7 @@ class SearchScreenBloc extends Bloc<SearchScreenEvent, SearchScreenState> {
         }
       }
     } else if (PlaceInteractor.activeFilters.isNotEmpty) {
-      for (final el in PlaceInteractor.filteredMocks) {
+      for (final el in PlaceInteractor.initialFilteredPlaces) {
         final distance = Geolocator.distanceBetween(
           Mocks.mockLat,
           Mocks.mockLot,

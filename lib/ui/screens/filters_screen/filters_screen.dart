@@ -28,7 +28,7 @@ class FilterScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final clearFilters = context.read<FilterDataProvider>().clearAllFilters;
+    // final clearFilters = context.read<FiltersScreenBloc>().clearAllFilters;
     final size = MediaQuery.of(context).size;
     // ignore: unnecessary_statements
     context.watch<FilterDataProvider>();
@@ -36,7 +36,7 @@ class FilterScreen extends StatelessWidget {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: _AppBar(
-        onPressed: clearFilters,
+        // onPressed: clearFilters,
       ),
       body: Padding(
         padding: const EdgeInsets.only(
@@ -57,7 +57,7 @@ class FilterScreen extends StatelessWidget {
                   const SizedBox(height: 24),
                   _FiltersTable(
                     places: state.places,
-                    filters: FilterDataProvider.filters,
+                    filters: FiltersScreenBloc.filters,
                     activeFilters: PlaceInteractor.activeFilters,
                   ),
                   if (size.width <= 320) SizedBox(height: size.height / 10) else SizedBox(height: size.height / 3.5),
@@ -118,11 +118,11 @@ class _Title extends StatelessWidget {
 }
 
 class _AppBar extends StatelessWidget implements PreferredSizeWidget {
-  final VoidCallback? onPressed;
+  // final VoidCallback? onPressed;
   @override
   Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 
-  const _AppBar({Key? key, required this.onPressed}) : super(key: key);
+  const _AppBar({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -140,7 +140,7 @@ class _AppBar extends StatelessWidget implements PreferredSizeWidget {
         bottomOpacity: 0.0,
         actions: [
           _ClearButtonWidget(
-            onPressed: onPressed,
+            // onPressed: onPressed,
           ),
         ],
       ),
@@ -149,8 +149,8 @@ class _AppBar extends StatelessWidget implements PreferredSizeWidget {
 }
 
 class _ClearButtonWidget extends StatefulWidget {
-  final VoidCallback? onPressed;
-  const _ClearButtonWidget({Key? key, required this.onPressed}) : super(key: key);
+  // final VoidCallback? onPressed;
+  const _ClearButtonWidget({Key? key}) : super(key: key);
 
   @override
   State<_ClearButtonWidget> createState() => _ClearButtonWidgetState();
@@ -160,7 +160,7 @@ class _ClearButtonWidgetState extends State<_ClearButtonWidget> {
   @override
   Widget build(BuildContext context) {
     return TextButton(
-      onPressed: widget.onPressed,
+      onPressed: () => context.read<ShowPlacesButtonCubit>().clearAllFilters(),
       child: const Text(
         AppString.clear,
         style: AppTypography.clearButton,

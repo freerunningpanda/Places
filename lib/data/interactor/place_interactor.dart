@@ -5,13 +5,7 @@ import 'package:places/data/repository/place_repository.dart';
 
 class PlaceInteractor {
   static final List<Category> activeFilters = [];
-  static final List<Place> filteredMocks = [];
-  static final List<Place> filteredPlacesByHotel = [];
-  static final List<Place> filteredPlacesByRestaurant = [];
-  static final List<Place> filteredPlacesOther = [];
-  static final List<Place> filteredPlacesByPark = [];
-  static final List<Place> filteredPlacesByMuseum = [];
-  static final List<Place> filteredPlacesByCafe = [];
+  static final List<Place> initialFilteredPlaces = [];
   static final Set<String> searchHistoryList = {};
   static Set<Place> filtersWithDistance = {};
   static List<Place> filteredPlaces = filtersWithDistance.toList();
