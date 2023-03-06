@@ -160,7 +160,11 @@ class _ClearButtonWidgetState extends State<_ClearButtonWidget> {
   @override
   Widget build(BuildContext context) {
     return TextButton(
-      onPressed: () => context.read<ShowPlacesButtonCubit>().clearAllFilters(),
+      onPressed: () {
+        context.read<ShowPlacesButtonCubit>().clearAllFilters();
+        context.read<FiltersScreenBloc>().add(ClearAllFiltersEvent());
+
+      },
       child: const Text(
         AppString.clear,
         style: AppTypography.clearButton,
@@ -249,7 +253,7 @@ class _ItemFiltersListBigScreens extends StatelessWidget {
 
                   if (!category.isEnabled) {
                     context.read<FiltersScreenBloc>().add(
-                          FiltersScreenEvent(
+                          AddRemoveFilterEvent(
                             category: category,
                             isEnabled: category.isEnabled = true,
                             categoryIndex: i,
@@ -257,7 +261,7 @@ class _ItemFiltersListBigScreens extends StatelessWidget {
                         );
                   } else {
                     context.read<FiltersScreenBloc>().add(
-                          FiltersScreenEvent(
+                          AddRemoveFilterEvent(
                             category: category,
                             isEnabled: category.isEnabled = false,
                             categoryIndex: i,
@@ -311,7 +315,7 @@ class _ItemFiltersListSmallScreens extends StatelessWidget {
 
                   if (!category.isEnabled) {
                     context.read<FiltersScreenBloc>().add(
-                          FiltersScreenEvent(
+                          AddRemoveFilterEvent(
                             category: category,
                             isEnabled: category.isEnabled = true,
                             categoryIndex: i,
@@ -319,7 +323,7 @@ class _ItemFiltersListSmallScreens extends StatelessWidget {
                         );
                   } else {
                     context.read<FiltersScreenBloc>().add(
-                          FiltersScreenEvent(
+                          AddRemoveFilterEvent(
                             category: category,
                             isEnabled: category.isEnabled = false,
                             categoryIndex: i,

@@ -33,7 +33,7 @@ class FiltersScreenBloc extends Bloc<FiltersScreenEvent, FiltersScreenState> {
     ),
   );
   FiltersScreenBloc() : super(IsNotEnabledState(filterIndex: 0, isEnabled: false)) {
-    on<FiltersScreenEvent>(
+    on<AddRemoveFilterEvent>(
       (event, emit) {
         if (event.isEnabled) {
           addToActiveFilters(category: event.category);
@@ -54,6 +54,16 @@ class FiltersScreenBloc extends Bloc<FiltersScreenEvent, FiltersScreenState> {
         }
       },
     );
+
+    on<ClearAllFiltersEvent>((event, emit) {
+      clearAllFilters();
+      emit(
+        IsNotEnabledState(
+          filterIndex: 0,
+          isEnabled: false,
+        ),
+      );
+    });
   }
 
   void addToActiveFilters({required Category category}) {
@@ -86,5 +96,11 @@ class FiltersScreenBloc extends Bloc<FiltersScreenEvent, FiltersScreenState> {
         '🟡---------Количество добавленных мест (фильтр откл.): ${PlaceInteractor.initialFilteredPlaces.length}',
       );
     }
+  }
+
+  void clearAllFilters() {
+    filters.map((e) => e.isEnabled = false).toList();
+    PlaceInteractor.activeFilters.removeWhere((element) => true);
+    PlaceInteractor.filtersWithDistance.clear();
   }
 }

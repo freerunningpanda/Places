@@ -1,14 +1,19 @@
 part of 'filters_screen_bloc.dart';
 
-class FiltersScreenEvent {
+abstract class FiltersScreenEvent {
+  const FiltersScreenEvent();
+}
+
+class AddRemoveFilterEvent extends FiltersScreenEvent {
   final Category category;
   final bool isEnabled;
   final int categoryIndex;
 
-  FiltersScreenEvent({
+  const AddRemoveFilterEvent({
     required this.category,
     required this.isEnabled,
     required this.categoryIndex,
   });
 }
 
+class ClearAllFiltersEvent extends FiltersScreenEvent {}
