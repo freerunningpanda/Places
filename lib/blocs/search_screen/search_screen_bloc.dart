@@ -12,7 +12,8 @@ part 'search_screen_event.dart';
 part 'search_screen_state.dart';
 
 class SearchScreenBloc extends Bloc<SearchScreenEvent, SearchScreenState> {
-  List<Place> filteredPlaces = PlaceInteractor.filteredPlaces;
+  Set<Place> filteredPlaces = PlaceInteractor.filtersWithDistance;
+
   bool hasFocus = false;
   PlaceInteractor interactor = PlaceInteractor(
     repository: PlaceRepository(
@@ -24,14 +25,15 @@ class SearchScreenBloc extends Bloc<SearchScreenEvent, SearchScreenState> {
     activeFocus(isActive: true);
     searchPlaces(interactor.query, interactor.controller);
     on<PlacesFoundEvent>((event, emit) {
+      debugPrint('Длина списка мест после поиска: ${PlaceInteractor.filtersWithDistance.toList().length}');
       emit(
         SearchScreenPlacesFoundState(
-          filteredPlaces: filteredPlaces,
-          length: filteredPlaces.length,
+          filteredPlaces: PlaceInteractor.filtersWithDistance.toList(),
+          length: PlaceInteractor.filtersWithDistance.length,
         ),
       );
 
-      if (filteredPlaces.isEmpty) {
+      if (PlaceInteractor.filtersWithDistance.isEmpty) {
         emit(SearchScreenEmptyState());
       }
     });
@@ -56,12 +58,12 @@ class SearchScreenBloc extends Bloc<SearchScreenEvent, SearchScreenState> {
           el.lng,
         );
         if (distance >= Mocks.rangeValues.start && distance <= Mocks.rangeValues.end) {
-          filteredPlaces = PlaceInteractor.filtersWithDistance.where((sight) {
+          PlaceInteractor.filtersWithDistance = PlaceInteractor.filtersWithDistance.where((sight) {
             final sightTitle = sight.name.toLowerCase();
             final input = query.toLowerCase();
 
             return sightTitle.contains(input);
-          }).toList();
+          }).toSet();
         }
       }
     } else if (PlaceInteractor.activeFilters.isNotEmpty) {
@@ -73,12 +75,12 @@ class SearchScreenBloc extends Bloc<SearchScreenEvent, SearchScreenState> {
           el.lng,
         );
         if (distance >= Mocks.rangeValues.start && distance <= Mocks.rangeValues.end) {
-          filteredPlaces = PlaceInteractor.filtersWithDistance.where((sight) {
+          PlaceInteractor.filtersWithDistance = PlaceInteractor.filtersWithDistance.where((sight) {
             final sightTitle = sight.name.toLowerCase();
             final input = query.toLowerCase();
 
             return sightTitle.contains(input);
-          }).toList();
+          }).toSet();
         }
       }
     }

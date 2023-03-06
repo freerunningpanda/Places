@@ -5,7 +5,6 @@ import 'package:places/data/repository/place_repository.dart';
 
 class PlaceInteractor {
   static final List<Category> activeFilters = [];
-  static final Set<Place> filtersWithDistance = {};
   static final List<Place> filteredMocks = [];
   static final List<Place> filteredPlacesByHotel = [];
   static final List<Place> filteredPlacesByRestaurant = [];
@@ -14,6 +13,7 @@ class PlaceInteractor {
   static final List<Place> filteredPlacesByMuseum = [];
   static final List<Place> filteredPlacesByCafe = [];
   static final Set<String> searchHistoryList = {};
+  static Set<Place> filtersWithDistance = {};
   static List<Place> filteredPlaces = filtersWithDistance.toList();
   static Set<Place> newPlaces = {};
   final PlaceRepository repository;

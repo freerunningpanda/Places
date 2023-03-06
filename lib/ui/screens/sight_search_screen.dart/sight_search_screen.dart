@@ -142,6 +142,8 @@ class _SightListWidget extends StatelessWidget {
           );
           // Если места найдены, берём их из state и отображаем на экране
         } else if (state is SearchScreenPlacesFoundState) {
+          
+
           return ListView.builder(
             physics: Platform.isAndroid ? const ClampingScrollPhysics() : const BouncingScrollPhysics(),
             shrinkWrap: true,
@@ -278,7 +280,6 @@ class _SearchItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return Column(
       children: searchStoryList
           .map(
@@ -305,12 +306,12 @@ class _SearchItem extends StatelessWidget {
                     InkWell(
                       borderRadius: BorderRadius.circular(30),
                       onTap: () => context.read<SearchHistoryBloc>().add(
-                              RemoveItemFromHistory(
-                                index: e,
-                                isDeleted: true,
-                                hasFocus: true,
-                              ),
+                            RemoveItemFromHistory(
+                              index: e,
+                              isDeleted: true,
+                              hasFocus: true,
                             ),
+                          ),
                       child: const SightIcons(assetName: AppAssets.delete, width: 24, height: 24),
                     ),
                   ],
