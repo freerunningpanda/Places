@@ -477,7 +477,7 @@ class _ItemFilter extends StatelessWidget {
   }
 }
 
-class _DistanceSlider extends StatefulWidget {
+class _DistanceSlider extends StatelessWidget {
   final List<Place> places;
   const _DistanceSlider({
     Key? key,
@@ -485,16 +485,10 @@ class _DistanceSlider extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<_DistanceSlider> createState() => _DistanceSliderState();
-}
-
-class _DistanceSliderState extends State<_DistanceSlider> {
-  double min = 100;
-  double max = 10000;
-
-  @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final min = context.read<DistanceSliderCubit>().min;
+    final max = context.read<DistanceSliderCubit>().max;
 
     return BlocBuilder<DistanceSliderCubit, DistanceSliderState>(
       builder: (context, state) {
@@ -520,7 +514,7 @@ class _DistanceSliderState extends State<_DistanceSlider> {
               max: max,
               onChanged: (values) {
                 context.read<DistanceSliderCubit>().changeArea(start: values.start, end: values.end);
-                context.read<ShowPlacesButtonCubit>().showCount(places: widget.places);
+                context.read<ShowPlacesButtonCubit>().showCount(places: places);
               },
             ),
           ],
