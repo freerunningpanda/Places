@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:places/blocs/favorite/favorite_bloc.dart';
 import 'package:places/blocs/filters_screen_bloc/filters_screen_bloc.dart';
 import 'package:places/blocs/search_screen/search_screen_bloc.dart';
 import 'package:places/cubits/distance_slider_cubit/distance_slider_cubit.dart';
@@ -11,7 +10,6 @@ import 'package:places/data/interactor/place_interactor.dart';
 import 'package:places/data/model/category.dart';
 import 'package:places/data/model/place.dart';
 import 'package:places/mocks.dart';
-import 'package:places/providers/filter_data_provider.dart';
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_strings.dart';
 import 'package:places/ui/res/app_typography.dart';
@@ -31,7 +29,6 @@ class FilterScreen extends StatelessWidget {
     // final clearFilters = context.read<FiltersScreenBloc>().clearAllFilters;
     final size = MediaQuery.of(context).size;
     // ignore: unnecessary_statements
-    context.watch<FilterDataProvider>();
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -194,7 +191,6 @@ class _FiltersTableState extends State<_FiltersTable> {
     final size = MediaQuery.of(context).size;
 
     // ignore: unnecessary_statements
-    context.watch<FilterDataProvider>();
 
     return Container(
       height: size.width <= 320 ? 90 : 170,

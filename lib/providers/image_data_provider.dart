@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:places/data/model/place.dart';
 import 'package:places/ui/res/app_strings.dart';
 
+// Переписать на блок, когда пройду тему с загрузкой изображений
+// Сейчас это бутофория
 class ImageDataProvider extends ChangeNotifier {
   static final List<Place> places = [];
 
