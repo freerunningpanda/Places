@@ -26,15 +26,11 @@ class FilterScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // final clearFilters = context.read<FiltersScreenBloc>().clearAllFilters;
     final size = MediaQuery.of(context).size;
-    // ignore: unnecessary_statements
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      appBar: _AppBar(
-        // onPressed: clearFilters,
-      ),
+      appBar: const _AppBar(),
       body: Padding(
         padding: const EdgeInsets.only(
           left: 16,
@@ -135,18 +131,13 @@ class _AppBar extends StatelessWidget implements PreferredSizeWidget {
         ),
         toolbarHeight: 86,
         bottomOpacity: 0.0,
-        actions: [
-          _ClearButtonWidget(
-            // onPressed: onPressed,
-          ),
-        ],
+        actions: const [_ClearButtonWidget()],
       ),
     );
   }
 }
 
 class _ClearButtonWidget extends StatefulWidget {
-  // final VoidCallback? onPressed;
   const _ClearButtonWidget({Key? key}) : super(key: key);
 
   @override
@@ -160,7 +151,6 @@ class _ClearButtonWidgetState extends State<_ClearButtonWidget> {
       onPressed: () {
         context.read<ShowPlacesButtonCubit>().clearAllFilters();
         context.read<FiltersScreenBloc>().add(ClearAllFiltersEvent());
-
       },
       child: const Text(
         AppString.clear,
@@ -189,8 +179,6 @@ class _FiltersTableState extends State<_FiltersTable> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-
-    // ignore: unnecessary_statements
 
     return Container(
       height: size.width <= 320 ? 90 : 170,
@@ -362,7 +350,6 @@ class _ItemFilter extends StatelessWidget {
       children: [
         SizedBox(
           width: 98,
-          // height: height,
           child: Column(
             children: [
               InkWell(
