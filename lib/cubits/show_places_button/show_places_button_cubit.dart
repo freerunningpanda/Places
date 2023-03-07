@@ -69,7 +69,15 @@ class ShowPlacesButtonCubit extends Cubit<ShowPlacesButtonState> {
         emit(const ShowPlacesButtonState(isEmpty: true, foundPlacesLength: 0));
       }
     }
-    
+  }
+
+  void resetToZero() {
+    if (PlaceInteractor.initialFilteredPlaces.isEmpty) {
+      PlaceInteractor.filtersWithDistance.clear();
+      emit(
+        const ShowPlacesButtonState(isEmpty: true, foundPlacesLength: 0),
+      );
+    }
   }
 
   // ignore: long-method
@@ -108,6 +116,9 @@ class ShowPlacesButtonCubit extends Cubit<ShowPlacesButtonState> {
       PlaceInteractor.filtersWithDistance.clear();
       // Если есть места в отсртированном по фильтрам списке мест то пройтись по нему
       for (final el in PlaceInteractor.initialFilteredPlaces) {
+        // if (PlaceInteractor.initialFilteredPlaces.isEmpty) {
+        //   PlaceInteractor.filtersWithDistance.clear();
+        // }
         final distance = Geolocator.distanceBetween(
           Mocks.mockLat,
           Mocks.mockLot,

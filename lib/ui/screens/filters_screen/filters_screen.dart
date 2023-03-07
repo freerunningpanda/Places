@@ -243,6 +243,7 @@ class _ItemFiltersListBigScreens extends StatelessWidget {
                             categoryIndex: i,
                           ),
                         );
+                    context.read<ShowPlacesButtonCubit>().resetToZero();
                   } else {
                     context.read<FiltersScreenBloc>().add(
                           AddRemoveFilterEvent(
