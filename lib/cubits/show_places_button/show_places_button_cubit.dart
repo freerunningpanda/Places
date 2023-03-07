@@ -71,6 +71,8 @@ class ShowPlacesButtonCubit extends Cubit<ShowPlacesButtonState> {
     }
   }
 
+// Если ни одно место не попало в список с фильтрами то обнулить счётчик
+// Вызывается при выборе фильтра
   void resetToZero() {
     if (PlaceInteractor.initialFilteredPlaces.isEmpty) {
       PlaceInteractor.filtersWithDistance.clear();

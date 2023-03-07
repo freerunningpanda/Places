@@ -56,6 +56,7 @@ class FilterScreen extends StatelessWidget {
                   if (size.width <= 320) SizedBox(height: size.height / 10) else SizedBox(height: size.height / 3.5),
                   Expanded(
                     child: _DistanceSlider(
+                      filters: FiltersScreenBloc.filters,
                       places: state.places,
                     ),
                   ),
@@ -306,6 +307,7 @@ class _ItemFiltersListSmallScreens extends StatelessWidget {
                             categoryIndex: i,
                           ),
                         );
+                    context.read<ShowPlacesButtonCubit>().resetToZero();
                   } else {
                     context.read<FiltersScreenBloc>().add(
                           AddRemoveFilterEvent(
@@ -479,9 +481,11 @@ class _ItemFilter extends StatelessWidget {
 }
 
 class _DistanceSlider extends StatelessWidget {
+  final List<Category> filters;
   final List<Place> places;
   const _DistanceSlider({
     Key? key,
+    required this.filters,
     required this.places,
   }) : super(key: key);
 
@@ -516,6 +520,11 @@ class _DistanceSlider extends StatelessWidget {
               onChanged: (values) {
                 context.read<DistanceSliderCubit>().changeArea(start: values.start, end: values.end);
                 context.read<ShowPlacesButtonCubit>().showCount(places: places);
+                for (final category in filters) {
+                  if (category.isEnabled) {
+                    context.read<ShowPlacesButtonCubit>().resetToZero();
+                  }
+                }
               },
             ),
           ],

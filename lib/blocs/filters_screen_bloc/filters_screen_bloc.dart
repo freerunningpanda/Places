@@ -90,8 +90,6 @@ class FiltersScreenBloc extends Bloc<FiltersScreenEvent, FiltersScreenState> {
       // фильтр передаётся из списка, значит он под верным индексом
       PlaceInteractor.initialFilteredPlaces.removeWhere((place) => place.placeType.contains(category.placeType));
       debugPrint('Длина списка с дистанцией: ${PlaceInteractor.filtersWithDistance.length}');
-      // emit(state);
-      PlaceInteractor.filtersWithDistance.clear(); // Дописать
       debugPrint(
         '🟡---------Количество добавленных мест (фильтр откл.): ${PlaceInteractor.initialFilteredPlaces.length}',
       );

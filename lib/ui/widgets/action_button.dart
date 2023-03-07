@@ -65,7 +65,7 @@ class ActionButton extends StatelessWidget {
                 type: MaterialType.transparency,
                 child: InkWell(
                   borderRadius: BorderRadius.circular(12.0),
-                  onTap: onTap,
+                  onTap: state.isEmpty ? null : onTap,
                 ),
               ),
             ),
