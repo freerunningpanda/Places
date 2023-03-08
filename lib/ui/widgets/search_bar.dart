@@ -44,13 +44,14 @@ class _SearchBarState extends State<SearchBar> {
   Widget build(BuildContext context) {
     final customColors = Theme.of(context).extension<CustomColors>()!;
     final theme = Theme.of(context);
-    final filteredPlaces = SearchScreenBloc().filteredPlaces;
+    // final filteredPlaces = SearchScreenBloc().filteredPlaces;
     final interactor = PlaceInteractor(
       repository: PlaceRepository(
         apiPlaces: ApiPlaces(),
       ),
     );
     final searchStoryList = PlaceInteractor.searchHistoryList;
+    // debugPrint('SearchScreenBloc().filteredPlaces: ${SearchScreenBloc().filteredPlaces}');
 
     return Padding(
       padding: const EdgeInsets.only(
@@ -86,10 +87,13 @@ class _SearchBarState extends State<SearchBar> {
                       context.read<SearchScreenBloc>()
                         ..activeFocus(isActive: true)
                         ..searchPlaces(value, widget.searchController);
-                      context.read<SearchScreenBloc>().add(PlacesFoundEvent());
-                      if (widget.searchController.text.isEmpty) {
-                        filteredPlaces.clear();
-                      }
+                      context.read<SearchScreenBloc>().add(PlacesFoundEvent(
+                        isHistoryClear: false,
+                            // places: filteredPlaces,
+                          ));
+                      // if (widget.searchController.text.isEmpty) {
+                      //   filteredPlaces.clear();
+                      // }
                     },
                     // По клику на поле поиска
                     onTap: () {

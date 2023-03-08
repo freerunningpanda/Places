@@ -88,7 +88,7 @@ class FilterScreen extends StatelessWidget {
   }
 
   void goToSearchScreen(BuildContext context) {
-    context.read<SearchScreenBloc>().add(PlacesFoundEvent());
+    context.read<SearchScreenBloc>().add(PlacesFoundEvent(isHistoryClear: false));
     Navigator.of(context).push<SightSearchScreen>(
       MaterialPageRoute(
         builder: (context) => const SightSearchScreen(),

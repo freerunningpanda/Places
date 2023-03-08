@@ -143,7 +143,7 @@ class _SightListWidget extends StatelessWidget {
           );
           // Если места найдены, берём их из state и отображаем на экране
         } else if (state is SearchScreenPlacesFoundState) {
-          
+          debugPrint('state.filteredPlaces.length: ${state.filteredPlaces.length}');
 
           return ListView.builder(
             physics: Platform.isAndroid ? const ClampingScrollPhysics() : const BouncingScrollPhysics(),
@@ -236,7 +236,10 @@ class _ClearHistoryButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextButton(
       // Вызываем event очистки истории поиска
-      onPressed: () => context.read<SearchHistoryBloc>().add(RemoveAllItemsFromHistory()),
+      onPressed: () {
+        context.read<SearchHistoryBloc>().add(RemoveAllItemsFromHistory());
+        context.read<SearchScreenBloc>().add(PlacesFoundEvent(isHistoryClear: true));
+      },
       child: const Align(
         alignment: Alignment.centerLeft,
         child: Text(
@@ -428,13 +431,13 @@ class _RippleEffect extends StatelessWidget {
           onTap: () {
             context.read<DetailsScreenBloc>().add(DetailsScreenEvent(place: place));
             Navigator.of(context).push<SightDetails>(
-            MaterialPageRoute(
-              builder: (context) => SightDetails(
-                place: place,
-                height: 360,
+              MaterialPageRoute(
+                builder: (context) => SightDetails(
+                  place: place,
+                  height: 360,
+                ),
               ),
-            ),
-          );
+            );
           },
         ),
       ),
