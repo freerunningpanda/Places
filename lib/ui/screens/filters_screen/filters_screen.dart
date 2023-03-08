@@ -88,6 +88,9 @@ class FilterScreen extends StatelessWidget {
   }
 
   void goToSearchScreen(BuildContext context) {
+    // Не виджет истории поиска. Поэтому isHistoryClear: false
+    // Параметр isHistoryClear отвечает за отображение всех найденных мест
+    // После очистки истории поиска
     context.read<SearchScreenBloc>().add(PlacesFoundEvent(isHistoryClear: false));
     Navigator.of(context).push<SightSearchScreen>(
       MaterialPageRoute(

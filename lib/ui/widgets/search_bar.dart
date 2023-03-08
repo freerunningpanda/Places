@@ -87,13 +87,14 @@ class _SearchBarState extends State<SearchBar> {
                       context.read<SearchScreenBloc>()
                         ..activeFocus(isActive: true)
                         ..searchPlaces(value, widget.searchController);
-                      context.read<SearchScreenBloc>().add(PlacesFoundEvent(
-                        isHistoryClear: false,
-                            // places: filteredPlaces,
-                          ));
-                      // if (widget.searchController.text.isEmpty) {
-                      //   filteredPlaces.clear();
-                      // }
+                        // Не виджет истории поиска. Поэтому isHistoryClear: false
+                        // Параметр isHistoryClear отвечает за отображение всех найденных мест
+                        // После очистки истории поиска
+                      context.read<SearchScreenBloc>().add(
+                            PlacesFoundEvent(
+                              isHistoryClear: false,
+                            ),
+                          );
                     },
                     // По клику на поле поиска
                     onTap: () {
