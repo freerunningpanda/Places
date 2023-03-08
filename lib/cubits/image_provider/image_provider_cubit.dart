@@ -1,11 +1,11 @@
-import 'package:flutter/material.dart';
-
+import 'package:equatable/equatable.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:places/data/model/place.dart';
 import 'package:places/ui/res/app_strings.dart';
 
-// Переписать на блок, когда пройду тему с загрузкой изображений
-// Сейчас это бутофория
-class ImageDataProvider extends ChangeNotifier {
+part 'image_provider_state.dart';
+
+class ImageProviderCubit extends Cubit<ImageProviderState> {
   static final List<Place> places = [];
 
   static List<Place> pickedImage = [
@@ -19,18 +19,19 @@ class ImageDataProvider extends ChangeNotifier {
       placeType: AppString.park,
     ),
   ];
+  ImageProviderCubit() : super(const ImageProviderState());
 
   void pickImage() {
-    if (ImageDataProvider.places.isEmpty) {
-      ImageDataProvider.places.addAll(ImageDataProvider.pickedImage);
-      notifyListeners();
+    if (ImageProviderCubit.places.isEmpty) {
+      ImageProviderCubit.places.addAll(ImageProviderCubit.pickedImage);
+      emit(state);
     }
   }
 
   void removeImage(int index) {
-    if (ImageDataProvider.places.isNotEmpty) {
-      ImageDataProvider.places.removeAt(index);
-      notifyListeners();
+    if (ImageProviderCubit.places.isNotEmpty) {
+      ImageProviderCubit.places.removeAt(index);
+      emit(state);
     }
   }
 }

@@ -13,11 +13,11 @@ import 'package:places/blocs/want_to_visit/want_to_visit_bloc.dart';
 import 'package:places/cubits/add_sight_screen/add_sight_screen_cubit.dart';
 import 'package:places/cubits/create_place/create_place_button_cubit.dart';
 import 'package:places/cubits/distance_slider_cubit/distance_slider_cubit.dart';
+import 'package:places/cubits/image_provider/image_provider_cubit.dart';
 import 'package:places/cubits/places_list/places_list_cubit.dart';
 import 'package:places/cubits/show_places_button/show_places_button_cubit.dart';
 import 'package:places/data/api/api_places.dart';
 import 'package:places/data/repository/place_repository.dart';
-import 'package:places/providers/image_data_provider.dart';
 import 'package:places/providers/theme_data_provider.dart';
 import 'package:places/ui/res/app_strings.dart';
 import 'package:places/ui/screens/res/app_theme.dart';
@@ -32,10 +32,6 @@ void main() {
   runApp(
     MultiProvider(
       providers: [
-        ChangeNotifierProvider<ImageDataProvider>(
-          create: (_) => ImageDataProvider(), // Переписать на блок, когда пройду тему с загрузкой изображений
-          // Сейчас это бутофория
-        ),
         ChangeNotifierProvider<ThemeDataProvider>(
           create: (_) => ThemeDataProvider(),
         ),
@@ -91,6 +87,9 @@ void main() {
           ),
           BlocProvider<ShowPlacesButtonCubit>(
             create: (context) => ShowPlacesButtonCubit(),
+          ),
+          BlocProvider<ImageProviderCubit>(
+            create: (context) => ImageProviderCubit(),
           ),
         ],
         child: const App(),

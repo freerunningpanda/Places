@@ -3,7 +3,6 @@ import 'package:places/data/api/api_places.dart';
 import 'package:places/data/interactor/place_interactor.dart';
 import 'package:places/data/model/place.dart';
 import 'package:places/data/repository/mapper.dart';
-import 'package:places/mocks.dart';
 
 class PlaceRepository {
   static final List<Place> places = [];

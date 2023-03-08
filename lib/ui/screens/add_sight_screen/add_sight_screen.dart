@@ -4,13 +4,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:places/blocs/choose_category_bloc/choose_category_bloc.dart';
 import 'package:places/cubits/add_sight_screen/add_sight_screen_cubit.dart';
 import 'package:places/cubits/create_place/create_place_button_cubit.dart';
+import 'package:places/cubits/image_provider/image_provider_cubit.dart';
 import 'package:places/data/api/api_places.dart';
 import 'package:places/data/interactor/place_interactor.dart';
 import 'package:places/data/model/place.dart';
 import 'package:places/data/repository/category_repository.dart';
 import 'package:places/data/repository/place_repository.dart';
-import 'package:places/providers/image_data_provider.dart' as image_provider;
-import 'package:places/providers/image_data_provider.dart';
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_strings.dart';
 import 'package:places/ui/res/app_typography.dart';
@@ -190,7 +189,7 @@ class _ImagePickerWidgetState extends State<_ImagePickerWidget> {
   ).favoritePlaces;
   @override
   Widget build(BuildContext context) {
-    final places = ImageDataProvider.places;
+    final places = ImageProviderCubit.places;
 
     return SizedBox(
       height: 72,
@@ -246,10 +245,12 @@ class _SightContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final cubit = context.read<ImageProviderCubit>();
+
     return Dismissible(
       direction: DismissDirection.vertical,
       key: UniqueKey(),
-      onDismissed: (direction) => context.read<image_provider.ImageDataProvider>().removeImage(index),
+      onDismissed: (direction) => cubit.removeImage(index),
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 8),
         decoration: const BoxDecoration(),
@@ -276,7 +277,7 @@ class _SightContent extends StatelessWidget {
                   type: MaterialType.transparency,
                   child: InkWell(
                     borderRadius: BorderRadius.circular(30),
-                    onTap: () => context.read<image_provider.ImageDataProvider>().removeImage(index),
+                    onTap: () => cubit.removeImage(index),
                     child: const SizedBox(height: 24, width: 24),
                   ),
                 ),
