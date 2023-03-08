@@ -16,8 +16,6 @@ import 'package:places/cubits/distance_slider_cubit/distance_slider_cubit.dart';
 import 'package:places/cubits/image_provider/image_provider_cubit.dart';
 import 'package:places/cubits/places_list/places_list_cubit.dart';
 import 'package:places/cubits/show_places_button/show_places_button_cubit.dart';
-import 'package:places/data/api/api_places.dart';
-import 'package:places/data/repository/place_repository.dart';
 import 'package:places/providers/theme_data_provider.dart';
 import 'package:places/ui/res/app_strings.dart';
 import 'package:places/ui/screens/res/app_theme.dart';
@@ -34,11 +32,6 @@ void main() {
       providers: [
         ChangeNotifierProvider<ThemeDataProvider>(
           create: (_) => ThemeDataProvider(),
-        ),
-        Provider<PlaceRepository>(
-          create: (_) => PlaceRepository(
-            apiPlaces: ApiPlaces(),
-          ),
         ),
       ],
       child: MultiBlocProvider(
