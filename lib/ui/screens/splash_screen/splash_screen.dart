@@ -5,7 +5,7 @@ import 'package:places/cubits/places_list/places_list_cubit.dart';
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_colors.dart';
 import 'package:places/ui/screens/onboarding_screen/onboarding_screen.dart';
-import 'package:places/ui/widgets/sight_icons.dart';
+import 'package:places/ui/widgets/place_icons.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);

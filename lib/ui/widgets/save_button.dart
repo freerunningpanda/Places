@@ -6,7 +6,7 @@ import 'package:places/data/model/category.dart';
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_typography.dart';
 import 'package:places/ui/screens/res/custom_colors.dart';
-import 'package:places/ui/widgets/sight_icons.dart';
+import 'package:places/ui/widgets/place_icons.dart';
 
 class SaveButton extends StatelessWidget {
   final String? assetName;
@@ -52,8 +52,8 @@ class SaveButton extends StatelessWidget {
                   Text(
                     title,
                     style: state.isEmpty
-                        ? AppTypography.sightDetailsButtonNameInnactive
-                        : AppTypography.sightDetailsButtonName,
+                        ? AppTypography.placeDetailsButtonNameInnactive
+                        : AppTypography.placeDetailsButtonName,
                   ),
                 ],
               ),

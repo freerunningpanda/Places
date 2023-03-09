@@ -14,7 +14,7 @@ import 'package:places/ui/res/app_strings.dart';
 import 'package:places/ui/res/app_typography.dart';
 import 'package:places/ui/widgets/close_bottom_sheet.dart';
 import 'package:places/ui/widgets/error_widget.dart';
-import 'package:places/ui/widgets/sight_icons.dart';
+import 'package:places/ui/widgets/place_icons.dart';
 
 class PlaceDetails extends StatefulWidget {
   final Place place;
@@ -165,12 +165,12 @@ class _SightDetailsFull extends StatelessWidget {
                       child: Column(
                         children: [
                           _DetailsScreenTitle(
-                            sight: place,
+                            place: place,
                           ),
                           const SizedBox(height: 24),
-                          _DetailsScreenDescription(sight: place),
+                          _DetailsScreenDescription(place: place),
                           const SizedBox(height: 24),
-                          _SightDetailsBuildRouteBtn(sight: place),
+                          _SightDetailsBuildRouteBtn(place: place),
                           const SizedBox(height: 16),
                           const Divider(),
                           const SizedBox(height: 8),
@@ -239,12 +239,12 @@ class _SightDetailsClosedState extends State<_SightDetailsClosed> {
                   children: [
                     const SizedBox(height: 8),
                     _DetailsScreenTitle(
-                      sight: widget.place,
+                      place: widget.place,
                     ),
                     const SizedBox(height: 24),
-                    _DetailsScreenDescription(sight: widget.place),
+                    _DetailsScreenDescription(place: widget.place),
                     const SizedBox(height: 24),
-                    _SightDetailsBuildRouteBtn(sight: widget.place),
+                    _SightDetailsBuildRouteBtn(place: widget.place),
                     const SizedBox(height: 16),
                     const Divider(),
                     const SizedBox(height: 8),
@@ -365,11 +365,11 @@ class _SightDetailsGalleryState extends State<_SightDetailsGallery> {
 }
 
 class _DetailsScreenTitle extends StatelessWidget {
-  final Place sight;
+  final Place place;
 
   const _DetailsScreenTitle({
     Key? key,
-    required this.sight,
+    required this.place,
   }) : super(key: key);
 
   @override
@@ -380,7 +380,7 @@ class _DetailsScreenTitle extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          sight.name,
+          place.name,
           style: theme.textTheme.headlineMedium,
         ),
         const SizedBox(
@@ -389,7 +389,7 @@ class _DetailsScreenTitle extends StatelessWidget {
         Row(
           children: [
             Text(
-              sight.placeType,
+              place.placeType,
               style: theme.textTheme.titleSmall,
             ),
             const SizedBox(width: 16),
@@ -434,10 +434,10 @@ class _SightDetailsImage extends StatelessWidget {
 }
 
 class _DetailsScreenDescription extends StatelessWidget {
-  final Place sight;
+  final Place place;
   const _DetailsScreenDescription({
     Key? key,
-    required this.sight,
+    required this.place,
   }) : super(key: key);
 
   @override
@@ -446,7 +446,7 @@ class _DetailsScreenDescription extends StatelessWidget {
 
     return SizedBox(
       child: Text(
-        sight.description,
+        place.description,
         style: theme.textTheme.displaySmall,
       ),
     );
@@ -454,10 +454,10 @@ class _DetailsScreenDescription extends StatelessWidget {
 }
 
 class _SightDetailsBuildRouteBtn extends StatelessWidget {
-  final Place sight;
+  final Place place;
   const _SightDetailsBuildRouteBtn({
     Key? key,
-    required this.sight,
+    required this.place,
   }) : super(key: key);
 
   @override
@@ -485,7 +485,7 @@ class _SightDetailsBuildRouteBtn extends StatelessWidget {
               const SizedBox(width: 8),
               Text(
                 AppString.goButtonTitle.toUpperCase(),
-                style: AppTypography.sightDetailsButtonName,
+                style: AppTypography.placeDetailsButtonName,
               ),
             ],
           ),

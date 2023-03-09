@@ -3,16 +3,15 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:places/blocs/favorite/favorite_bloc.dart';
 import 'package:places/blocs/visited/visited_screen_bloc.dart';
 import 'package:places/blocs/want_to_visit/want_to_visit_bloc.dart';
-
 import 'package:places/data/model/place.dart';
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_card_size.dart';
 import 'package:places/ui/res/app_strings.dart';
 import 'package:places/ui/res/app_typography.dart';
+import 'package:places/ui/screens/place_card/place_card.dart';
 import 'package:places/ui/screens/res/custom_colors.dart';
-import 'package:places/ui/screens/sight_card/sight_card.dart';
 import 'package:places/ui/widgets/add_new_place_button.dart';
-import 'package:places/ui/widgets/sight_icons.dart';
+import 'package:places/ui/widgets/place_icons.dart';
 
 class VisitingScreen extends StatelessWidget {
   const VisitingScreen({Key? key}) : super(key: key);
@@ -53,13 +52,13 @@ class VisitingScreen extends StatelessWidget {
                             debugPrint('Места (BlocBuilder): ${state.favoritePlaces}');
 
                             return _WantToVisitWidget(
-                              sightsToVisit: state.favoritePlaces.toList(),
+                              placesToVisit: state.favoritePlaces.toList(),
                               key: const PageStorageKey('WantToVisitScrollPosition'),
                             );
                           }
                           if (state is WantToVisitAfterDragState) {
                             return _WantToVisitWidget(
-                              sightsToVisit: state.favoritePlaces,
+                              placesToVisit: state.favoritePlaces,
                               key: const PageStorageKey('WantToVisitScrollPosition'),
                             );
                           }
@@ -172,8 +171,8 @@ class _TabBarWidgetState extends State<_TabBarWidget> with TickerProviderStateMi
 }
 
 class _WantToVisitWidget extends StatelessWidget {
-  final List<Place> sightsToVisit;
-  const _WantToVisitWidget({Key? key, required this.sightsToVisit}) : super(key: key);
+  final List<Place> placesToVisit;
+  const _WantToVisitWidget({Key? key, required this.placesToVisit}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -185,18 +184,18 @@ class _WantToVisitWidget extends StatelessWidget {
               DragCardOnWantToVisitEvent(
                 newIndex: newIndex,
                 oldIndex: oldIndex,
-                places: sightsToVisit,
+                places: placesToVisit,
               ),
             );
       },
       children: [
-        for (var i = 0; i < sightsToVisit.length; i++)
+        for (var i = 0; i < placesToVisit.length; i++)
           ClipRRect(
-            key: ObjectKey(sightsToVisit[i]),
+            key: ObjectKey(placesToVisit[i]),
             borderRadius: BorderRadius.circular(16.0),
             child: _DismissibleWidget(
               i: i,
-              sightsToVisit: sightsToVisit,
+              placesToVisit: placesToVisit,
               theme: theme,
               uniqueKey: UniqueKey(),
               actionTwo: const PlaceIcons(
@@ -235,7 +234,7 @@ class _VisitedWidget extends StatelessWidget {
         for (var i = 0; i < visitedSights.length; i++)
           _DismissibleWidget(
             i: i,
-            sightsToVisit: visitedSights,
+            placesToVisit: visitedSights,
             theme: theme,
             uniqueKey: UniqueKey(),
             actionTwo: const PlaceIcons(
@@ -253,7 +252,7 @@ class _VisitedWidget extends StatelessWidget {
 
 class _DismissibleWidget extends StatelessWidget {
   final int i;
-  final List<Place> sightsToVisit;
+  final List<Place> placesToVisit;
   final ThemeData theme;
   final Key uniqueKey;
   final Widget actionTwo;
@@ -263,7 +262,7 @@ class _DismissibleWidget extends StatelessWidget {
   const _DismissibleWidget({
     Key? key,
     required this.i,
-    required this.sightsToVisit,
+    required this.placesToVisit,
     required this.theme,
     required this.uniqueKey,
     required this.actionTwo,
@@ -327,16 +326,16 @@ class _DismissibleWidget extends StatelessWidget {
               // И передаю в эвент само место в избранном, а не весь список избранного
               context.read<WantToVisitBloc>().add(
                     RemoveFromWantToVisitEvent(
-                      isFavorite: sightsToVisit[i].isFavorite = false,
-                      place: sightsToVisit[i],
-                      placeIndex: sightsToVisit[i].id,
+                      isFavorite: placesToVisit[i].isFavorite = false,
+                      place: placesToVisit[i],
+                      placeIndex: placesToVisit[i].id,
                     ),
                   );
               context.read<FavoriteBloc>().add(
                     FavoriteEvent(
-                      isFavorite: sightsToVisit[i].isFavorite = false,
-                      place: sightsToVisit[i],
-                      placeIndex: sightsToVisit[i].id,
+                      isFavorite: placesToVisit[i].isFavorite = false,
+                      place: placesToVisit[i],
+                      placeIndex: placesToVisit[i].id,
                     ),
                   );
             },
@@ -349,28 +348,28 @@ class _DismissibleWidget extends StatelessWidget {
                 removeSight: () {
                   context.read<WantToVisitBloc>().add(
                         RemoveFromWantToVisitEvent(
-                          isFavorite: sightsToVisit[i].isFavorite = false,
-                          place: sightsToVisit[i],
+                          isFavorite: placesToVisit[i].isFavorite = false,
+                          place: placesToVisit[i],
                           placeIndex: i,
                         ),
                       );
                   context.read<FavoriteBloc>().add(
                         FavoriteEvent(
-                          isFavorite: sightsToVisit[i].isFavorite = false,
-                          place: sightsToVisit[i],
+                          isFavorite: placesToVisit[i].isFavorite = false,
+                          place: placesToVisit[i],
                           placeIndex: i,
                         ),
                       );
                 },
                 isVisitingScreen: true,
-                placeList: sightsToVisit,
-                url: sightsToVisit[i].urls[0],
-                type: sightsToVisit[i].placeType,
-                name: sightsToVisit[i].name,
+                placeList: placesToVisit,
+                url: placesToVisit[i].urls[0],
+                type: placesToVisit[i].placeType,
+                name: placesToVisit[i].name,
                 aspectRatio: AppCardSize.visitingCardDismiss,
                 details: [
                   Text(
-                    sightsToVisit[i].name,
+                    placesToVisit[i].name,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: theme.textTheme.headlineSmall,

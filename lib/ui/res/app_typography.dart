@@ -25,7 +25,7 @@ abstract class AppTypography {
     color: AppColors.backgroundColor,
   );
 
-  static const sightCardTitle = TextStyle(
+  static const placeCardTitle = TextStyle(
     fontWeight: FontWeight.w700,
     color: AppColors.backgroundColor,
   );
@@ -40,7 +40,7 @@ abstract class AppTypography {
     color: AppColors.inactiveBlack,
   );
 
-  static const sightCardDescriptionTitle = TextStyle(
+  static const placeCardDescriptionTitle = TextStyle(
     fontSize: 16,
     fontWeight: FontWeight.w500,
     color: AppColors.textColor,
@@ -50,7 +50,7 @@ abstract class AppTypography {
     fontWeight: FontWeight.w500,
     color: AppColors.secondaryTwo,
   );
-  static const sightCardDescriptionTitleDarkMode = TextStyle(
+  static const placeCardDescriptionTitleDarkMode = TextStyle(
     fontSize: 16,
     fontWeight: FontWeight.w500,
     color: AppColors.backgroundColor,
@@ -81,25 +81,25 @@ abstract class AppTypography {
     color: AppColors.backgroundColor,
   );
 
-  static const sightDetailsTitle = TextStyle(
+  static const placeDetailsTitle = TextStyle(
     fontSize: 24,
     fontWeight: FontWeight.w700,
     color: AppColors.textColor,
   );
 
-  static const sightDetailsTitleDarkMode = TextStyle(
+  static const placeDetailsTitleDarkMode = TextStyle(
     fontSize: 24,
     fontWeight: FontWeight.w700,
     color: AppColors.backgroundColor,
   );
 
-  static const sightDetailsSubtitle = TextStyle(
+  static const placeDetailsSubtitle = TextStyle(
     fontSize: 14,
     fontWeight: FontWeight.w700,
     color: AppColors.textColor,
   );
 
-  static const sightDetailsSubtitleDarkMode = TextStyle(
+  static const placeDetailsSubtitleDarkMode = TextStyle(
     fontSize: 14,
     fontWeight: FontWeight.w700,
     color: AppColors.secondaryTwo,
@@ -128,22 +128,22 @@ abstract class AppTypography {
     color: AppColors.inactiveBlack,
   );
 
-  static const sightDetailsDescription = TextStyle(
+  static const placeDetailsDescription = TextStyle(
     fontSize: 14,
     color: AppColors.textColor,
   );
-  static const sightDetailsDescriptionDarkMode = TextStyle(
+  static const placeDetailsDescriptionDarkMode = TextStyle(
     fontSize: 14,
     fontWeight: FontWeight.w400,
     color: AppColors.backgroundColor,
   );
 
-  static const sightDetailsButtonName = TextStyle(
+  static const placeDetailsButtonName = TextStyle(
     fontWeight: FontWeight.w700,
     color: AppColors.backgroundColor,
   );
 
-  static const sightDetailsButtonNameInnactive = TextStyle(
+  static const placeDetailsButtonNameInnactive = TextStyle(
     fontWeight: FontWeight.w700,
     color: AppColors.inactiveBlack,
   );

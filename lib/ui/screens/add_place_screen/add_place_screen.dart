@@ -17,7 +17,7 @@ import 'package:places/ui/screens/add_place_screen/choose_category_screen.dart';
 import 'package:places/ui/widgets/create_button.dart';
 import 'package:places/ui/widgets/new_place_app_bar_widget.dart';
 import 'package:places/ui/widgets/pick_image_widget.dart';
-import 'package:places/ui/widgets/sight_icons.dart';
+import 'package:places/ui/widgets/place_icons.dart';
 import 'package:places/ui/widgets/suffix_icon.dart';
 
 class AddSightScreen extends StatefulWidget {
@@ -182,7 +182,7 @@ class _ImagePickerWidget extends StatefulWidget {
 
 class _ImagePickerWidgetState extends State<_ImagePickerWidget> {
   // TODO(Alex): rewrite.
-  final sightList = PlaceInteractor(
+  final placeList = PlaceInteractor(
     repository: PlaceRepository(
       apiPlaces: ApiPlaces(),
     ),

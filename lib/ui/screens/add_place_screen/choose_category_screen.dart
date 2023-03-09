@@ -4,13 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:places/blocs/choose_category_bloc/choose_category_bloc.dart';
 import 'package:places/cubits/create_place/create_place_button_cubit.dart';
-
 import 'package:places/data/model/category.dart';
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_strings.dart';
 import 'package:places/ui/widgets/new_place_app_bar_widget.dart';
+import 'package:places/ui/widgets/place_icons.dart';
 import 'package:places/ui/widgets/save_button.dart';
-import 'package:places/ui/widgets/sight_icons.dart';
 
 class ChooseCategoryWidget extends StatelessWidget {
   final List<Category> categories;

@@ -30,7 +30,7 @@ abstract class AppTheme {
         radius: const Radius.circular(6),
       ),
       tabBarTheme: TabBarTheme(
-        unselectedLabelStyle: AppTypography.sightDetailsButtonNameInnactive,
+        unselectedLabelStyle: AppTypography.placeDetailsButtonNameInnactive,
         unselectedLabelColor: AppColors.inactiveBlack,
         indicator: BoxDecoration(
           borderRadius: BorderRadius.circular(50),
@@ -41,10 +41,10 @@ abstract class AppTheme {
       ),
       cardColor: AppColors.red,
       progressIndicatorTheme: const ProgressIndicatorThemeData(
-        circularTrackColor: AppColors.sightCardBackground,
+        circularTrackColor: AppColors.placeCardBackground,
         color: AppColors.secondaryTwo,
       ),
-      extensions: const <ThemeExtension<CustomColors>>[CustomColors.sightCardLight],
+      extensions: const <ThemeExtension<CustomColors>>[CustomColors.placeCardLight],
       textButtonTheme: TextButtonThemeData(
         style: TextButton.styleFrom(
           padding: EdgeInsets.zero,
@@ -63,9 +63,9 @@ abstract class AppTheme {
       ),
       dividerColor: AppColors.inactiveBlack,
       textTheme: const TextTheme(
-        headlineMedium: AppTypography.sightDetailsTitle,
-        headlineSmall: AppTypography.sightCardDescriptionTitle,
-        titleSmall: AppTypography.sightDetailsSubtitle,
+        headlineMedium: AppTypography.placeDetailsTitle,
+        headlineSmall: AppTypography.placeCardDescriptionTitle,
+        titleSmall: AppTypography.placeDetailsSubtitle,
         titleLarge: AppTypography.visitingScreenTitle,
         titleMedium: AppTypography.textText16Regular,
         bodyLarge: AppTypography.settings,
@@ -73,7 +73,7 @@ abstract class AppTheme {
         bodySmall: AppTypography.detailsText,
         displayLarge: AppTypography.addNewPlaceCancel,
         displayMedium: AppTypography.distantion,
-        displaySmall: AppTypography.sightDetailsDescription,
+        displaySmall: AppTypography.placeDetailsDescription,
         labelSmall: AppTypography.filtersItems,
         labelLarge: AppTypography.categoriesGrey,
       ),
@@ -120,7 +120,7 @@ abstract class AppTheme {
         radius: const Radius.circular(6),
       ),
       tabBarTheme: TabBarTheme(
-        unselectedLabelStyle: AppTypography.sightDetailsButtonNameInnactive,
+        unselectedLabelStyle: AppTypography.placeDetailsButtonNameInnactive,
         unselectedLabelColor: AppColors.inactiveBlack,
         indicator: BoxDecoration(
           borderRadius: BorderRadius.circular(50),
@@ -141,9 +141,9 @@ abstract class AppTheme {
       ),
       dividerColor: AppColors.inactiveBlack,
       textTheme: const TextTheme(
-        headlineMedium: AppTypography.sightDetailsTitleDarkMode,
-        headlineSmall: AppTypography.sightCardDescriptionTitleDarkMode,
-        titleSmall: AppTypography.sightDetailsSubtitleDarkMode,
+        headlineMedium: AppTypography.placeDetailsTitleDarkMode,
+        headlineSmall: AppTypography.placeCardDescriptionTitleDarkMode,
+        titleSmall: AppTypography.placeDetailsSubtitleDarkMode,
         titleLarge: AppTypography.visitingScreenTitleDarkMode,
         titleMedium: AppTypography.textText16Regular,
         bodyLarge: AppTypography.settingsDarkMode,
@@ -151,7 +151,7 @@ abstract class AppTheme {
         bodySmall: AppTypography.detailsTextDarkMode,
         displayLarge: AppTypography.addNewPlaceCancel,
         displayMedium: AppTypography.distantionDarkMode,
-        displaySmall: AppTypography.sightDetailsDescriptionDarkMode,
+        displaySmall: AppTypography.placeDetailsDescriptionDarkMode,
         labelSmall: AppTypography.filtersItemsDarkMode,
         labelLarge: AppTypography.categoriesGrey,
       ),
@@ -171,7 +171,7 @@ abstract class AppTheme {
         overlayShape: SliderComponentShape.noOverlay,
         rangeThumbShape: const RoundRangeSliderThumbShape(elevation: 3),
       ),
-      extensions: const <ThemeExtension<CustomColors>>[CustomColors.sightCardDark],
+      extensions: const <ThemeExtension<CustomColors>>[CustomColors.placeCardDark],
     );
   }
 }

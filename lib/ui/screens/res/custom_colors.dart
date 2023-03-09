@@ -4,12 +4,12 @@ import 'package:places/ui/res/app_colors.dart';
 
 @immutable
 class CustomColors extends ThemeExtension<CustomColors> {
-  static const sightCardLight = CustomColors(
-    color: AppColors.sightCardBackground,
+  static const placeCardLight = CustomColors(
+    color: AppColors.placeCardBackground,
   );
 
-  static const sightCardDark = CustomColors(
-    color: AppColors.sightCardBackgroundDM,
+  static const placeCardDark = CustomColors(
+    color: AppColors.placeCardBackgroundDM,
   );
 
   final Color? color;
@@ -17,8 +17,8 @@ class CustomColors extends ThemeExtension<CustomColors> {
   const CustomColors({required this.color});
 
   @override
-  ThemeExtension<CustomColors> copyWith({Color? sightCardColor, SystemUiOverlayStyle? systemColor}) {
-    return CustomColors(color: sightCardColor);
+  ThemeExtension<CustomColors> copyWith({Color? placeCardColor, SystemUiOverlayStyle? systemColor}) {
+    return CustomColors(color: placeCardColor);
   }
 
   @override

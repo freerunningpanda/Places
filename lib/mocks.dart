@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:places/data/model/place.dart';
 import 'package:places/utils/place_type.dart';
-// import 'package:places/data/model/sight.dart';
+// import 'package:places/data/model/place.dart';
 
 abstract class Mocks {
   static const mockLat = 55.988344;
@@ -88,7 +88,7 @@ abstract class Mocks {
     ),
   ];
 
-  // static final List<Place> sightsTovisit = [
+  // static final List<Place> placesTovisit = [
   //   const Place(
   //     name: 'Мытищинский парк',
   //     lat: 55.911397,

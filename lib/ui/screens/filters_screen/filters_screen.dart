@@ -15,7 +15,7 @@ import 'package:places/ui/res/app_strings.dart';
 import 'package:places/ui/res/app_typography.dart';
 import 'package:places/ui/screens/place_search_screen.dart/place_search_screen.dart';
 import 'package:places/ui/widgets/action_button.dart';
-import 'package:places/ui/widgets/sight_icons.dart';
+import 'package:places/ui/widgets/place_icons.dart';
 
 class FilterScreen extends StatelessWidget {
   final VoidCallback? onPressed;

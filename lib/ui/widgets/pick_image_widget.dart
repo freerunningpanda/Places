@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_strings.dart';
 import 'package:places/ui/widgets/cancel_button.dart';
-import 'package:places/ui/widgets/sight_icons.dart';
+import 'package:places/ui/widgets/place_icons.dart';
 
 class PickImageWidget extends StatelessWidget {
   const PickImageWidget({Key? key}) : super(key: key);

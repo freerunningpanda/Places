@@ -10,11 +10,11 @@ import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_card_size.dart';
 import 'package:places/ui/res/app_strings.dart';
 import 'package:places/ui/res/app_typography.dart';
-import 'package:places/ui/screens/sight_card/sight_card.dart';
+import 'package:places/ui/screens/place_card/place_card.dart';
 import 'package:places/ui/widgets/add_new_place_button.dart';
 import 'package:places/ui/widgets/error_widget.dart';
+import 'package:places/ui/widgets/place_icons.dart';
 import 'package:places/ui/widgets/search_bar.dart';
-import 'package:places/ui/widgets/sight_icons.dart';
 
 class SightListScreen extends StatelessWidget {
   const SightListScreen({Key? key}) : super(key: key);
@@ -121,7 +121,7 @@ class _SightListWidgetPortraitState extends State<_SightListWidgetPortrait> {
                 child: SightCard(
                   placeIndex: index,
                   isVisitingScreen: false,
-                  aspectRatio: AppCardSize.sightCard,
+                  aspectRatio: AppCardSize.placeCard,
                   actionOne: BlocBuilder<FavoriteBloc, FavoriteState>(
                     builder: (context, state) {
                       if (state is IsFavoriteState) {

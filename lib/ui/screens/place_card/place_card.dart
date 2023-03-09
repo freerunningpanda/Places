@@ -7,10 +7,9 @@ import 'package:places/blocs/details_screen/details_screen_bloc.dart';
 import 'package:places/blocs/favorite/favorite_bloc.dart';
 import 'package:places/blocs/want_to_visit/want_to_visit_bloc.dart';
 import 'package:places/data/model/place.dart';
-
 import 'package:places/ui/res/app_typography.dart';
+import 'package:places/ui/screens/place_details/place_details.dart';
 import 'package:places/ui/screens/res/custom_colors.dart';
-import 'package:places/ui/screens/sight_details/sight_details.dart';
 import 'package:places/ui/widgets/cupertino_time_widget.dart';
 
 class SightCard extends StatelessWidget {
@@ -313,7 +312,7 @@ class _SightCardTop extends StatelessWidget {
             top: 16,
             child: Text(
               type,
-              style: AppTypography.sightCardTitle,
+              style: AppTypography.placeCardTitle,
             ),
           ),
         ],

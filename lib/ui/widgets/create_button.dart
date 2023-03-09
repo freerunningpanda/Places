@@ -5,7 +5,7 @@ import 'package:places/cubits/create_place/create_place_button_cubit.dart';
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_typography.dart';
 import 'package:places/ui/screens/res/custom_colors.dart';
-import 'package:places/ui/widgets/sight_icons.dart';
+import 'package:places/ui/widgets/place_icons.dart';
 
 class CreateButton extends StatelessWidget {
   final String? assetName;
@@ -55,8 +55,8 @@ class CreateButton extends StatelessWidget {
                   Text(
                     title,
                     style: buttonStyle
-                        ? AppTypography.sightDetailsButtonNameInnactive
-                        : AppTypography.sightDetailsButtonName,
+                        ? AppTypography.placeDetailsButtonNameInnactive
+                        : AppTypography.placeDetailsButtonName,
                   ),
                 ],
               ),

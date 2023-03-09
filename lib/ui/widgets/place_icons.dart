@@ -21,7 +21,8 @@ class PlaceIcons extends StatelessWidget {
       assetName,
       width: width,
       height: height,
-      theme: SvgTheme(currentColor: color),
+      // ignore: deprecated_member_use
+      color: color,
     );
   }
 }

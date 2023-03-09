@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:places/ui/res/app_assets.dart';
-import 'package:places/ui/widgets/sight_icons.dart';
+import 'package:places/ui/widgets/place_icons.dart';
 
 class SuffixIcon extends StatelessWidget {
   final TextEditingController controller;

@@ -5,7 +5,7 @@ import 'package:places/ui/res/app_colors.dart';
 import 'package:places/ui/res/app_strings.dart';
 import 'package:places/ui/res/app_typography.dart';
 import 'package:places/ui/screens/add_place_screen/add_place_screen.dart';
-import 'package:places/ui/widgets/sight_icons.dart';
+import 'package:places/ui/widgets/place_icons.dart';
 
 class AddNewPlaceButton extends StatelessWidget {
   const AddNewPlaceButton({
@@ -42,7 +42,7 @@ class AddNewPlaceButton extends StatelessWidget {
             SizedBox(width: 8),
             Text(
               AppString.addNewPlace,
-              style: AppTypography.sightCardTitle,
+              style: AppTypography.placeCardTitle,
             ),
             Expanded(child: SizedBox()),
           ],

@@ -10,10 +10,10 @@ import 'package:places/data/model/place.dart';
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_strings.dart';
 import 'package:places/ui/res/app_typography.dart';
-import 'package:places/ui/screens/sight_details/sight_details.dart';
+import 'package:places/ui/screens/place_details/place_details.dart';
+import 'package:places/ui/widgets/place_icons.dart';
 import 'package:places/ui/widgets/search_appbar.dart';
 import 'package:places/ui/widgets/search_bar.dart';
-import 'package:places/ui/widgets/sight_icons.dart';
 
 class PlaceSearchScreen extends StatefulWidget {
   const PlaceSearchScreen({Key? key}) : super(key: key);

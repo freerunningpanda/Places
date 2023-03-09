@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-
 import 'package:places/ui/res/app_assets.dart';
+import 'package:places/ui/screens/place_list_screen/place_list_screen.dart';
 import 'package:places/ui/screens/settings_screen/settings_screen.dart';
-import 'package:places/ui/screens/sight_list_screen/sight_list_screen.dart';
 import 'package:places/ui/screens/visiting_screen/visiting_screen.dart';
-import 'package:places/ui/widgets/sight_icons.dart';
+import 'package:places/ui/widgets/place_icons.dart';
 
 class NavigationScreen extends StatefulWidget {
   const NavigationScreen({Key? key}) : super(key: key);
