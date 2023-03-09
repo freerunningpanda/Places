@@ -1,8 +1,6 @@
 part of 'want_to_visit_bloc.dart';
 
-abstract class VisitingScreenEvent extends Equatable {
-  @override
-  List<Object?> get props => [];
+abstract class VisitingScreenEvent {
 
   const VisitingScreenEvent();
 }

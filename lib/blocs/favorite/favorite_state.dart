@@ -3,6 +3,7 @@ part of 'favorite_bloc.dart';
 abstract class FavoriteState extends Equatable {
   @override
   List<Object?> get props => [];
+  const FavoriteState();
 }
 
 class IsNotFavoriteState extends FavoriteState {
@@ -11,7 +12,7 @@ class IsNotFavoriteState extends FavoriteState {
   @override
   List<Object?> get props => [placeIndex];
 
-  IsNotFavoriteState({
+  const IsNotFavoriteState({
     required this.placeIndex,
   });
 }
@@ -22,7 +23,7 @@ class IsFavoriteState extends FavoriteState {
   @override
   List<Object?> get props => [placeIndex];
 
-  IsFavoriteState({
+  const IsFavoriteState({
     required this.placeIndex,
   });
 }

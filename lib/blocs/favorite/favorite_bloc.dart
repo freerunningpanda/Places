@@ -15,7 +15,7 @@ class FavoriteBloc extends Bloc<FavoriteEvent, FavoriteState> {
       apiPlaces: ApiPlaces(),
     ),
   );
-  FavoriteBloc() : super(IsNotFavoriteState(placeIndex: 0)) {
+  FavoriteBloc() : super(const IsNotFavoriteState(placeIndex: 0)) {
     on<FavoriteEvent>(
       (event, emit) {
         if (event.isFavorite) {

@@ -3,6 +3,8 @@ part of 'search_bar_bloc.dart';
 abstract class SearchBarState extends Equatable {
   @override
   List<Object?> get props => [];
+
+  const SearchBarState();
 }
 
 class SearchBarEmptyState extends SearchBarState {}
@@ -13,7 +15,7 @@ class SearchBarHasValueState extends SearchBarState {
   @override
   List<Object?> get props => [value];
 
-  SearchBarHasValueState({
+  const SearchBarHasValueState({
     required this.value,
   });
 }

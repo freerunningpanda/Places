@@ -3,6 +3,8 @@ part of 'search_screen_bloc.dart';
 abstract class SearchScreenState extends Equatable {
   @override
   List<Object?> get props => [];
+
+  const SearchScreenState();
 }
 
 class SearchScreenEmptyState extends SearchScreenState {}
@@ -14,7 +16,7 @@ class SearchScreenPlacesFoundState extends SearchScreenState {
   @override
   List<Object?> get props => [filteredPlaces, length];
 
-  SearchScreenPlacesFoundState({
+  const SearchScreenPlacesFoundState({
     required this.filteredPlaces,
     required this.length,
   });

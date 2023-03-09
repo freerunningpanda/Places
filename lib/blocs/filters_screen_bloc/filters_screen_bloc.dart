@@ -32,7 +32,7 @@ class FiltersScreenBloc extends Bloc<FiltersScreenEvent, FiltersScreenState> {
       apiPlaces: ApiPlaces(),
     ),
   );
-  FiltersScreenBloc() : super(IsNotEnabledState(filterIndex: 0, isEnabled: false)) {
+  FiltersScreenBloc() : super(const IsNotEnabledState(filterIndex: 0, isEnabled: false)) {
     on<AddRemoveFilterEvent>(
       (event, emit) {
         if (event.isEnabled) {
@@ -58,7 +58,7 @@ class FiltersScreenBloc extends Bloc<FiltersScreenEvent, FiltersScreenState> {
     on<ClearAllFiltersEvent>((event, emit) {
       clearAllFilters();
       emit(
-        IsNotEnabledState(
+        const IsNotEnabledState(
           filterIndex: 0,
           isEnabled: false,
         ),

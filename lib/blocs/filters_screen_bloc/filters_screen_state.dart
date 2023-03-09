@@ -3,6 +3,7 @@ part of 'filters_screen_bloc.dart';
 abstract class FiltersScreenState extends Equatable {
   @override
   List<Object?> get props => [];
+  const FiltersScreenState();
 }
 
 class IsNotEnabledState extends FiltersScreenState {
@@ -12,7 +13,7 @@ class IsNotEnabledState extends FiltersScreenState {
   @override
   List<Object?> get props => [filterIndex, isEnabled];
 
-  IsNotEnabledState({
+  const IsNotEnabledState({
     required this.filterIndex,
     required this.isEnabled,
   });
@@ -25,7 +26,7 @@ class IsEnabledState extends FiltersScreenState {
   @override
   List<Object?> get props => [filterIndex, isEnabled];
 
-  IsEnabledState({
+  const IsEnabledState({
     required this.filterIndex,
     required this.isEnabled,
   });

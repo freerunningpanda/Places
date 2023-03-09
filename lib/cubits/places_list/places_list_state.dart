@@ -3,6 +3,8 @@ part of 'places_list_cubit.dart';
 abstract class PlacesListState extends Equatable {
   @override
   List<Object?> get props => [];
+
+  const PlacesListState();
 }
 
 class PlacesListEmptyState extends PlacesListState {}
@@ -13,7 +15,7 @@ class PlacesListLoadedState extends PlacesListState {
   @override
   List<Object?> get props => [places];
 
-  PlacesListLoadedState({
+  const PlacesListLoadedState({
     required this.places,
   });
 }
