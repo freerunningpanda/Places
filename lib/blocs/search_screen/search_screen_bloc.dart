@@ -86,12 +86,12 @@ class SearchScreenBloc extends Bloc<SearchScreenEvent, SearchScreenState> {
         el.lng,
       );
       if (distance >= Mocks.rangeValues.start && distance <= Mocks.rangeValues.end) {
-        PlaceInteractor.foundedPlaces = PlaceInteractor.filtersWithDistance.where((sight) {
-          final sightTitle = sight.name.toLowerCase();
+        PlaceInteractor.foundedPlaces = PlaceInteractor.filtersWithDistance.where((place) {
+          final placeTitle = place.name.toLowerCase();
           final input = query.toLowerCase();
           debugPrint('filteredPlaces: $PlaceInteractor.foundedPlaces');
 
-          return sightTitle.contains(input);
+          return placeTitle.contains(input);
         }).toList();
       }
     }
