@@ -16,8 +16,8 @@ import 'package:places/ui/widgets/error_widget.dart';
 import 'package:places/ui/widgets/place_icons.dart';
 import 'package:places/ui/widgets/search_bar.dart';
 
-class SightListScreen extends StatelessWidget {
-  const SightListScreen({Key? key}) : super(key: key);
+class PlaceListScreen extends StatelessWidget {
+  const PlaceListScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -70,9 +70,9 @@ class SightListScreen extends StatelessWidget {
                         ),
                       ),
                     if (orientation)
-                      _SightListWidgetPortrait(placeList: state.places, theme: theme)
+                      _PlaceListWidgetPortrait(placeList: state.places, theme: theme)
                     else
-                      _SightListWidgetLandscape(placeList: state.places, theme: theme),
+                      _PlaceListWidgetLandscape(placeList: state.places, theme: theme),
                   ],
                 );
               }
@@ -88,21 +88,21 @@ class SightListScreen extends StatelessWidget {
   }
 }
 
-class _SightListWidgetPortrait extends StatefulWidget {
+class _PlaceListWidgetPortrait extends StatefulWidget {
   final List<Place> placeList;
   final ThemeData theme;
 
-  const _SightListWidgetPortrait({
+  const _PlaceListWidgetPortrait({
     Key? key,
     required this.placeList,
     required this.theme,
   }) : super(key: key);
 
   @override
-  State<_SightListWidgetPortrait> createState() => _SightListWidgetPortraitState();
+  State<_PlaceListWidgetPortrait> createState() => _PlaceListWidgetPortraitState();
 }
 
-class _SightListWidgetPortraitState extends State<_SightListWidgetPortrait> {
+class _PlaceListWidgetPortraitState extends State<_PlaceListWidgetPortrait> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -118,7 +118,7 @@ class _SightListWidgetPortraitState extends State<_SightListWidgetPortrait> {
           return Column(
             children: [
               FittedBox(
-                child: SightCard(
+                child: PlaceCard(
                   placeIndex: index,
                   isVisitingScreen: false,
                   aspectRatio: AppCardSize.placeCard,
@@ -184,11 +184,11 @@ class _SightListWidgetPortraitState extends State<_SightListWidgetPortrait> {
   }
 }
 
-class _SightListWidgetLandscape extends StatelessWidget {
+class _PlaceListWidgetLandscape extends StatelessWidget {
   final List<Place> placeList;
   final ThemeData theme;
 
-  const _SightListWidgetLandscape({
+  const _PlaceListWidgetLandscape({
     Key? key,
     required this.placeList,
     required this.theme,
@@ -215,7 +215,7 @@ class _SightListWidgetLandscape extends StatelessWidget {
 
           return Column(
             children: [
-              SightCard(
+              PlaceCard(
                 placeIndex: index,
                 isVisitingScreen: false,
                 aspectRatio: 1.5 / 1,

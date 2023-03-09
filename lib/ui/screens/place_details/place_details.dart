@@ -82,7 +82,7 @@ class _PlaceDetailsState extends State<PlaceDetails> {
                   ),
                 ),
                 const SizedBox(height: 12),
-                _SightDetailsClosed(
+                _PlaceDetailsClosed(
                   height: widget.height,
                   place: widget.place,
                   pageController: _pageController,
@@ -100,12 +100,12 @@ class _PlaceDetailsState extends State<PlaceDetails> {
   }
 }
 
-class _SightDetailsFull extends StatelessWidget {
+class _PlaceDetailsFull extends StatelessWidget {
   final Place place;
   final double height;
   final PageController _pageController;
 
-  const _SightDetailsFull({
+  const _PlaceDetailsFull({
     Key? key,
     required this.place,
     required this.height,
@@ -154,7 +154,7 @@ class _SightDetailsFull extends StatelessWidget {
                   children: [
                     ClipRRect(
                       borderRadius: BorderRadius.circular(12),
-                      child: _SightDetailsGallery(
+                      child: _PlaceDetailsGallery(
                         images: place.urls,
                         height: height,
                         pageController: _pageController,
@@ -170,11 +170,11 @@ class _SightDetailsFull extends StatelessWidget {
                           const SizedBox(height: 24),
                           _DetailsScreenDescription(place: place),
                           const SizedBox(height: 24),
-                          _SightDetailsBuildRouteBtn(place: place),
+                          _PlaceDetailsBuildRouteBtn(place: place),
                           const SizedBox(height: 16),
                           const Divider(),
                           const SizedBox(height: 8),
-                          _SightDetailsBottom(place: place),
+                          _PlaceDetailsBottom(place: place),
                           const SizedBox(height: 16),
                         ],
                       ),
@@ -190,12 +190,12 @@ class _SightDetailsFull extends StatelessWidget {
   }
 }
 
-class _SightDetailsClosed extends StatefulWidget {
+class _PlaceDetailsClosed extends StatefulWidget {
   final Place place;
   final double height;
   final PageController _pageController;
 
-  const _SightDetailsClosed({
+  const _PlaceDetailsClosed({
     Key? key,
     required this.place,
     required this.height,
@@ -204,10 +204,10 @@ class _SightDetailsClosed extends StatefulWidget {
         super(key: key);
 
   @override
-  State<_SightDetailsClosed> createState() => _SightDetailsClosedState();
+  State<_PlaceDetailsClosed> createState() => _PlaceDetailsClosedState();
 }
 
-class _SightDetailsClosedState extends State<_SightDetailsClosed> {
+class _PlaceDetailsClosedState extends State<_PlaceDetailsClosed> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -244,11 +244,11 @@ class _SightDetailsClosedState extends State<_SightDetailsClosed> {
                     const SizedBox(height: 24),
                     _DetailsScreenDescription(place: widget.place),
                     const SizedBox(height: 24),
-                    _SightDetailsBuildRouteBtn(place: widget.place),
+                    _PlaceDetailsBuildRouteBtn(place: widget.place),
                     const SizedBox(height: 16),
                     const Divider(),
                     const SizedBox(height: 8),
-                    _SightDetailsBottom(place: widget.place),
+                    _PlaceDetailsBottom(place: widget.place),
                     const SizedBox(height: 16),
                   ],
                 ),
@@ -261,9 +261,9 @@ class _SightDetailsClosedState extends State<_SightDetailsClosed> {
   }
 
   void _showGallery() {
-    showModalBottomSheet<_SightDetailsFull>(
+    showModalBottomSheet<_PlaceDetailsFull>(
       context: context,
-      builder: (_) => _SightDetailsFull(
+      builder: (_) => _PlaceDetailsFull(
         height: widget.height,
         place: widget.place,
         pageController: widget._pageController,
@@ -273,12 +273,12 @@ class _SightDetailsClosedState extends State<_SightDetailsClosed> {
   }
 }
 
-class _SightDetailsGallery extends StatefulWidget {
+class _PlaceDetailsGallery extends StatefulWidget {
   final List<String> images;
   final double height;
   final PageController _pageController;
 
-  const _SightDetailsGallery({
+  const _PlaceDetailsGallery({
     Key? key,
     required this.images,
     required this.height,
@@ -287,10 +287,10 @@ class _SightDetailsGallery extends StatefulWidget {
         super(key: key);
 
   @override
-  State<_SightDetailsGallery> createState() => _SightDetailsGalleryState();
+  State<_PlaceDetailsGallery> createState() => _PlaceDetailsGalleryState();
 }
 
-class _SightDetailsGalleryState extends State<_SightDetailsGallery> {
+class _PlaceDetailsGalleryState extends State<_PlaceDetailsGallery> {
   final scrollController = ScrollController();
 
   @override
@@ -320,7 +320,7 @@ class _SightDetailsGalleryState extends State<_SightDetailsGallery> {
                           .map(
                             (i, e) => MapEntry(
                               i,
-                              _SightDetailsImage(
+                              _PlaceDetailsImage(
                                 height: widget.height,
                                 image: e,
                               ),
@@ -404,10 +404,10 @@ class _DetailsScreenTitle extends StatelessWidget {
   }
 }
 
-class _SightDetailsImage extends StatelessWidget {
+class _PlaceDetailsImage extends StatelessWidget {
   final String image;
   final double height;
-  const _SightDetailsImage({
+  const _PlaceDetailsImage({
     Key? key,
     required this.image,
     required this.height,
@@ -453,9 +453,9 @@ class _DetailsScreenDescription extends StatelessWidget {
   }
 }
 
-class _SightDetailsBuildRouteBtn extends StatelessWidget {
+class _PlaceDetailsBuildRouteBtn extends StatelessWidget {
   final Place place;
-  const _SightDetailsBuildRouteBtn({
+  const _PlaceDetailsBuildRouteBtn({
     Key? key,
     required this.place,
   }) : super(key: key);
@@ -495,9 +495,9 @@ class _SightDetailsBuildRouteBtn extends StatelessWidget {
   }
 }
 
-class _SightDetailsBottom extends StatelessWidget {
+class _PlaceDetailsBottom extends StatelessWidget {
   final Place place;
-  const _SightDetailsBottom({
+  const _PlaceDetailsBottom({
     required this.place,
     Key? key,
   }) : super(key: key);

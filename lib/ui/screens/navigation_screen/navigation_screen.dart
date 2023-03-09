@@ -14,7 +14,7 @@ class NavigationScreen extends StatefulWidget {
 
 class _NavigationScreenState extends State<NavigationScreen> {
   final screens = const [
-    SightListScreen(key: PageStorageKey('SaveScrollPosition'),),
+    PlaceListScreen(key: PageStorageKey('SaveScrollPosition'),),
     SizedBox(),
     VisitingScreen(),
     SettingsScreen(),

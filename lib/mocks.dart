@@ -158,7 +158,7 @@ abstract class Mocks {
   //   ),
   // ];
 
-  // static final List<Place> visitedSights = [
+  // static final List<Place> visitedPlaces = [
   //   const Place(
   //     name: 'Мытищинский парк',
   //     lat: 55.911397,

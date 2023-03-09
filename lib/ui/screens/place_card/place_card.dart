@@ -12,7 +12,7 @@ import 'package:places/ui/screens/place_details/place_details.dart';
 import 'package:places/ui/screens/res/custom_colors.dart';
 import 'package:places/ui/widgets/cupertino_time_widget.dart';
 
-class SightCard extends StatelessWidget {
+class PlaceCard extends StatelessWidget {
   final String? url;
   final String type;
   final String name;
@@ -23,9 +23,9 @@ class SightCard extends StatelessWidget {
   final List<Place> placeList;
   final int placeIndex;
   final bool isVisitingScreen;
-  final VoidCallback? removeSight;
+  final VoidCallback? removePlace;
 
-  const SightCard({
+  const PlaceCard({
     Key? key,
     required this.url,
     required this.type,
@@ -37,7 +37,7 @@ class SightCard extends StatelessWidget {
     required this.placeList,
     required this.placeIndex,
     required this.isVisitingScreen,
-    this.removeSight,
+    this.removePlace,
   }) : super(key: key);
 
   @override
@@ -62,12 +62,12 @@ class SightCard extends StatelessWidget {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  _SightCardTop(
+                  _PlaceCardTop(
                     type: type,
                     url: url,
                   ),
                   const SizedBox(height: 16),
-                  _SightCardBottom(
+                  _PlaceCardBottom(
                     name: name,
                     details: details,
                   ),
@@ -76,14 +76,14 @@ class SightCard extends StatelessWidget {
               RippleCardFull(place: placeList[placeIndex]),
               if (isVisitingScreen)
                 RippleIcons(
-                  removeSight: removeSight,
+                  removePlace: removePlace,
                   actionOne: actionOne,
                   actionTwo: actionTwo ?? const SizedBox(),
                 )
               else
                 RippleIcon(
                   actionOne: actionOne,
-                  addSight: () {
+                  addPlace: () {
                     final place = placeList[placeIndex];
                     // Если место не в избранном
                     if (!place.isFavorite) {
@@ -140,12 +140,12 @@ class SightCard extends StatelessWidget {
 
 class RippleIcon extends StatelessWidget {
   final Widget actionOne;
-  final VoidCallback? addSight;
+  final VoidCallback? addPlace;
 
   const RippleIcon({
     Key? key,
     required this.actionOne,
-    required this.addSight,
+    required this.addPlace,
   }) : super(key: key);
 
   @override
@@ -160,7 +160,7 @@ class RippleIcon extends StatelessWidget {
           height: 22,
           child: InkWell(
             borderRadius: BorderRadius.circular(16.0),
-            onTap: addSight,
+            onTap: addPlace,
             child: actionOne,
           ),
         ),
@@ -172,13 +172,13 @@ class RippleIcon extends StatelessWidget {
 class RippleIcons extends StatelessWidget {
   final Widget actionOne;
   final Widget actionTwo;
-  final VoidCallback? removeSight;
+  final VoidCallback? removePlace;
 
   const RippleIcons({
     Key? key,
     required this.actionOne,
     required this.actionTwo,
-    required this.removeSight,
+    required this.removePlace,
   }) : super(key: key);
 
   @override
@@ -227,7 +227,7 @@ class RippleIcons extends StatelessWidget {
               height: 22,
               child: InkWell(
                 borderRadius: BorderRadius.circular(16.0),
-                onTap: removeSight,
+                onTap: removePlace,
                 child: actionTwo,
               ),
             ),
@@ -270,12 +270,12 @@ class RippleCardFull extends StatelessWidget {
   }
 }
 
-class _SightCardTop extends StatelessWidget {
+class _PlaceCardTop extends StatelessWidget {
   // final Widget actionOne;
   final String type;
   final String? url;
 
-  const _SightCardTop({
+  const _PlaceCardTop({
     Key? key,
     // required this.actionOne,
     required this.type,
@@ -321,10 +321,10 @@ class _SightCardTop extends StatelessWidget {
   }
 }
 
-class _SightCardBottom extends StatelessWidget {
+class _PlaceCardBottom extends StatelessWidget {
   final String name;
   final List<Widget> details;
-  const _SightCardBottom({Key? key, required this.name, required this.details}) : super(key: key);
+  const _PlaceCardBottom({Key? key, required this.name, required this.details}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

@@ -80,7 +80,7 @@ class VisitingScreen extends StatelessWidget {
                                     description: AppString.finishRoute,
                                   )
                                 : _VisitedWidget(
-                                    visitedSights: state.visitedPlaces.toList(),
+                                    visitedPlaces: state.visitedPlaces.toList(),
                                     key: const PageStorageKey('VisitedScrollPosition'),
                                   );
                           }
@@ -213,8 +213,8 @@ class _WantToVisitWidget extends StatelessWidget {
 }
 
 class _VisitedWidget extends StatelessWidget {
-  final List<Place> visitedSights;
-  const _VisitedWidget({Key? key, required this.visitedSights}) : super(key: key);
+  final List<Place> visitedPlaces;
+  const _VisitedWidget({Key? key, required this.visitedPlaces}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -226,15 +226,15 @@ class _VisitedWidget extends StatelessWidget {
               DragCardOnVisitedEvent(
                 newIndex: newIndex,
                 oldIndex: oldIndex,
-                places: visitedSights,
+                places: visitedPlaces,
               ),
             );
       },
       children: [
-        for (var i = 0; i < visitedSights.length; i++)
+        for (var i = 0; i < visitedPlaces.length; i++)
           _DismissibleWidget(
             i: i,
-            placesToVisit: visitedSights,
+            placesToVisit: visitedPlaces,
             theme: theme,
             uniqueKey: UniqueKey(),
             actionTwo: const PlaceIcons(
@@ -343,9 +343,9 @@ class _DismissibleWidget extends StatelessWidget {
             direction: DismissDirection.endToStart,
             child: Padding(
               padding: const EdgeInsets.only(bottom: 11.0),
-              child: SightCard(
+              child: PlaceCard(
                 placeIndex: i,
-                removeSight: () {
+                removePlace: () {
                   context.read<WantToVisitBloc>().add(
                         RemoveFromWantToVisitEvent(
                           isFavorite: placesToVisit[i].isFavorite = false,

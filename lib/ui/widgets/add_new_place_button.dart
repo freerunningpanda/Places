@@ -16,9 +16,9 @@ class AddNewPlaceButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Navigator.of(context).push<AddSightScreen>(
+        Navigator.of(context).push<AddPlaceScreen>(
           MaterialPageRoute(
-            builder: (context) => const AddSightScreen(),
+            builder: (context) => const AddPlaceScreen(),
           ),
         );
         debugPrint('🟡---------Add new place button pressed');

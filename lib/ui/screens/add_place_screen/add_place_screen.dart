@@ -20,14 +20,14 @@ import 'package:places/ui/widgets/pick_image_widget.dart';
 import 'package:places/ui/widgets/place_icons.dart';
 import 'package:places/ui/widgets/suffix_icon.dart';
 
-class AddSightScreen extends StatefulWidget {
-  const AddSightScreen({Key? key}) : super(key: key);
+class AddPlaceScreen extends StatefulWidget {
+  const AddPlaceScreen({Key? key}) : super(key: key);
 
   @override
-  State<AddSightScreen> createState() => _AddSightScreenState();
+  State<AddPlaceScreen> createState() => _AddPlaceScreenState();
 }
 
-class _AddSightScreenState extends State<AddSightScreen> {
+class _AddPlaceScreenState extends State<AddPlaceScreen> {
   final categoryRepository = CategoryRepository();
   final latController = TextEditingController();
   final lotController = TextEditingController();
@@ -208,7 +208,7 @@ class _ImagePickerWidgetState extends State<_ImagePickerWidget> {
                 Row(
                   children: [
                     for (var i = 0; i < places.length; i++)
-                      _ImageSight(
+                      _ImagePlace(
                         image: places[i].urls[0],
                         index: i,
                       ),
@@ -223,21 +223,21 @@ class _ImagePickerWidgetState extends State<_ImagePickerWidget> {
   }
 }
 
-class _ImageSight extends StatelessWidget {
+class _ImagePlace extends StatelessWidget {
   final String? image;
   final int index;
-  const _ImageSight({Key? key, required this.image, required this.index}) : super(key: key);
+  const _ImagePlace({Key? key, required this.image, required this.index}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return _SightContent(image: image, index: index);
+    return _PlaceContent(image: image, index: index);
   }
 }
 
-class _SightContent extends StatelessWidget {
+class _PlaceContent extends StatelessWidget {
   final String? image;
   final int index;
-  const _SightContent({
+  const _PlaceContent({
     Key? key,
     required this.image,
     required this.index,
