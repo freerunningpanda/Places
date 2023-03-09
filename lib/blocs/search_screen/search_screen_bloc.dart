@@ -30,6 +30,7 @@ class SearchScreenBloc extends Bloc<SearchScreenEvent, SearchScreenState> {
           length: PlaceInteractor.filtersWithDistance.length,
         ),
       );
+      // Если поисковый запрос пуст, то показывать все найденные по фильтрам места
       if (event.isQueryEmpty) {
         emit(
           SearchScreenPlacesFoundState(

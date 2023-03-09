@@ -94,7 +94,8 @@ class _SearchBarState extends State<SearchBar> {
                             PlacesFoundEvent(
                               isHistoryClear: false,
                               fromFiltersScreen: false,
-                              isQueryEmpty: interactor.query.isEmpty,
+                              isQueryEmpty: interactor.query.isEmpty, // Для отображения найденных по фильтру мест
+                              // При пустом поисковом запросе
                             ),
                           );
                     },
