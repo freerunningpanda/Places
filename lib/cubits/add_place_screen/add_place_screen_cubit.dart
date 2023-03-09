@@ -3,17 +3,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:places/data/repository/category_repository.dart';
 
-part 'add_sight_screen_state.dart';
+part 'add_place_screen_state.dart';
 
-class AddSightScreenCubit extends Cubit<AddSightScreenState> {
+class AddPlaceScreenCubit extends Cubit<AddPlaceScreenState> {
   final categories = CategoryRepository.categories;
   final chosenCategories = CategoryRepository.chosenCategories;
   bool isLat = false;
   bool isLot = false;
 
-  AddSightScreenCubit()
+  AddPlaceScreenCubit()
       : super(
-          const AddSightScreenState(
+          const AddPlaceScreenState(
             isLatActive: false,
             isLotActive: false,
           ),
@@ -23,7 +23,7 @@ class AddSightScreenCubit extends Cubit<AddSightScreenState> {
     isLat = true;
     isLot = false;
     emit(
-      AddSightScreenState(
+      AddPlaceScreenState(
         isLatActive: isLat,
         isLotActive: isLat,
       ),
@@ -35,7 +35,7 @@ class AddSightScreenCubit extends Cubit<AddSightScreenState> {
     isLot = false;
     latFocus.requestFocus();
     emit(
-      AddSightScreenState(
+      AddPlaceScreenState(
         isLatActive: isLat,
         isLotActive: isLat,
       ),
@@ -47,7 +47,7 @@ class AddSightScreenCubit extends Cubit<AddSightScreenState> {
     isLot = true;
     lotFocus.requestFocus();
     emit(
-      AddSightScreenState(
+      AddPlaceScreenState(
         isLatActive: isLat,
         isLotActive: isLat,
       ),
@@ -58,7 +58,7 @@ class AddSightScreenCubit extends Cubit<AddSightScreenState> {
     isLat = false;
     isLot = true;
     emit(
-      AddSightScreenState(
+      AddPlaceScreenState(
         isLatActive: isLat,
         isLotActive: isLot,
       ),
@@ -70,7 +70,7 @@ class AddSightScreenCubit extends Cubit<AddSightScreenState> {
     isLot = false;
     descriptionFocus.requestFocus();
     emit(
-      AddSightScreenState(
+      AddPlaceScreenState(
         isLatActive: isLat,
         isLotActive: isLat,
       ),

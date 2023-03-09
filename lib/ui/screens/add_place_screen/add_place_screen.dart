@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:places/blocs/choose_category_bloc/choose_category_bloc.dart';
-import 'package:places/cubits/add_sight_screen/add_sight_screen_cubit.dart';
+import 'package:places/cubits/add_place_screen/add_place_screen_cubit.dart';
 import 'package:places/cubits/create_place/create_place_button_cubit.dart';
 import 'package:places/cubits/image_provider/image_provider_cubit.dart';
 import 'package:places/data/api/api_places.dart';
@@ -13,7 +13,7 @@ import 'package:places/data/repository/place_repository.dart';
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_strings.dart';
 import 'package:places/ui/res/app_typography.dart';
-import 'package:places/ui/screens/add_sight_screen/choose_category_screen.dart';
+import 'package:places/ui/screens/add_place_screen/choose_category_screen.dart';
 import 'package:places/ui/widgets/create_button.dart';
 import 'package:places/ui/widgets/new_place_app_bar_widget.dart';
 import 'package:places/ui/widgets/pick_image_widget.dart';
@@ -47,7 +47,7 @@ class _AddSightScreenState extends State<AddSightScreen> {
     final height = MediaQuery.of(context).size.height;
     final theme = Theme.of(context);
 
-    final focus = context.read<AddSightScreenCubit>();
+    final focus = context.read<AddPlaceScreenCubit>();
     final place = context.read<CreatePlaceButtonCubit>();
 
     context.watch<CreatePlaceButtonCubit>().updateButtonState(
@@ -466,10 +466,10 @@ class _CoordinatsInputWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final focus = context.read<AddSightScreenCubit>();
+    final focus = context.read<AddPlaceScreenCubit>();
     final place = context.read<CreatePlaceButtonCubit>();
 
-    return BlocBuilder<AddSightScreenCubit, AddSightScreenState>(
+    return BlocBuilder<AddPlaceScreenCubit, AddPlaceScreenState>(
       builder: (context, state) {
         return Row(
           children: [
@@ -597,7 +597,7 @@ class _CategoryChooseWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final cubit = context.read<AddSightScreenCubit>();
+    final cubit = context.read<AddPlaceScreenCubit>();
 
     return Column(
       children: [

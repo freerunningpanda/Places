@@ -1,13 +1,13 @@
-part of 'add_sight_screen_cubit.dart';
+part of 'add_place_screen_cubit.dart';
 
-class AddSightScreenState extends Equatable {
+class AddPlaceScreenState extends Equatable {
   final bool isLatActive;
   final bool isLotActive;
 
   @override
   List<Object?> get props => [isLatActive, isLotActive];
 
-  const AddSightScreenState({
+  const AddPlaceScreenState({
     required this.isLatActive,
     required this.isLotActive,
   });

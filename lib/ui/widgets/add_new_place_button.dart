@@ -4,7 +4,7 @@ import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_colors.dart';
 import 'package:places/ui/res/app_strings.dart';
 import 'package:places/ui/res/app_typography.dart';
-import 'package:places/ui/screens/add_sight_screen/add_sight_screen.dart';
+import 'package:places/ui/screens/add_place_screen/add_place_screen.dart';
 import 'package:places/ui/widgets/sight_icons.dart';
 
 class AddNewPlaceButton extends StatelessWidget {
