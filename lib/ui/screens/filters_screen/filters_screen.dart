@@ -96,6 +96,7 @@ class FilterScreen extends StatelessWidget {
             filteredPlaces: PlaceInteractor.filtersWithDistance.toList(),
             isHistoryClear: false,
             fromFiltersScreen: true,
+            isQueryEmpty: true,
           ),
         );
     Navigator.of(context).push<SightSearchScreen>(

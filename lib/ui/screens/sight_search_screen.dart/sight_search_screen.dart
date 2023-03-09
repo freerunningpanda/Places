@@ -243,6 +243,7 @@ class _ClearHistoryButton extends StatelessWidget {
               PlacesFoundEvent(
                 isHistoryClear: true,
                 fromFiltersScreen: false,
+                isQueryEmpty: true,
               ),
             );
       },

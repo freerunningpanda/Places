@@ -30,7 +30,14 @@ class SearchScreenBloc extends Bloc<SearchScreenEvent, SearchScreenState> {
           length: PlaceInteractor.filtersWithDistance.length,
         ),
       );
-
+      if (event.isQueryEmpty) {
+        emit(
+          SearchScreenPlacesFoundState(
+            filteredPlaces: PlaceInteractor.filtersWithDistance.toList(),
+            length: PlaceInteractor.filtersWithDistance.length,
+          ),
+        );
+      }
       // if (PlaceInteractor.foundedPlaces.isEmpty) {
       //   emit(SearchScreenEmptyState());
       // }
