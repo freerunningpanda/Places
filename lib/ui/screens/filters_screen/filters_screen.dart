@@ -93,6 +93,7 @@ class FilterScreen extends StatelessWidget {
     // После очистки истории поиска
     context.read<SearchScreenBloc>().add(
           PlacesFoundEvent(
+            filteredPlaces: PlaceInteractor.filtersWithDistance.toList(),
             isHistoryClear: false,
             fromFiltersScreen: true,
           ),

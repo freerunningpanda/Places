@@ -8,7 +8,7 @@ class PlaceInteractor {
   static final List<Place> initialFilteredPlaces = [];
   static final Set<String> searchHistoryList = {};
   static Set<Place> filtersWithDistance = {};
-  static List<Place> filteredPlaces = filtersWithDistance.toList();
+  static List<Place> foundedPlaces = PlaceInteractor.filtersWithDistance.toList();
   static Set<Place> newPlaces = {};
   final PlaceRepository repository;
   final controller = TextEditingController();

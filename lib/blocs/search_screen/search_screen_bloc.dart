@@ -12,8 +12,6 @@ part 'search_screen_event.dart';
 part 'search_screen_state.dart';
 
 class SearchScreenBloc extends Bloc<SearchScreenEvent, SearchScreenState> {
-  List<Place> filteredPlaces = PlaceInteractor.filtersWithDistance.toList();
-
   bool hasFocus = false;
   PlaceInteractor interactor = PlaceInteractor(
     repository: PlaceRepository(
@@ -25,21 +23,22 @@ class SearchScreenBloc extends Bloc<SearchScreenEvent, SearchScreenState> {
     activeFocus(isActive: true);
     searchPlaces(interactor.query, interactor.controller);
     on<PlacesFoundEvent>((event, emit) {
-      debugPrint('Длина списка мест после поиска: ${PlaceInteractor.filteredPlaces.length}');
+      debugPrint('Длина списка мест после поиска: ${PlaceInteractor.foundedPlaces.length}');
       emit(
         SearchScreenPlacesFoundState(
-          filteredPlaces: event.fromFiltersScreen ? PlaceInteractor.filtersWithDistance.toList() : filteredPlaces,
+          filteredPlaces: event.fromFiltersScreen ? event.filteredPlaces!.toList() : PlaceInteractor.foundedPlaces,
           length: PlaceInteractor.filtersWithDistance.length,
         ),
       );
 
-      if (filteredPlaces.isEmpty) {
-        emit(SearchScreenEmptyState());
-      }
+      // if (PlaceInteractor.foundedPlaces.isEmpty) {
+      //   emit(SearchScreenEmptyState());
+      // }
       if (event.isHistoryClear) {
         emit(
           SearchScreenPlacesFoundState(
-            filteredPlaces: event.isHistoryClear ? PlaceInteractor.filtersWithDistance.toList() : filteredPlaces,
+            filteredPlaces:
+                event.isHistoryClear ? PlaceInteractor.filtersWithDistance.toList() : PlaceInteractor.foundedPlaces,
             length: PlaceInteractor.filtersWithDistance.length,
           ),
         );
@@ -57,45 +56,26 @@ class SearchScreenBloc extends Bloc<SearchScreenEvent, SearchScreenState> {
   }
 
   void searchPlaces(String query, TextEditingController controller) {
-    if (PlaceInteractor.activeFilters.isEmpty) {
-      for (final el in PlaceInteractor.filtersWithDistance) {
-        final distance = Geolocator.distanceBetween(
-          Mocks.mockLat,
-          Mocks.mockLot,
-          el.lat,
-          el.lng,
-        );
-        if (distance >= Mocks.rangeValues.start && distance <= Mocks.rangeValues.end) {
-          filteredPlaces = PlaceInteractor.filtersWithDistance.where((sight) {
-            final sightTitle = sight.name.toLowerCase();
-            final input = query.toLowerCase();
-            debugPrint('filteredPlaces: $filteredPlaces');
+    for (final el in PlaceInteractor.filtersWithDistance) {
+      final distance = Geolocator.distanceBetween(
+        Mocks.mockLat,
+        Mocks.mockLot,
+        el.lat,
+        el.lng,
+      );
+      if (distance >= Mocks.rangeValues.start && distance <= Mocks.rangeValues.end) {
+        PlaceInteractor.foundedPlaces = PlaceInteractor.filtersWithDistance.where((sight) {
+          final sightTitle = sight.name.toLowerCase();
+          final input = query.toLowerCase();
+          debugPrint('filteredPlaces: $PlaceInteractor.foundedPlaces');
 
-            return sightTitle.contains(input);
-          }).toList();
-        }
-      }
-    } else if (PlaceInteractor.activeFilters.isNotEmpty) {
-      for (final el in PlaceInteractor.initialFilteredPlaces) {
-        final distance = Geolocator.distanceBetween(
-          Mocks.mockLat,
-          Mocks.mockLot,
-          el.lat,
-          el.lng,
-        );
-        if (distance >= Mocks.rangeValues.start && distance <= Mocks.rangeValues.end) {
-          filteredPlaces = PlaceInteractor.filtersWithDistance.where((sight) {
-            final sightTitle = sight.name.toLowerCase();
-            final input = query.toLowerCase();
-
-            return sightTitle.contains(input);
-          }).toList();
-        }
+          return sightTitle.contains(input);
+        }).toList();
       }
     }
 
     if (controller.text.isEmpty) {
-      PlaceInteractor.filteredPlaces.clear();
+      PlaceInteractor.foundedPlaces.clear();
     }
   }
 }
