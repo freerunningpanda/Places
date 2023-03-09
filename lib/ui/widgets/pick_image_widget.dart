@@ -111,7 +111,7 @@ class _DialogItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        SightIcons(assetName: assetName, width: 24, height: 24),
+        PlaceIcons(assetName: assetName, width: 24, height: 24),
         const SizedBox(width: 12),
         Text(
           title,

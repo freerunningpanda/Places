@@ -268,7 +268,7 @@ class _SightContent extends StatelessWidget {
               const Positioned(
                 top: 4,
                 right: 4,
-                child: SightIcons(assetName: AppAssets.clear, width: 24, height: 24),
+                child: PlaceIcons(assetName: AppAssets.clear, width: 24, height: 24),
               ),
               Positioned(
                 top: 4,

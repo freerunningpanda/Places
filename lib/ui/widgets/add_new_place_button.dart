@@ -38,7 +38,7 @@ class AddNewPlaceButton extends StatelessWidget {
         child: Row(
           children: const [
             Expanded(child: SizedBox()),
-            SightIcons(assetName: AppAssets.plus, width: 24, height: 24),
+            PlaceIcons(assetName: AppAssets.plus, width: 24, height: 24),
             SizedBox(width: 8),
             Text(
               AppString.addNewPlace,

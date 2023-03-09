@@ -157,7 +157,7 @@ class _OnboardingScreenContent extends StatelessWidget {
           ],
         ),
         const SizedBox(height: 191),
-        SightIcons(
+        PlaceIcons(
           assetName: assetName,
           width: 104,
           height: 104,

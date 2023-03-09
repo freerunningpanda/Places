@@ -20,7 +20,7 @@ class SuffixIcon extends StatelessWidget {
       child: InkWell(
         borderRadius: BorderRadius.circular(40),
         onTap: controller.clear,
-        child: SightIcons(
+        child: PlaceIcons(
           assetName: AppAssets.clearDark,
           width: 20,
           height: 20,

@@ -16,20 +16,20 @@ import 'package:places/ui/widgets/close_bottom_sheet.dart';
 import 'package:places/ui/widgets/error_widget.dart';
 import 'package:places/ui/widgets/sight_icons.dart';
 
-class SightDetails extends StatefulWidget {
+class PlaceDetails extends StatefulWidget {
   final Place place;
   final double height;
-  const SightDetails({
+  const PlaceDetails({
     Key? key,
     required this.place,
     required this.height,
   }) : super(key: key);
 
   @override
-  State<SightDetails> createState() => _SightDetailsState();
+  State<PlaceDetails> createState() => _PlaceDetailsState();
 }
 
-class _SightDetailsState extends State<SightDetails> {
+class _PlaceDetailsState extends State<PlaceDetails> {
   final _pageController = PageController();
 
   @override
@@ -477,7 +477,7 @@ class _SightDetailsBuildRouteBtn extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const SightIcons(
+              const PlaceIcons(
                 assetName: AppAssets.goIcon,
                 width: 24,
                 height: 24,
@@ -516,7 +516,7 @@ class _SightDetailsBottom extends StatelessWidget {
               SizedBox(
                 width: 17,
               ),
-              SightIcons(
+              PlaceIcons(
                 assetName: AppAssets.calendar,
                 width: 22,
                 height: 19,
@@ -536,7 +536,7 @@ class _SightDetailsBottom extends StatelessWidget {
           ).addToFavorites(place: place),
           child: Row(
             children: [
-              SightIcons(
+              PlaceIcons(
                 assetName: AppAssets.favouriteDark,
                 width: 20,
                 height: 18,

@@ -126,24 +126,24 @@ class _SightListWidgetPortraitState extends State<_SightListWidgetPortrait> {
                     builder: (context, state) {
                       if (state is IsFavoriteState) {
                         return place.isFavorite
-                            ? const SightIcons(
+                            ? const PlaceIcons(
                                 assetName: AppAssets.heartFull,
                                 width: 22,
                                 height: 22,
                               )
-                            : const SightIcons(
+                            : const PlaceIcons(
                                 assetName: AppAssets.favourite,
                                 width: 22,
                                 height: 22,
                               );
                       } else if (state is IsNotFavoriteState) {
                         return place.isFavorite
-                            ? const SightIcons(
+                            ? const PlaceIcons(
                                 assetName: AppAssets.heartFull,
                                 width: 22,
                                 height: 22,
                               )
-                            : const SightIcons(
+                            : const PlaceIcons(
                                 assetName: AppAssets.favourite,
                                 width: 22,
                                 height: 22,
@@ -223,24 +223,24 @@ class _SightListWidgetLandscape extends StatelessWidget {
                   builder: (context, state) {
                     if (state is IsFavoriteState) {
                       return place.isFavorite
-                          ? const SightIcons(
+                          ? const PlaceIcons(
                               assetName: AppAssets.heartFull,
                               width: 22,
                               height: 22,
                             )
-                          : const SightIcons(
+                          : const PlaceIcons(
                               assetName: AppAssets.favourite,
                               width: 22,
                               height: 22,
                             );
                     } else if (state is IsNotFavoriteState) {
                       return place.isFavorite
-                          ? const SightIcons(
+                          ? const PlaceIcons(
                               assetName: AppAssets.heartFull,
                               width: 22,
                               height: 22,
                             )
-                          : const SightIcons(
+                          : const PlaceIcons(
                               assetName: AppAssets.favourite,
                               width: 22,
                               height: 22,

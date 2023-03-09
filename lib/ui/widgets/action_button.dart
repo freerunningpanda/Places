@@ -45,7 +45,7 @@ class ActionButton extends StatelessWidget {
                   if (assetName == null)
                     const SizedBox()
                   else
-                    SightIcons(
+                    PlaceIcons(
                       assetName: assetName ?? AppAssets.goIcon,
                       width: 24,
                       height: 24,

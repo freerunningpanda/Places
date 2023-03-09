@@ -199,7 +199,7 @@ class _WantToVisitWidget extends StatelessWidget {
               sightsToVisit: sightsToVisit,
               theme: theme,
               uniqueKey: UniqueKey(),
-              actionTwo: const SightIcons(
+              actionTwo: const PlaceIcons(
                 assetName: AppAssets.cross,
                 width: 22,
                 height: 22,
@@ -238,7 +238,7 @@ class _VisitedWidget extends StatelessWidget {
             sightsToVisit: visitedSights,
             theme: theme,
             uniqueKey: UniqueKey(),
-            actionTwo: const SightIcons(
+            actionTwo: const PlaceIcons(
               assetName: AppAssets.share,
               width: 22,
               height: 22,
@@ -296,7 +296,7 @@ class _DismissibleWidget extends StatelessWidget {
                       // ignore: avoid_redundant_argument_values
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: const [
-                        SightIcons(assetName: AppAssets.bucket, width: 24, height: 24),
+                        PlaceIcons(assetName: AppAssets.bucket, width: 24, height: 24),
                         SizedBox(height: 8),
                         Text(
                           AppString.delete,
@@ -390,7 +390,7 @@ class _DismissibleWidget extends StatelessWidget {
                     style: AppTypography.textText16Regular,
                   ),
                 ],
-                actionOne: const SightIcons(
+                actionOne: const PlaceIcons(
                   assetName: AppAssets.calendarWhite,
                   width: 24,
                   height: 24,
@@ -419,7 +419,7 @@ class _EmptyList extends StatelessWidget {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        SightIcons(
+        PlaceIcons(
           assetName: icon,
           width: 64,
           height: 64,

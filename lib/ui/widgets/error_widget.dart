@@ -16,7 +16,7 @@ class ErrorWidget extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: const [
-          SightIcons(
+          PlaceIcons(
             assetName: AppAssets.error,
             width: 64,
             height: 64,

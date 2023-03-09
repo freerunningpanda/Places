@@ -13,7 +13,7 @@ import 'package:places/mocks.dart';
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_strings.dart';
 import 'package:places/ui/res/app_typography.dart';
-import 'package:places/ui/screens/sight_search_screen.dart/sight_search_screen.dart';
+import 'package:places/ui/screens/place_search_screen.dart/place_search_screen.dart';
 import 'package:places/ui/widgets/action_button.dart';
 import 'package:places/ui/widgets/sight_icons.dart';
 
@@ -99,9 +99,9 @@ class FilterScreen extends StatelessWidget {
             isQueryEmpty: true,
           ),
         );
-    Navigator.of(context).push<SightSearchScreen>(
+    Navigator.of(context).push<PlaceSearchScreen>(
       MaterialPageRoute(
-        builder: (context) => const SightSearchScreen(),
+        builder: (context) => const PlaceSearchScreen(),
       ),
     );
   }
@@ -379,7 +379,7 @@ class _ItemFilter extends StatelessWidget {
                                 opacity: 0.5,
                                 child: CircleAvatar(
                                   backgroundColor: theme.canvasColor,
-                                  child: SightIcons(
+                                  child: PlaceIcons(
                                     assetName: assetName,
                                     width: 32,
                                     height: 32,
@@ -388,7 +388,7 @@ class _ItemFilter extends StatelessWidget {
                               )
                             : CircleAvatar(
                                 backgroundColor: theme.canvasColor,
-                                child: SightIcons(
+                                child: PlaceIcons(
                                   assetName: assetName,
                                   width: 32,
                                   height: 32,
@@ -400,7 +400,7 @@ class _ItemFilter extends StatelessWidget {
                                 opacity: 0.5,
                                 child: CircleAvatar(
                                   backgroundColor: theme.canvasColor,
-                                  child: SightIcons(
+                                  child: PlaceIcons(
                                     assetName: assetName,
                                     width: 32,
                                     height: 32,
@@ -409,7 +409,7 @@ class _ItemFilter extends StatelessWidget {
                               )
                             : CircleAvatar(
                                 backgroundColor: theme.canvasColor,
-                                child: SightIcons(
+                                child: PlaceIcons(
                                   assetName: assetName,
                                   width: 32,
                                   height: 32,
@@ -448,7 +448,7 @@ class _ItemFilter extends StatelessWidget {
                           color: theme.focusColor,
                           borderRadius: BorderRadius.circular(16),
                         ),
-                        child: const SightIcons(
+                        child: const PlaceIcons(
                           assetName: AppAssets.check,
                           width: 16,
                           height: 16,
@@ -472,7 +472,7 @@ class _ItemFilter extends StatelessWidget {
                           color: theme.focusColor,
                           borderRadius: BorderRadius.circular(16),
                         ),
-                        child: const SightIcons(
+                        child: const PlaceIcons(
                           assetName: AppAssets.check,
                           width: 16,
                           height: 16,

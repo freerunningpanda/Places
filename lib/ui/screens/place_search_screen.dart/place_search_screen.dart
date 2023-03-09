@@ -15,14 +15,14 @@ import 'package:places/ui/widgets/search_appbar.dart';
 import 'package:places/ui/widgets/search_bar.dart';
 import 'package:places/ui/widgets/sight_icons.dart';
 
-class SightSearchScreen extends StatefulWidget {
-  const SightSearchScreen({Key? key}) : super(key: key);
+class PlaceSearchScreen extends StatefulWidget {
+  const PlaceSearchScreen({Key? key}) : super(key: key);
 
   @override
-  State<SightSearchScreen> createState() => _SightSearchScreenState();
+  State<PlaceSearchScreen> createState() => _PlaceSearchScreenState();
 }
 
-class _SightSearchScreenState extends State<SightSearchScreen> {
+class _PlaceSearchScreenState extends State<PlaceSearchScreen> {
   final searchController = TextEditingController();
 
   @override
@@ -78,7 +78,7 @@ class _SightSearchScreenState extends State<SightSearchScreen> {
                             return Column(
                               children: [
                                 const SizedBox(),
-                                _SightListWidget(theme: theme),
+                                _PlaceListWidget(theme: theme),
                               ],
                             );
                           }
@@ -96,7 +96,7 @@ class _SightSearchScreenState extends State<SightSearchScreen> {
                                 : Column(
                                     children: [
                                       const SizedBox(),
-                                      _SightListWidget(theme: theme),
+                                      _PlaceListWidget(theme: theme),
                                     ],
                                   );
                           } else {
@@ -104,7 +104,7 @@ class _SightSearchScreenState extends State<SightSearchScreen> {
                             return Column(
                               children: [
                                 const SizedBox(),
-                                _SightListWidget(theme: theme),
+                                _PlaceListWidget(theme: theme),
                               ],
                             );
                           }
@@ -123,9 +123,9 @@ class _SightSearchScreenState extends State<SightSearchScreen> {
 }
 
 // Виджет списка найденных мест
-class _SightListWidget extends StatelessWidget {
+class _PlaceListWidget extends StatelessWidget {
   final ThemeData theme;
-  const _SightListWidget({Key? key, required this.theme}) : super(key: key);
+  const _PlaceListWidget({Key? key, required this.theme}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -150,10 +150,10 @@ class _SightListWidget extends StatelessWidget {
             shrinkWrap: true,
             itemCount: state.filteredPlaces.length,
             itemBuilder: (context, index) {
-              final sight = state.filteredPlaces[index];
+              final place = state.filteredPlaces[index];
 
-              return _SightCardWidget(
-                place: sight,
+              return _PlaceCardWidget(
+                place: place,
                 width: width,
                 theme: theme,
               );
@@ -323,7 +323,7 @@ class _SearchItem extends StatelessWidget {
                               hasFocus: true,
                             ),
                           ),
-                      child: const SightIcons(assetName: AppAssets.delete, width: 24, height: 24),
+                      child: const PlaceIcons(assetName: AppAssets.delete, width: 24, height: 24),
                     ),
                   ],
                 ),
@@ -355,7 +355,7 @@ class _EmptyStateWidget extends StatelessWidget {
           SizedBox(
             height: height * 0.2,
           ),
-          const SightIcons(
+          const PlaceIcons(
             assetName: AppAssets.search,
             width: 64,
             height: 64,
@@ -387,12 +387,12 @@ class _EmptyStateWidget extends StatelessWidget {
   }
 }
 
-class _SightCardWidget extends StatelessWidget {
+class _PlaceCardWidget extends StatelessWidget {
   final Place place;
   final double width;
   final ThemeData theme;
 
-  const _SightCardWidget({
+  const _PlaceCardWidget({
     Key? key,
     required this.place,
     required this.width,
@@ -410,7 +410,7 @@ class _SightCardWidget extends StatelessWidget {
               children: [
                 _PlaceImage(place: place),
                 const SizedBox(width: 16),
-                _SightContent(width: width, sight: place, theme: theme),
+                _PlaceContent(width: width, place: place, theme: theme),
               ],
             ),
           ),
@@ -437,9 +437,9 @@ class _RippleEffect extends StatelessWidget {
         child: InkWell(
           onTap: () {
             context.read<DetailsScreenBloc>().add(DetailsScreenEvent(place: place));
-            Navigator.of(context).push<SightDetails>(
+            Navigator.of(context).push<PlaceDetails>(
               MaterialPageRoute(
-                builder: (context) => SightDetails(
+                builder: (context) => PlaceDetails(
                   place: place,
                   height: 360,
                 ),
@@ -452,15 +452,15 @@ class _RippleEffect extends StatelessWidget {
   }
 }
 
-class _SightContent extends StatelessWidget {
+class _PlaceContent extends StatelessWidget {
   final double width;
-  final Place sight;
+  final Place place;
   final ThemeData theme;
 
-  const _SightContent({
+  const _PlaceContent({
     Key? key,
     required this.width,
-    required this.sight,
+    required this.place,
     required this.theme,
   }) : super(key: key);
 
@@ -470,9 +470,9 @@ class _SightContent extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const SizedBox(height: 16),
-        _SightTitle(width: width, sight: sight, theme: theme),
+        _PlaceTitle(width: width, place: place, theme: theme),
         const SizedBox(height: 8),
-        _SightType(sight: sight, theme: theme),
+        _PlaceType(place: place, theme: theme),
         const SizedBox(height: 16),
         Container(
           height: 1,
@@ -484,34 +484,34 @@ class _SightContent extends StatelessWidget {
   }
 }
 
-class _SightType extends StatelessWidget {
-  final Place sight;
+class _PlaceType extends StatelessWidget {
+  final Place place;
   final ThemeData theme;
 
-  const _SightType({
+  const _PlaceType({
     Key? key,
-    required this.sight,
+    required this.place,
     required this.theme,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Text(
-      sight.placeType,
+      place.placeType,
       style: theme.textTheme.bodyMedium,
     );
   }
 }
 
-class _SightTitle extends StatelessWidget {
+class _PlaceTitle extends StatelessWidget {
   final double width;
-  final Place sight;
+  final Place place;
   final ThemeData theme;
 
-  const _SightTitle({
+  const _PlaceTitle({
     Key? key,
     required this.width,
-    required this.sight,
+    required this.place,
     required this.theme,
   }) : super(key: key);
 
@@ -520,7 +520,7 @@ class _SightTitle extends StatelessWidget {
     return SizedBox(
       width: width * 0.73,
       child: Text(
-        sight.name,
+        place.name,
         overflow: TextOverflow.ellipsis,
         style: theme.textTheme.bodyLarge,
       ),

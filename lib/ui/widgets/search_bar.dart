@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import 'package:places/blocs/search_history/search_history_bloc.dart';
 import 'package:places/blocs/search_screen/search_screen_bloc.dart';
 import 'package:places/data/api/api_places.dart';
@@ -9,8 +8,8 @@ import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_strings.dart';
 import 'package:places/ui/res/app_typography.dart';
 import 'package:places/ui/screens/filters_screen/filters_screen.dart';
+import 'package:places/ui/screens/place_search_screen.dart/place_search_screen.dart';
 import 'package:places/ui/screens/res/custom_colors.dart';
-import 'package:places/ui/screens/sight_search_screen.dart/sight_search_screen.dart';
 import 'package:places/ui/widgets/sight_icons.dart';
 import 'package:places/ui/widgets/suffix_icon.dart';
 import 'package:provider/provider.dart';
@@ -67,7 +66,7 @@ class _SearchBarState extends State<SearchBar> {
           children: [
             Row(
               children: [
-                const SightIcons(
+                const PlaceIcons(
                   assetName: AppAssets.search,
                   width: 24,
                   height: 24,
@@ -118,8 +117,8 @@ class _SearchBarState extends State<SearchBar> {
                       if (!widget.isSearchPage) {
                         // Просто переходим на экран поиска мест
                         Navigator.of(context).push(
-                          MaterialPageRoute<SightSearchScreen>(
-                            builder: (context) => const SightSearchScreen(),
+                          MaterialPageRoute<PlaceSearchScreen>(
+                            builder: (context) => const PlaceSearchScreen(),
                           ),
                         );
                       }
@@ -162,7 +161,7 @@ class _SearchBarState extends State<SearchBar> {
                                 );
                                 debugPrint('🟡---------filters button pressed');
                               },
-                              icon: const SightIcons(assetName: AppAssets.filter, width: 24, height: 24),
+                              icon: const PlaceIcons(assetName: AppAssets.filter, width: 24, height: 24),
                             ),
                     ),
                   ),

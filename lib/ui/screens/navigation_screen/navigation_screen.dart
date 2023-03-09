@@ -43,7 +43,7 @@ class _NavigationScreenState extends State<NavigationScreen> {
           type: BottomNavigationBarType.fixed,
           items: [
             BottomNavigationBarItem(
-              icon: SightIcons(
+              icon: PlaceIcons(
                 assetName: currentIndex == 0 ? AppAssets.listPlacesFilled : AppAssets.listPlaces,
                 width: 24,
                 height: 24,
@@ -52,7 +52,7 @@ class _NavigationScreenState extends State<NavigationScreen> {
               label: '',
             ),
             BottomNavigationBarItem(
-              icon: SightIcons(
+              icon: PlaceIcons(
                 assetName: AppAssets.map,
                 width: 24,
                 height: 24,
@@ -61,7 +61,7 @@ class _NavigationScreenState extends State<NavigationScreen> {
               label: '',
             ),
             BottomNavigationBarItem(
-              icon: SightIcons(
+              icon: PlaceIcons(
                 assetName: currentIndex == 2 ? AppAssets.heartFullDark : AppAssets.favouriteDark,
                 width: 24,
                 height: 24,
@@ -70,7 +70,7 @@ class _NavigationScreenState extends State<NavigationScreen> {
               label: '',
             ),
             BottomNavigationBarItem(
-              icon: SightIcons(
+              icon: PlaceIcons(
                 assetName: currentIndex == 3 ? AppAssets.settingsFill : AppAssets.settings,
                 width: 24,
                 height: 24,

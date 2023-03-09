@@ -178,7 +178,7 @@ class _ItemCategory extends StatelessWidget {
               builder: (context, state) {
                 return category.isEnabled // Передаю категорию с текущим индексом чтобы выбиралась
                     // только одна, а не все
-                    ? const SightIcons(
+                    ? const PlaceIcons(
                         assetName: AppAssets.tick,
                         width: 24,
                         height: 24,

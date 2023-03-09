@@ -257,8 +257,8 @@ class RippleCardFull extends StatelessWidget {
             debugPrint('🟡---------to details screen');
             context.read<DetailsScreenBloc>().add(DetailsScreenEvent(place: place));
             Navigator.of(context).push(
-              MaterialPageRoute<SightDetails>(
-                builder: (context) => SightDetails(
+              MaterialPageRoute<PlaceDetails>(
+                builder: (context) => PlaceDetails(
                   height: 360,
                   place: place,
                 ),

@@ -33,7 +33,7 @@ class _SplashScreenState extends State<SplashScreen> {
           ),
         ),
         child: Center(
-          child: SightIcons(
+          child: PlaceIcons(
             assetName: AppAssets.subtract,
             width: 160,
             height: 160,
