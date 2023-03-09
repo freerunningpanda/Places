@@ -93,6 +93,7 @@ class _SearchBarState extends State<SearchBar> {
                       context.read<SearchScreenBloc>().add(
                             PlacesFoundEvent(
                               isHistoryClear: false,
+                              fromFiltersScreen: false,
                             ),
                           );
                     },

@@ -28,7 +28,7 @@ class SearchScreenBloc extends Bloc<SearchScreenEvent, SearchScreenState> {
       debugPrint('Длина списка мест после поиска: ${PlaceInteractor.filteredPlaces.length}');
       emit(
         SearchScreenPlacesFoundState(
-          filteredPlaces: filteredPlaces,
+          filteredPlaces: event.fromFiltersScreen ? PlaceInteractor.filtersWithDistance.toList() : filteredPlaces,
           length: PlaceInteractor.filtersWithDistance.length,
         ),
       );
