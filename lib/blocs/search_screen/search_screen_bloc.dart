@@ -33,8 +33,16 @@ class SearchScreenBloc extends Bloc<SearchScreenEvent, SearchScreenState> {
         ),
       );
 
-      if (PlaceInteractor.filtersWithDistance.isEmpty) {
+      if (filteredPlaces.isEmpty) {
         emit(SearchScreenEmptyState());
+      }
+      if (event.isHistoryClear) {
+        emit(
+          SearchScreenPlacesFoundState(
+            filteredPlaces: event.isHistoryClear ? PlaceInteractor.filtersWithDistance.toList() : filteredPlaces,
+            length: PlaceInteractor.filtersWithDistance.length,
+          ),
+        );
       }
     });
   }
