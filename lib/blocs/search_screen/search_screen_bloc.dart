@@ -31,6 +31,8 @@ class SearchScreenBloc extends Bloc<SearchScreenEvent, SearchScreenState> {
         ),
       );
       // Если поисковый запрос пуст, то показывать все найденные по фильтрам места
+      // Теперь не будет отображаться пустое состояние, потому что сработает данное условие
+      // И в стэйт прокинутся отфильтрованные места
       if (event.isQueryEmpty) {
         emit(
           SearchScreenPlacesFoundState(
@@ -38,6 +40,10 @@ class SearchScreenBloc extends Bloc<SearchScreenEvent, SearchScreenState> {
             length: PlaceInteractor.filtersWithDistance.length,
           ),
         );
+      // Иначе если поисковый запрос содержит значение и список найденных мест пуст
+      // Эмитим пустое состояние экрана
+      } else if (!event.isQueryEmpty && PlaceInteractor.foundedPlaces.isEmpty) {
+        emit(SearchScreenEmptyState());
       }
       // if (PlaceInteractor.foundedPlaces.isEmpty) {
       //   emit(SearchScreenEmptyState());
