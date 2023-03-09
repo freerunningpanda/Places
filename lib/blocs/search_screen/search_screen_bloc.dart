@@ -12,7 +12,7 @@ part 'search_screen_event.dart';
 part 'search_screen_state.dart';
 
 class SearchScreenBloc extends Bloc<SearchScreenEvent, SearchScreenState> {
-  List<Place> filteredPlaces = PlaceInteractor.filteredPlaces;
+  List<Place> filteredPlaces = PlaceInteractor.filtersWithDistance.toList();
 
   bool hasFocus = false;
   PlaceInteractor interactor = PlaceInteractor(
@@ -28,7 +28,7 @@ class SearchScreenBloc extends Bloc<SearchScreenEvent, SearchScreenState> {
       debugPrint('Длина списка мест после поиска: ${PlaceInteractor.filteredPlaces.length}');
       emit(
         SearchScreenPlacesFoundState(
-          filteredPlaces: event.isHistoryClear ? PlaceInteractor.filtersWithDistance.toList() : filteredPlaces,
+          filteredPlaces: filteredPlaces,
           length: PlaceInteractor.filtersWithDistance.length,
         ),
       );
