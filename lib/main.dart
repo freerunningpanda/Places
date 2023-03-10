@@ -37,52 +37,52 @@ void main() {
       child: MultiBlocProvider(
         providers: [
           BlocProvider<WantToVisitBloc>(
-            create: (context) => WantToVisitBloc(),
+            create: (_) => WantToVisitBloc(),
           ),
           BlocProvider<VisitedScreenBloc>(
-            create: (context) => VisitedScreenBloc(),
+            create: (_) => VisitedScreenBloc(),
           ),
           BlocProvider<SearchScreenBloc>(
-            create: (context) => SearchScreenBloc(),
+            create: (_) => SearchScreenBloc(),
           ),
           BlocProvider<SearchHistoryBloc>(
-            create: (context) => SearchHistoryBloc(),
+            create: (_) => SearchHistoryBloc(),
           ),
           BlocProvider<SearchBarBloc>(
-            create: (context) => SearchBarBloc(),
+            create: (_) => SearchBarBloc(),
           ),
           BlocProvider<PlacesListCubit>(
-            create: (context) => PlacesListCubit(),
+            create: (_) => PlacesListCubit(),
           ),
           BlocProvider<DetailsScreenBloc>(
-            create: (context) => DetailsScreenBloc(),
+            create: (_) => DetailsScreenBloc(),
           ),
           BlocProvider<FavoriteBloc>(
-            create: (context) => FavoriteBloc(),
+            create: (_) => FavoriteBloc(),
           ),
           BlocProvider<ChooseCategoryBloc>(
-            create: (context) => ChooseCategoryBloc(),
+            create: (_) => ChooseCategoryBloc(),
           ),
           BlocProvider<ChooseCategoryBloc>(
-            create: (context) => ChooseCategoryBloc(),
+            create: (_) => ChooseCategoryBloc(),
           ),
           BlocProvider<AddPlaceScreenCubit>(
-            create: (context) => AddPlaceScreenCubit(),
+            create: (_) => AddPlaceScreenCubit(),
           ),
           BlocProvider<CreatePlaceButtonCubit>(
-            create: (context) => CreatePlaceButtonCubit(),
+            create: (_) => CreatePlaceButtonCubit(),
           ),
           BlocProvider<FiltersScreenBloc>(
-            create: (context) => FiltersScreenBloc(),
+            create: (_) => FiltersScreenBloc(),
           ),
           BlocProvider<DistanceSliderCubit>(
-            create: (context) => DistanceSliderCubit(),
+            create: (_) => DistanceSliderCubit(),
           ),
           BlocProvider<ShowPlacesButtonCubit>(
-            create: (context) => ShowPlacesButtonCubit(),
+            create: (_) => ShowPlacesButtonCubit(),
           ),
           BlocProvider<ImageProviderCubit>(
-            create: (context) => ImageProviderCubit(),
+            create: (_) => ImageProviderCubit(),
           ),
         ],
         child: const App(),
