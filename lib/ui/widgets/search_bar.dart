@@ -1,29 +1,29 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_redux/flutter_redux.dart';
-
+import 'package:places/blocs/search_history/search_history_bloc.dart';
+import 'package:places/blocs/search_screen/search_screen_bloc.dart';
+import 'package:places/data/api/api_places.dart';
 import 'package:places/data/interactor/place_interactor.dart';
-import 'package:places/providers/add_place_data_provider.dart';
-import 'package:places/providers/search_data_provider.dart';
-import 'package:places/redux/action/action.dart';
-import 'package:places/redux/action/search_action.dart';
-import 'package:places/redux/state/appstate.dart';
+import 'package:places/data/repository/place_repository.dart';
 import 'package:places/ui/res/app_assets.dart';
+import 'package:places/ui/res/app_strings.dart';
 import 'package:places/ui/res/app_typography.dart';
 import 'package:places/ui/screens/filters_screen/filters_screen.dart';
+import 'package:places/ui/screens/place_search_screen.dart/place_search_screen.dart';
 import 'package:places/ui/screens/res/custom_colors.dart';
-import 'package:places/ui/screens/sight_search_screen.dart/sight_search_screen.dart';
-import 'package:places/ui/widgets/sight_icons.dart';
+import 'package:places/ui/widgets/place_icons.dart';
 import 'package:places/ui/widgets/suffix_icon.dart';
 import 'package:provider/provider.dart';
 
 class SearchBar extends StatefulWidget {
   final bool? readOnly;
   final bool isSearchPage;
+  final TextEditingController searchController;
 
   const SearchBar({
     Key? key,
     this.readOnly,
     required this.isSearchPage,
+    required this.searchController,
   }) : super(key: key);
 
   @override
@@ -32,25 +32,28 @@ class SearchBar extends StatefulWidget {
 
 class _SearchBarState extends State<SearchBar> {
   final FocusNode focusNode = FocusNode();
-
+  PlaceInteractor interactor = PlaceInteractor(
+    repository: PlaceRepository(
+      apiPlaces: ApiPlaces(),
+    ),
+  );
   bool autofocus = true;
 
   @override
   Widget build(BuildContext context) {
     final customColors = Theme.of(context).extension<CustomColors>()!;
     final theme = Theme.of(context);
-    final filteredPlaces = PlaceInteractor.filteredPlaces;
-    final controller = context.read<AddPlaceDataProvider>().searchController;
-    final showHistoryList = context.read<SearchDataProvider>().hasFocus;
+    // final filteredPlaces = SearchScreenBloc().filteredPlaces;
+    final interactor = PlaceInteractor(
+      repository: PlaceRepository(
+        apiPlaces: ApiPlaces(),
+      ),
+    );
     final searchStoryList = PlaceInteractor.searchHistoryList;
-
-    final store = StoreProvider.of<AppState>(context);
-
-    context.watch<SearchDataProvider>();
+    // debugPrint('SearchScreenBloc().filteredPlaces: ${SearchScreenBloc().filteredPlaces}');
 
     return Padding(
       padding: const EdgeInsets.only(
-        // top: 30.0,
         bottom: 34,
       ),
       child: Container(
@@ -63,86 +66,80 @@ class _SearchBarState extends State<SearchBar> {
           children: [
             Row(
               children: [
-                const SightIcons(
+                const PlaceIcons(
                   assetName: AppAssets.search,
                   width: 24,
                   height: 24,
                 ),
                 const SizedBox(width: 14),
                 Expanded(
-                  child: TextField(
-                    // inputFormatters: [
-                    //   FilteringTextInputFormatter.deny(RegExp('[ ]')),
-                    // ],
+                  child: TextFormField(
                     style: theme.textTheme.bodyLarge,
                     textCapitalization: TextCapitalization.sentences,
-                    controller: controller,
+                    controller: widget.searchController,
                     autofocus: autofocus,
                     focusNode: focusNode,
                     readOnly: widget.readOnly ?? true,
                     onChanged: (value) {
-                      if (filteredPlaces.isNotEmpty) {
-                        store.dispatch(
-                          PlacesFoundAction(filteredPlaces: filteredPlaces),
-                        );
-                      } else {
-                        store.dispatch(
-                          PlacesEmptyAction(),
-                        );
-                      }
+                      interactor.query = value;
 
-                      context.read<SearchDataProvider>()
+                      context.read<SearchScreenBloc>()
                         ..activeFocus(isActive: true)
-                        ..searchPlaces(value, controller);
-
-                      if (controller.text.isEmpty) {
-                        filteredPlaces.clear();
-                      }
-                    },
-                    onTap: () {
-                      context.read<SearchDataProvider>().activeFocus(isActive: true);
-                      // Если страница поиска
-                      if (widget.isSearchPage) {
-                        // Если история поиска не пустая, то отправляем в action список из истории поиска
-                        if (searchStoryList.isNotEmpty) {
-                          store.dispatch(
-                            SearchHistoryHasValueAction(
-                              searchStoryList: searchStoryList,
-                              showHistoryList: showHistoryList,
+                        ..searchPlaces(value, widget.searchController);
+                        // Не виджет истории поиска. Поэтому isHistoryClear: false
+                        // Параметр isHistoryClear отвечает за отображение всех найденных мест
+                        // После очистки истории поиска
+                      context.read<SearchScreenBloc>().add(
+                            PlacesFoundEvent(
+                              isHistoryClear: false,
+                              fromFiltersScreen: false,
+                              isQueryEmpty: interactor.query.isEmpty, // Для отображения найденных по фильтру мест
+                              // При пустом поисковом запросе
                             ),
                           );
-                        } else {
-                          // Иначе просто отправляем в action список найденных мест
-                          store.dispatch(
-                            PlacesFoundAction(filteredPlaces: filteredPlaces),
-                          );
+                    },
+                    // По клику на поле поиска
+                    onTap: () {
+                      // Если виджет searchBar на экране поиска мест
+                      if (widget.isSearchPage) {
+                        // Если история поиска не пустая, то вызываем event показа истории поиска
+                        if (searchStoryList.isNotEmpty) {
+                          context.read<SearchHistoryBloc>().add(
+                                ShowHistoryEvent(
+                                  isDeleted: false,
+                                  hasFocus: true,
+                                ),
+                              );
                         }
                       }
 
+                      // Если виджет searchBar на главном экране
                       if (!widget.isSearchPage) {
+                        // Просто переходим на экран поиска мест
                         Navigator.of(context).push(
-                          MaterialPageRoute<SightSearchScreen>(
-                            builder: (context) => const SightSearchScreen(),
+                          MaterialPageRoute<PlaceSearchScreen>(
+                            builder: (context) => const PlaceSearchScreen(),
                           ),
                         );
-                      } else {
-                        return;
                       }
                     },
-                    onSubmitted: (value) {
-                      if (filteredPlaces.isNotEmpty) {
-                        store.dispatch(
-                          PlacesFoundAction(filteredPlaces: filteredPlaces),
+                    // При отправке данных из поиска
+                    onFieldSubmitted: (value) {
+                      context.read<SearchHistoryBloc>()
+
+                        // Добавляем значение из поиска в список истории поиска
+                        ..saveSearchHistory(value, widget.searchController)
+                        // Вызываем event добавления места в историю поиска
+                        ..add(
+                          AddItemToHistoryEvent(
+                            isDeleted: false,
+                            index: widget.searchController.text,
+                            hasFocus: false,
+                          ),
                         );
-                      } else {
-                        store.dispatch(
-                          PlacesEmptyAction(),
-                        );
-                      }
-                      context.read<SearchDataProvider>()
-                        ..activeFocus(isActive: false)
-                        ..saveSearchHistory(value, controller);
-                      controller.clear();
+
+                      // Очистить строку поиска после нажатия кнопки submit
+                      widget.searchController.clear();
                     },
                     decoration: InputDecoration(
                       border: InputBorder.none,
@@ -150,10 +147,10 @@ class _SearchBarState extends State<SearchBar> {
                         maxWidth: 24,
                         maxHeight: 24,
                       ),
-                      hintText: 'Поиск',
+                      hintText: AppString.search,
                       hintStyle: AppTypography.textText16Search,
                       suffixIcon: focusNode.hasFocus
-                          ? SuffixIcon(controller: controller, theme: theme)
+                          ? SuffixIcon(controller: widget.searchController, theme: theme)
                           : IconButton(
                               onPressed: () {
                                 Navigator.push(
@@ -164,7 +161,7 @@ class _SearchBarState extends State<SearchBar> {
                                 );
                                 debugPrint('🟡---------filters button pressed');
                               },
-                              icon: const SightIcons(assetName: AppAssets.filter, width: 24, height: 24),
+                              icon: const PlaceIcons(assetName: AppAssets.filter, width: 24, height: 24),
                             ),
                     ),
                   ),

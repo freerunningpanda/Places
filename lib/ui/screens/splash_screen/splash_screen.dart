@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:places/cubits/places_list/places_list_cubit.dart';
 
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_colors.dart';
 import 'package:places/ui/screens/onboarding_screen/onboarding_screen.dart';
-import 'package:places/ui/widgets/sight_icons.dart';
+import 'package:places/ui/widgets/place_icons.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -23,17 +25,19 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return const DecoratedBox(
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: AppColors.splashScreenBackground,
+    return const Scaffold(
+      body: DecoratedBox(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: AppColors.splashScreenBackground,
+          ),
         ),
-      ),
-      child: Center(
-        child: SightIcons(
-          assetName: AppAssets.subtract,
-          width: 160,
-          height: 160,
+        child: Center(
+          child: PlaceIcons(
+            assetName: AppAssets.subtract,
+            width: 160,
+            height: 160,
+          ),
         ),
       ),
     );
@@ -41,17 +45,19 @@ class _SplashScreenState extends State<SplashScreen> {
 
   /// Метод инициализации данных
   Future<void> _init() async {
-    isInitialized = false; /// изначально данные непроинициализированы.
+    isInitialized = false;
+
+    /// изначально данные непроинициализированы.
     await _loadData();
     await _navigateToNext();
   }
 
   /// Метод загрузки данных
-  Future<void> _loadData() {
-    return Future.delayed(
-      const Duration(seconds: 2),
-      () => isInitialized = true, /// загрузка данных. isInitialized меняется на true.
-    );
+  Future<void> _loadData() async {
+    await context.read<PlacesListCubit>().getPlaces();
+    isInitialized = true;
+
+    /// загрузка данных. isInitialized меняется на true.
   }
 
   /// Метод навигации

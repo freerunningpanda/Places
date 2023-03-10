@@ -7,7 +7,7 @@ import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_strings.dart';
 import 'package:places/ui/screens/navigation_screen/navigation_screen.dart';
 import 'package:places/ui/widgets/action_button.dart';
-import 'package:places/ui/widgets/sight_icons.dart';
+import 'package:places/ui/widgets/place_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
@@ -157,7 +157,7 @@ class _OnboardingScreenContent extends StatelessWidget {
           ],
         ),
         const SizedBox(height: 191),
-        SightIcons(
+        PlaceIcons(
           assetName: assetName,
           width: 104,
           height: 104,

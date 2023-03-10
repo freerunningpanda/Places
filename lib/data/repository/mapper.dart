@@ -6,7 +6,7 @@ class Mapper {
   static Place placesFromApiToUi(PlaceResponse place) => Place(
         id: place.id,
         lat: place.lat,
-        lon: place.lon,
+        lng: place.lon,
         name: place.name,
         urls: place.urls,
         placeType: place.placeType,
@@ -16,7 +16,7 @@ class Mapper {
   static Place detailPlaceFromApiToUi(PlaceRequest place) => Place(
         id: place.id,
         lat: place.lat,
-        lon: place.lon,
+        lng: place.lon,
         name: place.name,
         urls: place.urls,
         placeType: place.placeType,

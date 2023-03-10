@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_strings.dart';
 import 'package:places/ui/res/app_typography.dart';
-import 'package:places/ui/widgets/sight_icons.dart';
+import 'package:places/ui/widgets/place_icons.dart';
 
 class ErrorWidget extends StatelessWidget {
   const ErrorWidget({
@@ -16,7 +16,7 @@ class ErrorWidget extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: const [
-          SightIcons(
+          PlaceIcons(
             assetName: AppAssets.error,
             width: 64,
             height: 64,

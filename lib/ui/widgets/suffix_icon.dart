@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:places/ui/res/app_assets.dart';
-import 'package:places/ui/widgets/sight_icons.dart';
+import 'package:places/ui/widgets/place_icons.dart';
 
 class SuffixIcon extends StatelessWidget {
   final TextEditingController controller;
@@ -20,7 +20,7 @@ class SuffixIcon extends StatelessWidget {
       child: InkWell(
         borderRadius: BorderRadius.circular(40),
         onTap: controller.clear,
-        child: SightIcons(
+        child: PlaceIcons(
           assetName: AppAssets.clearDark,
           width: 20,
           height: 20,

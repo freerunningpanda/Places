@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_strings.dart';
 import 'package:places/ui/widgets/cancel_button.dart';
-import 'package:places/ui/widgets/sight_icons.dart';
+import 'package:places/ui/widgets/place_icons.dart';
 
 class PickImageWidget extends StatelessWidget {
   const PickImageWidget({Key? key}) : super(key: key);
@@ -111,7 +111,7 @@ class _DialogItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        SightIcons(assetName: assetName, width: 24, height: 24),
+        PlaceIcons(assetName: assetName, width: 24, height: 24),
         const SizedBox(width: 12),
         Text(
           title,

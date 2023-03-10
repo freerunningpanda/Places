@@ -13,6 +13,7 @@ class PlaceRepository {
   });
 
   // Преобразовать все места из Dto в места для UI
+  // Получить реальные места
   Future<List<Place>> getPlaces() async {
     final places = await apiPlaces.getPlaces(
       category: '',
@@ -22,37 +23,47 @@ class PlaceRepository {
     return places.map(Mapper.placesFromApiToUi).toList();
   }
 
+  // Получить моковые места
+  // Future<List<Place>> getPlaces() async {
+  //   final places = Mocks.mocks;
+
+  //   return places;
+  // }
+
   // Преобразовать одно место из Dto в место для UI
   Future<Place> getPlaceDetails(Place place) => apiPlaces.getPlaceDetails(place.id).then(Mapper.detailPlaceFromApiToUi);
 
   Set<Place> getFavoritesPlaces() => apiPlaces.getFavoritesPlaces();
 
   Stream<bool> addToFavorites({required Place place}) async* {
+      final interactor = PlaceInteractor(
+      repository: PlaceRepository(
+        apiPlaces: ApiPlaces(),
+      ),
+    );
     if (!place.isFavorite) {
-      final list = PlaceInteractor.favoritePlaces.add(place);
-      debugPrint('🟡--------- Добавлено в избранное: ${PlaceInteractor.favoritePlaces}');
-      debugPrint('🟡--------- Длина: ${PlaceInteractor.favoritePlaces.length}');
+      final list = interactor.favoritePlaces.add(place);
+      debugPrint('🟡--------- Добавлено в избранное: ${interactor.favoritePlaces}');
+      debugPrint('🟡--------- Длина: ${interactor.favoritePlaces.length}');
       place.isFavorite = true;
       yield list;
     } else {
-      final list = PlaceInteractor.favoritePlaces.remove(place);
-      debugPrint('🟡--------- Длина: ${PlaceInteractor.favoritePlaces.length}');
+      final list = interactor.favoritePlaces.remove(place);
+      debugPrint('🟡--------- Длина: ${interactor.favoritePlaces.length}');
       place.isFavorite = false;
       yield list;
     }
   }
 
   void removeFromFavorites({required Place place}) {
-    PlaceInteractor.favoritePlaces.remove(place);
-    debugPrint('🟡--------- Длина: ${PlaceInteractor.favoritePlaces.length}');
-  }
+    final interactor = PlaceInteractor(
+      repository: PlaceRepository(
+        apiPlaces: ApiPlaces(),
+      ),
+    );
 
-  Set<Place> getVisitPlaces() {
-    return PlaceInteractor.visitedPlaces;
-  }
-
-  void addToVisitingPlaces({required Place place}) {
-    PlaceInteractor.visitedPlaces.add(place);
+    interactor.favoritePlaces.remove(place);
+    debugPrint('🟡--------- Длина: ${interactor.favoritePlaces.length}');
   }
 
   void addNewPlace({required Place place}) {

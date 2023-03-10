@@ -1,20 +1,23 @@
 import 'package:flutter/material.dart';
-import 'package:places/data/api/api_places.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:places/blocs/filters_screen_bloc/filters_screen_bloc.dart';
+import 'package:places/blocs/search_screen/search_screen_bloc.dart';
+import 'package:places/cubits/distance_slider_cubit/distance_slider_cubit.dart';
+import 'package:places/cubits/places_list/places_list_cubit.dart';
+import 'package:places/cubits/show_places_button/show_places_button_cubit.dart';
 
 import 'package:places/data/interactor/place_interactor.dart';
 import 'package:places/data/model/category.dart';
 import 'package:places/data/model/place.dart';
-import 'package:places/data/repository/place_repository.dart';
 import 'package:places/mocks.dart';
-import 'package:places/providers/filter_data_provider.dart';
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_strings.dart';
 import 'package:places/ui/res/app_typography.dart';
+import 'package:places/ui/screens/place_search_screen.dart/place_search_screen.dart';
 import 'package:places/ui/widgets/action_button.dart';
-import 'package:places/ui/widgets/sight_icons.dart';
-import 'package:provider/provider.dart';
+import 'package:places/ui/widgets/place_icons.dart';
 
-class FilterScreen extends StatefulWidget {
+class FilterScreen extends StatelessWidget {
   final VoidCallback? onPressed;
   const FilterScreen({
     Key? key,
@@ -22,31 +25,12 @@ class FilterScreen extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<FilterScreen> createState() => _FilterScreenState();
-}
-
-class _FilterScreenState extends State<FilterScreen> {
-  late final List<Place> placeList;
-  bool isLoading = false;
-
-  @override
-  void initState() {
-    getPlaces();
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    final clearFilters = context.read<FilterDataProvider>().clearAllFilters;
     final size = MediaQuery.of(context).size;
-    // ignore: unnecessary_statements
-    context.watch<FilterDataProvider>();
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      appBar: _AppBar(
-        onPressed: clearFilters,
-      ),
+      appBar: const _AppBar(),
       body: Padding(
         padding: const EdgeInsets.only(
           left: 16,
@@ -54,61 +38,72 @@ class _FilterScreenState extends State<FilterScreen> {
           right: 16,
           bottom: 8.0,
         ),
-        child: isLoading
-            ? Column(
+        child: BlocBuilder<PlacesListCubit, PlacesListState>(
+          builder: (context, state) {
+            if (state is PlacesListEmptyState) {
+              return const Center(child: CircularProgressIndicator());
+            } else if (state is PlacesListLoadedState) {
+              return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const _Title(),
                   const SizedBox(height: 24),
                   _FiltersTable(
-                    placeList: placeList,
-                    filters: FilterDataProvider.filters,
+                    places: state.places,
+                    filters: FiltersScreenBloc.filters,
                     activeFilters: PlaceInteractor.activeFilters,
                   ),
                   if (size.width <= 320) SizedBox(height: size.height / 10) else SizedBox(height: size.height / 3.5),
                   Expanded(
                     child: _DistanceSlider(
-                      placeList: placeList,
+                      filters: FiltersScreenBloc.filters,
+                      places: state.places,
                     ),
                   ),
                   if (size.width <= 320)
                     Expanded(
                       child: ActionButton(
-                        counterValue: PlaceInteractor.filtersWithDistance.length,
                         activeFilters: PlaceInteractor.activeFilters,
-                        title: '${AppString.showPlaces} (${PlaceInteractor.filtersWithDistance.length})',
+                        title: AppString.showPlaces,
                         rangeValues: Mocks.rangeValues,
-                        onTap: () {
-                          context.read<FilterDataProvider>().showCount(placeList: placeList);
-                          context.read<FilterDataProvider>().clearSight(placeList: placeList);
-                          debugPrint('🟡---------Длина: ${PlaceInteractor.filtersWithDistance.length}');
-                        },
+                        onTap: () => goToSearchScreen(context),
                       ),
                     )
                   else
                     ActionButton(
-                      counterValue: PlaceInteractor.filtersWithDistance.length,
                       activeFilters: PlaceInteractor.activeFilters,
-                      title: '${AppString.showPlaces} (${PlaceInteractor.filtersWithDistance.length})',
+                      title: AppString.showPlaces,
                       rangeValues: Mocks.rangeValues,
-                      onTap: () {
-                        context.read<FilterDataProvider>().showCount(placeList: placeList);
-                        context.read<FilterDataProvider>().clearSight(placeList: placeList);
-                        debugPrint('🟡---------Длина: ${PlaceInteractor.filtersWithDistance.length}');
-                      },
+                      onTap: () => goToSearchScreen(context),
                     ),
                 ],
-              )
-            : const Center(child: CircularProgressIndicator()),
+              );
+            } else {
+              throw ArgumentError('Bad State');
+            }
+          },
+        ),
       ),
     );
   }
 
-  Future<void> getPlaces() async {
-    placeList = await PlaceInteractor(repository: PlaceRepository(apiPlaces: ApiPlaces())).getPlaces();
-    setState(() {
-      isLoading = true;
-    });
+  void goToSearchScreen(BuildContext context) {
+    // Не виджет истории поиска. Поэтому isHistoryClear: false
+    // Параметр isHistoryClear отвечает за отображение всех найденных мест
+    // После очистки истории поиска
+    context.read<SearchScreenBloc>().add(
+          PlacesFoundEvent(
+            filteredPlaces: PlaceInteractor.filtersWithDistance.toList(),
+            isHistoryClear: false,
+            fromFiltersScreen: true,
+            isQueryEmpty: true,
+          ),
+        );
+    Navigator.of(context).push<PlaceSearchScreen>(
+      MaterialPageRoute(
+        builder: (context) => const PlaceSearchScreen(),
+      ),
+    );
   }
 }
 
@@ -127,11 +122,11 @@ class _Title extends StatelessWidget {
 }
 
 class _AppBar extends StatelessWidget implements PreferredSizeWidget {
-  final VoidCallback? onPressed;
+  // final VoidCallback? onPressed;
   @override
   Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 
-  const _AppBar({Key? key, required this.onPressed}) : super(key: key);
+  const _AppBar({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -147,19 +142,14 @@ class _AppBar extends StatelessWidget implements PreferredSizeWidget {
         ),
         toolbarHeight: 86,
         bottomOpacity: 0.0,
-        actions: [
-          _ClearButtonWidget(
-            onPressed: onPressed,
-          ),
-        ],
+        actions: const [_ClearButtonWidget()],
       ),
     );
   }
 }
 
 class _ClearButtonWidget extends StatefulWidget {
-  final VoidCallback? onPressed;
-  const _ClearButtonWidget({Key? key, required this.onPressed}) : super(key: key);
+  const _ClearButtonWidget({Key? key}) : super(key: key);
 
   @override
   State<_ClearButtonWidget> createState() => _ClearButtonWidgetState();
@@ -169,7 +159,10 @@ class _ClearButtonWidgetState extends State<_ClearButtonWidget> {
   @override
   Widget build(BuildContext context) {
     return TextButton(
-      onPressed: widget.onPressed,
+      onPressed: () {
+        context.read<ShowPlacesButtonCubit>().clearAllFilters();
+        context.read<FiltersScreenBloc>().add(ClearAllFiltersEvent());
+      },
       child: const Text(
         AppString.clear,
         style: AppTypography.clearButton,
@@ -180,13 +173,13 @@ class _ClearButtonWidgetState extends State<_ClearButtonWidget> {
 
 class _FiltersTable extends StatefulWidget {
   final List<Category> filters;
-  final List<String> activeFilters;
-  final List<Place> placeList;
+  final List<Category> activeFilters;
+  final List<Place> places;
   const _FiltersTable({
     Key? key,
     required this.filters,
     required this.activeFilters,
-    required this.placeList,
+    required this.places,
   }) : super(key: key);
 
   @override
@@ -198,9 +191,6 @@ class _FiltersTableState extends State<_FiltersTable> {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
 
-    // ignore: unnecessary_statements
-    context.watch<FilterDataProvider>();
-
     return Container(
       height: size.width <= 320 ? 90 : 170,
       alignment: const Alignment(0.0, -0.8),
@@ -209,11 +199,11 @@ class _FiltersTableState extends State<_FiltersTable> {
           return size.width <= 320
               ? _ItemFiltersListSmallScreens(
                   filtersTable: widget,
-                  placeList: widget.placeList,
+                  placeList: widget.places,
                 )
               : _ItemFiltersListBigScreens(
                   filtersTable: widget,
-                  placeList: widget.placeList,
+                  placeList: widget.places,
                 );
         },
       ),
@@ -240,25 +230,42 @@ class _ItemFiltersListBigScreens extends StatelessWidget {
       children: filtersTable.filters
           .asMap()
           .map(
-            (i, e) => MapEntry(
+            (i, category) => MapEntry(
               i,
               _ItemFilter(
-                isEnabled: e.isEnabled,
-                title: e.title,
-                assetName: e.assetName ?? 'null',
+                category: category,
+                isEnabled: category.isEnabled,
+                name: category.title,
+                assetName: category.assetName ?? 'null',
                 onTap: () {
                   final filteredByType =
-                      filtersTable.placeList.where((sight) => sight.placeType.contains(e.title)).toList();
-                  if (!e.isEnabled) {
-                    PlaceInteractor.filteredMocks.addAll(filteredByType);
-                  } else {
-                    PlaceInteractor.filteredMocks.clear();
-                    PlaceInteractor.filtersWithDistance.clear();
-                    debugPrint('🟡---------Добавленные места: ${PlaceInteractor.filteredMocks}');
-                  }
-                  context.read<FilterDataProvider>().showCount(placeList: placeList);
+                      filtersTable.places.where((place) => place.placeType.contains(category.placeType)).toList();
+                  context.read<FiltersScreenBloc>().addToFilteredList(
+                        category: category,
+                        filteredByType: filteredByType,
+                      );
+                  context.read<ShowPlacesButtonCubit>().showCount(places: placeList);
 
-                  return context.read<FilterDataProvider>().saveFilters(i);
+                  if (!category.isEnabled) {
+                    context.read<FiltersScreenBloc>().add(
+                          AddRemoveFilterEvent(
+                            category: category,
+                            isEnabled: category.isEnabled = true,
+                            categoryIndex: i,
+                          ),
+                        );
+                    context.read<ShowPlacesButtonCubit>().resetToZero();
+                  } else {
+                    context.read<FiltersScreenBloc>().add(
+                          AddRemoveFilterEvent(
+                            category: category,
+                            isEnabled: category.isEnabled = false,
+                            categoryIndex: i,
+                          ),
+                        );
+                    debugPrint('🟡--------- isEnabled ${category.isEnabled}');
+                    debugPrint('🟡--------- Удалена из активных категорий: $category');
+                  }
                 },
               ),
             ),
@@ -286,25 +293,42 @@ class _ItemFiltersListSmallScreens extends StatelessWidget {
       children: filtersTable.filters
           .asMap()
           .map(
-            (i, e) => MapEntry(
+            (i, category) => MapEntry(
               i,
               _ItemFilter(
-                isEnabled: e.isEnabled,
-                title: e.title,
-                assetName: e.assetName ?? 'null',
+                category: category,
+                isEnabled: category.isEnabled,
+                name: category.title,
+                assetName: category.assetName ?? 'null',
                 onTap: () {
                   final filteredByType =
-                      filtersTable.placeList.where((sight) => sight.placeType.contains(e.title)).toList();
-                  if (!e.isEnabled) {
-                    PlaceInteractor.filteredMocks.addAll(filteredByType);
-                  } else {
-                    PlaceInteractor.filteredMocks.clear();
-                    PlaceInteractor.filtersWithDistance.clear();
-                    debugPrint('🟡---------Добавленные места: ${PlaceInteractor.filteredMocks}');
-                  }
-                  context.read<FilterDataProvider>().showCount(placeList: placeList);
+                      filtersTable.places.where((place) => place.placeType.contains(category.placeType)).toList();
+                  context.read<FiltersScreenBloc>().addToFilteredList(
+                        category: category,
+                        filteredByType: filteredByType,
+                      );
+                  context.read<ShowPlacesButtonCubit>().showCount(places: placeList);
 
-                  return context.read<FilterDataProvider>().saveFilters(i);
+                  if (!category.isEnabled) {
+                    context.read<FiltersScreenBloc>().add(
+                          AddRemoveFilterEvent(
+                            category: category,
+                            isEnabled: category.isEnabled = true,
+                            categoryIndex: i,
+                          ),
+                        );
+                    context.read<ShowPlacesButtonCubit>().resetToZero();
+                  } else {
+                    context.read<FiltersScreenBloc>().add(
+                          AddRemoveFilterEvent(
+                            category: category,
+                            isEnabled: category.isEnabled = false,
+                            categoryIndex: i,
+                          ),
+                        );
+                    debugPrint('🟡--------- isEnabled ${category.isEnabled}');
+                    debugPrint('🟡--------- Удалена из активных категорий: $category');
+                  }
                 },
               ),
             ),
@@ -315,25 +339,22 @@ class _ItemFiltersListSmallScreens extends StatelessWidget {
   }
 }
 
-class _ItemFilter extends StatefulWidget {
+class _ItemFilter extends StatelessWidget {
+  final String name;
   final bool isEnabled;
-  final Function() onTap;
-  final String title;
+  final Category category;
+  final VoidCallback onTap;
   final String assetName;
 
   const _ItemFilter({
     Key? key,
+    required this.name,
     required this.isEnabled,
-    required this.title,
-    required this.assetName,
+    required this.category,
     required this.onTap,
+    required this.assetName,
   }) : super(key: key);
 
-  @override
-  State<_ItemFilter> createState() => _ItemFilterState();
-}
-
-class _ItemFilterState extends State<_ItemFilter> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -342,120 +363,183 @@ class _ItemFilterState extends State<_ItemFilter> {
       children: [
         SizedBox(
           width: 98,
-          // height: height,
           child: Column(
             children: [
               InkWell(
                 borderRadius: BorderRadius.circular(50),
-                onTap: widget.onTap,
+                onTap: onTap,
                 child: SizedBox(
                   height: 64,
                   width: 64,
-                  child: !widget.isEnabled
-                      ? CircleAvatar(
-                          backgroundColor: theme.canvasColor,
-                          child: SightIcons(
-                            assetName: widget.assetName,
-                            width: 32,
-                            height: 32,
-                          ),
-                        )
-                      : Opacity(
-                          opacity: 0.5,
-                          child: CircleAvatar(
-                            backgroundColor: theme.canvasColor,
-                            child: SightIcons(
-                              assetName: widget.assetName,
-                              width: 32,
-                              height: 32,
-                            ),
-                          ),
-                        ),
+                  child: BlocBuilder<FiltersScreenBloc, FiltersScreenState>(
+                    builder: (context, state) {
+                      if (state is IsEnabledState) {
+                        return category.isEnabled
+                            ? Opacity(
+                                opacity: 0.5,
+                                child: CircleAvatar(
+                                  backgroundColor: theme.canvasColor,
+                                  child: PlaceIcons(
+                                    assetName: assetName,
+                                    width: 32,
+                                    height: 32,
+                                  ),
+                                ),
+                              )
+                            : CircleAvatar(
+                                backgroundColor: theme.canvasColor,
+                                child: PlaceIcons(
+                                  assetName: assetName,
+                                  width: 32,
+                                  height: 32,
+                                ),
+                              );
+                      } else if (state is IsNotEnabledState) {
+                        return category.isEnabled
+                            ? Opacity(
+                                opacity: 0.5,
+                                child: CircleAvatar(
+                                  backgroundColor: theme.canvasColor,
+                                  child: PlaceIcons(
+                                    assetName: assetName,
+                                    width: 32,
+                                    height: 32,
+                                  ),
+                                ),
+                              )
+                            : CircleAvatar(
+                                backgroundColor: theme.canvasColor,
+                                child: PlaceIcons(
+                                  assetName: assetName,
+                                  width: 32,
+                                  height: 32,
+                                ),
+                              );
+                      }
+                      throw ArgumentError('Bad state');
+                    },
+                  ),
                 ),
               ),
               const SizedBox(height: 12),
               Text(
-                widget.title,
+                name,
                 textAlign: TextAlign.center,
                 style: theme.textTheme.labelSmall,
               ),
             ],
           ),
         ),
-        if (widget.isEnabled)
-          Positioned(
-            right: 16,
-            bottom: 25,
-            child: Container(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 2,
-                vertical: 2,
-              ),
-              width: 16,
-              height: 16,
-              decoration: BoxDecoration(
-                color: theme.focusColor,
-                borderRadius: BorderRadius.circular(16),
-              ),
-              child: const SightIcons(
-                assetName: AppAssets.check,
-                width: 16,
-                height: 16,
-              ),
-            ),
-          )
-        else
-          const SizedBox(),
+        BlocBuilder<FiltersScreenBloc, FiltersScreenState>(
+          builder: (context, state) {
+            if (state is IsEnabledState) {
+              return category.isEnabled
+                  ? Positioned(
+                      right: 16,
+                      bottom: 25,
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 2,
+                          vertical: 2,
+                        ),
+                        width: 16,
+                        height: 16,
+                        decoration: BoxDecoration(
+                          color: theme.focusColor,
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                        child: const PlaceIcons(
+                          assetName: AppAssets.check,
+                          width: 16,
+                          height: 16,
+                        ),
+                      ),
+                    )
+                  : const SizedBox();
+            } else if (state is IsNotEnabledState) {
+              return category.isEnabled
+                  ? Positioned(
+                      right: 16,
+                      bottom: 25,
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 2,
+                          vertical: 2,
+                        ),
+                        width: 16,
+                        height: 16,
+                        decoration: BoxDecoration(
+                          color: theme.focusColor,
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                        child: const PlaceIcons(
+                          assetName: AppAssets.check,
+                          width: 16,
+                          height: 16,
+                        ),
+                      ),
+                    )
+                  : const SizedBox();
+            } else {
+              throw ArgumentError('Bad state');
+            }
+          },
+        ),
       ],
     );
   }
 }
 
-class _DistanceSlider extends StatefulWidget {
-  final List<Place> placeList;
+class _DistanceSlider extends StatelessWidget {
+  final List<Category> filters;
+  final List<Place> places;
   const _DistanceSlider({
     Key? key,
-    required this.placeList,
+    required this.filters,
+    required this.places,
   }) : super(key: key);
-
-  @override
-  State<_DistanceSlider> createState() => _DistanceSliderState();
-}
-
-class _DistanceSliderState extends State<_DistanceSlider> {
-  double min = 100;
-  double max = 10000;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final min = context.read<DistanceSliderCubit>().min;
+    final max = context.read<DistanceSliderCubit>().max;
 
-    return Column(
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return BlocBuilder<DistanceSliderCubit, DistanceSliderState>(
+      builder: (context, state) {
+        return Column(
           children: [
-            Text(
-              AppString.distantion,
-              style: theme.textTheme.displayMedium,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  AppString.distantion,
+                  style: theme.textTheme.displayMedium,
+                ),
+                Text(
+                  'от ${state.rangeValues.start.toInt()} до ${state.rangeValues.end.toInt()} м',
+                  style: theme.textTheme.titleMedium,
+                ),
+              ],
             ),
-            Text(
-              'от ${Mocks.rangeValues.start.toInt()} до ${Mocks.rangeValues.end.toInt()} м',
-              style: theme.textTheme.titleMedium,
+            const SizedBox(height: 24),
+            RangeSlider(
+              values: state.rangeValues,
+              min: min,
+              max: max,
+              onChanged: (values) {
+                context.read<DistanceSliderCubit>().changeArea(start: values.start, end: values.end);
+                context.read<ShowPlacesButtonCubit>().showCount(places: places);
+                for (final category in filters) {
+                  if (category.isEnabled) {
+                    context.read<ShowPlacesButtonCubit>().resetToZero();
+                  }
+                }
+              },
             ),
           ],
-        ),
-        const SizedBox(height: 24),
-        RangeSlider(
-          values: Mocks.rangeValues,
-          min: min,
-          max: max,
-          onChanged: (values) {
-            context.read<FilterDataProvider>().changeArea(start: values.start, end: values.end);
-            context.read<FilterDataProvider>().showCount(placeList: widget.placeList);
-          },
-        ),
-      ],
+        );
+      },
     );
   }
 }

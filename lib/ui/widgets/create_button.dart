@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 
-import 'package:places/data/model/category.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:places/cubits/create_place/create_place_button_cubit.dart';
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_typography.dart';
 import 'package:places/ui/screens/res/custom_colors.dart';
-import 'package:places/ui/widgets/sight_icons.dart';
+import 'package:places/ui/widgets/place_icons.dart';
 
 class CreateButton extends StatelessWidget {
   final String? assetName;
@@ -12,11 +13,6 @@ class CreateButton extends StatelessWidget {
   final VoidCallback? onTap;
   final List<String>? activeFilters;
   final RangeValues? rangeValues;
-  final TextEditingController titleController;
-  final TextEditingController latController;
-  final TextEditingController lotController;
-  final TextEditingController descriptionController;
-  final List<Category> chosenCategory;
 
   const CreateButton({
     Key? key,
@@ -25,11 +21,6 @@ class CreateButton extends StatelessWidget {
     required this.onTap,
     this.activeFilters,
     this.rangeValues,
-    required this.titleController,
-    required this.latController,
-    required this.lotController,
-    required this.descriptionController,
-    required this.chosenCategory,
   }) : super(key: key);
 
   @override
@@ -37,53 +28,51 @@ class CreateButton extends StatelessWidget {
     final theme = Theme.of(context);
     final customColors = Theme.of(context).extension<CustomColors>();
 
-    return Stack(
-      children: [
-        Container(
-          height: 48,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(12),
-            color: buttonStyle() ? customColors?.color : theme.sliderTheme.activeTrackColor,
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              if (assetName == null)
-                const SizedBox()
-              else
-                SightIcons(
-                  assetName: assetName ?? AppAssets.goIcon,
-                  width: 24,
-                  height: 24,
-                ),
-              const SizedBox(width: 8),
-              Text(
-                title,
-                style: buttonStyle()
-                    ? AppTypography.sightDetailsButtonNameInnactive
-                    : AppTypography.sightDetailsButtonName,
-              ),
-            ],
-          ),
-        ),
-        Positioned.fill(
-          child: Material(
-            type: MaterialType.transparency,
-            child: InkWell(
-              borderRadius: BorderRadius.circular(12.0),
-              onTap: buttonStyle() ? null : onTap,
-            ),
-          ),
-        ),
-      ],
-    );
-  }
+    return BlocBuilder<CreatePlaceButtonCubit, CreatePlaceButtonState>(
+      builder: (context, state) {
+        final buttonStyle = context.read<CreatePlaceButtonCubit>().buttonStyle(state: state);
 
-  bool buttonStyle() {
-    return chosenCategory.isEmpty ||
-        titleController.text.isEmpty ||
-        descriptionController.text.isEmpty ||
-        latController.text.isEmpty ||
-        lotController.text.isEmpty;
+        return Stack(
+          children: [
+            Container(
+              height: 48,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(12),
+                color: buttonStyle ? customColors?.color : theme.sliderTheme.activeTrackColor,
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  if (assetName == null)
+                    const SizedBox()
+                  else
+                    PlaceIcons(
+                      assetName: assetName ?? AppAssets.goIcon,
+                      width: 24,
+                      height: 24,
+                    ),
+                  const SizedBox(width: 8),
+                  Text(
+                    title,
+                    style: buttonStyle
+                        ? AppTypography.placeDetailsButtonNameInnactive
+                        : AppTypography.placeDetailsButtonName,
+                  ),
+                ],
+              ),
+            ),
+            Positioned.fill(
+              child: Material(
+                type: MaterialType.transparency,
+                child: InkWell(
+                  borderRadius: BorderRadius.circular(12.0),
+                  onTap: buttonStyle ? null : onTap,
+                ),
+              ),
+            ),
+          ],
+        );
+      },
+    );
   }
 }

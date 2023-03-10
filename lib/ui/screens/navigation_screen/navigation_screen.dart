@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-
 import 'package:places/ui/res/app_assets.dart';
+import 'package:places/ui/screens/place_list_screen/place_list_screen.dart';
 import 'package:places/ui/screens/settings_screen/settings_screen.dart';
-import 'package:places/ui/screens/sight_list_screen/sight_list_screen.dart';
 import 'package:places/ui/screens/visiting_screen/visiting_screen.dart';
-import 'package:places/ui/widgets/sight_icons.dart';
+import 'package:places/ui/widgets/place_icons.dart';
 
 class NavigationScreen extends StatefulWidget {
   const NavigationScreen({Key? key}) : super(key: key);
@@ -15,7 +14,7 @@ class NavigationScreen extends StatefulWidget {
 
 class _NavigationScreenState extends State<NavigationScreen> {
   final screens = const [
-    SightListScreen(key: PageStorageKey('SaveScrollPosition'),),
+    PlaceListScreen(key: PageStorageKey('SaveScrollPosition'),),
     SizedBox(),
     VisitingScreen(),
     SettingsScreen(),
@@ -43,7 +42,7 @@ class _NavigationScreenState extends State<NavigationScreen> {
           type: BottomNavigationBarType.fixed,
           items: [
             BottomNavigationBarItem(
-              icon: SightIcons(
+              icon: PlaceIcons(
                 assetName: currentIndex == 0 ? AppAssets.listPlacesFilled : AppAssets.listPlaces,
                 width: 24,
                 height: 24,
@@ -52,7 +51,7 @@ class _NavigationScreenState extends State<NavigationScreen> {
               label: '',
             ),
             BottomNavigationBarItem(
-              icon: SightIcons(
+              icon: PlaceIcons(
                 assetName: AppAssets.map,
                 width: 24,
                 height: 24,
@@ -61,7 +60,7 @@ class _NavigationScreenState extends State<NavigationScreen> {
               label: '',
             ),
             BottomNavigationBarItem(
-              icon: SightIcons(
+              icon: PlaceIcons(
                 assetName: currentIndex == 2 ? AppAssets.heartFullDark : AppAssets.favouriteDark,
                 width: 24,
                 height: 24,
@@ -70,7 +69,7 @@ class _NavigationScreenState extends State<NavigationScreen> {
               label: '',
             ),
             BottomNavigationBarItem(
-              icon: SightIcons(
+              icon: PlaceIcons(
                 assetName: currentIndex == 3 ? AppAssets.settingsFill : AppAssets.settings,
                 width: 24,
                 height: 24,
