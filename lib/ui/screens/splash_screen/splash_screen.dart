@@ -23,7 +23,7 @@ class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMix
 
   @override
   void initState() {
-    // _init();
+    _init();
     _animationController = AnimationController(vsync: this, duration: const Duration(seconds: 2));
     _rotateAnimation = Tween<double>(begin: 0, end: -pi * 2).animate(
       CurvedAnimation(parent: _animationController, curve: Curves.decelerate),

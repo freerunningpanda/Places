@@ -20,6 +20,7 @@ class PlacesListCubit extends Cubit<PlacesListState> {
   PlacesListCubit() : super(PlacesListEmptyState());
 
   Future<void> getPlaces() async {
+    emit(PlaceListLoadingState());
     final places = await interactor.getPlaces();
     emit(PlacesListLoadedState(places: places));
   }
