@@ -103,6 +103,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 children: [
                   const SizedBox(height: 32),
                   ActionButton(
+                    isOnboarding: true,
                     title: AppString.start,
                     onTap: () => Navigator.of(context).pushReplacement(
                       MaterialPageRoute<MainScreen>(
@@ -145,7 +146,7 @@ class _OnboardingScreenContentState extends State<_OnboardingScreenContent> with
 
   @override
   void initState() {
-    _animationController = AnimationController(vsync: this, duration: const Duration(seconds: 2));
+    _animationController = AnimationController(vsync: this, duration: const Duration(seconds: 1));
     _zoomAnimation = Tween<double>(begin: 0, end: 104).animate(
       CurvedAnimation(parent: _animationController, curve: Curves.linear),
     );

@@ -14,6 +14,7 @@ class ActionButton extends StatelessWidget {
   final VoidCallback? onTap;
   final List<Category>? activeFilters;
   final RangeValues? rangeValues;
+  final bool? isOnboarding;
 
   const ActionButton({
     Key? key,
@@ -22,6 +23,7 @@ class ActionButton extends StatelessWidget {
     required this.onTap,
     this.activeFilters,
     this.rangeValues,
+    this.isOnboarding,
   }) : super(key: key);
 
   @override
@@ -37,7 +39,7 @@ class ActionButton extends StatelessWidget {
               height: 48,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(12),
-                color: state.isEmpty ? customColors?.color : theme.sliderTheme.activeTrackColor,
+                color: state.isEmpty && isOnboarding == null ? customColors?.color : theme.sliderTheme.activeTrackColor,
               ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -51,11 +53,17 @@ class ActionButton extends StatelessWidget {
                       height: 24,
                     ),
                   const SizedBox(width: 8),
+                  if(isOnboarding == null)
                   Text(
                     '$title (${state.foundPlacesLength})',
-                    style: state.isEmpty
+                    style: state.isEmpty && isOnboarding == null
                         ? AppTypography.placeDetailsButtonNameInnactive
                         : AppTypography.placeDetailsButtonName,
+                  )
+                  else
+                  Text(
+                    title,
+                    style: AppTypography.placeDetailsButtonName,
                   ),
                 ],
               ),
@@ -65,7 +73,7 @@ class ActionButton extends StatelessWidget {
                 type: MaterialType.transparency,
                 child: InkWell(
                   borderRadius: BorderRadius.circular(12.0),
-                  onTap: state.isEmpty ? null : onTap,
+                  onTap: state.isEmpty && isOnboarding == null ? null : onTap,
                 ),
               ),
             ),
