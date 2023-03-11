@@ -24,9 +24,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   @override
   Widget build(BuildContext context) {
     SystemChrome.setPreferredOrientations([
-        DeviceOrientation.portraitUp,
-        DeviceOrientation.portraitDown,
-      ]);
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
     final isDarkMode = context.watch<ThemeDataProvider>().isDarkMode;
     final theme = Theme.of(context);
 
@@ -122,7 +122,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   }
 }
 
-class _OnboardingScreenContent extends StatelessWidget {
+class _OnboardingScreenContent extends StatefulWidget {
   final ThemeData theme;
   final String assetName;
   final String title;
@@ -136,8 +136,26 @@ class _OnboardingScreenContent extends StatelessWidget {
   }) : super(key: key);
 
   @override
+  State<_OnboardingScreenContent> createState() => _OnboardingScreenContentState();
+}
+
+class _OnboardingScreenContentState extends State<_OnboardingScreenContent> with TickerProviderStateMixin {
+  late final AnimationController _animationController;
+  late final Animation<double> _zoomAnimation;
+
+  @override
+  void initState() {
+    _animationController = AnimationController(vsync: this, duration: const Duration(seconds: 2));
+    _zoomAnimation = Tween<double>(begin: 0, end: 104).animate(
+      CurvedAnimation(parent: _animationController, curve: Curves.linear),
+    );
+
+    _animationController.forward();
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    
     return ListView(
       children: [
         Row(
@@ -151,16 +169,19 @@ class _OnboardingScreenContent extends StatelessWidget {
               ),
               child: Text(
                 AppString.skip,
-                style: theme.textTheme.bodyMedium,
+                style: widget.theme.textTheme.bodyMedium,
               ),
             ),
           ],
         ),
         const SizedBox(height: 191),
-        PlaceIcons(
-          assetName: assetName,
-          width: 104,
-          height: 104,
+        AnimatedBuilder(
+          animation: _animationController,
+          builder: (context, child) => PlaceIcons(
+            assetName: widget.assetName,
+            width: _zoomAnimation.value,
+            height: _zoomAnimation.value,
+          ),
         ),
         const SizedBox(height: 40),
         Center(
@@ -169,15 +190,15 @@ class _OnboardingScreenContent extends StatelessWidget {
             child: Column(
               children: [
                 Text(
-                  title,
+                  widget.title,
                   textAlign: TextAlign.center,
-                  style: theme.textTheme.headlineMedium,
+                  style: widget.theme.textTheme.headlineMedium,
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  description,
+                  widget.description,
                   textAlign: TextAlign.center,
-                  style: theme.textTheme.bodySmall,
+                  style: widget.theme.textTheme.bodySmall,
                 ),
               ],
             ),
