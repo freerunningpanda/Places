@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:math';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
@@ -7,12 +8,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:places/blocs/details_screen/details_screen_bloc.dart';
 import 'package:places/blocs/favorite/favorite_bloc.dart';
 import 'package:places/blocs/want_to_visit/want_to_visit_bloc.dart';
+import 'package:places/data/dio_configurator.dart';
 import 'package:places/data/model/place.dart';
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_typography.dart';
 import 'package:places/ui/screens/place_details/place_details.dart';
 import 'package:places/ui/screens/res/custom_colors.dart';
 import 'package:places/ui/widgets/cupertino_time_widget.dart';
+import 'package:places/ui/widgets/place_icons.dart';
 
 class PlaceCard extends StatelessWidget {
   final String? url;
@@ -272,17 +275,37 @@ class RippleCardFull extends StatelessWidget {
   }
 }
 
-class _PlaceCardTop extends StatelessWidget {
-  // final Widget actionOne;
+class _PlaceCardTop extends StatefulWidget {
   final String type;
   final String? url;
 
   const _PlaceCardTop({
     Key? key,
-    // required this.actionOne,
     required this.type,
     required this.url,
   }) : super(key: key);
+
+  @override
+  State<_PlaceCardTop> createState() => _PlaceCardTopState();
+}
+
+class _PlaceCardTopState extends State<_PlaceCardTop> with TickerProviderStateMixin {
+  late final AnimationController _animationController;
+  late final Animation<double> _rotateAnimation;
+
+  @override
+  void initState() {
+    _animationController = AnimationController(vsync: this, duration: const Duration(seconds: 2));
+    _rotateAnimation = Tween<double>(begin: 0, end: -pi * 5).animate(
+      CurvedAnimation(parent: _animationController, curve: Curves.linear),
+    );
+
+    _animationController
+      ..forward()
+      ..repeat();
+
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -297,23 +320,45 @@ class _PlaceCardTop extends StatelessWidget {
       child: Stack(
         fit: StackFit.expand,
         children: [
-          CachedNetworkImage(
-            imageUrl: url ?? 'no_url',
-            errorWidget: (context, url, dynamic error) => Image.asset(AppAssets.placeholder),
+          Image.network(
+            widget.url ?? 'no_url',
             fit: BoxFit.fitWidth,
-            placeholder: (context, url) => Image.asset(AppAssets.placeholder),
+            loadingBuilder: (context, child, loadingProgress) {
+              if (loadingProgress == null) return child;
+
+              return AnimatedBuilder(
+                animation: _animationController,
+                builder: (context, child) {
+                  return Transform.rotate(
+                    angle: _rotateAnimation.value,
+                    child: const PlaceIcons(
+                      assetName: AppAssets.loader,
+                      width: 30,
+                      height: 30,
+                    ),
+                  );
+                },
+              );
+            },
+            errorBuilder: (context, error, stackTrace) => Image.asset(AppAssets.placeholder),
           ),
           Positioned(
             left: 16,
             top: 16,
             child: Text(
-              type,
+              widget.type,
               style: AppTypography.placeCardTitle,
             ),
           ),
         ],
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
   }
 }
 

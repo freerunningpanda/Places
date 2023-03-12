@@ -43,5 +43,6 @@ abstract class AppAssets {
   static const file = 'lib/ui/res/icons/file.svg';
   static const photo = 'lib/ui/res/icons/photo.svg';
   static const error = 'lib/ui/res/icons/error.svg';
+  static const loader = 'lib/ui/res/icons/loader.svg';
 
 }
