@@ -8,7 +8,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:places/blocs/details_screen/details_screen_bloc.dart';
 import 'package:places/blocs/favorite/favorite_bloc.dart';
 import 'package:places/blocs/want_to_visit/want_to_visit_bloc.dart';
-import 'package:places/data/dio_configurator.dart';
 import 'package:places/data/model/place.dart';
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_typography.dart';
@@ -320,13 +319,10 @@ class _PlaceCardTopState extends State<_PlaceCardTop> with TickerProviderStateMi
       child: Stack(
         fit: StackFit.expand,
         children: [
-          Image.network(
-            widget.url ?? 'no_url',
-            fit: BoxFit.fitWidth,
-            loadingBuilder: (context, child, loadingProgress) {
-              if (loadingProgress == null) return child;
-
-              return AnimatedBuilder(
+          CachedNetworkImage(imageUrl: widget.url ?? 'no_url',
+          fit: BoxFit.fitWidth,
+          errorWidget: (context, url, dynamic error) => Image.asset(AppAssets.placeholder),
+          progressIndicatorBuilder: (context, url, progress) => AnimatedBuilder(
                 animation: _animationController,
                 builder: (context, child) {
                   return Transform.rotate(
@@ -338,9 +334,7 @@ class _PlaceCardTopState extends State<_PlaceCardTop> with TickerProviderStateMi
                     ),
                   );
                 },
-              );
-            },
-            errorBuilder: (context, error, stackTrace) => Image.asset(AppAssets.placeholder),
+              ),
           ),
           Positioned(
             left: 16,
