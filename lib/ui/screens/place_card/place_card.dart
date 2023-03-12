@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -7,6 +8,7 @@ import 'package:places/blocs/details_screen/details_screen_bloc.dart';
 import 'package:places/blocs/favorite/favorite_bloc.dart';
 import 'package:places/blocs/want_to_visit/want_to_visit_bloc.dart';
 import 'package:places/data/model/place.dart';
+import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_typography.dart';
 import 'package:places/ui/screens/place_details/place_details.dart';
 import 'package:places/ui/screens/res/custom_colors.dart';
@@ -295,17 +297,11 @@ class _PlaceCardTop extends StatelessWidget {
       child: Stack(
         fit: StackFit.expand,
         children: [
-          Image.network(
-            url ?? 'no_url',
+          CachedNetworkImage(
+            imageUrl: url ?? 'no_url',
+            errorWidget: (context, url, dynamic error) => Image.asset(AppAssets.placeholder),
             fit: BoxFit.fitWidth,
-            loadingBuilder: (context, child, loadingProgress) {
-              if (loadingProgress == null) return child;
-
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
-            },
-            errorBuilder: (context, error, stackTrace) => const Icon(Icons.error),
+            placeholder: (context, url) => Image.asset(AppAssets.placeholder),
           ),
           Positioned(
             left: 16,

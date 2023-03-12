@@ -427,7 +427,7 @@ class _PlaceDetailsImage extends StatelessWidget {
             child: CircularProgressIndicator(),
           );
         },
-        errorBuilder: (context, error, stackTrace) => const Icon(Icons.error),
+        errorBuilder: (context, error, stackTrace) => Image.asset(AppAssets.placeholder),
       ),
     );
   }

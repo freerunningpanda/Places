@@ -1,5 +1,5 @@
 abstract class AppAssets {
-  static const noImage = 'lib/ui/res/images/no_image.png';
+  static const placeholder = 'lib/ui/res/images/placeholder.png';
   static const favourite = 'lib/ui/res/icons/heart_icon.svg';
   static const calendar = 'lib/ui/res/icons/calendar.svg';
   static const calendarWhite = 'lib/ui/res/icons/calendar_white.svg';
