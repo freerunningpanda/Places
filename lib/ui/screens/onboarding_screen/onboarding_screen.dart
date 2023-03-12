@@ -209,4 +209,10 @@ class _OnboardingScreenContentState extends State<_OnboardingScreenContent> with
       ],
     );
   }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
 }
