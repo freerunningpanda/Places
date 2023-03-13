@@ -11,11 +11,9 @@ import 'package:places/data/model/place.dart';
 import 'package:places/data/repository/place_repository.dart';
 
 import 'package:places/ui/res/app_assets.dart';
-import 'package:places/ui/res/app_colors.dart';
 import 'package:places/ui/res/app_strings.dart';
 import 'package:places/ui/res/app_typography.dart';
 import 'package:places/ui/widgets/chevrone_back.dart';
-import 'package:places/ui/widgets/close_bottom_sheet.dart';
 import 'package:places/ui/widgets/error_widget.dart';
 import 'package:places/ui/widgets/place_icons.dart';
 
@@ -92,7 +90,7 @@ class _PlaceDetailsState extends State<PlaceDetails> with TickerProviderStateMix
               ),
             );
           } else if (state is DetailsScreenLoadedState) {
-            return _PlaceDetailsFull(
+            return _PlaceDetails(
               height: widget.height,
               place: widget.place,
               pageController: _pageController,
@@ -108,12 +106,12 @@ class _PlaceDetailsState extends State<PlaceDetails> with TickerProviderStateMix
   }
 }
 
-class _PlaceDetailsFull extends StatelessWidget {
+class _PlaceDetails extends StatelessWidget {
   final Place place;
   final double height;
   final PageController _pageController;
 
-  const _PlaceDetailsFull({
+  const _PlaceDetails({
     Key? key,
     required this.place,
     required this.height,
@@ -123,9 +121,6 @@ class _PlaceDetailsFull extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final orientation = MediaQuery.of(context).orientation == Orientation.portrait;
-
     return SingleChildScrollView(
       child: Column(
         children: [
@@ -159,89 +154,6 @@ class _PlaceDetailsFull extends StatelessWidget {
   }
 }
 
-class _PlaceDetailsClosed extends StatefulWidget {
-  final Place place;
-  final double height;
-  final PageController _pageController;
-
-  const _PlaceDetailsClosed({
-    Key? key,
-    required this.place,
-    required this.height,
-    required PageController pageController,
-  })  : _pageController = pageController,
-        super(key: key);
-
-  @override
-  State<_PlaceDetailsClosed> createState() => _PlaceDetailsClosedState();
-}
-
-class _PlaceDetailsClosedState extends State<_PlaceDetailsClosed> {
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final size = MediaQuery.of(context).size;
-    final orientation = MediaQuery.of(context).orientation == Orientation.portrait;
-
-    return Column(
-      children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0),
-          child: Column(
-            // clipBehavior: Clip.none,
-            children: [
-              GestureDetector(
-                onTap: _showGallery,
-                child: Container(
-                  width: 60,
-                  height: 3,
-                  decoration: BoxDecoration(
-                    borderRadius: const BorderRadius.all(Radius.circular(8.0)),
-                    color: theme.iconTheme.color,
-                  ),
-                ),
-              ),
-              SizedBox(
-                height: orientation ? size.height / 2.0 : size.height / 1.5,
-                child: ListView(
-                  shrinkWrap: true,
-                  children: [
-                    const SizedBox(height: 8),
-                    _DetailsScreenTitle(
-                      place: widget.place,
-                    ),
-                    const SizedBox(height: 24),
-                    _DetailsScreenDescription(place: widget.place),
-                    const SizedBox(height: 24),
-                    _PlaceDetailsBuildRouteBtn(place: widget.place),
-                    const SizedBox(height: 16),
-                    const Divider(),
-                    const SizedBox(height: 8),
-                    _PlaceDetailsBottom(place: widget.place),
-                    const SizedBox(height: 16),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
-      ],
-    );
-  }
-
-  void _showGallery() {
-    showModalBottomSheet<_PlaceDetailsFull>(
-      context: context,
-      builder: (_) => _PlaceDetailsFull(
-        height: widget.height,
-        place: widget.place,
-        pageController: widget._pageController,
-      ),
-      isScrollControlled: true,
-    );
-  }
-}
-
 class _PlaceDetailsGallery extends StatefulWidget {
   final List<String> images;
   final double height;
@@ -264,9 +176,6 @@ class _PlaceDetailsGalleryState extends State<_PlaceDetailsGallery> {
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
-    final theme = Theme.of(context);
-
     return SizedBox(
       height: MediaQuery.of(context).size.height / 1.8,
       child: Stack(
