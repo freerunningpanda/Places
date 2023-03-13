@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart' hide ErrorWidget;
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:places/blocs/details_screen/details_screen_bloc.dart';
 import 'package:places/blocs/favorite/favorite_bloc.dart';
 import 'package:places/cubits/places_list/places_list_cubit.dart';
 import 'package:places/data/model/place.dart';
@@ -11,6 +12,7 @@ import 'package:places/ui/res/app_card_size.dart';
 import 'package:places/ui/res/app_strings.dart';
 import 'package:places/ui/res/app_typography.dart';
 import 'package:places/ui/screens/place_card/place_card.dart';
+import 'package:places/ui/screens/place_details/place_details.dart';
 import 'package:places/ui/widgets/add_new_place_button.dart';
 import 'package:places/ui/widgets/error_widget.dart';
 import 'package:places/ui/widgets/place_icons.dart';
@@ -119,6 +121,17 @@ class _PlaceListWidgetPortraitState extends State<_PlaceListWidgetPortrait> {
             children: [
               FittedBox(
                 child: PlaceCard(
+                  onTap: () {
+                    context.read<DetailsScreenBloc>().add(DetailsScreenEvent(place: place));
+                    Navigator.of(context).push(
+                      MaterialPageRoute<PlaceDetails>(
+                        builder: (context) => PlaceDetails(
+                          height: 360,
+                          place: place,
+                        ),
+                      ),
+                    );
+                  },
                   placeIndex: index,
                   isVisitingScreen: false,
                   aspectRatio: AppCardSize.placeCard,
@@ -216,6 +229,17 @@ class _PlaceListWidgetLandscape extends StatelessWidget {
           return Column(
             children: [
               PlaceCard(
+                onTap: () {
+                  context.read<DetailsScreenBloc>().add(DetailsScreenEvent(place: place));
+                  Navigator.of(context).push(
+                    MaterialPageRoute<PlaceDetails>(
+                      builder: (context) => PlaceDetails(
+                        height: 360,
+                        place: place,
+                      ),
+                    ),
+                  );
+                },
                 placeIndex: index,
                 isVisitingScreen: false,
                 aspectRatio: 1.5 / 1,

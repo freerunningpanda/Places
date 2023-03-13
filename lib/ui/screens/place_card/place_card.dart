@@ -28,6 +28,7 @@ class PlaceCard extends StatelessWidget {
   final int placeIndex;
   final bool isVisitingScreen;
   final VoidCallback? removePlace;
+  final VoidCallback onTap;
 
   const PlaceCard({
     Key? key,
@@ -42,6 +43,7 @@ class PlaceCard extends StatelessWidget {
     required this.placeIndex,
     required this.isVisitingScreen,
     this.removePlace,
+    required this.onTap,
   }) : super(key: key);
 
   @override
@@ -77,7 +79,10 @@ class PlaceCard extends StatelessWidget {
                   ),
                 ],
               ),
-              RippleCardFull(place: placeList[placeIndex]),
+              RippleCardFull(
+                place: placeList[placeIndex],
+                onTap: onTap,
+              ),
               if (isVisitingScreen)
                 RippleIcons(
                   removePlace: removePlace,
@@ -244,10 +249,12 @@ class RippleIcons extends StatelessWidget {
 
 class RippleCardFull extends StatelessWidget {
   final Place place;
+  final VoidCallback onTap;
 
   const RippleCardFull({
     Key? key,
     required this.place,
+    required this.onTap,
   }) : super(key: key);
 
   @override
@@ -256,18 +263,7 @@ class RippleCardFull extends StatelessWidget {
       child: Material(
         type: MaterialType.transparency,
         child: InkWell(
-          onTap: () {
-            debugPrint('🟡---------to details screen');
-            context.read<DetailsScreenBloc>().add(DetailsScreenEvent(place: place));
-            Navigator.of(context).push(
-              MaterialPageRoute<PlaceDetails>(
-                builder: (context) => PlaceDetails(
-                  height: 360,
-                  place: place,
-                ),
-              ),
-            );
-          },
+          onTap: onTap,
         ),
       ),
     );
@@ -319,10 +315,13 @@ class _PlaceCardTopState extends State<_PlaceCardTop> with TickerProviderStateMi
       child: Stack(
         fit: StackFit.expand,
         children: [
-          CachedNetworkImage(imageUrl: widget.url ?? 'no_url',
-          fit: BoxFit.fitWidth,
-          errorWidget: (context, url, dynamic error) => Image.asset(AppAssets.placeholder),
-          progressIndicatorBuilder: (context, url, progress) => AnimatedBuilder(
+          Hero(
+            tag: 'tag',
+            child: CachedNetworkImage(
+              imageUrl: 'https://gazo.ru/upload/iblock/3ff/3ff3fbd5c63139765de789ed11f64ebe.png',
+              fit: BoxFit.fitWidth,
+              errorWidget: (context, url, dynamic error) => Image.asset(AppAssets.placeholder),
+              progressIndicatorBuilder: (context, url, progress) => AnimatedBuilder(
                 animation: _animationController,
                 builder: (context, child) {
                   return Transform.rotate(
@@ -335,6 +334,7 @@ class _PlaceCardTopState extends State<_PlaceCardTop> with TickerProviderStateMi
                   );
                 },
               ),
+            ),
           ),
           Positioned(
             left: 16,

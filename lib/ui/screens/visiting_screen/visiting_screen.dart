@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:places/blocs/details_screen/details_screen_bloc.dart';
 import 'package:places/blocs/favorite/favorite_bloc.dart';
 import 'package:places/blocs/visited/visited_screen_bloc.dart';
 import 'package:places/blocs/want_to_visit/want_to_visit_bloc.dart';
@@ -9,6 +10,7 @@ import 'package:places/ui/res/app_card_size.dart';
 import 'package:places/ui/res/app_strings.dart';
 import 'package:places/ui/res/app_typography.dart';
 import 'package:places/ui/screens/place_card/place_card.dart';
+import 'package:places/ui/screens/place_details/place_details.dart';
 import 'package:places/ui/screens/res/custom_colors.dart';
 import 'package:places/ui/widgets/add_new_place_button.dart';
 import 'package:places/ui/widgets/place_icons.dart';
@@ -18,7 +20,6 @@ class VisitingScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return Padding(
       padding: const EdgeInsets.only(left: 16.0, right: 16.0),
       child: DefaultTabController(
@@ -344,6 +345,17 @@ class _DismissibleWidget extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.only(bottom: 11.0),
               child: PlaceCard(
+                onTap: () {
+                  context.read<DetailsScreenBloc>().add(DetailsScreenEvent(place: placesToVisit[i]));
+                  Navigator.of(context).push(
+                    MaterialPageRoute<PlaceDetails>(
+                      builder: (context) => PlaceDetails(
+                        height: 360,
+                        place: placesToVisit[i],
+                      ),
+                    ),
+                  );
+                },
                 placeIndex: i,
                 removePlace: () {
                   context.read<WantToVisitBloc>().add(
