@@ -12,6 +12,7 @@ import 'package:places/data/repository/place_repository.dart';
 
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_strings.dart';
+import 'package:places/ui/res/app_tags.dart';
 import 'package:places/ui/res/app_typography.dart';
 import 'package:places/ui/widgets/chevrone_back.dart';
 import 'package:places/ui/widgets/error_widget.dart';
@@ -292,24 +293,27 @@ class _PlaceDetailsImageState extends State<_PlaceDetailsImage> with TickerProvi
   Widget build(BuildContext context) {
     return SizedBox(
       height: widget.height,
-      child: CachedNetworkImage(
-        imageUrl: widget.image,
-        fit: BoxFit.cover,
-        errorWidget: (context, url, dynamic error) => Image.asset(AppAssets.placeholder),
-        progressIndicatorBuilder: (context, url, progress) => AnimatedBuilder(
-          animation: _animationController,
-          builder: (context, child) {
-            return Center(
-              child: Transform.rotate(
-                angle: _rotateAnimation.value,
-                child: const PlaceIcons(
-                  assetName: AppAssets.loader,
-                  width: 30,
-                  height: 30,
+      child: Hero(
+        tag: AppTags.placeImage,
+        child: CachedNetworkImage(
+          imageUrl: widget.image,
+          fit: BoxFit.cover,
+          errorWidget: (context, url, dynamic error) => Image.asset(AppAssets.placeholder),
+          progressIndicatorBuilder: (context, url, progress) => AnimatedBuilder(
+            animation: _animationController,
+            builder: (context, child) {
+              return Center(
+                child: Transform.rotate(
+                  angle: _rotateAnimation.value,
+                  child: const PlaceIcons(
+                    assetName: AppAssets.loader,
+                    width: 30,
+                    height: 30,
+                  ),
                 ),
-              ),
-            );
-          },
+              );
+            },
+          ),
         ),
       ),
     );
