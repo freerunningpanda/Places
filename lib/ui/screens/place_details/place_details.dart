@@ -1,5 +1,7 @@
 import 'dart:async';
+import 'dart:math';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart' hide ErrorWidget;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:places/blocs/details_screen/details_screen_bloc.dart';
@@ -29,8 +31,10 @@ class PlaceDetails extends StatefulWidget {
   State<PlaceDetails> createState() => _PlaceDetailsState();
 }
 
-class _PlaceDetailsState extends State<PlaceDetails> {
+class _PlaceDetailsState extends State<PlaceDetails> with TickerProviderStateMixin {
   final _pageController = PageController();
+  late final AnimationController _animationController;
+  late final Animation<double> _rotateAnimation;
 
   @override
   void initState() {
@@ -53,6 +57,14 @@ class _PlaceDetailsState extends State<PlaceDetails> {
         }
       },
     );
+    _animationController = AnimationController(vsync: this, duration: const Duration(seconds: 2));
+    _rotateAnimation = Tween<double>(begin: 0, end: -pi * 5).animate(
+      CurvedAnimation(parent: _animationController, curve: Curves.linear),
+    );
+
+    _animationController
+      ..forward()
+      ..repeat();
 
     super.initState();
   }
@@ -60,6 +72,7 @@ class _PlaceDetailsState extends State<PlaceDetails> {
   @override
   void dispose() {
     _pageController.dispose();
+    _animationController.dispose();
     super.dispose();
   }
 
@@ -69,8 +82,13 @@ class _PlaceDetailsState extends State<PlaceDetails> {
       body: BlocBuilder<DetailsScreenBloc, DetailsScreenState>(
         builder: (_, state) {
           if (state is DetailsScreenLoadingState) {
-            return const Center(
-              child: CircularProgressIndicator(),
+            return Transform.rotate(
+              angle: _rotateAnimation.value,
+              child: const PlaceIcons(
+                assetName: AppAssets.loader,
+                width: 30,
+                height: 30,
+              ),
             );
           } else if (state is DetailsScreenLoadedState) {
             return Column(
@@ -90,7 +108,7 @@ class _PlaceDetailsState extends State<PlaceDetails> {
               ],
             );
           }
-          
+
           return const Center(
             child: ErrorWidget(),
           );
@@ -404,7 +422,7 @@ class _DetailsScreenTitle extends StatelessWidget {
   }
 }
 
-class _PlaceDetailsImage extends StatelessWidget {
+class _PlaceDetailsImage extends StatefulWidget {
   final String image;
   final double height;
   const _PlaceDetailsImage({
@@ -414,22 +432,58 @@ class _PlaceDetailsImage extends StatelessWidget {
   }) : super(key: key);
 
   @override
+  State<_PlaceDetailsImage> createState() => _PlaceDetailsImageState();
+}
+
+class _PlaceDetailsImageState extends State<_PlaceDetailsImage> with TickerProviderStateMixin {
+  late final AnimationController _animationController;
+  late final Animation<double> _rotateAnimation;
+
+  @override
+  void initState() {
+    _animationController = AnimationController(vsync: this, duration: const Duration(seconds: 2));
+    _rotateAnimation = Tween<double>(begin: 0, end: -pi * 5).animate(
+      CurvedAnimation(parent: _animationController, curve: Curves.linear),
+    );
+
+    _animationController
+      ..forward()
+      ..repeat();
+
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: height,
-      child: Image.network(
-        image,
+      height: widget.height,
+      child: CachedNetworkImage(
+        imageUrl: widget.image,
         fit: BoxFit.cover,
-        loadingBuilder: (context, child, loadingProgress) {
-          if (loadingProgress == null) return child;
-
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
-        },
-        errorBuilder: (context, error, stackTrace) => Image.asset(AppAssets.placeholder),
+        errorWidget: (context, url, dynamic error) => Image.asset(AppAssets.placeholder),
+        progressIndicatorBuilder: (context, url, progress) => AnimatedBuilder(
+          animation: _animationController,
+          builder: (context, child) {
+            return Center(
+              child: Transform.rotate(
+                angle: _rotateAnimation.value,
+                child: const PlaceIcons(
+                  assetName: AppAssets.loader,
+                  width: 30,
+                  height: 30,
+                ),
+              ),
+            );
+          },
+        ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
   }
 }
 
