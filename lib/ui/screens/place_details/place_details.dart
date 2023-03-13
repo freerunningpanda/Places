@@ -14,6 +14,7 @@ import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_colors.dart';
 import 'package:places/ui/res/app_strings.dart';
 import 'package:places/ui/res/app_typography.dart';
+import 'package:places/ui/widgets/chevrone_back.dart';
 import 'package:places/ui/widgets/close_bottom_sheet.dart';
 import 'package:places/ui/widgets/error_widget.dart';
 import 'package:places/ui/widgets/place_icons.dart';
@@ -91,21 +92,10 @@ class _PlaceDetailsState extends State<PlaceDetails> with TickerProviderStateMix
               ),
             );
           } else if (state is DetailsScreenLoadedState) {
-            return Column(
-              children: [
-                Expanded(
-                  child: ColoredBox(
-                    child: Container(),
-                    color: AppColors.detailsScreenBackground,
-                  ),
-                ),
-                const SizedBox(height: 12),
-                _PlaceDetailsClosed(
-                  height: widget.height,
-                  place: widget.place,
-                  pageController: _pageController,
-                ),
-              ],
+            return _PlaceDetailsFull(
+              height: widget.height,
+              place: widget.place,
+              pageController: _pageController,
             );
           }
 
@@ -136,74 +126,35 @@ class _PlaceDetailsFull extends StatelessWidget {
     final theme = Theme.of(context);
     final orientation = MediaQuery.of(context).orientation == Orientation.portrait;
 
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.end,
-      children: [
-        GestureDetector(
-          onTap: () => Navigator.of(context).pop(),
-          child: Container(
-            margin: const EdgeInsets.symmetric(horizontal: 32),
-            width: double.infinity,
-            height: 16,
-            decoration: const BoxDecoration(
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(12.0),
-                topRight: Radius.circular(12.0),
-              ),
-              color: AppColors.detailsScreenBottomSheet,
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          _PlaceDetailsGallery(
+            images: place.urls,
+            height: height,
+            pageController: _pageController,
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: Column(
+              children: [
+                _DetailsScreenTitle(
+                  place: place,
+                ),
+                const SizedBox(height: 24),
+                _DetailsScreenDescription(place: place),
+                const SizedBox(height: 24),
+                _PlaceDetailsBuildRouteBtn(place: place),
+                const SizedBox(height: 16),
+                const Divider(),
+                const SizedBox(height: 8),
+                _PlaceDetailsBottom(place: place),
+                const SizedBox(height: 16),
+              ],
             ),
           ),
-        ),
-        Stack(
-          children: [
-            DecoratedBox(
-              decoration: BoxDecoration(
-                borderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(12.0),
-                  topRight: Radius.circular(12.0),
-                ),
-                color: theme.scaffoldBackgroundColor,
-              ),
-              child: ConstrainedBox(
-                constraints: BoxConstraints(
-                  maxHeight: orientation ? 629 : 350,
-                ),
-                child: ListView(
-                  children: [
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(12),
-                      child: _PlaceDetailsGallery(
-                        images: place.urls,
-                        height: height,
-                        pageController: _pageController,
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                      child: Column(
-                        children: [
-                          _DetailsScreenTitle(
-                            place: place,
-                          ),
-                          const SizedBox(height: 24),
-                          _DetailsScreenDescription(place: place),
-                          const SizedBox(height: 24),
-                          _PlaceDetailsBuildRouteBtn(place: place),
-                          const SizedBox(height: 16),
-                          const Divider(),
-                          const SizedBox(height: 8),
-                          _PlaceDetailsBottom(place: place),
-                          const SizedBox(height: 16),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ],
-        ),
-      ],
+        ],
+      ),
     );
   }
 }
@@ -318,62 +269,37 @@ class _PlaceDetailsGalleryState extends State<_PlaceDetailsGallery> {
 
     return SizedBox(
       height: MediaQuery.of(context).size.height / 1.8,
-      child: CustomScrollView(
-        // controller: scrollController,
-        slivers: [
-          SliverAppBar(
-            automaticallyImplyLeading: false,
-            expandedHeight: widget.height,
-            flexibleSpace: Stack(
-              children: [
-                SizedBox(
-                  width: double.infinity,
-                  height: widget.height,
-                  child: Scrollbar(
-                    controller: widget._pageController,
-                    child: PageView(
-                      controller: widget._pageController,
-                      children: widget.images
-                          .asMap()
-                          .map(
-                            (i, e) => MapEntry(
-                              i,
-                              _PlaceDetailsImage(
-                                height: widget.height,
-                                image: e,
-                              ),
-                            ),
-                          )
-                          .values
-                          .toList(),
-                    ),
-                  ),
-                ),
-                const Positioned(
-                  top: 32,
-                  right: 16,
-                  child: CloseBottomSheet(
-                    width: 32,
-                    height: 32,
-                  ),
-                ),
-                Positioned(
-                  top: 12,
-                  left: size.width / 2.3,
-                  right: size.width / 2.3,
-                  child: GestureDetector(
-                    onTap: () => Navigator.of(context).pop(),
-                    child: Container(
-                      width: 40,
-                      height: 3,
-                      decoration: BoxDecoration(
-                        borderRadius: const BorderRadius.all(Radius.circular(8.0)),
-                        color: theme.sliderTheme.thumbColor,
+      child: Stack(
+        children: [
+          SizedBox(
+            width: double.infinity,
+            height: widget.height,
+            child: Scrollbar(
+              controller: widget._pageController,
+              child: PageView(
+                controller: widget._pageController,
+                children: widget.images
+                    .asMap()
+                    .map(
+                      (i, e) => MapEntry(
+                        i,
+                        _PlaceDetailsImage(
+                          height: widget.height,
+                          image: e,
+                        ),
                       ),
-                    ),
-                  ),
-                ),
-              ],
+                    )
+                    .values
+                    .toList(),
+              ),
+            ),
+          ),
+          const Positioned(
+            left: 16,
+            top: 36,
+            child: ChevroneBack(
+              width: 32,
+              height: 32,
             ),
           ),
         ],
