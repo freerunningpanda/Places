@@ -320,22 +320,25 @@ class _PlaceCardTopState extends State<_PlaceCardTop> with TickerProviderStateMi
       child: Stack(
         fit: StackFit.expand,
         children: [
-          CachedNetworkImage(imageUrl: widget.url ?? 'no_url',
-          fit: BoxFit.fitWidth,
-          errorWidget: (context, url, dynamic error) => Image.asset(AppAssets.placeholder),
-          progressIndicatorBuilder: (_, url, progress) => AnimatedBuilder(
-                animation: _animationController,
-                builder: (_, child) {
-                  return Transform.rotate(
-                    angle: _rotateAnimation.value,
-                    child: const PlaceIcons(
-                      assetName: AppAssets.loader,
-                      width: 30,
-                      height: 30,
-                    ),
-                  );
-                },
-              ),
+          Hero(
+            tag: AppTags.placeImage,
+            child: CachedNetworkImage(imageUrl: widget.url ?? 'no_url',
+            fit: BoxFit.fitWidth,
+            errorWidget: (context, url, dynamic error) => Image.asset(AppAssets.placeholder),
+            progressIndicatorBuilder: (_, url, progress) => AnimatedBuilder(
+                  animation: _animationController,
+                  builder: (_, child) {
+                    return Transform.rotate(
+                      angle: _rotateAnimation.value,
+                      child: const PlaceIcons(
+                        assetName: AppAssets.loader,
+                        width: 30,
+                        height: 30,
+                      ),
+                    );
+                  },
+                ),
+            ),
           ),
           Positioned(
             left: 16,

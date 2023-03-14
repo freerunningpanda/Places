@@ -293,24 +293,27 @@ class _PlaceDetailsImageState extends State<_PlaceDetailsImage> with TickerProvi
   Widget build(BuildContext context) {
     return SizedBox(
       height: widget.height,
-      child: CachedNetworkImage(
-        imageUrl: widget.image,
-        fit: BoxFit.cover,
-        errorWidget: (context, url, dynamic error) => Image.asset(AppAssets.placeholder),
-        progressIndicatorBuilder: (_, url, progress) => AnimatedBuilder(
-          animation: _animationController,
-          builder: (_, child) {
-            return Center(
-              child: Transform.rotate(
-                angle: _rotateAnimation.value,
-                child: const PlaceIcons(
-                  assetName: AppAssets.loader,
-                  width: 30,
-                  height: 30,
+      child: Hero(
+        tag: AppTags.placeImage,
+        child: CachedNetworkImage(
+          imageUrl: widget.image,
+          fit: BoxFit.cover,
+          errorWidget: (context, url, dynamic error) => Image.asset(AppAssets.placeholder),
+          progressIndicatorBuilder: (_, url, progress) => AnimatedBuilder(
+            animation: _animationController,
+            builder: (_, child) {
+              return Center(
+                child: Transform.rotate(
+                  angle: _rotateAnimation.value,
+                  child: const PlaceIcons(
+                    assetName: AppAssets.loader,
+                    width: 30,
+                    height: 30,
+                  ),
                 ),
-              ),
-            );
-          },
+              );
+            },
+          ),
         ),
       ),
     );
