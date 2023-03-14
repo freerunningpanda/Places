@@ -68,6 +68,7 @@ class PlaceCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   _PlaceCardTop(
+                    name: name,
                     type: type,
                     url: url,
                   ),
@@ -278,11 +279,13 @@ class RippleCardFull extends StatelessWidget {
 class _PlaceCardTop extends StatefulWidget {
   final String type;
   final String? url;
+  final String name;
 
   const _PlaceCardTop({
     Key? key,
     required this.type,
     required this.url,
+    required this.name,
   }) : super(key: key);
 
   @override
@@ -321,23 +324,24 @@ class _PlaceCardTopState extends State<_PlaceCardTop> with TickerProviderStateMi
         fit: StackFit.expand,
         children: [
           Hero(
-            tag: AppTags.placeImage,
-            child: CachedNetworkImage(imageUrl: widget.url ?? 'no_url',
-            fit: BoxFit.fitWidth,
-            errorWidget: (context, url, dynamic error) => Image.asset(AppAssets.placeholder),
-            progressIndicatorBuilder: (_, url, progress) => AnimatedBuilder(
-                  animation: _animationController,
-                  builder: (_, child) {
-                    return Transform.rotate(
-                      angle: _rotateAnimation.value,
-                      child: const PlaceIcons(
-                        assetName: AppAssets.loader,
-                        width: 30,
-                        height: 30,
-                      ),
-                    );
-                  },
-                ),
+            tag: Text(widget.name),
+            child: CachedNetworkImage(
+              imageUrl: widget.url ?? 'no_url',
+              fit: BoxFit.fitWidth,
+              errorWidget: (context, url, dynamic error) => Image.asset(AppAssets.placeholder),
+              progressIndicatorBuilder: (_, url, progress) => AnimatedBuilder(
+                animation: _animationController,
+                builder: (_, child) {
+                  return Transform.rotate(
+                    angle: _rotateAnimation.value,
+                    child: const PlaceIcons(
+                      assetName: AppAssets.loader,
+                      width: 30,
+                      height: 30,
+                    ),
+                  );
+                },
+              ),
             ),
           ),
           Positioned(

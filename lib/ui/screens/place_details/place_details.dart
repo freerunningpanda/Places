@@ -126,6 +126,7 @@ class _PlaceDetails extends StatelessWidget {
       child: Column(
         children: [
           _PlaceDetailsGallery(
+            place: place,
             images: place.urls,
             height: height,
             pageController: _pageController,
@@ -158,12 +159,14 @@ class _PlaceDetails extends StatelessWidget {
 class _PlaceDetailsGallery extends StatefulWidget {
   final List<String> images;
   final double height;
+  final Place place;
   final PageController _pageController;
 
   const _PlaceDetailsGallery({
     Key? key,
     required this.images,
     required this.height,
+    required this.place,
     required PageController pageController,
   })  : _pageController = pageController,
         super(key: key);
@@ -196,6 +199,7 @@ class _PlaceDetailsGalleryState extends State<_PlaceDetailsGallery> {
                         _PlaceDetailsImage(
                           height: widget.height,
                           image: e,
+                          place: widget.place,
                         ),
                       ),
                     )
@@ -261,10 +265,12 @@ class _DetailsScreenTitle extends StatelessWidget {
 class _PlaceDetailsImage extends StatefulWidget {
   final String image;
   final double height;
+  final Place place;
   const _PlaceDetailsImage({
     Key? key,
     required this.image,
     required this.height,
+    required this.place,
   }) : super(key: key);
 
   @override
@@ -294,7 +300,7 @@ class _PlaceDetailsImageState extends State<_PlaceDetailsImage> with TickerProvi
     return SizedBox(
       height: widget.height,
       child: Hero(
-        tag: AppTags.placeImage,
+        tag: Text(widget.place.name),
         child: CachedNetworkImage(
           imageUrl: widget.image,
           fit: BoxFit.cover,
