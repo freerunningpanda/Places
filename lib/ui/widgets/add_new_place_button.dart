@@ -18,7 +18,7 @@ class AddNewPlaceButton extends StatelessWidget {
       onTap: () {
         Navigator.of(context).push<AddPlaceScreen>(
           MaterialPageRoute(
-            builder: (context) => const AddPlaceScreen(),
+            builder: (_) => const AddPlaceScreen(),
           ),
         );
         debugPrint('🟡---------Add new place button pressed');

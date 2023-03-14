@@ -470,7 +470,7 @@ class _CoordinatsInputWidget extends StatelessWidget {
     final place = context.read<CreatePlaceButtonCubit>();
 
     return BlocBuilder<AddPlaceScreenCubit, AddPlaceScreenState>(
-      builder: (context, state) {
+      builder: (_, state) {
         return Row(
           children: [
             Expanded(
@@ -613,7 +613,7 @@ class _CategoryChooseWidget extends StatelessWidget {
         InkWell(
           onTap: () => Navigator.of(context).push<ChooseCategoryWidget>(
             MaterialPageRoute(
-              builder: (context) => ChooseCategoryWidget(
+              builder: (_) => ChooseCategoryWidget(
                 chosenCategories: cubit.chosenCategories,
                 categories: cubit.categories,
               ),
@@ -625,7 +625,7 @@ class _CategoryChooseWidget extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 BlocBuilder<ChooseCategoryBloc, ChooseCategoryState>(
-                  builder: (context, state) {
+                  builder: (_, state) {
                     return state.isEmpty
                         ? Text(AppString.nochoose, style: theme.textTheme.titleMedium)
                         // null быть не может, так как при сохранении категории она прокинется в стэйт

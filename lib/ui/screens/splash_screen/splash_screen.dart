@@ -48,7 +48,7 @@ class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMix
         child: Center(
           child: AnimatedBuilder(
             animation: _animationController,
-            builder: (context, child) => Transform.rotate(
+            builder: (_, child) => Transform.rotate(
               angle: _rotateAnimation.value,
               child: const PlaceIcons(
                 assetName: AppAssets.subtract,
@@ -91,7 +91,7 @@ class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMix
       /// если виджет смонтирован и проинициализирован, то переходим на OnBoardingScreen
       await Navigator.of(context).pushReplacement(
         MaterialPageRoute<OnboardingScreen>(
-          builder: (context) => const OnboardingScreen(),
+          builder: (_) => const OnboardingScreen(),
         ),
       );
     } else {
