@@ -18,6 +18,7 @@ import 'package:places/cubits/places_list/places_list_cubit.dart';
 import 'package:places/cubits/show_places_button/show_places_button_cubit.dart';
 import 'package:places/providers/theme_data_provider.dart';
 import 'package:places/ui/res/app_strings.dart';
+import 'package:places/ui/screens/onboarding_screen/onboarding_screen.dart';
 import 'package:places/ui/screens/res/app_theme.dart';
 import 'package:places/ui/screens/splash_screen/splash_screen.dart';
 import 'package:provider/provider.dart';
@@ -117,6 +118,17 @@ class MainScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const SplashScreen();
+    
+    return BlocBuilder<PlacesListCubit, PlacesListState>(
+      builder: (context, state) {
+        if (state is PlaceListLoadingState) {
+          return const SplashScreen();
+        } else if (state is PlacesListLoadedState) {
+          return const OnboardingScreen();
+        } else {
+          return const SplashScreen();
+        }
+      },
+    );
   }
 }

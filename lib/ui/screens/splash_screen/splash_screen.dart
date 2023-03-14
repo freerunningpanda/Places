@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:places/cubits/places_list/places_list_cubit.dart';
@@ -14,33 +16,56 @@ class SplashScreen extends StatefulWidget {
   State<SplashScreen> createState() => _SplashScreenState();
 }
 
-class _SplashScreenState extends State<SplashScreen> {
+class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMixin {
   late bool isInitialized;
+  late AnimationController _animationController;
+  late Animation<double> _rotateAnimation;
 
   @override
   void initState() {
     _init();
+    _animationController = AnimationController(vsync: this, duration: const Duration(seconds: 2));
+    _rotateAnimation = Tween<double>(begin: 0, end: -pi * 2).animate(
+      CurvedAnimation(parent: _animationController, curve: Curves.decelerate),
+    );
+
+    _animationController
+      ..forward()
+      ..repeat();
+
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
+    return Scaffold(
       body: DecoratedBox(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           gradient: LinearGradient(
             colors: AppColors.splashScreenBackground,
           ),
         ),
         child: Center(
-          child: PlaceIcons(
-            assetName: AppAssets.subtract,
-            width: 160,
-            height: 160,
+          child: AnimatedBuilder(
+            animation: _animationController,
+            builder: (context, child) => Transform.rotate(
+              angle: _rotateAnimation.value,
+              child: const PlaceIcons(
+                assetName: AppAssets.subtract,
+                width: 160,
+                height: 160,
+              ),
+            ),
           ),
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
   }
 
   /// Метод инициализации данных

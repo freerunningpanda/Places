@@ -9,6 +9,8 @@ abstract class PlacesListState extends Equatable {
 
 class PlacesListEmptyState extends PlacesListState {}
 
+class PlaceListLoadingState extends PlacesListState {}
+
 class PlacesListLoadedState extends PlacesListState {
   final List<Place> places;
 
