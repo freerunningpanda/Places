@@ -12,7 +12,6 @@ import 'package:places/data/repository/place_repository.dart';
 
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_strings.dart';
-import 'package:places/ui/res/app_tags.dart';
 import 'package:places/ui/res/app_typography.dart';
 import 'package:places/ui/widgets/chevrone_back.dart';
 import 'package:places/ui/widgets/error_widget.dart';

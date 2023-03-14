@@ -10,7 +10,6 @@ import 'package:places/blocs/favorite/favorite_bloc.dart';
 import 'package:places/blocs/want_to_visit/want_to_visit_bloc.dart';
 import 'package:places/data/model/place.dart';
 import 'package:places/ui/res/app_assets.dart';
-import 'package:places/ui/res/app_tags.dart';
 import 'package:places/ui/res/app_typography.dart';
 import 'package:places/ui/screens/place_details/place_details.dart';
 import 'package:places/ui/screens/res/custom_colors.dart';
