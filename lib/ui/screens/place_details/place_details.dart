@@ -461,9 +461,9 @@ class _PlaceDetailsImageState extends State<_PlaceDetailsImage> with TickerProvi
         imageUrl: widget.image,
         fit: BoxFit.cover,
         errorWidget: (context, url, dynamic error) => Image.asset(AppAssets.placeholder),
-        progressIndicatorBuilder: (context, url, progress) => AnimatedBuilder(
+        progressIndicatorBuilder: (_, url, progress) => AnimatedBuilder(
           animation: _animationController,
-          builder: (context, child) {
+          builder: (_, child) {
             return Center(
               child: Transform.rotate(
                 angle: _rotateAnimation.value,

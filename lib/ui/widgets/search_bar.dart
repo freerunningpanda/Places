@@ -118,7 +118,7 @@ class _SearchBarState extends State<SearchBar> {
                         // Просто переходим на экран поиска мест
                         Navigator.of(context).push(
                           MaterialPageRoute<PlaceSearchScreen>(
-                            builder: (context) => const PlaceSearchScreen(),
+                            builder: (_) => const PlaceSearchScreen(),
                           ),
                         );
                       }
@@ -156,7 +156,7 @@ class _SearchBarState extends State<SearchBar> {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute<FilterScreen>(
-                                    builder: (context) => const FilterScreen(),
+                                    builder: (_) => const FilterScreen(),
                                   ),
                                 );
                                 debugPrint('🟡---------filters button pressed');

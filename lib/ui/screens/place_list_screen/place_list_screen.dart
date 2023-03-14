@@ -37,7 +37,7 @@ class PlaceListScreen extends StatelessWidget {
       body: Padding(
         padding: const EdgeInsets.only(left: 16.0, right: 16.0),
         child: NestedScrollView(
-          headerSliverBuilder: (context, innerBoxIsScrolled) => [
+          headerSliverBuilder: (_, innerBoxIsScrolled) => [
             SliverAppBar(
               centerTitle: orientation ? isPortrait : !isPortrait,
               pinned: true,
@@ -112,7 +112,7 @@ class _PlaceListWidgetPortraitState extends State<_PlaceListWidgetPortrait> {
         physics: Platform.isAndroid ? const ClampingScrollPhysics() : const BouncingScrollPhysics(),
         shrinkWrap: true,
         itemCount: widget.placeList.length,
-        itemBuilder: (context, index) {
+        itemBuilder: (_, index) {
           final place = widget.placeList[index];
 
           return Column(
@@ -123,7 +123,7 @@ class _PlaceListWidgetPortraitState extends State<_PlaceListWidgetPortrait> {
                   isVisitingScreen: false,
                   aspectRatio: AppCardSize.placeCard,
                   actionOne: BlocBuilder<FavoriteBloc, FavoriteState>(
-                    builder: (context, state) {
+                    builder: (_, state) {
                       if (state is IsFavoriteState) {
                         return place.isFavorite
                             ? const PlaceIcons(
@@ -210,7 +210,7 @@ class _PlaceListWidgetLandscape extends StatelessWidget {
         physics: Platform.isAndroid ? const ClampingScrollPhysics() : const BouncingScrollPhysics(),
         shrinkWrap: true,
         itemCount: placeList.length,
-        itemBuilder: (context, index) {
+        itemBuilder: (_, index) {
           final place = placeList[index];
 
           return Column(
@@ -220,7 +220,7 @@ class _PlaceListWidgetLandscape extends StatelessWidget {
                 isVisitingScreen: false,
                 aspectRatio: 1.5 / 1,
                 actionOne: BlocBuilder<FavoriteBloc, FavoriteState>(
-                  builder: (context, state) {
+                  builder: (_, state) {
                     if (state is IsFavoriteState) {
                       return place.isFavorite
                           ? const PlaceIcons(

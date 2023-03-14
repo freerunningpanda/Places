@@ -261,7 +261,7 @@ class RippleCardFull extends StatelessWidget {
             context.read<DetailsScreenBloc>().add(DetailsScreenEvent(place: place));
             Navigator.of(context).push(
               MaterialPageRoute<PlaceDetails>(
-                builder: (context) => PlaceDetails(
+                builder: (_) => PlaceDetails(
                   height: 360,
                   place: place,
                 ),
@@ -322,9 +322,9 @@ class _PlaceCardTopState extends State<_PlaceCardTop> with TickerProviderStateMi
           CachedNetworkImage(imageUrl: widget.url ?? 'no_url',
           fit: BoxFit.fitWidth,
           errorWidget: (context, url, dynamic error) => Image.asset(AppAssets.placeholder),
-          progressIndicatorBuilder: (context, url, progress) => AnimatedBuilder(
+          progressIndicatorBuilder: (_, url, progress) => AnimatedBuilder(
                 animation: _animationController,
-                builder: (context, child) {
+                builder: (_, child) {
                   return Transform.rotate(
                     angle: _rotateAnimation.value,
                     child: const PlaceIcons(

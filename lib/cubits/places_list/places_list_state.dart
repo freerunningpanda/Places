@@ -21,3 +21,14 @@ class PlacesListLoadedState extends PlacesListState {
     required this.places,
   });
 }
+
+class PlacesListErrorState extends PlacesListState {
+  final String error;
+
+  @override
+  List<Object?> get props => [error];
+
+  const PlacesListErrorState({
+    required this.error,
+  });
+}

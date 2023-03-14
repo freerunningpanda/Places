@@ -107,7 +107,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     title: AppString.start,
                     onTap: () => Navigator.of(context).pushReplacement(
                       MaterialPageRoute<MainScreen>(
-                        builder: (context) => const NavigationScreen(),
+                        builder: (_) => const NavigationScreen(),
                       ),
                     ),
                   ),
@@ -165,7 +165,7 @@ class _OnboardingScreenContentState extends State<_OnboardingScreenContent> with
             InkWell(
               onTap: () => Navigator.of(context).pushReplacement(
                 MaterialPageRoute<MainScreen>(
-                  builder: (context) => const NavigationScreen(),
+                  builder: (_) => const NavigationScreen(),
                 ),
               ),
               child: Text(
@@ -178,7 +178,7 @@ class _OnboardingScreenContentState extends State<_OnboardingScreenContent> with
         const SizedBox(height: 191),
         AnimatedBuilder(
           animation: _animationController,
-          builder: (context, child) => PlaceIcons(
+          builder: (_, child) => PlaceIcons(
             assetName: widget.assetName,
             width: _zoomAnimation.value,
             height: _zoomAnimation.value,
