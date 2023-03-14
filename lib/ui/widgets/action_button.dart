@@ -32,7 +32,7 @@ class ActionButton extends StatelessWidget {
     final customColors = Theme.of(context).extension<CustomColors>();
 
     return BlocBuilder<ShowPlacesButtonCubit, ShowPlacesButtonState>(
-      builder: (context, state) {
+      builder: (_, state) {
         return Stack(
           children: [
             Container(
