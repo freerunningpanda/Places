@@ -324,7 +324,7 @@ class _PlaceCardTopState extends State<_PlaceCardTop> with TickerProviderStateMi
         fit: StackFit.expand,
         children: [
           Hero(
-            tag: Text(widget.name),
+            tag: widget.name,
             child: CachedNetworkImage(
               imageUrl: widget.url ?? 'no_url',
               fit: BoxFit.fitWidth,

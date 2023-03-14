@@ -300,7 +300,7 @@ class _PlaceDetailsImageState extends State<_PlaceDetailsImage> with TickerProvi
     return SizedBox(
       height: widget.height,
       child: Hero(
-        tag: Text(widget.place.name),
+        tag: widget.place.name,
         child: CachedNetworkImage(
           imageUrl: widget.image,
           fit: BoxFit.cover,
