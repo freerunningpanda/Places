@@ -8,7 +8,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:places/blocs/details_screen/details_screen_bloc.dart';
 import 'package:places/blocs/favorite/favorite_bloc.dart';
 import 'package:places/blocs/want_to_visit/want_to_visit_bloc.dart';
-import 'package:places/data/dio_configurator.dart';
 import 'package:places/data/model/place.dart';
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_typography.dart';
@@ -68,6 +67,7 @@ class PlaceCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   _PlaceCardTop(
+                    name: name,
                     type: type,
                     url: url,
                   ),
@@ -278,11 +278,13 @@ class RippleCardFull extends StatelessWidget {
 class _PlaceCardTop extends StatefulWidget {
   final String type;
   final String? url;
+  final String name;
 
   const _PlaceCardTop({
     Key? key,
     required this.type,
     required this.url,
+    required this.name,
   }) : super(key: key);
 
   @override
@@ -320,13 +322,13 @@ class _PlaceCardTopState extends State<_PlaceCardTop> with TickerProviderStateMi
       child: Stack(
         fit: StackFit.expand,
         children: [
-          Image.network(
-            widget.url ?? 'no_url',
-            fit: BoxFit.fitWidth,
-            loadingBuilder: (_, child, loadingProgress) {
-              if (loadingProgress == null) return child;
-
-              return AnimatedBuilder(
+          Hero(
+            tag: widget.name,
+            child: CachedNetworkImage(
+              imageUrl: widget.url ?? 'no_url',
+              fit: BoxFit.fitWidth,
+              errorWidget: (context, url, dynamic error) => Image.asset(AppAssets.placeholder),
+              progressIndicatorBuilder: (_, url, progress) => AnimatedBuilder(
                 animation: _animationController,
                 builder: (_, child) {
                   return Transform.rotate(
@@ -338,9 +340,8 @@ class _PlaceCardTopState extends State<_PlaceCardTop> with TickerProviderStateMi
                     ),
                   );
                 },
-              );
-            },
-            errorBuilder: (_, error, stackTrace) => Image.asset(AppAssets.placeholder),
+              ),
+            ),
           ),
           Positioned(
             left: 16,

@@ -101,7 +101,7 @@ class FilterScreen extends StatelessWidget {
         );
     Navigator.of(context).push<PlaceSearchScreen>(
       MaterialPageRoute(
-        builder: (context) => const PlaceSearchScreen(),
+        builder: (_) => const PlaceSearchScreen(),
       ),
     );
   }

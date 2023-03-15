@@ -120,7 +120,13 @@ class MainScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<PlacesListCubit, PlacesListState>(
       builder: (_, state) {
-        return state is PlacesListLoadedState ? const OnboardingScreen() : const SplashScreen();
+        if (state is PlacesListLoadedState) {
+          return const OnboardingScreen();
+        } else if (state is PlacesListErrorState) {
+          throw ArgumentError(state.error);
+        } else {
+          return const SplashScreen();
+        }
       },
     );
   }
