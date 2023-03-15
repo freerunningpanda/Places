@@ -67,6 +67,7 @@ class PlaceCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   _PlaceCardTop(
+                    name: name,
                     type: type,
                     url: url,
                   ),
@@ -277,11 +278,13 @@ class RippleCardFull extends StatelessWidget {
 class _PlaceCardTop extends StatefulWidget {
   final String type;
   final String? url;
+  final String name;
 
   const _PlaceCardTop({
     Key? key,
     required this.type,
     required this.url,
+    required this.name,
   }) : super(key: key);
 
   @override
@@ -319,10 +322,13 @@ class _PlaceCardTopState extends State<_PlaceCardTop> with TickerProviderStateMi
       child: Stack(
         fit: StackFit.expand,
         children: [
-          CachedNetworkImage(imageUrl: widget.url ?? 'no_url',
-          fit: BoxFit.fitWidth,
-          errorWidget: (context, url, dynamic error) => Image.asset(AppAssets.placeholder),
-          progressIndicatorBuilder: (_, url, progress) => AnimatedBuilder(
+          Hero(
+            tag: widget.name,
+            child: CachedNetworkImage(
+              imageUrl: widget.url ?? 'no_url',
+              fit: BoxFit.fitWidth,
+              errorWidget: (context, url, dynamic error) => Image.asset(AppAssets.placeholder),
+              progressIndicatorBuilder: (_, url, progress) => AnimatedBuilder(
                 animation: _animationController,
                 builder: (_, child) {
                   return Transform.rotate(
@@ -335,6 +341,7 @@ class _PlaceCardTopState extends State<_PlaceCardTop> with TickerProviderStateMi
                   );
                 },
               ),
+            ),
           ),
           Positioned(
             left: 16,
