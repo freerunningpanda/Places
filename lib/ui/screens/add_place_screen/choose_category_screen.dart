@@ -46,7 +46,7 @@ class ChooseCategoryWidget extends StatelessWidget {
                   child: ListView.separated(
                     physics: Platform.isAndroid ? const ClampingScrollPhysics() : const BouncingScrollPhysics(),
                     shrinkWrap: true,
-                    itemBuilder: (context, index) {
+                    itemBuilder: (_, index) {
                       final category = categories[index];
 
                       return _ItemCategory(
@@ -77,7 +77,7 @@ class ChooseCategoryWidget extends StatelessWidget {
                         },
                       );
                     },
-                    separatorBuilder: (context, index) {
+                    separatorBuilder: (_, index) {
                       return const Divider();
                     },
                     itemCount: categories.length,
@@ -174,7 +174,7 @@ class _ItemCategory extends StatelessWidget {
               style: theme.textTheme.bodyLarge,
             ),
             BlocBuilder<ChooseCategoryBloc, ChooseCategoryState>(
-              builder: (context, state) {
+              builder: (_, state) {
                 return category.isEnabled // Передаю категорию с текущим индексом чтобы выбиралась
                     // только одна, а не все
                     ? const PlaceIcons(

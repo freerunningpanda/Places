@@ -118,16 +118,9 @@ class MainScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    
     return BlocBuilder<PlacesListCubit, PlacesListState>(
-      builder: (context, state) {
-        if (state is PlaceListLoadingState) {
-          return const SplashScreen();
-        } else if (state is PlacesListLoadedState) {
-          return const OnboardingScreen();
-        } else {
-          return const SplashScreen();
-        }
+      builder: (_, state) {
+        return state is PlacesListLoadedState ? const OnboardingScreen() : const SplashScreen();
       },
     );
   }

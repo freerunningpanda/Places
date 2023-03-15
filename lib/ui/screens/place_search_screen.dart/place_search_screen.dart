@@ -49,7 +49,7 @@ class _PlaceSearchScreenState extends State<PlaceSearchScreen> {
               const SearchAppBar(),
               const SizedBox(height: 16),
               BlocBuilder<SearchBarBloc, SearchBarState>(
-                builder: (context, state) {
+                builder: (_, state) {
                   if (state is SearchBarHasValueState) {
                     return SearchBar(
                       isSearchPage: isSearchPage,
@@ -72,7 +72,7 @@ class _PlaceSearchScreenState extends State<PlaceSearchScreen> {
                   child: Column(
                     children: [
                       BlocBuilder<SearchHistoryBloc, SearchHistoryState>(
-                        builder: (context, state) {
+                        builder: (_, state) {
                           // Если история поиска пуста, показываем просто список найденных мест
                           if (state is SearchHistoryEmptyState) {
                             return Column(
@@ -133,7 +133,7 @@ class _PlaceListWidget extends StatelessWidget {
     final height = MediaQuery.of(context).size.height;
 
     return BlocBuilder<SearchScreenBloc, SearchScreenState>(
-      builder: (context, state) {
+      builder: (_, state) {
         // Начальное состояние экрана пустого списка найденных мест
         if (state is SearchScreenEmptyState) {
           return _EmptyListWidget(
@@ -149,7 +149,7 @@ class _PlaceListWidget extends StatelessWidget {
             physics: Platform.isAndroid ? const ClampingScrollPhysics() : const BouncingScrollPhysics(),
             shrinkWrap: true,
             itemCount: state.filteredPlaces.length,
-            itemBuilder: (context, index) {
+            itemBuilder: (_, index) {
               final place = state.filteredPlaces[index];
 
               return _PlaceCardWidget(
@@ -439,7 +439,7 @@ class _RippleEffect extends StatelessWidget {
             context.read<DetailsScreenBloc>().add(DetailsScreenEvent(place: place));
             Navigator.of(context).push<PlaceDetails>(
               MaterialPageRoute(
-                builder: (context) => PlaceDetails(
+                builder: (_) => PlaceDetails(
                   place: place,
                   height: 360,
                 ),

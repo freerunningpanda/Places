@@ -43,7 +43,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               onTap: () => Navigator.push(
                 context,
                 MaterialPageRoute<OnboardingScreen>(
-                  builder: (context) => const OnboardingScreen(),
+                  builder: (_) => const OnboardingScreen(),
                 ),
               ),
               child: Padding(

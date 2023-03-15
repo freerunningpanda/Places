@@ -39,7 +39,7 @@ class FilterScreen extends StatelessWidget {
           bottom: 8.0,
         ),
         child: BlocBuilder<PlacesListCubit, PlacesListState>(
-          builder: (context, state) {
+          builder: (_, state) {
             if (state is PlacesListEmptyState) {
               return const Center(child: CircularProgressIndicator());
             } else if (state is PlacesListLoadedState) {
@@ -195,7 +195,7 @@ class _FiltersTableState extends State<_FiltersTable> {
       height: size.width <= 320 ? 90 : 170,
       alignment: const Alignment(0.0, -0.8),
       child: Builder(
-        builder: (context) {
+        builder: (_) {
           return size.width <= 320
               ? _ItemFiltersListSmallScreens(
                   filtersTable: widget,
@@ -372,7 +372,7 @@ class _ItemFilter extends StatelessWidget {
                   height: 64,
                   width: 64,
                   child: BlocBuilder<FiltersScreenBloc, FiltersScreenState>(
-                    builder: (context, state) {
+                    builder: (_, state) {
                       if (state is IsEnabledState) {
                         return category.isEnabled
                             ? Opacity(
@@ -431,7 +431,7 @@ class _ItemFilter extends StatelessWidget {
           ),
         ),
         BlocBuilder<FiltersScreenBloc, FiltersScreenState>(
-          builder: (context, state) {
+          builder: (_, state) {
             if (state is IsEnabledState) {
               return category.isEnabled
                   ? Positioned(
@@ -506,7 +506,7 @@ class _DistanceSlider extends StatelessWidget {
     final max = context.read<DistanceSliderCubit>().max;
 
     return BlocBuilder<DistanceSliderCubit, DistanceSliderState>(
-      builder: (context, state) {
+      builder: (_, state) {
         return Column(
           children: [
             Row(

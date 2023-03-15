@@ -1,5 +1,5 @@
 abstract class AppAssets {
-  static const noImage = 'lib/ui/res/images/no_image.png';
+  static const placeholder = 'lib/ui/res/images/placeholder.png';
   static const favourite = 'lib/ui/res/icons/heart_icon.svg';
   static const calendar = 'lib/ui/res/icons/calendar.svg';
   static const calendarWhite = 'lib/ui/res/icons/calendar_white.svg';
@@ -43,5 +43,6 @@ abstract class AppAssets {
   static const file = 'lib/ui/res/icons/file.svg';
   static const photo = 'lib/ui/res/icons/photo.svg';
   static const error = 'lib/ui/res/icons/error.svg';
+  static const loader = 'lib/ui/res/icons/loader.svg';
 
 }

@@ -29,7 +29,7 @@ class CreateButton extends StatelessWidget {
     final customColors = Theme.of(context).extension<CustomColors>();
 
     return BlocBuilder<CreatePlaceButtonCubit, CreatePlaceButtonState>(
-      builder: (context, state) {
+      builder: (_, state) {
         final buttonStyle = context.read<CreatePlaceButtonCubit>().buttonStyle(state: state);
 
         return Stack(

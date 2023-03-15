@@ -420,14 +420,14 @@ class _PlaceDetailsImage extends StatelessWidget {
       child: Image.network(
         image,
         fit: BoxFit.cover,
-        loadingBuilder: (context, child, loadingProgress) {
+        loadingBuilder: (_, child, loadingProgress) {
           if (loadingProgress == null) return child;
 
           return const Center(
             child: CircularProgressIndicator(),
           );
         },
-        errorBuilder: (context, error, stackTrace) => const Icon(Icons.error),
+        errorBuilder: (_, error, stackTrace) => Image.asset(AppAssets.placeholder),
       ),
     );
   }
