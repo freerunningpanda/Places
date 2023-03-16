@@ -96,6 +96,8 @@ class ShowPlacesButtonCubit extends Cubit<ShowPlacesButtonState> {
         );
         if (distance >= Mocks.rangeValues.start && distance <= Mocks.rangeValues.end) {
           PlaceInteractor.filtersWithDistance.add(el);
+          final encodedData = Place.encode(PlaceInteractor.filtersWithDistance);
+          debugPrint('encodedData: $encodedData');
           final isEmpty = PlaceInteractor.filtersWithDistance.isEmpty;
           final length = PlaceInteractor.filtersWithDistance.length;
           debugPrint('🟡---------Добавленные места (дистанция): ${PlaceInteractor.filtersWithDistance}');
