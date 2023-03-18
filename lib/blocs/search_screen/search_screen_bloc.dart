@@ -32,21 +32,29 @@ class SearchScreenBloc extends Bloc<SearchScreenEvent, SearchScreenState> {
           length: AppPreferences.getPlacesListLength(),
         ),
       );
+      // Если поисковый запрос содержит значение и список найденных мест пуст
+      // Эмитим пустое состояние экрана
+
+      // P.S.: когда данное условие стояло ниже следующего условия
+      // Оно не дёргалось и пустой стэйт не эмитился после ввода имени места
+      // Которого в списке нет. Не понятно почему
+      // Сейчас перенёс его сюда и оно срабатывает
+
+      if (!event.isQueryEmpty && PlaceInteractor.foundedPlaces.isEmpty) {
+        emit(SearchScreenEmptyState());
+      }
       // Если поисковый запрос пуст, то показывать все найденные по фильтрам места
       // Теперь не будет отображаться пустое состояние, потому что сработает данное условие
       // И в стэйт прокинутся отфильтрованные места
-      if (event.isQueryEmpty) {
+      if (event.isQueryEmpty || event.searchHistoryIsEmpty) {
         emit(
           SearchScreenPlacesFoundState(
             filteredPlaces: event.filteredPlaces!.toList(),
             length: AppPreferences.getPlacesListLength(),
           ),
         );
-      // Иначе если поисковый запрос содержит значение и список найденных мест пуст
-      // Эмитим пустое состояние экрана
-      } else if (!event.isQueryEmpty && PlaceInteractor.foundedPlaces.isEmpty) {
-        emit(SearchScreenEmptyState());
       }
+
       // Предыдущее условие показывало пустой стэйт, потому что не было проверки
       // На то, пустой запрос или нет. Поэтому при завершении поиска состоянием пустого экрана
       // Возвратом на экран фильтров, затем снова на экран поиска - отображался экран ненайденных мест
@@ -61,8 +69,7 @@ class SearchScreenBloc extends Bloc<SearchScreenEvent, SearchScreenState> {
       if (event.isHistoryClear) {
         emit(
           SearchScreenPlacesFoundState(
-            filteredPlaces:
-                event.isHistoryClear ? event.filteredPlaces!.toList() : PlaceInteractor.foundedPlaces,
+            filteredPlaces: event.isHistoryClear ? event.filteredPlaces!.toList() : PlaceInteractor.foundedPlaces,
             length: AppPreferences.getPlacesListLength(),
           ),
         );
@@ -91,7 +98,7 @@ class SearchScreenBloc extends Bloc<SearchScreenEvent, SearchScreenState> {
         PlaceInteractor.foundedPlaces = AppPreferences.getPlacesList().where((place) {
           final placeTitle = place.name.toLowerCase();
           final input = query.toLowerCase();
-          debugPrint('filteredPlaces: $PlaceInteractor.foundedPlaces');
+          debugPrint('filteredPlaces: ${PlaceInteractor.foundedPlaces}');
 
           return placeTitle.contains(input);
         }).toList();

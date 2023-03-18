@@ -222,15 +222,17 @@ class _SearchHistoryList extends StatelessWidget {
           controller: controller,
         ),
         const SizedBox(height: 15),
-        const _ClearHistoryButton(),
+        _ClearHistoryButton(searchStoryList: searchStoryList),
       ],
     );
   }
 }
 
 class _ClearHistoryButton extends StatelessWidget {
+  final Set<String> searchStoryList;
   const _ClearHistoryButton({
     Key? key,
+    required this.searchStoryList,
   }) : super(key: key);
 
   @override
@@ -242,6 +244,7 @@ class _ClearHistoryButton extends StatelessWidget {
         // Для того, чтобы заново показать весь список найденных мест с экрана фильтров
         context.read<SearchScreenBloc>().add(
               PlacesFoundEvent(
+                searchHistoryIsEmpty: searchStoryList.isEmpty,
                 filteredPlaces: AppPreferences.getPlacesList().toList(),
                 isHistoryClear: true,
                 fromFiltersScreen: false,
@@ -318,13 +321,26 @@ class _SearchItem extends StatelessWidget {
                     ),
                     InkWell(
                       borderRadius: BorderRadius.circular(30),
-                      onTap: () => context.read<SearchHistoryBloc>().add(
-                            RemoveItemFromHistory(
-                              index: e,
-                              isDeleted: true,
-                              hasFocus: true,
-                            ),
-                          ),
+                      onTap: () {
+                        context.read<SearchHistoryBloc>().add(
+                              RemoveItemFromHistory(
+                                index: e,
+                                isDeleted: true,
+                                hasFocus: true,
+                              ),
+                            );
+                         // Чтобы обновить стейт экрана
+                        // Если крайнее место было удалено из истории
+                        context.read<SearchScreenBloc>().add(
+                              PlacesFoundEvent(
+                                searchHistoryIsEmpty: searchStoryList.isEmpty,
+                                filteredPlaces: AppPreferences.getPlacesList().toList(),
+                                isHistoryClear: true,
+                                fromFiltersScreen: false,
+                                isQueryEmpty: true,
+                              ),
+                            );
+                      },
                       child: const PlaceIcons(assetName: AppAssets.delete, width: 24, height: 24),
                     ),
                   ],
