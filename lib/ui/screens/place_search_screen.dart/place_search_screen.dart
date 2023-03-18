@@ -7,6 +7,7 @@ import 'package:places/blocs/search_bar/search_bar_bloc.dart';
 import 'package:places/blocs/search_history/search_history_bloc.dart';
 import 'package:places/blocs/search_screen/search_screen_bloc.dart';
 import 'package:places/data/model/place.dart';
+import 'package:places/data/store/app_preferences.dart';
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_strings.dart';
 import 'package:places/ui/res/app_typography.dart';
@@ -241,6 +242,7 @@ class _ClearHistoryButton extends StatelessWidget {
         // Для того, чтобы заново показать весь список найденных мест с экрана фильтров
         context.read<SearchScreenBloc>().add(
               PlacesFoundEvent(
+                filteredPlaces: AppPreferences.getPlacesList().toList(),
                 isHistoryClear: true,
                 fromFiltersScreen: false,
                 isQueryEmpty: true,
