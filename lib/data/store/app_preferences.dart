@@ -46,4 +46,11 @@ class AppPreferences extends Store {
 
     return places.length;
   }
+
+  static bool checkListValue() {
+    final jsonString = _prefs.getString(placesList) ?? '';
+    final places = Place.decode(jsonString);
+
+    return places.isEmpty;
+  }
 }
