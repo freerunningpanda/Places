@@ -9,6 +9,7 @@ import 'package:places/cubits/show_places_button/show_places_button_cubit.dart';
 import 'package:places/data/interactor/place_interactor.dart';
 import 'package:places/data/model/category.dart';
 import 'package:places/data/model/place.dart';
+import 'package:places/data/store/app_preferences.dart';
 import 'package:places/mocks.dart';
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_strings.dart';
@@ -93,7 +94,7 @@ class FilterScreen extends StatelessWidget {
     // После очистки истории поиска
     context.read<SearchScreenBloc>().add(
           PlacesFoundEvent(
-            filteredPlaces: PlaceInteractor.filtersWithDistance.toList(),
+            filteredPlaces: AppPreferences.getPlacesList().toList(),
             isHistoryClear: false,
             fromFiltersScreen: true,
             isQueryEmpty: true,

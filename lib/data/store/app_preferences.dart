@@ -40,7 +40,13 @@ class AppPreferences extends Store {
     return prefs;
   }
 
-  static int getPlacesList() {
+  static Set<Place> getPlacesList() {
+    final jsonString = _prefs.getString(placesList) ?? '';
+    final places = Place.decode(jsonString);
+
+    return places;
+  }
+  static int getPlacesListLength() {
     final jsonString = _prefs.getString(placesList) ?? '';
     final places = Place.decode(jsonString);
 

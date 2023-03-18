@@ -6,6 +6,7 @@ import 'package:places/data/api/api_places.dart';
 import 'package:places/data/interactor/place_interactor.dart';
 import 'package:places/data/model/place.dart';
 import 'package:places/data/repository/place_repository.dart';
+import 'package:places/data/store/app_preferences.dart';
 import 'package:places/mocks.dart';
 
 part 'search_screen_event.dart';
@@ -27,7 +28,7 @@ class SearchScreenBloc extends Bloc<SearchScreenEvent, SearchScreenState> {
       emit(
         SearchScreenPlacesFoundState(
           filteredPlaces: event.fromFiltersScreen ? event.filteredPlaces!.toList() : PlaceInteractor.foundedPlaces,
-          length: PlaceInteractor.filtersWithDistance.length,
+          length: AppPreferences.getPlacesListLength(),
         ),
       );
       // Если поисковый запрос пуст, то показывать все найденные по фильтрам места
@@ -36,8 +37,8 @@ class SearchScreenBloc extends Bloc<SearchScreenEvent, SearchScreenState> {
       if (event.isQueryEmpty) {
         emit(
           SearchScreenPlacesFoundState(
-            filteredPlaces: PlaceInteractor.filtersWithDistance.toList(),
-            length: PlaceInteractor.filtersWithDistance.length,
+            filteredPlaces: event.filteredPlaces!.toList(),
+            length: AppPreferences.getPlacesListLength(),
           ),
         );
       // Иначе если поисковый запрос содержит значение и список найденных мест пуст
