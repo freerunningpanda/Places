@@ -8,6 +8,7 @@ import 'package:places/data/api/api_places.dart';
 import 'package:places/data/interactor/place_interactor.dart';
 import 'package:places/data/model/place.dart';
 import 'package:places/data/repository/place_repository.dart';
+import 'package:places/data/store/app_preferences.dart';
 import 'package:places/mocks.dart';
 
 part 'show_places_button_state.dart';
@@ -21,9 +22,9 @@ class ShowPlacesButtonCubit extends Cubit<ShowPlacesButtonState> {
   );
   ShowPlacesButtonCubit()
       : super(
-          const ShowPlacesButtonState(
+           ShowPlacesButtonState(
             isEmpty: true,
-            foundPlacesLength: 0,
+            foundPlacesLength: AppPreferences.getPlacesList(),
           ),
         );
 
@@ -83,7 +84,9 @@ class ShowPlacesButtonCubit extends Cubit<ShowPlacesButtonState> {
   }
 
   // ignore: long-method
-  void showCount({required List<Place> places}) {
+  void showCount({required List<Place> places}) async {
+    // var jsonString = AppPreferences.getPlacesList();
+
     if (PlaceInteractor.initialFilteredPlaces.isEmpty) {
       PlaceInteractor.filtersWithDistance.clear();
       // Если отсортированный по фильтрам список мест пуст. То пройтись вообще по всем местам.
@@ -96,8 +99,6 @@ class ShowPlacesButtonCubit extends Cubit<ShowPlacesButtonState> {
         );
         if (distance >= Mocks.rangeValues.start && distance <= Mocks.rangeValues.end) {
           PlaceInteractor.filtersWithDistance.add(el);
-          final encodedData = Place.encode(PlaceInteractor.filtersWithDistance);
-          debugPrint('encodedData: $encodedData');
           final isEmpty = PlaceInteractor.filtersWithDistance.isEmpty;
           final length = PlaceInteractor.filtersWithDistance.length;
           debugPrint('🟡---------Добавленные места (дистанция): ${PlaceInteractor.filtersWithDistance}');
@@ -151,5 +152,13 @@ class ShowPlacesButtonCubit extends Cubit<ShowPlacesButtonState> {
         }
       }
     }
+
+    // Кодирую список в строку Json
+    final jsonString = Place.encode(PlaceInteractor.filtersWithDistance);
+
+    // Сохраняю данную строку в Shared Preferences
+    await AppPreferences.setPlacesList(jsonString);
+
+    debugPrint('encodedData: ${jsonString.length}');
   }
 }

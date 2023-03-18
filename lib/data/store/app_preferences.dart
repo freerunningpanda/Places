@@ -1,4 +1,5 @@
 import 'package:places/data/constants.dart';
+import 'package:places/data/model/place.dart';
 import 'package:places/data/store/store.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -21,6 +22,12 @@ class AppPreferences extends Store {
     return prefs;
   }
 
+  static Future<bool> setPlacesList(String jsonString) async {
+    final prefs = await _prefs.setString(placesList, jsonString);
+
+    return prefs;
+  }
+
   static double getStartValue() {
     final prefs = _prefs.getDouble(rangeValueStart) ?? 100.0;
 
@@ -31,5 +38,12 @@ class AppPreferences extends Store {
     final prefs = _prefs.getDouble(rangeValueEnd) ?? 10000.0;
 
     return prefs;
+  }
+
+  static int getPlacesList() {
+    final jsonString = _prefs.getString(placesList) ?? '';
+    final places = Place.decode(jsonString);
+
+    return places.length;
   }
 }
