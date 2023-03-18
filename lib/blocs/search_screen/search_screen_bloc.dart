@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:places/data/api/api_places.dart';
@@ -61,8 +62,8 @@ class SearchScreenBloc extends Bloc<SearchScreenEvent, SearchScreenState> {
         emit(
           SearchScreenPlacesFoundState(
             filteredPlaces:
-                event.isHistoryClear ? PlaceInteractor.filtersWithDistance.toList() : PlaceInteractor.foundedPlaces,
-            length: PlaceInteractor.filtersWithDistance.length,
+                event.isHistoryClear ? event.filteredPlaces!.toList() : PlaceInteractor.foundedPlaces,
+            length: AppPreferences.getPlacesListLength(),
           ),
         );
       }
@@ -79,7 +80,7 @@ class SearchScreenBloc extends Bloc<SearchScreenEvent, SearchScreenState> {
   }
 
   void searchPlaces(String query, TextEditingController controller) {
-    for (final el in PlaceInteractor.filtersWithDistance) {
+    for (final el in AppPreferences.getPlacesList()) {
       final distance = Geolocator.distanceBetween(
         Mocks.mockLat,
         Mocks.mockLot,
@@ -87,7 +88,7 @@ class SearchScreenBloc extends Bloc<SearchScreenEvent, SearchScreenState> {
         el.lng,
       );
       if (distance >= Mocks.rangeValues.start && distance <= Mocks.rangeValues.end) {
-        PlaceInteractor.foundedPlaces = PlaceInteractor.filtersWithDistance.where((place) {
+        PlaceInteractor.foundedPlaces = AppPreferences.getPlacesList().where((place) {
           final placeTitle = place.name.toLowerCase();
           final input = query.toLowerCase();
           debugPrint('filteredPlaces: $PlaceInteractor.foundedPlaces');
@@ -97,8 +98,8 @@ class SearchScreenBloc extends Bloc<SearchScreenEvent, SearchScreenState> {
       }
     }
 
-    if (controller.text.isEmpty) {
-      PlaceInteractor.foundedPlaces.clear();
-    }
+    // if (controller.text.isEmpty) {
+    //   PlaceInteractor.foundedPlaces.clear();
+    // }
   }
 }
