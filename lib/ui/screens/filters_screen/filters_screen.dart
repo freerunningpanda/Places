@@ -236,10 +236,10 @@ class _ItemFiltersListBigScreens extends StatelessWidget {
               i,
               _ItemFilter(
                 category: category,
-                isEnabled: category.isEnabled,
+                isEnabled: AppPreferences.getCategory(category.title),
                 name: category.title,
                 assetName: category.assetName ?? 'null',
-                onTap: () {
+                onTap: () async {
                   final filteredByType =
                       filtersTable.places.where((place) => place.placeType.contains(category.placeType)).toList();
                   context.read<FiltersScreenBloc>().addToFilteredList(
@@ -249,6 +249,8 @@ class _ItemFiltersListBigScreens extends StatelessWidget {
                   context.read<ShowPlacesButtonCubit>().showCount(places: placeList);
 
                   if (!category.isEnabled) {
+                    await AppPreferences.setCategory(title: category.title, isEnabled: true);
+                    // ignore: use_build_context_synchronously
                     context.read<FiltersScreenBloc>().add(
                           AddRemoveFilterEvent(
                             category: category,
@@ -256,8 +258,11 @@ class _ItemFiltersListBigScreens extends StatelessWidget {
                             categoryIndex: i,
                           ),
                         );
+                    // ignore: use_build_context_synchronously
                     context.read<ShowPlacesButtonCubit>().resetToZero();
                   } else {
+                    await AppPreferences.setCategory(title: category.title, isEnabled: false);
+                    // ignore: use_build_context_synchronously
                     context.read<FiltersScreenBloc>().add(
                           AddRemoveFilterEvent(
                             category: category,

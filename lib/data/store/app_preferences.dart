@@ -28,6 +28,12 @@ class AppPreferences extends Store {
     return prefs;
   }
 
+  static Future<bool> setCategory({required String title, required bool isEnabled}) async {
+    final prefs = await _prefs.setBool(title, isEnabled);
+
+    return prefs;
+  }
+
   static double getStartValue() {
     final prefs = _prefs.getDouble(rangeValueStart) ?? 100.0;
 
@@ -74,5 +80,11 @@ class AppPreferences extends Store {
       // Данное решение, для того, чтобы не ловить крэш после удаления/установки приложения
       return null;
     }
+  }
+
+  static bool getCategory(String title) {
+    final prefs = _prefs.getBool(title) ?? false;
+
+    return prefs;
   }
 }
