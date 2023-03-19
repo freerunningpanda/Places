@@ -32,13 +32,13 @@ class FiltersScreenBloc extends Bloc<FiltersScreenEvent, FiltersScreenState> {
       apiPlaces: ApiPlaces(),
     ),
   );
-  FiltersScreenBloc() : super(const IsNotEnabledState(filterIndex: 0, isEnabled: false)) {
+  FiltersScreenBloc() : super(const FiltersScreenState(filterIndex: 0, isEnabled: false)) {
     on<AddRemoveFilterEvent>(
       (event, emit) {
         if (event.isEnabled) {
           addToActiveFilters(category: event.category);
           emit(
-            IsEnabledState(
+            state.copyWith(
               filterIndex: event.categoryIndex,
               isEnabled: event.isEnabled,
             ),
@@ -46,7 +46,7 @@ class FiltersScreenBloc extends Bloc<FiltersScreenEvent, FiltersScreenState> {
         } else {
           removeFromFavorites(category: event.category);
           emit(
-            IsNotEnabledState(
+            state.copyWith(
               filterIndex: event.categoryIndex,
               isEnabled: event.isEnabled,
             ),
@@ -58,7 +58,7 @@ class FiltersScreenBloc extends Bloc<FiltersScreenEvent, FiltersScreenState> {
     on<ClearAllFiltersEvent>((event, emit) {
       clearAllFilters();
       emit(
-        const IsNotEnabledState(
+        const FiltersScreenState(
           filterIndex: 0,
           isEnabled: false,
         ),

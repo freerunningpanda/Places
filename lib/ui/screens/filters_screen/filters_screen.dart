@@ -380,50 +380,26 @@ class _ItemFilter extends StatelessWidget {
                   width: 64,
                   child: BlocBuilder<FiltersScreenBloc, FiltersScreenState>(
                     builder: (_, state) {
-                      if (state is IsEnabledState) {
-                        return category.isEnabled
-                            ? Opacity(
-                                opacity: 0.5,
-                                child: CircleAvatar(
-                                  backgroundColor: theme.canvasColor,
-                                  child: PlaceIcons(
-                                    assetName: assetName,
-                                    width: 32,
-                                    height: 32,
-                                  ),
-                                ),
-                              )
-                            : CircleAvatar(
+                      return category.isEnabled
+                          ? Opacity(
+                              opacity: 0.5,
+                              child: CircleAvatar(
                                 backgroundColor: theme.canvasColor,
                                 child: PlaceIcons(
                                   assetName: assetName,
                                   width: 32,
                                   height: 32,
                                 ),
-                              );
-                      } else if (state is IsNotEnabledState) {
-                        return category.isEnabled
-                            ? Opacity(
-                                opacity: 0.5,
-                                child: CircleAvatar(
-                                  backgroundColor: theme.canvasColor,
-                                  child: PlaceIcons(
-                                    assetName: assetName,
-                                    width: 32,
-                                    height: 32,
-                                  ),
-                                ),
-                              )
-                            : CircleAvatar(
-                                backgroundColor: theme.canvasColor,
-                                child: PlaceIcons(
-                                  assetName: assetName,
-                                  width: 32,
-                                  height: 32,
-                                ),
-                              );
-                      }
-                      throw ArgumentError('Bad state');
+                              ),
+                            )
+                          : CircleAvatar(
+                              backgroundColor: theme.canvasColor,
+                              child: PlaceIcons(
+                                assetName: assetName,
+                                width: 32,
+                                height: 32,
+                              ),
+                            );
                     },
                   ),
                 ),
@@ -439,57 +415,29 @@ class _ItemFilter extends StatelessWidget {
         ),
         BlocBuilder<FiltersScreenBloc, FiltersScreenState>(
           builder: (_, state) {
-            if (state is IsEnabledState) {
-              return category.isEnabled
-                  ? Positioned(
-                      right: 16,
-                      bottom: 25,
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 2,
-                          vertical: 2,
-                        ),
+            return category.isEnabled
+                ? Positioned(
+                    right: 16,
+                    bottom: 25,
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 2,
+                        vertical: 2,
+                      ),
+                      width: 16,
+                      height: 16,
+                      decoration: BoxDecoration(
+                        color: theme.focusColor,
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      child: const PlaceIcons(
+                        assetName: AppAssets.check,
                         width: 16,
                         height: 16,
-                        decoration: BoxDecoration(
-                          color: theme.focusColor,
-                          borderRadius: BorderRadius.circular(16),
-                        ),
-                        child: const PlaceIcons(
-                          assetName: AppAssets.check,
-                          width: 16,
-                          height: 16,
-                        ),
                       ),
-                    )
-                  : const SizedBox();
-            } else if (state is IsNotEnabledState) {
-              return category.isEnabled
-                  ? Positioned(
-                      right: 16,
-                      bottom: 25,
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 2,
-                          vertical: 2,
-                        ),
-                        width: 16,
-                        height: 16,
-                        decoration: BoxDecoration(
-                          color: theme.focusColor,
-                          borderRadius: BorderRadius.circular(16),
-                        ),
-                        child: const PlaceIcons(
-                          assetName: AppAssets.check,
-                          width: 16,
-                          height: 16,
-                        ),
-                      ),
-                    )
-                  : const SizedBox();
-            } else {
-              throw ArgumentError('Bad state');
-            }
+                    ),
+                  )
+                : const SizedBox();
           },
         ),
       ],
