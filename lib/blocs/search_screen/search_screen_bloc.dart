@@ -88,7 +88,7 @@ class SearchScreenBloc extends Bloc<SearchScreenEvent, SearchScreenState> {
 
   void searchPlaces(String query) {
     final placesList = AppPreferences.getPlacesList();
-    // Если список мест в Preferences не пустой, искать в нём
+    // Если список мест в Preferences не null, искать в нём
     // Данное решение, для того, чтобы не ловить крэш после удаления/установки приложения
     if (placesList != null) {
       for (final el in placesList) {
@@ -108,29 +108,6 @@ class SearchScreenBloc extends Bloc<SearchScreenEvent, SearchScreenState> {
           }).toList();
         }
       }
-      // Если пустой Preferences, то искать в фильтрах с дистанцией
-    } else {
-      for (final el in PlaceInteractor.filtersWithDistance) {
-        final distance = Geolocator.distanceBetween(
-          Mocks.mockLat,
-          Mocks.mockLot,
-          el.lat,
-          el.lng,
-        );
-        if (distance >= Mocks.rangeValues.start && distance <= Mocks.rangeValues.end) {
-          PlaceInteractor.foundedPlaces = AppPreferences.getPlacesList()!.where((place) {
-            final placeTitle = place.name.toLowerCase();
-            final input = query.toLowerCase();
-            debugPrint('filteredPlaces: ${PlaceInteractor.foundedPlaces}');
-
-            return placeTitle.contains(input);
-          }).toList();
-        }
-      }
-    }
-
-    // if (controller.text.isEmpty) {
-    //   PlaceInteractor.foundedPlaces.clear();
-    // }
+    } 
   }
 }

@@ -47,6 +47,7 @@ class AppPreferences extends Store {
 
       return places;
     } else {
+      // Данное решение, для того, чтобы не ловить крэш после удаления/установки приложения
       return null;
     }
   }
@@ -58,6 +59,7 @@ class AppPreferences extends Store {
 
       return places.length;
     } else {
+      // Данное решение, для того, чтобы не ловить крэш после удаления/установки приложения
       return null;
     }
   }
@@ -69,6 +71,7 @@ class AppPreferences extends Store {
 
       return places.isEmpty;
     } else {
+      // Данное решение, для того, чтобы не ловить крэш после удаления/установки приложения
       return null;
     }
   }
