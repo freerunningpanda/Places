@@ -23,13 +23,13 @@ class SearchScreenBloc extends Bloc<SearchScreenEvent, SearchScreenState> {
 
   SearchScreenBloc() : super(SearchScreenEmptyState()) {
     activeFocus(isActive: true);
-    searchPlaces(interactor.query, interactor.controller);
+    searchPlaces(interactor.query);
     on<PlacesFoundEvent>((event, emit) {
       debugPrint('Длина списка мест после поиска: ${PlaceInteractor.foundedPlaces.length}');
       emit(
         SearchScreenPlacesFoundState(
           filteredPlaces: event.fromFiltersScreen ? event.filteredPlaces!.toList() : PlaceInteractor.foundedPlaces,
-          length: AppPreferences.getPlacesListLength(),
+          length: AppPreferences.getPlacesListLength() ?? 0,
         ),
       );
       // Если поисковый запрос содержит значение и список найденных мест пуст
@@ -50,7 +50,7 @@ class SearchScreenBloc extends Bloc<SearchScreenEvent, SearchScreenState> {
         emit(
           SearchScreenPlacesFoundState(
             filteredPlaces: event.filteredPlaces!.toList(),
-            length: AppPreferences.getPlacesListLength(),
+            length: AppPreferences.getPlacesListLength() ?? 0,
           ),
         );
       }
@@ -70,7 +70,7 @@ class SearchScreenBloc extends Bloc<SearchScreenEvent, SearchScreenState> {
         emit(
           SearchScreenPlacesFoundState(
             filteredPlaces: event.isHistoryClear ? event.filteredPlaces!.toList() : PlaceInteractor.foundedPlaces,
-            length: AppPreferences.getPlacesListLength(),
+            length: AppPreferences.getPlacesListLength() ?? 0,
           ),
         );
       }
@@ -86,22 +86,46 @@ class SearchScreenBloc extends Bloc<SearchScreenEvent, SearchScreenState> {
     }
   }
 
-  void searchPlaces(String query, TextEditingController controller) {
-    for (final el in AppPreferences.getPlacesList()) {
-      final distance = Geolocator.distanceBetween(
-        Mocks.mockLat,
-        Mocks.mockLot,
-        el.lat,
-        el.lng,
-      );
-      if (distance >= Mocks.rangeValues.start && distance <= Mocks.rangeValues.end) {
-        PlaceInteractor.foundedPlaces = AppPreferences.getPlacesList().where((place) {
-          final placeTitle = place.name.toLowerCase();
-          final input = query.toLowerCase();
-          debugPrint('filteredPlaces: ${PlaceInteractor.foundedPlaces}');
+  void searchPlaces(String query) {
+    final placesList = AppPreferences.getPlacesList();
+    // Если список мест в Preferences не пустой, искать в нём
+    // Данное решение, для того, чтобы не ловить крэш после удаления/установки приложения
+    if (placesList != null) {
+      for (final el in placesList) {
+        final distance = Geolocator.distanceBetween(
+          Mocks.mockLat,
+          Mocks.mockLot,
+          el.lat,
+          el.lng,
+        );
+        if (distance >= Mocks.rangeValues.start && distance <= Mocks.rangeValues.end) {
+          PlaceInteractor.foundedPlaces = AppPreferences.getPlacesList()!.where((place) {
+            final placeTitle = place.name.toLowerCase();
+            final input = query.toLowerCase();
+            debugPrint('filteredPlaces: ${PlaceInteractor.foundedPlaces}');
 
-          return placeTitle.contains(input);
-        }).toList();
+            return placeTitle.contains(input);
+          }).toList();
+        }
+      }
+      // Если пустой Preferences, то искать в фильтрах с дистанцией
+    } else {
+      for (final el in PlaceInteractor.filtersWithDistance) {
+        final distance = Geolocator.distanceBetween(
+          Mocks.mockLat,
+          Mocks.mockLot,
+          el.lat,
+          el.lng,
+        );
+        if (distance >= Mocks.rangeValues.start && distance <= Mocks.rangeValues.end) {
+          PlaceInteractor.foundedPlaces = AppPreferences.getPlacesList()!.where((place) {
+            final placeTitle = place.name.toLowerCase();
+            final input = query.toLowerCase();
+            debugPrint('filteredPlaces: ${PlaceInteractor.foundedPlaces}');
+
+            return placeTitle.contains(input);
+          }).toList();
+        }
       }
     }
 

@@ -95,7 +95,7 @@ class FilterScreen extends StatelessWidget {
     context.read<SearchScreenBloc>().add(
           PlacesFoundEvent(
             searchHistoryIsEmpty: PlaceInteractor.searchHistoryList.isEmpty,
-            filteredPlaces: AppPreferences.getPlacesList().toList(),
+            filteredPlaces: AppPreferences.getPlacesList()?.toList(),
             isHistoryClear: false,
             fromFiltersScreen: true,
             isQueryEmpty: true,

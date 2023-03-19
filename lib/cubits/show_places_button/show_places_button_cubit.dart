@@ -23,8 +23,8 @@ class ShowPlacesButtonCubit extends Cubit<ShowPlacesButtonState> {
   ShowPlacesButtonCubit()
       : super(
            ShowPlacesButtonState(
-            isEmpty: AppPreferences.checkListValue(),
-            foundPlacesLength: AppPreferences.getPlacesListLength(),
+            isEmpty: AppPreferences.checkListValue() ?? true,
+            foundPlacesLength: AppPreferences.getPlacesListLength() ?? 0,
           ),
         );
 

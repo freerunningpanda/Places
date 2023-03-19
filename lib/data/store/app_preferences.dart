@@ -40,23 +40,36 @@ class AppPreferences extends Store {
     return prefs;
   }
 
-  static Set<Place> getPlacesList() {
+  static Set<Place>? getPlacesList() {
     final jsonString = _prefs.getString(placesList) ?? '';
-    final places = Place.decode(jsonString);
+    if (jsonString.isNotEmpty) {
+      final places = Place.decode(jsonString);
 
-    return places;
-  }
-  static int getPlacesListLength() {
-    final jsonString = _prefs.getString(placesList) ?? '';
-    final places = Place.decode(jsonString);
-
-    return places.length;
+      return places;
+    } else {
+      return null;
+    }
   }
 
-  static bool checkListValue() {
+  static int? getPlacesListLength() {
     final jsonString = _prefs.getString(placesList) ?? '';
-    final places = Place.decode(jsonString);
+    if (jsonString.isNotEmpty) {
+      final places = Place.decode(jsonString);
 
-    return places.isEmpty;
+      return places.length;
+    } else {
+      return null;
+    }
+  }
+
+  static bool? checkListValue() {
+    final jsonString = _prefs.getString(placesList) ?? '';
+    if (jsonString.isNotEmpty) {
+      final places = Place.decode(jsonString);
+
+      return places.isEmpty;
+    } else {
+      return null;
+    }
   }
 }
