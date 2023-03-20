@@ -1,5 +1,7 @@
 import 'package:places/data/constants.dart';
+import 'package:places/data/dto/place_request.dart';
 import 'package:places/data/model/place.dart';
+import 'package:places/data/repository/mapper.dart';
 import 'package:places/data/store/store.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -64,9 +66,9 @@ class AppPreferences extends Store {
   static Set<Place>? getPlacesList() {
     final jsonString = _prefs.getString(placesList) ?? '';
     if (jsonString.isNotEmpty) {
-      final places = Place.decode(jsonString);
+      final places = PlaceRequest.decode(jsonString);
 
-      return places;
+      return places.map<Place>(Mapper.detailPlaceFromApiToUi).toSet();
     } else {
       // Данное решение, для того, чтобы не ловить крэш после удаления/установки приложения
       return null;
@@ -77,7 +79,7 @@ class AppPreferences extends Store {
   static int? getPlacesListLength() {
     final jsonString = _prefs.getString(placesList) ?? '';
     if (jsonString.isNotEmpty) {
-      final places = Place.decode(jsonString);
+      final places = PlaceRequest.decode(jsonString);
 
       return places.length;
     } else {
@@ -90,7 +92,7 @@ class AppPreferences extends Store {
   static bool? checkListValue() {
     final jsonString = _prefs.getString(placesList) ?? '';
     if (jsonString.isNotEmpty) {
-      final places = Place.decode(jsonString);
+      final places = PlaceRequest.decode(jsonString);
 
       return places.isEmpty;
     } else {

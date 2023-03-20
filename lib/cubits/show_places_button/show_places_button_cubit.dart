@@ -5,8 +5,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:places/blocs/filters_screen_bloc/filters_screen_bloc.dart';
 import 'package:places/data/api/api_places.dart';
+import 'package:places/data/dto/place_request.dart';
 import 'package:places/data/interactor/place_interactor.dart';
 import 'package:places/data/model/place.dart';
+import 'package:places/data/repository/mapper.dart';
 import 'package:places/data/repository/place_repository.dart';
 import 'package:places/data/store/app_preferences.dart';
 import 'package:places/mocks.dart';
@@ -22,7 +24,7 @@ class ShowPlacesButtonCubit extends Cubit<ShowPlacesButtonState> {
   );
   ShowPlacesButtonCubit()
       : super(
-           ShowPlacesButtonState(
+          ShowPlacesButtonState(
             isEmpty: AppPreferences.checkListValue() ?? true,
             foundPlacesLength: AppPreferences.getPlacesListLength() ?? 0,
           ),
@@ -153,8 +155,9 @@ class ShowPlacesButtonCubit extends Cubit<ShowPlacesButtonState> {
       }
     }
 
+    final filtersWithDistance = Mapper.getFiltersWithDistance(PlaceInteractor.filtersWithDistance);
     // Кодирую список в строку Json
-    final jsonString = Place.encode(PlaceInteractor.filtersWithDistance);
+    final jsonString = PlaceRequest.encode(filtersWithDistance);
 
     // Сохраняю данную строку в Shared Preferences
     await AppPreferences.setPlacesList(jsonString);

@@ -16,10 +16,24 @@ class Mapper {
   static Place detailPlaceFromApiToUi(PlaceRequest place) => Place(
         id: place.id,
         lat: place.lat,
-        lng: place.lon,
+        lng: place.lng,
         name: place.name,
         urls: place.urls,
         placeType: place.placeType,
         description: place.description,
       );
+
+  static Set<PlaceRequest> getFiltersWithDistance(Set<Place> places) => places
+      .map(
+        (place) => PlaceRequest(
+          id: place.id,
+          lat: place.lat,
+          lng: place.lng,
+          name: place.name,
+          urls: place.urls,
+          placeType: place.placeType,
+          description: place.description,
+        ),
+      )
+      .toSet();
 }
