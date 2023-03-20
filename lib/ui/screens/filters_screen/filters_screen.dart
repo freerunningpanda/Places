@@ -236,7 +236,7 @@ class _ItemFiltersListBigScreens extends StatelessWidget {
               i,
               _ItemFilter(
                 category: category,
-                isEnabled: AppPreferences.getCategory(category.title),
+                isEnabled: AppPreferences.getCategoryByName(category.title),
                 name: category.title,
                 assetName: category.assetName ?? 'null',
                 onTap: () async {
@@ -249,7 +249,14 @@ class _ItemFiltersListBigScreens extends StatelessWidget {
                   context.read<ShowPlacesButtonCubit>().showCount(places: placeList);
 
                   if (!category.isEnabled) {
-                    await AppPreferences.setCategory(title: category.title, isEnabled: true);
+                    await AppPreferences.setCategoryByName(
+                      title: category.title,
+                      isEnabled: category.isEnabled = true,
+                    );
+                    await AppPreferences.setCategoryByStatus(
+                      type: category.placeType,
+                      isEnabled: category.isEnabled = true,
+                    );
                     // ignore: use_build_context_synchronously
                     context.read<FiltersScreenBloc>().add(
                           AddRemoveFilterEvent(
@@ -261,7 +268,14 @@ class _ItemFiltersListBigScreens extends StatelessWidget {
                     // ignore: use_build_context_synchronously
                     context.read<ShowPlacesButtonCubit>().resetToZero();
                   } else {
-                    await AppPreferences.setCategory(title: category.title, isEnabled: false);
+                    await AppPreferences.setCategoryByName(
+                      title: category.title,
+                      isEnabled: category.isEnabled = false,
+                    );
+                    await AppPreferences.setCategoryByStatus(
+                      type: category.placeType,
+                      isEnabled: category.isEnabled = false,
+                    );
                     // ignore: use_build_context_synchronously
                     context.read<FiltersScreenBloc>().add(
                           AddRemoveFilterEvent(

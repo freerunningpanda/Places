@@ -28,8 +28,15 @@ class AppPreferences extends Store {
     return prefs;
   }
 
-  static Future<bool> setCategory({required String title, required bool isEnabled}) async {
+  static Future<bool> setCategoryByName({required String title, required bool isEnabled}) async {
     final prefs = await _prefs.setBool(title, isEnabled);
+
+    return prefs;
+  }
+
+  static Future<bool> setCategoryByStatus({required String type, required bool isEnabled}) async {
+
+    final prefs = await _prefs.setBool(type, isEnabled);
 
     return prefs;
   }
@@ -82,8 +89,14 @@ class AppPreferences extends Store {
     }
   }
 
-  static bool getCategory(String title) {
+  static bool getCategoryByName(String title) {
     final prefs = _prefs.getBool(title) ?? false;
+
+    return prefs;
+  }
+
+  static bool getCategoryByStatus(String type) {
+    final prefs = _prefs.getBool(type) ?? false;
 
     return prefs;
   }
