@@ -89,10 +89,10 @@ class ShowPlacesButtonCubit extends Cubit<ShowPlacesButtonState> {
   void showCount({required List<Place> places}) async {
     // var jsonString = AppPreferences.getPlacesList();
 
-    final initialFilteredPlaces = AppPreferences.getPlacesList();
+    final placesWithDistance = AppPreferences.getPlacesList();
 
-    if (initialFilteredPlaces != null) {
-      if (initialFilteredPlaces.isEmpty) {
+    if (placesWithDistance != null) {
+      if (placesWithDistance.isEmpty) {
         PlaceInteractor.filtersWithDistance.clear();
         // Если отсортированный по фильтрам список мест пуст. То пройтись вообще по всем местам.
         for (final el in places) {
@@ -125,7 +125,7 @@ class ShowPlacesButtonCubit extends Cubit<ShowPlacesButtonState> {
       } else {
         PlaceInteractor.filtersWithDistance.clear();
         // Если есть места в отсортированном по фильтрам списке мест то пройтись по нему
-        for (final el in initialFilteredPlaces) {
+        for (final el in placesWithDistance) {
           // if (PlaceInteractor.initialFilteredPlaces.isEmpty) {
           //   PlaceInteractor.filtersWithDistance.clear();
           // }
@@ -148,8 +148,7 @@ class ShowPlacesButtonCubit extends Cubit<ShowPlacesButtonState> {
             } else {
               emit(ShowPlacesButtonState(isEmpty: isEmpty, foundPlacesLength: length));
             }
-          }
-          else {
+          } else {
             // Эмитить пустые места, если они не входят в диапазон поиска
             // Чтобы состояние кнопки менялось, когда места не найдены
             PlaceInteractor.filtersWithDistance.clear();
@@ -229,6 +228,10 @@ class ShowPlacesButtonCubit extends Cubit<ShowPlacesButtonState> {
       }
     }
 
+    await savePlaces();
+  }
+
+  Future<void> savePlaces() async {
     final filtersWithDistance = Mapper.getFiltersWithDistance(PlaceInteractor.filtersWithDistance);
     // Кодирую список в строку Json
     final jsonString = PlaceRequest.encode(filtersWithDistance);

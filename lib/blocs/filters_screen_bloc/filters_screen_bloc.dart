@@ -112,26 +112,30 @@ class FiltersScreenBloc extends Bloc<FiltersScreenEvent, FiltersScreenState> {
       // Если категория не активна, добавляю отфильтрованные по категории места filteredByType
       // В список вообще отфильтрованных мест
       PlaceInteractor.initialFilteredPlaces.addAll(filteredByType);
+      await savePlaces();
       debugPrint('🟡---------Добавленные места (фильтр вкл.): ${PlaceInteractor.initialFilteredPlaces}');
     } else {
       // Если категория активна, удаляю из списка вообще отфильтрованных мест только те места
       // Тип которых соответствует заявленному фильтру
       // фильтр передаётся из списка, значит он под верным индексом
       PlaceInteractor.initialFilteredPlaces.removeWhere((place) => place.placeType.contains(category.placeType));
+      await savePlaces();
       debugPrint('Длина списка с дистанцией: ${PlaceInteractor.filtersWithDistance.length}');
       debugPrint(
         '🟡---------Количество добавленных мест (фильтр откл.): ${PlaceInteractor.initialFilteredPlaces.length}',
       );
-
-      final filtersWithDistance = Mapper.getFiltersWithDistance(PlaceInteractor.initialFilteredPlaces.toSet());
-      // Кодирую список в строку Json
-      final jsonString = PlaceRequest.encode(filtersWithDistance);
-
-      // Сохраняю данную строку в Shared Preferences
-      await AppPreferences.setPlacesList(jsonString);
-
-      debugPrint('encodedData: ${jsonString.length}');
     }
+  }
+
+  Future<void> savePlaces() async {
+    final filtersWithDistance = Mapper.getFiltersWithDistance(PlaceInteractor.initialFilteredPlaces.toSet());
+    // Кодирую список в строку Json
+    final jsonString = PlaceRequest.encode(filtersWithDistance);
+
+    // Сохраняю данную строку в Shared Preferences
+    await AppPreferences.setPlacesList(jsonString);
+
+    debugPrint('encodedData: ${jsonString.length}');
   }
 
   void clearAllFilters() {
