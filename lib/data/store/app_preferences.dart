@@ -1,5 +1,8 @@
+import 'dart:convert';
+
 import 'package:places/data/constants.dart';
 import 'package:places/data/dto/place_request.dart';
+import 'package:places/data/interactor/place_interactor.dart';
 import 'package:places/data/model/place.dart';
 import 'package:places/data/repository/mapper.dart';
 import 'package:places/data/store/store.dart';
@@ -29,6 +32,9 @@ class AppPreferences extends Store {
   // Сохранить список отфильтрованных мест
   static Future<bool> setPlacesList(String jsonString) async {
     final prefs = await _prefs.setString(placesList, jsonString);
+    final places = PlaceRequest.decode(jsonString);
+    var tt = places.map<Place>(Mapper.detailPlaceFromApiToUi).toSet();
+    PlaceInteractor.filtersWithDistance.addAll(tt);
 
     return prefs;
   }
@@ -42,7 +48,6 @@ class AppPreferences extends Store {
 
   // Сохранить фильтр по статусу: включен/отключён
   static Future<bool> setCategoryByStatus({required String type, required bool isEnabled}) async {
-
     final prefs = await _prefs.setBool(type, isEnabled);
 
     return prefs;
@@ -67,21 +72,10 @@ class AppPreferences extends Store {
     final jsonString = _prefs.getString(placesList) ?? '';
     if (jsonString.isNotEmpty) {
       final places = PlaceRequest.decode(jsonString);
+      final tt = places.map<Place>(Mapper.detailPlaceFromApiToUi).toSet();
+      PlaceInteractor.filtersWithDistance.addAll(tt);
 
-      return places.map<Place>(Mapper.detailPlaceFromApiToUi).toSet();
-    } else {
-      // Данное решение, для того, чтобы не ловить крэш после удаления/установки приложения
-      return null;
-    }
-  }
-
-  // Получить длину списка отфильтрованных мест
-  static int? getPlacesListLength() {
-    final jsonString = _prefs.getString(placesList) ?? '';
-    if (jsonString.isNotEmpty) {
-      final places = PlaceRequest.decode(jsonString);
-
-      return places.length;
+      return PlaceInteractor.filtersWithDistance;
     } else {
       // Данное решение, для того, чтобы не ловить крэш после удаления/установки приложения
       return null;

@@ -29,7 +29,7 @@ class SearchScreenBloc extends Bloc<SearchScreenEvent, SearchScreenState> {
       emit(
         SearchScreenPlacesFoundState(
           filteredPlaces: event.fromFiltersScreen ? event.filteredPlaces!.toList() : PlaceInteractor.foundedPlaces,
-          length: AppPreferences.getPlacesListLength() ?? 0,
+          length: AppPreferences.getPlacesList()?.length ?? 0,
         ),
       );
       // Если поисковый запрос содержит значение и список найденных мест пуст
@@ -50,7 +50,7 @@ class SearchScreenBloc extends Bloc<SearchScreenEvent, SearchScreenState> {
         emit(
           SearchScreenPlacesFoundState(
             filteredPlaces: event.filteredPlaces!.toList(),
-            length: AppPreferences.getPlacesListLength() ?? 0,
+            length: AppPreferences.getPlacesList()?.length ?? 0,
           ),
         );
       }
@@ -70,7 +70,7 @@ class SearchScreenBloc extends Bloc<SearchScreenEvent, SearchScreenState> {
         emit(
           SearchScreenPlacesFoundState(
             filteredPlaces: event.isHistoryClear ? event.filteredPlaces!.toList() : PlaceInteractor.foundedPlaces,
-            length: AppPreferences.getPlacesListLength() ?? 0,
+            length: AppPreferences.getPlacesList()?.length ?? 0,
           ),
         );
       }
