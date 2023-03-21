@@ -89,6 +89,80 @@ class ShowPlacesButtonCubit extends Cubit<ShowPlacesButtonState> {
   void showCount({required List<Place> places}) async {
     // var jsonString = AppPreferences.getPlacesList();
 
+    final initialFilteredPlaces = AppPreferences.getPlacesList();
+
+    if (initialFilteredPlaces != null) {
+      if (initialFilteredPlaces.isEmpty) {
+        PlaceInteractor.filtersWithDistance.clear();
+        // Если отсортированный по фильтрам список мест пуст. То пройтись вообще по всем местам.
+        for (final el in places) {
+          final distance = Geolocator.distanceBetween(
+            Mocks.mockLat,
+            Mocks.mockLot,
+            el.lat,
+            el.lng,
+          );
+          if (distance >= Mocks.rangeValues.start && distance <= Mocks.rangeValues.end) {
+            PlaceInteractor.filtersWithDistance.add(el);
+            final isEmpty = PlaceInteractor.filtersWithDistance.isEmpty;
+            final length = PlaceInteractor.filtersWithDistance.length;
+            debugPrint('🟡---------Добавленные места (дистанция): ${PlaceInteractor.filtersWithDistance}');
+            debugPrint(
+              '🟡---------Количество добавленных мест (дистанция): ${PlaceInteractor.filtersWithDistance.length}',
+            );
+            emit(ShowPlacesButtonState(isEmpty: isEmpty, foundPlacesLength: length));
+          } else {
+            // Эмитить пустые места, если они не входят в диапазон поиска
+            // Чтобы состояние кнопки менялось, когда места не найдены
+            PlaceInteractor.filtersWithDistance.clear();
+            debugPrint('🟡---------Добавленные места (дистанция): ${PlaceInteractor.filtersWithDistance}');
+            debugPrint(
+              '🟡---------Количество добавленных мест (дистанция): ${PlaceInteractor.filtersWithDistance.length}',
+            );
+            emit(const ShowPlacesButtonState(isEmpty: true, foundPlacesLength: 0));
+          }
+        }
+      } else {
+        PlaceInteractor.filtersWithDistance.clear();
+        // Если есть места в отсртированном по фильтрам списке мест то пройтись по нему
+        for (final el in initialFilteredPlaces) {
+          // if (PlaceInteractor.initialFilteredPlaces.isEmpty) {
+          //   PlaceInteractor.filtersWithDistance.clear();
+          // }
+          final distance = Geolocator.distanceBetween(
+            Mocks.mockLat,
+            Mocks.mockLot,
+            el.lat,
+            el.lng,
+          );
+          if (distance >= Mocks.rangeValues.start && distance <= Mocks.rangeValues.end) {
+            PlaceInteractor.filtersWithDistance.add(el);
+            final isEmpty = PlaceInteractor.filtersWithDistance.isEmpty;
+            final length = PlaceInteractor.filtersWithDistance.length;
+            debugPrint('🟡---------Добавленные места (дистанция): ${PlaceInteractor.filtersWithDistance}');
+            debugPrint(
+              '🟡---------Количество добавленных мест (дистанция): ${PlaceInteractor.filtersWithDistance.length}',
+            );
+            if (isEmpty && length == 0) {
+              return;
+            } else {
+              emit(ShowPlacesButtonState(isEmpty: isEmpty, foundPlacesLength: length));
+            }
+          }
+          // else {
+          //   // Эмитить пустые места, если они не входят в диапазон поиска
+          //   // Чтобы состояние кнопки менялось, когда места не найдены
+          //   PlaceInteractor.filtersWithDistance.clear();
+          //   debugPrint('🟡---------Добавленные места (дистанция): ${PlaceInteractor.filtersWithDistance}');
+          //   debugPrint(
+          //     '🟡---------Количество добавленных мест (дистанция): ${PlaceInteractor.filtersWithDistance.length}',
+          //   );
+          //   emit(const ShowPlacesButtonState(isEmpty: true, foundPlacesLength: 0));
+          // }
+        }
+      }
+    }
+
     if (PlaceInteractor.initialFilteredPlaces.isEmpty) {
       PlaceInteractor.filtersWithDistance.clear();
       // Если отсортированный по фильтрам список мест пуст. То пройтись вообще по всем местам.
