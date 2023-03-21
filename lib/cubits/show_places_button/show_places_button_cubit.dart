@@ -124,7 +124,7 @@ class ShowPlacesButtonCubit extends Cubit<ShowPlacesButtonState> {
         }
       } else {
         PlaceInteractor.filtersWithDistance.clear();
-        // Если есть места в отсртированном по фильтрам списке мест то пройтись по нему
+        // Если есть места в отсортированном по фильтрам списке мест то пройтись по нему
         for (final el in initialFilteredPlaces) {
           // if (PlaceInteractor.initialFilteredPlaces.isEmpty) {
           //   PlaceInteractor.filtersWithDistance.clear();
@@ -149,16 +149,16 @@ class ShowPlacesButtonCubit extends Cubit<ShowPlacesButtonState> {
               emit(ShowPlacesButtonState(isEmpty: isEmpty, foundPlacesLength: length));
             }
           }
-          // else {
-          //   // Эмитить пустые места, если они не входят в диапазон поиска
-          //   // Чтобы состояние кнопки менялось, когда места не найдены
-          //   PlaceInteractor.filtersWithDistance.clear();
-          //   debugPrint('🟡---------Добавленные места (дистанция): ${PlaceInteractor.filtersWithDistance}');
-          //   debugPrint(
-          //     '🟡---------Количество добавленных мест (дистанция): ${PlaceInteractor.filtersWithDistance.length}',
-          //   );
-          //   emit(const ShowPlacesButtonState(isEmpty: true, foundPlacesLength: 0));
-          // }
+          else {
+            // Эмитить пустые места, если они не входят в диапазон поиска
+            // Чтобы состояние кнопки менялось, когда места не найдены
+            PlaceInteractor.filtersWithDistance.clear();
+            debugPrint('🟡---------Добавленные места (дистанция): ${PlaceInteractor.filtersWithDistance}');
+            debugPrint(
+              '🟡---------Количество добавленных мест (дистанция): ${PlaceInteractor.filtersWithDistance.length}',
+            );
+            emit(const ShowPlacesButtonState(isEmpty: true, foundPlacesLength: 0));
+          }
         }
       }
     }
@@ -195,7 +195,7 @@ class ShowPlacesButtonCubit extends Cubit<ShowPlacesButtonState> {
       }
     } else {
       PlaceInteractor.filtersWithDistance.clear();
-      // Если есть места в отсртированном по фильтрам списке мест то пройтись по нему
+      // Если есть места в отсортированном по фильтрам списке мест то пройтись по нему
       for (final el in PlaceInteractor.initialFilteredPlaces) {
         // if (PlaceInteractor.initialFilteredPlaces.isEmpty) {
         //   PlaceInteractor.filtersWithDistance.clear();
