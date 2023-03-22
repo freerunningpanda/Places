@@ -145,11 +145,7 @@ class ShowPlacesButtonCubit extends Cubit<ShowPlacesButtonState> {
             debugPrint(
               '🟡---------Количество добавленных мест (дистанция): ${PlaceInteractor.filtersWithDistance.length}',
             );
-            if (isEmpty && length == 0) {
-              return;
-            } else {
-              emit(ShowPlacesButtonState(isEmpty: isEmpty, foundPlacesLength: length));
-            }
+            emit(ShowPlacesButtonState(isEmpty: isEmpty, foundPlacesLength: length));
           } else {
             // Эмитить пустые места, если они не входят в диапазон поиска
             // Чтобы состояние кнопки менялось, когда места не найдены
