@@ -119,7 +119,7 @@ class ShowPlacesButtonCubit extends Cubit<ShowPlacesButtonState> {
             debugPrint(
               '🟡---------Количество добавленных мест (дистанция): ${PlaceInteractor.filtersWithDistance.length}',
             );
-            emit(const ShowPlacesButtonState(isEmpty: true, foundPlacesLength: 0));
+            emit(const ShowPlacesButtonState(isEmpty: false, foundPlacesLength: 0));
           }
         }
       } else {
@@ -238,7 +238,7 @@ class ShowPlacesButtonCubit extends Cubit<ShowPlacesButtonState> {
     final jsonString = PlaceRequest.encode(filtersWithDistance);
 
     // Сохраняю данную строку в Shared Preferences
-    await AppPreferences.setPlacesList(jsonString);
+    await AppPreferences.setPlacesListByDistance(jsonString);
 
     debugPrint('encodedData: ${jsonString.length}');
   }

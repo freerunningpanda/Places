@@ -1,3 +1,4 @@
 const rangeValueStart = 'rangeValueStart';
 const rangeValueEnd = 'rangeValueEnd';
-const placesList = 'placesList';
+const placesListByDistance = 'placesListByDistance';
+const placesListByFilter = 'placesListByFilter';

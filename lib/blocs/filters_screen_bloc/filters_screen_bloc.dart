@@ -133,7 +133,7 @@ class FiltersScreenBloc extends Bloc<FiltersScreenEvent, FiltersScreenState> {
     final jsonString = PlaceRequest.encode(filtersWithDistance);
 
     // Сохраняю данную строку в Shared Preferences
-    await AppPreferences.setPlacesList(jsonString);
+    await AppPreferences.setPlacesListByDistance(jsonString);
 
     debugPrint('encodedData: ${jsonString.length}');
   }

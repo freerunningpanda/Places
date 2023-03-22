@@ -30,8 +30,8 @@ class AppPreferences extends Store {
   }
 
   // Сохранить список отфильтрованных мест
-  static Future<bool> setPlacesList(String jsonString) async {
-    final prefs = await _prefs.setString(placesList, jsonString);
+  static Future<bool> setPlacesListByDistance(String jsonString) async {
+    final prefs = await _prefs.setString(placesListByDistance, jsonString);
     final places = PlaceRequest.decode(jsonString);
     var tt = places.map<Place>(Mapper.detailPlaceFromApiToUi).toSet();
     PlaceInteractor.filtersWithDistance.addAll(tt);
@@ -69,7 +69,7 @@ class AppPreferences extends Store {
 
   // Получить список отфильтрованных мест
   static Set<Place>? getPlacesList() {
-    final jsonString = _prefs.getString(placesList) ?? '';
+    final jsonString = _prefs.getString(placesListByDistance) ?? '';
     if (jsonString.isNotEmpty) {
       final places = PlaceRequest.decode(jsonString);
       final tt = places.map<Place>(Mapper.detailPlaceFromApiToUi).toSet();
@@ -84,7 +84,7 @@ class AppPreferences extends Store {
 
   // Получить значение (пустой/не пустой) списка отфильтрованных мест
   static bool? checkListValue() {
-    final jsonString = _prefs.getString(placesList) ?? '';
+    final jsonString = _prefs.getString(placesListByDistance) ?? '';
     if (jsonString.isNotEmpty) {
       final places = PlaceRequest.decode(jsonString);
 
