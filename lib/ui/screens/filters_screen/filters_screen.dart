@@ -243,11 +243,12 @@ class _ItemFiltersListBigScreens extends StatelessWidget {
                 onTap: () async {
                   final filteredByType =
                       filtersTable.places.where((place) => place.placeType.contains(category.placeType)).toList();
-                  context.read<FiltersScreenBloc>().addToFilteredList(
+                  await context.read<FiltersScreenBloc>().addToFilteredList(
                         category: category,
                         filteredByType: filteredByType,
                       );
-                  context.read<ShowPlacesButtonCubit>().showCount(places: placeList);
+                  // ignore: use_build_context_synchronously
+                  await context.read<ShowPlacesButtonCubit>().showCount(places: placeList);
 
                   if (!category.isEnabled) {
                     await AppPreferences.setCategoryByName(
@@ -325,11 +326,12 @@ class _ItemFiltersListSmallScreens extends StatelessWidget {
                 onTap: () async {
                   final filteredByType =
                       filtersTable.places.where((place) => place.placeType.contains(category.placeType)).toList();
-                  context.read<FiltersScreenBloc>().addToFilteredList(
+                  await context.read<FiltersScreenBloc>().addToFilteredList(
                         category: category,
                         filteredByType: filteredByType,
                       );
-                  context.read<ShowPlacesButtonCubit>().showCount(places: placeList);
+                  // ignore: use_build_context_synchronously
+                  await context.read<ShowPlacesButtonCubit>().showCount(places: placeList);
 
                   if (!category.isEnabled) {
                     await AppPreferences.setCategoryByName(

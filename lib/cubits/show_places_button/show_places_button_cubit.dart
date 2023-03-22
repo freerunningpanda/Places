@@ -86,7 +86,7 @@ class ShowPlacesButtonCubit extends Cubit<ShowPlacesButtonState> {
   }
 
   // ignore: long-method
-  void showCount({required List<Place> places}) async {
+  Future<void> showCount({required List<Place> places}) async {
     // var jsonString = AppPreferences.getPlacesList();
 
     final placesByType = AppPreferences.getPlacesListByType();

@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:places/data/constants.dart';
 import 'package:places/data/dto/place_request.dart';
 import 'package:places/data/interactor/place_interactor.dart';

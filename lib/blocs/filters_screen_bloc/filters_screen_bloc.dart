@@ -107,7 +107,7 @@ class FiltersScreenBloc extends Bloc<FiltersScreenEvent, FiltersScreenState> {
     debugPrint('🟡--------- Активна категория: ${PlaceInteractor.activeFilters}');
   }
 
-  void addToFilteredList({required Category category, required List<Place> filteredByType}) async {
+  Future<void> addToFilteredList({required Category category, required List<Place> filteredByType}) async {
     if (!category.isEnabled) {
       // Если категория не активна, добавляю отфильтрованные по категории места filteredByType
       // В список вообще отфильтрованных мест
