@@ -61,6 +61,13 @@ class AppPreferences extends Store {
     return prefs;
   }
 
+  // Сохранить настройки темы
+  static Future<bool> setAppTheme({required bool value}) async {
+    final prefs = await _prefs.setBool(appTheme, value);
+
+    return prefs;
+  }
+
   // Получить стартовую точку диапазона поиска
   static double getStartValue() {
     final prefs = _prefs.getDouble(rangeValueStart) ?? 2000.0;
@@ -113,6 +120,13 @@ class AppPreferences extends Store {
   // Получить фильтр по статусу: включен/отключён
   static bool getCategoryByStatus(String type) {
     final prefs = _prefs.getBool(type) ?? false;
+
+    return prefs;
+  }
+
+  // Получить настройки темы
+  static bool getAppTheme() {
+    final prefs = _prefs.getBool(appTheme) ?? false;
 
     return prefs;
   }
