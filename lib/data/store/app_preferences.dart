@@ -34,7 +34,7 @@ class AppPreferences extends Store {
     final prefs = await _prefs.setString(placesListByType, jsonString);
     final placesDto = PlaceRequest.decode(jsonString);
     final places = placesDto.map<Place>(Mapper.detailPlaceFromApiToUi).toSet();
-    PlaceInteractor.filtersWithDistance.addAll(places);
+    PlaceInteractor.initialFilteredPlaces.addAll(places);
 
     return prefs;
   }
@@ -99,19 +99,6 @@ class AppPreferences extends Store {
       final places = placesDto.map<Place>(Mapper.detailPlaceFromApiToUi).toSet();
 
       return places;
-    } else {
-      // Данное решение, для того, чтобы не ловить крэш после удаления/установки приложения
-      return null;
-    }
-  }
-
-  // Получить значение (пустой/не пустой) списка отфильтрованных мест
-  static bool? checkListValue() {
-    final jsonString = _prefs.getString(placesListByDistance) ?? '';
-    if (jsonString.isNotEmpty) {
-      final places = PlaceRequest.decode(jsonString);
-
-      return places.isEmpty;
     } else {
       // Данное решение, для того, чтобы не ловить крэш после удаления/установки приложения
       return null;

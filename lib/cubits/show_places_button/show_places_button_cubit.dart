@@ -25,7 +25,7 @@ class ShowPlacesButtonCubit extends Cubit<ShowPlacesButtonState> {
   ShowPlacesButtonCubit()
       : super(
           ShowPlacesButtonState(
-            isEmpty: AppPreferences.checkListValue() ?? true,
+            isEmpty: AppPreferences.getPlacesListByDistance()?.isEmpty ?? true,
             foundPlacesLength: AppPreferences.getPlacesListByDistance()?.length ?? 0,
           ),
         );
@@ -89,12 +89,13 @@ class ShowPlacesButtonCubit extends Cubit<ShowPlacesButtonState> {
   void showCount({required List<Place> places}) async {
     // var jsonString = AppPreferences.getPlacesList();
 
-    final placesWithDistance = AppPreferences.getPlacesListByDistance();
+    final placesByType = AppPreferences.getPlacesListByType();
+    final placesByDistance = AppPreferences.getPlacesListByDistance();
 
-    if (placesWithDistance != null) {
-      if (placesWithDistance.isEmpty) {
+    if (placesByType != null) {
+      if (placesByType.isEmpty) {
         PlaceInteractor.filtersWithDistance.clear();
-        // Если отсортированный по фильтрам список мест пуст. То пройтись вообще по всем местам.
+        // Если отсортированный по типу список мест пуст. То пройтись вообще по всем местам.
         for (final el in places) {
           final distance = Geolocator.distanceBetween(
             Mocks.mockLat,
@@ -124,9 +125,9 @@ class ShowPlacesButtonCubit extends Cubit<ShowPlacesButtonState> {
         }
       } else {
         PlaceInteractor.filtersWithDistance.clear();
-        placesWithDistance.clear();
-        // Если есть места в отсортированном по фильтрам списке мест то пройтись по нему
-        for (final el in placesWithDistance) {
+        placesByDistance?.clear();
+        // Если есть места в отсортированном по типу списке мест то пройтись по нему
+        for (final el in placesByType) {
           // if (PlaceInteractor.initialFilteredPlaces.isEmpty) {
           //   PlaceInteractor.filtersWithDistance.clear();
           // }
@@ -165,7 +166,7 @@ class ShowPlacesButtonCubit extends Cubit<ShowPlacesButtonState> {
 
     if (PlaceInteractor.initialFilteredPlaces.isEmpty) {
       PlaceInteractor.filtersWithDistance.clear();
-      // Если отсортированный по фильтрам список мест пуст. То пройтись вообще по всем местам.
+      // Если отсортированный по типу список мест пуст. То пройтись вообще по всем местам.
       for (final el in places) {
         final distance = Geolocator.distanceBetween(
           Mocks.mockLat,
@@ -195,7 +196,7 @@ class ShowPlacesButtonCubit extends Cubit<ShowPlacesButtonState> {
       }
     } else {
       PlaceInteractor.filtersWithDistance.clear();
-      // Если есть места в отсортированном по фильтрам списке мест то пройтись по нему
+      // Если есть места в отсортированном по типу списке мест то пройтись по нему
       for (final el in PlaceInteractor.initialFilteredPlaces) {
         // if (PlaceInteractor.initialFilteredPlaces.isEmpty) {
         //   PlaceInteractor.filtersWithDistance.clear();
