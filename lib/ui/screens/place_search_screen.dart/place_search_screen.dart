@@ -245,7 +245,7 @@ class _ClearHistoryButton extends StatelessWidget {
         context.read<SearchScreenBloc>().add(
               PlacesFoundEvent(
                 searchHistoryIsEmpty: searchStoryList.isEmpty,
-                filteredPlaces: AppPreferences.getPlacesList()?.toList(),
+                filteredPlaces: AppPreferences.getPlacesListByDistance()?.toList(),
                 isHistoryClear: true,
                 fromFiltersScreen: false,
                 isQueryEmpty: true,
@@ -334,7 +334,7 @@ class _SearchItem extends StatelessWidget {
                         context.read<SearchScreenBloc>().add(
                               PlacesFoundEvent(
                                 searchHistoryIsEmpty: searchStoryList.isEmpty,
-                                filteredPlaces: AppPreferences.getPlacesList()?.toList(),
+                                filteredPlaces: AppPreferences.getPlacesListByDistance()?.toList(),
                                 isHistoryClear: true,
                                 fromFiltersScreen: false,
                                 isQueryEmpty: true,

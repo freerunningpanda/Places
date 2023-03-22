@@ -29,7 +29,7 @@ class SearchScreenBloc extends Bloc<SearchScreenEvent, SearchScreenState> {
       emit(
         SearchScreenPlacesFoundState(
           filteredPlaces: event.fromFiltersScreen ? event.filteredPlaces!.toList() : PlaceInteractor.foundedPlaces,
-          length: AppPreferences.getPlacesList()?.length ?? 0,
+          length: AppPreferences.getPlacesListByDistance()?.length ?? 0,
         ),
       );
       // Если поисковый запрос содержит значение и список найденных мест пуст
@@ -50,7 +50,7 @@ class SearchScreenBloc extends Bloc<SearchScreenEvent, SearchScreenState> {
         emit(
           SearchScreenPlacesFoundState(
             filteredPlaces: event.filteredPlaces!.toList(),
-            length: AppPreferences.getPlacesList()?.length ?? 0,
+            length: AppPreferences.getPlacesListByDistance()?.length ?? 0,
           ),
         );
       }
@@ -70,7 +70,7 @@ class SearchScreenBloc extends Bloc<SearchScreenEvent, SearchScreenState> {
         emit(
           SearchScreenPlacesFoundState(
             filteredPlaces: event.isHistoryClear ? event.filteredPlaces!.toList() : PlaceInteractor.foundedPlaces,
-            length: AppPreferences.getPlacesList()?.length ?? 0,
+            length: AppPreferences.getPlacesListByDistance()?.length ?? 0,
           ),
         );
       }
@@ -87,7 +87,7 @@ class SearchScreenBloc extends Bloc<SearchScreenEvent, SearchScreenState> {
   }
 
   void searchPlaces(String query) {
-    final placesList = AppPreferences.getPlacesList();
+    final placesList = AppPreferences.getPlacesListByDistance();
     // Если список мест в Preferences не null, искать в нём
     // Данное решение, для того, чтобы не ловить крэш после удаления/установки приложения
     if (placesList != null) {
@@ -99,7 +99,7 @@ class SearchScreenBloc extends Bloc<SearchScreenEvent, SearchScreenState> {
           el.lng,
         );
         if (distance >= Mocks.rangeValues.start && distance <= Mocks.rangeValues.end) {
-          PlaceInteractor.foundedPlaces = AppPreferences.getPlacesList()!.where((place) {
+          PlaceInteractor.foundedPlaces = AppPreferences.getPlacesListByDistance()!.where((place) {
             final placeTitle = place.name.toLowerCase();
             final input = query.toLowerCase();
             debugPrint('filteredPlaces: ${PlaceInteractor.foundedPlaces}');

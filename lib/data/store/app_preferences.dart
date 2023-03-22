@@ -29,12 +29,22 @@ class AppPreferences extends Store {
     return prefs;
   }
 
-  // Сохранить список отфильтрованных мест
+  // Сохранить список отфильтрованных мест по типу
+  static Future<bool> setPlacesListByType(String jsonString) async {
+    final prefs = await _prefs.setString(placesListByType, jsonString);
+    final placesDto = PlaceRequest.decode(jsonString);
+    final places = placesDto.map<Place>(Mapper.detailPlaceFromApiToUi).toSet();
+    PlaceInteractor.filtersWithDistance.addAll(places);
+
+    return prefs;
+  }
+
+  // Сохранить список отфильтрованных мест по дистанции
   static Future<bool> setPlacesListByDistance(String jsonString) async {
     final prefs = await _prefs.setString(placesListByDistance, jsonString);
-    final places = PlaceRequest.decode(jsonString);
-    var tt = places.map<Place>(Mapper.detailPlaceFromApiToUi).toSet();
-    PlaceInteractor.filtersWithDistance.addAll(tt);
+    final placesDto = PlaceRequest.decode(jsonString);
+    final places = placesDto.map<Place>(Mapper.detailPlaceFromApiToUi).toSet();
+    PlaceInteractor.filtersWithDistance.addAll(places);
 
     return prefs;
   }
@@ -55,27 +65,40 @@ class AppPreferences extends Store {
 
   // Получить стартовую точку диапазона поиска
   static double getStartValue() {
-    final prefs = _prefs.getDouble(rangeValueStart) ?? 100.0;
+    final prefs = _prefs.getDouble(rangeValueStart) ?? 2000.0;
 
     return prefs;
   }
 
   // Получить конечную точку диапазона поиска
   static double getEndValue() {
-    final prefs = _prefs.getDouble(rangeValueEnd) ?? 10000.0;
+    final prefs = _prefs.getDouble(rangeValueEnd) ?? 8000.0;
 
     return prefs;
   }
 
-  // Получить список отфильтрованных мест
-  static Set<Place>? getPlacesList() {
+  // Получить список отфильтрованных мест по типу
+  static Set<Place>? getPlacesListByType() {
+    final jsonString = _prefs.getString(placesListByType) ?? '';
+    if (jsonString.isNotEmpty) {
+      final placesDto = PlaceRequest.decode(jsonString);
+      final places = placesDto.map<Place>(Mapper.detailPlaceFromApiToUi).toSet();
+
+      return places;
+    } else {
+      // Данное решение, для того, чтобы не ловить крэш после удаления/установки приложения
+      return null;
+    }
+  }
+
+  // Получить список отфильтрованных мест по дистанции
+  static Set<Place>? getPlacesListByDistance() {
     final jsonString = _prefs.getString(placesListByDistance) ?? '';
     if (jsonString.isNotEmpty) {
-      final places = PlaceRequest.decode(jsonString);
-      final tt = places.map<Place>(Mapper.detailPlaceFromApiToUi).toSet();
-      PlaceInteractor.filtersWithDistance.addAll(tt);
+      final placesDto = PlaceRequest.decode(jsonString);
+      final places = placesDto.map<Place>(Mapper.detailPlaceFromApiToUi).toSet();
 
-      return PlaceInteractor.filtersWithDistance;
+      return places;
     } else {
       // Данное решение, для того, чтобы не ловить крэш после удаления/установки приложения
       return null;

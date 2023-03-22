@@ -128,12 +128,12 @@ class FiltersScreenBloc extends Bloc<FiltersScreenEvent, FiltersScreenState> {
   }
 
   Future<void> savePlaces() async {
-    final filtersWithDistance = Mapper.getFiltersWithDistance(PlaceInteractor.initialFilteredPlaces.toSet());
+    final filteredByType = Mapper.getFiltersWithDistance(PlaceInteractor.initialFilteredPlaces.toSet());
     // Кодирую список в строку Json
-    final jsonString = PlaceRequest.encode(filtersWithDistance);
+    final jsonString = PlaceRequest.encode(filteredByType);
 
     // Сохраняю данную строку в Shared Preferences
-    await AppPreferences.setPlacesListByDistance(jsonString);
+    await AppPreferences.setPlacesListByType(jsonString);
 
     debugPrint('encodedData: ${jsonString.length}');
   }

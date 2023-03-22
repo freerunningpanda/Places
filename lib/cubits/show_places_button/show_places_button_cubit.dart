@@ -26,7 +26,7 @@ class ShowPlacesButtonCubit extends Cubit<ShowPlacesButtonState> {
       : super(
           ShowPlacesButtonState(
             isEmpty: AppPreferences.checkListValue() ?? true,
-            foundPlacesLength: AppPreferences.getPlacesList()?.length ?? 0,
+            foundPlacesLength: AppPreferences.getPlacesListByDistance()?.length ?? 0,
           ),
         );
 
@@ -89,10 +89,10 @@ class ShowPlacesButtonCubit extends Cubit<ShowPlacesButtonState> {
   void showCount({required List<Place> places}) async {
     // var jsonString = AppPreferences.getPlacesList();
 
-    final placesWithDistance = AppPreferences.getPlacesList();
+    final placesWithDistance = AppPreferences.getPlacesListByDistance();
 
-    if (placesWithDistance != null || PlaceInteractor.initialFilteredPlaces.isEmpty) {
-      if (placesWithDistance!.isEmpty) {
+    if (placesWithDistance != null) {
+      if (placesWithDistance.isEmpty) {
         PlaceInteractor.filtersWithDistance.clear();
         // Если отсортированный по фильтрам список мест пуст. То пройтись вообще по всем местам.
         for (final el in places) {

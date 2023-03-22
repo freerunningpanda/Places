@@ -96,7 +96,7 @@ class FilterScreen extends StatelessWidget {
     context.read<SearchScreenBloc>().add(
           PlacesFoundEvent(
             searchHistoryIsEmpty: PlaceInteractor.searchHistoryList.isEmpty,
-            filteredPlaces: AppPreferences.getPlacesList()?.toList(),
+            filteredPlaces: AppPreferences.getPlacesListByDistance()?.toList(),
             isHistoryClear: false,
             fromFiltersScreen: true,
             isQueryEmpty: true,
@@ -517,7 +517,6 @@ class _DistanceSlider extends StatelessWidget {
               min: min,
               max: max,
               onChanged: (values) {
-                debugPrint('AppPreferences.getPlacesList()!.toList(): ${AppPreferences.getPlacesList()!.toList()}');
                 context.read<DistanceSliderCubit>().changeArea(start: values.start, end: values.end);
                 context.read<ShowPlacesButtonCubit>().showCount(places: places);
                 for (final category in filters) {
