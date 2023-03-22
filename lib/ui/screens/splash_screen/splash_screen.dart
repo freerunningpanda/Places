@@ -3,9 +3,11 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:places/cubits/places_list/places_list_cubit.dart';
+import 'package:places/data/store/app_preferences.dart';
 
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_colors.dart';
+import 'package:places/ui/screens/navigation_screen/navigation_screen.dart';
 import 'package:places/ui/screens/onboarding_screen/onboarding_screen.dart';
 import 'package:places/ui/widgets/place_icons.dart';
 
@@ -17,6 +19,7 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMixin {
+  bool isFirstOpen = AppPreferences.getTheFirstOpen();
   late bool isInitialized;
   late AnimationController _animationController;
   late Animation<double> _rotateAnimation;
@@ -87,13 +90,24 @@ class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMix
 
   /// Метод навигации
   Future<void> _navigateToNext() async {
+    /// если виджет смонтирован и проинициализирован, то переходим
+    /// Если первый запуск приложения на OnBoardingScreen
+    /// Если второй то NavigationScreen
     if (mounted && isInitialized) {
-      /// если виджет смонтирован и проинициализирован, то переходим на OnBoardingScreen
-      await Navigator.of(context).pushReplacement(
-        MaterialPageRoute<OnboardingScreen>(
-          builder: (_) => const OnboardingScreen(),
-        ),
-      );
+      if (isFirstOpen) {
+        await Navigator.of(context).pushReplacement(
+          MaterialPageRoute<OnboardingScreen>(
+            builder: (_) => const NavigationScreen(),
+          ),
+        );
+      } else {
+        await Navigator.of(context).pushReplacement(
+          MaterialPageRoute<OnboardingScreen>(
+            builder: (_) => const OnboardingScreen(),
+          ),
+        );
+        await AppPreferences.setTheFirstOpen(value: isFirstOpen = true);
+      }
     } else {
       return;
 
