@@ -1,0 +1,6 @@
+CREATE TABLE searchHistorys (
+    id INT NOT NULL PRIMARY KEY AUTOINCREMENT,
+    placeId TEXT
+);
+
+searchItem: SELECT * FROM searchHistorys;
