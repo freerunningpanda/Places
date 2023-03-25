@@ -8,6 +8,7 @@ class PlacesFoundEvent extends SearchScreenEvent {
   final bool isHistoryClear;
   final bool fromFiltersScreen;
   final bool isQueryEmpty;
+  final bool searchHistoryIsEmpty;
   final List<Place>? filteredPlaces;
 
   PlacesFoundEvent({
@@ -15,5 +16,6 @@ class PlacesFoundEvent extends SearchScreenEvent {
     required this.isHistoryClear,
     required this.isQueryEmpty,
     required this.fromFiltersScreen,
+    required this.searchHistoryIsEmpty,
   });
 }

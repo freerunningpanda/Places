@@ -85,7 +85,7 @@ class _SearchBarState extends State<SearchBar> {
 
                       context.read<SearchScreenBloc>()
                         ..activeFocus(isActive: true)
-                        ..searchPlaces(value, widget.searchController);
+                        ..searchPlaces(value);
                         // Не виджет истории поиска. Поэтому isHistoryClear: false
                         // Параметр isHistoryClear отвечает за отображение всех найденных мест
                         // После очистки истории поиска
@@ -93,6 +93,8 @@ class _SearchBarState extends State<SearchBar> {
                             PlacesFoundEvent(
                               isHistoryClear: false,
                               fromFiltersScreen: false,
+                              searchHistoryIsEmpty: searchStoryList.isEmpty, // Чтобы обновить стейт экрана
+                              // Если крайнее место было удалено из истории
                               isQueryEmpty: interactor.query.isEmpty, // Для отображения найденных по фильтру мест
                               // При пустом поисковом запросе
                             ),

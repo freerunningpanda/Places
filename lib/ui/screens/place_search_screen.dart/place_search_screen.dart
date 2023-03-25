@@ -7,6 +7,7 @@ import 'package:places/blocs/search_bar/search_bar_bloc.dart';
 import 'package:places/blocs/search_history/search_history_bloc.dart';
 import 'package:places/blocs/search_screen/search_screen_bloc.dart';
 import 'package:places/data/model/place.dart';
+import 'package:places/data/store/app_preferences.dart';
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_strings.dart';
 import 'package:places/ui/res/app_typography.dart';
@@ -221,15 +222,17 @@ class _SearchHistoryList extends StatelessWidget {
           controller: controller,
         ),
         const SizedBox(height: 15),
-        const _ClearHistoryButton(),
+        _ClearHistoryButton(searchStoryList: searchStoryList),
       ],
     );
   }
 }
 
 class _ClearHistoryButton extends StatelessWidget {
+  final Set<String> searchStoryList;
   const _ClearHistoryButton({
     Key? key,
+    required this.searchStoryList,
   }) : super(key: key);
 
   @override
@@ -241,6 +244,8 @@ class _ClearHistoryButton extends StatelessWidget {
         // Для того, чтобы заново показать весь список найденных мест с экрана фильтров
         context.read<SearchScreenBloc>().add(
               PlacesFoundEvent(
+                searchHistoryIsEmpty: searchStoryList.isEmpty,
+                filteredPlaces: AppPreferences.getPlacesListByDistance()?.toList(),
                 isHistoryClear: true,
                 fromFiltersScreen: false,
                 isQueryEmpty: true,
@@ -316,13 +321,26 @@ class _SearchItem extends StatelessWidget {
                     ),
                     InkWell(
                       borderRadius: BorderRadius.circular(30),
-                      onTap: () => context.read<SearchHistoryBloc>().add(
-                            RemoveItemFromHistory(
-                              index: e,
-                              isDeleted: true,
-                              hasFocus: true,
-                            ),
-                          ),
+                      onTap: () {
+                        context.read<SearchHistoryBloc>().add(
+                              RemoveItemFromHistory(
+                                index: e,
+                                isDeleted: true,
+                                hasFocus: true,
+                              ),
+                            );
+                         // Чтобы обновить стейт экрана
+                        // Если крайнее место было удалено из истории
+                        context.read<SearchScreenBloc>().add(
+                              PlacesFoundEvent(
+                                searchHistoryIsEmpty: searchStoryList.isEmpty,
+                                filteredPlaces: AppPreferences.getPlacesListByDistance()?.toList(),
+                                isHistoryClear: true,
+                                fromFiltersScreen: false,
+                                isQueryEmpty: true,
+                              ),
+                            );
+                      },
                       child: const PlaceIcons(assetName: AppAssets.delete, width: 24, height: 24),
                     ),
                   ],

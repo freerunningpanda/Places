@@ -1,33 +1,24 @@
 part of 'filters_screen_bloc.dart';
 
-abstract class FiltersScreenState extends Equatable {
-  @override
-  List<Object?> get props => [];
-  const FiltersScreenState();
-}
-
-class IsNotEnabledState extends FiltersScreenState {
+class FiltersScreenState extends Equatable {
   final int filterIndex;
   final bool isEnabled;
 
   @override
   List<Object?> get props => [filterIndex, isEnabled];
 
-  const IsNotEnabledState({
+  const FiltersScreenState({
     required this.filterIndex,
     required this.isEnabled,
   });
-}
 
-class IsEnabledState extends FiltersScreenState {
-  final int filterIndex;
-  final bool isEnabled;
-
-  @override
-  List<Object?> get props => [filterIndex, isEnabled];
-
-  const IsEnabledState({
-    required this.filterIndex,
-    required this.isEnabled,
-  });
+  FiltersScreenState copyWith({
+    int? filterIndex,
+    bool? isEnabled,
+  }) {
+    return FiltersScreenState(
+      filterIndex: filterIndex ?? this.filterIndex,
+      isEnabled: isEnabled ?? this.isEnabled,
+    );
+  }
 }

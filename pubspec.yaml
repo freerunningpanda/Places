@@ -18,6 +18,7 @@ dependencies:
   flutter_svg: ^2.0.1
   geolocator: ^9.0.1
   provider: ^6.0.3
+  shared_preferences: ^2.0.18
   smooth_page_indicator: ^1.0.0+2
   surf_lint_rules: ^1.5.0
 

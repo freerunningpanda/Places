@@ -19,8 +19,10 @@ class Place {
     this.isFavorite = false,
   });
 
+
   @override
   String toString() {
     return 'Название: $name. Тип: $placeType. Ширина: $lat. Долгота: $lng. В избранном: $isFavorite';
   }
+
 }

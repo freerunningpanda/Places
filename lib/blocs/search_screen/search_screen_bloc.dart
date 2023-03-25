@@ -1,11 +1,13 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:places/data/api/api_places.dart';
 import 'package:places/data/interactor/place_interactor.dart';
 import 'package:places/data/model/place.dart';
 import 'package:places/data/repository/place_repository.dart';
+import 'package:places/data/store/app_preferences.dart';
 import 'package:places/mocks.dart';
 
 part 'search_screen_event.dart';
@@ -21,30 +23,38 @@ class SearchScreenBloc extends Bloc<SearchScreenEvent, SearchScreenState> {
 
   SearchScreenBloc() : super(SearchScreenEmptyState()) {
     activeFocus(isActive: true);
-    searchPlaces(interactor.query, interactor.controller);
+    searchPlaces(interactor.query);
     on<PlacesFoundEvent>((event, emit) {
       debugPrint('Длина списка мест после поиска: ${PlaceInteractor.foundedPlaces.length}');
       emit(
         SearchScreenPlacesFoundState(
           filteredPlaces: event.fromFiltersScreen ? event.filteredPlaces!.toList() : PlaceInteractor.foundedPlaces,
-          length: PlaceInteractor.filtersWithDistance.length,
+          length: AppPreferences.getPlacesListByDistance()?.length ?? 0,
         ),
       );
+      // Если поисковый запрос содержит значение и список найденных мест пуст
+      // Эмитим пустое состояние экрана
+
+      // P.S.: когда данное условие стояло ниже следующего условия
+      // Оно не дёргалось и пустой стэйт не эмитился после ввода имени места
+      // Которого в списке нет. Не понятно почему
+      // Сейчас перенёс его сюда и оно срабатывает
+
+      if (!event.isQueryEmpty && PlaceInteractor.foundedPlaces.isEmpty) {
+        emit(SearchScreenEmptyState());
+      }
       // Если поисковый запрос пуст, то показывать все найденные по фильтрам места
       // Теперь не будет отображаться пустое состояние, потому что сработает данное условие
       // И в стэйт прокинутся отфильтрованные места
-      if (event.isQueryEmpty) {
+      if (event.isQueryEmpty || event.searchHistoryIsEmpty) {
         emit(
           SearchScreenPlacesFoundState(
-            filteredPlaces: PlaceInteractor.filtersWithDistance.toList(),
-            length: PlaceInteractor.filtersWithDistance.length,
+            filteredPlaces: event.filteredPlaces!.toList(),
+            length: AppPreferences.getPlacesListByDistance()?.length ?? 0,
           ),
         );
-      // Иначе если поисковый запрос содержит значение и список найденных мест пуст
-      // Эмитим пустое состояние экрана
-      } else if (!event.isQueryEmpty && PlaceInteractor.foundedPlaces.isEmpty) {
-        emit(SearchScreenEmptyState());
       }
+
       // Предыдущее условие показывало пустой стэйт, потому что не было проверки
       // На то, пустой запрос или нет. Поэтому при завершении поиска состоянием пустого экрана
       // Возвратом на экран фильтров, затем снова на экран поиска - отображался экран ненайденных мест
@@ -59,9 +69,8 @@ class SearchScreenBloc extends Bloc<SearchScreenEvent, SearchScreenState> {
       if (event.isHistoryClear) {
         emit(
           SearchScreenPlacesFoundState(
-            filteredPlaces:
-                event.isHistoryClear ? PlaceInteractor.filtersWithDistance.toList() : PlaceInteractor.foundedPlaces,
-            length: PlaceInteractor.filtersWithDistance.length,
+            filteredPlaces: event.isHistoryClear ? event.filteredPlaces!.toList() : PlaceInteractor.foundedPlaces,
+            length: AppPreferences.getPlacesListByDistance()?.length ?? 0,
           ),
         );
       }
@@ -77,27 +86,28 @@ class SearchScreenBloc extends Bloc<SearchScreenEvent, SearchScreenState> {
     }
   }
 
-  void searchPlaces(String query, TextEditingController controller) {
-    for (final el in PlaceInteractor.filtersWithDistance) {
-      final distance = Geolocator.distanceBetween(
-        Mocks.mockLat,
-        Mocks.mockLot,
-        el.lat,
-        el.lng,
-      );
-      if (distance >= Mocks.rangeValues.start && distance <= Mocks.rangeValues.end) {
-        PlaceInteractor.foundedPlaces = PlaceInteractor.filtersWithDistance.where((place) {
-          final placeTitle = place.name.toLowerCase();
-          final input = query.toLowerCase();
-          debugPrint('filteredPlaces: $PlaceInteractor.foundedPlaces');
+  void searchPlaces(String query) {
+    final placesList = AppPreferences.getPlacesListByDistance();
+    // Если список мест в Preferences не null, искать в нём
+    // Данное решение, для того, чтобы не ловить крэш после удаления/установки приложения
+    if (placesList != null) {
+      for (final el in placesList) {
+        final distance = Geolocator.distanceBetween(
+          Mocks.mockLat,
+          Mocks.mockLot,
+          el.lat,
+          el.lng,
+        );
+        if (distance >= Mocks.rangeValues.start && distance <= Mocks.rangeValues.end) {
+          PlaceInteractor.foundedPlaces = AppPreferences.getPlacesListByDistance()!.where((place) {
+            final placeTitle = place.name.toLowerCase();
+            final input = query.toLowerCase();
+            debugPrint('filteredPlaces: ${PlaceInteractor.foundedPlaces}');
 
-          return placeTitle.contains(input);
-        }).toList();
+            return placeTitle.contains(input);
+          }).toList();
+        }
       }
-    }
-
-    if (controller.text.isEmpty) {
-      PlaceInteractor.foundedPlaces.clear();
-    }
+    } 
   }
 }

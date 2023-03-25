@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:places/blocs/filters_screen_bloc/filters_screen_bloc.dart';
 import 'package:places/blocs/search_screen/search_screen_bloc.dart';
@@ -9,6 +10,7 @@ import 'package:places/cubits/show_places_button/show_places_button_cubit.dart';
 import 'package:places/data/interactor/place_interactor.dart';
 import 'package:places/data/model/category.dart';
 import 'package:places/data/model/place.dart';
+import 'package:places/data/store/app_preferences.dart';
 import 'package:places/mocks.dart';
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_strings.dart';
@@ -93,7 +95,8 @@ class FilterScreen extends StatelessWidget {
     // После очистки истории поиска
     context.read<SearchScreenBloc>().add(
           PlacesFoundEvent(
-            filteredPlaces: PlaceInteractor.filtersWithDistance.toList(),
+            searchHistoryIsEmpty: PlaceInteractor.searchHistoryList.isEmpty,
+            filteredPlaces: AppPreferences.getPlacesListByDistance()?.toList(),
             isHistoryClear: false,
             fromFiltersScreen: true,
             isQueryEmpty: true,
@@ -234,19 +237,29 @@ class _ItemFiltersListBigScreens extends StatelessWidget {
               i,
               _ItemFilter(
                 category: category,
-                isEnabled: category.isEnabled,
+                isEnabled: AppPreferences.getCategoryByName(category.title),
                 name: category.title,
                 assetName: category.assetName ?? 'null',
-                onTap: () {
+                onTap: () async {
                   final filteredByType =
                       filtersTable.places.where((place) => place.placeType.contains(category.placeType)).toList();
-                  context.read<FiltersScreenBloc>().addToFilteredList(
+                  await context.read<FiltersScreenBloc>().addToFilteredList(
                         category: category,
                         filteredByType: filteredByType,
                       );
-                  context.read<ShowPlacesButtonCubit>().showCount(places: placeList);
+                  // ignore: use_build_context_synchronously
+                  await context.read<ShowPlacesButtonCubit>().showCount(places: placeList);
 
                   if (!category.isEnabled) {
+                    await AppPreferences.setCategoryByName(
+                      title: category.title,
+                      isEnabled: category.isEnabled = true,
+                    );
+                    await AppPreferences.setCategoryByStatus(
+                      type: category.placeType,
+                      isEnabled: category.isEnabled = true,
+                    );
+                    // ignore: use_build_context_synchronously
                     context.read<FiltersScreenBloc>().add(
                           AddRemoveFilterEvent(
                             category: category,
@@ -254,8 +267,18 @@ class _ItemFiltersListBigScreens extends StatelessWidget {
                             categoryIndex: i,
                           ),
                         );
+                    // ignore: use_build_context_synchronously
                     context.read<ShowPlacesButtonCubit>().resetToZero();
                   } else {
+                    await AppPreferences.setCategoryByName(
+                      title: category.title,
+                      isEnabled: category.isEnabled = false,
+                    );
+                    await AppPreferences.setCategoryByStatus(
+                      type: category.placeType,
+                      isEnabled: category.isEnabled = false,
+                    );
+                    // ignore: use_build_context_synchronously
                     context.read<FiltersScreenBloc>().add(
                           AddRemoveFilterEvent(
                             category: category,
@@ -297,19 +320,29 @@ class _ItemFiltersListSmallScreens extends StatelessWidget {
               i,
               _ItemFilter(
                 category: category,
-                isEnabled: category.isEnabled,
+                isEnabled: AppPreferences.getCategoryByName(category.title),
                 name: category.title,
                 assetName: category.assetName ?? 'null',
-                onTap: () {
+                onTap: () async {
                   final filteredByType =
                       filtersTable.places.where((place) => place.placeType.contains(category.placeType)).toList();
-                  context.read<FiltersScreenBloc>().addToFilteredList(
+                  await context.read<FiltersScreenBloc>().addToFilteredList(
                         category: category,
                         filteredByType: filteredByType,
                       );
-                  context.read<ShowPlacesButtonCubit>().showCount(places: placeList);
+                  // ignore: use_build_context_synchronously
+                  await context.read<ShowPlacesButtonCubit>().showCount(places: placeList);
 
                   if (!category.isEnabled) {
+                    await AppPreferences.setCategoryByName(
+                      title: category.title,
+                      isEnabled: category.isEnabled = true,
+                    );
+                    await AppPreferences.setCategoryByStatus(
+                      type: category.placeType,
+                      isEnabled: category.isEnabled = true,
+                    );
+                    // ignore: use_build_context_synchronously
                     context.read<FiltersScreenBloc>().add(
                           AddRemoveFilterEvent(
                             category: category,
@@ -317,8 +350,18 @@ class _ItemFiltersListSmallScreens extends StatelessWidget {
                             categoryIndex: i,
                           ),
                         );
+                    // ignore: use_build_context_synchronously
                     context.read<ShowPlacesButtonCubit>().resetToZero();
                   } else {
+                    await AppPreferences.setCategoryByName(
+                      title: category.title,
+                      isEnabled: category.isEnabled = false,
+                    );
+                    await AppPreferences.setCategoryByStatus(
+                      type: category.placeType,
+                      isEnabled: category.isEnabled = false,
+                    );
+                    // ignore: use_build_context_synchronously
                     context.read<FiltersScreenBloc>().add(
                           AddRemoveFilterEvent(
                             category: category,
@@ -373,50 +416,26 @@ class _ItemFilter extends StatelessWidget {
                   width: 64,
                   child: BlocBuilder<FiltersScreenBloc, FiltersScreenState>(
                     builder: (_, state) {
-                      if (state is IsEnabledState) {
-                        return category.isEnabled
-                            ? Opacity(
-                                opacity: 0.5,
-                                child: CircleAvatar(
-                                  backgroundColor: theme.canvasColor,
-                                  child: PlaceIcons(
-                                    assetName: assetName,
-                                    width: 32,
-                                    height: 32,
-                                  ),
-                                ),
-                              )
-                            : CircleAvatar(
+                      return category.isEnabled
+                          ? Opacity(
+                              opacity: 0.5,
+                              child: CircleAvatar(
                                 backgroundColor: theme.canvasColor,
                                 child: PlaceIcons(
                                   assetName: assetName,
                                   width: 32,
                                   height: 32,
                                 ),
-                              );
-                      } else if (state is IsNotEnabledState) {
-                        return category.isEnabled
-                            ? Opacity(
-                                opacity: 0.5,
-                                child: CircleAvatar(
-                                  backgroundColor: theme.canvasColor,
-                                  child: PlaceIcons(
-                                    assetName: assetName,
-                                    width: 32,
-                                    height: 32,
-                                  ),
-                                ),
-                              )
-                            : CircleAvatar(
-                                backgroundColor: theme.canvasColor,
-                                child: PlaceIcons(
-                                  assetName: assetName,
-                                  width: 32,
-                                  height: 32,
-                                ),
-                              );
-                      }
-                      throw ArgumentError('Bad state');
+                              ),
+                            )
+                          : CircleAvatar(
+                              backgroundColor: theme.canvasColor,
+                              child: PlaceIcons(
+                                assetName: assetName,
+                                width: 32,
+                                height: 32,
+                              ),
+                            );
                     },
                   ),
                 ),
@@ -432,57 +451,29 @@ class _ItemFilter extends StatelessWidget {
         ),
         BlocBuilder<FiltersScreenBloc, FiltersScreenState>(
           builder: (_, state) {
-            if (state is IsEnabledState) {
-              return category.isEnabled
-                  ? Positioned(
-                      right: 16,
-                      bottom: 25,
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 2,
-                          vertical: 2,
-                        ),
+            return category.isEnabled
+                ? Positioned(
+                    right: 16,
+                    bottom: 25,
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 2,
+                        vertical: 2,
+                      ),
+                      width: 16,
+                      height: 16,
+                      decoration: BoxDecoration(
+                        color: theme.focusColor,
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      child: const PlaceIcons(
+                        assetName: AppAssets.check,
                         width: 16,
                         height: 16,
-                        decoration: BoxDecoration(
-                          color: theme.focusColor,
-                          borderRadius: BorderRadius.circular(16),
-                        ),
-                        child: const PlaceIcons(
-                          assetName: AppAssets.check,
-                          width: 16,
-                          height: 16,
-                        ),
                       ),
-                    )
-                  : const SizedBox();
-            } else if (state is IsNotEnabledState) {
-              return category.isEnabled
-                  ? Positioned(
-                      right: 16,
-                      bottom: 25,
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 2,
-                          vertical: 2,
-                        ),
-                        width: 16,
-                        height: 16,
-                        decoration: BoxDecoration(
-                          color: theme.focusColor,
-                          borderRadius: BorderRadius.circular(16),
-                        ),
-                        child: const PlaceIcons(
-                          assetName: AppAssets.check,
-                          width: 16,
-                          height: 16,
-                        ),
-                      ),
-                    )
-                  : const SizedBox();
-            } else {
-              throw ArgumentError('Bad state');
-            }
+                    ),
+                  )
+                : const SizedBox();
           },
         ),
       ],
