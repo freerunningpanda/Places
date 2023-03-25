@@ -68,6 +68,13 @@ class AppPreferences extends Store {
     return prefs;
   }
 
+  // Сохранить отслеживание первого входа
+  static Future<bool> setTheFirstOpen({required bool value}) async {
+    final prefs = await _prefs.setBool(isFirstOpen, value);
+
+    return prefs;
+  }
+
   // Получить стартовую точку диапазона поиска
   static double getStartValue() {
     final prefs = _prefs.getDouble(rangeValueStart) ?? 2000.0;
@@ -127,6 +134,13 @@ class AppPreferences extends Store {
   // Получить настройки темы
   static bool getAppTheme() {
     final prefs = _prefs.getBool(appTheme) ?? false;
+
+    return prefs;
+  }
+
+  // Получить отслеживание первого входа
+  static bool getTheFirstOpen() {
+    final prefs = _prefs.getBool(isFirstOpen) ?? false;
 
     return prefs;
   }
