@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:places/data/interactor/settings_interactor.dart';
+import 'package:places/data/store/app_preferences.dart';
 import 'package:places/providers/theme_data_provider.dart';
 
 import 'package:provider/provider.dart';
@@ -27,6 +28,7 @@ class _SwitcherState extends State<Switcher> {
       value: isSwitched,
       onChanged: (value) {
         context.read<ThemeDataProvider>().switchTheme(value: value);
+        AppPreferences.setAppTheme(value: value);
       },
     );
   }
