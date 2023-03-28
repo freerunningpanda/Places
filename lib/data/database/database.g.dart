@@ -9,14 +9,14 @@ part of 'database.dart';
 // ignore_for_file: type=lint
 class SearchHistory extends DataClass implements Insertable<SearchHistory> {
   final int id;
-  final String? placeId;
-  const SearchHistory({required this.id, this.placeId});
+  final String? searchItemId;
+  const SearchHistory({required this.id, this.searchItemId});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     map['id'] = Variable<int>(id);
-    if (!nullToAbsent || placeId != null) {
-      map['placeId'] = Variable<String>(placeId);
+    if (!nullToAbsent || searchItemId != null) {
+      map['searchItemId'] = Variable<String>(searchItemId);
     }
     return map;
   }
@@ -24,9 +24,9 @@ class SearchHistory extends DataClass implements Insertable<SearchHistory> {
   SearchHistorysCompanion toCompanion(bool nullToAbsent) {
     return SearchHistorysCompanion(
       id: Value(id),
-      placeId: placeId == null && nullToAbsent
+      searchItemId: searchItemId == null && nullToAbsent
           ? const Value.absent()
-          : Value(placeId),
+          : Value(searchItemId),
     );
   }
 
@@ -35,7 +35,7 @@ class SearchHistory extends DataClass implements Insertable<SearchHistory> {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return SearchHistory(
       id: serializer.fromJson<int>(json['id']),
-      placeId: serializer.fromJson<String?>(json['placeId']),
+      searchItemId: serializer.fromJson<String?>(json['searchItemId']),
     );
   }
   @override
@@ -43,60 +43,62 @@ class SearchHistory extends DataClass implements Insertable<SearchHistory> {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'id': serializer.toJson<int>(id),
-      'placeId': serializer.toJson<String?>(placeId),
+      'searchItemId': serializer.toJson<String?>(searchItemId),
     };
   }
 
   SearchHistory copyWith(
-          {int? id, Value<String?> placeId = const Value.absent()}) =>
+          {int? id, Value<String?> searchItemId = const Value.absent()}) =>
       SearchHistory(
         id: id ?? this.id,
-        placeId: placeId.present ? placeId.value : this.placeId,
+        searchItemId:
+            searchItemId.present ? searchItemId.value : this.searchItemId,
       );
   @override
   String toString() {
     return (StringBuffer('SearchHistory(')
           ..write('id: $id, ')
-          ..write('placeId: $placeId')
+          ..write('searchItemId: $searchItemId')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(id, placeId);
+  int get hashCode => Object.hash(id, searchItemId);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       (other is SearchHistory &&
           other.id == this.id &&
-          other.placeId == this.placeId);
+          other.searchItemId == this.searchItemId);
 }
 
 class SearchHistorysCompanion extends UpdateCompanion<SearchHistory> {
   final Value<int> id;
-  final Value<String?> placeId;
+  final Value<String?> searchItemId;
   const SearchHistorysCompanion({
     this.id = const Value.absent(),
-    this.placeId = const Value.absent(),
+    this.searchItemId = const Value.absent(),
   });
   SearchHistorysCompanion.insert({
     this.id = const Value.absent(),
-    this.placeId = const Value.absent(),
+    this.searchItemId = const Value.absent(),
   });
   static Insertable<SearchHistory> custom({
     Expression<int>? id,
-    Expression<String>? placeId,
+    Expression<String>? searchItemId,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
-      if (placeId != null) 'placeId': placeId,
+      if (searchItemId != null) 'searchItemId': searchItemId,
     });
   }
 
-  SearchHistorysCompanion copyWith({Value<int>? id, Value<String?>? placeId}) {
+  SearchHistorysCompanion copyWith(
+      {Value<int>? id, Value<String?>? searchItemId}) {
     return SearchHistorysCompanion(
       id: id ?? this.id,
-      placeId: placeId ?? this.placeId,
+      searchItemId: searchItemId ?? this.searchItemId,
     );
   }
 
@@ -106,8 +108,8 @@ class SearchHistorysCompanion extends UpdateCompanion<SearchHistory> {
     if (id.present) {
       map['id'] = Variable<int>(id.value);
     }
-    if (placeId.present) {
-      map['placeId'] = Variable<String>(placeId.value);
+    if (searchItemId.present) {
+      map['searchItemId'] = Variable<String>(searchItemId.value);
     }
     return map;
   }
@@ -116,7 +118,7 @@ class SearchHistorysCompanion extends UpdateCompanion<SearchHistory> {
   String toString() {
     return (StringBuffer('SearchHistorysCompanion(')
           ..write('id: $id, ')
-          ..write('placeId: $placeId')
+          ..write('searchItemId: $searchItemId')
           ..write(')'))
         .toString();
   }
@@ -134,14 +136,15 @@ class SearchHistorys extends Table
       type: DriftSqlType.int,
       requiredDuringInsert: false,
       $customConstraints: 'NOT NULL PRIMARY KEY AUTOINCREMENT');
-  final VerificationMeta _placeIdMeta = const VerificationMeta('placeId');
-  late final GeneratedColumn<String> placeId = GeneratedColumn<String>(
-      'placeId', aliasedName, true,
+  final VerificationMeta _searchItemIdMeta =
+      const VerificationMeta('searchItemId');
+  late final GeneratedColumn<String> searchItemId = GeneratedColumn<String>(
+      'searchItemId', aliasedName, true,
       type: DriftSqlType.string,
       requiredDuringInsert: false,
       $customConstraints: '');
   @override
-  List<GeneratedColumn> get $columns => [id, placeId];
+  List<GeneratedColumn> get $columns => [id, searchItemId];
   @override
   String get aliasedName => _alias ?? 'searchHistorys';
   @override
@@ -154,9 +157,11 @@ class SearchHistorys extends Table
     if (data.containsKey('id')) {
       context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
     }
-    if (data.containsKey('placeId')) {
-      context.handle(_placeIdMeta,
-          placeId.isAcceptableOrUnknown(data['placeId']!, _placeIdMeta));
+    if (data.containsKey('searchItemId')) {
+      context.handle(
+          _searchItemIdMeta,
+          searchItemId.isAcceptableOrUnknown(
+              data['searchItemId']!, _searchItemIdMeta));
     }
     return context;
   }
@@ -169,8 +174,8 @@ class SearchHistorys extends Table
     return SearchHistory(
       id: attachedDatabase.options.types
           .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
-      placeId: attachedDatabase.options.types
-          .read(DriftSqlType.string, data['${effectivePrefix}placeId']),
+      searchItemId: attachedDatabase.options.types
+          .read(DriftSqlType.string, data['${effectivePrefix}searchItemId']),
     );
   }
 

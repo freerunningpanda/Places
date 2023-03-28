@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+
 import 'package:places/blocs/search_history/search_history_bloc.dart';
 import 'package:places/blocs/search_screen/search_screen_bloc.dart';
 import 'package:places/data/api/api_places.dart';
+import 'package:places/data/database/database.dart';
 import 'package:places/data/interactor/place_interactor.dart';
 import 'package:places/data/repository/place_repository.dart';
 import 'package:places/ui/res/app_assets.dart';
@@ -16,12 +18,14 @@ import 'package:provider/provider.dart';
 
 class SearchBar extends StatefulWidget {
   final bool? readOnly;
+  final bool isMainPage;
   final bool isSearchPage;
   final TextEditingController searchController;
 
   const SearchBar({
     Key? key,
     this.readOnly,
+    required this.isMainPage,
     required this.isSearchPage,
     required this.searchController,
   }) : super(key: key);
@@ -32,12 +36,24 @@ class SearchBar extends StatefulWidget {
 
 class _SearchBarState extends State<SearchBar> {
   final FocusNode focusNode = FocusNode();
+
   PlaceInteractor interactor = PlaceInteractor(
     repository: PlaceRepository(
       apiPlaces: ApiPlaces(),
     ),
   );
   bool autofocus = true;
+  late AppDb _db;
+  bool _isLoading = false;
+  List<SearchHistory>? _historyList;
+
+  @override
+  void initState() {
+    _db = context.read<AppDb>();
+    _isLoading = true;
+    _loadHistory();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -86,9 +102,9 @@ class _SearchBarState extends State<SearchBar> {
                       context.read<SearchScreenBloc>()
                         ..activeFocus(isActive: true)
                         ..searchPlaces(value);
-                        // Не виджет истории поиска. Поэтому isHistoryClear: false
-                        // Параметр isHistoryClear отвечает за отображение всех найденных мест
-                        // После очистки истории поиска
+                      // Не виджет истории поиска. Поэтому isHistoryClear: false
+                      // Параметр isHistoryClear отвечает за отображение всех найденных мест
+                      // После очистки истории поиска
                       context.read<SearchScreenBloc>().add(
                             PlacesFoundEvent(
                               isHistoryClear: false,
@@ -151,7 +167,7 @@ class _SearchBarState extends State<SearchBar> {
                       ),
                       hintText: AppString.search,
                       hintStyle: AppTypography.textText16Search,
-                      suffixIcon: focusNode.hasFocus
+                      suffixIcon: focusNode.hasFocus && !widget.isMainPage
                           ? SuffixIcon(controller: widget.searchController, theme: theme)
                           : IconButton(
                               onPressed: () {
@@ -174,5 +190,13 @@ class _SearchBarState extends State<SearchBar> {
         ),
       ),
     );
+  }
+
+  Future<void> _loadHistory() async {
+    _historyList = await _db.allHistorysEntries;
+
+    setState(() {
+      _isLoading = false;
+    });
   }
 }

@@ -53,12 +53,14 @@ class _PlaceSearchScreenState extends State<PlaceSearchScreen> {
                 builder: (_, state) {
                   if (state is SearchBarHasValueState) {
                     return SearchBar(
+                      isMainPage: false,
                       isSearchPage: isSearchPage,
                       readOnly: readOnly,
                       searchController: searchController,
                     );
                   } else if (state is SearchBarEmptyState) {
                     return SearchBar(
+                      isMainPage: false,
                       isSearchPage: isSearchPage,
                       readOnly: readOnly,
                       searchController: TextEditingController(),

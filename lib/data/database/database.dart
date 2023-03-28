@@ -15,14 +15,23 @@ part 'database.g.dart';
 class AppDb extends _$AppDb {
   @override
   int get schemaVersion => 1;
+
+  Future<List<SearchHistory>> get allHistorysEntries => select(searchHistorys).get();
+
   AppDb() : super(_openConnection());
+
+  Future<int> addHistoryItem(SearchHistorysCompanion history) {
+    return into(searchHistorys).insert(history);
+  }
 }
 
 LazyDatabase _openConnection() {
-  return LazyDatabase(() async {
-    final dbPath = await getApplicationDocumentsDirectory();
-    final file = File(p.join(dbPath.path, 'places.sqlite'));
+  return LazyDatabase(
+    () async {
+      final dbPath = await getApplicationDocumentsDirectory();
+      final file = File(p.join(dbPath.path, 'places.sqlite'));
 
-    return NativeDatabase(file);
-  });
+      return NativeDatabase(file);
+    },
+  );
 }

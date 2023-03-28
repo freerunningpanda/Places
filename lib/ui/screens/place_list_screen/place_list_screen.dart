@@ -56,6 +56,7 @@ class PlaceListScreen extends StatelessWidget {
                   children: [
                     if (orientation)
                       SearchBar(
+                        isMainPage: true,
                         isSearchPage: isSearchPage,
                         readOnly: readOnly,
                         searchController: TextEditingController(),
@@ -64,6 +65,7 @@ class PlaceListScreen extends StatelessWidget {
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 18.0),
                         child: SearchBar(
+                          isMainPage: true,
                           isSearchPage: isSearchPage,
                           readOnly: readOnly,
                           searchController: TextEditingController(),
