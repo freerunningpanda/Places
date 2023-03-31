@@ -134,7 +134,7 @@ class $SearchHistorysTable extends SearchHistorys
   late final GeneratedColumn<String> title = GeneratedColumn<String>(
       'title', aliasedName, false,
       additionalChecks:
-          GeneratedColumn.checkTextLength(minTextLength: 1, maxTextLength: 16),
+          GeneratedColumn.checkTextLength(minTextLength: 3, maxTextLength: 16),
       type: DriftSqlType.string,
       requiredDuringInsert: true);
   @override

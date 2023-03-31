@@ -6,6 +6,7 @@ import 'package:places/blocs/details_screen/details_screen_bloc.dart';
 import 'package:places/blocs/search_bar/search_bar_bloc.dart';
 import 'package:places/blocs/search_history/search_history_bloc.dart';
 import 'package:places/blocs/search_screen/search_screen_bloc.dart';
+import 'package:places/data/database/database.dart';
 import 'package:places/data/model/place.dart';
 import 'package:places/data/store/app_preferences.dart';
 import 'package:places/ui/res/app_assets.dart';
@@ -25,6 +26,17 @@ class PlaceSearchScreen extends StatefulWidget {
 
 class _PlaceSearchScreenState extends State<PlaceSearchScreen> {
   final searchController = TextEditingController();
+  bool _isLoading = false;
+  late AppDb _db;
+  late List<SearchHistory> _list;
+
+  @override
+  void initState() {
+    super.initState();
+    _db = context.read<AppDb>();
+    _isLoading = true;
+    _loadHistorys();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -91,7 +103,7 @@ class _PlaceSearchScreenState extends State<PlaceSearchScreen> {
                                 // При наличии фокуса в поле ввода, показываем историю поиска (если она есть)
                                 ? _SearchHistoryList(
                                     theme: theme,
-                                    searchStoryList: state.searchStoryList,
+                                    searchStoryList: _isLoading ? _list : [],
                                     width: width,
                                     controller: searchController,
                                   )
@@ -123,6 +135,21 @@ class _PlaceSearchScreenState extends State<PlaceSearchScreen> {
       ),
     );
   }
+
+  Future<void> _loadHistorys() async {
+    _list = await _db.allHistorysEntries;
+
+    setState(() {
+      _isLoading = false;
+    });
+  }
+
+  // void _addTodo() async {
+  //   await _loadHistorys();
+  //   await _db.addHistoryItem(
+  //     SearchHistorysCompanion.insert(title: searchController.text),
+  //   );
+  // }
 }
 
 // Виджет списка найденных мест
@@ -196,7 +223,7 @@ class _EmptyListWidget extends StatelessWidget {
 
 // Виджет истории поиска
 class _SearchHistoryList extends StatelessWidget {
-  final Set<String> searchStoryList;
+  final List<SearchHistory> searchStoryList;
   final ThemeData theme;
   final double width;
   final TextEditingController controller;
@@ -231,7 +258,7 @@ class _SearchHistoryList extends StatelessWidget {
 }
 
 class _ClearHistoryButton extends StatelessWidget {
-  final Set<String> searchStoryList;
+  final List<SearchHistory> searchStoryList;
   const _ClearHistoryButton({
     Key? key,
     required this.searchStoryList,
@@ -284,7 +311,7 @@ class _SearchHistoryTitle extends StatelessWidget {
 
 class _SearchItem extends StatelessWidget {
   final ThemeData theme;
-  final Set<String> searchStoryList;
+  final List<SearchHistory> searchStoryList;
   final double width;
   final TextEditingController controller;
 
@@ -310,13 +337,13 @@ class _SearchItem extends StatelessWidget {
                     InkWell(
                       borderRadius: BorderRadius.circular(12),
                       onTap: () {
-                        final value = controller.text = e;
+                        final value = controller.text = e.toString();
                         context.read<SearchBarBloc>().add(SearchBarEvent(value: value));
                       },
                       child: SizedBox(
                         width: width * 0.7,
                         child: Text(
-                          e,
+                          e.title,
                           style: theme.textTheme.titleMedium,
                         ),
                       ),
@@ -326,12 +353,12 @@ class _SearchItem extends StatelessWidget {
                       onTap: () {
                         context.read<SearchHistoryBloc>().add(
                               RemoveItemFromHistory(
-                                index: e,
+                                index: e.title,
                                 isDeleted: true,
                                 hasFocus: true,
                               ),
                             );
-                         // Чтобы обновить стейт экрана
+                        // Чтобы обновить стейт экрана
                         // Если крайнее место было удалено из истории
                         context.read<SearchScreenBloc>().add(
                               PlacesFoundEvent(

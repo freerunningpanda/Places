@@ -6,7 +6,7 @@ import 'package:places/data/repository/place_repository.dart';
 class PlaceInteractor {
   static final List<Category> activeFilters = [];
   static final List<Place> initialFilteredPlaces = [];
-  static final Set<String> searchHistoryList = {};
+  static final List<String> searchHistoryList = [];
   static Set<Place> filtersWithDistance = {};
   static List<Place> foundedPlaces = PlaceInteractor.filtersWithDistance.toList();
   static Set<Place> newPlaces = {};

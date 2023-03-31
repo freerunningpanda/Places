@@ -22,6 +22,10 @@ class AppDb extends _$AppDb {
   Future<int> addHistoryItem(SearchHistorysCompanion history) {
     return into(searchHistorys).insert(history);
   }
+
+  Future<void> deleteHistory(int id) {
+    return customStatement('DELETE FROM searchHistorys WHERE id = $id');
+  }
 }
 
 LazyDatabase _openConnection() {

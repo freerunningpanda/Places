@@ -14,7 +14,7 @@ class SearchHistoryEmptyState extends SearchHistoryState {}
 class SearchHistoryHasValueState extends SearchHistoryState {
   final String?
       index; // Берётся значение text из контроллера. Нужен для обновления стейта после удаления элемента из списка.
-  final Set<String> searchStoryList;
+  final List<String> searchStoryList;
   final bool hasFocus;
   final bool isDeleted; // Нужен для обновления стейта после удаления элемента из списка.
 
