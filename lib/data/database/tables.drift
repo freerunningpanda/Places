@@ -1,6 +1,0 @@
-CREATE TABLE searchHistorys (
-    id INT NOT NULL PRIMARY KEY AUTOINCREMENT,
-    searchItemId TEXT
-);
-
-searchItem: SELECT * FROM searchHistorys;

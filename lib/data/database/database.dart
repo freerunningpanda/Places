@@ -4,13 +4,12 @@ import 'package:drift/drift.dart';
 import 'package:drift/native.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
+import 'package:places/data/database/table/search_history.dart';
 
 part 'database.g.dart';
 
 @DriftDatabase(
-  // relative import for the drift file. Drift also supports `package:`
-  // imports
-  include: {'tables.drift'},
+  tables: [SearchHistorys],
 )
 class AppDb extends _$AppDb {
   @override

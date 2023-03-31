@@ -9,24 +9,20 @@ part of 'database.dart';
 // ignore_for_file: type=lint
 class SearchHistory extends DataClass implements Insertable<SearchHistory> {
   final int id;
-  final String? searchItemId;
-  const SearchHistory({required this.id, this.searchItemId});
+  final String title;
+  const SearchHistory({required this.id, required this.title});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     map['id'] = Variable<int>(id);
-    if (!nullToAbsent || searchItemId != null) {
-      map['searchItemId'] = Variable<String>(searchItemId);
-    }
+    map['title'] = Variable<String>(title);
     return map;
   }
 
   SearchHistorysCompanion toCompanion(bool nullToAbsent) {
     return SearchHistorysCompanion(
       id: Value(id),
-      searchItemId: searchItemId == null && nullToAbsent
-          ? const Value.absent()
-          : Value(searchItemId),
+      title: Value(title),
     );
   }
 
@@ -35,7 +31,7 @@ class SearchHistory extends DataClass implements Insertable<SearchHistory> {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return SearchHistory(
       id: serializer.fromJson<int>(json['id']),
-      searchItemId: serializer.fromJson<String?>(json['searchItemId']),
+      title: serializer.fromJson<String>(json['title']),
     );
   }
   @override
@@ -43,62 +39,58 @@ class SearchHistory extends DataClass implements Insertable<SearchHistory> {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'id': serializer.toJson<int>(id),
-      'searchItemId': serializer.toJson<String?>(searchItemId),
+      'title': serializer.toJson<String>(title),
     };
   }
 
-  SearchHistory copyWith(
-          {int? id, Value<String?> searchItemId = const Value.absent()}) =>
-      SearchHistory(
+  SearchHistory copyWith({int? id, String? title}) => SearchHistory(
         id: id ?? this.id,
-        searchItemId:
-            searchItemId.present ? searchItemId.value : this.searchItemId,
+        title: title ?? this.title,
       );
   @override
   String toString() {
     return (StringBuffer('SearchHistory(')
           ..write('id: $id, ')
-          ..write('searchItemId: $searchItemId')
+          ..write('title: $title')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(id, searchItemId);
+  int get hashCode => Object.hash(id, title);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       (other is SearchHistory &&
           other.id == this.id &&
-          other.searchItemId == this.searchItemId);
+          other.title == this.title);
 }
 
 class SearchHistorysCompanion extends UpdateCompanion<SearchHistory> {
   final Value<int> id;
-  final Value<String?> searchItemId;
+  final Value<String> title;
   const SearchHistorysCompanion({
     this.id = const Value.absent(),
-    this.searchItemId = const Value.absent(),
+    this.title = const Value.absent(),
   });
   SearchHistorysCompanion.insert({
     this.id = const Value.absent(),
-    this.searchItemId = const Value.absent(),
-  });
+    required String title,
+  }) : title = Value(title);
   static Insertable<SearchHistory> custom({
     Expression<int>? id,
-    Expression<String>? searchItemId,
+    Expression<String>? title,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
-      if (searchItemId != null) 'searchItemId': searchItemId,
+      if (title != null) 'title': title,
     });
   }
 
-  SearchHistorysCompanion copyWith(
-      {Value<int>? id, Value<String?>? searchItemId}) {
+  SearchHistorysCompanion copyWith({Value<int>? id, Value<String>? title}) {
     return SearchHistorysCompanion(
       id: id ?? this.id,
-      searchItemId: searchItemId ?? this.searchItemId,
+      title: title ?? this.title,
     );
   }
 
@@ -108,8 +100,8 @@ class SearchHistorysCompanion extends UpdateCompanion<SearchHistory> {
     if (id.present) {
       map['id'] = Variable<int>(id.value);
     }
-    if (searchItemId.present) {
-      map['searchItemId'] = Variable<String>(searchItemId.value);
+    if (title.present) {
+      map['title'] = Variable<String>(title.value);
     }
     return map;
   }
@@ -118,37 +110,39 @@ class SearchHistorysCompanion extends UpdateCompanion<SearchHistory> {
   String toString() {
     return (StringBuffer('SearchHistorysCompanion(')
           ..write('id: $id, ')
-          ..write('searchItemId: $searchItemId')
+          ..write('title: $title')
           ..write(')'))
         .toString();
   }
 }
 
-class SearchHistorys extends Table
-    with TableInfo<SearchHistorys, SearchHistory> {
+class $SearchHistorysTable extends SearchHistorys
+    with TableInfo<$SearchHistorysTable, SearchHistory> {
   @override
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
-  SearchHistorys(this.attachedDatabase, [this._alias]);
+  $SearchHistorysTable(this.attachedDatabase, [this._alias]);
   final VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
   late final GeneratedColumn<int> id = GeneratedColumn<int>(
       'id', aliasedName, false,
       type: DriftSqlType.int,
       requiredDuringInsert: false,
-      $customConstraints: 'NOT NULL PRIMARY KEY AUTOINCREMENT');
-  final VerificationMeta _searchItemIdMeta =
-      const VerificationMeta('searchItemId');
-  late final GeneratedColumn<String> searchItemId = GeneratedColumn<String>(
-      'searchItemId', aliasedName, true,
+      defaultConstraints: 'PRIMARY KEY AUTOINCREMENT');
+  final VerificationMeta _titleMeta = const VerificationMeta('title');
+  @override
+  late final GeneratedColumn<String> title = GeneratedColumn<String>(
+      'title', aliasedName, false,
+      additionalChecks:
+          GeneratedColumn.checkTextLength(minTextLength: 1, maxTextLength: 16),
       type: DriftSqlType.string,
-      requiredDuringInsert: false,
-      $customConstraints: '');
+      requiredDuringInsert: true);
   @override
-  List<GeneratedColumn> get $columns => [id, searchItemId];
+  List<GeneratedColumn> get $columns => [id, title];
   @override
-  String get aliasedName => _alias ?? 'searchHistorys';
+  String get aliasedName => _alias ?? 'search_historys';
   @override
-  String get actualTableName => 'searchHistorys';
+  String get actualTableName => 'search_historys';
   @override
   VerificationContext validateIntegrity(Insertable<SearchHistory> instance,
       {bool isInserting = false}) {
@@ -157,11 +151,11 @@ class SearchHistorys extends Table
     if (data.containsKey('id')) {
       context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
     }
-    if (data.containsKey('searchItemId')) {
+    if (data.containsKey('title')) {
       context.handle(
-          _searchItemIdMeta,
-          searchItemId.isAcceptableOrUnknown(
-              data['searchItemId']!, _searchItemIdMeta));
+          _titleMeta, title.isAcceptableOrUnknown(data['title']!, _titleMeta));
+    } else if (isInserting) {
+      context.missing(_titleMeta);
     }
     return context;
   }
@@ -174,31 +168,20 @@ class SearchHistorys extends Table
     return SearchHistory(
       id: attachedDatabase.options.types
           .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
-      searchItemId: attachedDatabase.options.types
-          .read(DriftSqlType.string, data['${effectivePrefix}searchItemId']),
+      title: attachedDatabase.options.types
+          .read(DriftSqlType.string, data['${effectivePrefix}title'])!,
     );
   }
 
   @override
-  SearchHistorys createAlias(String alias) {
-    return SearchHistorys(attachedDatabase, alias);
+  $SearchHistorysTable createAlias(String alias) {
+    return $SearchHistorysTable(attachedDatabase, alias);
   }
-
-  @override
-  bool get dontWriteConstraints => true;
 }
 
 abstract class _$AppDb extends GeneratedDatabase {
   _$AppDb(QueryExecutor e) : super(e);
-  late final SearchHistorys searchHistorys = SearchHistorys(this);
-  Selectable<SearchHistory> searchItem() {
-    return customSelect('SELECT * FROM searchHistorys',
-        variables: [],
-        readsFrom: {
-          searchHistorys,
-        }).asyncMap(searchHistorys.mapFromRow);
-  }
-
+  late final $SearchHistorysTable searchHistorys = $SearchHistorysTable(this);
   @override
   Iterable<TableInfo<Table, dynamic>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
