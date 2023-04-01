@@ -26,20 +26,10 @@ class PlaceSearchScreen extends StatefulWidget {
 
 class _PlaceSearchScreenState extends State<PlaceSearchScreen> {
   final searchController = TextEditingController();
-  bool _isLoading = false;
-  late AppDb _db;
-  late List<SearchHistory> _list;
-
-  @override
-  void initState() {
-    super.initState();
-    _db = context.read<AppDb>();
-    _isLoading = true;
-    _loadHistorys();
-  }
 
   @override
   Widget build(BuildContext context) {
+    _loadDb();
     final theme = Theme.of(context);
     const readOnly = false;
     const isSearchPage = true;
@@ -103,7 +93,7 @@ class _PlaceSearchScreenState extends State<PlaceSearchScreen> {
                                 // При наличии фокуса в поле ввода, показываем историю поиска (если она есть)
                                 ? _SearchHistoryList(
                                     theme: theme,
-                                    searchStoryList: _isLoading ? [] : _list,
+                                    searchStoryList: state.searchStoryList,
                                     width: width,
                                     controller: searchController,
                                   )
@@ -136,20 +126,9 @@ class _PlaceSearchScreenState extends State<PlaceSearchScreen> {
     );
   }
 
-  Future<void> _loadHistorys() async {
-    _list = await _db.allHistorysEntries;
-
-    setState(() {
-      _isLoading = false;
-    });
+  Future<void> _loadDb() async {
+    await context.read<AppDb>().allHistorysEntries;
   }
-
-  // void _addTodo() async {
-  //   await _loadHistorys();
-  //   await _db.addHistoryItem(
-  //     SearchHistorysCompanion.insert(title: searchController.text),
-  //   );
-  // }
 }
 
 // Виджет списка найденных мест
