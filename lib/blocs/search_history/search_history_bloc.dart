@@ -3,6 +3,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:places/data/api/api_places.dart';
+import 'package:places/data/database/database.dart';
 import 'package:places/data/interactor/place_interactor.dart';
 import 'package:places/data/model/place.dart';
 import 'package:places/data/repository/place_repository.dart';
@@ -24,7 +25,7 @@ class SearchHistoryBloc extends Bloc<SearchHistoryEvent, SearchHistoryState> {
         saveSearchHistory(interactor.query, interactor.controller);
         emit(
           SearchHistoryHasValueState(
-            searchStoryList: searchHistoryList,
+            searchStoryList: event.list,
             hasFocus: event.hasFocus,
             isDeleted: event.isDeleted,
           ),
@@ -36,7 +37,7 @@ class SearchHistoryBloc extends Bloc<SearchHistoryEvent, SearchHistoryState> {
         saveSearchHistory(interactor.query, interactor.controller);
         emit(
           SearchHistoryHasValueState(
-            searchStoryList: searchHistoryList,
+            searchStoryList: event.list,
             hasFocus: event.hasFocus,
             isDeleted: event.isDeleted,
             index: event.index,
@@ -49,7 +50,7 @@ class SearchHistoryBloc extends Bloc<SearchHistoryEvent, SearchHistoryState> {
         removeItemFromHistory(event.index);
         emit(
           SearchHistoryHasValueState(
-            searchStoryList: searchHistoryList,
+            searchStoryList: event.list,
             hasFocus: event.hasFocus,
             isDeleted: event.isDeleted,
             index: event.index,

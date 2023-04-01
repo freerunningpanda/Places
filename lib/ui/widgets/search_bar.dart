@@ -45,7 +45,7 @@ class _SearchBarState extends State<SearchBar> {
   bool autofocus = true;
   late AppDb _db;
   bool _isLoading = false;
-  late List<SearchHistory>? _list;
+  late List<SearchHistory> _list;
 
   @override
   void initState() {
@@ -123,11 +123,12 @@ class _SearchBarState extends State<SearchBar> {
                         // Загружаем историю из БД
                         _loadHistorys();
                         // Если история поиска не пустая, то вызываем event показа истории поиска
-                        if (searchStoryList.isNotEmpty) {
+                        if (searchStoryList.isNotEmpty || _list.isNotEmpty) {
                           context.read<SearchHistoryBloc>().add(
                                 ShowHistoryEvent(
                                   isDeleted: false,
                                   hasFocus: true,
+                                  list: _isLoading ? [] : _list,
                                 ),
                               );
                         }
@@ -146,7 +147,8 @@ class _SearchBarState extends State<SearchBar> {
                     // При отправке данных из поиска
                     onFieldSubmitted: (value) {
                       // Добавляем значение из поиска в БД
-                      _addTodo();
+                      _addHistory();
+                      _loadHistorys();
 
                       context.read<SearchHistoryBloc>()
 
@@ -158,6 +160,7 @@ class _SearchBarState extends State<SearchBar> {
                             isDeleted: false,
                             index: widget.searchController.text,
                             hasFocus: false,
+                            list: _isLoading ? [] : _list,
                           ),
                         );
 
@@ -205,7 +208,7 @@ class _SearchBarState extends State<SearchBar> {
     });
   }
 
-  void _addTodo() async {
+  Future<void> _addHistory() async {
     await _db.addHistoryItem(
       SearchHistorysCompanion.insert(title: widget.searchController.text),
     );

@@ -103,7 +103,7 @@ class _PlaceSearchScreenState extends State<PlaceSearchScreen> {
                                 // При наличии фокуса в поле ввода, показываем историю поиска (если она есть)
                                 ? _SearchHistoryList(
                                     theme: theme,
-                                    searchStoryList: _isLoading ? _list : [],
+                                    searchStoryList: _isLoading ? [] : _list,
                                     width: width,
                                     controller: searchController,
                                   )
@@ -356,6 +356,7 @@ class _SearchItem extends StatelessWidget {
                                 index: e.title,
                                 isDeleted: true,
                                 hasFocus: true,
+                                list: searchStoryList,
                               ),
                             );
                         // Чтобы обновить стейт экрана
