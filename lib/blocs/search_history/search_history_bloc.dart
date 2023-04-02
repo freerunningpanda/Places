@@ -1,4 +1,3 @@
-
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
@@ -13,11 +12,13 @@ part 'search_history_state.dart';
 
 class SearchHistoryBloc extends Bloc<SearchHistoryEvent, SearchHistoryState> {
   final searchHistoryList = PlaceInteractor.searchHistoryList;
+  final _db = AppDb();
   PlaceInteractor interactor = PlaceInteractor(
     repository: PlaceRepository(
       apiPlaces: ApiPlaces(),
     ),
   );
+  var list = <SearchHistory>[];
 
   SearchHistoryBloc() : super(SearchHistoryEmptyState()) {
     on<ShowHistoryEvent>(
@@ -25,7 +26,7 @@ class SearchHistoryBloc extends Bloc<SearchHistoryEvent, SearchHistoryState> {
         saveSearchHistory(interactor.query, interactor.controller);
         emit(
           SearchHistoryHasValueState(
-            searchStoryList: event.list,
+            searchStoryList: list,
             hasFocus: event.hasFocus,
             isDeleted: event.isDeleted,
           ),
@@ -37,7 +38,7 @@ class SearchHistoryBloc extends Bloc<SearchHistoryEvent, SearchHistoryState> {
         saveSearchHistory(interactor.query, interactor.controller);
         emit(
           SearchHistoryHasValueState(
-            searchStoryList: event.list,
+            searchStoryList: list,
             hasFocus: event.hasFocus,
             isDeleted: event.isDeleted,
             index: event.index,
@@ -50,7 +51,7 @@ class SearchHistoryBloc extends Bloc<SearchHistoryEvent, SearchHistoryState> {
         removeItemFromHistory(event.index);
         emit(
           SearchHistoryHasValueState(
-            searchStoryList: event.list,
+            searchStoryList: list,
             hasFocus: event.hasFocus,
             isDeleted: event.isDeleted,
             index: event.index,
@@ -75,5 +76,15 @@ class SearchHistoryBloc extends Bloc<SearchHistoryEvent, SearchHistoryState> {
 
   void removeItemFromHistory(String index) {
     PlaceInteractor.searchHistoryList.remove(index);
+  }
+
+  Future<void> loadHistorys() async {
+    list = await _db.allHistorysEntries;
+  }
+
+  Future<void> addHistory(String text) async {
+    await _db.addHistoryItem(
+      SearchHistorysCompanion.insert(title: text),
+    );
   }
 }

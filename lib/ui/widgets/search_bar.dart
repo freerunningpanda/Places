@@ -43,17 +43,6 @@ class _SearchBarState extends State<SearchBar> {
     ),
   );
   bool autofocus = true;
-  late AppDb _db;
-  bool _isLoading = false;
-  late List<SearchHistory> _list;
-
-  @override
-  void initState() {
-    _db = context.read<AppDb>();
-    _isLoading = true;
-    _loadHistorys();
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -66,6 +55,7 @@ class _SearchBarState extends State<SearchBar> {
       ),
     );
     final searchStoryList = PlaceInteractor.searchHistoryList;
+    final bloc = context.read<SearchHistoryBloc>();
     // debugPrint('SearchScreenBloc().filteredPlaces: ${SearchScreenBloc().filteredPlaces}');
 
     return Padding(
@@ -121,14 +111,13 @@ class _SearchBarState extends State<SearchBar> {
                       // Если виджет searchBar на экране поиска мест
                       if (widget.isSearchPage) {
                         // Загружаем историю из БД
-                        _loadHistorys();
+                        bloc.loadHistorys();
                         // Если история поиска не пустая, то вызываем event показа истории поиска
-                        if (searchStoryList.isNotEmpty || _list.isNotEmpty) {
+                        if (searchStoryList.isNotEmpty || bloc.list.isNotEmpty) {
                           context.read<SearchHistoryBloc>().add(
                                 ShowHistoryEvent(
                                   isDeleted: false,
                                   hasFocus: true,
-                                  list: _isLoading ? [] : _list,
                                 ),
                               );
                         }
@@ -147,8 +136,9 @@ class _SearchBarState extends State<SearchBar> {
                     // При отправке данных из поиска
                     onFieldSubmitted: (value) {
                       // Добавляем значение из поиска в БД
-                      _addHistory();
-                      _loadHistorys();
+                      bloc
+                        ..addHistory(widget.searchController.text)
+                        ..loadHistorys();
 
                       context.read<SearchHistoryBloc>()
 
@@ -160,7 +150,6 @@ class _SearchBarState extends State<SearchBar> {
                             isDeleted: false,
                             index: widget.searchController.text,
                             hasFocus: false,
-                            list: _isLoading ? [] : _list,
                           ),
                         );
 
@@ -197,20 +186,6 @@ class _SearchBarState extends State<SearchBar> {
           ],
         ),
       ),
-    );
-  }
-
-  Future<void> _loadHistorys() async {
-    _list = await _db.allHistorysEntries;
-
-    setState(() {
-      _isLoading = false;
-    });
-  }
-
-  Future<void> _addHistory() async {
-    await _db.addHistoryItem(
-      SearchHistorysCompanion.insert(title: widget.searchController.text),
     );
   }
 }
