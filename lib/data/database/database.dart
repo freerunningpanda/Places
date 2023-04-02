@@ -23,8 +23,8 @@ class AppDb extends _$AppDb {
     return into(searchHistorys).insert(history);
   }
 
-  Future<void> deleteHistory(int id) {
-    return customStatement('DELETE FROM searchHistorys WHERE id = $id');
+  Future<void> deleteHistory(String text) {
+    return (delete(searchHistorys)..where((tbl) => tbl.title.equals(text))).go();
   }
 }
 

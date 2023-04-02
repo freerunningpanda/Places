@@ -332,7 +332,7 @@ class _SearchItem extends StatelessWidget {
                       onTap: () {
                         context.read<SearchHistoryBloc>().add(
                               RemoveItemFromHistory(
-                                index: e.title,
+                                text: e.title,
                                 isDeleted: true,
                                 hasFocus: true,
                                 list: searchStoryList,

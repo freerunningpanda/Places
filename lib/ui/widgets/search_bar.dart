@@ -148,7 +148,7 @@ class _SearchBarState extends State<SearchBar> {
                           .add(
                             AddItemToHistoryEvent(
                               isDeleted: false,
-                              index: widget.searchController.text,
+                              text: widget.searchController.text,
                               hasFocus: false,
                             ),
                           );
