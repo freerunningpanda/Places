@@ -1,6 +1,5 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter/material.dart';
 import 'package:places/data/api/api_places.dart';
 import 'package:places/data/database/database.dart';
 import 'package:places/data/interactor/place_interactor.dart';
@@ -11,19 +10,17 @@ part 'search_history_event.dart';
 part 'search_history_state.dart';
 
 class SearchHistoryBloc extends Bloc<SearchHistoryEvent, SearchHistoryState> {
-  final searchHistoryList = PlaceInteractor.searchHistoryList;
   final _db = AppDb();
   PlaceInteractor interactor = PlaceInteractor(
     repository: PlaceRepository(
       apiPlaces: ApiPlaces(),
     ),
   );
-  var list = <SearchHistory>[];
+  List<SearchHistory> list = [];
 
   SearchHistoryBloc() : super(SearchHistoryEmptyState()) {
     on<ShowHistoryEvent>(
       (event, emit) {
-        saveSearchHistory(interactor.query, interactor.controller);
         emit(
           SearchHistoryHasValueState(
             searchStoryList: list,
@@ -35,7 +32,6 @@ class SearchHistoryBloc extends Bloc<SearchHistoryEvent, SearchHistoryState> {
     );
     on<AddItemToHistoryEvent>(
       (event, emit) {
-        saveSearchHistory(interactor.query, interactor.controller);
         emit(
           SearchHistoryHasValueState(
             searchStoryList: list,
@@ -61,7 +57,7 @@ class SearchHistoryBloc extends Bloc<SearchHistoryEvent, SearchHistoryState> {
     );
     on<RemoveAllItemsFromHistory>(
       (event, emit) {
-        searchHistoryList.clear();
+        list.clear();
         emit(
           SearchHistoryEmptyState(),
         );
@@ -69,10 +65,10 @@ class SearchHistoryBloc extends Bloc<SearchHistoryEvent, SearchHistoryState> {
     );
   }
 
-  void saveSearchHistory(String value, TextEditingController controller) {
-    if (controller.text.isEmpty) return;
-    PlaceInteractor.searchHistoryList.add(value);
-  }
+  // void saveSearchHistory(String value, TextEditingController controller) {
+  //   if (controller.text.isEmpty) return;
+  //   PlaceInteractor.searchHistoryList.add(value);
+  // }
 
   void removeItemFromHistory(String index) {
     PlaceInteractor.searchHistoryList.remove(index);

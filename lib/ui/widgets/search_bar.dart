@@ -140,18 +140,18 @@ class _SearchBarState extends State<SearchBar> {
                         ..addHistory(widget.searchController.text)
                         ..loadHistorys();
 
-                      context.read<SearchHistoryBloc>()
+                      context
+                          .read<SearchHistoryBloc>()
 
-                        // Добавляем значение из поиска в список истории поиска
-                        ..saveSearchHistory(value, widget.searchController)
-                        // Вызываем event добавления места в историю поиска
-                        ..add(
-                          AddItemToHistoryEvent(
-                            isDeleted: false,
-                            index: widget.searchController.text,
-                            hasFocus: false,
-                          ),
-                        );
+                          // Добавляем значение из поиска в список истории поиска
+                          // Вызываем event добавления места в историю поиска
+                          .add(
+                            AddItemToHistoryEvent(
+                              isDeleted: false,
+                              index: widget.searchController.text,
+                              hasFocus: false,
+                            ),
+                          );
 
                       // Очистить строку поиска после нажатия кнопки submit
                       widget.searchController.clear();
