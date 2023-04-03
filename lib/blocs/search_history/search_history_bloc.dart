@@ -38,14 +38,15 @@ class SearchHistoryBloc extends Bloc<SearchHistoryEvent, SearchHistoryState> {
       },
     );
     on<RemoveItemFromHistory>(
-      (event, emit) {
+      (event, emit) async {
+        await removeItemFromHistory(event.id);
+        final updatedList = list.where((element) => element.id != event.id).toList();
         emit(
-          SearchHistoryHasValueState(
-            searchStoryList: list,
+          ItemRemovedFromHistory(
+            searchStoryList: updatedList,
             hasFocus: event.hasFocus,
             isDeleted: event.isDeleted,
-            text: event.text,
-            length: list.length,
+            length: updatedList.length,
           ),
         );
       },
@@ -60,10 +61,10 @@ class SearchHistoryBloc extends Bloc<SearchHistoryEvent, SearchHistoryState> {
     );
   }
 
-  Future<void> removeItemFromHistory(String text) async {
-    await _db.deleteHistory(text);
+  Future<void> removeItemFromHistory(int id) async {
+    await _db.deleteHistory(id);
 
-    await loadHistorys();
+    // await loadHistorys();
   }
 
   Future<void> loadHistorys() async {

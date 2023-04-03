@@ -45,3 +45,20 @@ class FoundedPlacesAction extends SearchHistoryState {
     required this.filteredPlaces,
   });
 }
+
+class ItemRemovedFromHistory extends SearchHistoryState {
+  final String?
+      text; // Берётся значение text из контроллера. Нужен для обновления стейта после удаления элемента из списка.
+  final List<SearchHistory> searchStoryList;
+  final bool hasFocus;
+  final bool isDeleted; // Нужен для обновления стейта после удаления элемента из списка.
+  final int length;
+
+  const ItemRemovedFromHistory({
+    this.text,
+    required this.searchStoryList,
+    required this.hasFocus,
+    required this.isDeleted,
+    required this.length,
+  });
+}

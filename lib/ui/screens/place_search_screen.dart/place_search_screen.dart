@@ -333,15 +333,17 @@ class _SearchItem extends StatelessWidget {
                     InkWell(
                       borderRadius: BorderRadius.circular(30),
                       onTap: () {
-                        historyBloc
-                          ..removeItemFromHistory(e.title)
-                          ..add(
-                            RemoveItemFromHistory(
-                              text: e.title,
-                              isDeleted: true,
-                              hasFocus: true,
-                            ),
-                          );
+                        historyBloc.removeItemFromHistory(e.id);
+                        final updatedList = searchStoryList.where((element) => element.id != e.id).toList();
+                        historyBloc.add(
+                          RemoveItemFromHistory(
+                            updatedList: updatedList,
+                            id: e.id,
+                            length: updatedList.length,
+                            isDeleted: true,
+                            hasFocus: true,
+                          ),
+                        );
                         // Чтобы обновить стейт экрана
                         // Если крайнее место было удалено из истории
                         searchBloc.add(
