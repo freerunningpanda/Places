@@ -89,7 +89,7 @@ class _PlaceSearchScreenState extends State<PlaceSearchScreen> {
                           }
                           // Если история не пустая то берём её из state и отображаем на экране
                           else if (state is SearchHistoryHasValueState || state is ItemRemovedFromHistory) {
-                            return state.hasFocus
+                            return state.hasFocus && state.searchStoryList.isNotEmpty
                                 // При наличии фокуса в поле ввода, показываем историю поиска (если она есть)
                                 ? _SearchHistoryList(
                                     theme: theme,
