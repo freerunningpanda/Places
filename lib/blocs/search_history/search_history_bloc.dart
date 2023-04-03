@@ -63,8 +63,10 @@ class SearchHistoryBloc extends Bloc<SearchHistoryEvent, SearchHistoryState> {
 
   Future<void> removeItemFromHistory(int id) async {
     await _db.deleteHistory(id);
+  }
 
-    // await loadHistorys();
+  Future<void> removeAllItemsFromHistory() async {
+    await _db.deleteAllHistory();
   }
 
   Future<void> loadHistorys() async {

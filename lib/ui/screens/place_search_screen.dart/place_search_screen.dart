@@ -251,20 +251,25 @@ class _ClearHistoryButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final historyBloc = context.read<SearchHistoryBloc>();
+    final searchBloc = context.read<SearchScreenBloc>();
+
     return TextButton(
       // Вызываем event очистки истории поиска
       onPressed: () {
-        context.read<SearchHistoryBloc>().add(RemoveAllItemsFromHistory());
+        historyBloc
+          ..removeAllItemsFromHistory()
+          ..add(RemoveAllItemsFromHistory());
         // Для того, чтобы заново показать весь список найденных мест с экрана фильтров
-        context.read<SearchScreenBloc>().add(
-              PlacesFoundEvent(
-                searchHistoryIsEmpty: searchStoryList.isEmpty,
-                filteredPlaces: AppPreferences.getPlacesListByDistance()?.toList(),
-                isHistoryClear: true,
-                fromFiltersScreen: false,
-                isQueryEmpty: true,
-              ),
-            );
+        searchBloc.add(
+          PlacesFoundEvent(
+            searchHistoryIsEmpty: searchStoryList.isEmpty,
+            filteredPlaces: AppPreferences.getPlacesListByDistance()?.toList(),
+            isHistoryClear: true,
+            fromFiltersScreen: false,
+            isQueryEmpty: true,
+          ),
+        );
       },
       child: const Align(
         alignment: Alignment.centerLeft,

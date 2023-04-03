@@ -26,6 +26,10 @@ class AppDb extends _$AppDb {
   Future<void> deleteHistory(int id) {
     return customStatement('DELETE FROM "search_historys" WHERE id = $id');
   }
+
+  Future<void> deleteAllHistory() {
+    return customStatement('DELETE FROM "search_historys"');
+  }
 }
 
 LazyDatabase _openConnection() {
