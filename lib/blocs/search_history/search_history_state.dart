@@ -1,8 +1,11 @@
 part of 'search_history_bloc.dart';
 
 abstract class SearchHistoryState extends Equatable {
+  bool get hasFocus => false; 
+  List<SearchHistory> get searchStoryList => [];
+
   @override
-  List<Object?> get props => [];
+  List<Object?> get props => [hasFocus, searchStoryList];
 
   const SearchHistoryState();
 }
@@ -14,7 +17,9 @@ class SearchHistoryEmptyState extends SearchHistoryState {}
 class SearchHistoryHasValueState extends SearchHistoryState {
   final String?
       text; // Берётся значение text из контроллера. Нужен для обновления стейта после удаления элемента из списка.
+  @override
   final List<SearchHistory> searchStoryList;
+  @override
   final bool hasFocus;
   final bool isDeleted; // Нужен для обновления стейта после удаления элемента из списка.
   final int length;
@@ -49,7 +54,9 @@ class FoundedPlacesAction extends SearchHistoryState {
 class ItemRemovedFromHistory extends SearchHistoryState {
   final String?
       text; // Берётся значение text из контроллера. Нужен для обновления стейта после удаления элемента из списка.
+  @override
   final List<SearchHistory> searchStoryList;
+  @override
   final bool hasFocus;
   final bool isDeleted; // Нужен для обновления стейта после удаления элемента из списка.
   final int length;
