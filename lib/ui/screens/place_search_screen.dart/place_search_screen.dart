@@ -330,7 +330,7 @@ class _SearchItem extends StatelessWidget {
                     InkWell(
                       borderRadius: BorderRadius.circular(12),
                       onTap: () {
-                        final value = controller.text = e.toString();
+                        final value = controller.text = e.title;
                         context.read<SearchBarBloc>().add(SearchBarEvent(value: value));
                       },
                       child: SizedBox(
