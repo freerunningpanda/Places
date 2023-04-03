@@ -17,6 +17,7 @@ class SearchHistoryHasValueState extends SearchHistoryState {
   final List<SearchHistory> searchStoryList;
   final bool hasFocus;
   final bool isDeleted; // Нужен для обновления стейта после удаления элемента из списка.
+  final int length;
 
   @override
   List<Object?> get props => [text, searchStoryList, hasFocus, isDeleted];
@@ -26,6 +27,7 @@ class SearchHistoryHasValueState extends SearchHistoryState {
     required this.searchStoryList,
     required this.hasFocus,
     required this.isDeleted,
+    required this.length,
   });
 }
 

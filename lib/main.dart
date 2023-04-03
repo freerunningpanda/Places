@@ -35,9 +35,6 @@ void main() async {
   runApp(
     MultiProvider(
       providers: [
-        Provider<AppDb>(
-          create: (_) => AppDb(),
-        ),
         ChangeNotifierProvider<ThemeDataProvider>(
           create: (_) => ThemeDataProvider(),
         ),

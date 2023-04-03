@@ -127,7 +127,7 @@ class _PlaceSearchScreenState extends State<PlaceSearchScreen> {
   }
 
   Future<void> _loadDb() async {
-    await context.read<AppDb>().allHistorysEntries;
+    await context.watch<SearchHistoryBloc>().loadHistorys();
   }
 }
 
@@ -304,6 +304,8 @@ class _SearchItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    debugPrint('searchStoryList: ${searchStoryList.length}');
+
     return Column(
       children: searchStoryList
           .map(
@@ -330,12 +332,14 @@ class _SearchItem extends StatelessWidget {
                     InkWell(
                       borderRadius: BorderRadius.circular(30),
                       onTap: () {
+                        context.read<SearchHistoryBloc>().removeItemFromHistory(e.title);
                         context.read<SearchHistoryBloc>().add(
                               RemoveItemFromHistory(
                                 text: e.title,
                                 isDeleted: true,
                                 hasFocus: true,
                                 list: searchStoryList,
+                                length: searchStoryList.length,
                               ),
                             );
                         // Чтобы обновить стейт экрана

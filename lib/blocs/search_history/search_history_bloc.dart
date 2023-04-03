@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/foundation.dart';
 import 'package:places/data/database/database.dart';
 import 'package:places/data/model/place.dart';
 
@@ -18,6 +19,7 @@ class SearchHistoryBloc extends Bloc<SearchHistoryEvent, SearchHistoryState> {
             searchStoryList: list,
             hasFocus: event.hasFocus,
             isDeleted: event.isDeleted,
+            length: list.length,
           ),
         );
       },
@@ -30,19 +32,20 @@ class SearchHistoryBloc extends Bloc<SearchHistoryEvent, SearchHistoryState> {
             hasFocus: event.hasFocus,
             isDeleted: event.isDeleted,
             text: event.text,
+            length: list.length,
           ),
         );
       },
     );
     on<RemoveItemFromHistory>(
       (event, emit) {
-        removeItemFromHistory(event.text);
         emit(
           SearchHistoryHasValueState(
             searchStoryList: list,
             hasFocus: event.hasFocus,
             isDeleted: event.isDeleted,
             text: event.text,
+            length: list.length,
           ),
         );
       },
@@ -65,6 +68,7 @@ class SearchHistoryBloc extends Bloc<SearchHistoryEvent, SearchHistoryState> {
 
   Future<void> loadHistorys() async {
     list = await _db.allHistorysEntries;
+    debugPrint('list: ${list.length}');
   }
 
   Future<void> addHistory(String text) async {
