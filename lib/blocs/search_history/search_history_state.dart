@@ -51,7 +51,7 @@ class FoundedPlacesAction extends SearchHistoryState {
   });
 }
 
-class ItemRemovedFromHistory extends SearchHistoryState {
+class ItemRemovedFromHistoryState extends SearchHistoryState {
   final String?
       text; // Берётся значение text из контроллера. Нужен для обновления стейта после удаления элемента из списка.
   @override
@@ -61,7 +61,7 @@ class ItemRemovedFromHistory extends SearchHistoryState {
   final bool isDeleted; // Нужен для обновления стейта после удаления элемента из списка.
   final int length;
 
-  const ItemRemovedFromHistory({
+  const ItemRemovedFromHistoryState({
     this.text,
     required this.searchStoryList,
     required this.hasFocus,

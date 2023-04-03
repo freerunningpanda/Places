@@ -42,7 +42,7 @@ class SearchHistoryBloc extends Bloc<SearchHistoryEvent, SearchHistoryState> {
         await removeItemFromHistory(event.id);
         final updatedList = list.where((element) => element.id != event.id).toList();
         emit(
-          ItemRemovedFromHistory(
+          ItemRemovedFromHistoryState(
             searchStoryList: updatedList,
             hasFocus: event.hasFocus,
             isDeleted: event.isDeleted,
