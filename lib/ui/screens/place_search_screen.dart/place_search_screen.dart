@@ -304,7 +304,8 @@ class _SearchItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    debugPrint('searchStoryList: ${searchStoryList.length}');
+    final historyBloc = context.read<SearchHistoryBloc>();
+    final searchBloc = context.read<SearchScreenBloc>();
 
     return Column(
       children: searchStoryList
@@ -332,27 +333,28 @@ class _SearchItem extends StatelessWidget {
                     InkWell(
                       borderRadius: BorderRadius.circular(30),
                       onTap: () {
-                        context.read<SearchHistoryBloc>().removeItemFromHistory(e.title);
-                        context.read<SearchHistoryBloc>().add(
-                              RemoveItemFromHistory(
-                                text: e.title,
-                                isDeleted: true,
-                                hasFocus: true,
-                                list: searchStoryList,
-                                length: searchStoryList.length,
-                              ),
-                            );
+                        historyBloc
+                          ..removeItemFromHistory(e.title)
+                          ..add(
+                            RemoveItemFromHistory(
+                              text: e.title,
+                              isDeleted: true,
+                              hasFocus: true,
+                              list: searchStoryList,
+                              length: searchStoryList.length,
+                            ),
+                          );
                         // Чтобы обновить стейт экрана
                         // Если крайнее место было удалено из истории
-                        context.read<SearchScreenBloc>().add(
-                              PlacesFoundEvent(
-                                searchHistoryIsEmpty: searchStoryList.isEmpty,
-                                filteredPlaces: AppPreferences.getPlacesListByDistance()?.toList(),
-                                isHistoryClear: true,
-                                fromFiltersScreen: false,
-                                isQueryEmpty: true,
-                              ),
-                            );
+                        searchBloc.add(
+                          PlacesFoundEvent(
+                            searchHistoryIsEmpty: searchStoryList.isEmpty,
+                            filteredPlaces: AppPreferences.getPlacesListByDistance()?.toList(),
+                            isHistoryClear: true,
+                            fromFiltersScreen: false,
+                            isQueryEmpty: true,
+                          ),
+                        );
                       },
                       child: const PlaceIcons(assetName: AppAssets.delete, width: 24, height: 24),
                     ),
