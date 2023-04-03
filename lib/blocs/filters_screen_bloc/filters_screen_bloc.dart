@@ -61,6 +61,7 @@ class FiltersScreenBloc extends Bloc<FiltersScreenEvent, FiltersScreenState> {
       apiPlaces: ApiPlaces(),
     ),
   );
+
   FiltersScreenBloc() : super(const FiltersScreenState(filterIndex: 0, isEnabled: false)) {
     on<AddRemoveFilterEvent>(
       (event, emit) {
@@ -86,6 +87,7 @@ class FiltersScreenBloc extends Bloc<FiltersScreenEvent, FiltersScreenState> {
 
     on<ClearAllFiltersEvent>((event, emit) {
       clearAllFilters();
+      disableAllCategories();
       emit(
         const FiltersScreenState(
           filterIndex: 0,
@@ -93,6 +95,12 @@ class FiltersScreenBloc extends Bloc<FiltersScreenEvent, FiltersScreenState> {
         ),
       );
     });
+  }
+
+  Future<void> disableAllCategories() async {
+    for (final category in filters) {
+      await AppPreferences.setCategoryByName(title: category.placeType.toString(), isEnabled: false);
+    }
   }
 
   void addToActiveFilters({required Category category}) {
