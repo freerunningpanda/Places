@@ -154,20 +154,26 @@ class _PlaceListWidget extends StatelessWidget {
         } else if (state is SearchScreenPlacesFoundState) {
           debugPrint('state.filteredPlaces.length: ${state.filteredPlaces.length}');
 
-          return ListView.builder(
-            physics: Platform.isAndroid ? const ClampingScrollPhysics() : const BouncingScrollPhysics(),
-            shrinkWrap: true,
-            itemCount: state.filteredPlaces.length,
-            itemBuilder: (_, index) {
-              final place = state.filteredPlaces[index];
+          return state.filteredPlaces.isNotEmpty
+              ? ListView.builder(
+                  physics: Platform.isAndroid ? const ClampingScrollPhysics() : const BouncingScrollPhysics(),
+                  shrinkWrap: true,
+                  itemCount: state.filteredPlaces.length,
+                  itemBuilder: (_, index) {
+                    final place = state.filteredPlaces[index];
 
-              return _PlaceCardWidget(
-                place: place,
-                width: width,
-                theme: theme,
-              );
-            },
-          );
+                    return _PlaceCardWidget(
+                      place: place,
+                      width: width,
+                      theme: theme,
+                    );
+                  },
+                )
+              : _EmptyListWidget(
+                  height: height,
+                  width: width,
+                  theme: theme,
+                );
         }
         // В противном случае отображаем пустой список мест
 
