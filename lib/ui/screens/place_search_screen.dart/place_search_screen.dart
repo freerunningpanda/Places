@@ -340,8 +340,6 @@ class _SearchItem extends StatelessWidget {
                               text: e.title,
                               isDeleted: true,
                               hasFocus: true,
-                              list: searchStoryList,
-                              length: searchStoryList.length,
                             ),
                           );
                         // Чтобы обновить стейт экрана

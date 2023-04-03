@@ -28,15 +28,12 @@ class RemoveItemFromHistory extends SearchHistoryEvent {
   final String text; // Значения text из текстового контроллера
   final bool isDeleted; // При удалении будет true. Виджет перерисуется.
   final bool hasFocus; // Останется на true, чтобы после удаления элемента мы оставались на виджете поисковой истории.
-  final List<SearchHistory> list;
-  final int length;
 
   RemoveItemFromHistory({
     required this.text,
     required this.isDeleted,
     required this.hasFocus,
-    required this.list,
-    required this.length,
+
   });
 }
 
