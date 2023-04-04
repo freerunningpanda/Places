@@ -4,18 +4,21 @@ import 'package:drift/drift.dart';
 import 'package:drift/native.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
+import 'package:places/data/database/table/places.dart';
 import 'package:places/data/database/table/search_history.dart';
 
 part 'database.g.dart';
 
 @DriftDatabase(
-  tables: [SearchHistorys],
+  tables: [SearchHistorys, DbPlaces],
 )
 class AppDb extends _$AppDb {
   @override
-  int get schemaVersion => 1;
+  int get schemaVersion => 2;
 
   Future<List<SearchHistory>> get allHistorysEntries => select(searchHistorys).get();
+
+  Future<List<DbPlace>> get allPlacesEntries => select(dbPlaces).get();
 
   AppDb() : super(_openConnection());
 
@@ -29,6 +32,20 @@ class AppDb extends _$AppDb {
 
   Future<void> deleteAllHistory() {
     return customStatement('DELETE FROM "search_historys"');
+  }
+
+  Future<int> addPlace(DbPlace place) {
+    return into(dbPlaces).insert(
+      DbPlacesCompanion.insert(
+        lat: place.lat,
+        lng: place.lng,
+        name: place.name,
+        urls: place.urls,
+        placeType: place.placeType,
+        description: place.description,
+        isFavorite: place.isFavorite,
+      ),
+    );
   }
 }
 
