@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:places/blocs/favorite/favorite_bloc.dart';
+import 'package:places/blocs/search_history/search_history_bloc.dart';
 import 'package:places/blocs/visited/visited_screen_bloc.dart';
 import 'package:places/blocs/want_to_visit/want_to_visit_bloc.dart';
 import 'package:places/data/database/database.dart';
@@ -13,11 +14,18 @@ import 'package:places/ui/screens/res/custom_colors.dart';
 import 'package:places/ui/widgets/add_new_place_button.dart';
 import 'package:places/ui/widgets/place_icons.dart';
 
-class VisitingScreen extends StatelessWidget {
+class VisitingScreen extends StatefulWidget {
   const VisitingScreen({Key? key}) : super(key: key);
 
   @override
+  State<VisitingScreen> createState() => _VisitingScreenState();
+}
+
+class _VisitingScreenState extends State<VisitingScreen> {
+  @override
   Widget build(BuildContext context) {
+    final db = context.read<AppDb>();
+    _loadDb(db);
 
     return Padding(
       padding: const EdgeInsets.only(left: 16.0, right: 16.0),
@@ -98,6 +106,10 @@ class VisitingScreen extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Future<void> _loadDb(AppDb db) async {
+    await context.watch<WantToVisitBloc>().loadPlaces(db);
   }
 }
 

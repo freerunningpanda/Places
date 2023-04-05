@@ -50,6 +50,7 @@ class PlaceCard extends StatelessWidget {
     final size = MediaQuery.of(context).size;
     final orientation = MediaQuery.of(context).orientation == Orientation.portrait;
     final db = context.read<AppDb>();
+    final bloc = context.read<WantToVisitBloc>();
 
     return SizedBox(
       height: orientation ? size.height / 2.5 : size.height / 2.0,
@@ -105,11 +106,16 @@ class PlaceCard extends StatelessWidget {
                             ),
                           );
                       // Отвечает за отображение списка мест в избранном
+                      bloc
+                        ..addToFavorites(place: place, db: db)
+                        ..loadPlaces(db);
+
                       context.read<WantToVisitBloc>().add(
                             AddToWantToVisitEvent(
                               isFavorite: place.isFavorite = true,
                               place: place,
                               placeIndex: place.id,
+                              db: db,
                             ),
                           );
                       debugPrint('isFavorite ${place.isFavorite}');
@@ -117,6 +123,10 @@ class PlaceCard extends StatelessWidget {
                     } else {
                       // Если место в избранном, меняю флаг isFavorite на false.
                       // Событие удаляет место из списка избранного
+                      bloc
+                        ..removeFromFavorites(place: place, db: db)
+                        ..loadPlaces(db);
+
                       context.read<FavoriteBloc>().add(
                             FavoriteEvent(
                               isFavorite: place.isFavorite = false,
