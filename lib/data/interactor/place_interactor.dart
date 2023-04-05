@@ -1,19 +1,20 @@
 import 'package:flutter/cupertino.dart';
+import 'package:places/data/database/database.dart';
 import 'package:places/data/model/category.dart';
 import 'package:places/data/model/place.dart';
 import 'package:places/data/repository/place_repository.dart';
 
 class PlaceInteractor {
   static final List<Category> activeFilters = [];
-  static final List<Place> initialFilteredPlaces = [];
+  static final List<DbPlace> initialFilteredPlaces = [];
   static final List<String> searchHistoryList = [];
-  static Set<Place> filtersWithDistance = {};
-  static List<Place> foundedPlaces = PlaceInteractor.filtersWithDistance.toList();
+  static Set<DbPlace> filtersWithDistance = {};
+  static List<DbPlace> foundedPlaces = PlaceInteractor.filtersWithDistance.toList();
   static Set<Place> newPlaces = {};
   final PlaceRepository repository;
   final controller = TextEditingController();
-  Set<Place> favoritePlaces = {};
-  Set<Place> visitedPlaces = {};
+  Set<DbPlace> favoritePlaces = {};
+  Set<DbPlace> visitedPlaces = {};
   String query = '';
   bool hasFocus = false;
 
@@ -21,13 +22,13 @@ class PlaceInteractor {
     required this.repository,
   });
 
-  Future<List<Place>> getPlaces() => repository.getPlaces();
+  Future<List<DbPlace>> getPlaces() => repository.getPlaces();
 
-  Future<Place> getPlaceDetails(Place place) => repository.getPlaceDetails(place);
+  Future<DbPlace> getPlaceDetails(DbPlace place) => repository.getPlaceDetails(place);
 
-  Set<Place> getFavoritesPlaces() => repository.getFavoritesPlaces();
+  Set<DbPlace> getFavoritesPlaces() => repository.getFavoritesPlaces();
 
-  Stream<bool> addToFavorites({required Place place}) => repository.addToFavorites(place: place);
+  Stream<bool> addToFavorites({required DbPlace place}) => repository.addToFavorites(place: place);
 
   void removeFromFavorites({required Place place}) => repository.removeFromFavorites(place: place);
 

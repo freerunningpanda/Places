@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:places/data/api/api_places.dart';
+import 'package:places/data/database/database.dart';
 import 'package:places/data/interactor/place_interactor.dart';
-import 'package:places/data/model/place.dart';
 import 'package:places/data/repository/place_repository.dart';
 import 'package:places/data/store/app_preferences.dart';
 import 'package:places/mocks.dart';
@@ -28,7 +28,7 @@ class SearchScreenBloc extends Bloc<SearchScreenEvent, SearchScreenState> {
       debugPrint('Длина списка мест после поиска: ${PlaceInteractor.foundedPlaces.length}');
       emit(
         SearchScreenPlacesFoundState(
-          filteredPlaces: event.fromFiltersScreen ? event.filteredPlaces!.toList() : PlaceInteractor.foundedPlaces,
+          filteredPlaces: PlaceInteractor.foundedPlaces,
           length: AppPreferences.getPlacesListByDistance()?.length ?? 0,
         ),
       );

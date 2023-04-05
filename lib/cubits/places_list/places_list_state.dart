@@ -12,7 +12,7 @@ class PlacesListEmptyState extends PlacesListState {}
 class PlaceListLoadingState extends PlacesListState {}
 
 class PlacesListLoadedState extends PlacesListState {
-  final List<Place> places;
+  final List<DbPlace> places;
 
   @override
   List<Object?> get props => [places];

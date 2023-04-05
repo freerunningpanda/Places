@@ -1,7 +1,6 @@
 part of 'want_to_visit_bloc.dart';
 
 abstract class VisitingScreenEvent {
-
   const VisitingScreenEvent();
 }
 
@@ -11,7 +10,7 @@ class FavoriteListIsEmpty extends VisitingScreenEvent {}
 class AddToWantToVisitEvent extends VisitingScreenEvent {
   final bool isFavorite;
   final int placeIndex;
-  final Place place;
+  final DbPlace place;
 
   const AddToWantToVisitEvent({
     required this.isFavorite,
@@ -23,17 +22,19 @@ class AddToWantToVisitEvent extends VisitingScreenEvent {
 class RemoveFromWantToVisitEvent extends VisitingScreenEvent {
   final bool isFavorite;
   final int placeIndex;
-  final Place place;
+  final DbPlace place;
+  final AppDb db;
 
   const RemoveFromWantToVisitEvent({
     required this.isFavorite,
     required this.placeIndex,
     required this.place,
+    required this.db,
   });
 }
 
 class DragCardOnWantToVisitEvent extends VisitingScreenEvent {
-  final List<Place> places;
+  final List<DbPlace> places;
   final int oldIndex;
   final int newIndex;
 

@@ -1,7 +1,7 @@
 part of 'favorite_bloc.dart';
 
 class FavoriteEvent {
-  final Place place;
+  final DbPlace place;
   final bool isFavorite;
   final int placeIndex;
 

@@ -2,8 +2,8 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:places/data/api/api_places.dart';
+import 'package:places/data/database/database.dart';
 import 'package:places/data/interactor/place_interactor.dart';
-import 'package:places/data/model/place.dart';
 import 'package:places/data/repository/place_repository.dart';
 
 part 'favorite_event.dart';
@@ -33,13 +33,13 @@ class FavoriteBloc extends Bloc<FavoriteEvent, FavoriteState> {
     );
   }
 
-  void addToFavorites({required Place place}) {
+  void addToFavorites({required DbPlace place}) {
     interactor.favoritePlaces.add(place);
     debugPrint('🟡--------- Добавлено в избранное: ${interactor.favoritePlaces}');
     debugPrint('🟡--------- Длина: ${interactor.favoritePlaces.length}');
   }
 
-  void removeFromFavorites({required Place place}) {
+  void removeFromFavorites({required DbPlace place}) {
     interactor.favoritePlaces.remove(place);
     debugPrint('🟡--------- Длина: ${interactor.favoritePlaces.length}');
   }

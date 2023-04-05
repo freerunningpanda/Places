@@ -8,7 +8,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:places/blocs/details_screen/details_screen_bloc.dart';
 import 'package:places/blocs/favorite/favorite_bloc.dart';
 import 'package:places/blocs/want_to_visit/want_to_visit_bloc.dart';
-import 'package:places/data/model/place.dart';
+import 'package:places/data/database/database.dart';
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_typography.dart';
 import 'package:places/ui/screens/place_details/place_details.dart';
@@ -24,7 +24,7 @@ class PlaceCard extends StatelessWidget {
   final Widget actionOne;
   final Widget? actionTwo;
   final double aspectRatio;
-  final List<Place> placeList;
+  final List<DbPlace> placeList;
   final int placeIndex;
   final bool isVisitingScreen;
   final VoidCallback? removePlace;
@@ -49,6 +49,7 @@ class PlaceCard extends StatelessWidget {
     final customColors = Theme.of(context).extension<CustomColors>()!;
     final size = MediaQuery.of(context).size;
     final orientation = MediaQuery.of(context).orientation == Orientation.portrait;
+    final db = context.read<AppDb>();
 
     return SizedBox(
       height: orientation ? size.height / 2.5 : size.height / 2.0,
@@ -128,6 +129,7 @@ class PlaceCard extends StatelessWidget {
                               isFavorite: place.isFavorite = false,
                               place: place,
                               placeIndex: place.id,
+                              db: db,
                             ),
                           );
                       debugPrint('isFavorite ${place.isFavorite}');
@@ -244,7 +246,7 @@ class RippleIcons extends StatelessWidget {
 }
 
 class RippleCardFull extends StatelessWidget {
-  final Place place;
+  final DbPlace place;
 
   const RippleCardFull({
     Key? key,

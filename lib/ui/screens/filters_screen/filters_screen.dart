@@ -6,10 +6,10 @@ import 'package:places/blocs/search_screen/search_screen_bloc.dart';
 import 'package:places/cubits/distance_slider_cubit/distance_slider_cubit.dart';
 import 'package:places/cubits/places_list/places_list_cubit.dart';
 import 'package:places/cubits/show_places_button/show_places_button_cubit.dart';
+import 'package:places/data/database/database.dart';
 
 import 'package:places/data/interactor/place_interactor.dart';
 import 'package:places/data/model/category.dart';
-import 'package:places/data/model/place.dart';
 import 'package:places/data/store/app_preferences.dart';
 import 'package:places/mocks.dart';
 import 'package:places/ui/res/app_assets.dart';
@@ -177,7 +177,7 @@ class _ClearButtonWidgetState extends State<_ClearButtonWidget> {
 class _FiltersTable extends StatefulWidget {
   final List<Category> filters;
   final List<Category> activeFilters;
-  final List<Place> places;
+  final List<DbPlace> places;
   const _FiltersTable({
     Key? key,
     required this.filters,
@@ -216,7 +216,7 @@ class _FiltersTableState extends State<_FiltersTable> {
 
 class _ItemFiltersListBigScreens extends StatelessWidget {
   final _FiltersTable filtersTable;
-  final List<Place> placeList;
+  final List<DbPlace> placeList;
 
   const _ItemFiltersListBigScreens({
     Key? key,
@@ -301,7 +301,7 @@ class _ItemFiltersListBigScreens extends StatelessWidget {
 
 class _ItemFiltersListSmallScreens extends StatelessWidget {
   final _FiltersTable filtersTable;
-  final List<Place> placeList;
+  final List<DbPlace> placeList;
 
   const _ItemFiltersListSmallScreens({
     Key? key,
@@ -483,7 +483,7 @@ class _ItemFilter extends StatelessWidget {
 
 class _DistanceSlider extends StatelessWidget {
   final List<Category> filters;
-  final List<Place> places;
+  final List<DbPlace> places;
   const _DistanceSlider({
     Key? key,
     required this.filters,

@@ -7,7 +7,6 @@ import 'package:places/blocs/search_bar/search_bar_bloc.dart';
 import 'package:places/blocs/search_history/search_history_bloc.dart';
 import 'package:places/blocs/search_screen/search_screen_bloc.dart';
 import 'package:places/data/database/database.dart';
-import 'package:places/data/model/place.dart';
 import 'package:places/data/store/app_preferences.dart';
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_strings.dart';
@@ -29,7 +28,8 @@ class _PlaceSearchScreenState extends State<PlaceSearchScreen> {
 
   @override
   Widget build(BuildContext context) {
-    _loadDb();
+    final db = context.read<AppDb>();
+    _loadDb(db);
     final theme = Theme.of(context);
     const readOnly = false;
     const isSearchPage = true;
@@ -126,8 +126,8 @@ class _PlaceSearchScreenState extends State<PlaceSearchScreen> {
     );
   }
 
-  Future<void> _loadDb() async {
-    await context.watch<SearchHistoryBloc>().loadHistorys();
+  Future<void> _loadDb(AppDb db) async {
+    await context.watch<SearchHistoryBloc>().loadHistorys(db);
   }
 }
 
@@ -253,12 +253,13 @@ class _ClearHistoryButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final historyBloc = context.read<SearchHistoryBloc>();
     final searchBloc = context.read<SearchScreenBloc>();
+    final db = context.read<AppDb>();
 
     return TextButton(
       // Вызываем event очистки истории поиска
       onPressed: () {
         historyBloc
-          ..removeAllItemsFromHistory()
+          ..removeAllItemsFromHistory(db)
           ..add(RemoveAllItemsFromHistory());
         // Для того, чтобы заново показать весь список найденных мест с экрана фильтров
         searchBloc.add(
@@ -317,6 +318,7 @@ class _SearchItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final historyBloc = context.read<SearchHistoryBloc>();
     final searchBloc = context.read<SearchScreenBloc>();
+    final db = context.read<AppDb>();
 
     return Column(
       children: searchStoryList
@@ -344,7 +346,7 @@ class _SearchItem extends StatelessWidget {
                     InkWell(
                       borderRadius: BorderRadius.circular(30),
                       onTap: () {
-                        historyBloc.removeItemFromHistory(e.id);
+                        historyBloc.removeItemFromHistory(e.id, db);
                         final updatedList = searchStoryList.where((element) => element.id != e.id).toList();
                         historyBloc.add(
                           RemoveItemFromHistory(
@@ -353,6 +355,7 @@ class _SearchItem extends StatelessWidget {
                             length: updatedList.length,
                             isDeleted: true,
                             hasFocus: true,
+                            appDb: db,
                           ),
                         );
                         // Чтобы обновить стейт экрана
@@ -432,7 +435,7 @@ class _EmptyStateWidget extends StatelessWidget {
 }
 
 class _PlaceCardWidget extends StatelessWidget {
-  final Place place;
+  final DbPlace place;
   final double width;
   final ThemeData theme;
 
@@ -466,7 +469,7 @@ class _PlaceCardWidget extends StatelessWidget {
 }
 
 class _RippleEffect extends StatelessWidget {
-  final Place place;
+  final DbPlace place;
 
   const _RippleEffect({
     Key? key,
@@ -498,7 +501,7 @@ class _RippleEffect extends StatelessWidget {
 
 class _PlaceContent extends StatelessWidget {
   final double width;
-  final Place place;
+  final DbPlace place;
   final ThemeData theme;
 
   const _PlaceContent({
@@ -529,7 +532,7 @@ class _PlaceContent extends StatelessWidget {
 }
 
 class _PlaceType extends StatelessWidget {
-  final Place place;
+  final DbPlace place;
   final ThemeData theme;
 
   const _PlaceType({
@@ -549,7 +552,7 @@ class _PlaceType extends StatelessWidget {
 
 class _PlaceTitle extends StatelessWidget {
   final double width;
-  final Place place;
+  final DbPlace place;
   final ThemeData theme;
 
   const _PlaceTitle({
@@ -573,7 +576,7 @@ class _PlaceTitle extends StatelessWidget {
 }
 
 class _PlaceImage extends StatelessWidget {
-  final Place place;
+  final DbPlace place;
 
   const _PlaceImage({
     Key? key,

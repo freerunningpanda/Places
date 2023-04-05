@@ -187,8 +187,8 @@ class DbPlace extends DataClass implements Insertable<DbPlace> {
   final String urls;
   final String placeType;
   final String description;
-  final bool isFavorite;
-  const DbPlace(
+  bool isFavorite;
+  DbPlace(
       {required this.id,
       required this.lat,
       required this.lng,
@@ -196,7 +196,7 @@ class DbPlace extends DataClass implements Insertable<DbPlace> {
       required this.urls,
       required this.placeType,
       required this.description,
-      required this.isFavorite});
+      this.isFavorite = false});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};

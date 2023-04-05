@@ -8,7 +8,7 @@ part 'search_history_event.dart';
 part 'search_history_state.dart';
 
 class SearchHistoryBloc extends Bloc<SearchHistoryEvent, SearchHistoryState> {
-  final _db = AppDb();
+  // final _db = AppDb();
   List<SearchHistory> list = [];
 
   SearchHistoryBloc() : super(SearchHistoryEmptyState()) {
@@ -39,7 +39,7 @@ class SearchHistoryBloc extends Bloc<SearchHistoryEvent, SearchHistoryState> {
     );
     on<RemoveItemFromHistory>(
       (event, emit) async {
-        await removeItemFromHistory(event.id);
+        await removeItemFromHistory(event.id, event.appDb);
         final updatedList = list.where((element) => element.id != event.id).toList();
         emit(
           ItemRemovedFromHistoryState(
@@ -61,21 +61,21 @@ class SearchHistoryBloc extends Bloc<SearchHistoryEvent, SearchHistoryState> {
     );
   }
 
-  Future<void> removeItemFromHistory(int id) async {
-    await _db.deleteHistory(id);
+  Future<void> removeItemFromHistory(int id, AppDb db) async {
+    await db.deleteHistory(id);
   }
 
-  Future<void> removeAllItemsFromHistory() async {
-    await _db.deleteAllHistory();
+  Future<void> removeAllItemsFromHistory(AppDb db) async {
+    await db.deleteAllHistory();
   }
 
-  Future<void> loadHistorys() async {
-    list = await _db.allHistorysEntries;
+  Future<void> loadHistorys(AppDb db) async {
+    list = await db.allHistorysEntries;
     debugPrint('list: ${list.length}');
   }
 
-  Future<void> addHistory(String text) async {
-    await _db.addHistoryItem(
+  Future<void> addHistory(String text, AppDb db) async {
+    await db.addHistoryItem(
       SearchHistorysCompanion.insert(title: text),
     );
   }

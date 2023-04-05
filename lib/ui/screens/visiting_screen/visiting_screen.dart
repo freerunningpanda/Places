@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:places/blocs/favorite/favorite_bloc.dart';
 import 'package:places/blocs/visited/visited_screen_bloc.dart';
 import 'package:places/blocs/want_to_visit/want_to_visit_bloc.dart';
-import 'package:places/data/model/place.dart';
+import 'package:places/data/database/database.dart';
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_card_size.dart';
 import 'package:places/ui/res/app_strings.dart';
@@ -171,7 +171,7 @@ class _TabBarWidgetState extends State<_TabBarWidget> with TickerProviderStateMi
 }
 
 class _WantToVisitWidget extends StatelessWidget {
-  final List<Place> placesToVisit;
+  final List<DbPlace> placesToVisit;
   const _WantToVisitWidget({Key? key, required this.placesToVisit}) : super(key: key);
 
   @override
@@ -213,7 +213,7 @@ class _WantToVisitWidget extends StatelessWidget {
 }
 
 class _VisitedWidget extends StatelessWidget {
-  final List<Place> visitedPlaces;
+  final List<DbPlace> visitedPlaces;
   const _VisitedWidget({Key? key, required this.visitedPlaces}) : super(key: key);
 
   @override
@@ -252,7 +252,7 @@ class _VisitedWidget extends StatelessWidget {
 
 class _DismissibleWidget extends StatelessWidget {
   final int i;
-  final List<Place> placesToVisit;
+  final List<DbPlace> placesToVisit;
   final ThemeData theme;
   final Key uniqueKey;
   final Widget actionTwo;
@@ -273,6 +273,7 @@ class _DismissibleWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final orientation = MediaQuery.of(context).orientation == Orientation.portrait;
+    final db = context.read<AppDb>();
 
     return Stack(
       children: [
@@ -329,6 +330,7 @@ class _DismissibleWidget extends StatelessWidget {
                       isFavorite: placesToVisit[i].isFavorite = false,
                       place: placesToVisit[i],
                       placeIndex: placesToVisit[i].id,
+                      db: db,
                     ),
                   );
               context.read<FavoriteBloc>().add(
@@ -351,6 +353,7 @@ class _DismissibleWidget extends StatelessWidget {
                           isFavorite: placesToVisit[i].isFavorite = false,
                           place: placesToVisit[i],
                           placeIndex: i,
+                          db: db,
                         ),
                       );
                   context.read<FavoriteBloc>().add(

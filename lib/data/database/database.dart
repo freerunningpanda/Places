@@ -16,6 +16,19 @@ class AppDb extends _$AppDb {
   @override
   int get schemaVersion => 2;
 
+  @override
+  MigrationStrategy get migration => MigrationStrategy(
+        onCreate: (m) async {
+          await m.createAll();
+        },
+        onUpgrade: (m, from, to) async {
+          if (from == 1) {
+            await m.drop(dbPlaces);
+            await m.createTable(dbPlaces);
+          }
+        },
+      );
+
   Future<List<SearchHistory>> get allHistorysEntries => select(searchHistorys).get();
 
   Future<List<DbPlace>> get allPlacesEntries => select(dbPlaces).get();
@@ -43,9 +56,13 @@ class AppDb extends _$AppDb {
         urls: place.urls,
         placeType: place.placeType,
         description: place.description,
-        isFavorite: place.isFavorite,
+        isFavorite: place.isFavorite ?? false,
       ),
     );
+  }
+
+  Future<void> deletePlace(int id) {
+    return customStatement('DELETE FROM "db_places" WHERE id = $id');
   }
 }
 

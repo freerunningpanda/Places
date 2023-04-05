@@ -13,7 +13,7 @@ class WantToVisitScreenEmptyState extends WantToVisitScreenState {}
 // Состояние добавленных мест
 class WantToVisitScreenIsNotEmpty extends WantToVisitScreenState {
   final int placeIndex;
-  final Set<Place> favoritePlaces;
+  final Set<DbPlace> favoritePlaces;
   final int length;
 
   @override
@@ -39,7 +39,7 @@ class WantToVisitScreenIsNotEmpty extends WantToVisitScreenState {
 class WantToVisitAfterDragState extends WantToVisitScreenState {
   final int oldIndex;
   final int newIndex;
-  final List<Place> favoritePlaces;
+  final List<DbPlace> favoritePlaces;
 
   @override
   List<Object?> get props => [

@@ -10,7 +10,7 @@ abstract class SearchScreenState extends Equatable {
 class SearchScreenEmptyState extends SearchScreenState {}
 
 class SearchScreenPlacesFoundState extends SearchScreenState {
-  final List<Place> filteredPlaces;
+  final List<DbPlace> filteredPlaces;
   final int length;
 
   @override

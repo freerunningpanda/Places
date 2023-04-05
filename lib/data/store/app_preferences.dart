@@ -1,7 +1,7 @@
 import 'package:places/data/constants.dart';
+import 'package:places/data/database/database.dart';
 import 'package:places/data/dto/place_request.dart';
 import 'package:places/data/interactor/place_interactor.dart';
-import 'package:places/data/model/place.dart';
 import 'package:places/data/repository/mapper.dart';
 import 'package:places/data/store/store.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -31,7 +31,7 @@ class AppPreferences extends Store {
   static Future<bool> setPlacesListByType(String jsonString) async {
     final prefs = await _prefs.setString(placesListByType, jsonString);
     final placesDto = PlaceRequest.decode(jsonString);
-    final places = placesDto.map<Place>(Mapper.detailPlaceFromApiToUi).toSet();
+    final places = placesDto.map<DbPlace>(Mapper.detailPlaceFromApiToUi).toSet();
     PlaceInteractor.initialFilteredPlaces.addAll(places);
 
     return prefs;
@@ -41,7 +41,7 @@ class AppPreferences extends Store {
   static Future<bool> setPlacesListByDistance(String jsonString) async {
     final prefs = await _prefs.setString(placesListByDistance, jsonString);
     final placesDto = PlaceRequest.decode(jsonString);
-    final places = placesDto.map<Place>(Mapper.detailPlaceFromApiToUi).toSet();
+    final places = placesDto.map<DbPlace>(Mapper.detailPlaceFromApiToUi).toSet();
     PlaceInteractor.filtersWithDistance.addAll(places);
 
     return prefs;
@@ -90,11 +90,11 @@ class AppPreferences extends Store {
   }
 
   // Получить список отфильтрованных мест по типу
-  static Set<Place>? getPlacesListByType() {
+  static Set<DbPlace>? getPlacesListByType() {
     final jsonString = _prefs.getString(placesListByType) ?? '';
     if (jsonString.isNotEmpty) {
       final placesDto = PlaceRequest.decode(jsonString);
-      final places = placesDto.map<Place>(Mapper.detailPlaceFromApiToUi).toSet();
+      final places = placesDto.map<DbPlace>(Mapper.detailPlaceFromApiToUi).toSet();
 
       return places;
     } else {
@@ -104,11 +104,11 @@ class AppPreferences extends Store {
   }
 
   // Получить список отфильтрованных мест по дистанции
-  static Set<Place>? getPlacesListByDistance() {
+  static Set<DbPlace>? getPlacesListByDistance() {
     final jsonString = _prefs.getString(placesListByDistance) ?? '';
     if (jsonString.isNotEmpty) {
       final placesDto = PlaceRequest.decode(jsonString);
-      final places = placesDto.map<Place>(Mapper.detailPlaceFromApiToUi).toSet();
+      final places = placesDto.map<DbPlace>(Mapper.detailPlaceFromApiToUi).toSet();
 
       return places;
     } else {

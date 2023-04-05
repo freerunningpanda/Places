@@ -12,7 +12,7 @@ class VisitedListIsEmpty extends VisitedScreenEvent {}
 class AddToVisitedEvent extends VisitedScreenEvent {
   final bool isFavorite;
   final int placeIndex;
-  final Place place;
+  final DbPlace place;
 
   const AddToVisitedEvent({
     required this.isFavorite,
@@ -34,7 +34,7 @@ class RemoveFromVisitedEvent extends VisitedScreenEvent {
 }
 
 class DragCardOnVisitedEvent extends VisitedScreenEvent {
-  final List<Place> places;
+  final List<DbPlace> places;
   final int oldIndex;
   final int newIndex;
 

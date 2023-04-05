@@ -38,6 +38,9 @@ void main() async {
         ChangeNotifierProvider<ThemeDataProvider>(
           create: (_) => ThemeDataProvider(),
         ),
+        Provider<AppDb>(
+          create: (_) => AppDb(),
+        ),
       ],
       child: MultiBlocProvider(
         providers: [

@@ -1,8 +1,8 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:places/data/api/api_places.dart';
+import 'package:places/data/database/database.dart';
 import 'package:places/data/interactor/place_interactor.dart';
-import 'package:places/data/model/place.dart';
 import 'package:places/data/repository/place_repository.dart';
 
 part 'details_screen_event.dart';
@@ -23,7 +23,7 @@ class DetailsScreenBloc extends Bloc<DetailsScreenEvent, DetailsScreenState> {
     });
   }
 
-  Future<void> getPlace({required Place place}) async {
+  Future<void> getPlace({required DbPlace place}) async {
     await interactor.getPlaceDetails(place);
   }
 }

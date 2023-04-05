@@ -56,6 +56,7 @@ class _SearchBarState extends State<SearchBar> {
     );
     final searchStoryList = PlaceInteractor.searchHistoryList;
     final bloc = context.read<SearchHistoryBloc>();
+    final _db = context.read<AppDb>();
     // debugPrint('SearchScreenBloc().filteredPlaces: ${SearchScreenBloc().filteredPlaces}');
 
     return Padding(
@@ -111,7 +112,7 @@ class _SearchBarState extends State<SearchBar> {
                       // Если виджет searchBar на экране поиска мест
                       if (widget.isSearchPage) {
                         // Загружаем историю из БД
-                        bloc.loadHistorys();
+                        bloc.loadHistorys(_db);
                         // Если история поиска не пустая, то вызываем event показа истории поиска
                         if (searchStoryList.isNotEmpty || bloc.list.isNotEmpty) {
                           context.read<SearchHistoryBloc>().add(
@@ -137,8 +138,8 @@ class _SearchBarState extends State<SearchBar> {
                     onFieldSubmitted: (value) {
                       // Добавляем значение из поиска в БД
                       bloc
-                        ..addHistory(widget.searchController.text)
-                        ..loadHistorys();
+                        ..addHistory(widget.searchController.text, _db)
+                        ..loadHistorys(_db);
 
                       context
                           .read<SearchHistoryBloc>()

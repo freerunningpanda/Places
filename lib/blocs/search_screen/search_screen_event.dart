@@ -9,7 +9,7 @@ class PlacesFoundEvent extends SearchScreenEvent {
   final bool fromFiltersScreen;
   final bool isQueryEmpty;
   final bool searchHistoryIsEmpty;
-  final List<Place>? filteredPlaces;
+  final List<DbPlace>? filteredPlaces;
 
   PlacesFoundEvent({
     this.filteredPlaces,
