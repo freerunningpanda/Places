@@ -50,6 +50,7 @@ class AppDb extends _$AppDb {
   Future<int> addPlace(DbPlace place) async {
     return into(dbPlaces).insert(
       DbPlacesCompanion.insert(
+        id: place.id,
         lat: place.lat,
         lng: place.lng,
         name: place.name,
@@ -84,7 +85,17 @@ class AppDb extends _$AppDb {
   // }
 
   Future<void> deletePlace(String name) {
-   return (delete(dbPlaces)..where((tbl) => tbl.name.equals(name))).go();
+    return transaction(
+      () async {
+        await (update(dbPlaces)..where((tbl) => tbl.name.equals(name))).write(
+          const DbPlacesCompanion(
+            isFavorite: Value(false),
+          ),
+        );
+        await (delete(dbPlaces)..where((tbl) => tbl.name.equals(name))).go();
+      },
+    );
+    //  return (delete(dbPlaces)..where((tbl) => tbl.name.equals(name))).go();
   }
 }
 

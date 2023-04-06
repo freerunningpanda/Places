@@ -324,7 +324,7 @@ class DbPlacesCompanion extends UpdateCompanion<DbPlace> {
     this.isFavorite = const Value.absent(),
   });
   DbPlacesCompanion.insert({
-    this.id = const Value.absent(),
+    required int id,
     required double lat,
     required double lng,
     required String name,
@@ -332,7 +332,8 @@ class DbPlacesCompanion extends UpdateCompanion<DbPlace> {
     required String placeType,
     required String description,
     required bool isFavorite,
-  })  : lat = Value(lat),
+  })  : id = Value(id),
+        lat = Value(lat),
         lng = Value(lng),
         name = Value(name),
         urls = Value(urls),
@@ -437,9 +438,7 @@ class $DbPlacesTable extends DbPlaces with TableInfo<$DbPlacesTable, DbPlace> {
   @override
   late final GeneratedColumn<int> id = GeneratedColumn<int>(
       'id', aliasedName, false,
-      type: DriftSqlType.int,
-      requiredDuringInsert: false,
-      defaultConstraints: 'PRIMARY KEY AUTOINCREMENT');
+      type: DriftSqlType.int, requiredDuringInsert: true);
   final VerificationMeta _latMeta = const VerificationMeta('lat');
   @override
   late final GeneratedColumn<double> lat = GeneratedColumn<double>(
@@ -498,6 +497,8 @@ class $DbPlacesTable extends DbPlaces with TableInfo<$DbPlacesTable, DbPlace> {
     final data = instance.toColumns(true);
     if (data.containsKey('id')) {
       context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    } else if (isInserting) {
+      context.missing(_idMeta);
     }
     if (data.containsKey('lat')) {
       context.handle(
@@ -549,7 +550,7 @@ class $DbPlacesTable extends DbPlaces with TableInfo<$DbPlacesTable, DbPlace> {
   }
 
   @override
-  Set<GeneratedColumn> get $primaryKey => {id};
+  Set<GeneratedColumn> get $primaryKey => <GeneratedColumn>{};
   @override
   DbPlace map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
