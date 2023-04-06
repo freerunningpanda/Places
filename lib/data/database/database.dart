@@ -47,7 +47,7 @@ class AppDb extends _$AppDb {
     return customStatement('DELETE FROM "search_historys"');
   }
 
-  Future<int> addPlace(DbPlace place) {
+  Future<int> addPlace(DbPlace place) async {
     return into(dbPlaces).insert(
       DbPlacesCompanion.insert(
         lat: place.lat,
@@ -56,13 +56,34 @@ class AppDb extends _$AppDb {
         urls: place.urls,
         placeType: place.placeType,
         description: place.description,
-        isFavorite: place.isFavorite ?? false,
+        isFavorite: place.isFavorite,
       ),
     );
   }
+  // Future<int> addPlace(DbPlace place) async {
+  //   final existingPlace = await (select(dbPlaces)..where((tbl) => tbl.name.equals(place.name))).getSingleOrNull();
 
-  Future<void> deletePlace(String name) {
-    return customStatement('DELETE FROM "db_places" WHERE name = $name');
+  //   if (existingPlace != null) {
+  //     await update(dbPlaces).replace(place.copyWith(id: existingPlace.id));
+
+  //     return existingPlace.id;
+  //   } else {
+  //     return into(dbPlaces).insert(
+  //       DbPlacesCompanion.insert(
+  //         lat: place.lat,
+  //         lng: place.lng,
+  //         name: place.name,
+  //         urls: place.urls,
+  //         placeType: place.placeType,
+  //         description: place.description,
+  //         isFavorite: place.isFavorite,
+  //       ),
+  //     );
+  //   }
+  // }
+
+  Future<void> deletePlace(int id) {
+    return customStatement('DELETE FROM "db_places" WHERE id = $id');
   }
 }
 

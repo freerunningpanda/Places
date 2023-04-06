@@ -35,41 +35,19 @@ class PlaceRepository {
   Future<DbPlace> getPlaceDetails(DbPlace place) =>
       apiPlaces.getPlaceDetails(place.id).then(Mapper.detailPlaceFromApiToUi);
 
-  Set<DbPlace> getFavoritesPlaces() => apiPlaces.getFavoritesPlaces();
+  List<DbPlace> getFavoritesPlaces() => apiPlaces.getFavoritesPlaces();
 
-  Stream<bool> addToFavorites({required DbPlace place}) async* {
-    final interactor = PlaceInteractor(
-      repository: PlaceRepository(
-        apiPlaces: ApiPlaces(),
-      ),
-    );
-
-    var isFavorite = place.isFavorite;
-    if (isFavorite != null) {
-      if (!isFavorite) {
-        final list = interactor.favoritePlaces.add(place);
-        debugPrint('🟡--------- Добавлено в избранное: ${interactor.favoritePlaces}');
-        debugPrint('🟡--------- Длина: ${interactor.favoritePlaces.length}');
-        isFavorite = true;
-        yield list;
-      } else {
-        final list = interactor.favoritePlaces.remove(place);
-        debugPrint('🟡--------- Длина: ${interactor.favoritePlaces.length}');
-        isFavorite = false;
-        yield list;
-      }
-    }
+  Future<void> removeFromFavorites({required DbPlace place, required AppDb db}) async {
+    await db.deletePlace(place.id);
   }
 
-  void removeFromFavorites({required Place place}) {
-    final interactor = PlaceInteractor(
-      repository: PlaceRepository(
-        apiPlaces: ApiPlaces(),
-      ),
-    );
+  Future<void> addToFavorites({required DbPlace place, required AppDb db}) async {
+    await db.addPlace(place);
+  }
 
-    interactor.favoritePlaces.remove(place);
-    debugPrint('🟡--------- Длина: ${interactor.favoritePlaces.length}');
+  Future<void> loadPlaces(AppDb db) async {
+    PlaceInteractor.favoritePlaces = await db.allPlacesEntries;
+    debugPrint('places_list: ${PlaceInteractor.favoritePlaces.length}');
   }
 
   void addNewPlace({required Place place}) {

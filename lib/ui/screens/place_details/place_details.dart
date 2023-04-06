@@ -403,6 +403,7 @@ class _PlaceDetailsBottom extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final db = context.read<AppDb>();
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -431,7 +432,7 @@ class _PlaceDetailsBottom extends StatelessWidget {
             repository: PlaceRepository(
               apiPlaces: ApiPlaces(),
             ),
-          ).addToFavorites(place: place),
+          ).addToFavorites(place: place, db: db),
           child: Row(
             children: [
               PlaceIcons(

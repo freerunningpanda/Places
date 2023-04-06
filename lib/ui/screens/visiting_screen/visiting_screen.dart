@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:places/blocs/favorite/favorite_bloc.dart';
-import 'package:places/blocs/search_history/search_history_bloc.dart';
 import 'package:places/blocs/visited/visited_screen_bloc.dart';
 import 'package:places/blocs/want_to_visit/want_to_visit_bloc.dart';
 import 'package:places/data/database/database.dart';
@@ -347,6 +346,7 @@ class _DismissibleWidget extends StatelessWidget {
                   );
               context.read<FavoriteBloc>().add(
                     FavoriteEvent(
+                      db: db,
                       isFavorite: placesToVisit[i].isFavorite = false,
                       place: placesToVisit[i],
                       placeIndex: placesToVisit[i].id,
@@ -362,14 +362,15 @@ class _DismissibleWidget extends StatelessWidget {
                 removePlace: () {
                   context.read<WantToVisitBloc>().add(
                         RemoveFromWantToVisitEvent(
+                          db: db,
                           isFavorite: placesToVisit[i].isFavorite = false,
                           place: placesToVisit[i],
                           placeIndex: i,
-                          db: db,
                         ),
                       );
                   context.read<FavoriteBloc>().add(
                         FavoriteEvent(
+                          db: db,
                           isFavorite: placesToVisit[i].isFavorite = false,
                           place: placesToVisit[i],
                           placeIndex: i,

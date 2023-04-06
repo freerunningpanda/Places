@@ -8,7 +8,6 @@ import 'package:places/data/dto/place_request.dart';
 import 'package:places/data/dto/place_response.dart';
 import 'package:places/data/exceptions/network_exception.dart';
 import 'package:places/data/interactor/place_interactor.dart';
-import 'package:places/data/repository/place_repository.dart';
 import 'package:places/mocks.dart';
 
 class ApiPlaces {
@@ -60,14 +59,14 @@ class ApiPlaces {
     }
   }
 
-  Set<DbPlace> getFavoritesPlaces() {
-    final interactor = PlaceInteractor(
-      repository: PlaceRepository(
-        apiPlaces: ApiPlaces(),
-      ),
-    );
+  List<DbPlace> getFavoritesPlaces() {
+    // final interactor = PlaceInteractor(
+    //   repository: PlaceRepository(
+    //     apiPlaces: ApiPlaces(),
+    //   ),
+    // );
 
-    return interactor.favoritePlaces;
+    return PlaceInteractor.favoritePlaces;
   }
 
   Future<String> postPlace() async {

@@ -13,7 +13,7 @@ class VisitedEmptyState extends VisitedScreenState {}
 // Состояние добавленных мест
 class VisitedIsNotEmpty extends VisitedScreenState {
   final int placeIndex;
-  final Set<DbPlace> visitedPlaces;
+  final List<DbPlace> visitedPlaces;
   final int length;
 
   @override

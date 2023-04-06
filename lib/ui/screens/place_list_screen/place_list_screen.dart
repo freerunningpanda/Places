@@ -4,6 +4,7 @@ import 'package:flutter/material.dart' hide ErrorWidget;
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:places/blocs/favorite/favorite_bloc.dart';
+import 'package:places/blocs/want_to_visit/want_to_visit_bloc.dart';
 import 'package:places/cubits/places_list/places_list_cubit.dart';
 import 'package:places/data/database/database.dart';
 import 'package:places/ui/res/app_assets.dart';
@@ -108,6 +109,8 @@ class _PlaceListWidgetPortraitState extends State<_PlaceListWidgetPortrait> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+    final db = context.read<AppDb>();
+    _loadDb(db);
 
     return Expanded(
       child: ListView.builder(
@@ -121,14 +124,32 @@ class _PlaceListWidgetPortraitState extends State<_PlaceListWidgetPortrait> {
             children: [
               FittedBox(
                 child: PlaceCard(
+                  removePlace: () {
+                    context.read<WantToVisitBloc>().add(
+                          RemoveFromWantToVisitEvent(
+                            isFavorite: place.isFavorite = false,
+                            place: place,
+                            placeIndex: place.id,
+                            db: db,
+                          ),
+                        );
+                    context.read<FavoriteBloc>().add(
+                          FavoriteEvent(
+                            db: db,
+                            isFavorite: place.isFavorite = false,
+                            place: place,
+                            placeIndex: place.id,
+                          ),
+                        );
+                  },
                   placeIndex: index,
                   isVisitingScreen: false,
                   aspectRatio: AppCardSize.placeCard,
                   actionOne: BlocBuilder<FavoriteBloc, FavoriteState>(
                     builder: (_, state) {
                       final isFavorite = place.isFavorite;
-                      if (isFavorite != null) {
-                        if (state is IsFavoriteState) {
+
+                      if (state is IsFavoriteState) {
                           return isFavorite
                               ? const PlaceIcons(
                                   assetName: AppAssets.heartFull,
@@ -155,11 +176,6 @@ class _PlaceListWidgetPortraitState extends State<_PlaceListWidgetPortrait> {
                         } else {
                           throw ArgumentError('Bad state');
                         }
-                      } else {
-                        return const Center(
-                          child: CircularProgressIndicator(),
-                        );
-                      }
                     },
                   ),
                   url: place.urls[0],
@@ -191,9 +207,13 @@ class _PlaceListWidgetPortraitState extends State<_PlaceListWidgetPortrait> {
       ),
     );
   }
+
+  Future<void> _loadDb(AppDb db) async {
+    await context.read<FavoriteBloc>().loadPlaces(db);
+  }
 }
 
-class _PlaceListWidgetLandscape extends StatelessWidget {
+class _PlaceListWidgetLandscape extends StatefulWidget {
   final List<DbPlace> placeList;
   final ThemeData theme;
 
@@ -204,8 +224,15 @@ class _PlaceListWidgetLandscape extends StatelessWidget {
   }) : super(key: key);
 
   @override
+  State<_PlaceListWidgetLandscape> createState() => _PlaceListWidgetLandscapeState();
+}
+
+class _PlaceListWidgetLandscapeState extends State<_PlaceListWidgetLandscape> {
+  @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+    final db = context.read<AppDb>();
+    _loadDb(db);
 
     return Expanded(
       child: GridView.builder(
@@ -218,21 +245,38 @@ class _PlaceListWidgetLandscape extends StatelessWidget {
         ),
         physics: Platform.isAndroid ? const ClampingScrollPhysics() : const BouncingScrollPhysics(),
         shrinkWrap: true,
-        itemCount: placeList.length,
+        itemCount: widget.placeList.length,
         itemBuilder: (_, index) {
-          final place = placeList[index];
+          final place = widget.placeList[index];
 
           return Column(
             children: [
               PlaceCard(
+                removePlace: () {
+                  context.read<WantToVisitBloc>().add(
+                        RemoveFromWantToVisitEvent(
+                          isFavorite: place.isFavorite = false,
+                          place: place,
+                          placeIndex: place.id,
+                          db: db,
+                        ),
+                      );
+                  context.read<FavoriteBloc>().add(
+                        FavoriteEvent(
+                          db: db,
+                          isFavorite: place.isFavorite = false,
+                          place: place,
+                          placeIndex: place.id,
+                        ),
+                      );
+                },
                 placeIndex: index,
                 isVisitingScreen: false,
                 aspectRatio: 1.5 / 1,
                 actionOne: BlocBuilder<FavoriteBloc, FavoriteState>(
                   builder: (_, state) {
                     final isFavorite = place.isFavorite;
-                    if (isFavorite != null) {
-                      if (state is IsFavoriteState) {
+                    if (state is IsFavoriteState) {
                         return isFavorite
                             ? const PlaceIcons(
                                 assetName: AppAssets.heartFull,
@@ -259,22 +303,17 @@ class _PlaceListWidgetLandscape extends StatelessWidget {
                       } else {
                         return const Text('Bad state');
                       }
-                    } else {
-                      return const Center(
-                        child: CircularProgressIndicator(),
-                      );
-                    }
                   },
                 ),
                 url: place.urls[0],
                 type: place.placeType,
                 name: place.name,
-                placeList: placeList,
+                placeList: widget.placeList,
                 details: [
                   Text(
                     place.name,
                     maxLines: 2,
-                    style: theme.textTheme.headlineSmall,
+                    style: widget.theme.textTheme.headlineSmall,
                   ),
                   const SizedBox(height: 2),
                   SizedBox(
@@ -293,5 +332,9 @@ class _PlaceListWidgetLandscape extends StatelessWidget {
         },
       ),
     );
+  }
+
+  Future<void> _loadDb(AppDb db) async {
+    await context.read<FavoriteBloc>().loadPlaces(db);
   }
 }

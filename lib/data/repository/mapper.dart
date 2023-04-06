@@ -11,7 +11,6 @@ class Mapper {
         urls: place.urls[0],
         placeType: place.placeType,
         description: place.description,
-        isFavorite: false,
       );
 
   static DbPlace detailPlaceFromApiToUi(PlaceRequest place) => DbPlace(
@@ -22,7 +21,6 @@ class Mapper {
         urls: place.urls[0],
         placeType: place.placeType,
         description: place.description,
-        isFavorite: false,
       );
 
   static Set<PlaceRequest> getFiltersWithDistance(Set<DbPlace> places) => places
