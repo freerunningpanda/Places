@@ -101,9 +101,7 @@ class PlaceCard extends StatelessWidget {
                     final place = placeList[placeIndex];
                     // Если место не в избранном
                     if (!place.isFavorite) {
-                      interactor
-                        ..addToFavorites(place: place, db: db)
-                        ..loadPlaces(db: db);
+                      interactor.addToFavorites(place: place, db: db);
 
                       // Добавляю место в избранное, меняя флаг isFavorite на true
                       // Событие добавляет место в список избранного
@@ -132,9 +130,7 @@ class PlaceCard extends StatelessWidget {
                       debugPrint('isFavorite ${place.isFavorite}');
                       debugPrint('Добавлены в избранное: $place');
                     } else {
-                      interactor
-                        ..removeFromFavorites(place: place, db: db)
-                        ..loadPlaces(db: db);
+                      interactor.removeFromFavorites(place: place, db: db);
 
                       // Если место в избранном, меняю флаг isFavorite на false.
                       // Событие удаляет место из списка избранного
@@ -156,7 +152,6 @@ class PlaceCard extends StatelessWidget {
                               db: db,
                             ),
                           );
-                      // removePlace?.call();
 
                       debugPrint('isFavorite ${place.isFavorite}');
                       debugPrint('Удалено из избранного: $place');
