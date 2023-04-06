@@ -124,26 +124,26 @@ class _PlaceListWidgetPortraitState extends State<_PlaceListWidgetPortrait> {
             children: [
               FittedBox(
                 child: PlaceCard(
-                  removePlace: () {
-                    // final updatedList = PlaceInteractor.favoritePlaces.where((element) => element.id != element.id).toList();
+                  // removePlace: () {
+                  //   // final updatedList = PlaceInteractor.favoritePlaces.where((element) => element.id != element.id).toList();
 
-                    context.read<WantToVisitBloc>().add(
-                          RemoveFromWantToVisitEvent(
-                            isFavorite: place.isFavorite = false,
-                            place: place,
-                            placeIndex: place.id,
-                            db: db,
-                          ),
-                        );
-                    context.read<FavoriteBloc>().add(
-                          FavoriteEvent(
-                            db: db,
-                            isFavorite: place.isFavorite = false,
-                            place: place,
-                            placeIndex: place.id,
-                          ),
-                        );
-                  },
+                  //   context.read<WantToVisitBloc>().add(
+                  //         RemoveFromWantToVisitEvent(
+                  //           isFavorite: place.isFavorite = false,
+                  //           place: place,
+                  //           placeIndex: place.id,
+                  //           db: db,
+                  //         ),
+                  //       );
+                  //   context.read<FavoriteBloc>().add(
+                  //         FavoriteEvent(
+                  //           db: db,
+                  //           isFavorite: place.isFavorite = false,
+                  //           place: place,
+                  //           placeIndex: place.id,
+                  //         ),
+                  //       );
+                  // },
                   placeIndex: index,
                   isVisitingScreen: false,
                   aspectRatio: AppCardSize.placeCard,
@@ -254,24 +254,24 @@ class _PlaceListWidgetLandscapeState extends State<_PlaceListWidgetLandscape> {
           return Column(
             children: [
               PlaceCard(
-                removePlace: () {
-                  context.read<WantToVisitBloc>().add(
-                        RemoveFromWantToVisitEvent(
-                          isFavorite: place.isFavorite = false,
-                          place: place,
-                          placeIndex: place.id,
-                          db: db,
-                        ),
-                      );
-                  context.read<FavoriteBloc>().add(
-                        FavoriteEvent(
-                          db: db,
-                          isFavorite: place.isFavorite = false,
-                          place: place,
-                          placeIndex: place.id,
-                        ),
-                      );
-                },
+                // removePlace: () {
+                //   context.read<WantToVisitBloc>().add(
+                //         RemoveFromWantToVisitEvent(
+                //           isFavorite: place.isFavorite = false,
+                //           place: place,
+                //           placeIndex: place.id,
+                //           db: db,
+                //         ),
+                //       );
+                //   context.read<FavoriteBloc>().add(
+                //         FavoriteEvent(
+                //           db: db,
+                //           isFavorite: place.isFavorite = false,
+                //           place: place,
+                //           placeIndex: place.id,
+                //         ),
+                //       );
+                // },
                 placeIndex: index,
                 isVisitingScreen: false,
                 aspectRatio: 1.5 / 1,

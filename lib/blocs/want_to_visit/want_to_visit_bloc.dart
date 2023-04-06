@@ -24,19 +24,19 @@ class WantToVisitBloc extends Bloc<VisitingScreenEvent, WantToVisitScreenState> 
           WantToVisitScreenIsNotEmpty(
             placeIndex: event.placeIndex,
             favoritePlaces: event.favoritePlaces,
-            length: PlaceInteractor.favoritePlaces.length,
+            length: event.favoritePlaces.length,
           ),
         );
       },
     );
     on<RemoveFromWantToVisitEvent>((event, emit) async {
       // await removeFromFavorites(place: event.place, db: event.db);
-      final updatedList = PlaceInteractor.favoritePlaces.where((element) => element.id != event.placeIndex).toList();
+      // final updatedList = PlaceInteractor.favoritePlaces.where((element) => element.id != event.placeIndex).toList();
       emit(
         WantToVisitScreenIsNotEmpty(
           placeIndex: event.placeIndex,
-          favoritePlaces: updatedList,
-          length: PlaceInteractor.favoritePlaces.length,
+          favoritePlaces: event.favoritePlaces,
+          length: event.favoritePlaces.length,
         ),
       );
     });

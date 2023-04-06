@@ -338,6 +338,7 @@ class _DismissibleWidget extends StatelessWidget {
               // И передаю в эвент само место в избранном, а не весь список избранного
               context.read<WantToVisitBloc>().add(
                     RemoveFromWantToVisitEvent(
+                      favoritePlaces: placesToVisit,
                       isFavorite: placesToVisit[i].isFavorite = false,
                       place: placesToVisit[i],
                       placeIndex: placesToVisit[i].id,
@@ -362,6 +363,7 @@ class _DismissibleWidget extends StatelessWidget {
                 removePlace: () {
                   context.read<WantToVisitBloc>().add(
                         RemoveFromWantToVisitEvent(
+                          favoritePlaces: placesToVisit,
                           db: db,
                           isFavorite: placesToVisit[i].isFavorite = false,
                           place: placesToVisit[i],

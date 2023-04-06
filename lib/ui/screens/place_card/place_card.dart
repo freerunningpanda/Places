@@ -104,6 +104,7 @@ class PlaceCard extends StatelessWidget {
                       interactor
                         ..addToFavorites(place: place, db: db)
                         ..loadPlaces(db: db);
+
                       // Добавляю место в избранное, меняя флаг isFavorite на true
                       // Событие добавляет место в список избранного
                       // Отвечает за обновление состояние лайка
@@ -131,28 +132,31 @@ class PlaceCard extends StatelessWidget {
                       debugPrint('isFavorite ${place.isFavorite}');
                       debugPrint('Добавлены в избранное: $place');
                     } else {
-                      // Если место в избранном, меняю флаг isFavorite на false.
-                      // Событие удаляет место из списка избранного
-
-                      // context.read<FavoriteBloc>().add(
-                      //       FavoriteEvent(
-                      //         isFavorite: place.isFavorite = false,
-                      //         place: place,
-                      //         placeIndex: placeList.indexOf(place),
-                      //       ),
-                      //     );
-                      // context.read<WantToVisitBloc>().add(
-                      //       RemoveFromWantToVisitEvent(
-                      //         isFavorite: place.isFavorite = false,
-                      //         place: place,
-                      //         placeIndex: placeList.indexOf(place),
-                      //         db: db,
-                      //       ),
-                      //     );
-                      removePlace?.call();
                       interactor
                         ..removeFromFavorites(place: place, db: db)
                         ..loadPlaces(db: db);
+
+                      // Если место в избранном, меняю флаг isFavorite на false.
+                      // Событие удаляет место из списка избранного
+
+                      context.read<FavoriteBloc>().add(
+                            FavoriteEvent(
+                              isFavorite: place.isFavorite = false,
+                              place: place,
+                              placeIndex: place.id,
+                              db: db,
+                            ),
+                          );
+                      context.read<WantToVisitBloc>().add(
+                            RemoveFromWantToVisitEvent(
+                              isFavorite: place.isFavorite = false,
+                              place: place,
+                              placeIndex: place.id,
+                              favoritePlaces: await db.allPlacesEntries,
+                              db: db,
+                            ),
+                          );
+                      // removePlace?.call();
 
                       debugPrint('isFavorite ${place.isFavorite}');
                       debugPrint('Удалено из избранного: $place');
