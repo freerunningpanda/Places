@@ -62,7 +62,7 @@ class PlaceInteractor {
 
   List<DbPlace> getFavoritesPlaces() => repository.getFavoritesPlaces();
 
-  // void loadPlaces({required AppDb db}) => repository.loadPlaces(db);
+  void loadPlaces({required AppDb db}) => repository.loadPlaces(db);
 
   void addToFavorites({required DbPlace place, required AppDb db}) => repository.addToFavorites(place: place, db: db);
 

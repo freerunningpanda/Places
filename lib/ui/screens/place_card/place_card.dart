@@ -8,7 +8,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:places/blocs/details_screen/details_screen_bloc.dart';
 import 'package:places/blocs/favorite/favorite_bloc.dart';
 import 'package:places/blocs/want_to_visit/want_to_visit_bloc.dart';
+import 'package:places/data/api/api_places.dart';
 import 'package:places/data/database/database.dart';
+import 'package:places/data/interactor/place_interactor.dart';
+import 'package:places/data/repository/place_repository.dart';
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_typography.dart';
 import 'package:places/ui/screens/place_details/place_details.dart';
@@ -50,13 +53,11 @@ class PlaceCard extends StatelessWidget {
     final size = MediaQuery.of(context).size;
     final orientation = MediaQuery.of(context).orientation == Orientation.portrait;
     final db = context.read<AppDb>();
-    final favoriteBloc = context.read<FavoriteBloc>();
-    final wantToVisitBloc = context.read<WantToVisitBloc>();
-    // final interactor = PlaceInteractor(
-    //   repository: PlaceRepository(
-    //     apiPlaces: ApiPlaces(),
-    //   ),
-    // );
+    final interactor = PlaceInteractor(
+      repository: PlaceRepository(
+        apiPlaces: ApiPlaces(),
+      ),
+    );
 
     return SizedBox(
       height: orientation ? size.height / 2.5 : size.height / 2.0,
@@ -122,9 +123,9 @@ class PlaceCard extends StatelessWidget {
                               db: db,
                             ),
                           );
-                      favoriteBloc
+                      interactor
                         ..addToFavorites(place: place, db: db)
-                        ..loadPlaces(db);
+                        ..loadPlaces(db: db);
 
                       debugPrint('isFavorite ${place.isFavorite}');
                       debugPrint('Добавлены в избранное: $place');
@@ -148,9 +149,9 @@ class PlaceCard extends StatelessWidget {
                       //       ),
                       //     );
                       removePlace?.call();
-                      wantToVisitBloc
+                      interactor
                         ..removeFromFavorites(place: place, db: db)
-                        ..loadPlaces(db);
+                        ..loadPlaces(db: db);
 
                       debugPrint('isFavorite ${place.isFavorite}');
                       debugPrint('Удалено из избранного: $place');

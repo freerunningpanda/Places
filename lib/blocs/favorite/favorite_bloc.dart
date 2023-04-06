@@ -26,15 +26,15 @@ class FavoriteBloc extends Bloc<FavoriteEvent, FavoriteState> {
     );
   }
 
-  Future<void> addToFavorites({required DbPlace place, required AppDb db}) async {
-    await db.addPlace(place);
-    // interactor.favoritePlaces.add(place);
-  }
+  // Future<void> addToFavorites({required DbPlace place, required AppDb db}) async {
+  //   await db.addPlace(place);
+  //   // interactor.favoritePlaces.add(place);
+  // }
 
-  Future<void> removeFromFavorites({required DbPlace place, required AppDb db}) async {
-    await db.deletePlace(place.id);
-    // interactor.favoritePlaces.remove(place);
-  }
+  // Future<void> removeFromFavorites({required DbPlace place, required AppDb db}) async {
+  //   await db.deletePlace(place.id);
+  //   // interactor.favoritePlaces.remove(place);
+  // }
 
   Future<void> loadPlaces(AppDb db) async {
     PlaceInteractor.favoritePlaces = await db.allPlacesEntries;
