@@ -125,6 +125,8 @@ class _PlaceListWidgetPortraitState extends State<_PlaceListWidgetPortrait> {
               FittedBox(
                 child: PlaceCard(
                   removePlace: () {
+                    // final updatedList = PlaceInteractor.favoritePlaces.where((element) => element.id != element.id).toList();
+
                     context.read<WantToVisitBloc>().add(
                           RemoveFromWantToVisitEvent(
                             isFavorite: place.isFavorite = false,
@@ -150,32 +152,32 @@ class _PlaceListWidgetPortraitState extends State<_PlaceListWidgetPortrait> {
                       final isFavorite = place.isFavorite;
 
                       if (state is IsFavoriteState) {
-                          return isFavorite
-                              ? const PlaceIcons(
-                                  assetName: AppAssets.heartFull,
-                                  width: 22,
-                                  height: 22,
-                                )
-                              : const PlaceIcons(
-                                  assetName: AppAssets.favourite,
-                                  width: 22,
-                                  height: 22,
-                                );
-                        } else if (state is IsNotFavoriteState) {
-                          return isFavorite
-                              ? const PlaceIcons(
-                                  assetName: AppAssets.heartFull,
-                                  width: 22,
-                                  height: 22,
-                                )
-                              : const PlaceIcons(
-                                  assetName: AppAssets.favourite,
-                                  width: 22,
-                                  height: 22,
-                                );
-                        } else {
-                          throw ArgumentError('Bad state');
-                        }
+                        return isFavorite
+                            ? const PlaceIcons(
+                                assetName: AppAssets.heartFull,
+                                width: 22,
+                                height: 22,
+                              )
+                            : const PlaceIcons(
+                                assetName: AppAssets.favourite,
+                                width: 22,
+                                height: 22,
+                              );
+                      } else if (state is IsNotFavoriteState) {
+                        return isFavorite
+                            ? const PlaceIcons(
+                                assetName: AppAssets.heartFull,
+                                width: 22,
+                                height: 22,
+                              )
+                            : const PlaceIcons(
+                                assetName: AppAssets.favourite,
+                                width: 22,
+                                height: 22,
+                              );
+                      } else {
+                        throw ArgumentError('Bad state');
+                      }
                     },
                   ),
                   url: place.urls[0],
@@ -277,32 +279,32 @@ class _PlaceListWidgetLandscapeState extends State<_PlaceListWidgetLandscape> {
                   builder: (_, state) {
                     final isFavorite = place.isFavorite;
                     if (state is IsFavoriteState) {
-                        return isFavorite
-                            ? const PlaceIcons(
-                                assetName: AppAssets.heartFull,
-                                width: 22,
-                                height: 22,
-                              )
-                            : const PlaceIcons(
-                                assetName: AppAssets.favourite,
-                                width: 22,
-                                height: 22,
-                              );
-                      } else if (state is IsNotFavoriteState) {
-                        return isFavorite
-                            ? const PlaceIcons(
-                                assetName: AppAssets.heartFull,
-                                width: 22,
-                                height: 22,
-                              )
-                            : const PlaceIcons(
-                                assetName: AppAssets.favourite,
-                                width: 22,
-                                height: 22,
-                              );
-                      } else {
-                        return const Text('Bad state');
-                      }
+                      return isFavorite
+                          ? const PlaceIcons(
+                              assetName: AppAssets.heartFull,
+                              width: 22,
+                              height: 22,
+                            )
+                          : const PlaceIcons(
+                              assetName: AppAssets.favourite,
+                              width: 22,
+                              height: 22,
+                            );
+                    } else if (state is IsNotFavoriteState) {
+                      return isFavorite
+                          ? const PlaceIcons(
+                              assetName: AppAssets.heartFull,
+                              width: 22,
+                              height: 22,
+                            )
+                          : const PlaceIcons(
+                              assetName: AppAssets.favourite,
+                              width: 22,
+                              height: 22,
+                            );
+                    } else {
+                      return const Text('Bad state');
+                    }
                   },
                 ),
                 url: place.urls[0],

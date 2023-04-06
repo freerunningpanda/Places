@@ -82,8 +82,8 @@ class AppDb extends _$AppDb {
   //   }
   // }
 
-  Future<void> deletePlace(int id) {
-    return customStatement('DELETE FROM "db_places" WHERE id = $id');
+  Future<void> deletePlace(String name) {
+   return (delete(dbPlaces)..where((tbl) => tbl.name.equals(name))).go();
   }
 }
 
