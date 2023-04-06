@@ -60,6 +60,7 @@ class AppDb extends _$AppDb {
       ),
     );
   }
+
   // Future<int> addPlace(DbPlace place) async {
   //   final existingPlace = await (select(dbPlaces)..where((tbl) => tbl.name.equals(place.name))).getSingleOrNull();
 

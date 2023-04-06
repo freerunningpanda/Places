@@ -23,7 +23,7 @@ class WantToVisitBloc extends Bloc<VisitingScreenEvent, WantToVisitScreenState> 
         emit(
           WantToVisitScreenIsNotEmpty(
             placeIndex: event.placeIndex,
-            favoritePlaces: PlaceInteractor.favoritePlaces.toSet(),
+            favoritePlaces: event.favoritePlaces,
             length: PlaceInteractor.favoritePlaces.length,
           ),
         );
@@ -35,7 +35,7 @@ class WantToVisitBloc extends Bloc<VisitingScreenEvent, WantToVisitScreenState> 
       emit(
         WantToVisitScreenIsNotEmpty(
           placeIndex: event.placeIndex,
-          favoritePlaces: updatedList.toSet(),
+          favoritePlaces: updatedList,
           length: PlaceInteractor.favoritePlaces.length,
         ),
       );

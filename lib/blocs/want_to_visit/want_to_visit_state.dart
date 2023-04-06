@@ -13,7 +13,7 @@ class WantToVisitScreenEmptyState extends WantToVisitScreenState {}
 // Состояние добавленных мест
 class WantToVisitScreenIsNotEmpty extends WantToVisitScreenState {
   final int placeIndex;
-  final Set<DbPlace> favoritePlaces;
+  final List<DbPlace> favoritePlaces;
   final int length;
 
   @override

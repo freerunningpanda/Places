@@ -97,10 +97,13 @@ class PlaceCard extends StatelessWidget {
               else
                 RippleIcon(
                   actionOne: actionOne,
-                  addPlace: () {
+                  addPlace: () async {
                     final place = placeList[placeIndex];
                     // Если место не в избранном
                     if (!place.isFavorite) {
+                      interactor
+                        ..addToFavorites(place: place, db: db)
+                        ..loadPlaces(db: db);
                       // Добавляю место в избранное, меняя флаг isFavorite на true
                       // Событие добавляет место в список избранного
                       // Отвечает за обновление состояние лайка
@@ -120,12 +123,10 @@ class PlaceCard extends StatelessWidget {
                               isFavorite: place.isFavorite = true,
                               place: place,
                               placeIndex: place.id,
+                              favoritePlaces: await db.allPlacesEntries,
                               db: db,
                             ),
                           );
-                      interactor
-                        ..addToFavorites(place: place, db: db)
-                        ..loadPlaces(db: db);
 
                       debugPrint('isFavorite ${place.isFavorite}');
                       debugPrint('Добавлены в избранное: $place');
