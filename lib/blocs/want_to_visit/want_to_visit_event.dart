@@ -11,15 +11,15 @@ class AddToWantToVisitEvent extends VisitingScreenEvent {
   final bool isFavorite;
   final int placeIndex;
   final DbPlace place;
-  final List<DbPlace> favoritePlaces;
-  final AppDb db;
+  // final List<DbPlace> favoritePlaces;
+  // final AppDb db;
 
   const AddToWantToVisitEvent({
     required this.isFavorite,
     required this.placeIndex,
     required this.place,
-    required this.favoritePlaces,
-    required this.db,
+    // required this.favoritePlaces,
+    // required this.db,
   });
 }
 
@@ -27,15 +27,15 @@ class RemoveFromWantToVisitEvent extends VisitingScreenEvent {
   final bool isFavorite;
   final int placeIndex;
   final DbPlace place;
-  final List<DbPlace> favoritePlaces;
-  final AppDb db;
+  // final List<DbPlace> favoritePlaces;
+  // final AppDb db;
 
   const RemoveFromWantToVisitEvent({
     required this.isFavorite,
     required this.placeIndex,
     required this.place,
-    required this.favoritePlaces,
-    required this.db,
+    // required this.favoritePlaces,
+    // required this.db,
   });
 }
 

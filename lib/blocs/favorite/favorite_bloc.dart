@@ -13,17 +13,30 @@ class FavoriteBloc extends Bloc<FavoriteEvent, FavoriteState> {
       (event, emit) {
         if (event.isFavorite) {
           // addToFavorites(place: event.place, db: event.db);
+          addToFavorites(place: event.place);
           emit(
             IsFavoriteState(placeIndex: event.placeIndex),
           );
         } else {
           // removeFromFavorites(place: event.place, db: event.db);
+          removeFromFavorites(place: event.place);
           emit(
             IsNotFavoriteState(placeIndex: event.placeIndex),
           );
         }
       },
     );
+  }
+
+  void addToFavorites({required DbPlace place}) {
+    PlaceInteractor.favoritePlaces.add(place);
+    debugPrint('🟡--------- Добавлено в избранное: ${PlaceInteractor.favoritePlaces}');
+    debugPrint('🟡--------- Длина: ${PlaceInteractor.favoritePlaces.length}');
+  }
+
+  void removeFromFavorites({required DbPlace place}) {
+    PlaceInteractor.favoritePlaces.remove(place);
+    debugPrint('🟡--------- Длина: ${PlaceInteractor.favoritePlaces.length}');
   }
 
   // Future<void> addToFavorites({required DbPlace place, required AppDb db}) async {

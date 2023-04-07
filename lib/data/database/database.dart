@@ -85,17 +85,31 @@ class AppDb extends _$AppDb {
   // }
 
   Future<void> deletePlace(String name) {
+    // return transaction(
+    //   () async {
+    //     await (update(dbPlaces)..where((tbl) => tbl.name.equals(name))).write(
+    //       const DbPlacesCompanion(
+    //         isFavorite: Value(false),
+    //       ),
+    //     );
+    //     await (delete(dbPlaces)..where((tbl) => tbl.name.equals(name))).go();
+    //   },
+    // );
+    //  return (delete(dbPlaces)..where((tbl) => tbl.name.equals(name))).go();
     return transaction(
       () async {
-        await (update(dbPlaces)..where((tbl) => tbl.name.equals(name))).write(
-          const DbPlacesCompanion(
-            isFavorite: Value(false),
-          ),
-        );
-        await (delete(dbPlaces)..where((tbl) => tbl.name.equals(name))).go();
+        await (update(dbPlaces)..where((tbl) => tbl.name.equals(name)))
+            .write(
+              const DbPlacesCompanion(
+                isFavorite: Value(false),
+              ),
+            )
+            .then(
+              (value) => (delete(dbPlaces)..where((tbl) => tbl.name.equals(name))).go(),
+            );
+        // await (delete(dbPlaces)..where((tbl) => tbl.name.equals(name))).go();
       },
     );
-    //  return (delete(dbPlaces)..where((tbl) => tbl.name.equals(name))).go();
   }
 }
 
