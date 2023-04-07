@@ -4,6 +4,7 @@ import 'package:flutter/material.dart' hide ErrorWidget;
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:places/blocs/favorite/favorite_bloc.dart';
+import 'package:places/blocs/search_screen/search_screen_bloc.dart';
 import 'package:places/cubits/places_list/places_list_cubit.dart';
 import 'package:places/data/database/database.dart';
 import 'package:places/ui/res/app_assets.dart';
@@ -16,11 +17,19 @@ import 'package:places/ui/widgets/error_widget.dart';
 import 'package:places/ui/widgets/place_icons.dart';
 import 'package:places/ui/widgets/search_bar.dart';
 
-class PlaceListScreen extends StatelessWidget {
+class PlaceListScreen extends StatefulWidget {
   const PlaceListScreen({Key? key}) : super(key: key);
 
   @override
+  State<PlaceListScreen> createState() => _PlaceListScreenState();
+}
+
+class _PlaceListScreenState extends State<PlaceListScreen> {
+  @override
   Widget build(BuildContext context) {
+    final db = context.read<AppDb>();
+    _loadFoundedPlaces(db);
+
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitUp,
@@ -87,6 +96,10 @@ class PlaceListScreen extends StatelessWidget {
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: const AddNewPlaceButton(),
     );
+  }
+
+  Future<void> _loadFoundedPlaces(AppDb db) async {
+    await context.read<SearchScreenBloc>().loadFilteredPlaces(db);
   }
 }
 

@@ -62,6 +62,27 @@ class AppDb extends _$AppDb {
     );
   }
 
+  Future<void> addPlaces(List<DbPlace> places) async {
+    await customStatement('DELETE FROM "db_places"'); // Сначала удалить предыдущие места из таблицы
+    await batch((batch) {
+      for (final place in places) {
+        batch.insert(
+          dbPlaces,
+          DbPlacesCompanion.insert(
+            id: place.id,
+            lat: place.lat,
+            lng: place.lng,
+            name: place.name,
+            urls: place.urls,
+            placeType: place.placeType,
+            description: place.description,
+            isFavorite: place.isFavorite,
+          ),
+        );
+      }
+    });
+  }
+
   // Future<int> addPlace(DbPlace place) async {
   //   final existingPlace = await (select(dbPlaces)..where((tbl) => tbl.name.equals(place.name))).getSingleOrNull();
 

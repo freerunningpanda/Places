@@ -14,6 +14,7 @@ part 'search_screen_event.dart';
 part 'search_screen_state.dart';
 
 class SearchScreenBloc extends Bloc<SearchScreenEvent, SearchScreenState> {
+  List<DbPlace> list = [];
   bool hasFocus = false;
   PlaceInteractor interactor = PlaceInteractor(
     repository: PlaceRepository(
@@ -25,11 +26,14 @@ class SearchScreenBloc extends Bloc<SearchScreenEvent, SearchScreenState> {
     activeFocus(isActive: true);
     searchPlaces(interactor.query);
     on<PlacesFoundEvent>((event, emit) {
-      debugPrint('Длина списка мест после поиска: ${PlaceInteractor.foundedPlaces.length}');
+      debugPrint('Длина списка мест после поиска: ${list.length}');
+      // debugPrint('Длина списка мест после поиска: ${PlaceInteractor.foundedPlaces.length}');
       emit(
         SearchScreenPlacesFoundState(
-          filteredPlaces: PlaceInteractor.foundedPlaces,
-          length: AppPreferences.getPlacesListByDistance()?.length ?? 0,
+          filteredPlaces: list,
+          // filteredPlaces: PlaceInteractor.foundedPlaces,
+          length: list.length,
+          // length: AppPreferences.getPlacesListByDistance()?.length ?? 0,
         ),
       );
       // Если поисковый запрос содержит значение и список найденных мест пуст
@@ -77,6 +81,11 @@ class SearchScreenBloc extends Bloc<SearchScreenEvent, SearchScreenState> {
     });
   }
 
+  Future<void> loadFilteredPlaces(AppDb db) async {
+    list = await db.allPlacesEntries;
+    debugPrint('list_of_founded_places: ${list.length}');
+  }
+
   void activeFocus({required bool isActive}) {
     // ignore: prefer-conditional-expressions
     if (isActive) {
@@ -108,6 +117,6 @@ class SearchScreenBloc extends Bloc<SearchScreenEvent, SearchScreenState> {
           }).toList();
         }
       }
-    } 
+    }
   }
 }

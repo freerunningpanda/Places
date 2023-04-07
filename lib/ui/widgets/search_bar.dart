@@ -132,6 +132,17 @@ class _SearchBarState extends State<SearchBar> {
                             builder: (_) => const PlaceSearchScreen(),
                           ),
                         );
+
+                        context.read<SearchScreenBloc>().add(
+                            PlacesFoundEvent(
+                              isHistoryClear: false,
+                              fromFiltersScreen: false,
+                              searchHistoryIsEmpty: searchStoryList.isEmpty, // Чтобы обновить стейт экрана
+                              // Если крайнее место было удалено из истории
+                              isQueryEmpty: interactor.query.isEmpty, // Для отображения найденных по фильтру мест
+                              // При пустом поисковом запросе
+                            ),
+                          );
                       }
                     },
                     // При отправке данных из поиска

@@ -29,6 +29,7 @@ class FilterScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+    final db = context.read<AppDb>();
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -68,7 +69,7 @@ class FilterScreen extends StatelessWidget {
                         activeFilters: PlaceInteractor.activeFilters,
                         title: AppString.showPlaces,
                         rangeValues: Mocks.rangeValues,
-                        onTap: () => goToSearchScreen(context),
+                        onTap: () => goToSearchScreen(context, db),
                       ),
                     )
                   else
@@ -76,7 +77,7 @@ class FilterScreen extends StatelessWidget {
                       activeFilters: PlaceInteractor.activeFilters,
                       title: AppString.showPlaces,
                       rangeValues: Mocks.rangeValues,
-                      onTap: () => goToSearchScreen(context),
+                      onTap: () => goToSearchScreen(context, db),
                     ),
                 ],
               );
@@ -89,10 +90,11 @@ class FilterScreen extends StatelessWidget {
     );
   }
 
-  void goToSearchScreen(BuildContext context) {
+  void goToSearchScreen(BuildContext context, AppDb db) {
     // Не виджет истории поиска. Поэтому isHistoryClear: false
     // Параметр isHistoryClear отвечает за отображение всех найденных мест
     // После очистки истории поиска
+    db.addPlaces(PlaceInteractor.foundedPlaces);
     context.read<SearchScreenBloc>().add(
           PlacesFoundEvent(
             searchHistoryIsEmpty: PlaceInteractor.searchHistoryList.isEmpty,
