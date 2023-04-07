@@ -2,7 +2,6 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:places/data/database/database.dart';
 import 'package:places/data/interactor/place_interactor.dart';
-import 'package:places/data/model/place.dart';
 
 part 'visited_screen_event.dart';
 part 'visited_screen_state.dart';
@@ -45,11 +44,11 @@ class VisitedScreenBloc extends Bloc<VisitedScreenEvent, VisitedScreenState> {
   }
 
   void addToVisited({required DbPlace place}) {
-    // PlaceInteractor.visitedPlaces.add(place);
+    PlaceInteractor.visitedPlaces.add(place);
   }
 
-  void removeFromVisited({required Place place}) {
-    // interactor.visitedPlaces.remove(place);
+  void removeFromVisited({required DbPlace place}) {
+    PlaceInteractor.visitedPlaces.remove(place);
   }
 
   void dragCard(List<DbPlace> places, int oldIndex, int newIndex) {

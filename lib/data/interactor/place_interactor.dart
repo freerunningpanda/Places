@@ -43,12 +43,12 @@ class PlaceInteractor {
   static final List<DbPlace> initialFilteredPlaces = [];
   static final List<String> searchHistoryList = [];
   static List<DbPlace> favoritePlaces = [];
+  static List<DbPlace>  visitedPlaces = [];
   static Set<DbPlace> filtersWithDistance = {};
   static List<DbPlace> foundedPlaces = PlaceInteractor.filtersWithDistance.toList();
   static Set<Place> newPlaces = {};
   final PlaceRepository repository;
   final controller = TextEditingController();
-  Set<DbPlace> visitedPlaces = {};
   String query = '';
   bool hasFocus = false;
 

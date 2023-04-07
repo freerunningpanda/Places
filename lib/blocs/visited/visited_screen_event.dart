@@ -24,7 +24,7 @@ class AddToVisitedEvent extends VisitedScreenEvent {
 class RemoveFromVisitedEvent extends VisitedScreenEvent {
   final bool isFavorite;
   final int placeIndex;
-  final Place place;
+  final DbPlace place;
 
   const RemoveFromVisitedEvent({
     required this.isFavorite,

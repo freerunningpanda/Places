@@ -1,17 +1,12 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:places/data/api/api_places.dart';
 import 'package:places/data/database/database.dart';
 import 'package:places/data/interactor/place_interactor.dart';
-import 'package:places/data/repository/place_repository.dart';
 
 part 'want_to_visit_event.dart';
 part 'want_to_visit_state.dart';
 
 class WantToVisitBloc extends Bloc<VisitingScreenEvent, WantToVisitScreenState> {
-  final interactor = PlaceInteractor(
-    repository: PlaceRepository(apiPlaces: ApiPlaces()),
-  );
 
   WantToVisitBloc() : super(WantToVisitScreenEmptyState()) {
     on<AddToWantToVisitEvent>(

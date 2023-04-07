@@ -4,7 +4,6 @@ import 'package:flutter/material.dart' hide ErrorWidget;
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:places/blocs/favorite/favorite_bloc.dart';
-import 'package:places/blocs/want_to_visit/want_to_visit_bloc.dart';
 import 'package:places/cubits/places_list/places_list_cubit.dart';
 import 'package:places/data/database/database.dart';
 import 'package:places/ui/res/app_assets.dart';
