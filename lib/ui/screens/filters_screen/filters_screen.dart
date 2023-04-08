@@ -96,14 +96,16 @@ class FilterScreen extends StatelessWidget {
     // Параметр isHistoryClear отвечает за отображение всех найденных мест
     // После очистки истории поиска
     await db.deleteAllPlaces();
-    await db.addPlaces(PlaceInteractor.foundedPlaces);
-    debugPrint('PlaceInteractor.filtersWithDistance: ${PlaceInteractor.foundedPlaces}');
+    await db.addPlaces(PlaceInteractor.filtersWithDistance.toList());
+    debugPrint('PlaceInteractor.filtersWithDistance: ${PlaceInteractor.filtersWithDistance}');
+
+    final list = await db.allPlacesEntries;
 
     // ignore: use_build_context_synchronously
     context.read<SearchScreenBloc>().add(
           PlacesFoundEvent(
             searchHistoryIsEmpty: PlaceInteractor.searchHistoryList.isEmpty,
-            filteredPlaces: PlaceInteractor.foundedPlaces,
+            filteredPlaces: list,
             // filteredPlaces: AppPreferences.getPlacesListByDistance()?.toList(),
             isHistoryClear: false,
             fromFiltersScreen: true,
