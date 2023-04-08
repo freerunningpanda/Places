@@ -23,8 +23,8 @@ class SearchScreenBloc extends Bloc<SearchScreenEvent, SearchScreenState> {
 
   SearchScreenBloc() : super(SearchScreenEmptyState()) {
     activeFocus(isActive: true);
-    searchPlaces(interactor.query);
     on<PlacesFoundEvent>((event, emit) {
+    searchPlaces(interactor.query, event.db);
       // debugPrint('Длина списка мест после поиска: ${PlaceInteractor.foundedPlaces.length}');
       emit(
         SearchScreenPlacesFoundState(
@@ -93,27 +93,25 @@ class SearchScreenBloc extends Bloc<SearchScreenEvent, SearchScreenState> {
     }
   }
 
-  void searchPlaces(String query) {
-    final placesList = AppPreferences.getPlacesListByDistance();
+  Future<void> searchPlaces(String query, AppDb db) async {
+    final placesList = await db.allPlacesEntries;
     // Если список мест в Preferences не null, искать в нём
     // Данное решение, для того, чтобы не ловить крэш после удаления/установки приложения
-    if (placesList != null) {
-      for (final el in placesList) {
-        final distance = Geolocator.distanceBetween(
-          Mocks.mockLat,
-          Mocks.mockLot,
-          el.lat,
-          el.lng,
-        );
-        if (distance >= Mocks.rangeValues.start && distance <= Mocks.rangeValues.end) {
-          PlaceInteractor.foundedPlaces = AppPreferences.getPlacesListByDistance()!.where((place) {
-            final placeTitle = place.name.toLowerCase();
-            final input = query.toLowerCase();
-            debugPrint('filteredPlaces: ${PlaceInteractor.foundedPlaces}');
+    for (final el in placesList) {
+      final distance = Geolocator.distanceBetween(
+        Mocks.mockLat,
+        Mocks.mockLot,
+        el.lat,
+        el.lng,
+      );
+      if (distance >= Mocks.rangeValues.start && distance <= Mocks.rangeValues.end) {
+        PlaceInteractor.foundedPlaces = AppPreferences.getPlacesListByDistance()!.where((place) {
+          final placeTitle = place.name.toLowerCase();
+          final input = query.toLowerCase();
+          debugPrint('filteredPlaces: ${PlaceInteractor.foundedPlaces}');
 
-            return placeTitle.contains(input);
-          }).toList();
-        }
+          return placeTitle.contains(input);
+        }).toList();
       }
     }
   }

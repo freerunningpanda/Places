@@ -86,17 +86,20 @@ class _SearchBarState extends State<SearchBar> {
                     autofocus: autofocus,
                     focusNode: focusNode,
                     readOnly: widget.readOnly ?? true,
-                    onChanged: (value) {
+                    onChanged: (value) async {
                       interactor.query = value;
 
-                      context.read<SearchScreenBloc>()
-                        ..activeFocus(isActive: true)
-                        ..searchPlaces(value);
+                      context.read<SearchScreenBloc>().activeFocus(isActive: true);
+                      await context.read<SearchScreenBloc>().searchPlaces(value, db);
                       // Не виджет истории поиска. Поэтому isHistoryClear: false
                       // Параметр isHistoryClear отвечает за отображение всех найденных мест
                       // После очистки истории поиска
+
+                      // ignore: use_build_context_synchronously
                       context.read<SearchScreenBloc>().add(
                             PlacesFoundEvent(
+                              // filteredPlaces: await db.allPlacesEntries,
+                              filteredPlaces: PlaceInteractor.foundedPlaces,
                               isHistoryClear: false,
                               fromFiltersScreen: false,
                               searchHistoryIsEmpty: searchStoryList.isEmpty, // Чтобы обновить стейт экрана
@@ -128,7 +131,7 @@ class _SearchBarState extends State<SearchBar> {
                       // Если виджет searchBar на главном экране
                       if (!widget.isSearchPage) {
                         final list = await db.allPlacesEntries;
-                        
+
                         // ignore: use_build_context_synchronously
                         context.read<SearchScreenBloc>().add(
                               PlacesFoundEvent(
