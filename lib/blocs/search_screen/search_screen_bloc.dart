@@ -23,8 +23,8 @@ class SearchScreenBloc extends Bloc<SearchScreenEvent, SearchScreenState> {
 
   SearchScreenBloc() : super(SearchScreenEmptyState()) {
     activeFocus(isActive: true);
-    on<PlacesFoundEvent>((event, emit) {
-    searchPlaces(interactor.query, event.db);
+    on<PlacesFoundEvent>((event, emit) async {
+      await searchPlaces(interactor.query, event.db);
       // debugPrint('Длина списка мест после поиска: ${PlaceInteractor.foundedPlaces.length}');
       emit(
         SearchScreenPlacesFoundState(
@@ -72,7 +72,8 @@ class SearchScreenBloc extends Bloc<SearchScreenEvent, SearchScreenState> {
         emit(
           SearchScreenPlacesFoundState(
             filteredPlaces: event.isHistoryClear ? event.filteredPlaces!.toList() : PlaceInteractor.foundedPlaces,
-            length: AppPreferences.getPlacesListByDistance()?.length ?? 0,
+            length: await loadPlaces(event.db),
+            // length: AppPreferences.getPlacesListByDistance()?.length ?? 0,
           ),
         );
       }
@@ -114,5 +115,11 @@ class SearchScreenBloc extends Bloc<SearchScreenEvent, SearchScreenState> {
         }).toList();
       }
     }
+  }
+
+  Future<int> loadPlaces(AppDb db) async {
+    final placesList = await db.allPlacesEntries;
+
+    return placesList.length;
   }
 }
