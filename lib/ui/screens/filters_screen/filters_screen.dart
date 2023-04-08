@@ -9,6 +9,7 @@ import 'package:places/cubits/show_places_button/show_places_button_cubit.dart';
 import 'package:places/data/database/database.dart';
 
 import 'package:places/data/interactor/place_interactor.dart';
+import 'package:places/data/loaded_data/loaded_data.dart';
 import 'package:places/data/model/category.dart';
 import 'package:places/data/store/app_preferences.dart';
 import 'package:places/mocks.dart';
@@ -90,21 +91,29 @@ class FilterScreen extends StatelessWidget {
     );
   }
 
-  void goToSearchScreen(BuildContext context, AppDb db) {
+  Future<void> goToSearchScreen(BuildContext context, AppDb db) async {
     // Не виджет истории поиска. Поэтому isHistoryClear: false
     // Параметр isHistoryClear отвечает за отображение всех найденных мест
     // После очистки истории поиска
-    db.addPlaces(PlaceInteractor.foundedPlaces);
+    await db.deleteAllPlaces();
+    await db.addPlaces(PlaceInteractor.foundedPlaces);
+    debugPrint('PlaceInteractor.filtersWithDistance: ${PlaceInteractor.foundedPlaces}');
+
+    // ignore: use_build_context_synchronously
     context.read<SearchScreenBloc>().add(
           PlacesFoundEvent(
             searchHistoryIsEmpty: PlaceInteractor.searchHistoryList.isEmpty,
-            filteredPlaces: AppPreferences.getPlacesListByDistance()?.toList(),
+            filteredPlaces: PlaceInteractor.foundedPlaces,
+            // filteredPlaces: AppPreferences.getPlacesListByDistance()?.toList(),
             isHistoryClear: false,
             fromFiltersScreen: true,
             isQueryEmpty: true,
+            db: db,
           ),
         );
-    Navigator.of(context).push<PlaceSearchScreen>(
+    await LoadedData.loadFilteredPlaces(db);
+    // ignore: use_build_context_synchronously
+    await Navigator.of(context).push<PlaceSearchScreen>(
       MaterialPageRoute(
         builder: (_) => const PlaceSearchScreen(),
       ),

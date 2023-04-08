@@ -10,6 +10,7 @@ class PlacesFoundEvent extends SearchScreenEvent {
   final bool isQueryEmpty;
   final bool searchHistoryIsEmpty;
   final List<DbPlace>? filteredPlaces;
+  final AppDb db;
 
   PlacesFoundEvent({
     this.filteredPlaces,
@@ -17,5 +18,6 @@ class PlacesFoundEvent extends SearchScreenEvent {
     required this.isQueryEmpty,
     required this.fromFiltersScreen,
     required this.searchHistoryIsEmpty,
+    required this.db,
   });
 }

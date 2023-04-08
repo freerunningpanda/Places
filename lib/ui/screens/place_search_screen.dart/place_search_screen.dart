@@ -270,6 +270,7 @@ class _ClearHistoryButton extends StatelessWidget {
             isHistoryClear: true,
             fromFiltersScreen: false,
             isQueryEmpty: true,
+            db: db,
           ),
         );
       },
@@ -368,6 +369,7 @@ class _SearchItem extends StatelessWidget {
                             isHistoryClear: true,
                             fromFiltersScreen: false,
                             isQueryEmpty: true,
+                            db: db,
                           ),
                         );
                       },

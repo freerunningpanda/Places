@@ -17,18 +17,11 @@ import 'package:places/ui/widgets/error_widget.dart';
 import 'package:places/ui/widgets/place_icons.dart';
 import 'package:places/ui/widgets/search_bar.dart';
 
-class PlaceListScreen extends StatefulWidget {
+class PlaceListScreen extends StatelessWidget {
   const PlaceListScreen({Key? key}) : super(key: key);
 
   @override
-  State<PlaceListScreen> createState() => _PlaceListScreenState();
-}
-
-class _PlaceListScreenState extends State<PlaceListScreen> {
-  @override
   Widget build(BuildContext context) {
-    final db = context.read<AppDb>();
-    _loadFoundedPlaces(db);
 
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
@@ -96,10 +89,6 @@ class _PlaceListScreenState extends State<PlaceListScreen> {
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: const AddNewPlaceButton(),
     );
-  }
-
-  Future<void> _loadFoundedPlaces(AppDb db) async {
-    await context.read<SearchScreenBloc>().loadFilteredPlaces(db);
   }
 }
 

@@ -62,8 +62,11 @@ class AppDb extends _$AppDb {
     );
   }
 
-  Future<void> addPlaces(List<DbPlace> places) async {
+  Future<void> deleteAllPlaces() async {
     await customStatement('DELETE FROM "db_places"'); // Сначала удалить предыдущие места из таблицы
+  }
+
+  Future<void> addPlaces(List<DbPlace> places) async {
     await batch((batch) {
       for (final place in places) {
         batch.insert(
