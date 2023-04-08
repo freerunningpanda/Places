@@ -9,7 +9,6 @@ import 'package:places/cubits/show_places_button/show_places_button_cubit.dart';
 import 'package:places/data/database/database.dart';
 
 import 'package:places/data/interactor/place_interactor.dart';
-import 'package:places/data/loaded_data/loaded_data.dart';
 import 'package:places/data/model/category.dart';
 import 'package:places/data/store/app_preferences.dart';
 import 'package:places/mocks.dart';
@@ -97,7 +96,6 @@ class FilterScreen extends StatelessWidget {
     // После очистки истории поиска
     await db.deleteAllPlaces();
     await db.addPlaces(PlaceInteractor.filtersWithDistance.toList());
-    debugPrint('PlaceInteractor.filtersWithDistance: ${PlaceInteractor.filtersWithDistance}');
 
     final list = await db.allPlacesEntries;
 
@@ -106,14 +104,12 @@ class FilterScreen extends StatelessWidget {
           PlacesFoundEvent(
             searchHistoryIsEmpty: PlaceInteractor.searchHistoryList.isEmpty,
             filteredPlaces: list,
-            // filteredPlaces: AppPreferences.getPlacesListByDistance()?.toList(),
             isHistoryClear: false,
             fromFiltersScreen: true,
             isQueryEmpty: true,
             db: db,
           ),
         );
-    await LoadedData.loadFilteredPlaces(db);
     // ignore: use_build_context_synchronously
     await Navigator.of(context).push<PlaceSearchScreen>(
       MaterialPageRoute(

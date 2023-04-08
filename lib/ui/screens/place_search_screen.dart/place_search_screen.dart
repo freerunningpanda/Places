@@ -140,7 +140,6 @@ class _PlaceListWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
-    final db = context.read<AppDb>();
 
     return BlocBuilder<SearchScreenBloc, SearchScreenState>(
       builder: (_, state) {

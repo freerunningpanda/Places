@@ -6,7 +6,6 @@ import 'package:geolocator/geolocator.dart';
 import 'package:places/data/api/api_places.dart';
 import 'package:places/data/database/database.dart';
 import 'package:places/data/interactor/place_interactor.dart';
-import 'package:places/data/loaded_data/loaded_data.dart';
 import 'package:places/data/repository/place_repository.dart';
 import 'package:places/data/store/app_preferences.dart';
 import 'package:places/mocks.dart';
@@ -26,13 +25,12 @@ class SearchScreenBloc extends Bloc<SearchScreenEvent, SearchScreenState> {
     activeFocus(isActive: true);
     searchPlaces(interactor.query);
     on<PlacesFoundEvent>((event, emit) {
-      debugPrint('Длина списка мест после поиска: ${LoadedData.list.length}');
       // debugPrint('Длина списка мест после поиска: ${PlaceInteractor.foundedPlaces.length}');
       emit(
         SearchScreenPlacesFoundState(
           filteredPlaces: event.filteredPlaces ?? [],
           // filteredPlaces: PlaceInteractor.foundedPlaces,
-          length: LoadedData.list.length,
+          length: event.filteredPlaces!.length,
           // length: AppPreferences.getPlacesListByDistance()?.length ?? 0,
         ),
       );

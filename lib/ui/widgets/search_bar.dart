@@ -5,7 +5,6 @@ import 'package:places/blocs/search_screen/search_screen_bloc.dart';
 import 'package:places/data/api/api_places.dart';
 import 'package:places/data/database/database.dart';
 import 'package:places/data/interactor/place_interactor.dart';
-import 'package:places/data/loaded_data/loaded_data.dart';
 import 'package:places/data/repository/place_repository.dart';
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_strings.dart';
@@ -57,9 +56,7 @@ class _SearchBarState extends State<SearchBar> {
     );
     final searchStoryList = PlaceInteractor.searchHistoryList;
     final bloc = context.read<SearchHistoryBloc>();
-    final searchScreenBloc = context.read<SearchScreenBloc>();
     final db = context.read<AppDb>();
-    // debugPrint('SearchScreenBloc().filteredPlaces: ${SearchScreenBloc().filteredPlaces}');
 
     return Padding(
       padding: const EdgeInsets.only(

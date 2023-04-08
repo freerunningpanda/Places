@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:places/data/api/api_places.dart';
 import 'package:places/data/database/database.dart';
 import 'package:places/data/interactor/place_interactor.dart';
@@ -45,10 +44,10 @@ class PlaceRepository {
     await db.addPlace(place);
   }
 
-  Future<void> loadPlaces(AppDb db) async {
-    PlaceInteractor.favoritePlaces = await db.allPlacesEntries;
-    debugPrint('places_list: ${PlaceInteractor.favoritePlaces.length}');
-  }
+  // Future<void> loadPlaces(AppDb db) async {
+  //   PlaceInteractor.favoritePlaces = await db.allPlacesEntries;
+  //   debugPrint('places_list: ${PlaceInteractor.favoritePlaces.length}');
+  // }
 
   void addNewPlace({required Place place}) {
     PlaceInteractor.newPlaces.add(place);
