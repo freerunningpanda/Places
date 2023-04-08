@@ -111,13 +111,14 @@ class _SearchBarState extends State<SearchBar> {
                           );
                     },
                     // По клику на поле поиска
-                    onTap: () {
+                    onTap: () async {
                       // Если виджет searchBar на экране поиска мест
                       if (widget.isSearchPage) {
                         // Загружаем историю из БД
-                        bloc.loadHistorys(db);
+                        await bloc.loadHistorys(db);
                         // Если история поиска не пустая, то вызываем event показа истории поиска
                         if (searchStoryList.isNotEmpty || bloc.list.isNotEmpty) {
+                          // ignore: use_build_context_synchronously
                           context.read<SearchHistoryBloc>().add(
                                 ShowHistoryEvent(
                                   isDeleted: false,
@@ -129,16 +130,12 @@ class _SearchBarState extends State<SearchBar> {
 
                       // Если виджет searchBar на главном экране
                       if (!widget.isSearchPage) {
-                        // Просто переходим на экран поиска мест
-                        LoadedData.loadFilteredPlaces(db);
-                        Navigator.of(context).push(
-                          MaterialPageRoute<PlaceSearchScreen>(
-                            builder: (_) => const PlaceSearchScreen(),
-                          ),
-                        );
-
+                        final list = await db.allPlacesEntries;
+                        
+                        // ignore: use_build_context_synchronously
                         context.read<SearchScreenBloc>().add(
                               PlacesFoundEvent(
+                                filteredPlaces: list,
                                 isHistoryClear: false,
                                 fromFiltersScreen: false,
                                 searchHistoryIsEmpty: searchStoryList.isEmpty, // Чтобы обновить стейт экрана
@@ -148,6 +145,14 @@ class _SearchBarState extends State<SearchBar> {
                                 db: db,
                               ),
                             );
+                        // Просто переходим на экран поиска мест
+                        // ignore: use_build_context_synchronously
+                        await Navigator.of(context).push(
+                          MaterialPageRoute<PlaceSearchScreen>(
+                            builder: (_) => const PlaceSearchScreen(),
+                          ),
+                        );
+                        // ignore: use_build_context_synchronously
                       }
                     },
                     // При отправке данных из поиска
