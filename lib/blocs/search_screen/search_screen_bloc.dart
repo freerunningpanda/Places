@@ -106,7 +106,7 @@ class SearchScreenBloc extends Bloc<SearchScreenEvent, SearchScreenState> {
         el.lng,
       );
       if (distance >= Mocks.rangeValues.start && distance <= Mocks.rangeValues.end) {
-        PlaceInteractor.foundedPlaces = AppPreferences.getPlacesListByDistance()!.where((place) {
+        PlaceInteractor.foundedPlaces = placesList.where((place) {
           final placeTitle = place.name.toLowerCase();
           final input = query.toLowerCase();
           debugPrint('filteredPlaces: ${PlaceInteractor.foundedPlaces}');
