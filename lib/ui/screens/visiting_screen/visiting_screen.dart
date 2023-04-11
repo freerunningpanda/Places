@@ -73,7 +73,7 @@ class _VisitingScreenState extends State<VisitingScreen> {
                           }
                           if (state is WantToVisitAfterDragState) {
                             debugPrint('placesToVisit: ${state.favoritePlaces.length}');
-                            
+
                             return _WantToVisitWidget(
                               placesToVisit: state.favoritePlaces,
                               key: const PageStorageKey('WantToVisitScrollPosition'),
@@ -360,7 +360,7 @@ class _DismissibleWidget extends StatelessWidget {
                       db: db,
                       isFavorite: placesToVisit[i].isFavorite,
                       place: placesToVisit[i],
-                      placeIndex: i,
+                      placeIndex: placesToVisit[i].id,
                     ),
                   );
               placesToVisit[i].isFavorite = false;
@@ -370,7 +370,7 @@ class _DismissibleWidget extends StatelessWidget {
                       db: db,
                       isFavorite: placesToVisit[i].isFavorite,
                       place: placesToVisit[i],
-                      placeIndex: i,
+                      placeIndex: placesToVisit[i].id,
                     ),
                   );
 
@@ -398,7 +398,7 @@ class _DismissibleWidget extends StatelessWidget {
                           db: db,
                           isFavorite: placesToVisit[i].isFavorite,
                           place: placesToVisit[i],
-                          placeIndex: i,
+                          placeIndex: placesToVisit[i].id,
                         ),
                       );
                   placesToVisit[i].isFavorite = false;
@@ -408,13 +408,13 @@ class _DismissibleWidget extends StatelessWidget {
                           db: db,
                           isFavorite: placesToVisit[i].isFavorite,
                           place: placesToVisit[i],
-                          placeIndex: i,
+                          placeIndex: placesToVisit[i].id,
                         ),
                       );
-
+                  debugPrint('placesToVisit[i].id: ${placesToVisit[i].id}');
                   await interactor.loadFavoritePlaces(db: db);
-                  debugPrint('isFavorite ${placesToVisit[i].isFavorite}');
-                  debugPrint('Удалено из избранного: ${placesToVisit[i]}');
+                  // debugPrint('isFavorite ${placesToVisit[i].isFavorite}');
+                  // debugPrint('Удалено из избранного: ${placesToVisit[i]}');
                 },
                 isVisitingScreen: true,
                 placeList: placesToVisit,

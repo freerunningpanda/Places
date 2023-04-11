@@ -127,6 +127,7 @@ class PlaceCard extends StatelessWidget {
                               placeIndex: place.id,
                             ),
                           );
+                      debugPrint('placeIndex: ${place.id}');
                       await interactor.addToFavorites(place: place, db: db);
                       await interactor.loadFavoritePlaces(db: db);
                       debugPrint('isFavorite ${place.isFavorite}');
