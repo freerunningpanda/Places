@@ -16,6 +16,8 @@ import 'package:places/ui/screens/res/custom_colors.dart';
 import 'package:places/ui/widgets/add_new_place_button.dart';
 import 'package:places/ui/widgets/place_icons.dart';
 
+bool fromVisitingScreen = false;
+
 class VisitingScreen extends StatefulWidget {
   const VisitingScreen({Key? key}) : super(key: key);
 
@@ -371,8 +373,8 @@ class _DismissibleWidget extends StatelessWidget {
                       placeIndex: placesToVisit[i].id,
                     ),
                   );
+              fromVisitingScreen = true;
               debugPrint('placesToVisit[i].id: ${placesToVisit[i].id}');
-
             },
             background: const SizedBox.shrink(),
             direction: DismissDirection.endToStart,
@@ -399,8 +401,8 @@ class _DismissibleWidget extends StatelessWidget {
                           placeIndex: placesToVisit[i].id,
                         ),
                       );
+                  fromVisitingScreen = true;
                   debugPrint('placesToVisit[i].id: ${placesToVisit[i].isFavorite}');
-
                 },
                 isVisitingScreen: true,
                 placeList: placesToVisit,
