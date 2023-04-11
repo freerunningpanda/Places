@@ -43,10 +43,12 @@ class DragCardOnWantToVisitEvent extends VisitingScreenEvent {
   final List<DbPlace> places;
   final int oldIndex;
   final int newIndex;
+  final AppDb db;
 
   const DragCardOnWantToVisitEvent({
     required this.places,
     required this.oldIndex,
     required this.newIndex,
+    required this.db,
   });
 }

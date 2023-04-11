@@ -19,7 +19,6 @@ class WantToVisitBloc extends Bloc<VisitingScreenEvent, WantToVisitScreenState> 
     on<AddToWantToVisitEvent>(
       (event, emit) async {
         final dbFavoritePlaces = await event.db.favoritePlacesEntries;
-        // addToFavorites(place: event.place);
         emit(
           WantToVisitScreenIsNotEmpty(
             placeIndex: event.placeIndex,
@@ -30,9 +29,8 @@ class WantToVisitBloc extends Bloc<VisitingScreenEvent, WantToVisitScreenState> 
       },
     );
     on<RemoveFromWantToVisitEvent>((event, emit) async {
+      await interactor.removeFromFavorites(place: event.place, db: event.db);
       final dbFavoritePlaces = await event.db.favoritePlacesEntries;
-      // removeFromFavorites(place: event.place);
-      // interactor.removeFromFavorites(place: event.place, db: event.db);
       emit(
         WantToVisitScreenIsNotEmpty(
           placeIndex: event.placeIndex,
@@ -41,13 +39,14 @@ class WantToVisitBloc extends Bloc<VisitingScreenEvent, WantToVisitScreenState> 
         ),
       );
     });
-    on<DragCardOnWantToVisitEvent>((event, emit) {
+    on<DragCardOnWantToVisitEvent>((event, emit) async {
+      final dbFavoritePlaces = await event.db.favoritePlacesEntries;
       dragCard(event.places, event.oldIndex, event.newIndex);
       emit(
         WantToVisitAfterDragState(
           newIndex: event.newIndex,
           oldIndex: event.oldIndex,
-          favoritePlaces: event.places,
+          favoritePlaces: dbFavoritePlaces,
         ),
       );
     });

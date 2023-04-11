@@ -198,11 +198,13 @@ class _WantToVisitWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final db = context.read<AppDb>();
 
     return ReorderableListView(
       onReorder: (oldIndex, newIndex) {
         context.read<WantToVisitBloc>().add(
               DragCardOnWantToVisitEvent(
+                db: db,
                 newIndex: newIndex,
                 oldIndex: oldIndex,
                 places: placesToVisit,
@@ -351,10 +353,7 @@ class _DismissibleWidget extends StatelessWidget {
               // так список для него иммутабелен,
               // а сейчас я добавил флаг isFavorite
               // И передаю в эвент само место в избранном, а не весь список избранного
-              await interactor.removeFromFavorites(place: placesToVisit[i], db: db);
-
               placesToVisit[i].isFavorite = false;
-              // ignore: use_build_context_synchronously
               context.read<WantToVisitBloc>().add(
                     RemoveFromWantToVisitEvent(
                       db: db,
@@ -364,7 +363,6 @@ class _DismissibleWidget extends StatelessWidget {
                     ),
                   );
               placesToVisit[i].isFavorite = false;
-              // ignore: use_build_context_synchronously
               context.read<FavoriteBloc>().add(
                     FavoriteEvent(
                       db: db,
@@ -373,10 +371,10 @@ class _DismissibleWidget extends StatelessWidget {
                       placeIndex: placesToVisit[i].id,
                     ),
                   );
-
-              await interactor.loadFavoritePlaces(db: db);
-              debugPrint('isFavorite ${placesToVisit[i].isFavorite}');
-              debugPrint('Удалено из избранного: ${placesToVisit[i]}');
+              debugPrint('placesToVisit[i].id: ${placesToVisit[i].id}');
+              // await interactor.loadFavoritePlaces(db: db);
+              // debugPrint('isFavorite ${placesToVisit[i].isFavorite}');
+              // debugPrint('Удалено из избранного: ${placesToVisit[i]}');
             },
             background: const SizedBox.shrink(),
             direction: DismissDirection.endToStart,
@@ -385,14 +383,7 @@ class _DismissibleWidget extends StatelessWidget {
               child: PlaceCard(
                 placeIndex: i,
                 removePlace: () async {
-                  // interactor.removeFromFavorites(
-                  //   place: placesToVisit[i],
-                  //   db: db,
-                  // );
-                  await interactor.removeFromFavorites(place: placesToVisit[i], db: db);
-
                   placesToVisit[i].isFavorite = false;
-                  // ignore: use_build_context_synchronously
                   context.read<WantToVisitBloc>().add(
                         RemoveFromWantToVisitEvent(
                           db: db,
@@ -402,7 +393,6 @@ class _DismissibleWidget extends StatelessWidget {
                         ),
                       );
                   placesToVisit[i].isFavorite = false;
-                  // ignore: use_build_context_synchronously
                   context.read<FavoriteBloc>().add(
                         FavoriteEvent(
                           db: db,
@@ -412,7 +402,7 @@ class _DismissibleWidget extends StatelessWidget {
                         ),
                       );
                   debugPrint('placesToVisit[i].id: ${placesToVisit[i].id}');
-                  await interactor.loadFavoritePlaces(db: db);
+                  // await interactor.loadFavoritePlaces(db: db);
                   // debugPrint('isFavorite ${placesToVisit[i].isFavorite}');
                   // debugPrint('Удалено из избранного: ${placesToVisit[i]}');
                 },
