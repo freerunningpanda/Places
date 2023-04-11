@@ -5,7 +5,10 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:places/blocs/favorite/favorite_bloc.dart';
 import 'package:places/cubits/places_list/places_list_cubit.dart';
+import 'package:places/data/api/api_places.dart';
 import 'package:places/data/database/database.dart';
+import 'package:places/data/interactor/place_interactor.dart';
+import 'package:places/data/repository/place_repository.dart';
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_card_size.dart';
 import 'package:places/ui/res/app_strings.dart';
@@ -21,7 +24,6 @@ class PlaceListScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitUp,
@@ -106,6 +108,12 @@ class _PlaceListWidgetPortrait extends StatefulWidget {
 }
 
 class _PlaceListWidgetPortraitState extends State<_PlaceListWidgetPortrait> {
+  final interactor = PlaceInteractor(
+    repository: PlaceRepository(
+      apiPlaces: ApiPlaces(),
+    ),
+  );
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -191,7 +199,7 @@ class _PlaceListWidgetPortraitState extends State<_PlaceListWidgetPortrait> {
   }
 
   Future<void> _loadDb(AppDb db) async {
-    await context.read<FavoriteBloc>().loadPlaces(db);
+    await interactor.loadFavoritePlaces(db: db);
   }
 }
 
@@ -210,6 +218,12 @@ class _PlaceListWidgetLandscape extends StatefulWidget {
 }
 
 class _PlaceListWidgetLandscapeState extends State<_PlaceListWidgetLandscape> {
+  final interactor = PlaceInteractor(
+    repository: PlaceRepository(
+      apiPlaces: ApiPlaces(),
+    ),
+  );
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -299,6 +313,6 @@ class _PlaceListWidgetLandscapeState extends State<_PlaceListWidgetLandscape> {
   }
 
   Future<void> _loadDb(AppDb db) async {
-    await context.read<FavoriteBloc>().loadPlaces(db);
+    await interactor.loadFavoritePlaces(db: db);
   }
 }

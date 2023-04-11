@@ -3,7 +3,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:places/blocs/favorite/favorite_bloc.dart';
 import 'package:places/blocs/visited/visited_screen_bloc.dart';
 import 'package:places/blocs/want_to_visit/want_to_visit_bloc.dart';
+import 'package:places/data/api/api_places.dart';
 import 'package:places/data/database/database.dart';
+import 'package:places/data/interactor/place_interactor.dart';
+import 'package:places/data/repository/place_repository.dart';
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_card_size.dart';
 import 'package:places/ui/res/app_strings.dart';
@@ -285,12 +288,12 @@ class _DismissibleWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final orientation = MediaQuery.of(context).orientation == Orientation.portrait;
-    // final db = context.read<AppDb>();
-    // final interactor = PlaceInteractor(
-    //   repository: PlaceRepository(
-    //     apiPlaces: ApiPlaces(),
-    //   ),
-    // );
+    final db = context.read<AppDb>();
+    final interactor = PlaceInteractor(
+      repository: PlaceRepository(
+        apiPlaces: ApiPlaces(),
+      ),
+    );
 
     return Stack(
       children: [
@@ -344,6 +347,7 @@ class _DismissibleWidget extends StatelessWidget {
               // И передаю в эвент само место в избранном, а не весь список избранного
               context.read<WantToVisitBloc>().add(
                     RemoveFromWantToVisitEvent(
+                      db: db,
                       isFavorite: placesToVisit[i].isFavorite = false,
                       place: placesToVisit[i],
                       placeIndex: placesToVisit[i].id,
@@ -351,6 +355,7 @@ class _DismissibleWidget extends StatelessWidget {
                   );
               context.read<FavoriteBloc>().add(
                     FavoriteEvent(
+                      db: db,
                       isFavorite: placesToVisit[i].isFavorite = false,
                       place: placesToVisit[i],
                       placeIndex: placesToVisit[i].id,
@@ -364,13 +369,14 @@ class _DismissibleWidget extends StatelessWidget {
               child: PlaceCard(
                 placeIndex: i,
                 removePlace: () {
-                  // interactor.removeFromFavorites(
-                  //   place: placesToVisit[i],
-                  //   db: db,
-                  // );
+                  interactor.removeFromFavorites(
+                    place: placesToVisit[i],
+                    db: db,
+                  );
 
                   context.read<WantToVisitBloc>().add(
                         RemoveFromWantToVisitEvent(
+                          db: db,
                           isFavorite: placesToVisit[i].isFavorite = false,
                           place: placesToVisit[i],
                           placeIndex: i,
@@ -378,6 +384,7 @@ class _DismissibleWidget extends StatelessWidget {
                       );
                   context.read<FavoriteBloc>().add(
                         FavoriteEvent(
+                          db: db,
                           isFavorite: placesToVisit[i].isFavorite = false,
                           place: placesToVisit[i],
                           placeIndex: i,

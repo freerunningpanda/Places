@@ -28,11 +28,13 @@ class PlaceInteractor {
 
   List<DbPlace> getFavoritesPlaces() => repository.getFavoritesPlaces();
 
-  // void loadPlaces({required AppDb db}) => repository.loadPlaces(db);
+  Future<void> loadAllPlaces({required AppDb db}) => repository.loadAllPlaces(db);
 
-  void addToFavorites({required DbPlace place, required AppDb db}) => repository.addToFavorites(place: place, db: db);
+  Future<void> loadFavoritePlaces({required AppDb db}) => repository.loadFavoritePlaces(db);
 
-  void removeFromFavorites({required DbPlace place, required AppDb db}) =>
+  Future<void> addToFavorites({required DbPlace place, required AppDb db}) => repository.addToFavorites(place: place, db: db);
+
+  Future<void> removeFromFavorites({required DbPlace place, required AppDb db}) =>
       repository.removeFromFavorites(place: place, db: db);
 
   void addNewPlace({required Place place}) => repository.addNewPlace(place: place);

@@ -33,6 +33,9 @@ class AppDb extends _$AppDb {
 
   Future<List<DbPlace>> get allPlacesEntries => select(dbPlaces).get();
 
+  Future<List<DbPlace>> get favoritePlacesEntries =>
+      (select(dbPlaces)..where((tbl) => tbl.isFavorite.equals(true))).get();
+
   AppDb() : super(_openConnection());
 
   Future<int> addHistoryItem(SearchHistorysCompanion history) {
@@ -86,54 +89,8 @@ class AppDb extends _$AppDb {
     });
   }
 
-  // Future<int> addPlace(DbPlace place) async {
-  //   final existingPlace = await (select(dbPlaces)..where((tbl) => tbl.name.equals(place.name))).getSingleOrNull();
-
-  //   if (existingPlace != null) {
-  //     await update(dbPlaces).replace(place.copyWith(id: existingPlace.id));
-
-  //     return existingPlace.id;
-  //   } else {
-  //     return into(dbPlaces).insert(
-  //       DbPlacesCompanion.insert(
-  //         lat: place.lat,
-  //         lng: place.lng,
-  //         name: place.name,
-  //         urls: place.urls,
-  //         placeType: place.placeType,
-  //         description: place.description,
-  //         isFavorite: place.isFavorite,
-  //       ),
-  //     );
-  //   }
-  // }
-
-  Future<void> deletePlace(String name) {
-    // return transaction(
-    //   () async {
-    //     await (update(dbPlaces)..where((tbl) => tbl.name.equals(name))).write(
-    //       const DbPlacesCompanion(
-    //         isFavorite: Value(false),
-    //       ),
-    //     );
-    //     await (delete(dbPlaces)..where((tbl) => tbl.name.equals(name))).go();
-    //   },
-    // );
-    //  return (delete(dbPlaces)..where((tbl) => tbl.name.equals(name))).go();
-    return transaction(
-      () async {
-        await (update(dbPlaces)..where((tbl) => tbl.name.equals(name)))
-            .write(
-              const DbPlacesCompanion(
-                isFavorite: Value(false),
-              ),
-            )
-            .then(
-              (value) => (delete(dbPlaces)..where((tbl) => tbl.name.equals(name))).go(),
-            );
-        // await (delete(dbPlaces)..where((tbl) => tbl.name.equals(name))).go();
-      },
-    );
+  Future<void> deletePlace(int id) async {
+    await (delete(dbPlaces)..where((tbl) => tbl.id.equals(id))).go();
   }
 }
 

@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:places/data/api/api_places.dart';
 import 'package:places/data/database/database.dart';
 import 'package:places/data/interactor/place_interactor.dart';
@@ -37,17 +38,22 @@ class PlaceRepository {
   List<DbPlace> getFavoritesPlaces() => apiPlaces.getFavoritesPlaces();
 
   Future<void> removeFromFavorites({required DbPlace place, required AppDb db}) async {
-   await db.deletePlace(place.name);
+   await db.deletePlace(place.id);
   }
 
   Future<void> addToFavorites({required DbPlace place, required AppDb db}) async {
     await db.addPlace(place);
   }
 
-  // Future<void> loadPlaces(AppDb db) async {
-  //   PlaceInteractor.favoritePlaces = await db.allPlacesEntries;
-  //   debugPrint('places_list: ${PlaceInteractor.favoritePlaces.length}');
-  // }
+   Future<void> loadFavoritePlaces(AppDb db) async {
+    PlaceInteractor.favoritePlaces = await db.favoritePlacesEntries;
+    debugPrint('places_list: ${PlaceInteractor.favoritePlaces.length}');
+  }
+
+   Future<void> loadAllPlaces(AppDb db) async {
+    PlaceInteractor.favoritePlaces = await db.allPlacesEntries;
+    debugPrint('places_list: ${PlaceInteractor.favoritePlaces.length}');
+  }
 
   void addNewPlace({required Place place}) {
     PlaceInteractor.newPlaces.add(place);
