@@ -37,7 +37,7 @@ class WantToVisitBloc extends Bloc<VisitingScreenEvent, WantToVisitScreenState> 
         WantToVisitScreenIsNotEmpty(
           placeIndex: event.placeIndex,
           favoritePlaces: dbFavoritePlaces,
-          length: PlaceInteractor.favoritePlaces.length,
+          length: dbFavoritePlaces.length,
         ),
       );
     });
@@ -53,13 +53,13 @@ class WantToVisitBloc extends Bloc<VisitingScreenEvent, WantToVisitScreenState> 
     });
   }
 
-  void addToFavorites({required DbPlace place}) {
-    PlaceInteractor.favoritePlaces.add(place);
-  }
+  // void addToFavorites({required DbPlace place}) {
+  //   PlaceInteractor.favoritePlaces.add(place);
+  // }
 
-  void removeFromFavorites({required DbPlace place}) {
-    PlaceInteractor.favoritePlaces.remove(place);
-  }
+  // void removeFromFavorites({required DbPlace place}) {
+  //   PlaceInteractor.favoritePlaces.remove(place);
+  // }
 
   void dragCard(List<DbPlace> places, int oldIndex, int newIndex) {
     var modifiedIndex = newIndex;

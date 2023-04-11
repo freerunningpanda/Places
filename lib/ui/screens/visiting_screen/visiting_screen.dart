@@ -45,6 +45,8 @@ class _VisitingScreenState extends State<VisitingScreen> {
                       BlocBuilder<WantToVisitBloc, WantToVisitScreenState>(
                         builder: (_, state) {
                           if (state is WantToVisitScreenEmptyState) {
+                            debugPrint('placesToVisit: emptyState');
+
                             return const _EmptyList(
                               icon: AppAssets.card,
                               description: AppString.likedPlaces,
@@ -54,12 +56,15 @@ class _VisitingScreenState extends State<VisitingScreen> {
                             // Места могут быть удалены из избранного
                             // В этом случае показываем опять пустое состояние экрана
                             if (state.favoritePlaces.isEmpty) {
+                              debugPrint('placesToVisit: ${state.favoritePlaces.length}');
+
                               return const _EmptyList(
                                 icon: AppAssets.card,
                                 description: AppString.likedPlaces,
                               );
                             }
                             debugPrint('Места (BlocBuilder): ${state.favoritePlaces}');
+                            debugPrint('placesToVisit: ${state.favoritePlaces.length}');
 
                             return _WantToVisitWidget(
                               placesToVisit: state.favoritePlaces.toList(),
@@ -67,6 +72,8 @@ class _VisitingScreenState extends State<VisitingScreen> {
                             );
                           }
                           if (state is WantToVisitAfterDragState) {
+                            debugPrint('placesToVisit: ${state.favoritePlaces.length}');
+                            
                             return _WantToVisitWidget(
                               placesToVisit: state.favoritePlaces,
                               key: const PageStorageKey('WantToVisitScrollPosition'),
@@ -190,7 +197,6 @@ class _WantToVisitWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    debugPrint('placesToVisit: ${placesToVisit.length}');
     final theme = Theme.of(context);
 
     return ReorderableListView(
@@ -334,7 +340,7 @@ class _DismissibleWidget extends StatelessWidget {
           aspectRatio: orientation ? AppCardSize.visitingCard : AppCardSize.visitingCardLandscape,
           child: Dismissible(
             key: uniqueKey,
-            onDismissed: (direction) {
+            onDismissed: (direction) async {
               // Отправляю в эвент удаления карточки id свойство текущего места, само место
               // и меняю свойство isFavorite на false
               // Благодаря чему стейт видит обновление состояния и теперь виджет перерисовывается
@@ -345,22 +351,32 @@ class _DismissibleWidget extends StatelessWidget {
               // так список для него иммутабелен,
               // а сейчас я добавил флаг isFavorite
               // И передаю в эвент само место в избранном, а не весь список избранного
+              await interactor.removeFromFavorites(place: placesToVisit[i], db: db);
+
+              placesToVisit[i].isFavorite = false;
+              // ignore: use_build_context_synchronously
               context.read<WantToVisitBloc>().add(
                     RemoveFromWantToVisitEvent(
                       db: db,
-                      isFavorite: placesToVisit[i].isFavorite = false,
+                      isFavorite: placesToVisit[i].isFavorite,
                       place: placesToVisit[i],
-                      placeIndex: placesToVisit[i].id,
+                      placeIndex: i,
                     ),
                   );
+              placesToVisit[i].isFavorite = false;
+              // ignore: use_build_context_synchronously
               context.read<FavoriteBloc>().add(
                     FavoriteEvent(
                       db: db,
-                      isFavorite: placesToVisit[i].isFavorite = false,
+                      isFavorite: placesToVisit[i].isFavorite,
                       place: placesToVisit[i],
-                      placeIndex: placesToVisit[i].id,
+                      placeIndex: i,
                     ),
                   );
+
+              await interactor.loadFavoritePlaces(db: db);
+              debugPrint('isFavorite ${placesToVisit[i].isFavorite}');
+              debugPrint('Удалено из избранного: ${placesToVisit[i]}');
             },
             background: const SizedBox.shrink(),
             direction: DismissDirection.endToStart,
@@ -368,28 +384,37 @@ class _DismissibleWidget extends StatelessWidget {
               padding: const EdgeInsets.only(bottom: 11.0),
               child: PlaceCard(
                 placeIndex: i,
-                removePlace: () {
-                  interactor.removeFromFavorites(
-                    place: placesToVisit[i],
-                    db: db,
-                  );
+                removePlace: () async {
+                  // interactor.removeFromFavorites(
+                  //   place: placesToVisit[i],
+                  //   db: db,
+                  // );
+                  await interactor.removeFromFavorites(place: placesToVisit[i], db: db);
 
+                  placesToVisit[i].isFavorite = false;
+                  // ignore: use_build_context_synchronously
                   context.read<WantToVisitBloc>().add(
                         RemoveFromWantToVisitEvent(
                           db: db,
-                          isFavorite: placesToVisit[i].isFavorite = false,
+                          isFavorite: placesToVisit[i].isFavorite,
                           place: placesToVisit[i],
                           placeIndex: i,
                         ),
                       );
+                  placesToVisit[i].isFavorite = false;
+                  // ignore: use_build_context_synchronously
                   context.read<FavoriteBloc>().add(
                         FavoriteEvent(
                           db: db,
-                          isFavorite: placesToVisit[i].isFavorite = false,
+                          isFavorite: placesToVisit[i].isFavorite,
                           place: placesToVisit[i],
                           placeIndex: i,
                         ),
                       );
+
+                  await interactor.loadFavoritePlaces(db: db);
+                  debugPrint('isFavorite ${placesToVisit[i].isFavorite}');
+                  debugPrint('Удалено из избранного: ${placesToVisit[i]}');
                 },
                 isVisitingScreen: true,
                 placeList: placesToVisit,
