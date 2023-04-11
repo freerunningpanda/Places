@@ -15,7 +15,7 @@ class FavoriteBloc extends Bloc<FavoriteEvent, FavoriteState> {
       apiPlaces: ApiPlaces(),
     ),
   );
-  FavoriteBloc() : super(const IsNotFavoriteState(placeIndex: 0)) {
+  FavoriteBloc() : super(const IsNotFavoriteState(placeIndex: 0, isFavorite: false)) {
     on<FavoriteEvent>(
       (event, emit) {
         if (event.isFavorite) {
@@ -26,7 +26,7 @@ class FavoriteBloc extends Bloc<FavoriteEvent, FavoriteState> {
         } else {
           // interactor.removeFromFavorites(place: event.place, db: event.db);
           emit(
-            IsNotFavoriteState(placeIndex: event.placeIndex),
+            IsNotFavoriteState(placeIndex: event.placeIndex, isFavorite: event.isFavorite),
           );
         }
       },

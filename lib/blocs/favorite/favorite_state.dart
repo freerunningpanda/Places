@@ -8,12 +8,14 @@ abstract class FavoriteState extends Equatable {
 
 class IsNotFavoriteState extends FavoriteState {
   final int placeIndex;
+  final bool isFavorite;
 
   @override
-  List<Object?> get props => [placeIndex];
+  List<Object?> get props => [placeIndex, isFavorite];
 
   const IsNotFavoriteState({
     required this.placeIndex,
+    required this.isFavorite,
   });
 }
 

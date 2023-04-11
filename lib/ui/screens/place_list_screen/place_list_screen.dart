@@ -154,7 +154,7 @@ class _PlaceListWidgetPortraitState extends State<_PlaceListWidgetPortrait> {
                                 height: 22,
                               );
                       } else if (state is IsNotFavoriteState) {
-                        return isFavorite
+                        return state.isFavorite
                             ? const PlaceIcons(
                                 assetName: AppAssets.heartFull,
                                 width: 22,
