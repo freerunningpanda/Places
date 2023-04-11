@@ -139,6 +139,8 @@ class _PlaceListWidgetPortraitState extends State<_PlaceListWidgetPortrait> {
                     builder: (_, state) {
                       final isFavorite = place.isFavorite;
 
+                      debugPrint('isFavoriteMain: $isFavorite place: ${place.name}');
+
                       if (state is IsFavoriteState) {
                         return isFavorite
                             ? const PlaceIcons(

@@ -372,9 +372,7 @@ class _DismissibleWidget extends StatelessWidget {
                     ),
                   );
               debugPrint('placesToVisit[i].id: ${placesToVisit[i].id}');
-              // await interactor.loadFavoritePlaces(db: db);
-              // debugPrint('isFavorite ${placesToVisit[i].isFavorite}');
-              // debugPrint('Удалено из избранного: ${placesToVisit[i]}');
+
             },
             background: const SizedBox.shrink(),
             direction: DismissDirection.endToStart,
@@ -401,10 +399,8 @@ class _DismissibleWidget extends StatelessWidget {
                           placeIndex: placesToVisit[i].id,
                         ),
                       );
-                  debugPrint('placesToVisit[i].id: ${placesToVisit[i].id}');
-                  // await interactor.loadFavoritePlaces(db: db);
-                  // debugPrint('isFavorite ${placesToVisit[i].isFavorite}');
-                  // debugPrint('Удалено из избранного: ${placesToVisit[i]}');
+                  debugPrint('placesToVisit[i].id: ${placesToVisit[i].isFavorite}');
+
                 },
                 isVisitingScreen: true,
                 placeList: placesToVisit,
