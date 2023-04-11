@@ -16,19 +16,18 @@ class FavoriteBloc extends Bloc<FavoriteEvent, FavoriteState> {
     ),
   );
   FavoriteBloc() : super(const IsNotFavoriteState(placeIndex: 0, isFavorite: false)) {
-    on<FavoriteEvent>(
+    on<AddToFavoriteEvent>(
       (event, emit) {
-        if (event.isFavorite) {
-          // interactor.addToFavorites(place: event.place, db: event.db);
-          emit(
-            IsFavoriteState(placeIndex: event.placeIndex),
-          );
-        } else {
-          // interactor.removeFromFavorites(place: event.place, db: event.db);
-          emit(
-            IsNotFavoriteState(placeIndex: event.placeIndex, isFavorite: event.isFavorite),
-          );
-        }
+        emit(
+          IsFavoriteState(placeIndex: event.placeIndex),
+        );
+      },
+    );
+    on<RemoveFromFavoriteEvent>(
+      (event, emit) {
+        emit(
+          IsNotFavoriteState(placeIndex: event.placeIndex, isFavorite: event.isFavorite),
+        );
       },
     );
   }
@@ -43,8 +42,6 @@ class FavoriteBloc extends Bloc<FavoriteEvent, FavoriteState> {
   //   PlaceInteractor.favoritePlaces.remove(place);
   //   debugPrint('🟡--------- Длина: ${PlaceInteractor.favoritePlaces.length}');
   // }
-
-  
 
   // Future<void> addToFavorites({required DbPlace place, required AppDb db}) async {
   //   await db.addPlace(place);

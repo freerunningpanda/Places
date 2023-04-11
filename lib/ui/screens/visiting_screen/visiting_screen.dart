@@ -364,7 +364,7 @@ class _DismissibleWidget extends StatelessWidget {
                   );
               placesToVisit[i].isFavorite = false;
               context.read<FavoriteBloc>().add(
-                    FavoriteEvent(
+                    RemoveFromFavoriteEvent(
                       db: db,
                       isFavorite: placesToVisit[i].isFavorite,
                       place: placesToVisit[i],
@@ -392,7 +392,7 @@ class _DismissibleWidget extends StatelessWidget {
                       );
                   placesToVisit[i].isFavorite = false;
                   context.read<FavoriteBloc>().add(
-                        FavoriteEvent(
+                        RemoveFromFavoriteEvent(
                           db: db,
                           isFavorite: placesToVisit[i].isFavorite,
                           place: placesToVisit[i],

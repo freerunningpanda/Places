@@ -107,7 +107,7 @@ class PlaceCard extends StatelessWidget {
 
                       place.isFavorite = true;
                       context.read<FavoriteBloc>().add(
-                            FavoriteEvent(
+                            AddToFavoriteEvent(
                               db: db,
                               isFavorite: place.isFavorite,
                               place: place,
@@ -144,7 +144,7 @@ class PlaceCard extends StatelessWidget {
                       // Событие удаляет место из списка избранного
                       // ignore: use_build_context_synchronously
                       context.read<FavoriteBloc>().add(
-                            FavoriteEvent(
+                            RemoveFromFavoriteEvent(
                               db: db,
                               isFavorite: place.isFavorite,
                               place: place,
