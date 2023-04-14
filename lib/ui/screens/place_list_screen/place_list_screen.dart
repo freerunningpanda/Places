@@ -232,7 +232,6 @@ class _PlaceListWidgetPortraitState extends State<_PlaceListWidgetPortrait> {
     setState(() {
       if (!isFavorite) {
         place.isFavorite = true;
-        PlaceInteractor.favoritePlaces.add(place);
         context.read<WantToVisitBloc>().add(
               AddToWantToVisitEvent(
                 db: db,
@@ -243,7 +242,6 @@ class _PlaceListWidgetPortraitState extends State<_PlaceListWidgetPortrait> {
         db.addPlace(place);
       } else {
         place.isFavorite = false;
-        PlaceInteractor.favoritePlaces.remove(place);
         context.read<WantToVisitBloc>().add(
               RemoveFromWantToVisitEvent(
                 db: db,
