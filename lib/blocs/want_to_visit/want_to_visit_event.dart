@@ -4,8 +4,8 @@ abstract class VisitingScreenEvent {
   const VisitingScreenEvent();
 }
 
-// Пустой список мест
-class FavoriteListIsEmpty extends VisitingScreenEvent {}
+// Список мест
+class FavoriteListLoadedEvent extends VisitingScreenEvent {}
 
 class AddToWantToVisitEvent extends VisitingScreenEvent {
   final bool isFavorite;

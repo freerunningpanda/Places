@@ -9,13 +9,30 @@ part 'want_to_visit_event.dart';
 part 'want_to_visit_state.dart';
 
 class WantToVisitBloc extends Bloc<VisitingScreenEvent, WantToVisitScreenState> {
+  final AppDb db;
   final interactor = PlaceInteractor(
     repository: PlaceRepository(
       apiPlaces: ApiPlaces(),
     ),
   );
 
-  WantToVisitBloc() : super(WantToVisitScreenEmptyState()) {
+  WantToVisitBloc({required this.db}) : super(WantToVisitScreenEmptyState()) {
+    on<FavoriteListLoadedEvent>((event, emit) async {
+      /// Список избранных мест из бд
+      final loadedPlaces = await getPlaces(db);
+      if (loadedPlaces.isEmpty) {
+        emit(
+          WantToVisitScreenEmptyState(),
+        );
+      } else {
+        emit(
+          WantToVisitScreenIsNotEmpty(
+            favoritePlaces: loadedPlaces,
+            length: loadedPlaces.length,
+          ),
+        );
+      }
+    });
     on<AddToWantToVisitEvent>(
       (event, emit) async {
         final dbFavoritePlaces = await event.db.favoritePlacesEntries;
@@ -64,5 +81,11 @@ class WantToVisitBloc extends Bloc<VisitingScreenEvent, WantToVisitScreenState> 
 
     final place = places.removeAt(oldIndex);
     places.insert(modifiedIndex, place);
+  }
+
+  Future<List<DbPlace>> getPlaces(AppDb db) async {
+    final list = await db.favoritePlacesEntries;
+
+    return list;
   }
 }
