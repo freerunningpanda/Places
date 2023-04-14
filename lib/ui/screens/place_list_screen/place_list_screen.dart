@@ -115,10 +115,16 @@ class _PlaceListWidgetPortraitState extends State<_PlaceListWidgetPortrait> {
   );
 
   @override
+  void initState() {
+    final db = context.read<AppDb>();
+    getPlaces(db);
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     final db = context.read<AppDb>();
-    _loadDb(db);
 
     return Expanded(
       child: ListView.builder(
@@ -131,65 +137,49 @@ class _PlaceListWidgetPortraitState extends State<_PlaceListWidgetPortrait> {
           return Column(
             children: [
               FittedBox(
-                child: PlaceCard(
-                  placeIndex: index,
-                  isVisitingScreen: false,
-                  aspectRatio: AppCardSize.placeCard,
-                  actionOne: BlocBuilder<FavoriteBloc, FavoriteState>(
-                    builder: (_, state) {
-                      final isFavorite = place.isFavorite;
+                child: FutureBuilder(
+                  future: getValue(db, place),
+                  // ignore: avoid_types_on_closure_parameters
+                  builder: (_, AsyncSnapshot<bool> snapshot) {
+                    if (snapshot.connectionState == ConnectionState.done) {
+                      final isFavorite = snapshot.data ?? false;
 
-                      debugPrint('isFavoriteMain: $isFavorite place: ${place.name}');
-
-                      if (state is IsFavoriteState) {
-                        return isFavorite
-                            ? const PlaceIcons(
-                                assetName: AppAssets.heartFull,
-                                width: 22,
-                                height: 22,
-                              )
-                            : const PlaceIcons(
-                                assetName: AppAssets.favourite,
-                                width: 22,
-                                height: 22,
-                              );
-                      } else if (state is IsNotFavoriteState) {
-                        return state.isFavorite
-                            ? const PlaceIcons(
-                                assetName: AppAssets.heartFull,
-                                width: 22,
-                                height: 22,
-                              )
-                            : const PlaceIcons(
-                                assetName: AppAssets.favourite,
-                                width: 22,
-                                height: 22,
-                              );
-                      } else {
-                        throw ArgumentError('Bad state');
-                      }
-                    },
-                  ),
-                  url: place.urls[0],
-                  type: place.placeType,
-                  name: place.name,
-                  placeList: widget.placeList,
-                  details: [
-                    Text(
-                      place.name,
-                      maxLines: 2,
-                      style: widget.theme.textTheme.headlineSmall,
-                    ),
-                    const SizedBox(height: 2),
-                    SizedBox(
-                      height: size.height / 7,
-                      child: Text(
-                        place.description,
-                        overflow: TextOverflow.ellipsis,
-                        style: AppTypography.textText16Regular,
-                      ),
-                    ),
-                  ],
+                      return PlaceCard(
+                        placeIndex: index,
+                        isVisitingScreen: false,
+                        aspectRatio: AppCardSize.placeCard,
+                        actionOne: Icon(
+                          isFavorite ? Icons.favorite : Icons.favorite_border,
+                          color: isFavorite ? Colors.red : null,
+                        ),
+                        addPlace: () => toggleFavorite(place),
+                        url: place.urls[0],
+                        type: place.placeType,
+                        name: place.name,
+                        placeList: widget.placeList,
+                        details: [
+                          Text(
+                            place.name,
+                            maxLines: 2,
+                            style: widget.theme.textTheme.headlineSmall,
+                          ),
+                          const SizedBox(height: 2),
+                          SizedBox(
+                            height: size.height / 7,
+                            child: Text(
+                              place.description,
+                              overflow: TextOverflow.ellipsis,
+                              style: AppTypography.textText16Regular,
+                            ),
+                          ),
+                        ],
+                      );
+                    } else {
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    }
+                  },
                 ),
               ),
               const SizedBox(height: 11),
@@ -200,8 +190,42 @@ class _PlaceListWidgetPortraitState extends State<_PlaceListWidgetPortrait> {
     );
   }
 
-  Future<void> _loadDb(AppDb db) async {
-    await interactor.loadFavoritePlaces(db: db);
+  Future<void> toggleFavorite(DbPlace place) async {
+    final db = context.read<AppDb>();
+    final isFavorite = await getValue(db, place);
+    setState(() {
+      if (!isFavorite) {
+        place.isFavorite = true;
+        PlaceInteractor.favoritePlaces.add(place);
+        db.addPlace(place);
+      } else {
+        place.isFavorite = false;
+        PlaceInteractor.favoritePlaces.remove(place);
+        db.deletePlace(place);
+      }
+    });
+  }
+
+  void removeFromFavorites(DbPlace place) {
+    final db = context.read<AppDb>();
+
+    setState(() {
+      place.isFavorite = false;
+      PlaceInteractor.favoritePlaces.remove(place);
+      db.deletePlace(place);
+    });
+  }
+
+  Future<void> getPlaces(AppDb db) async {
+    final list = await db.favoritePlacesEntries;
+    debugPrint('length: ${list.length}');
+  }
+
+  Future<bool> getValue(AppDb db, DbPlace place) async {
+    final list = await db.favoritePlacesEntries;
+    final isFavorite = list.any((p) => p.id == place.id);
+
+    return isFavorite;
   }
 }
 
@@ -227,10 +251,16 @@ class _PlaceListWidgetLandscapeState extends State<_PlaceListWidgetLandscape> {
   );
 
   @override
+  void initState() {
+    final db = context.read<AppDb>();
+    getPlaces(db);
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     final db = context.read<AppDb>();
-    _loadDb(db);
 
     return Expanded(
       child: GridView.builder(
@@ -249,62 +279,51 @@ class _PlaceListWidgetLandscapeState extends State<_PlaceListWidgetLandscape> {
 
           return Column(
             children: [
-              PlaceCard(
-                placeIndex: index,
-                isVisitingScreen: false,
-                aspectRatio: 1.5 / 1,
-                actionOne: BlocBuilder<FavoriteBloc, FavoriteState>(
-                  builder: (_, state) {
-                    final isFavorite = place.isFavorite;
-                    if (state is IsFavoriteState) {
-                      return isFavorite
-                          ? const PlaceIcons(
-                              assetName: AppAssets.heartFull,
-                              width: 22,
-                              height: 22,
-                            )
-                          : const PlaceIcons(
-                              assetName: AppAssets.favourite,
-                              width: 22,
-                              height: 22,
-                            );
-                    } else if (state is IsNotFavoriteState) {
-                      return isFavorite
-                          ? const PlaceIcons(
-                              assetName: AppAssets.heartFull,
-                              width: 22,
-                              height: 22,
-                            )
-                          : const PlaceIcons(
-                              assetName: AppAssets.favourite,
-                              width: 22,
-                              height: 22,
-                            );
+              FittedBox(
+                child: FutureBuilder(
+                  future: getValue(db, place),
+                  // ignore: avoid_types_on_closure_parameters
+                  builder: (_, AsyncSnapshot<bool> snapshot) {
+                    if (snapshot.connectionState == ConnectionState.done) {
+                      final isFavorite = snapshot.data ?? false;
+
+                      return PlaceCard(
+                        placeIndex: index,
+                        isVisitingScreen: false,
+                        aspectRatio: 1.5 / 1,
+                        actionOne: Icon(
+                          isFavorite ? Icons.favorite : Icons.favorite_border,
+                          color: isFavorite ? Colors.red : null,
+                        ),
+                        addPlace: () => toggleFavorite(place),
+                        url: place.urls[0],
+                        type: place.placeType,
+                        name: place.name,
+                        placeList: widget.placeList,
+                        details: [
+                          Text(
+                            place.name,
+                            maxLines: 2,
+                            style: widget.theme.textTheme.headlineSmall,
+                          ),
+                          const SizedBox(height: 2),
+                          SizedBox(
+                            height: size.height / 7,
+                            child: Text(
+                              place.description,
+                              overflow: TextOverflow.ellipsis,
+                              style: AppTypography.textText16Regular,
+                            ),
+                          ),
+                        ],
+                      );
                     } else {
-                      return const Text('Bad state');
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
                     }
                   },
                 ),
-                url: place.urls[0],
-                type: place.placeType,
-                name: place.name,
-                placeList: widget.placeList,
-                details: [
-                  Text(
-                    place.name,
-                    maxLines: 2,
-                    style: widget.theme.textTheme.headlineSmall,
-                  ),
-                  const SizedBox(height: 2),
-                  SizedBox(
-                    height: size.height / 10,
-                    child: Text(
-                      place.description,
-                      overflow: TextOverflow.ellipsis,
-                      style: AppTypography.textText16Regular,
-                    ),
-                  ),
-                ],
               ),
               const SizedBox(height: 11),
             ],
@@ -314,7 +333,41 @@ class _PlaceListWidgetLandscapeState extends State<_PlaceListWidgetLandscape> {
     );
   }
 
-  Future<void> _loadDb(AppDb db) async {
-    await interactor.loadFavoritePlaces(db: db);
+  Future<void> toggleFavorite(DbPlace place) async {
+    final db = context.read<AppDb>();
+    final isFavorite = await getValue(db, place);
+    setState(() {
+      if (!isFavorite) {
+        place.isFavorite = true;
+        PlaceInteractor.favoritePlaces.add(place);
+        db.addPlace(place);
+      } else {
+        place.isFavorite = false;
+        PlaceInteractor.favoritePlaces.remove(place);
+        db.deletePlace(place);
+      }
+    });
+  }
+
+  void removeFromFavorites(DbPlace place) {
+    final db = context.read<AppDb>();
+
+    setState(() {
+      place.isFavorite = false;
+      PlaceInteractor.favoritePlaces.remove(place);
+      db.deletePlace(place);
+    });
+  }
+
+  Future<void> getPlaces(AppDb db) async {
+    final list = await db.favoritePlacesEntries;
+    debugPrint('length: ${list.length}');
+  }
+
+  Future<bool> getValue(AppDb db, DbPlace place) async {
+    final list = await db.favoritePlacesEntries;
+    final isFavorite = list.any((p) => p.id == place.id);
+
+    return isFavorite;
   }
 }

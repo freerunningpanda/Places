@@ -381,6 +381,7 @@ class _DismissibleWidget extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.only(bottom: 11.0),
               child: PlaceCard(
+                addPlace: () {},
                 placeIndex: i,
                 removePlace: () async {
                   placesToVisit[i].isFavorite = false;

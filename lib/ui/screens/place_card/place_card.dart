@@ -27,6 +27,7 @@ class PlaceCard extends StatelessWidget {
   final List<Widget> details;
   final Widget actionOne;
   final Widget? actionTwo;
+  final VoidCallback? addPlace;
   final double aspectRatio;
   final List<DbPlace> placeList;
   final int placeIndex;
@@ -41,6 +42,7 @@ class PlaceCard extends StatelessWidget {
     required this.details,
     required this.actionOne,
     this.actionTwo,
+    required this.addPlace,
     required this.aspectRatio,
     required this.placeList,
     required this.placeIndex,
@@ -98,160 +100,7 @@ class PlaceCard extends StatelessWidget {
               else
                 RippleIcon(
                   actionOne: actionOne,
-                  addPlace: () async {
-                    final place = placeList[placeIndex];
-                    // Если место не в избранном
-                    if (!place.isFavorite) {
-                      // Добавляю место в избранное, меняя флаг isFavorite на true
-                      // Событие добавляет место в список избранного
-                      // Отвечает за обновление состояние лайка
-
-                      place.isFavorite = true;
-                      context.read<FavoriteBloc>().add(
-                            AddToFavoriteEvent(
-                              db: db,
-                              isFavorite: place.isFavorite,
-                              place: place,
-                              placeIndex: place.id, // Для того чтобы связать места по его id с бэка
-                              // Это позволит при перемешивании позиции места в списке удалять нужное место
-                            ),
-                          );
-
-                      // Отвечает за отображение списка мест в избранном
-                      place.isFavorite = true;
-                      context.read<WantToVisitBloc>().add(
-                            AddToWantToVisitEvent(
-                              db: db,
-                              isFavorite: place.isFavorite,
-                              place: place,
-                              placeIndex: place.id,
-                            ),
-                          );
-                      debugPrint('placeIndex: ${place.id}');
-                      await interactor.addToFavorites(place: place, db: db);
-                      await interactor.loadFavoritePlaces(db: db);
-                      debugPrint('isFavorite ${place.isFavorite}');
-                      debugPrint('Добавлены в избранное: $place');
-                    } else {
-                      // Если место в избранном, меняю флаг isFavorite на false.
-
-                      if (fromVisitingScreen) {
-                        place.isFavorite = true;
-                        context.read<FavoriteBloc>().add(
-                              AddToFavoriteEvent(
-                                db: db,
-                                isFavorite: place.isFavorite,
-                                place: place,
-                                placeIndex: place.id, // Для того чтобы связать места по его id с бэка
-                                // Это позволит при перемешивании позиции места в списке удалять нужное место
-                              ),
-                            );
-
-                        // Отвечает за отображение списка мест в избранном
-                        place.isFavorite = true;
-                        context.read<WantToVisitBloc>().add(
-                              AddToWantToVisitEvent(
-                                db: db,
-                                isFavorite: place.isFavorite,
-                                place: place,
-                                placeIndex: place.id,
-                              ),
-                            );
-                        debugPrint('placeIndex: ${place.id}');
-                        await interactor.addToFavorites(place: place, db: db);
-                        await interactor.loadFavoritePlaces(db: db);
-                        debugPrint('isFavorite ${place.isFavorite}');
-                        debugPrint('Добавлены в избранное: $place');
-                        fromVisitingScreen = false;
-                      } else {
-                        place.isFavorite = false;
-                        
-
-                        // Событие удаляет место из списка избранного
-                        // ignore: use_build_context_synchronously
-                        context.read<FavoriteBloc>().add(
-                              RemoveFromFavoriteEvent(
-                                db: db,
-                                isFavorite: place.isFavorite,
-                                place: place,
-                                placeIndex: place.id,
-                              ),
-                            );
-
-                        place.isFavorite = false;
-
-                        // ignore: use_build_context_synchronously
-                        context.read<WantToVisitBloc>().add(
-                              RemoveFromWantToVisitEvent(
-                                db: db,
-                                isFavorite: place.isFavorite,
-                                place: place,
-                                placeIndex: place.id,
-                              ),
-                            );
-                        await interactor.removeFromFavorites(place: place, db: db);
-                        await interactor.loadFavoritePlaces(db: db);
-                        debugPrint('isFavorite ${place.isFavorite}');
-                        debugPrint('Удалено из избранного: $place');
-                      }
-                    }
-                    // if (!place.isFavorite) {
-                    //   interactor.addToFavorites(place: place, db: db);
-
-                    //   // Добавляю место в избранное, меняя флаг isFavorite на true
-                    //   // Событие добавляет место в список избранного
-                    //   // Отвечает за обновление состояние лайка
-                    //   context.read<FavoriteBloc>().add(
-                    //         FavoriteEvent(
-                    //           db: db,
-                    //           isFavorite: place.isFavorite = true,
-                    //           place: place,
-                    //           placeIndex: place.id, // Для того чтобы связать места по его id с бэка
-                    //           // Это позволит при перемешивании позиции места в списке удалять нужное место
-                    //         ),
-                    //       );
-                    //   // Отвечает за отображение списка мест в избранном
-
-                    //   context.read<WantToVisitBloc>().add(
-                    //         AddToWantToVisitEvent(
-                    //           isFavorite: place.isFavorite = true,
-                    //           place: place,
-                    //           placeIndex: place.id,
-                    //           favoritePlaces: await db.allPlacesEntries,
-                    //           db: db,
-                    //         ),
-                    //       );
-
-                    //   debugPrint('isFavorite ${place.isFavorite}');
-                    //   debugPrint('Добавлены в избранное: $place');
-                    // } else {
-                    //   interactor.removeFromFavorites(place: place, db: db);
-
-                    //   // Если место в избранном, меняю флаг isFavorite на false.
-                    //   // Событие удаляет место из списка избранного
-
-                    //   context.read<FavoriteBloc>().add(
-                    //         FavoriteEvent(
-                    //           isFavorite: place.isFavorite = false,
-                    //           place: place,
-                    //           placeIndex: place.id,
-                    //           db: db,
-                    //         ),
-                    //       );
-                    //   context.read<WantToVisitBloc>().add(
-                    //         RemoveFromWantToVisitEvent(
-                    //           isFavorite: place.isFavorite = false,
-                    //           place: place,
-                    //           placeIndex: place.id,
-                    //           favoritePlaces: await db.allPlacesEntries,
-                    //           db: db,
-                    //         ),
-                    //       );
-
-                    //   debugPrint('isFavorite ${place.isFavorite}');
-                    //   debugPrint('Удалено из избранного: $place');
-                    // }
-                  },
+                  addPlace: addPlace,
                 ),
             ],
           ),
