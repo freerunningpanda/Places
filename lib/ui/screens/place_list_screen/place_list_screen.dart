@@ -148,10 +148,17 @@ class _PlaceListWidgetPortraitState extends State<_PlaceListWidgetPortrait> {
                         placeIndex: index,
                         isVisitingScreen: false,
                         aspectRatio: AppCardSize.placeCard,
-                        actionOne: Icon(
-                          isFavorite ? Icons.favorite : Icons.favorite_border,
-                          color: isFavorite ? Colors.red : null,
-                        ),
+                        actionOne: isFavorite
+                            ? const PlaceIcons(
+                                assetName: AppAssets.heartFull,
+                                width: 22,
+                                height: 22,
+                              )
+                            : const PlaceIcons(
+                                assetName: AppAssets.favourite,
+                                width: 22,
+                                height: 22,
+                              ),
                         addPlace: () => toggleFavorite(place),
                         url: place.urls[0],
                         type: place.placeType,
@@ -175,8 +182,36 @@ class _PlaceListWidgetPortraitState extends State<_PlaceListWidgetPortrait> {
                         ],
                       );
                     } else {
-                      return const Center(
-                        child: CircularProgressIndicator(),
+                      return PlaceCard(
+                        placeIndex: index,
+                        isVisitingScreen: false,
+                        aspectRatio: AppCardSize.placeCard,
+                        actionOne: const PlaceIcons(
+                          assetName: AppAssets.favourite,
+                          width: 22,
+                          height: 22,
+                        ),
+                        addPlace: null,
+                        url: place.urls[0],
+                        type: place.placeType,
+                        name: place.name,
+                        placeList: widget.placeList,
+                        details: [
+                          Text(
+                            place.name,
+                            maxLines: 2,
+                            style: widget.theme.textTheme.headlineSmall,
+                          ),
+                          const SizedBox(height: 2),
+                          SizedBox(
+                            height: size.height / 7,
+                            child: Text(
+                              place.description,
+                              overflow: TextOverflow.ellipsis,
+                              style: AppTypography.textText16Regular,
+                            ),
+                          ),
+                        ],
                       );
                     }
                   },
