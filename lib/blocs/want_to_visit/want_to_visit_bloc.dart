@@ -21,7 +21,6 @@ class WantToVisitBloc extends Bloc<VisitingScreenEvent, WantToVisitScreenState> 
         final dbFavoritePlaces = await event.db.favoritePlacesEntries;
         emit(
           WantToVisitScreenIsNotEmpty(
-            placeIndex: event.placeIndex,
             favoritePlaces: dbFavoritePlaces,
             length: dbFavoritePlaces.length,
           ),
@@ -33,7 +32,6 @@ class WantToVisitBloc extends Bloc<VisitingScreenEvent, WantToVisitScreenState> 
       final dbFavoritePlaces = await event.db.favoritePlacesEntries;
       emit(
         WantToVisitScreenIsNotEmpty(
-          placeIndex: event.placeIndex,
           favoritePlaces: dbFavoritePlaces,
           length: dbFavoritePlaces.length,
         ),

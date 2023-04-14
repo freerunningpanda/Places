@@ -361,7 +361,6 @@ class _DismissibleWidget extends StatelessWidget {
                       db: db,
                       isFavorite: placesToVisit[i].isFavorite,
                       place: placesToVisit[i],
-                      placeIndex: placesToVisit[i].id,
                     ),
                   );
               placesToVisit[i].isFavorite = false;
@@ -390,7 +389,6 @@ class _DismissibleWidget extends StatelessWidget {
                           db: db,
                           isFavorite: placesToVisit[i].isFavorite,
                           place: placesToVisit[i],
-                          placeIndex: placesToVisit[i].id,
                         ),
                       );
                   placesToVisit[i].isFavorite = false;

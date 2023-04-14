@@ -4,6 +4,7 @@ import 'package:flutter/material.dart' hide ErrorWidget;
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:places/blocs/favorite/favorite_bloc.dart';
+import 'package:places/blocs/want_to_visit/want_to_visit_bloc.dart';
 import 'package:places/cubits/places_list/places_list_cubit.dart';
 import 'package:places/data/api/api_places.dart';
 import 'package:places/data/database/database.dart';
@@ -232,10 +233,24 @@ class _PlaceListWidgetPortraitState extends State<_PlaceListWidgetPortrait> {
       if (!isFavorite) {
         place.isFavorite = true;
         PlaceInteractor.favoritePlaces.add(place);
+        context.read<WantToVisitBloc>().add(
+              AddToWantToVisitEvent(
+                db: db,
+                isFavorite: place.isFavorite,
+                place: place,
+              ),
+            );
         db.addPlace(place);
       } else {
         place.isFavorite = false;
         PlaceInteractor.favoritePlaces.remove(place);
+        context.read<WantToVisitBloc>().add(
+              RemoveFromWantToVisitEvent(
+                db: db,
+                isFavorite: place.isFavorite,
+                place: place,
+              ),
+            );
         db.deletePlace(place);
       }
     });
