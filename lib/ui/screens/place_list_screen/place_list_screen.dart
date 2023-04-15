@@ -264,11 +264,14 @@ class _PlaceListWidgetPortraitState extends State<_PlaceListWidgetPortrait> {
     });
   }
 
+
+  // Получить список избранного из бд
   Future<void> getPlaces(AppDb db) async {
     final list = await db.favoritePlacesEntries;
     debugPrint('length: ${list.length}');
   }
 
+  // Получить значение свойства isFavorite
   Future<bool> getValue(AppDb db, DbPlace place) async {
     final list = await db.favoritePlacesEntries;
     final isFavorite = list.any((p) => p.id == place.id);
