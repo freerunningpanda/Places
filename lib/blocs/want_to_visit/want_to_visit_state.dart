@@ -25,30 +25,28 @@ class WantToVisitScreenIsNotEmpty extends WantToVisitScreenState {
     required this.favoritePlaces,
     required this.length,
   });
-
 }
 
 // Состояние списка после переноса места
 class WantToVisitAfterDragState extends WantToVisitScreenState {
-  final int oldIndex;
-  final int newIndex;
+  final int index;
   final List<DbPlace> favoritePlaces;
+  final bool isReordinable;
 
   @override
   List<Object?> get props => [
-        oldIndex,
-        newIndex,
+        index,
         favoritePlaces,
       ];
 
   const WantToVisitAfterDragState({
-    required this.oldIndex,
-    required this.newIndex,
+    required this.index,
     required this.favoritePlaces,
+    required this.isReordinable,
   });
 
   @override
   String toString() {
-    return 'newIndex $newIndex}';
+    return 'newIndex $index}';
   }
 }

@@ -55,34 +55,8 @@ class WantToVisitBloc extends Bloc<VisitingScreenEvent, WantToVisitScreenState> 
         ),
       );
     });
-    on<DragCardOnWantToVisitEvent>((event, emit) async {
-      final dbFavoritePlaces = await event.db.favoritePlacesEntries;
-      await dragCard(event.places, event.db, event.oldIndex, event.newIndex);
-      emit(
-        WantToVisitAfterDragState(
-          newIndex: event.newIndex,
-          oldIndex: event.oldIndex,
-          favoritePlaces: dbFavoritePlaces,
-        ),
-      );
-    });
+
   }
-
-  // void addToFavorites({required DbPlace place}) {
-  //   PlaceInteractor.favoritePlaces.add(place);
-  // }
-
-  // void removeFromFavorites({required DbPlace place}) {
-  //   PlaceInteractor.favoritePlaces.remove(place);
-  // }
-
-  // void dragCard(List<DbPlace> places, int oldIndex, int newIndex) {
-  //   var modifiedIndex = newIndex;
-  //   if (newIndex > oldIndex) modifiedIndex--;
-
-  //   final place = places.removeAt(oldIndex);
-  //   places.insert(modifiedIndex, place);
-  // }
 
   Future<void> dragCard(List<DbPlace> places, AppDb db, int oldIndex, int newIndex) async {
     var modifiedIndex = newIndex;
@@ -95,8 +69,9 @@ class WantToVisitBloc extends Bloc<VisitingScreenEvent, WantToVisitScreenState> 
       final updatedPlace = places[i].copyWith(index: Value<int>(i));
       await db.updatePlace(updatedPlace);
     }
-  }
 
+    
+  }
   Future<List<DbPlace>> getPlaces(AppDb db) async {
     final list = await db.favoritePlacesEntries;
 
