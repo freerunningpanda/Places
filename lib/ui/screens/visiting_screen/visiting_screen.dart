@@ -215,13 +215,11 @@ class _WantToVisitWidget extends StatelessWidget {
             );
       },
       itemBuilder: (context, index) {
-
         return ClipRRect(
           key: ObjectKey(index),
           borderRadius: BorderRadius.circular(16.0),
           child: _DismissibleWidget(
-            i: index,
-            placesToVisit: placesToVisit,
+            place: placesToVisit[index],
             theme: theme,
             uniqueKey: UniqueKey(),
             actionTwo: const PlaceIcons(
@@ -261,8 +259,7 @@ class _VisitedWidget extends StatelessWidget {
       children: [
         for (var i = 0; i < visitedPlaces.length; i++)
           _DismissibleWidget(
-            i: i,
-            placesToVisit: visitedPlaces,
+            place: visitedPlaces[i],
             theme: theme,
             uniqueKey: UniqueKey(),
             actionTwo: const PlaceIcons(
@@ -279,8 +276,8 @@ class _VisitedWidget extends StatelessWidget {
 }
 
 class _DismissibleWidget extends StatelessWidget {
-  final int i;
-  final List<DbPlace> placesToVisit;
+  // final int i;
+  final DbPlace place;
   final ThemeData theme;
   final Key uniqueKey;
   final Widget actionTwo;
@@ -289,8 +286,8 @@ class _DismissibleWidget extends StatelessWidget {
 
   const _DismissibleWidget({
     Key? key,
-    required this.i,
-    required this.placesToVisit,
+    // required this.i,
+    required this.place,
     required this.theme,
     required this.uniqueKey,
     required this.actionTwo,
@@ -307,7 +304,7 @@ class _DismissibleWidget extends StatelessWidget {
         apiPlaces: ApiPlaces(),
       ),
     );
-    debugPrint('placesToVisit[i].urls: ${placesToVisit[i].urls}');
+    debugPrint('placesToVisit[i].urls: ${place.urls}');
 
     return Stack(
       children: [
@@ -359,25 +356,25 @@ class _DismissibleWidget extends StatelessWidget {
               // так список для него иммутабелен,
               // а сейчас я добавил флаг isFavorite
               // И передаю в эвент само место в избранном, а не весь список избранного
-              placesToVisit[i].isFavorite = false;
+              place.isFavorite = false;
               context.read<WantToVisitBloc>().add(
                     RemoveFromWantToVisitEvent(
                       db: db,
-                      isFavorite: placesToVisit[i].isFavorite,
-                      place: placesToVisit[i],
+                      isFavorite: place.isFavorite,
+                      place: place,
                     ),
                   );
-              placesToVisit[i].isFavorite = false;
+              place.isFavorite = false;
               context.read<FavoriteBloc>().add(
                     RemoveFromFavoriteEvent(
                       db: db,
-                      isFavorite: placesToVisit[i].isFavorite,
-                      place: placesToVisit[i],
-                      placeIndex: placesToVisit[i].id,
+                      isFavorite: place.isFavorite,
+                      place: place,
+                      placeIndex: place.id,
                     ),
                   );
               fromVisitingScreen = true;
-              debugPrint('placesToVisit[i].id: ${placesToVisit[i].id}');
+              debugPrint('placesToVisit[i].id: ${place.id}');
             },
             background: const SizedBox.shrink(),
             direction: DismissDirection.endToStart,
@@ -385,36 +382,37 @@ class _DismissibleWidget extends StatelessWidget {
               padding: const EdgeInsets.only(bottom: 11.0),
               child: PlaceCard(
                 addPlace: () {},
-                placeIndex: i,
+                placeIndex: place.id,
                 removePlace: () async {
-                  placesToVisit[i].isFavorite = false;
+                  debugPrint('pressed_remove_place');
+                  place.isFavorite = false;
                   context.read<WantToVisitBloc>().add(
                         RemoveFromWantToVisitEvent(
                           db: db,
-                          isFavorite: placesToVisit[i].isFavorite,
-                          place: placesToVisit[i],
+                          isFavorite: place.isFavorite,
+                          place: place,
                         ),
                       );
-                  placesToVisit[i].isFavorite = false;
+                  place.isFavorite = false;
                   context.read<FavoriteBloc>().add(
                         RemoveFromFavoriteEvent(
                           db: db,
-                          isFavorite: placesToVisit[i].isFavorite,
-                          place: placesToVisit[i],
-                          placeIndex: placesToVisit[i].id,
+                          isFavorite: place.isFavorite,
+                          place: place,
+                          placeIndex: place.id,
                         ),
                       );
                   fromVisitingScreen = true;
                 },
                 isVisitingScreen: true,
-                placeList: placesToVisit,
-                url: placesToVisit[i].urls,
-                type: placesToVisit[i].placeType,
-                name: placesToVisit[i].name,
+                place: place,
+                url: place.urls,
+                type: place.placeType,
+                name: place.name,
                 aspectRatio: AppCardSize.visitingCardDismiss,
                 details: [
                   Text(
-                    placesToVisit[i].name,
+                    place.name,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: theme.textTheme.headlineSmall,

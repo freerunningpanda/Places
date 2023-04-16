@@ -29,7 +29,7 @@ class PlaceCard extends StatelessWidget {
   final Widget? actionTwo;
   final VoidCallback? addPlace;
   final double aspectRatio;
-  final List<DbPlace> placeList;
+  final DbPlace place;
   final int placeIndex;
   final bool isVisitingScreen;
   final VoidCallback? removePlace;
@@ -44,7 +44,7 @@ class PlaceCard extends StatelessWidget {
     this.actionTwo,
     required this.addPlace,
     required this.aspectRatio,
-    required this.placeList,
+    required this.place,
     required this.placeIndex,
     required this.isVisitingScreen,
     this.removePlace,
@@ -86,7 +86,7 @@ class PlaceCard extends StatelessWidget {
                   ),
                 ],
               ),
-              RippleCardFull(place: placeList[placeIndex]),
+              RippleCardFull(place: place),
               if (isVisitingScreen)
                 RippleIcons(
                   removePlace: removePlace,

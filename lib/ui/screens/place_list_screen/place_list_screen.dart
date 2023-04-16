@@ -171,7 +171,7 @@ class _PlaceListWidgetPortraitState extends State<_PlaceListWidgetPortrait> {
                         url: imageUrl,
                         type: place.placeType,
                         name: place.name,
-                        placeList: widget.placeList,
+                        place: place,
                         details: [
                           Text(
                             place.name,
@@ -203,7 +203,7 @@ class _PlaceListWidgetPortraitState extends State<_PlaceListWidgetPortrait> {
                         url: imageUrl,
                         type: place.placeType,
                         name: place.name,
-                        placeList: widget.placeList,
+                        place: place,
                         details: [
                           Text(
                             place.name,
@@ -358,7 +358,7 @@ class _PlaceListWidgetLandscapeState extends State<_PlaceListWidgetLandscape> {
                         url: urlsList[0],
                         type: place.placeType,
                         name: place.name,
-                        placeList: widget.placeList,
+                        place: place,
                         details: [
                           Text(
                             place.name,
