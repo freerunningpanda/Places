@@ -138,8 +138,8 @@ class _PlaceListWidgetPortraitState extends State<_PlaceListWidgetPortrait> {
         itemCount: widget.placeList.length,
         itemBuilder: (_, index) {
           final place = widget.placeList[index];
-          final urlString = widget.placeList[index].urls;
-          final urlsList = urlString.split('|');
+          /// Из строки получаю список с картинками
+          final urlsList = place.urls.split('|');
 
           return Column(
             children: [
@@ -332,6 +332,8 @@ class _PlaceListWidgetLandscapeState extends State<_PlaceListWidgetLandscape> {
         itemCount: widget.placeList.length,
         itemBuilder: (_, index) {
           final place = widget.placeList[index];
+          /// Из строки получаю список с картинками
+          final urlsList = place.urls.split('|');
 
           return Column(
             children: [
@@ -352,7 +354,7 @@ class _PlaceListWidgetLandscapeState extends State<_PlaceListWidgetLandscape> {
                           color: isFavorite ? Colors.red : null,
                         ),
                         addPlace: () => toggleFavorite(place),
-                        url: place.urls[0],
+                        url: urlsList[0],
                         type: place.placeType,
                         name: place.name,
                         placeList: widget.placeList,

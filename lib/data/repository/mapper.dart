@@ -1,10 +1,10 @@
 import 'package:places/data/database/database.dart';
 import 'package:places/data/dto/place_request.dart';
 import 'package:places/data/dto/place_response.dart';
-import 'package:places/data/model/place.dart';
 
 class Mapper {
   static DbPlace placesFromApiToUi(PlaceResponse place) {
+    /// Для записи в БД сохраняю список картинок в строку
     final urlsString = place.urls.join('|');
 
     return DbPlace(
@@ -41,14 +41,4 @@ class Mapper {
         ),
       )
       .toSet();
-
-  // static Place getPlaceFromDb(DbPlace place) => Place(
-  //       id: place.id,
-  //       lat: place.lat,
-  //       lng: place.lng,
-  //       name: place.name,
-  //       urls: place.urls,
-  //       placeType: place.placeType,
-  //       description: place.description,
-  //     );
 }
