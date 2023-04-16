@@ -226,107 +226,148 @@ class _WantToVisitWidgetState extends State<_WantToVisitWidget> {
               return AspectRatio(
                 key: ObjectKey(index),
                 aspectRatio: orientation ? AppCardSize.visitingCard : AppCardSize.visitingCardLandscape,
-                child: Dismissible(
-                  key: ObjectKey(index),
-                  onDismissed: (direction) async {
-                    // Отправляю в эвент удаления карточки id свойство текущего места, само место
-                    // и меняю свойство isFavorite на false
-                    // Благодаря чему стейт видит обновление состояния и теперь виджет перерисовывается
-                    // P.S.: раньше не обновлялся UI при попытке удалить карточку из-за того что
-                    // Я отправлял в эвент только индекс элемента в списке (а не индекс свойства места) и список избранного,
-                    // Из-за чего блок не видел смены состояния, из-за особенности Equatable,
-                    // который не видит изменений если количество элементов в списке изменилось
-                    // так список для него иммутабелен,
-                    // а сейчас я добавил флаг isFavorite
-                    // И передаю в эвент само место в избранном, а не весь список избранного
-                    place.isFavorite = false;
-                    context.read<WantToVisitBloc>().add(
-                          RemoveFromWantToVisitEvent(
-                            db: db,
-                            isFavorite: place.isFavorite,
-                            place: place,
+                child: Stack(
+                  children: [
+                    AspectRatio(
+                      aspectRatio:
+                          orientation ? AppCardSize.visitingCardDismiss : AppCardSize.visitingCardDismissLandscape,
+                      child: Padding(
+                        padding: const EdgeInsets.only(bottom: 1),
+                        child: DecoratedBox(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(16.0),
+                            color: Colors.red,
                           ),
-                        );
-                    place.isFavorite = false;
-                    context.read<FavoriteBloc>().add(
-                          RemoveFromFavoriteEvent(
-                            db: db,
-                            isFavorite: place.isFavorite,
-                            place: place,
-                            placeIndex: place.id,
+                          child: Padding(
+                            padding: const EdgeInsets.only(right: 16.0),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: [
+                                Column(
+                                  // ignore: avoid_redundant_argument_values
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: const [
+                                    PlaceIcons(assetName: AppAssets.bucket, width: 24, height: 24),
+                                    SizedBox(height: 8),
+                                    Text(
+                                      AppString.delete,
+                                      style: AppTypography.removeCardText,
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
                           ),
-                        );
-                    fromVisitingScreen = true;
-                    debugPrint('placesToVisit[i].id: ${place.id}');
-                  },
-                  background: const SizedBox.shrink(),
-                  direction: DismissDirection.endToStart,
-                  child: Padding(
-                    padding: const EdgeInsets.only(bottom: 11.0),
-                    child: PlaceCard(
-                      addPlace: () {},
-                      placeIndex: place.id,
-                      removePlace: () async {
-                        debugPrint('pressed_remove_place');
-                        place.isFavorite = false;
-                        context.read<WantToVisitBloc>().add(
-                              RemoveFromWantToVisitEvent(
-                                db: db,
-                                isFavorite: place.isFavorite,
-                                place: place,
-                              ),
-                            );
-                        place.isFavorite = false;
-                        context.read<FavoriteBloc>().add(
-                              RemoveFromFavoriteEvent(
-                                db: db,
-                                isFavorite: place.isFavorite,
-                                place: place,
-                                placeIndex: place.id,
-                              ),
-                            );
-                        fromVisitingScreen = true;
-                      },
-                      isVisitingScreen: true,
-                      place: place,
-                      url: place.urls,
-                      type: place.placeType,
-                      name: place.name,
-                      aspectRatio: AppCardSize.visitingCardDismiss,
-                      details: [
-                        Text(
-                          place.name,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: theme.textTheme.headlineSmall,
                         ),
-                        const SizedBox(height: 2),
-                        const Text(
-                          '${AppString.planning} 12 окт. 2022',
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: AppTypography.greenColor,
-                        ),
-                        const SizedBox(height: 10),
-                        const Text(
-                          '${AppString.closed} 09:00',
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: AppTypography.textText16Regular,
-                        ),
-                      ],
-                      actionOne: const PlaceIcons(
-                        assetName: AppAssets.calendarWhite,
-                        width: 24,
-                        height: 24,
-                      ),
-                      actionTwo: const PlaceIcons(
-                        assetName: AppAssets.cross,
-                        width: 22,
-                        height: 22,
                       ),
                     ),
-                  ),
+                    AspectRatio(
+                      aspectRatio: orientation ? AppCardSize.visitingCard : AppCardSize.visitingCardLandscape,
+                      child: Dismissible(
+                        key: ObjectKey(index),
+                        onDismissed: (direction) async {
+                          // Отправляю в эвент удаления карточки id свойство текущего места, само место
+                          // и меняю свойство isFavorite на false
+                          // Благодаря чему стейт видит обновление состояния и теперь виджет перерисовывается
+                          // P.S.: раньше не обновлялся UI при попытке удалить карточку из-за того что
+                          // Я отправлял в эвент только индекс элемента в списке (а не индекс свойства места) и список избранного,
+                          // Из-за чего блок не видел смены состояния, из-за особенности Equatable,
+                          // который не видит изменений если количество элементов в списке изменилось
+                          // так список для него иммутабелен,
+                          // а сейчас я добавил флаг isFavorite
+                          // И передаю в эвент само место в избранном, а не весь список избранного
+                          place.isFavorite = false;
+                          context.read<WantToVisitBloc>().add(
+                                RemoveFromWantToVisitEvent(
+                                  db: db,
+                                  isFavorite: place.isFavorite,
+                                  place: place,
+                                ),
+                              );
+                          place.isFavorite = false;
+                          context.read<FavoriteBloc>().add(
+                                RemoveFromFavoriteEvent(
+                                  db: db,
+                                  isFavorite: place.isFavorite,
+                                  place: place,
+                                  placeIndex: place.id,
+                                ),
+                              );
+                          fromVisitingScreen = true;
+                          debugPrint('placesToVisit[i].id: ${place.id}');
+                        },
+                        background: const SizedBox.shrink(),
+                        direction: DismissDirection.endToStart,
+                        child: Padding(
+                          padding: const EdgeInsets.only(bottom: 11.0),
+                          child: PlaceCard(
+                            addPlace: () {},
+                            placeIndex: place.id,
+                            removePlace: () async {
+                              debugPrint('pressed_remove_place');
+                              place.isFavorite = false;
+                              context.read<WantToVisitBloc>().add(
+                                    RemoveFromWantToVisitEvent(
+                                      db: db,
+                                      isFavorite: place.isFavorite,
+                                      place: place,
+                                    ),
+                                  );
+                              place.isFavorite = false;
+                              context.read<FavoriteBloc>().add(
+                                    RemoveFromFavoriteEvent(
+                                      db: db,
+                                      isFavorite: place.isFavorite,
+                                      place: place,
+                                      placeIndex: place.id,
+                                    ),
+                                  );
+                              fromVisitingScreen = true;
+                            },
+                            isVisitingScreen: true,
+                            place: place,
+                            url: place.urls,
+                            type: place.placeType,
+                            name: place.name,
+                            aspectRatio: AppCardSize.visitingCardDismiss,
+                            details: [
+                              Text(
+                                place.name,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: theme.textTheme.headlineSmall,
+                              ),
+                              const SizedBox(height: 2),
+                              const Text(
+                                '${AppString.planning} 12 окт. 2022',
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: AppTypography.greenColor,
+                              ),
+                              const SizedBox(height: 10),
+                              const Text(
+                                '${AppString.closed} 09:00',
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: AppTypography.textText16Regular,
+                              ),
+                            ],
+                            actionOne: const PlaceIcons(
+                              assetName: AppAssets.calendarWhite,
+                              width: 24,
+                              height: 24,
+                            ),
+                            actionTwo: const PlaceIcons(
+                              assetName: AppAssets.cross,
+                              width: 22,
+                              height: 22,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               );
 
