@@ -140,6 +140,7 @@ class _PlaceListWidgetPortraitState extends State<_PlaceListWidgetPortrait> {
           final place = widget.placeList[index];
           /// Из строки получаю список с картинками
           final urlsList = place.urls.split('|');
+          final imageUrl = urlsList.isNotEmpty ? urlsList[0] : null;
 
           return Column(
             children: [
@@ -167,7 +168,7 @@ class _PlaceListWidgetPortraitState extends State<_PlaceListWidgetPortrait> {
                                 height: 22,
                               ),
                         addPlace: () => toggleFavorite(place),
-                        url: urlsList.first,
+                        url: imageUrl,
                         type: place.placeType,
                         name: place.name,
                         placeList: widget.placeList,
@@ -199,7 +200,7 @@ class _PlaceListWidgetPortraitState extends State<_PlaceListWidgetPortrait> {
                           height: 22,
                         ),
                         addPlace: null,
-                        url: urlsList.first,
+                        url: imageUrl,
                         type: place.placeType,
                         name: place.name,
                         placeList: widget.placeList,

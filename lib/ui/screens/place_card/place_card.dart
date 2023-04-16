@@ -52,6 +52,7 @@ class PlaceCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final urlsList = url?.split('|');
     final customColors = Theme.of(context).extension<CustomColors>()!;
     final size = MediaQuery.of(context).size;
     final orientation = MediaQuery.of(context).orientation == Orientation.portrait;
@@ -75,7 +76,7 @@ class PlaceCard extends StatelessWidget {
                   _PlaceCardTop(
                     name: name,
                     type: type,
-                    url: url,
+                    url: urlsList,
                   ),
                   const SizedBox(height: 16),
                   _PlaceCardBottom(
@@ -238,7 +239,7 @@ class RippleCardFull extends StatelessWidget {
 
 class _PlaceCardTop extends StatefulWidget {
   final String type;
-  final String? url;
+  final List<String>? url;
   final String name;
 
   const _PlaceCardTop({
@@ -286,7 +287,7 @@ class _PlaceCardTopState extends State<_PlaceCardTop> with TickerProviderStateMi
           Hero(
             tag: widget.name,
             child: CachedNetworkImage(
-              imageUrl: widget.url ?? 'no_url',
+              imageUrl: widget.url?.first ?? 'no_url',
               fit: BoxFit.fitWidth,
               errorWidget: (context, url, dynamic error) => Image.asset(AppAssets.placeholder),
               progressIndicatorBuilder: (_, url, progress) => AnimatedBuilder(

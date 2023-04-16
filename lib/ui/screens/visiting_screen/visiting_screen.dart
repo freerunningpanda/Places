@@ -304,6 +304,7 @@ class _DismissibleWidget extends StatelessWidget {
         apiPlaces: ApiPlaces(),
       ),
     );
+    debugPrint('placesToVisit[i].urls: ${placesToVisit[i].urls}');
 
     return Stack(
       children: [
@@ -401,11 +402,10 @@ class _DismissibleWidget extends StatelessWidget {
                         ),
                       );
                   fromVisitingScreen = true;
-                  debugPrint('placesToVisit[i].id: ${placesToVisit[i].isFavorite}');
                 },
                 isVisitingScreen: true,
                 placeList: placesToVisit,
-                url: placesToVisit[i].urls[0],
+                url: placesToVisit[i].urls,
                 type: placesToVisit[i].placeType,
                 name: placesToVisit[i].name,
                 aspectRatio: AppCardSize.visitingCardDismiss,
