@@ -202,7 +202,8 @@ class _WantToVisitWidget extends StatelessWidget {
     final theme = Theme.of(context);
     final db = context.read<AppDb>();
 
-    return ReorderableListView(
+    return ReorderableListView.builder(
+      itemCount: placesToVisit.length,
       onReorder: (oldIndex, newIndex) {
         context.read<WantToVisitBloc>().add(
               DragCardOnWantToVisitEvent(
@@ -213,26 +214,26 @@ class _WantToVisitWidget extends StatelessWidget {
               ),
             );
       },
-      children: [
-        for (var i = 0; i < placesToVisit.length; i++)
-          ClipRRect(
-            key: ObjectKey(i),
-            borderRadius: BorderRadius.circular(16.0),
-            child: _DismissibleWidget(
-              i: i,
-              placesToVisit: placesToVisit,
-              theme: theme,
-              uniqueKey: UniqueKey(),
-              actionTwo: const PlaceIcons(
-                assetName: AppAssets.cross,
-                width: 22,
-                height: 22,
-              ),
-              style: AppTypography.greenColor,
-              target: AppString.planning,
+      itemBuilder: (context, index) {
+
+        return ClipRRect(
+          key: ObjectKey(index),
+          borderRadius: BorderRadius.circular(16.0),
+          child: _DismissibleWidget(
+            i: index,
+            placesToVisit: placesToVisit,
+            theme: theme,
+            uniqueKey: UniqueKey(),
+            actionTwo: const PlaceIcons(
+              assetName: AppAssets.cross,
+              width: 22,
+              height: 22,
             ),
+            style: AppTypography.greenColor,
+            target: AppString.planning,
           ),
-      ],
+        );
+      },
     );
   }
 }
@@ -244,11 +245,13 @@ class _VisitedWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final db = context.read<AppDb>();
 
     return ReorderableListView(
       onReorder: (oldIndex, newIndex) {
         context.read<VisitedScreenBloc>().add(
               DragCardOnVisitedEvent(
+                db: db,
                 newIndex: newIndex,
                 oldIndex: oldIndex,
                 places: visitedPlaces,

@@ -52,6 +52,7 @@ class PlaceCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    /// Пробразовать строку из url в список, чтобы обращаться к первому элементу списка
     final urlsList = url?.split('|');
     final customColors = Theme.of(context).extension<CustomColors>()!;
     final size = MediaQuery.of(context).size;

@@ -1,8 +1,6 @@
 part of 'visited_screen_bloc.dart';
 
 abstract class VisitedScreenEvent {
-
-
   const VisitedScreenEvent();
 }
 
@@ -35,11 +33,13 @@ class RemoveFromVisitedEvent extends VisitedScreenEvent {
 
 class DragCardOnVisitedEvent extends VisitedScreenEvent {
   final List<DbPlace> places;
+  final AppDb db;
   final int oldIndex;
   final int newIndex;
 
   const DragCardOnVisitedEvent({
     required this.places,
+    required this.db,
     required this.oldIndex,
     required this.newIndex,
   });

@@ -1,3 +1,4 @@
+import 'package:drift/drift.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:places/data/api/api_places.dart';
@@ -56,7 +57,7 @@ class WantToVisitBloc extends Bloc<VisitingScreenEvent, WantToVisitScreenState> 
     });
     on<DragCardOnWantToVisitEvent>((event, emit) async {
       final dbFavoritePlaces = await event.db.favoritePlacesEntries;
-      dragCard(event.places, event.oldIndex, event.newIndex);
+      await dragCard(event.places, event.db, event.oldIndex, event.newIndex);
       emit(
         WantToVisitAfterDragState(
           newIndex: event.newIndex,
@@ -75,12 +76,25 @@ class WantToVisitBloc extends Bloc<VisitingScreenEvent, WantToVisitScreenState> 
   //   PlaceInteractor.favoritePlaces.remove(place);
   // }
 
-  void dragCard(List<DbPlace> places, int oldIndex, int newIndex) {
+  // void dragCard(List<DbPlace> places, int oldIndex, int newIndex) {
+  //   var modifiedIndex = newIndex;
+  //   if (newIndex > oldIndex) modifiedIndex--;
+
+  //   final place = places.removeAt(oldIndex);
+  //   places.insert(modifiedIndex, place);
+  // }
+
+  Future<void> dragCard(List<DbPlace> places, AppDb db, int oldIndex, int newIndex) async {
     var modifiedIndex = newIndex;
     if (newIndex > oldIndex) modifiedIndex--;
 
     final place = places.removeAt(oldIndex);
+
     places.insert(modifiedIndex, place);
+    for (var i = 0; i < places.length; i++) {
+      final updatedPlace = places[i].copyWith(index: Value<int>(i));
+      await db.updatePlace(updatedPlace);
+    }
   }
 
   Future<List<DbPlace>> getPlaces(AppDb db) async {
