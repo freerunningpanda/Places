@@ -9,6 +9,7 @@ import 'package:places/cubits/places_list/places_list_cubit.dart';
 import 'package:places/data/api/api_places.dart';
 import 'package:places/data/database/database.dart';
 import 'package:places/data/interactor/place_interactor.dart';
+import 'package:places/data/model/place.dart';
 import 'package:places/data/repository/place_repository.dart';
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_card_size.dart';
@@ -76,7 +77,10 @@ class PlaceListScreen extends StatelessWidget {
                         ),
                       ),
                     if (orientation)
-                      _PlaceListWidgetPortrait(placeList: state.places, theme: theme)
+                      _PlaceListWidgetPortrait(
+                        placeList: state.places,
+                        theme: theme,
+                      )
                     else
                       _PlaceListWidgetLandscape(placeList: state.places, theme: theme),
                   ],
@@ -134,6 +138,8 @@ class _PlaceListWidgetPortraitState extends State<_PlaceListWidgetPortrait> {
         itemCount: widget.placeList.length,
         itemBuilder: (_, index) {
           final place = widget.placeList[index];
+          final urlString = widget.placeList[index].urls;
+          final urlsList = urlString.split('|');
 
           return Column(
             children: [
@@ -161,7 +167,7 @@ class _PlaceListWidgetPortraitState extends State<_PlaceListWidgetPortrait> {
                                 height: 22,
                               ),
                         addPlace: () => toggleFavorite(place),
-                        url: place.urls[0],
+                        url: urlsList.first,
                         type: place.placeType,
                         name: place.name,
                         placeList: widget.placeList,
@@ -193,7 +199,7 @@ class _PlaceListWidgetPortraitState extends State<_PlaceListWidgetPortrait> {
                           height: 22,
                         ),
                         addPlace: null,
-                        url: place.urls[0],
+                        url: urlsList.first,
                         type: place.placeType,
                         name: place.name,
                         placeList: widget.placeList,
@@ -263,7 +269,6 @@ class _PlaceListWidgetPortraitState extends State<_PlaceListWidgetPortrait> {
       db.deletePlace(place);
     });
   }
-
 
   // Получить список избранного из бд
   Future<void> getPlaces(AppDb db) async {

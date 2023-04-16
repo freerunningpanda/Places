@@ -55,12 +55,6 @@ class PlaceCard extends StatelessWidget {
     final customColors = Theme.of(context).extension<CustomColors>()!;
     final size = MediaQuery.of(context).size;
     final orientation = MediaQuery.of(context).orientation == Orientation.portrait;
-    final db = context.read<AppDb>();
-    final interactor = PlaceInteractor(
-      repository: PlaceRepository(
-        apiPlaces: ApiPlaces(),
-      ),
-    );
 
     return SizedBox(
       height: orientation ? size.height / 2.5 : size.height / 2.0,
