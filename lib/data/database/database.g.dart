@@ -189,6 +189,7 @@ class DbPlace extends DataClass implements Insertable<DbPlace> {
   final String placeType;
   final String description;
   bool isFavorite;
+  bool isSearchScreen;
   DbPlace(
       {this.index,
       required this.id,
@@ -198,7 +199,8 @@ class DbPlace extends DataClass implements Insertable<DbPlace> {
       required this.urls,
       required this.placeType,
       required this.description,
-      this.isFavorite = false});
+      this.isFavorite = false,
+      this.isSearchScreen = false});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -213,6 +215,7 @@ class DbPlace extends DataClass implements Insertable<DbPlace> {
     map['place_type'] = Variable<String>(placeType);
     map['description'] = Variable<String>(description);
     map['is_favorite'] = Variable<bool>(isFavorite);
+    map['is_search_screen'] = Variable<bool>(isSearchScreen);
     return map;
   }
 
@@ -228,6 +231,7 @@ class DbPlace extends DataClass implements Insertable<DbPlace> {
       placeType: Value(placeType),
       description: Value(description),
       isFavorite: Value(isFavorite),
+      isSearchScreen: Value(isSearchScreen),
     );
   }
 
@@ -244,6 +248,7 @@ class DbPlace extends DataClass implements Insertable<DbPlace> {
       placeType: serializer.fromJson<String>(json['placeType']),
       description: serializer.fromJson<String>(json['description']),
       isFavorite: serializer.fromJson<bool>(json['isFavorite']),
+      isSearchScreen: serializer.fromJson<bool>(json['isSearchScreen']),
     );
   }
   @override
@@ -259,6 +264,7 @@ class DbPlace extends DataClass implements Insertable<DbPlace> {
       'placeType': serializer.toJson<String>(placeType),
       'description': serializer.toJson<String>(description),
       'isFavorite': serializer.toJson<bool>(isFavorite),
+      'isSearchScreen': serializer.toJson<bool>(isSearchScreen),
     };
   }
 
@@ -271,7 +277,8 @@ class DbPlace extends DataClass implements Insertable<DbPlace> {
           String? urls,
           String? placeType,
           String? description,
-          bool? isFavorite}) =>
+          bool? isFavorite,
+          bool? isSearchScreen}) =>
       DbPlace(
         index: index.present ? index.value : this.index,
         id: id ?? this.id,
@@ -282,6 +289,7 @@ class DbPlace extends DataClass implements Insertable<DbPlace> {
         placeType: placeType ?? this.placeType,
         description: description ?? this.description,
         isFavorite: isFavorite ?? this.isFavorite,
+        isSearchScreen: isSearchScreen ?? this.isSearchScreen,
       );
   @override
   String toString() {
@@ -294,14 +302,15 @@ class DbPlace extends DataClass implements Insertable<DbPlace> {
           ..write('urls: $urls, ')
           ..write('placeType: $placeType, ')
           ..write('description: $description, ')
-          ..write('isFavorite: $isFavorite')
+          ..write('isFavorite: $isFavorite, ')
+          ..write('isSearchScreen: $isSearchScreen')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(
-      index, id, lat, lng, name, urls, placeType, description, isFavorite);
+  int get hashCode => Object.hash(index, id, lat, lng, name, urls, placeType,
+      description, isFavorite, isSearchScreen);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -314,7 +323,8 @@ class DbPlace extends DataClass implements Insertable<DbPlace> {
           other.urls == this.urls &&
           other.placeType == this.placeType &&
           other.description == this.description &&
-          other.isFavorite == this.isFavorite);
+          other.isFavorite == this.isFavorite &&
+          other.isSearchScreen == this.isSearchScreen);
 }
 
 class DbPlacesCompanion extends UpdateCompanion<DbPlace> {
@@ -327,6 +337,7 @@ class DbPlacesCompanion extends UpdateCompanion<DbPlace> {
   final Value<String> placeType;
   final Value<String> description;
   final Value<bool> isFavorite;
+  final Value<bool> isSearchScreen;
   const DbPlacesCompanion({
     this.index = const Value.absent(),
     this.id = const Value.absent(),
@@ -337,6 +348,7 @@ class DbPlacesCompanion extends UpdateCompanion<DbPlace> {
     this.placeType = const Value.absent(),
     this.description = const Value.absent(),
     this.isFavorite = const Value.absent(),
+    this.isSearchScreen = const Value.absent(),
   });
   DbPlacesCompanion.insert({
     this.index = const Value.absent(),
@@ -348,6 +360,7 @@ class DbPlacesCompanion extends UpdateCompanion<DbPlace> {
     required String placeType,
     required String description,
     required bool isFavorite,
+    required bool isSearchScreen,
   })  : id = Value(id),
         lat = Value(lat),
         lng = Value(lng),
@@ -355,7 +368,8 @@ class DbPlacesCompanion extends UpdateCompanion<DbPlace> {
         urls = Value(urls),
         placeType = Value(placeType),
         description = Value(description),
-        isFavorite = Value(isFavorite);
+        isFavorite = Value(isFavorite),
+        isSearchScreen = Value(isSearchScreen);
   static Insertable<DbPlace> custom({
     Expression<int>? index,
     Expression<int>? id,
@@ -366,6 +380,7 @@ class DbPlacesCompanion extends UpdateCompanion<DbPlace> {
     Expression<String>? placeType,
     Expression<String>? description,
     Expression<bool>? isFavorite,
+    Expression<bool>? isSearchScreen,
   }) {
     return RawValuesInsertable({
       if (index != null) 'index': index,
@@ -377,6 +392,7 @@ class DbPlacesCompanion extends UpdateCompanion<DbPlace> {
       if (placeType != null) 'place_type': placeType,
       if (description != null) 'description': description,
       if (isFavorite != null) 'is_favorite': isFavorite,
+      if (isSearchScreen != null) 'is_search_screen': isSearchScreen,
     });
   }
 
@@ -389,7 +405,8 @@ class DbPlacesCompanion extends UpdateCompanion<DbPlace> {
       Value<String>? urls,
       Value<String>? placeType,
       Value<String>? description,
-      Value<bool>? isFavorite}) {
+      Value<bool>? isFavorite,
+      Value<bool>? isSearchScreen}) {
     return DbPlacesCompanion(
       index: index ?? this.index,
       id: id ?? this.id,
@@ -400,6 +417,7 @@ class DbPlacesCompanion extends UpdateCompanion<DbPlace> {
       placeType: placeType ?? this.placeType,
       description: description ?? this.description,
       isFavorite: isFavorite ?? this.isFavorite,
+      isSearchScreen: isSearchScreen ?? this.isSearchScreen,
     );
   }
 
@@ -433,6 +451,9 @@ class DbPlacesCompanion extends UpdateCompanion<DbPlace> {
     if (isFavorite.present) {
       map['is_favorite'] = Variable<bool>(isFavorite.value);
     }
+    if (isSearchScreen.present) {
+      map['is_search_screen'] = Variable<bool>(isSearchScreen.value);
+    }
     return map;
   }
 
@@ -447,7 +468,8 @@ class DbPlacesCompanion extends UpdateCompanion<DbPlace> {
           ..write('urls: $urls, ')
           ..write('placeType: $placeType, ')
           ..write('description: $description, ')
-          ..write('isFavorite: $isFavorite')
+          ..write('isFavorite: $isFavorite, ')
+          ..write('isSearchScreen: $isSearchScreen')
           ..write(')'))
         .toString();
   }
@@ -514,9 +536,27 @@ class $DbPlacesTable extends DbPlaces with TableInfo<$DbPlacesTable, DbPlace> {
       type: DriftSqlType.bool,
       requiredDuringInsert: true,
       defaultConstraints: 'CHECK ("is_favorite" IN (0, 1))');
+  final VerificationMeta _isSearchScreenMeta =
+      const VerificationMeta('isSearchScreen');
   @override
-  List<GeneratedColumn> get $columns =>
-      [index, id, lat, lng, name, urls, placeType, description, isFavorite];
+  late final GeneratedColumn<bool> isSearchScreen = GeneratedColumn<bool>(
+      'is_search_screen', aliasedName, false,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: true,
+      defaultConstraints: 'CHECK ("is_search_screen" IN (0, 1))');
+  @override
+  List<GeneratedColumn> get $columns => [
+        index,
+        id,
+        lat,
+        lng,
+        name,
+        urls,
+        placeType,
+        description,
+        isFavorite,
+        isSearchScreen
+      ];
   @override
   String get aliasedName => _alias ?? 'db_places';
   @override
@@ -581,6 +621,14 @@ class $DbPlacesTable extends DbPlaces with TableInfo<$DbPlacesTable, DbPlace> {
     } else if (isInserting) {
       context.missing(_isFavoriteMeta);
     }
+    if (data.containsKey('is_search_screen')) {
+      context.handle(
+          _isSearchScreenMeta,
+          isSearchScreen.isAcceptableOrUnknown(
+              data['is_search_screen']!, _isSearchScreenMeta));
+    } else if (isInserting) {
+      context.missing(_isSearchScreenMeta);
+    }
     return context;
   }
 
@@ -608,6 +656,8 @@ class $DbPlacesTable extends DbPlaces with TableInfo<$DbPlacesTable, DbPlace> {
           .read(DriftSqlType.string, data['${effectivePrefix}description'])!,
       isFavorite: attachedDatabase.options.types
           .read(DriftSqlType.bool, data['${effectivePrefix}is_favorite'])!,
+      isSearchScreen: attachedDatabase.options.types
+          .read(DriftSqlType.bool, data['${effectivePrefix}is_search_screen'])!,
     );
   }
 

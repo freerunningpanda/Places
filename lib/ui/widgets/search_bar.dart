@@ -130,7 +130,7 @@ class _SearchBarState extends State<SearchBar> {
 
                       // Если виджет searchBar на главном экране
                       if (!widget.isSearchPage) {
-                        final list = await db.allPlacesEntries;
+                        final list = await db.searchedPlacesEntries;
 
                         // ignore: use_build_context_synchronously
                         context.read<SearchScreenBloc>().add(

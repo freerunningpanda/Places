@@ -36,6 +36,9 @@ class AppDb extends _$AppDb {
   Future<List<DbPlace>> get favoritePlacesEntries =>
       (select(dbPlaces)..where((tbl) => tbl.isFavorite.equals(true))).get();
 
+  Future<List<DbPlace>> get searchedPlacesEntries =>
+      (select(dbPlaces)..where((tbl) => tbl.isSearchScreen.equals(true))).get();
+
   AppDb() : super(_openConnection());
 
   Future<int> addHistoryItem(SearchHistorysCompanion history) {
@@ -61,6 +64,7 @@ class AppDb extends _$AppDb {
         placeType: place.placeType,
         description: place.description,
         isFavorite: place.isFavorite,
+        isSearchScreen: place.isSearchScreen,
       ),
     );
   }
@@ -69,7 +73,7 @@ class AppDb extends _$AppDb {
     await customStatement('DELETE FROM "db_places"'); // Сначала удалить предыдущие места из таблицы
   }
 
-  Future<void> addPlaces(List<DbPlace> places) async {
+  Future<void> addPlacesToSearchScreen(List<DbPlace> places) async {
     await batch((batch) {
       for (final place in places) {
         batch.insert(
@@ -83,6 +87,7 @@ class AppDb extends _$AppDb {
             placeType: place.placeType,
             description: place.description,
             isFavorite: place.isFavorite,
+            isSearchScreen: true,
           ),
         );
       }
