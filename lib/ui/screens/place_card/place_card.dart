@@ -32,7 +32,7 @@ class PlaceCard extends StatelessWidget {
   final DbPlace place;
   final int placeIndex;
   final bool isVisitingScreen;
-  final VoidCallback? removePlace;
+  final VoidCallback? actionThree;
 
   const PlaceCard({
     Key? key,
@@ -47,7 +47,7 @@ class PlaceCard extends StatelessWidget {
     required this.place,
     required this.placeIndex,
     required this.isVisitingScreen,
-    this.removePlace,
+    this.actionThree,
   }) : super(key: key);
 
   @override
@@ -89,7 +89,7 @@ class PlaceCard extends StatelessWidget {
               RippleCardFull(place: place),
               if (isVisitingScreen)
                 RippleIcons(
-                  removePlace: removePlace,
+                  actionThree: actionThree,
                   actionOne: actionOne,
                   actionTwo: actionTwo ?? const SizedBox(),
                 )
@@ -140,13 +140,13 @@ class RippleIcon extends StatelessWidget {
 class RippleIcons extends StatelessWidget {
   final Widget actionOne;
   final Widget actionTwo;
-  final VoidCallback? removePlace;
+  final VoidCallback? actionThree;
 
   const RippleIcons({
     Key? key,
     required this.actionOne,
     required this.actionTwo,
-    required this.removePlace,
+    required this.actionThree,
   }) : super(key: key);
 
   @override
@@ -195,7 +195,7 @@ class RippleIcons extends StatelessWidget {
               height: 22,
               child: InkWell(
                 borderRadius: BorderRadius.circular(16.0),
-                onTap: removePlace,
+                onTap: actionThree,
                 child: actionTwo,
               ),
             ),

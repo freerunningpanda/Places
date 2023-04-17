@@ -337,7 +337,7 @@ class _DismissibleWidget extends StatelessWidget {
                 padding: const EdgeInsets.only(bottom: 11.0),
                 child: PlaceCard(
                   placeIndex: place.id,
-                  removePlace: () async {
+                  actionThree: () async {
                     debugPrint('pressed_remove_place');
                     place.isFavorite = false;
                     context.read<WantToVisitBloc>().add(
@@ -415,33 +415,39 @@ class _VisitedWidget extends StatelessWidget {
       future: context.read<VisitedScreenBloc>().getVisitedPlaces(db),
       // ignore: avoid_types_on_closure_parameters
       builder: (_, AsyncSnapshot<List<DbPlace>> snapshot) {
-        final visitedPlaces = snapshot.data;
+        if (snapshot.connectionState == ConnectionState.done) {
+          final visitedPlaces = snapshot.data;
 
-        return ReorderableListView.builder(
-          onReorder: (oldIndex, newIndex) async {
-            if (newIndex > oldIndex) {
-              newIndex -= 1;
-            }
-            final place = visitedPlaces!.removeAt(oldIndex);
-            visitedPlaces.insert(newIndex, place);
-            for (var i = 0; i < visitedPlaces.length; i++) {
-              final updatedPlace = visitedPlaces[i].copyWith(index: Value<int>(i));
-              await db.updatePlace(updatedPlace);
-            }
-          },
-          itemCount: visitedPlaces!.length,
-          itemBuilder: (_, index) {
-            final place = visitedPlaces[index];
+          return ReorderableListView.builder(
+            onReorder: (oldIndex, newIndex) async {
+              if (newIndex > oldIndex) {
+                newIndex -= 1;
+              }
+              final place = visitedPlaces!.removeAt(oldIndex);
+              visitedPlaces.insert(newIndex, place);
+              for (var i = 0; i < visitedPlaces.length; i++) {
+                final updatedPlace = visitedPlaces[i].copyWith(index: Value<int>(i));
+                await db.updatePlace(updatedPlace);
+              }
+            },
+            itemCount: visitedPlaces!.length,
+            itemBuilder: (_, index) {
+              final place = visitedPlaces[index];
 
-            return _VisitedPlacesList(
-              key: ObjectKey(index),
-              orientation: orientation,
-              place: place,
-              db: db,
-              theme: theme,
-            );
-          },
-        );
+              return _VisitedPlacesList(
+                key: ObjectKey(index),
+                orientation: orientation,
+                place: place,
+                db: db,
+                theme: theme,
+              );
+            },
+          );
+        } else {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        }
       },
     );
   }
@@ -469,26 +475,8 @@ class _VisitedPlacesList extends StatelessWidget {
         padding: const EdgeInsets.only(bottom: 11.0),
         child: PlaceCard(
           placeIndex: place.id,
-          removePlace: () async {
-            debugPrint('pressed_remove_place');
-            place.isFavorite = false;
-            context.read<WantToVisitBloc>().add(
-                  RemoveFromWantToVisitEvent(
-                    db: db,
-                    isFavorite: place.isFavorite,
-                    place: place,
-                  ),
-                );
-            place.isFavorite = false;
-            context.read<FavoriteBloc>().add(
-                  RemoveFromFavoriteEvent(
-                    db: db,
-                    isFavorite: place.isFavorite,
-                    place: place,
-                    placeIndex: place.id,
-                  ),
-                );
-            fromVisitingScreen = true;
+          actionThree: () async {
+            debugPrint('pressed_share_place');
           },
           isVisitingScreen: true,
           place: place,

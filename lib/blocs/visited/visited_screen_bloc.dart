@@ -1,21 +1,13 @@
 import 'package:drift/drift.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:places/data/api/api_places.dart';
 import 'package:places/data/database/database.dart';
-import 'package:places/data/interactor/place_interactor.dart';
-import 'package:places/data/repository/place_repository.dart';
 
 part 'visited_screen_event.dart';
 part 'visited_screen_state.dart';
 
 class VisitedScreenBloc extends Bloc<VisitedScreenEvent, VisitedScreenState> {
   final AppDb db;
-  final interactor = PlaceInteractor(
-    repository: PlaceRepository(
-      apiPlaces: ApiPlaces(),
-    ),
-  );
 
   VisitedScreenBloc({required this.db}) : super(VisitedEmptyState()) {
     on<VisitedListLoadedEvent>((event, emit) async {
@@ -24,9 +16,11 @@ class VisitedScreenBloc extends Bloc<VisitedScreenEvent, VisitedScreenState> {
       if (visitedPlaces.isEmpty) {
         emit(VisitedEmptyState());
       } else {
-        VisitedIsNotEmpty(
-          visitedPlaces: visitedPlaces,
-          length: visitedPlaces.length,
+        emit(
+          VisitedIsNotEmpty(
+            visitedPlaces: visitedPlaces,
+            length: visitedPlaces.length,
+          ),
         );
       }
     });
