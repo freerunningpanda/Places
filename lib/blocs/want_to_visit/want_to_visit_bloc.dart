@@ -22,9 +22,7 @@ class WantToVisitBloc extends Bloc<VisitingScreenEvent, WantToVisitScreenState> 
       /// Список избранных мест из бд
       final loadedPlaces = await getPlaces(db);
       if (loadedPlaces.isEmpty) {
-        emit(
-          WantToVisitScreenEmptyState(),
-        );
+        emit(WantToVisitScreenEmptyState());
       } else {
         emit(
           WantToVisitScreenIsNotEmpty(
@@ -55,7 +53,6 @@ class WantToVisitBloc extends Bloc<VisitingScreenEvent, WantToVisitScreenState> 
         ),
       );
     });
-
   }
 
   Future<void> dragCard(List<DbPlace> places, AppDb db, int oldIndex, int newIndex) async {
@@ -69,9 +66,8 @@ class WantToVisitBloc extends Bloc<VisitingScreenEvent, WantToVisitScreenState> 
       final updatedPlace = places[i].copyWith(index: Value<int>(i));
       await db.updatePlace(updatedPlace);
     }
-
-    
   }
+
   Future<List<DbPlace>> getPlaces(AppDb db) async {
     final list = await db.favoritePlacesEntries;
 

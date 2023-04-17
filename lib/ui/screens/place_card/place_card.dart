@@ -42,7 +42,7 @@ class PlaceCard extends StatelessWidget {
     required this.details,
     required this.actionOne,
     this.actionTwo,
-    required this.addPlace,
+    this.addPlace,
     required this.aspectRatio,
     required this.place,
     required this.placeIndex,
@@ -188,7 +188,7 @@ class RippleIcons extends StatelessWidget {
         Positioned(
           top: 16,
           right: 16,
-          child: Material(
+          child: Material( 
             type: MaterialType.transparency,
             child: SizedBox(
               width: 22,
