@@ -64,7 +64,7 @@ class AppDb extends _$AppDb {
         placeType: place.placeType,
         description: place.description,
         isFavorite: place.isFavorite,
-        isSearchScreen: place.isSearchScreen,
+        isSearchScreen: false,
       ),
     );
   }

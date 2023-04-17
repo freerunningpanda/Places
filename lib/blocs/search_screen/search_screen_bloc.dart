@@ -95,7 +95,7 @@ class SearchScreenBloc extends Bloc<SearchScreenEvent, SearchScreenState> {
   }
 
   Future<void> searchPlaces(String query, AppDb db) async {
-    final placesList = await db.searchedPlacesEntries;
+    final placesList = await db.allPlacesEntries;
     // Если список мест в Preferences не null, искать в нём
     // Данное решение, для того, чтобы не ловить крэш после удаления/установки приложения
     for (final el in placesList) {

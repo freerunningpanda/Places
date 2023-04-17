@@ -95,6 +95,8 @@ class _SearchBarState extends State<SearchBar> {
                       // Параметр isHistoryClear отвечает за отображение всех найденных мест
                       // После очистки истории поиска
 
+                      final list = await db.searchedPlacesEntries;
+
                       // ignore: use_build_context_synchronously
                       context.read<SearchScreenBloc>().add(
                             PlacesFoundEvent(
@@ -130,6 +132,7 @@ class _SearchBarState extends State<SearchBar> {
 
                       // Если виджет searchBar на главном экране
                       if (!widget.isSearchPage) {
+                        /// Получить места из БД помеченные только как для поиска
                         final list = await db.searchedPlacesEntries;
 
                         // ignore: use_build_context_synchronously
