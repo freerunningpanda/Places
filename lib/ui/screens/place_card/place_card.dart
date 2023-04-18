@@ -6,17 +6,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:places/blocs/details_screen/details_screen_bloc.dart';
-import 'package:places/blocs/favorite/favorite_bloc.dart';
-import 'package:places/blocs/want_to_visit/want_to_visit_bloc.dart';
-import 'package:places/data/api/api_places.dart';
 import 'package:places/data/database/database.dart';
-import 'package:places/data/interactor/place_interactor.dart';
-import 'package:places/data/repository/place_repository.dart';
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_typography.dart';
 import 'package:places/ui/screens/place_details/place_details.dart';
 import 'package:places/ui/screens/res/custom_colors.dart';
-import 'package:places/ui/screens/visiting_screen/visiting_screen.dart';
 import 'package:places/ui/widgets/cupertino_time_widget.dart';
 import 'package:places/ui/widgets/place_icons.dart';
 
@@ -290,6 +284,7 @@ class _PlaceCardTopState extends State<_PlaceCardTop> with TickerProviderStateMi
             child: CachedNetworkImage(
               imageUrl: widget.url?.first ?? 'no_url',
               fit: BoxFit.fitWidth,
+              // ignore: avoid_annotating_with_dynamic
               errorWidget: (context, url, dynamic error) => Image.asset(AppAssets.placeholder),
               progressIndicatorBuilder: (_, url, progress) => AnimatedBuilder(
                 animation: _animationController,

@@ -29,30 +29,40 @@ class AppDb extends _$AppDb {
         },
       );
 
+  /// Получить историю поисковых запросов
   Future<List<SearchHistory>> get allHistorysEntries => select(searchHistorys).get();
 
+  /// Получить все места не хранящиеся в Избранном
   Future<List<DbPlace>> get allPlacesEntries => (select(dbPlaces)..where((tbl) => tbl.isFavorite.equals(false))).get();
 
+  /// Получить список избранных мест
   Future<List<DbPlace>> get favoritePlacesEntries =>
       (select(dbPlaces)..where((tbl) => tbl.isFavorite.equals(true))).get();
 
-  Future<List<DbPlace>> get searchedPlacesEntries =>
-      (select(dbPlaces)..where((tbl) => tbl.isSearchScreen.equals(true))).get();
+  /// Получить список мест отмеченных как для экрана поиска
+  // Future<List<DbPlace>> get searchedPlacesEntries =>
+  //     (select(dbPlaces)..where((tbl) => tbl.isSearchScreen.equals(true))).get();
 
+  
   AppDb() : super(_openConnection());
 
+  
+  /// Сохранить запрос в истории поиска
   Future<int> addHistoryItem(SearchHistorysCompanion history) {
     return into(searchHistorys).insert(history);
   }
 
+  /// Удалить элемент истории поиска
   Future<void> deleteHistory(int id) {
     return customStatement('DELETE FROM "search_historys" WHERE id = $id');
   }
 
+  /// Очистить всю историю поиска
   Future<void> deleteAllHistory() {
     return customStatement('DELETE FROM "search_historys"');
   }
 
+  /// Пометить место как "Избранное"
   Future<int> addPlaceToFavorites(DbPlace place, {required bool isSearchScreen}) async {
     return into(dbPlaces).insert(
       DbPlacesCompanion.insert(
@@ -69,12 +79,17 @@ class AppDb extends _$AppDb {
     );
   }
 
+  /// Удалить только те места, которые не хранятся в избранном
   Future<void> deleteAllPlaces() async {
-    await customStatement('DELETE FROM "db_places" WHERE is_favorite = false'); // Сначала удалить предыдущие места из таблицы
+    await customStatement(
+      'DELETE FROM "db_places" WHERE is_favorite = false',
+    ); // Сначала удалить предыдущие места из таблицы
   }
 
-  Future<void> deleteUnsearchedPlaces() => (delete(dbPlaces)..where((tbl) => tbl.isSearchScreen.equals(true))).go();
+  /// Удалить места помеченные как для поиска
+  // Future<void> deleteUnsearchedPlaces() => (delete(dbPlaces)..where((tbl) => tbl.isSearchScreen.equals(true))).go();
 
+  /// Удалить дубликаты мест по имени (на всякий случай)
   Future<void> distinctByName() async {
     await customUpdate('''
       DELETE FROM db_places
@@ -86,6 +101,7 @@ class AppDb extends _$AppDb {
     ''');
   }
 
+  /// Сохранить список отфильтрованных мест для экрана поиска
   Future<void> addPlacesToSearchScreen(List<DbPlace> places, {required bool isSearchScreen}) async {
     final distinctPlaces = places.toSet().toList();
 
@@ -108,10 +124,12 @@ class AppDb extends _$AppDb {
     await distinctByName();
   }
 
+  /// Обновить место в базе
   Future<void> updatePlace(DbPlace updatedPlace) async {
     await update(dbPlaces).replace(updatedPlace);
   }
 
+  /// Удалить место из базы
   Future<void> deletePlace(DbPlace place) async {
     await (delete(dbPlaces)..where((tbl) => tbl.id.equals(place.id))).go();
   }

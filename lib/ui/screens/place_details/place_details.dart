@@ -306,6 +306,7 @@ class _PlaceDetailsImageState extends State<_PlaceDetailsImage> with TickerProvi
         child: CachedNetworkImage(
           imageUrl: widget.image,
           fit: BoxFit.cover,
+          // ignore: avoid_annotating_with_dynamic
           errorWidget: (context, url, dynamic error) => Image.asset(AppAssets.placeholder),
           progressIndicatorBuilder: (_, url, progress) => AnimatedBuilder(
             animation: _animationController,
