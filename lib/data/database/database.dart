@@ -31,7 +31,7 @@ class AppDb extends _$AppDb {
 
   Future<List<SearchHistory>> get allHistorysEntries => select(searchHistorys).get();
 
-  Future<List<DbPlace>> get allPlacesEntries => select(dbPlaces).get();
+  Future<List<DbPlace>> get allPlacesEntries => (select(dbPlaces)..where((tbl) => tbl.isFavorite.equals(false))).get();
 
   Future<List<DbPlace>> get favoritePlacesEntries =>
       (select(dbPlaces)..where((tbl) => tbl.isFavorite.equals(true))).get();
@@ -53,7 +53,7 @@ class AppDb extends _$AppDb {
     return customStatement('DELETE FROM "search_historys"');
   }
 
-  Future<int> addPlace(DbPlace place) async {
+  Future<int> addPlace(DbPlace place, {required bool isSearchScreen}) async {
     return into(dbPlaces).insert(
       DbPlacesCompanion.insert(
         id: place.id,
@@ -64,7 +64,7 @@ class AppDb extends _$AppDb {
         placeType: place.placeType,
         description: place.description,
         isFavorite: place.isFavorite,
-        isSearchScreen: false,
+        isSearchScreen: isSearchScreen,
       ),
     );
   }
@@ -73,28 +73,42 @@ class AppDb extends _$AppDb {
     await customStatement('DELETE FROM "db_places"'); // Сначала удалить предыдущие места из таблицы
   }
 
-  Future<void> addPlacesToSearchScreen(List<DbPlace> places) async {
-    await batch((batch) {
-      for (final place in places) {
-        batch.insert(
-          dbPlaces,
-          DbPlacesCompanion.insert(
-            id: place.id,
-            lat: place.lat,
-            lng: place.lng,
-            name: place.name,
-            urls: place.urls,
-            placeType: place.placeType,
-            description: place.description,
-            isFavorite: place.isFavorite,
-            isSearchScreen: true,
-          ),
-        );
-      }
-    });
+  Future<void> deleteUnsearchedPlaces() => (delete(dbPlaces)..where((tbl) => tbl.isSearchScreen.equals(true))).go();
+
+  Future<void> distinctByName() async {
+    await customUpdate('''
+      DELETE FROM db_places
+      WHERE id NOT IN (
+        SELECT MIN(id)
+        FROM db_places
+        GROUP BY name
+      )
+    ''');
   }
 
-    Future<void> updatePlace(DbPlace updatedPlace) async {
+  Future<void> addPlacesToSearchScreen(List<DbPlace> places, {required bool isSearchScreen}) async {
+    final distinctPlaces = places.toSet().toList();
+
+    for (final place in distinctPlaces) {
+      await into(dbPlaces).insert(
+        DbPlacesCompanion.insert(
+          id: place.id,
+          lat: place.lat,
+          lng: place.lng,
+          name: place.name,
+          urls: place.urls,
+          placeType: place.placeType,
+          description: place.description,
+          isFavorite: false,
+          isSearchScreen: isSearchScreen,
+        ),
+      );
+    }
+    // удалить дубликаты мест по имени
+    await distinctByName();
+  }
+
+  Future<void> updatePlace(DbPlace updatedPlace) async {
     await update(dbPlaces).replace(updatedPlace);
   }
 
