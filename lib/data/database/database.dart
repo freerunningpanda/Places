@@ -53,7 +53,7 @@ class AppDb extends _$AppDb {
     return customStatement('DELETE FROM "search_historys"');
   }
 
-  Future<int> addPlace(DbPlace place, {required bool isSearchScreen}) async {
+  Future<int> addPlaceToFavorites(DbPlace place, {required bool isSearchScreen}) async {
     return into(dbPlaces).insert(
       DbPlacesCompanion.insert(
         id: place.id,
@@ -70,7 +70,7 @@ class AppDb extends _$AppDb {
   }
 
   Future<void> deleteAllPlaces() async {
-    await customStatement('DELETE FROM "db_places"'); // Сначала удалить предыдущие места из таблицы
+    await customStatement('DELETE FROM "db_places" WHERE is_favorite = false'); // Сначала удалить предыдущие места из таблицы
   }
 
   Future<void> deleteUnsearchedPlaces() => (delete(dbPlaces)..where((tbl) => tbl.isSearchScreen.equals(true))).go();
