@@ -587,6 +587,8 @@ class _PlaceImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final urlsList = place.urls.split('|');
+
     return ClipRRect(
       borderRadius: BorderRadius.circular(12.0),
       child: Container(
@@ -595,7 +597,7 @@ class _PlaceImage extends StatelessWidget {
         decoration: BoxDecoration(
           image: DecorationImage(
             fit: BoxFit.cover,
-            image: NetworkImage(place.urls[0]),
+            image: NetworkImage(urlsList[0]),
           ),
         ),
       ),
