@@ -245,6 +245,7 @@ class _SearchBarState extends State<SearchBar> {
     );
   }
 
+  /// Показать историю поиска
   Future<void> showSearchPlacesHistory({
     required List<DbPlace> loadedPlaces, // Загруженные места с экрана фильтров
     required List<SearchHistory> historyList, // История поиска
