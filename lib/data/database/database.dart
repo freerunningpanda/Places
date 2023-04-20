@@ -40,8 +40,8 @@ class AppDb extends _$AppDb {
       (select(dbPlaces)..where((tbl) => tbl.isFavorite.equals(true))).get();
 
   /// Получить список мест отмеченных как для экрана поиска
-  // Future<List<DbPlace>> get searchedPlacesEntries =>
-  //     (select(dbPlaces)..where((tbl) => tbl.isSearchScreen.equals(true))).get();
+  Future<List<DbPlace>> get searchedPlacesEntries =>
+      (select(dbPlaces)..where((tbl) => tbl.isSearchScreen.equals(true))).get();
 
   
   AppDb() : super(_openConnection());
@@ -62,8 +62,8 @@ class AppDb extends _$AppDb {
     return customStatement('DELETE FROM "search_historys"');
   }
 
-  /// Пометить место как "Избранное"
-  Future<int> addPlaceToFavorites(DbPlace place, {required bool isSearchScreen}) async {
+  /// Добавить место в базу данных
+  Future<int> addPlace(DbPlace place, {required bool isSearchScreen}) async {
     return into(dbPlaces).insert(
       DbPlacesCompanion.insert(
         id: place.id,
@@ -87,7 +87,7 @@ class AppDb extends _$AppDb {
   }
 
   /// Удалить места помеченные как для поиска
-  // Future<void> deleteUnsearchedPlaces() => (delete(dbPlaces)..where((tbl) => tbl.isSearchScreen.equals(true))).go();
+  Future<void> deleteUnsearchedPlaces() => (delete(dbPlaces)..where((tbl) => tbl.isSearchScreen.equals(true))).go();
 
   /// Удалить дубликаты мест по имени (на всякий случай)
   Future<void> distinctByName() async {

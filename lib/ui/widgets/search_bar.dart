@@ -89,24 +89,25 @@ class _SearchBarState extends State<SearchBar> {
                       interactor.query = value;
 
                       context.read<SearchScreenBloc>().activeFocus(isActive: true);
-                      final foundedPlaces = await context.read<SearchScreenBloc>().searchPlaces(value, db);
+                        final foundedPlaces = await context.read<SearchScreenBloc>().searchPlaces(value, db);
 
-                      // Не виджет истории поиска. Поэтому isHistoryClear: false
-                      // Параметр isHistoryClear отвечает за отображение всех найденных мест
-                      // После очистки истории поиска
-                      // ignore: use_build_context_synchronously
-                      context.read<SearchScreenBloc>().add(
-                            PlacesFoundEvent(
-                              filteredPlaces: foundedPlaces,
-                              isHistoryClear: false,
-                              fromFiltersScreen: false,
-                              searchHistoryIsEmpty: searchStoryList.isEmpty, // Чтобы обновить стейт экрана
-                              // Если крайнее место было удалено из истории
-                              isQueryEmpty: interactor.query.isEmpty, // Для отображения найденных по фильтру мест
-                              // При пустом поисковом запросе
-                              db: db,
-                            ),
-                          );
+                        // Не виджет истории поиска. Поэтому isHistoryClear: false
+                        // Параметр isHistoryClear отвечает за отображение всех найденных мест
+                        // После очистки истории поиска
+                        // ignore: use_build_context_synchronously
+                        context.read<SearchScreenBloc>().add(
+                              PlacesFoundEvent(
+                                filteredPlaces: foundedPlaces,
+                                isHistoryClear: false,
+                                fromFiltersScreen: false,
+                                searchHistoryIsEmpty: searchStoryList.isEmpty, // Чтобы обновить стейт экрана
+                                // Если крайнее место было удалено из истории
+                                isQueryEmpty: interactor.query.isEmpty, // Для отображения найденных по фильтру мест
+                                // При пустом поисковом запросе
+                                db: db,
+                              ),
+                            );
+
                     },
                     // По клику на поле поиска
                     onTap: () async {
@@ -125,28 +126,59 @@ class _SearchBarState extends State<SearchBar> {
                               );
                         }
                       }
+                      await db.deleteUnsearchedPlaces();
 
                       // Если виджет searchBar на главном экране
                       if (!widget.isSearchPage) {
+                        final historyList = await db.allHistorysEntries;
+                        final loadedPlaces = await db.allPlacesEntries;
+
+                        for (var i = 0; i < loadedPlaces.length; i++) {
+                          final containsTitle = historyList.any(
+                            (item) => loadedPlaces[i].name.toLowerCase().contains(item.title.toLowerCase()),
+                          );
+                          if (containsTitle) {
+                            await db.addPlace(loadedPlaces[i], isSearchScreen: true);
+                          }
+                        }
+
+                        final searchedPlaces = await db.searchedPlacesEntries;
+
                         // Получить места из БД помеченные только как для поиска
                         // final foundedPlaces = await db.searchedPlacesEntries;
                         // Получить места с экрана фильтров из БД
-                        final filteredList = await db.allPlacesEntries;
+                        if (historyList.isEmpty) {
+                          // ignore: use_build_context_synchronously
+                          context.read<SearchScreenBloc>().add(
+                                PlacesFoundEvent(
+                                  // filteredPlaces: foundedPlaces.isEmpty ? filteredList : foundedPlaces,
+                                  filteredPlaces: loadedPlaces,
+                                  isHistoryClear: false,
+                                  fromFiltersScreen: false,
+                                  searchHistoryIsEmpty: searchStoryList.isEmpty, // Чтобы обновить стейт экрана
+                                  // Если крайнее место было удалено из истории
+                                  isQueryEmpty: interactor.query.isEmpty, // Для отображения найденных по фильтру мест
+                                  // При пустом поисковом запросе
+                                  db: db,
+                                ),
+                              );
+                        } else {
+                          // ignore: use_build_context_synchronously
+                          context.read<SearchScreenBloc>().add(
+                                PlacesFoundEvent(
+                                  // filteredPlaces: foundedPlaces.isEmpty ? filteredList : foundedPlaces,
+                                  filteredPlaces: searchedPlaces,
+                                  isHistoryClear: false,
+                                  fromFiltersScreen: false,
+                                  searchHistoryIsEmpty: searchStoryList.isEmpty, // Чтобы обновить стейт экрана
+                                  // Если крайнее место было удалено из истории
+                                  isQueryEmpty: interactor.query.isEmpty, // Для отображения найденных по фильтру мест
+                                  // При пустом поисковом запросе
+                                  db: db,
+                                ),
+                              );
+                        }
 
-                        // ignore: use_build_context_synchronously
-                        context.read<SearchScreenBloc>().add(
-                              PlacesFoundEvent(
-                                // filteredPlaces: foundedPlaces.isEmpty ? filteredList : foundedPlaces,
-                                filteredPlaces: filteredList,
-                                isHistoryClear: false,
-                                fromFiltersScreen: false,
-                                searchHistoryIsEmpty: searchStoryList.isEmpty, // Чтобы обновить стейт экрана
-                                // Если крайнее место было удалено из истории
-                                isQueryEmpty: interactor.query.isEmpty, // Для отображения найденных по фильтру мест
-                                // При пустом поисковом запросе
-                                db: db,
-                              ),
-                            );
                         // Просто переходим на экран поиска мест
                         // ignore: use_build_context_synchronously
                         await Navigator.of(context).push(

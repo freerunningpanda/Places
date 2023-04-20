@@ -42,7 +42,7 @@ class PlaceRepository {
   }
 
   Future<void> addToFavorites({required DbPlace place, required AppDb db}) async {
-    await db.addPlaceToFavorites(place, isSearchScreen: false);
+    await db.addPlace(place, isSearchScreen: false);
   }
 
    Future<void> loadFavoritePlaces(AppDb db) async {

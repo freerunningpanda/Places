@@ -12,6 +12,7 @@ class PlaceInteractor {
   static List<DbPlace>  visitedPlaces = [];
   static Set<DbPlace> filtersWithDistance = {};
   static List<DbPlace> foundedPlaces = PlaceInteractor.filtersWithDistance.toList();
+  static List<DbPlace> savedPlaces = [];
   static Set<Place> newPlaces = {};
   final PlaceRepository repository;
   final controller = TextEditingController();

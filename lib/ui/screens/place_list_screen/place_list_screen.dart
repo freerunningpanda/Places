@@ -243,7 +243,7 @@ class _PlaceListWidgetPortraitState extends State<_PlaceListWidgetPortrait> {
                 place: place,
               ),
             );
-        db.addPlaceToFavorites(place, isSearchScreen: false);
+        db.addPlace(place, isSearchScreen: false);
       } else {
         place.isFavorite = false;
         context.read<WantToVisitBloc>().add(
@@ -396,7 +396,7 @@ class _PlaceListWidgetLandscapeState extends State<_PlaceListWidgetLandscape> {
       if (!isFavorite) {
         place.isFavorite = true;
         PlaceInteractor.favoritePlaces.add(place);
-        db.addPlaceToFavorites(place, isSearchScreen: false);
+        db.addPlace(place, isSearchScreen: false);
       } else {
         place.isFavorite = false;
         PlaceInteractor.favoritePlaces.remove(place);

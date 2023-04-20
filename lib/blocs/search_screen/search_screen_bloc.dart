@@ -104,12 +104,7 @@ class SearchScreenBloc extends Bloc<SearchScreenEvent, SearchScreenState> {
         return distance >= Mocks.rangeValues.start && distance <= Mocks.rangeValues.end && placeTitle.contains(input);
       },
     ).toList();
-
-    // Сохранить найденные места в бд
-    // for (final place in filteredPlaces) {
-    //   await db.addPlace(place, isSearchScreen: true);
-    // }
-
+    
     return PlaceInteractor.foundedPlaces;
   }
 }
