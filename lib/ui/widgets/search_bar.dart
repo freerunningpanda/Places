@@ -246,14 +246,17 @@ class _SearchBarState extends State<SearchBar> {
   }
 
   Future<void> showSearchPlacesHistory({
-    required List<DbPlace> loadedPlaces,
-    required List<SearchHistory> historyList,
-    required AppDb db,
+    required List<DbPlace> loadedPlaces, // Загруженные места с экрана фильтров
+    required List<SearchHistory> historyList, // История поиска
+    required AppDb db, // БД
   }) async {
     for (var i = 0; i < loadedPlaces.length; i++) {
+      // Проверка на соответствие истории запроса с именем места
       final containsTitle = historyList.any(
         (item) => loadedPlaces[i].name.toLowerCase().contains(item.title.toLowerCase()),
       );
+      // Если есть соответствие, то добавляем места в базу указывая флаг isSearchScreen на true
+      // чтобы отобразить места только с данным флагом в истории 
       if (containsTitle) {
         await db.addPlace(loadedPlaces[i], isSearchScreen: true);
       }
