@@ -207,8 +207,6 @@ class _SearchBarState extends State<SearchBar> {
                             ),
                           );
 
-                      // await db.addPlacesToSearchScreen(PlaceInteractor.foundedPlaces, isSearchScreen: true);
-
                       // Очистить строку поиска после нажатия кнопки submit
                       widget.searchController.clear();
                     },
@@ -250,7 +248,7 @@ class _SearchBarState extends State<SearchBar> {
     required List<DbPlace> loadedPlaces, // Загруженные места с экрана фильтров
     required List<SearchHistory> historyList, // История поиска
     required AppDb db, // БД
-  }) async {
+  }) async {  
     for (var i = 0; i < loadedPlaces.length; i++) {
       // Проверка на соответствие истории запроса с именем места
       final containsTitle = historyList.any(

@@ -35,7 +35,6 @@ class PlaceRepository {
   Future<DbPlace> getPlaceDetails(DbPlace place) =>
       apiPlaces.getPlaceDetails(place.id).then(Mapper.detailPlaceFromApiToUi);
 
-  List<DbPlace> getFavoritesPlaces() => apiPlaces.getFavoritesPlaces();
 
   Future<void> removeFromFavorites({required DbPlace place, required AppDb db}) async {
    await db.deletePlace(place);

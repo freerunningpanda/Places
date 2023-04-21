@@ -21,7 +21,6 @@ abstract class AppTheme {
       ),
       bottomSheetTheme: const BottomSheetThemeData(
         backgroundColor: AppColors.transparent,
-        // modalBackgroundColor: AppColors.detailsScreenBackground,
       ),
       scrollbarTheme: ScrollbarThemeData(
         thumbVisibility: MaterialStateProperty.all(true),
@@ -111,7 +110,6 @@ abstract class AppTheme {
       ),
       bottomSheetTheme: const BottomSheetThemeData(
         backgroundColor: AppColors.transparent,
-        // modalBackgroundColor: AppColors.detailsScreenBackground,
       ),
       scrollbarTheme: ScrollbarThemeData(
         thumbVisibility: MaterialStateProperty.all(true),

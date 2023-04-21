@@ -27,7 +27,6 @@ class PlaceInteractor {
 
   Future<DbPlace> getPlaceDetails(DbPlace place) => repository.getPlaceDetails(place);
 
-  List<DbPlace> getFavoritesPlaces() => repository.getFavoritesPlaces();
 
   Future<void> loadAllPlaces({required AppDb db}) => repository.loadAllPlaces(db);
 
