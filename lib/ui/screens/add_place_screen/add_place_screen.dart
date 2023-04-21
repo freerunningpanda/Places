@@ -1,6 +1,9 @@
-import 'package:flutter/material.dart';
+import 'dart:io';
 
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:image_picker/image_picker.dart';
+
 import 'package:places/blocs/choose_category_bloc/choose_category_bloc.dart';
 import 'package:places/cubits/add_place_screen/add_place_screen_cubit.dart';
 import 'package:places/cubits/create_place/create_place_button_cubit.dart';
@@ -185,6 +188,10 @@ class _ImagePickerWidgetState extends State<_ImagePickerWidget> {
   //     apiPlaces: ApiPlaces(),
   //   ),
   // ).favoritePlaces;
+
+  final ImagePicker picker = ImagePicker();
+  XFile? _image;
+
   @override
   Widget build(BuildContext context) {
     final places = ImageProviderCubit.places;
@@ -195,7 +202,12 @@ class _ImagePickerWidgetState extends State<_ImagePickerWidget> {
         children: [
           Row(
             children: [
-              _PickImageWidget(theme: widget.theme, places: places),
+              _PickImageWidget(
+                theme: widget.theme,
+                places: places,
+                imgFromCamera: _imgFromCamera,
+                imgFromGallery: _imgFromGallery,
+              ),
             ],
           ),
           Expanded(
@@ -207,7 +219,7 @@ class _ImagePickerWidgetState extends State<_ImagePickerWidget> {
                   children: [
                     for (var i = 0; i < places.length; i++)
                       _ImagePlace(
-                        image: places[i].urls[0],
+                        image: _image,
                         index: i,
                       ),
                   ],
@@ -219,10 +231,32 @@ class _ImagePickerWidgetState extends State<_ImagePickerWidget> {
       ),
     );
   }
+
+  Future<void> _imgFromCamera() async {
+    final image = await ImagePicker().pickImage(
+      source: ImageSource.camera,
+      imageQuality: 50,
+    );
+
+    setState(() {
+      _image = image;
+    });
+  }
+
+  Future<void> _imgFromGallery() async {
+    final image = await ImagePicker().pickImage(
+      source: ImageSource.gallery,
+      imageQuality: 50,
+    );
+
+    setState(() {
+      _image = image;
+    });
+  }
 }
 
 class _ImagePlace extends StatelessWidget {
-  final String? image;
+  final XFile? image;
   final int index;
   const _ImagePlace({Key? key, required this.image, required this.index}) : super(key: key);
 
@@ -233,7 +267,7 @@ class _ImagePlace extends StatelessWidget {
 }
 
 class _PlaceContent extends StatelessWidget {
-  final String? image;
+  final XFile? image;
   final int index;
   const _PlaceContent({
     Key? key,
@@ -256,8 +290,8 @@ class _PlaceContent extends StatelessWidget {
           borderRadius: BorderRadius.circular(12),
           child: Stack(
             children: [
-              Image.network(
-                image ?? 'no_url',
+              Image.file(
+                File(image!.path),
                 width: 72,
                 height: 72,
                 fit: BoxFit.cover,
@@ -292,11 +326,15 @@ class _PlaceContent extends StatelessWidget {
 class _PickImageWidget extends StatelessWidget {
   final List<Place> places;
   final ThemeData theme;
+  final VoidCallback imgFromCamera;
+  final VoidCallback imgFromGallery;
 
   const _PickImageWidget({
     Key? key,
-    required this.theme,
     required this.places,
+    required this.theme,
+    required this.imgFromCamera,
+    required this.imgFromGallery,
   }) : super(key: key);
 
   @override
@@ -319,7 +357,10 @@ class _PickImageWidget extends StatelessWidget {
           await showDialog<PickImageWidget>(
             context: context,
             builder: (_) {
-              return const PickImageWidget();
+              return PickImageWidget(
+                imgFromCamera: imgFromCamera,
+                imgFromGallery: imgFromGallery,
+              );
             },
           );
         },
