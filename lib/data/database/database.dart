@@ -89,8 +89,12 @@ class AppDb extends _$AppDb {
     });
   }
 
-  Future<void> deletePlace(int id) async {
-    await (delete(dbPlaces)..where((tbl) => tbl.id.equals(id))).go();
+    Future<void> updatePlace(DbPlace updatedPlace) async {
+    await update(dbPlaces).replace(updatedPlace);
+  }
+
+  Future<void> deletePlace(DbPlace place) async {
+    await (delete(dbPlaces)..where((tbl) => tbl.id.equals(place.id))).go();
   }
 }
 

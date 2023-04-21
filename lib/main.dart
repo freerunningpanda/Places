@@ -27,6 +27,7 @@ import 'package:provider/provider.dart';
 
 final ThemeData _lightTheme = AppTheme.buildTheme();
 final ThemeData _darkTheme = AppTheme.buildThemeDark();
+final AppDb db = AppDb();
 
 // ignore: long-method
 void main() async {
@@ -39,13 +40,17 @@ void main() async {
           create: (_) => ThemeDataProvider(),
         ),
         Provider<AppDb>(
-          create: (_) => AppDb(),
+          create: (_) => db,
         ),
       ],
       child: MultiBlocProvider(
         providers: [
           BlocProvider<WantToVisitBloc>(
-            create: (_) => WantToVisitBloc(),
+            create: (_) => WantToVisitBloc(
+              db: db,
+            )..add(
+                FavoriteListLoadedEvent(),
+              ),
           ),
           BlocProvider<VisitedScreenBloc>(
             create: (_) => VisitedScreenBloc(),

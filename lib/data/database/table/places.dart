@@ -1,6 +1,7 @@
 import 'package:drift/drift.dart';
 
 class DbPlaces extends Table {
+  IntColumn get index => integer().autoIncrement().nullable()();
   IntColumn get id => integer()();
   RealColumn get lat => real()();
   RealColumn get lng => real()();

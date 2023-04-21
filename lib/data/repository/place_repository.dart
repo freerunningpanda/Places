@@ -38,7 +38,7 @@ class PlaceRepository {
   List<DbPlace> getFavoritesPlaces() => apiPlaces.getFavoritesPlaces();
 
   Future<void> removeFromFavorites({required DbPlace place, required AppDb db}) async {
-   await db.deletePlace(place.id);
+   await db.deletePlace(place);
   }
 
   Future<void> addToFavorites({required DbPlace place, required AppDb db}) async {

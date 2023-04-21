@@ -1,3 +1,4 @@
+import 'package:drift/drift.dart' hide Column;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:places/blocs/favorite/favorite_bloc.dart';
@@ -69,15 +70,7 @@ class _VisitingScreenState extends State<VisitingScreen> {
                             debugPrint('placesToVisit: ${state.favoritePlaces.length}');
 
                             return _WantToVisitWidget(
-                              placesToVisit: state.favoritePlaces.toList(),
-                              key: const PageStorageKey('WantToVisitScrollPosition'),
-                            );
-                          }
-                          if (state is WantToVisitAfterDragState) {
-                            debugPrint('placesToVisit: ${state.favoritePlaces.length}');
-
-                            return _WantToVisitWidget(
-                              placesToVisit: state.favoritePlaces,
+                              // placesToVisit: state.favoritePlaces.toList(),
                               key: const PageStorageKey('WantToVisitScrollPosition'),
                             );
                           }
@@ -193,46 +186,234 @@ class _TabBarWidgetState extends State<_TabBarWidget> with TickerProviderStateMi
   }
 }
 
-class _WantToVisitWidget extends StatelessWidget {
-  final List<DbPlace> placesToVisit;
-  const _WantToVisitWidget({Key? key, required this.placesToVisit}) : super(key: key);
+class _WantToVisitWidget extends StatefulWidget {
+  const _WantToVisitWidget({Key? key}) : super(key: key);
 
+  @override
+  State<_WantToVisitWidget> createState() => _WantToVisitWidgetState();
+}
+
+class _WantToVisitWidgetState extends State<_WantToVisitWidget> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final db = context.read<AppDb>();
+    final orientation = MediaQuery.of(context).orientation == Orientation.portrait;
 
-    return ReorderableListView(
-      onReorder: (oldIndex, newIndex) {
-        context.read<WantToVisitBloc>().add(
-              DragCardOnWantToVisitEvent(
+    return FutureBuilder(
+      future: context.read<WantToVisitBloc>().getPlaces(db),
+      // ignore: avoid_types_on_closure_parameters
+      builder: (_, AsyncSnapshot<List<DbPlace>> snapshot) {
+        if (snapshot.connectionState == ConnectionState.done) {
+          final favoritePlaces = snapshot.data;
+
+          return ReorderableListView.builder(
+            onReorder: (oldIndex, newIndex) async {
+              if (newIndex > oldIndex) {
+                newIndex -= 1;
+              }
+              final place = favoritePlaces!.removeAt(oldIndex);
+              favoritePlaces.insert(newIndex, place);
+              for (var i = 0; i < favoritePlaces.length; i++) {
+                final updatedPlace = favoritePlaces[i].copyWith(index: Value<int>(i));
+                await db.updatePlace(updatedPlace);
+              }
+            },
+            itemCount: favoritePlaces!.length,
+            itemBuilder: (context, index) {
+              final place = favoritePlaces[index];
+
+              return _DismissibleWidget(
+                key: ObjectKey(index),
+                index: index,
+                orientation: orientation,
+                place: place,
                 db: db,
-                newIndex: newIndex,
-                oldIndex: oldIndex,
-                places: placesToVisit,
-              ),
-            );
+                theme: theme,
+                actionTwo: const PlaceIcons(
+                  assetName: AppAssets.cross,
+                  width: 22,
+                  height: 22,
+                ),
+                style: AppTypography.greenColor,
+                target: AppString.planning,
+              );
+            },
+          );
+        } else {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        }
       },
-      children: [
-        for (var i = 0; i < placesToVisit.length; i++)
-          ClipRRect(
-            key: ObjectKey(i),
-            borderRadius: BorderRadius.circular(16.0),
-            child: _DismissibleWidget(
-              i: i,
-              placesToVisit: placesToVisit,
-              theme: theme,
-              uniqueKey: UniqueKey(),
-              actionTwo: const PlaceIcons(
-                assetName: AppAssets.cross,
-                width: 22,
-                height: 22,
+    );
+  }
+}
+
+class _DismissibleWidget extends StatelessWidget {
+  final int index;
+  final bool orientation;
+  final DbPlace place;
+  final AppDb db;
+  final ThemeData theme;
+  final TextStyle style;
+  final Widget actionTwo;
+  final String target;
+
+  const _DismissibleWidget({
+    Key? key,
+    required this.index,
+    required this.orientation,
+    required this.place,
+    required this.db,
+    required this.theme,
+    required this.style,
+    required this.actionTwo,
+    required this.target,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return AspectRatio(
+      aspectRatio: orientation ? AppCardSize.visitingCard : AppCardSize.visitingCardLandscape,
+      child: Stack(
+        children: [
+          AspectRatio(
+            aspectRatio: orientation ? AppCardSize.visitingCardDismiss : AppCardSize.visitingCardDismissLandscape,
+            child: Padding(
+              padding: const EdgeInsets.only(bottom: 1),
+              child: DecoratedBox(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(16.0),
+                  color: Colors.red,
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.only(right: 16.0),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Column(
+                        // ignore: avoid_redundant_argument_values
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: const [
+                          PlaceIcons(assetName: AppAssets.bucket, width: 24, height: 24),
+                          SizedBox(height: 8),
+                          Text(
+                            AppString.delete,
+                            style: AppTypography.removeCardText,
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
               ),
-              style: AppTypography.greenColor,
-              target: AppString.planning,
             ),
           ),
-      ],
+          AspectRatio(
+            aspectRatio: orientation ? AppCardSize.visitingCard : AppCardSize.visitingCardLandscape,
+            child: Dismissible(
+              key: ObjectKey(index),
+              onDismissed: (direction) async {
+                // Отправляю в эвент удаления карточки id свойство текущего места, само место
+                // и меняю свойство isFavorite на false
+                // Благодаря чему стейт видит обновление состояния и теперь виджет перерисовывается
+                // P.S.: раньше не обновлялся UI при попытке удалить карточку из-за того что
+                // Я отправлял в эвент только индекс элемента в списке (а не индекс свойства места) и список избранного,
+                // Из-за чего блок не видел смены состояния, из-за особенности Equatable,
+                // который не видит изменений если количество элементов в списке изменилось
+                // так список для него иммутабелен,
+                // а сейчас я добавил флаг isFavorite
+                // И передаю в эвент само место в избранном, а не весь список избранного
+                place.isFavorite = false;
+                context.read<WantToVisitBloc>().add(
+                      RemoveFromWantToVisitEvent(
+                        db: db,
+                        isFavorite: place.isFavorite,
+                        place: place,
+                      ),
+                    );
+                place.isFavorite = false;
+                context.read<FavoriteBloc>().add(
+                      RemoveFromFavoriteEvent(
+                        db: db,
+                        isFavorite: place.isFavorite,
+                        place: place,
+                        placeIndex: place.id,
+                      ),
+                    );
+                fromVisitingScreen = true;
+                debugPrint('placesToVisit[i].id: ${place.id}');
+              },
+              background: const SizedBox.shrink(),
+              direction: DismissDirection.endToStart,
+              child: Padding(
+                padding: const EdgeInsets.only(bottom: 11.0),
+                child: PlaceCard(
+                  addPlace: () {},
+                  placeIndex: place.id,
+                  removePlace: () async {
+                    debugPrint('pressed_remove_place');
+                    place.isFavorite = false;
+                    context.read<WantToVisitBloc>().add(
+                          RemoveFromWantToVisitEvent(
+                            db: db,
+                            isFavorite: place.isFavorite,
+                            place: place,
+                          ),
+                        );
+                    place.isFavorite = false;
+                    context.read<FavoriteBloc>().add(
+                          RemoveFromFavoriteEvent(
+                            db: db,
+                            isFavorite: place.isFavorite,
+                            place: place,
+                            placeIndex: place.id,
+                          ),
+                        );
+                    fromVisitingScreen = true;
+                  },
+                  isVisitingScreen: true,
+                  place: place,
+                  url: place.urls,
+                  type: place.placeType,
+                  name: place.name,
+                  aspectRatio: AppCardSize.visitingCardDismiss,
+                  details: [
+                    Text(
+                      place.name,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: theme.textTheme.headlineSmall,
+                    ),
+                    const SizedBox(height: 2),
+                    Text(
+                      '$target 12 окт. 2022',
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: style,
+                    ),
+                    const SizedBox(height: 10),
+                    const Text(
+                      '${AppString.closed} 09:00',
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: AppTypography.textText16Regular,
+                    ),
+                  ],
+                  actionOne: const PlaceIcons(
+                    assetName: AppAssets.calendarWhite,
+                    width: 24,
+                    height: 24,
+                  ),
+                  actionTwo: actionTwo,
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
@@ -244,11 +425,13 @@ class _VisitedWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final db = context.read<AppDb>();
 
     return ReorderableListView(
       onReorder: (oldIndex, newIndex) {
         context.read<VisitedScreenBloc>().add(
               DragCardOnVisitedEvent(
+                db: db,
                 newIndex: newIndex,
                 oldIndex: oldIndex,
                 places: visitedPlaces,
@@ -257,191 +440,7 @@ class _VisitedWidget extends StatelessWidget {
       },
       children: [
         for (var i = 0; i < visitedPlaces.length; i++)
-          _DismissibleWidget(
-            i: i,
-            placesToVisit: visitedPlaces,
-            theme: theme,
-            uniqueKey: UniqueKey(),
-            actionTwo: const PlaceIcons(
-              assetName: AppAssets.share,
-              width: 22,
-              height: 22,
-            ),
-            style: AppTypography.detailsText,
-            target: AppString.targetReach,
-          ),
-      ],
-    );
-  }
-}
-
-class _DismissibleWidget extends StatelessWidget {
-  final int i;
-  final List<DbPlace> placesToVisit;
-  final ThemeData theme;
-  final Key uniqueKey;
-  final Widget actionTwo;
-  final String target;
-  final TextStyle style;
-
-  const _DismissibleWidget({
-    Key? key,
-    required this.i,
-    required this.placesToVisit,
-    required this.theme,
-    required this.uniqueKey,
-    required this.actionTwo,
-    required this.style,
-    required this.target,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    final orientation = MediaQuery.of(context).orientation == Orientation.portrait;
-    final db = context.read<AppDb>();
-    final interactor = PlaceInteractor(
-      repository: PlaceRepository(
-        apiPlaces: ApiPlaces(),
-      ),
-    );
-
-    return Stack(
-      children: [
-        AspectRatio(
-          aspectRatio: orientation ? AppCardSize.visitingCardDismiss : AppCardSize.visitingCardDismissLandscape,
-          child: Padding(
-            padding: const EdgeInsets.only(bottom: 1),
-            child: DecoratedBox(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(16.0),
-                color: Colors.red,
-              ),
-              child: Padding(
-                padding: const EdgeInsets.only(right: 16.0),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    Column(
-                      // ignore: avoid_redundant_argument_values
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: const [
-                        PlaceIcons(assetName: AppAssets.bucket, width: 24, height: 24),
-                        SizedBox(height: 8),
-                        Text(
-                          AppString.delete,
-                          style: AppTypography.removeCardText,
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
-        ),
-        AspectRatio(
-          aspectRatio: orientation ? AppCardSize.visitingCard : AppCardSize.visitingCardLandscape,
-          child: Dismissible(
-            key: uniqueKey,
-            onDismissed: (direction) async {
-              // Отправляю в эвент удаления карточки id свойство текущего места, само место
-              // и меняю свойство isFavorite на false
-              // Благодаря чему стейт видит обновление состояния и теперь виджет перерисовывается
-              // P.S.: раньше не обновлялся UI при попытке удалить карточку из-за того что
-              // Я отправлял в эвент только индекс элемента в списке (а не индекс свойства места) и список избранного,
-              // Из-за чего блок не видел смены состояния, из-за особенности Equatable,
-              // который не видит изменений если количество элементов в списке изменилось
-              // так список для него иммутабелен,
-              // а сейчас я добавил флаг isFavorite
-              // И передаю в эвент само место в избранном, а не весь список избранного
-              placesToVisit[i].isFavorite = false;
-              context.read<WantToVisitBloc>().add(
-                    RemoveFromWantToVisitEvent(
-                      db: db,
-                      isFavorite: placesToVisit[i].isFavorite,
-                      place: placesToVisit[i],
-                      placeIndex: placesToVisit[i].id,
-                    ),
-                  );
-              placesToVisit[i].isFavorite = false;
-              context.read<FavoriteBloc>().add(
-                    RemoveFromFavoriteEvent(
-                      db: db,
-                      isFavorite: placesToVisit[i].isFavorite,
-                      place: placesToVisit[i],
-                      placeIndex: placesToVisit[i].id,
-                    ),
-                  );
-              fromVisitingScreen = true;
-              debugPrint('placesToVisit[i].id: ${placesToVisit[i].id}');
-            },
-            background: const SizedBox.shrink(),
-            direction: DismissDirection.endToStart,
-            child: Padding(
-              padding: const EdgeInsets.only(bottom: 11.0),
-              child: PlaceCard(
-                placeIndex: i,
-                removePlace: () async {
-                  placesToVisit[i].isFavorite = false;
-                  context.read<WantToVisitBloc>().add(
-                        RemoveFromWantToVisitEvent(
-                          db: db,
-                          isFavorite: placesToVisit[i].isFavorite,
-                          place: placesToVisit[i],
-                          placeIndex: placesToVisit[i].id,
-                        ),
-                      );
-                  placesToVisit[i].isFavorite = false;
-                  context.read<FavoriteBloc>().add(
-                        RemoveFromFavoriteEvent(
-                          db: db,
-                          isFavorite: placesToVisit[i].isFavorite,
-                          place: placesToVisit[i],
-                          placeIndex: placesToVisit[i].id,
-                        ),
-                      );
-                  fromVisitingScreen = true;
-                  debugPrint('placesToVisit[i].id: ${placesToVisit[i].isFavorite}');
-                },
-                isVisitingScreen: true,
-                placeList: placesToVisit,
-                url: placesToVisit[i].urls[0],
-                type: placesToVisit[i].placeType,
-                name: placesToVisit[i].name,
-                aspectRatio: AppCardSize.visitingCardDismiss,
-                details: [
-                  Text(
-                    placesToVisit[i].name,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: theme.textTheme.headlineSmall,
-                  ),
-                  const SizedBox(height: 2),
-                  Text(
-                    '$target 12 окт. 2022',
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: style,
-                  ),
-                  const SizedBox(height: 10),
-                  const Text(
-                    '${AppString.closed} 09:00',
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: AppTypography.textText16Regular,
-                  ),
-                ],
-                actionOne: const PlaceIcons(
-                  assetName: AppAssets.calendarWhite,
-                  width: 24,
-                  height: 24,
-                ),
-                actionTwo: actionTwo,
-              ),
-            ),
-          ),
-        ),
+          Container(),
       ],
     );
   }

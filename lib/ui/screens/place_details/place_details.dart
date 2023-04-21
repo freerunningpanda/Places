@@ -121,12 +121,15 @@ class _PlaceDetails extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Получить список картинок из строки
+    final urlsList = place.urls.split('|');
+
     return SingleChildScrollView(
       child: Column(
         children: [
           _PlaceDetailsGallery(
             place: place,
-            images: [place.urls],
+            images: urlsList,
             height: height,
             pageController: _pageController,
           ),

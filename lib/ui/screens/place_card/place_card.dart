@@ -27,8 +27,9 @@ class PlaceCard extends StatelessWidget {
   final List<Widget> details;
   final Widget actionOne;
   final Widget? actionTwo;
+  final VoidCallback? addPlace;
   final double aspectRatio;
-  final List<DbPlace> placeList;
+  final DbPlace place;
   final int placeIndex;
   final bool isVisitingScreen;
   final VoidCallback? removePlace;
@@ -41,8 +42,9 @@ class PlaceCard extends StatelessWidget {
     required this.details,
     required this.actionOne,
     this.actionTwo,
+    required this.addPlace,
     required this.aspectRatio,
-    required this.placeList,
+    required this.place,
     required this.placeIndex,
     required this.isVisitingScreen,
     this.removePlace,
@@ -50,15 +52,11 @@ class PlaceCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    /// Пробразовать строку из url в список, чтобы обращаться к первому элементу списка
+    final urlsList = url?.split('|');
     final customColors = Theme.of(context).extension<CustomColors>()!;
     final size = MediaQuery.of(context).size;
     final orientation = MediaQuery.of(context).orientation == Orientation.portrait;
-    final db = context.read<AppDb>();
-    final interactor = PlaceInteractor(
-      repository: PlaceRepository(
-        apiPlaces: ApiPlaces(),
-      ),
-    );
 
     return SizedBox(
       height: orientation ? size.height / 2.5 : size.height / 2.0,
@@ -79,7 +77,7 @@ class PlaceCard extends StatelessWidget {
                   _PlaceCardTop(
                     name: name,
                     type: type,
-                    url: url,
+                    url: urlsList,
                   ),
                   const SizedBox(height: 16),
                   _PlaceCardBottom(
@@ -88,7 +86,7 @@ class PlaceCard extends StatelessWidget {
                   ),
                 ],
               ),
-              RippleCardFull(place: placeList[placeIndex]),
+              RippleCardFull(place: place),
               if (isVisitingScreen)
                 RippleIcons(
                   removePlace: removePlace,
@@ -98,160 +96,7 @@ class PlaceCard extends StatelessWidget {
               else
                 RippleIcon(
                   actionOne: actionOne,
-                  addPlace: () async {
-                    final place = placeList[placeIndex];
-                    // Если место не в избранном
-                    if (!place.isFavorite) {
-                      // Добавляю место в избранное, меняя флаг isFavorite на true
-                      // Событие добавляет место в список избранного
-                      // Отвечает за обновление состояние лайка
-
-                      place.isFavorite = true;
-                      context.read<FavoriteBloc>().add(
-                            AddToFavoriteEvent(
-                              db: db,
-                              isFavorite: place.isFavorite,
-                              place: place,
-                              placeIndex: place.id, // Для того чтобы связать места по его id с бэка
-                              // Это позволит при перемешивании позиции места в списке удалять нужное место
-                            ),
-                          );
-
-                      // Отвечает за отображение списка мест в избранном
-                      place.isFavorite = true;
-                      context.read<WantToVisitBloc>().add(
-                            AddToWantToVisitEvent(
-                              db: db,
-                              isFavorite: place.isFavorite,
-                              place: place,
-                              placeIndex: place.id,
-                            ),
-                          );
-                      debugPrint('placeIndex: ${place.id}');
-                      await interactor.addToFavorites(place: place, db: db);
-                      await interactor.loadFavoritePlaces(db: db);
-                      debugPrint('isFavorite ${place.isFavorite}');
-                      debugPrint('Добавлены в избранное: $place');
-                    } else {
-                      // Если место в избранном, меняю флаг isFavorite на false.
-
-                      if (fromVisitingScreen) {
-                        place.isFavorite = true;
-                        context.read<FavoriteBloc>().add(
-                              AddToFavoriteEvent(
-                                db: db,
-                                isFavorite: place.isFavorite,
-                                place: place,
-                                placeIndex: place.id, // Для того чтобы связать места по его id с бэка
-                                // Это позволит при перемешивании позиции места в списке удалять нужное место
-                              ),
-                            );
-
-                        // Отвечает за отображение списка мест в избранном
-                        place.isFavorite = true;
-                        context.read<WantToVisitBloc>().add(
-                              AddToWantToVisitEvent(
-                                db: db,
-                                isFavorite: place.isFavorite,
-                                place: place,
-                                placeIndex: place.id,
-                              ),
-                            );
-                        debugPrint('placeIndex: ${place.id}');
-                        await interactor.addToFavorites(place: place, db: db);
-                        await interactor.loadFavoritePlaces(db: db);
-                        debugPrint('isFavorite ${place.isFavorite}');
-                        debugPrint('Добавлены в избранное: $place');
-                        fromVisitingScreen = false;
-                      } else {
-                        place.isFavorite = false;
-                        
-
-                        // Событие удаляет место из списка избранного
-                        // ignore: use_build_context_synchronously
-                        context.read<FavoriteBloc>().add(
-                              RemoveFromFavoriteEvent(
-                                db: db,
-                                isFavorite: place.isFavorite,
-                                place: place,
-                                placeIndex: place.id,
-                              ),
-                            );
-
-                        place.isFavorite = false;
-
-                        // ignore: use_build_context_synchronously
-                        context.read<WantToVisitBloc>().add(
-                              RemoveFromWantToVisitEvent(
-                                db: db,
-                                isFavorite: place.isFavorite,
-                                place: place,
-                                placeIndex: place.id,
-                              ),
-                            );
-                        await interactor.removeFromFavorites(place: place, db: db);
-                        await interactor.loadFavoritePlaces(db: db);
-                        debugPrint('isFavorite ${place.isFavorite}');
-                        debugPrint('Удалено из избранного: $place');
-                      }
-                    }
-                    // if (!place.isFavorite) {
-                    //   interactor.addToFavorites(place: place, db: db);
-
-                    //   // Добавляю место в избранное, меняя флаг isFavorite на true
-                    //   // Событие добавляет место в список избранного
-                    //   // Отвечает за обновление состояние лайка
-                    //   context.read<FavoriteBloc>().add(
-                    //         FavoriteEvent(
-                    //           db: db,
-                    //           isFavorite: place.isFavorite = true,
-                    //           place: place,
-                    //           placeIndex: place.id, // Для того чтобы связать места по его id с бэка
-                    //           // Это позволит при перемешивании позиции места в списке удалять нужное место
-                    //         ),
-                    //       );
-                    //   // Отвечает за отображение списка мест в избранном
-
-                    //   context.read<WantToVisitBloc>().add(
-                    //         AddToWantToVisitEvent(
-                    //           isFavorite: place.isFavorite = true,
-                    //           place: place,
-                    //           placeIndex: place.id,
-                    //           favoritePlaces: await db.allPlacesEntries,
-                    //           db: db,
-                    //         ),
-                    //       );
-
-                    //   debugPrint('isFavorite ${place.isFavorite}');
-                    //   debugPrint('Добавлены в избранное: $place');
-                    // } else {
-                    //   interactor.removeFromFavorites(place: place, db: db);
-
-                    //   // Если место в избранном, меняю флаг isFavorite на false.
-                    //   // Событие удаляет место из списка избранного
-
-                    //   context.read<FavoriteBloc>().add(
-                    //         FavoriteEvent(
-                    //           isFavorite: place.isFavorite = false,
-                    //           place: place,
-                    //           placeIndex: place.id,
-                    //           db: db,
-                    //         ),
-                    //       );
-                    //   context.read<WantToVisitBloc>().add(
-                    //         RemoveFromWantToVisitEvent(
-                    //           isFavorite: place.isFavorite = false,
-                    //           place: place,
-                    //           placeIndex: place.id,
-                    //           favoritePlaces: await db.allPlacesEntries,
-                    //           db: db,
-                    //         ),
-                    //       );
-
-                    //   debugPrint('isFavorite ${place.isFavorite}');
-                    //   debugPrint('Удалено из избранного: $place');
-                    // }
-                  },
+                  addPlace: addPlace,
                 ),
             ],
           ),
@@ -395,7 +240,7 @@ class RippleCardFull extends StatelessWidget {
 
 class _PlaceCardTop extends StatefulWidget {
   final String type;
-  final String? url;
+  final List<String>? url;
   final String name;
 
   const _PlaceCardTop({
@@ -443,7 +288,7 @@ class _PlaceCardTopState extends State<_PlaceCardTop> with TickerProviderStateMi
           Hero(
             tag: widget.name,
             child: CachedNetworkImage(
-              imageUrl: widget.url ?? 'no_url',
+              imageUrl: widget.url?.first ?? 'no_url',
               fit: BoxFit.fitWidth,
               errorWidget: (context, url, dynamic error) => Image.asset(AppAssets.placeholder),
               progressIndicatorBuilder: (_, url, progress) => AnimatedBuilder(

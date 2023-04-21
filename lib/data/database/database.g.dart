@@ -180,6 +180,7 @@ class $SearchHistorysTable extends SearchHistorys
 }
 
 class DbPlace extends DataClass implements Insertable<DbPlace> {
+  final int? index;
   final int id;
   final double lat;
   final double lng;
@@ -189,7 +190,8 @@ class DbPlace extends DataClass implements Insertable<DbPlace> {
   final String description;
   bool isFavorite;
   DbPlace(
-      {required this.id,
+      {this.index,
+      required this.id,
       required this.lat,
       required this.lng,
       required this.name,
@@ -200,6 +202,9 @@ class DbPlace extends DataClass implements Insertable<DbPlace> {
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
+    if (!nullToAbsent || index != null) {
+      map['index'] = Variable<int>(index);
+    }
     map['id'] = Variable<int>(id);
     map['lat'] = Variable<double>(lat);
     map['lng'] = Variable<double>(lng);
@@ -213,6 +218,8 @@ class DbPlace extends DataClass implements Insertable<DbPlace> {
 
   DbPlacesCompanion toCompanion(bool nullToAbsent) {
     return DbPlacesCompanion(
+      index:
+          index == null && nullToAbsent ? const Value.absent() : Value(index),
       id: Value(id),
       lat: Value(lat),
       lng: Value(lng),
@@ -228,6 +235,7 @@ class DbPlace extends DataClass implements Insertable<DbPlace> {
       {ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return DbPlace(
+      index: serializer.fromJson<int?>(json['index']),
       id: serializer.fromJson<int>(json['id']),
       lat: serializer.fromJson<double>(json['lat']),
       lng: serializer.fromJson<double>(json['lng']),
@@ -242,6 +250,7 @@ class DbPlace extends DataClass implements Insertable<DbPlace> {
   Map<String, dynamic> toJson({ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
+      'index': serializer.toJson<int?>(index),
       'id': serializer.toJson<int>(id),
       'lat': serializer.toJson<double>(lat),
       'lng': serializer.toJson<double>(lng),
@@ -254,7 +263,8 @@ class DbPlace extends DataClass implements Insertable<DbPlace> {
   }
 
   DbPlace copyWith(
-          {int? id,
+          {Value<int?> index = const Value.absent(),
+          int? id,
           double? lat,
           double? lng,
           String? name,
@@ -263,6 +273,7 @@ class DbPlace extends DataClass implements Insertable<DbPlace> {
           String? description,
           bool? isFavorite}) =>
       DbPlace(
+        index: index.present ? index.value : this.index,
         id: id ?? this.id,
         lat: lat ?? this.lat,
         lng: lng ?? this.lng,
@@ -275,6 +286,7 @@ class DbPlace extends DataClass implements Insertable<DbPlace> {
   @override
   String toString() {
     return (StringBuffer('DbPlace(')
+          ..write('index: $index, ')
           ..write('id: $id, ')
           ..write('lat: $lat, ')
           ..write('lng: $lng, ')
@@ -288,12 +300,13 @@ class DbPlace extends DataClass implements Insertable<DbPlace> {
   }
 
   @override
-  int get hashCode =>
-      Object.hash(id, lat, lng, name, urls, placeType, description, isFavorite);
+  int get hashCode => Object.hash(
+      index, id, lat, lng, name, urls, placeType, description, isFavorite);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       (other is DbPlace &&
+          other.index == this.index &&
           other.id == this.id &&
           other.lat == this.lat &&
           other.lng == this.lng &&
@@ -305,6 +318,7 @@ class DbPlace extends DataClass implements Insertable<DbPlace> {
 }
 
 class DbPlacesCompanion extends UpdateCompanion<DbPlace> {
+  final Value<int?> index;
   final Value<int> id;
   final Value<double> lat;
   final Value<double> lng;
@@ -314,6 +328,7 @@ class DbPlacesCompanion extends UpdateCompanion<DbPlace> {
   final Value<String> description;
   final Value<bool> isFavorite;
   const DbPlacesCompanion({
+    this.index = const Value.absent(),
     this.id = const Value.absent(),
     this.lat = const Value.absent(),
     this.lng = const Value.absent(),
@@ -324,6 +339,7 @@ class DbPlacesCompanion extends UpdateCompanion<DbPlace> {
     this.isFavorite = const Value.absent(),
   });
   DbPlacesCompanion.insert({
+    this.index = const Value.absent(),
     required int id,
     required double lat,
     required double lng,
@@ -341,6 +357,7 @@ class DbPlacesCompanion extends UpdateCompanion<DbPlace> {
         description = Value(description),
         isFavorite = Value(isFavorite);
   static Insertable<DbPlace> custom({
+    Expression<int>? index,
     Expression<int>? id,
     Expression<double>? lat,
     Expression<double>? lng,
@@ -351,6 +368,7 @@ class DbPlacesCompanion extends UpdateCompanion<DbPlace> {
     Expression<bool>? isFavorite,
   }) {
     return RawValuesInsertable({
+      if (index != null) 'index': index,
       if (id != null) 'id': id,
       if (lat != null) 'lat': lat,
       if (lng != null) 'lng': lng,
@@ -363,7 +381,8 @@ class DbPlacesCompanion extends UpdateCompanion<DbPlace> {
   }
 
   DbPlacesCompanion copyWith(
-      {Value<int>? id,
+      {Value<int?>? index,
+      Value<int>? id,
       Value<double>? lat,
       Value<double>? lng,
       Value<String>? name,
@@ -372,6 +391,7 @@ class DbPlacesCompanion extends UpdateCompanion<DbPlace> {
       Value<String>? description,
       Value<bool>? isFavorite}) {
     return DbPlacesCompanion(
+      index: index ?? this.index,
       id: id ?? this.id,
       lat: lat ?? this.lat,
       lng: lng ?? this.lng,
@@ -386,6 +406,9 @@ class DbPlacesCompanion extends UpdateCompanion<DbPlace> {
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
+    if (index.present) {
+      map['index'] = Variable<int>(index.value);
+    }
     if (id.present) {
       map['id'] = Variable<int>(id.value);
     }
@@ -416,6 +439,7 @@ class DbPlacesCompanion extends UpdateCompanion<DbPlace> {
   @override
   String toString() {
     return (StringBuffer('DbPlacesCompanion(')
+          ..write('index: $index, ')
           ..write('id: $id, ')
           ..write('lat: $lat, ')
           ..write('lng: $lng, ')
@@ -434,6 +458,13 @@ class $DbPlacesTable extends DbPlaces with TableInfo<$DbPlacesTable, DbPlace> {
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
   $DbPlacesTable(this.attachedDatabase, [this._alias]);
+  final VerificationMeta _indexMeta = const VerificationMeta('index');
+  @override
+  late final GeneratedColumn<int> index = GeneratedColumn<int>(
+      'index', aliasedName, true,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultConstraints: 'PRIMARY KEY AUTOINCREMENT');
   final VerificationMeta _idMeta = const VerificationMeta('id');
   @override
   late final GeneratedColumn<int> id = GeneratedColumn<int>(
@@ -485,7 +516,7 @@ class $DbPlacesTable extends DbPlaces with TableInfo<$DbPlacesTable, DbPlace> {
       defaultConstraints: 'CHECK ("is_favorite" IN (0, 1))');
   @override
   List<GeneratedColumn> get $columns =>
-      [id, lat, lng, name, urls, placeType, description, isFavorite];
+      [index, id, lat, lng, name, urls, placeType, description, isFavorite];
   @override
   String get aliasedName => _alias ?? 'db_places';
   @override
@@ -495,6 +526,10 @@ class $DbPlacesTable extends DbPlaces with TableInfo<$DbPlacesTable, DbPlace> {
       {bool isInserting = false}) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
+    if (data.containsKey('index')) {
+      context.handle(
+          _indexMeta, index.isAcceptableOrUnknown(data['index']!, _indexMeta));
+    }
     if (data.containsKey('id')) {
       context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
     } else if (isInserting) {
@@ -550,11 +585,13 @@ class $DbPlacesTable extends DbPlaces with TableInfo<$DbPlacesTable, DbPlace> {
   }
 
   @override
-  Set<GeneratedColumn> get $primaryKey => <GeneratedColumn>{};
+  Set<GeneratedColumn> get $primaryKey => {index};
   @override
   DbPlace map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return DbPlace(
+      index: attachedDatabase.options.types
+          .read(DriftSqlType.int, data['${effectivePrefix}index']),
       id: attachedDatabase.options.types
           .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
       lat: attachedDatabase.options.types

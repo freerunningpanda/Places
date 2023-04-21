@@ -1,3 +1,4 @@
+import 'package:drift/drift.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:places/data/database/database.dart';
@@ -7,7 +8,6 @@ part 'visited_screen_event.dart';
 part 'visited_screen_state.dart';
 
 class VisitedScreenBloc extends Bloc<VisitedScreenEvent, VisitedScreenState> {
-
   VisitedScreenBloc() : super(VisitedEmptyState()) {
     on<AddToVisitedEvent>(
       (event, emit) async {
@@ -31,8 +31,8 @@ class VisitedScreenBloc extends Bloc<VisitedScreenEvent, VisitedScreenState> {
         ),
       );
     });
-    on<DragCardOnVisitedEvent>((event, emit) {
-      dragCard(event.places, event.oldIndex, event.newIndex);
+    on<DragCardOnVisitedEvent>((event, emit) async {
+      await dragCard(event.places, event.db, event.oldIndex, event.newIndex);
       emit(
         VisitedAfterDragState(
           newIndex: event.newIndex,
@@ -51,11 +51,16 @@ class VisitedScreenBloc extends Bloc<VisitedScreenEvent, VisitedScreenState> {
     PlaceInteractor.visitedPlaces.remove(place);
   }
 
-  void dragCard(List<DbPlace> places, int oldIndex, int newIndex) {
+  Future<void> dragCard(List<DbPlace> places, AppDb db, int oldIndex, int newIndex) async {
     var modifiedIndex = newIndex;
     if (newIndex > oldIndex) modifiedIndex--;
 
     final place = places.removeAt(oldIndex);
+
     places.insert(modifiedIndex, place);
+    for (var i = 0; i < places.length; i++) {
+      final updatedPlace = places[i].copyWith(index: Value<int>(i));
+      await db.updatePlace(updatedPlace);
+    }
   }
 }
