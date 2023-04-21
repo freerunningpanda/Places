@@ -193,7 +193,6 @@ class _ImagePickerWidgetState extends State<_ImagePickerWidget> {
 
   @override
   Widget build(BuildContext context) {
-    final places = ImageProviderCubit.places;
     final cubit = context.read<ImageProviderCubit>();
 
     return SizedBox(
@@ -204,9 +203,8 @@ class _ImagePickerWidgetState extends State<_ImagePickerWidget> {
             children: [
               _PickImageWidget(
                 theme: widget.theme,
-                places: places,
-                imgFromCamera: cubit.imgFromCamera,
-                imgFromGallery: cubit.imgFromGallery,
+                imgFromCamera: cubit.pickImageFromCamera,
+                imgFromGallery: cubit.pickImageFromGallery,
               ),
             ],
           ),
@@ -306,14 +304,12 @@ class _PlaceContent extends StatelessWidget {
 
 /// Class for image picking to horizontal list
 class _PickImageWidget extends StatelessWidget {
-  final List<Place> places;
   final ThemeData theme;
   final VoidCallback imgFromCamera;
   final VoidCallback imgFromGallery;
 
   const _PickImageWidget({
     Key? key,
-    required this.places,
     required this.theme,
     required this.imgFromCamera,
     required this.imgFromGallery,
