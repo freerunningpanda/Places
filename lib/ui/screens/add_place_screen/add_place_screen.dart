@@ -190,11 +190,11 @@ class _ImagePickerWidgetState extends State<_ImagePickerWidget> {
   // ).favoritePlaces;
 
   final ImagePicker picker = ImagePicker();
-  final List<XFile> _images = [];
 
   @override
   Widget build(BuildContext context) {
     final places = ImageProviderCubit.places;
+    final cubit = context.read<ImageProviderCubit>();
 
     return SizedBox(
       height: 72,
@@ -205,56 +205,35 @@ class _ImagePickerWidgetState extends State<_ImagePickerWidget> {
               _PickImageWidget(
                 theme: widget.theme,
                 places: places,
-                imgFromCamera: _imgFromCamera,
-                imgFromGallery: _imgFromGallery,
+                imgFromCamera: cubit.imgFromCamera,
+                imgFromGallery: cubit.imgFromGallery,
               ),
             ],
           ),
           Expanded(
-            child: ListView(
-              scrollDirection: Axis.horizontal,
-              shrinkWrap: true,
-              children: [
-                Row(
+            child: BlocBuilder<ImageProviderCubit, ImageProviderState>(
+              builder: (context, state) {
+                return ListView(
+                  scrollDirection: Axis.horizontal,
+                  shrinkWrap: true,
                   children: [
-                    for (var i = 0; i < _images.length; i++)
-                      _ImagePlace(
-                        image: _images[i],
-                        index: i,
-                      ),
+                    Row(
+                      children: [
+                        for (var i = 0; i < cubit.images.length; i++)
+                          _ImagePlace(
+                            image: cubit.images[i],
+                            index: i,
+                          ),
+                      ],
+                    ),
                   ],
-                ),
-              ],
+                );
+              },
             ),
           ),
         ],
       ),
     );
-  }
-
-  Future<void> _imgFromCamera() async {
-    final image = await ImagePicker().pickImage(
-      source: ImageSource.camera,
-      imageQuality: 50,
-    );
-    if (image != null) {
-      setState(() {
-        _images.add(image);
-      });
-    }
-  }
-
-  Future<void> _imgFromGallery() async {
-    final image = await ImagePicker().pickImage(
-      source: ImageSource.gallery,
-      imageQuality: 50,
-    );
-
-    if (image != null) {
-      setState(() {
-        _images.add(image);
-      });
-    }
   }
 }
 

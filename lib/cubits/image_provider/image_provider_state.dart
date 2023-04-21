@@ -1,10 +1,18 @@
 part of 'image_provider_cubit.dart';
 
-// Сейчас это бутофория
-// Допишу как пройду тему с загрузкой файлов
 class ImageProviderState extends Equatable {
-  @override
-  List<Object?> get props => [];
+  final int length;
 
-  const ImageProviderState();
+  @override
+  List<Object?> get props => [length];
+
+  const ImageProviderState({required this.length});
+
+  ImageProviderState copyWith({
+    int? length,
+  }) {
+    return ImageProviderState(
+      length: length ?? this.length,
+    );
+  }
 }
