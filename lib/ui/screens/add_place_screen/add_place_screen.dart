@@ -190,7 +190,7 @@ class _ImagePickerWidgetState extends State<_ImagePickerWidget> {
   // ).favoritePlaces;
 
   final ImagePicker picker = ImagePicker();
-  XFile? _image;
+  final List<XFile> _images = [];
 
   @override
   Widget build(BuildContext context) {
@@ -217,9 +217,9 @@ class _ImagePickerWidgetState extends State<_ImagePickerWidget> {
               children: [
                 Row(
                   children: [
-                    for (var i = 0; i < places.length; i++)
+                    for (var i = 0; i < _images.length; i++)
                       _ImagePlace(
-                        image: _image,
+                        image: _images[i],
                         index: i,
                       ),
                   ],
@@ -237,10 +237,11 @@ class _ImagePickerWidgetState extends State<_ImagePickerWidget> {
       source: ImageSource.camera,
       imageQuality: 50,
     );
-
-    setState(() {
-      _image = image;
-    });
+    if (image != null) {
+      setState(() {
+        _images.add(image);
+      });
+    }
   }
 
   Future<void> _imgFromGallery() async {
@@ -249,9 +250,11 @@ class _ImagePickerWidgetState extends State<_ImagePickerWidget> {
       imageQuality: 50,
     );
 
-    setState(() {
-      _image = image;
-    });
+    if (image != null) {
+      setState(() {
+        _images.add(image);
+      });
+    }
   }
 }
 
