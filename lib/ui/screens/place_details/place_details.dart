@@ -6,8 +6,8 @@ import 'package:flutter/material.dart' hide ErrorWidget;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:places/blocs/details_screen/details_screen_bloc.dart';
 import 'package:places/data/api/api_places.dart';
+import 'package:places/data/database/database.dart';
 import 'package:places/data/interactor/place_interactor.dart';
-import 'package:places/data/model/place.dart';
 import 'package:places/data/repository/place_repository.dart';
 
 import 'package:places/ui/res/app_assets.dart';
@@ -18,7 +18,7 @@ import 'package:places/ui/widgets/error_widget.dart';
 import 'package:places/ui/widgets/place_icons.dart';
 
 class PlaceDetails extends StatefulWidget {
-  final Place place;
+  final DbPlace place;
   final double height;
   const PlaceDetails({
     Key? key,
@@ -107,7 +107,7 @@ class _PlaceDetailsState extends State<PlaceDetails> with TickerProviderStateMix
 }
 
 class _PlaceDetails extends StatelessWidget {
-  final Place place;
+  final DbPlace place;
   final double height;
   final PageController _pageController;
 
@@ -126,7 +126,7 @@ class _PlaceDetails extends StatelessWidget {
         children: [
           _PlaceDetailsGallery(
             place: place,
-            images: place.urls,
+            images: [place.urls],
             height: height,
             pageController: _pageController,
           ),
@@ -158,7 +158,7 @@ class _PlaceDetails extends StatelessWidget {
 class _PlaceDetailsGallery extends StatefulWidget {
   final List<String> images;
   final double height;
-  final Place place;
+  final DbPlace place;
   final PageController _pageController;
 
   const _PlaceDetailsGallery({
@@ -222,7 +222,7 @@ class _PlaceDetailsGalleryState extends State<_PlaceDetailsGallery> {
 }
 
 class _DetailsScreenTitle extends StatelessWidget {
-  final Place place;
+  final DbPlace place;
 
   const _DetailsScreenTitle({
     Key? key,
@@ -264,7 +264,7 @@ class _DetailsScreenTitle extends StatelessWidget {
 class _PlaceDetailsImage extends StatefulWidget {
   final String image;
   final double height;
-  final Place place;
+  final DbPlace place;
   const _PlaceDetailsImage({
     Key? key,
     required this.image,
@@ -332,7 +332,7 @@ class _PlaceDetailsImageState extends State<_PlaceDetailsImage> with TickerProvi
 }
 
 class _DetailsScreenDescription extends StatelessWidget {
-  final Place place;
+  final DbPlace place;
   const _DetailsScreenDescription({
     Key? key,
     required this.place,
@@ -352,7 +352,7 @@ class _DetailsScreenDescription extends StatelessWidget {
 }
 
 class _PlaceDetailsBuildRouteBtn extends StatelessWidget {
-  final Place place;
+  final DbPlace place;
   const _PlaceDetailsBuildRouteBtn({
     Key? key,
     required this.place,
@@ -394,7 +394,7 @@ class _PlaceDetailsBuildRouteBtn extends StatelessWidget {
 }
 
 class _PlaceDetailsBottom extends StatelessWidget {
-  final Place place;
+  final DbPlace place;
   const _PlaceDetailsBottom({
     required this.place,
     Key? key,
@@ -403,6 +403,7 @@ class _PlaceDetailsBottom extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final db = context.read<AppDb>();
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -431,7 +432,7 @@ class _PlaceDetailsBottom extends StatelessWidget {
             repository: PlaceRepository(
               apiPlaces: ApiPlaces(),
             ),
-          ).addToFavorites(place: place),
+          ).addToFavorites(place: place, db: db),
           child: Row(
             children: [
               PlaceIcons(

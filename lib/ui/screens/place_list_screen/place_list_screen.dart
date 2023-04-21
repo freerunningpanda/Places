@@ -5,7 +5,10 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:places/blocs/favorite/favorite_bloc.dart';
 import 'package:places/cubits/places_list/places_list_cubit.dart';
-import 'package:places/data/model/place.dart';
+import 'package:places/data/api/api_places.dart';
+import 'package:places/data/database/database.dart';
+import 'package:places/data/interactor/place_interactor.dart';
+import 'package:places/data/repository/place_repository.dart';
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_card_size.dart';
 import 'package:places/ui/res/app_strings.dart';
@@ -56,6 +59,7 @@ class PlaceListScreen extends StatelessWidget {
                   children: [
                     if (orientation)
                       SearchBar(
+                        isMainPage: true,
                         isSearchPage: isSearchPage,
                         readOnly: readOnly,
                         searchController: TextEditingController(),
@@ -64,6 +68,7 @@ class PlaceListScreen extends StatelessWidget {
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 18.0),
                         child: SearchBar(
+                          isMainPage: true,
                           isSearchPage: isSearchPage,
                           readOnly: readOnly,
                           searchController: TextEditingController(),
@@ -89,7 +94,7 @@ class PlaceListScreen extends StatelessWidget {
 }
 
 class _PlaceListWidgetPortrait extends StatefulWidget {
-  final List<Place> placeList;
+  final List<DbPlace> placeList;
   final ThemeData theme;
 
   const _PlaceListWidgetPortrait({
@@ -103,9 +108,17 @@ class _PlaceListWidgetPortrait extends StatefulWidget {
 }
 
 class _PlaceListWidgetPortraitState extends State<_PlaceListWidgetPortrait> {
+  final interactor = PlaceInteractor(
+    repository: PlaceRepository(
+      apiPlaces: ApiPlaces(),
+    ),
+  );
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+    final db = context.read<AppDb>();
+    _loadDb(db);
 
     return Expanded(
       child: ListView.builder(
@@ -124,8 +137,12 @@ class _PlaceListWidgetPortraitState extends State<_PlaceListWidgetPortrait> {
                   aspectRatio: AppCardSize.placeCard,
                   actionOne: BlocBuilder<FavoriteBloc, FavoriteState>(
                     builder: (_, state) {
+                      final isFavorite = place.isFavorite;
+
+                      debugPrint('isFavoriteMain: $isFavorite place: ${place.name}');
+
                       if (state is IsFavoriteState) {
-                        return place.isFavorite
+                        return isFavorite
                             ? const PlaceIcons(
                                 assetName: AppAssets.heartFull,
                                 width: 22,
@@ -137,7 +154,7 @@ class _PlaceListWidgetPortraitState extends State<_PlaceListWidgetPortrait> {
                                 height: 22,
                               );
                       } else if (state is IsNotFavoriteState) {
-                        return place.isFavorite
+                        return state.isFavorite
                             ? const PlaceIcons(
                                 assetName: AppAssets.heartFull,
                                 width: 22,
@@ -182,10 +199,14 @@ class _PlaceListWidgetPortraitState extends State<_PlaceListWidgetPortrait> {
       ),
     );
   }
+
+  Future<void> _loadDb(AppDb db) async {
+    await interactor.loadFavoritePlaces(db: db);
+  }
 }
 
-class _PlaceListWidgetLandscape extends StatelessWidget {
-  final List<Place> placeList;
+class _PlaceListWidgetLandscape extends StatefulWidget {
+  final List<DbPlace> placeList;
   final ThemeData theme;
 
   const _PlaceListWidgetLandscape({
@@ -195,8 +216,21 @@ class _PlaceListWidgetLandscape extends StatelessWidget {
   }) : super(key: key);
 
   @override
+  State<_PlaceListWidgetLandscape> createState() => _PlaceListWidgetLandscapeState();
+}
+
+class _PlaceListWidgetLandscapeState extends State<_PlaceListWidgetLandscape> {
+  final interactor = PlaceInteractor(
+    repository: PlaceRepository(
+      apiPlaces: ApiPlaces(),
+    ),
+  );
+
+  @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+    final db = context.read<AppDb>();
+    _loadDb(db);
 
     return Expanded(
       child: GridView.builder(
@@ -209,9 +243,9 @@ class _PlaceListWidgetLandscape extends StatelessWidget {
         ),
         physics: Platform.isAndroid ? const ClampingScrollPhysics() : const BouncingScrollPhysics(),
         shrinkWrap: true,
-        itemCount: placeList.length,
+        itemCount: widget.placeList.length,
         itemBuilder: (_, index) {
-          final place = placeList[index];
+          final place = widget.placeList[index];
 
           return Column(
             children: [
@@ -221,8 +255,9 @@ class _PlaceListWidgetLandscape extends StatelessWidget {
                 aspectRatio: 1.5 / 1,
                 actionOne: BlocBuilder<FavoriteBloc, FavoriteState>(
                   builder: (_, state) {
+                    final isFavorite = place.isFavorite;
                     if (state is IsFavoriteState) {
-                      return place.isFavorite
+                      return isFavorite
                           ? const PlaceIcons(
                               assetName: AppAssets.heartFull,
                               width: 22,
@@ -234,7 +269,7 @@ class _PlaceListWidgetLandscape extends StatelessWidget {
                               height: 22,
                             );
                     } else if (state is IsNotFavoriteState) {
-                      return place.isFavorite
+                      return isFavorite
                           ? const PlaceIcons(
                               assetName: AppAssets.heartFull,
                               width: 22,
@@ -253,12 +288,12 @@ class _PlaceListWidgetLandscape extends StatelessWidget {
                 url: place.urls[0],
                 type: place.placeType,
                 name: place.name,
-                placeList: placeList,
+                placeList: widget.placeList,
                 details: [
                   Text(
                     place.name,
                     maxLines: 2,
-                    style: theme.textTheme.headlineSmall,
+                    style: widget.theme.textTheme.headlineSmall,
                   ),
                   const SizedBox(height: 2),
                   SizedBox(
@@ -277,5 +312,9 @@ class _PlaceListWidgetLandscape extends StatelessWidget {
         },
       ),
     );
+  }
+
+  Future<void> _loadDb(AppDb db) async {
+    await interactor.loadFavoritePlaces(db: db);
   }
 }

@@ -5,11 +5,9 @@ import 'package:places/blocs/choose_category_bloc/choose_category_bloc.dart';
 import 'package:places/cubits/add_place_screen/add_place_screen_cubit.dart';
 import 'package:places/cubits/create_place/create_place_button_cubit.dart';
 import 'package:places/cubits/image_provider/image_provider_cubit.dart';
-import 'package:places/data/api/api_places.dart';
 import 'package:places/data/interactor/place_interactor.dart';
 import 'package:places/data/model/place.dart';
 import 'package:places/data/repository/category_repository.dart';
-import 'package:places/data/repository/place_repository.dart';
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_strings.dart';
 import 'package:places/ui/res/app_typography.dart';
@@ -182,11 +180,11 @@ class _ImagePickerWidget extends StatefulWidget {
 
 class _ImagePickerWidgetState extends State<_ImagePickerWidget> {
   // TODO(Alex): rewrite.
-  final placeList = PlaceInteractor(
-    repository: PlaceRepository(
-      apiPlaces: ApiPlaces(),
-    ),
-  ).favoritePlaces;
+  // final placeList = PlaceInteractor(
+  //   repository: PlaceRepository(
+  //     apiPlaces: ApiPlaces(),
+  //   ),
+  // ).favoritePlaces;
   @override
   Widget build(BuildContext context) {
     final places = ImageProviderCubit.places;

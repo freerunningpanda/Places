@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:places/data/api/api_places.dart';
+import 'package:places/data/database/database.dart';
 import 'package:places/data/interactor/place_interactor.dart';
-import 'package:places/data/model/place.dart';
 import 'package:places/data/repository/place_repository.dart';
 import 'package:places/data/store/app_preferences.dart';
 import 'package:places/mocks.dart';
@@ -23,13 +23,15 @@ class SearchScreenBloc extends Bloc<SearchScreenEvent, SearchScreenState> {
 
   SearchScreenBloc() : super(SearchScreenEmptyState()) {
     activeFocus(isActive: true);
-    searchPlaces(interactor.query);
-    on<PlacesFoundEvent>((event, emit) {
-      debugPrint('Длина списка мест после поиска: ${PlaceInteractor.foundedPlaces.length}');
+    on<PlacesFoundEvent>((event, emit) async {
+      await searchPlaces(interactor.query, event.db);
+      // debugPrint('Длина списка мест после поиска: ${PlaceInteractor.foundedPlaces.length}');
       emit(
         SearchScreenPlacesFoundState(
-          filteredPlaces: event.fromFiltersScreen ? event.filteredPlaces!.toList() : PlaceInteractor.foundedPlaces,
-          length: AppPreferences.getPlacesListByDistance()?.length ?? 0,
+          filteredPlaces: event.filteredPlaces ?? [],
+          // filteredPlaces: PlaceInteractor.foundedPlaces,
+          length: event.filteredPlaces!.length,
+          // length: AppPreferences.getPlacesListByDistance()?.length ?? 0,
         ),
       );
       // Если поисковый запрос содержит значение и список найденных мест пуст
@@ -70,12 +72,18 @@ class SearchScreenBloc extends Bloc<SearchScreenEvent, SearchScreenState> {
         emit(
           SearchScreenPlacesFoundState(
             filteredPlaces: event.isHistoryClear ? event.filteredPlaces!.toList() : PlaceInteractor.foundedPlaces,
-            length: AppPreferences.getPlacesListByDistance()?.length ?? 0,
+            length: await loadPlaces(event.db),
+            // length: AppPreferences.getPlacesListByDistance()?.length ?? 0,
           ),
         );
       }
     });
   }
+
+  // Future<void> loadFilteredPlaces(AppDb db) async {
+  //   list = await db.allPlacesEntries;
+  //   debugPrint('list_of_founded_places: ${list.length}');
+  // }
 
   void activeFocus({required bool isActive}) {
     // ignore: prefer-conditional-expressions
@@ -86,28 +94,32 @@ class SearchScreenBloc extends Bloc<SearchScreenEvent, SearchScreenState> {
     }
   }
 
-  void searchPlaces(String query) {
-    final placesList = AppPreferences.getPlacesListByDistance();
+  Future<void> searchPlaces(String query, AppDb db) async {
+    final placesList = await db.allPlacesEntries;
     // Если список мест в Preferences не null, искать в нём
     // Данное решение, для того, чтобы не ловить крэш после удаления/установки приложения
-    if (placesList != null) {
-      for (final el in placesList) {
-        final distance = Geolocator.distanceBetween(
-          Mocks.mockLat,
-          Mocks.mockLot,
-          el.lat,
-          el.lng,
-        );
-        if (distance >= Mocks.rangeValues.start && distance <= Mocks.rangeValues.end) {
-          PlaceInteractor.foundedPlaces = AppPreferences.getPlacesListByDistance()!.where((place) {
-            final placeTitle = place.name.toLowerCase();
-            final input = query.toLowerCase();
-            debugPrint('filteredPlaces: ${PlaceInteractor.foundedPlaces}');
+    for (final el in placesList) {
+      final distance = Geolocator.distanceBetween(
+        Mocks.mockLat,
+        Mocks.mockLot,
+        el.lat,
+        el.lng,
+      );
+      if (distance >= Mocks.rangeValues.start && distance <= Mocks.rangeValues.end) {
+        PlaceInteractor.foundedPlaces = placesList.where((place) {
+          final placeTitle = place.name.toLowerCase();
+          final input = query.toLowerCase();
+          debugPrint('filteredPlaces: ${PlaceInteractor.foundedPlaces}');
 
-            return placeTitle.contains(input);
-          }).toList();
-        }
+          return placeTitle.contains(input);
+        }).toList();
       }
-    } 
+    }
+  }
+
+  Future<int> loadPlaces(AppDb db) async {
+    final placesList = await db.allPlacesEntries;
+
+    return placesList.length;
   }
 }

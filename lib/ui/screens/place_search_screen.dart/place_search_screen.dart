@@ -6,7 +6,7 @@ import 'package:places/blocs/details_screen/details_screen_bloc.dart';
 import 'package:places/blocs/search_bar/search_bar_bloc.dart';
 import 'package:places/blocs/search_history/search_history_bloc.dart';
 import 'package:places/blocs/search_screen/search_screen_bloc.dart';
-import 'package:places/data/model/place.dart';
+import 'package:places/data/database/database.dart';
 import 'package:places/data/store/app_preferences.dart';
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_strings.dart';
@@ -28,6 +28,8 @@ class _PlaceSearchScreenState extends State<PlaceSearchScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final db = context.read<AppDb>();
+    _loadDb(db);
     final theme = Theme.of(context);
     const readOnly = false;
     const isSearchPage = true;
@@ -53,12 +55,14 @@ class _PlaceSearchScreenState extends State<PlaceSearchScreen> {
                 builder: (_, state) {
                   if (state is SearchBarHasValueState) {
                     return SearchBar(
+                      isMainPage: false,
                       isSearchPage: isSearchPage,
                       readOnly: readOnly,
                       searchController: searchController,
                     );
                   } else if (state is SearchBarEmptyState) {
                     return SearchBar(
+                      isMainPage: false,
                       isSearchPage: isSearchPage,
                       readOnly: readOnly,
                       searchController: TextEditingController(),
@@ -84,8 +88,8 @@ class _PlaceSearchScreenState extends State<PlaceSearchScreen> {
                             );
                           }
                           // Если история не пустая то берём её из state и отображаем на экране
-                          else if (state is SearchHistoryHasValueState) {
-                            return state.hasFocus
+                          else if (state is SearchHistoryHasValueState || state is ItemRemovedFromHistoryState) {
+                            return state.hasFocus && state.searchStoryList.isNotEmpty
                                 // При наличии фокуса в поле ввода, показываем историю поиска (если она есть)
                                 ? _SearchHistoryList(
                                     theme: theme,
@@ -121,6 +125,10 @@ class _PlaceSearchScreenState extends State<PlaceSearchScreen> {
       ),
     );
   }
+
+  Future<void> _loadDb(AppDb db) async {
+    await context.watch<SearchHistoryBloc>().loadHistorys(db);
+  }
 }
 
 // Виджет списка найденных мест
@@ -146,20 +154,26 @@ class _PlaceListWidget extends StatelessWidget {
         } else if (state is SearchScreenPlacesFoundState) {
           debugPrint('state.filteredPlaces.length: ${state.filteredPlaces.length}');
 
-          return ListView.builder(
-            physics: Platform.isAndroid ? const ClampingScrollPhysics() : const BouncingScrollPhysics(),
-            shrinkWrap: true,
-            itemCount: state.filteredPlaces.length,
-            itemBuilder: (_, index) {
-              final place = state.filteredPlaces[index];
+          return state.filteredPlaces.isNotEmpty
+              ? ListView.builder(
+                  physics: Platform.isAndroid ? const ClampingScrollPhysics() : const BouncingScrollPhysics(),
+                  shrinkWrap: true,
+                  itemCount: state.filteredPlaces.length,
+                  itemBuilder: (_, index) {
+                    final place = state.filteredPlaces[index];
 
-              return _PlaceCardWidget(
-                place: place,
-                width: width,
-                theme: theme,
-              );
-            },
-          );
+                    return _PlaceCardWidget(
+                      place: place,
+                      width: width,
+                      theme: theme,
+                    );
+                  },
+                )
+              : _EmptyListWidget(
+                  height: height,
+                  width: width,
+                  theme: theme,
+                );
         }
         // В противном случае отображаем пустой список мест
 
@@ -194,7 +208,7 @@ class _EmptyListWidget extends StatelessWidget {
 
 // Виджет истории поиска
 class _SearchHistoryList extends StatelessWidget {
-  final Set<String> searchStoryList;
+  final List<SearchHistory> searchStoryList;
   final ThemeData theme;
   final double width;
   final TextEditingController controller;
@@ -229,7 +243,7 @@ class _SearchHistoryList extends StatelessWidget {
 }
 
 class _ClearHistoryButton extends StatelessWidget {
-  final Set<String> searchStoryList;
+  final List<SearchHistory> searchStoryList;
   const _ClearHistoryButton({
     Key? key,
     required this.searchStoryList,
@@ -237,20 +251,27 @@ class _ClearHistoryButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final historyBloc = context.read<SearchHistoryBloc>();
+    final searchBloc = context.read<SearchScreenBloc>();
+    final db = context.read<AppDb>();
+
     return TextButton(
       // Вызываем event очистки истории поиска
       onPressed: () {
-        context.read<SearchHistoryBloc>().add(RemoveAllItemsFromHistory());
+        historyBloc
+          ..removeAllItemsFromHistory(db)
+          ..add(RemoveAllItemsFromHistory());
         // Для того, чтобы заново показать весь список найденных мест с экрана фильтров
-        context.read<SearchScreenBloc>().add(
-              PlacesFoundEvent(
-                searchHistoryIsEmpty: searchStoryList.isEmpty,
-                filteredPlaces: AppPreferences.getPlacesListByDistance()?.toList(),
-                isHistoryClear: true,
-                fromFiltersScreen: false,
-                isQueryEmpty: true,
-              ),
-            );
+        searchBloc.add(
+          PlacesFoundEvent(
+            searchHistoryIsEmpty: searchStoryList.isEmpty,
+            filteredPlaces: AppPreferences.getPlacesListByDistance()?.toList(),
+            isHistoryClear: true,
+            fromFiltersScreen: false,
+            isQueryEmpty: true,
+            db: db,
+          ),
+        );
       },
       child: const Align(
         alignment: Alignment.centerLeft,
@@ -282,7 +303,7 @@ class _SearchHistoryTitle extends StatelessWidget {
 
 class _SearchItem extends StatelessWidget {
   final ThemeData theme;
-  final Set<String> searchStoryList;
+  final List<SearchHistory> searchStoryList;
   final double width;
   final TextEditingController controller;
 
@@ -296,6 +317,10 @@ class _SearchItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final historyBloc = context.read<SearchHistoryBloc>();
+    final searchBloc = context.read<SearchScreenBloc>();
+    final db = context.read<AppDb>();
+
     return Column(
       children: searchStoryList
           .map(
@@ -308,13 +333,13 @@ class _SearchItem extends StatelessWidget {
                     InkWell(
                       borderRadius: BorderRadius.circular(12),
                       onTap: () {
-                        final value = controller.text = e;
+                        final value = controller.text = e.title;
                         context.read<SearchBarBloc>().add(SearchBarEvent(value: value));
                       },
                       child: SizedBox(
                         width: width * 0.7,
                         child: Text(
-                          e,
+                          e.title,
                           style: theme.textTheme.titleMedium,
                         ),
                       ),
@@ -322,24 +347,30 @@ class _SearchItem extends StatelessWidget {
                     InkWell(
                       borderRadius: BorderRadius.circular(30),
                       onTap: () {
-                        context.read<SearchHistoryBloc>().add(
-                              RemoveItemFromHistory(
-                                index: e,
-                                isDeleted: true,
-                                hasFocus: true,
-                              ),
-                            );
-                         // Чтобы обновить стейт экрана
+                        historyBloc.removeItemFromHistory(e.id, db);
+                        final updatedList = searchStoryList.where((element) => element.id != e.id).toList();
+                        historyBloc.add(
+                          RemoveItemFromHistory(
+                            updatedList: updatedList,
+                            id: e.id,
+                            length: updatedList.length,
+                            isDeleted: true,
+                            hasFocus: true,
+                            appDb: db,
+                          ),
+                        );
+                        // Чтобы обновить стейт экрана
                         // Если крайнее место было удалено из истории
-                        context.read<SearchScreenBloc>().add(
-                              PlacesFoundEvent(
-                                searchHistoryIsEmpty: searchStoryList.isEmpty,
-                                filteredPlaces: AppPreferences.getPlacesListByDistance()?.toList(),
-                                isHistoryClear: true,
-                                fromFiltersScreen: false,
-                                isQueryEmpty: true,
-                              ),
-                            );
+                        searchBloc.add(
+                          PlacesFoundEvent(
+                            searchHistoryIsEmpty: searchStoryList.isEmpty,
+                            filteredPlaces: AppPreferences.getPlacesListByDistance()?.toList(),
+                            isHistoryClear: true,
+                            fromFiltersScreen: false,
+                            isQueryEmpty: true,
+                            db: db,
+                          ),
+                        );
                       },
                       child: const PlaceIcons(assetName: AppAssets.delete, width: 24, height: 24),
                     ),
@@ -406,7 +437,7 @@ class _EmptyStateWidget extends StatelessWidget {
 }
 
 class _PlaceCardWidget extends StatelessWidget {
-  final Place place;
+  final DbPlace place;
   final double width;
   final ThemeData theme;
 
@@ -440,7 +471,7 @@ class _PlaceCardWidget extends StatelessWidget {
 }
 
 class _RippleEffect extends StatelessWidget {
-  final Place place;
+  final DbPlace place;
 
   const _RippleEffect({
     Key? key,
@@ -472,7 +503,7 @@ class _RippleEffect extends StatelessWidget {
 
 class _PlaceContent extends StatelessWidget {
   final double width;
-  final Place place;
+  final DbPlace place;
   final ThemeData theme;
 
   const _PlaceContent({
@@ -503,7 +534,7 @@ class _PlaceContent extends StatelessWidget {
 }
 
 class _PlaceType extends StatelessWidget {
-  final Place place;
+  final DbPlace place;
   final ThemeData theme;
 
   const _PlaceType({
@@ -523,7 +554,7 @@ class _PlaceType extends StatelessWidget {
 
 class _PlaceTitle extends StatelessWidget {
   final double width;
-  final Place place;
+  final DbPlace place;
   final ThemeData theme;
 
   const _PlaceTitle({
@@ -547,7 +578,7 @@ class _PlaceTitle extends StatelessWidget {
 }
 
 class _PlaceImage extends StatelessWidget {
-  final Place place;
+  final DbPlace place;
 
   const _PlaceImage({
     Key? key,

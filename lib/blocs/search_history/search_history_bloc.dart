@@ -1,65 +1,59 @@
-
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter/material.dart';
-import 'package:places/data/api/api_places.dart';
-import 'package:places/data/interactor/place_interactor.dart';
+import 'package:flutter/foundation.dart';
+import 'package:places/data/database/database.dart';
 import 'package:places/data/model/place.dart';
-import 'package:places/data/repository/place_repository.dart';
 
 part 'search_history_event.dart';
 part 'search_history_state.dart';
 
 class SearchHistoryBloc extends Bloc<SearchHistoryEvent, SearchHistoryState> {
-  final searchHistoryList = PlaceInteractor.searchHistoryList;
-  PlaceInteractor interactor = PlaceInteractor(
-    repository: PlaceRepository(
-      apiPlaces: ApiPlaces(),
-    ),
-  );
+  // final _db = AppDb();
+  List<SearchHistory> list = [];
 
   SearchHistoryBloc() : super(SearchHistoryEmptyState()) {
     on<ShowHistoryEvent>(
       (event, emit) {
-        saveSearchHistory(interactor.query, interactor.controller);
         emit(
           SearchHistoryHasValueState(
-            searchStoryList: searchHistoryList,
+            searchStoryList: list,
             hasFocus: event.hasFocus,
             isDeleted: event.isDeleted,
+            length: list.length,
           ),
         );
       },
     );
     on<AddItemToHistoryEvent>(
       (event, emit) {
-        saveSearchHistory(interactor.query, interactor.controller);
         emit(
           SearchHistoryHasValueState(
-            searchStoryList: searchHistoryList,
+            searchStoryList: list,
             hasFocus: event.hasFocus,
             isDeleted: event.isDeleted,
-            index: event.index,
+            text: event.text,
+            length: list.length,
           ),
         );
       },
     );
     on<RemoveItemFromHistory>(
-      (event, emit) {
-        removeItemFromHistory(event.index);
+      (event, emit) async {
+        await removeItemFromHistory(event.id, event.appDb);
+        final updatedList = list.where((element) => element.id != event.id).toList();
         emit(
-          SearchHistoryHasValueState(
-            searchStoryList: searchHistoryList,
+          ItemRemovedFromHistoryState(
+            searchStoryList: updatedList,
             hasFocus: event.hasFocus,
             isDeleted: event.isDeleted,
-            index: event.index,
+            length: updatedList.length,
           ),
         );
       },
     );
     on<RemoveAllItemsFromHistory>(
       (event, emit) {
-        searchHistoryList.clear();
+        list.clear();
         emit(
           SearchHistoryEmptyState(),
         );
@@ -67,12 +61,22 @@ class SearchHistoryBloc extends Bloc<SearchHistoryEvent, SearchHistoryState> {
     );
   }
 
-  void saveSearchHistory(String value, TextEditingController controller) {
-    if (controller.text.isEmpty) return;
-    PlaceInteractor.searchHistoryList.add(value);
+  Future<void> removeItemFromHistory(int id, AppDb db) async {
+    await db.deleteHistory(id);
   }
 
-  void removeItemFromHistory(String index) {
-    PlaceInteractor.searchHistoryList.remove(index);
+  Future<void> removeAllItemsFromHistory(AppDb db) async {
+    await db.deleteAllHistory();
+  }
+
+  Future<void> loadHistorys(AppDb db) async {
+    list = await db.allHistorysEntries;
+    debugPrint('list: ${list.length}');
+  }
+
+  Future<void> addHistory(String text, AppDb db) async {
+    await db.addHistoryItem(
+      SearchHistorysCompanion.insert(title: text),
+    );
   }
 }

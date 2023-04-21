@@ -1,17 +1,12 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:places/data/api/api_places.dart';
+import 'package:places/data/database/database.dart';
 import 'package:places/data/interactor/place_interactor.dart';
-import 'package:places/data/model/place.dart';
-import 'package:places/data/repository/place_repository.dart';
 
 part 'visited_screen_event.dart';
 part 'visited_screen_state.dart';
 
 class VisitedScreenBloc extends Bloc<VisitedScreenEvent, VisitedScreenState> {
-  final interactor = PlaceInteractor(
-    repository: PlaceRepository(apiPlaces: ApiPlaces()),
-  );
 
   VisitedScreenBloc() : super(VisitedEmptyState()) {
     on<AddToVisitedEvent>(
@@ -20,8 +15,8 @@ class VisitedScreenBloc extends Bloc<VisitedScreenEvent, VisitedScreenState> {
         emit(
           VisitedIsNotEmpty(
             placeIndex: event.placeIndex,
-            visitedPlaces: interactor.favoritePlaces,
-            length: interactor.favoritePlaces.length,
+            visitedPlaces: PlaceInteractor.favoritePlaces,
+            length: PlaceInteractor.favoritePlaces.length,
           ),
         );
       },
@@ -31,8 +26,8 @@ class VisitedScreenBloc extends Bloc<VisitedScreenEvent, VisitedScreenState> {
       emit(
         VisitedIsNotEmpty(
           placeIndex: event.placeIndex,
-          visitedPlaces: interactor.favoritePlaces,
-          length: interactor.favoritePlaces.length,
+          visitedPlaces: PlaceInteractor.favoritePlaces,
+          length: PlaceInteractor.favoritePlaces.length,
         ),
       );
     });
@@ -48,15 +43,15 @@ class VisitedScreenBloc extends Bloc<VisitedScreenEvent, VisitedScreenState> {
     });
   }
 
-  void addToVisited({required Place place}) {
-    interactor.visitedPlaces.add(place);
+  void addToVisited({required DbPlace place}) {
+    PlaceInteractor.visitedPlaces.add(place);
   }
 
-  void removeFromVisited({required Place place}) {
-    interactor.visitedPlaces.remove(place);
+  void removeFromVisited({required DbPlace place}) {
+    PlaceInteractor.visitedPlaces.remove(place);
   }
 
-  void dragCard(List<Place> places, int oldIndex, int newIndex) {
+  void dragCard(List<DbPlace> places, int oldIndex, int newIndex) {
     var modifiedIndex = newIndex;
     if (newIndex > oldIndex) modifiedIndex--;
 

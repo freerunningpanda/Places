@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+
 import 'package:places/blocs/search_history/search_history_bloc.dart';
 import 'package:places/blocs/search_screen/search_screen_bloc.dart';
 import 'package:places/data/api/api_places.dart';
+import 'package:places/data/database/database.dart';
 import 'package:places/data/interactor/place_interactor.dart';
 import 'package:places/data/repository/place_repository.dart';
 import 'package:places/ui/res/app_assets.dart';
@@ -16,12 +18,14 @@ import 'package:provider/provider.dart';
 
 class SearchBar extends StatefulWidget {
   final bool? readOnly;
+  final bool isMainPage;
   final bool isSearchPage;
   final TextEditingController searchController;
 
   const SearchBar({
     Key? key,
     this.readOnly,
+    required this.isMainPage,
     required this.isSearchPage,
     required this.searchController,
   }) : super(key: key);
@@ -32,6 +36,7 @@ class SearchBar extends StatefulWidget {
 
 class _SearchBarState extends State<SearchBar> {
   final FocusNode focusNode = FocusNode();
+
   PlaceInteractor interactor = PlaceInteractor(
     repository: PlaceRepository(
       apiPlaces: ApiPlaces(),
@@ -50,7 +55,8 @@ class _SearchBarState extends State<SearchBar> {
       ),
     );
     final searchStoryList = PlaceInteractor.searchHistoryList;
-    // debugPrint('SearchScreenBloc().filteredPlaces: ${SearchScreenBloc().filteredPlaces}');
+    final bloc = context.read<SearchHistoryBloc>();
+    final db = context.read<AppDb>();
 
     return Padding(
       padding: const EdgeInsets.only(
@@ -80,32 +86,39 @@ class _SearchBarState extends State<SearchBar> {
                     autofocus: autofocus,
                     focusNode: focusNode,
                     readOnly: widget.readOnly ?? true,
-                    onChanged: (value) {
+                    onChanged: (value) async {
                       interactor.query = value;
 
-                      context.read<SearchScreenBloc>()
-                        ..activeFocus(isActive: true)
-                        ..searchPlaces(value);
-                        // Не виджет истории поиска. Поэтому isHistoryClear: false
-                        // Параметр isHistoryClear отвечает за отображение всех найденных мест
-                        // После очистки истории поиска
+                      context.read<SearchScreenBloc>().activeFocus(isActive: true);
+                      await context.read<SearchScreenBloc>().searchPlaces(value, db);
+                      // Не виджет истории поиска. Поэтому isHistoryClear: false
+                      // Параметр isHistoryClear отвечает за отображение всех найденных мест
+                      // После очистки истории поиска
+
+                      // ignore: use_build_context_synchronously
                       context.read<SearchScreenBloc>().add(
                             PlacesFoundEvent(
+                              // filteredPlaces: await db.allPlacesEntries,
+                              filteredPlaces: PlaceInteractor.foundedPlaces,
                               isHistoryClear: false,
                               fromFiltersScreen: false,
                               searchHistoryIsEmpty: searchStoryList.isEmpty, // Чтобы обновить стейт экрана
                               // Если крайнее место было удалено из истории
                               isQueryEmpty: interactor.query.isEmpty, // Для отображения найденных по фильтру мест
                               // При пустом поисковом запросе
+                              db: db,
                             ),
                           );
                     },
                     // По клику на поле поиска
-                    onTap: () {
+                    onTap: () async {
                       // Если виджет searchBar на экране поиска мест
                       if (widget.isSearchPage) {
+                        // Загружаем историю из БД
+                        await bloc.loadHistorys(db);
                         // Если история поиска не пустая, то вызываем event показа истории поиска
-                        if (searchStoryList.isNotEmpty) {
+                        if (searchStoryList.isNotEmpty || bloc.list.isNotEmpty) {
+                          // ignore: use_build_context_synchronously
                           context.read<SearchHistoryBloc>().add(
                                 ShowHistoryEvent(
                                   isDeleted: false,
@@ -117,28 +130,50 @@ class _SearchBarState extends State<SearchBar> {
 
                       // Если виджет searchBar на главном экране
                       if (!widget.isSearchPage) {
+                        final list = await db.allPlacesEntries;
+
+                        // ignore: use_build_context_synchronously
+                        context.read<SearchScreenBloc>().add(
+                              PlacesFoundEvent(
+                                filteredPlaces: list,
+                                isHistoryClear: false,
+                                fromFiltersScreen: false,
+                                searchHistoryIsEmpty: searchStoryList.isEmpty, // Чтобы обновить стейт экрана
+                                // Если крайнее место было удалено из истории
+                                isQueryEmpty: interactor.query.isEmpty, // Для отображения найденных по фильтру мест
+                                // При пустом поисковом запросе
+                                db: db,
+                              ),
+                            );
                         // Просто переходим на экран поиска мест
-                        Navigator.of(context).push(
+                        // ignore: use_build_context_synchronously
+                        await Navigator.of(context).push(
                           MaterialPageRoute<PlaceSearchScreen>(
                             builder: (_) => const PlaceSearchScreen(),
                           ),
                         );
+                        // ignore: use_build_context_synchronously
                       }
                     },
                     // При отправке данных из поиска
                     onFieldSubmitted: (value) {
-                      context.read<SearchHistoryBloc>()
+                      // Добавляем значение из поиска в БД
+                      bloc
+                        ..addHistory(widget.searchController.text, db)
+                        ..loadHistorys(db);
 
-                        // Добавляем значение из поиска в список истории поиска
-                        ..saveSearchHistory(value, widget.searchController)
-                        // Вызываем event добавления места в историю поиска
-                        ..add(
-                          AddItemToHistoryEvent(
-                            isDeleted: false,
-                            index: widget.searchController.text,
-                            hasFocus: false,
-                          ),
-                        );
+                      context
+                          .read<SearchHistoryBloc>()
+
+                          // Добавляем значение из поиска в список истории поиска
+                          // Вызываем event добавления места в историю поиска
+                          .add(
+                            AddItemToHistoryEvent(
+                              isDeleted: false,
+                              text: widget.searchController.text,
+                              hasFocus: false,
+                            ),
+                          );
 
                       // Очистить строку поиска после нажатия кнопки submit
                       widget.searchController.clear();
@@ -151,7 +186,7 @@ class _SearchBarState extends State<SearchBar> {
                       ),
                       hintText: AppString.search,
                       hintStyle: AppTypography.textText16Search,
-                      suffixIcon: focusNode.hasFocus
+                      suffixIcon: focusNode.hasFocus && !widget.isMainPage
                           ? SuffixIcon(controller: widget.searchController, theme: theme)
                           : IconButton(
                               onPressed: () {

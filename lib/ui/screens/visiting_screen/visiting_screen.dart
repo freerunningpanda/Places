@@ -3,7 +3,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:places/blocs/favorite/favorite_bloc.dart';
 import 'package:places/blocs/visited/visited_screen_bloc.dart';
 import 'package:places/blocs/want_to_visit/want_to_visit_bloc.dart';
-import 'package:places/data/model/place.dart';
+import 'package:places/data/api/api_places.dart';
+import 'package:places/data/database/database.dart';
+import 'package:places/data/interactor/place_interactor.dart';
+import 'package:places/data/repository/place_repository.dart';
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_card_size.dart';
 import 'package:places/ui/res/app_strings.dart';
@@ -13,11 +16,20 @@ import 'package:places/ui/screens/res/custom_colors.dart';
 import 'package:places/ui/widgets/add_new_place_button.dart';
 import 'package:places/ui/widgets/place_icons.dart';
 
-class VisitingScreen extends StatelessWidget {
+bool fromVisitingScreen = false;
+
+class VisitingScreen extends StatefulWidget {
   const VisitingScreen({Key? key}) : super(key: key);
 
   @override
+  State<VisitingScreen> createState() => _VisitingScreenState();
+}
+
+class _VisitingScreenState extends State<VisitingScreen> {
+  @override
   Widget build(BuildContext context) {
+    // final db = context.read<AppDb>();
+    // _loadDb(db);
 
     return Padding(
       padding: const EdgeInsets.only(left: 16.0, right: 16.0),
@@ -35,6 +47,8 @@ class VisitingScreen extends StatelessWidget {
                       BlocBuilder<WantToVisitBloc, WantToVisitScreenState>(
                         builder: (_, state) {
                           if (state is WantToVisitScreenEmptyState) {
+                            debugPrint('placesToVisit: emptyState');
+
                             return const _EmptyList(
                               icon: AppAssets.card,
                               description: AppString.likedPlaces,
@@ -44,12 +58,15 @@ class VisitingScreen extends StatelessWidget {
                             // Места могут быть удалены из избранного
                             // В этом случае показываем опять пустое состояние экрана
                             if (state.favoritePlaces.isEmpty) {
+                              debugPrint('placesToVisit: ${state.favoritePlaces.length}');
+
                               return const _EmptyList(
                                 icon: AppAssets.card,
                                 description: AppString.likedPlaces,
                               );
                             }
                             debugPrint('Места (BlocBuilder): ${state.favoritePlaces}');
+                            debugPrint('placesToVisit: ${state.favoritePlaces.length}');
 
                             return _WantToVisitWidget(
                               placesToVisit: state.favoritePlaces.toList(),
@@ -57,6 +74,8 @@ class VisitingScreen extends StatelessWidget {
                             );
                           }
                           if (state is WantToVisitAfterDragState) {
+                            debugPrint('placesToVisit: ${state.favoritePlaces.length}');
+
                             return _WantToVisitWidget(
                               placesToVisit: state.favoritePlaces,
                               key: const PageStorageKey('WantToVisitScrollPosition'),
@@ -99,6 +118,10 @@ class VisitingScreen extends StatelessWidget {
       ),
     );
   }
+
+  // Future<void> _loadDb(AppDb db) async {
+  //   await context.watch<WantToVisitBloc>().loadPlaces(db);
+  // }
 }
 
 class _AppBar extends StatefulWidget implements PreferredSizeWidget {
@@ -171,17 +194,19 @@ class _TabBarWidgetState extends State<_TabBarWidget> with TickerProviderStateMi
 }
 
 class _WantToVisitWidget extends StatelessWidget {
-  final List<Place> placesToVisit;
+  final List<DbPlace> placesToVisit;
   const _WantToVisitWidget({Key? key, required this.placesToVisit}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final db = context.read<AppDb>();
 
     return ReorderableListView(
       onReorder: (oldIndex, newIndex) {
         context.read<WantToVisitBloc>().add(
               DragCardOnWantToVisitEvent(
+                db: db,
                 newIndex: newIndex,
                 oldIndex: oldIndex,
                 places: placesToVisit,
@@ -191,7 +216,7 @@ class _WantToVisitWidget extends StatelessWidget {
       children: [
         for (var i = 0; i < placesToVisit.length; i++)
           ClipRRect(
-            key: ObjectKey(placesToVisit[i]),
+            key: ObjectKey(i),
             borderRadius: BorderRadius.circular(16.0),
             child: _DismissibleWidget(
               i: i,
@@ -213,7 +238,7 @@ class _WantToVisitWidget extends StatelessWidget {
 }
 
 class _VisitedWidget extends StatelessWidget {
-  final List<Place> visitedPlaces;
+  final List<DbPlace> visitedPlaces;
   const _VisitedWidget({Key? key, required this.visitedPlaces}) : super(key: key);
 
   @override
@@ -252,7 +277,7 @@ class _VisitedWidget extends StatelessWidget {
 
 class _DismissibleWidget extends StatelessWidget {
   final int i;
-  final List<Place> placesToVisit;
+  final List<DbPlace> placesToVisit;
   final ThemeData theme;
   final Key uniqueKey;
   final Widget actionTwo;
@@ -273,6 +298,12 @@ class _DismissibleWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final orientation = MediaQuery.of(context).orientation == Orientation.portrait;
+    final db = context.read<AppDb>();
+    final interactor = PlaceInteractor(
+      repository: PlaceRepository(
+        apiPlaces: ApiPlaces(),
+      ),
+    );
 
     return Stack(
       children: [
@@ -313,7 +344,7 @@ class _DismissibleWidget extends StatelessWidget {
           aspectRatio: orientation ? AppCardSize.visitingCard : AppCardSize.visitingCardLandscape,
           child: Dismissible(
             key: uniqueKey,
-            onDismissed: (direction) {
+            onDismissed: (direction) async {
               // Отправляю в эвент удаления карточки id свойство текущего места, само место
               // и меняю свойство isFavorite на false
               // Благодаря чему стейт видит обновление состояния и теперь виджет перерисовывается
@@ -324,20 +355,26 @@ class _DismissibleWidget extends StatelessWidget {
               // так список для него иммутабелен,
               // а сейчас я добавил флаг isFavorite
               // И передаю в эвент само место в избранном, а не весь список избранного
+              placesToVisit[i].isFavorite = false;
               context.read<WantToVisitBloc>().add(
                     RemoveFromWantToVisitEvent(
-                      isFavorite: placesToVisit[i].isFavorite = false,
+                      db: db,
+                      isFavorite: placesToVisit[i].isFavorite,
                       place: placesToVisit[i],
                       placeIndex: placesToVisit[i].id,
                     ),
                   );
+              placesToVisit[i].isFavorite = false;
               context.read<FavoriteBloc>().add(
-                    FavoriteEvent(
-                      isFavorite: placesToVisit[i].isFavorite = false,
+                    RemoveFromFavoriteEvent(
+                      db: db,
+                      isFavorite: placesToVisit[i].isFavorite,
                       place: placesToVisit[i],
                       placeIndex: placesToVisit[i].id,
                     ),
                   );
+              fromVisitingScreen = true;
+              debugPrint('placesToVisit[i].id: ${placesToVisit[i].id}');
             },
             background: const SizedBox.shrink(),
             direction: DismissDirection.endToStart,
@@ -345,21 +382,27 @@ class _DismissibleWidget extends StatelessWidget {
               padding: const EdgeInsets.only(bottom: 11.0),
               child: PlaceCard(
                 placeIndex: i,
-                removePlace: () {
+                removePlace: () async {
+                  placesToVisit[i].isFavorite = false;
                   context.read<WantToVisitBloc>().add(
                         RemoveFromWantToVisitEvent(
-                          isFavorite: placesToVisit[i].isFavorite = false,
+                          db: db,
+                          isFavorite: placesToVisit[i].isFavorite,
                           place: placesToVisit[i],
-                          placeIndex: i,
+                          placeIndex: placesToVisit[i].id,
                         ),
                       );
+                  placesToVisit[i].isFavorite = false;
                   context.read<FavoriteBloc>().add(
-                        FavoriteEvent(
-                          isFavorite: placesToVisit[i].isFavorite = false,
+                        RemoveFromFavoriteEvent(
+                          db: db,
+                          isFavorite: placesToVisit[i].isFavorite,
                           place: placesToVisit[i],
-                          placeIndex: i,
+                          placeIndex: placesToVisit[i].id,
                         ),
                       );
+                  fromVisitingScreen = true;
+                  debugPrint('placesToVisit[i].id: ${placesToVisit[i].isFavorite}');
                 },
                 isVisitingScreen: true,
                 placeList: placesToVisit,

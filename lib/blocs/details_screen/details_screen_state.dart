@@ -10,7 +10,7 @@ abstract class DetailsScreenState extends Equatable {
 class DetailsScreenLoadingState extends DetailsScreenState {}
 
 class DetailsScreenLoadedState extends DetailsScreenState {
-  final Place place;
+  final DbPlace place;
 
   @override
   List<Object?> get props => [place];

@@ -1,19 +1,20 @@
 import 'package:flutter/cupertino.dart';
+import 'package:places/data/database/database.dart';
 import 'package:places/data/model/category.dart';
 import 'package:places/data/model/place.dart';
 import 'package:places/data/repository/place_repository.dart';
 
 class PlaceInteractor {
   static final List<Category> activeFilters = [];
-  static final List<Place> initialFilteredPlaces = [];
-  static final Set<String> searchHistoryList = {};
-  static Set<Place> filtersWithDistance = {};
-  static List<Place> foundedPlaces = PlaceInteractor.filtersWithDistance.toList();
+  static final List<DbPlace> initialFilteredPlaces = [];
+  static final List<String> searchHistoryList = [];
+  static List<DbPlace> favoritePlaces = [];
+  static List<DbPlace>  visitedPlaces = [];
+  static Set<DbPlace> filtersWithDistance = {};
+  static List<DbPlace> foundedPlaces = PlaceInteractor.filtersWithDistance.toList();
   static Set<Place> newPlaces = {};
   final PlaceRepository repository;
   final controller = TextEditingController();
-  Set<Place> favoritePlaces = {};
-  Set<Place> visitedPlaces = {};
   String query = '';
   bool hasFocus = false;
 
@@ -21,15 +22,21 @@ class PlaceInteractor {
     required this.repository,
   });
 
-  Future<List<Place>> getPlaces() => repository.getPlaces();
+  Future<List<DbPlace>> getPlaces() => repository.getPlaces();
 
-  Future<Place> getPlaceDetails(Place place) => repository.getPlaceDetails(place);
+  Future<DbPlace> getPlaceDetails(DbPlace place) => repository.getPlaceDetails(place);
 
-  Set<Place> getFavoritesPlaces() => repository.getFavoritesPlaces();
+  List<DbPlace> getFavoritesPlaces() => repository.getFavoritesPlaces();
 
-  Stream<bool> addToFavorites({required Place place}) => repository.addToFavorites(place: place);
+  Future<void> loadAllPlaces({required AppDb db}) => repository.loadAllPlaces(db);
 
-  void removeFromFavorites({required Place place}) => repository.removeFromFavorites(place: place);
+  Future<void> loadFavoritePlaces({required AppDb db}) => repository.loadFavoritePlaces(db);
+
+  Future<void> addToFavorites({required DbPlace place, required AppDb db}) => repository.addToFavorites(place: place, db: db);
+
+  Future<void> removeFromFavorites({required DbPlace place, required AppDb db}) =>
+      repository.removeFromFavorites(place: place, db: db);
 
   void addNewPlace({required Place place}) => repository.addNewPlace(place: place);
 }
+

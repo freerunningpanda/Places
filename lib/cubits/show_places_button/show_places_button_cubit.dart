@@ -5,9 +5,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:places/blocs/filters_screen_bloc/filters_screen_bloc.dart';
 import 'package:places/data/api/api_places.dart';
+import 'package:places/data/database/database.dart';
 import 'package:places/data/dto/place_request.dart';
 import 'package:places/data/interactor/place_interactor.dart';
-import 'package:places/data/model/place.dart';
 import 'package:places/data/repository/mapper.dart';
 import 'package:places/data/repository/place_repository.dart';
 import 'package:places/data/store/app_preferences.dart';
@@ -86,7 +86,7 @@ class ShowPlacesButtonCubit extends Cubit<ShowPlacesButtonState> {
   }
 
   // ignore: long-method
-  Future<void> showCount({required List<Place> places}) async {
+  Future<void> showCount({required List<DbPlace> places}) async {
     // var jsonString = AppPreferences.getPlacesList();
 
     final placesByType = AppPreferences.getPlacesListByType();
