@@ -4,10 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:places/blocs/favorite/favorite_bloc.dart';
 import 'package:places/blocs/visited/visited_screen_bloc.dart';
 import 'package:places/blocs/want_to_visit/want_to_visit_bloc.dart';
-import 'package:places/data/api/api_places.dart';
 import 'package:places/data/database/database.dart';
-import 'package:places/data/interactor/place_interactor.dart';
-import 'package:places/data/repository/place_repository.dart';
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_card_size.dart';
 import 'package:places/ui/res/app_strings.dart';
@@ -29,9 +26,6 @@ class VisitingScreen extends StatefulWidget {
 class _VisitingScreenState extends State<VisitingScreen> {
   @override
   Widget build(BuildContext context) {
-    // final db = context.read<AppDb>();
-    // _loadDb(db);
-
     return Padding(
       padding: const EdgeInsets.only(left: 16.0, right: 16.0),
       child: DefaultTabController(
@@ -70,7 +64,7 @@ class _VisitingScreenState extends State<VisitingScreen> {
                             debugPrint('placesToVisit: ${state.favoritePlaces.length}');
 
                             return _WantToVisitWidget(
-                              // placesToVisit: state.favoritePlaces.toList(),
+                              placesToVisit: state.favoritePlaces.toList(),
                               key: const PageStorageKey('WantToVisitScrollPosition'),
                             );
                           }
@@ -86,15 +80,9 @@ class _VisitingScreenState extends State<VisitingScreen> {
                             );
                           }
                           if (state is VisitedIsNotEmpty) {
-                            return state.visitedPlaces.isEmpty
-                                ? const _EmptyList(
-                                    icon: AppAssets.goIconTransparent,
-                                    description: AppString.finishRoute,
-                                  )
-                                : _VisitedWidget(
-                                    visitedPlaces: state.visitedPlaces.toList(),
-                                    key: const PageStorageKey('VisitedScrollPosition'),
-                                  );
+                            return const _VisitedWidget(
+                              key: PageStorageKey('VisitedScrollPosition'),
+                            );
                           }
                           throw ArgumentError('Error');
                         },
@@ -111,10 +99,6 @@ class _VisitingScreenState extends State<VisitingScreen> {
       ),
     );
   }
-
-  // Future<void> _loadDb(AppDb db) async {
-  //   await context.watch<WantToVisitBloc>().loadPlaces(db);
-  // }
 }
 
 class _AppBar extends StatefulWidget implements PreferredSizeWidget {
@@ -187,7 +171,8 @@ class _TabBarWidgetState extends State<_TabBarWidget> with TickerProviderStateMi
 }
 
 class _WantToVisitWidget extends StatefulWidget {
-  const _WantToVisitWidget({Key? key}) : super(key: key);
+  final List<DbPlace> placesToVisit;
+  const _WantToVisitWidget({Key? key, required this.placesToVisit}) : super(key: key);
 
   @override
   State<_WantToVisitWidget> createState() => _WantToVisitWidgetState();
@@ -220,7 +205,7 @@ class _WantToVisitWidgetState extends State<_WantToVisitWidget> {
               }
             },
             itemCount: favoritePlaces!.length,
-            itemBuilder: (context, index) {
+            itemBuilder: (_, index) {
               final place = favoritePlaces[index];
 
               return _DismissibleWidget(
@@ -351,9 +336,8 @@ class _DismissibleWidget extends StatelessWidget {
               child: Padding(
                 padding: const EdgeInsets.only(bottom: 11.0),
                 child: PlaceCard(
-                  addPlace: () {},
                   placeIndex: place.id,
-                  removePlace: () async {
+                  actionThree: () async {
                     debugPrint('pressed_remove_place');
                     place.isFavorite = false;
                     context.read<WantToVisitBloc>().add(
@@ -419,29 +403,121 @@ class _DismissibleWidget extends StatelessWidget {
 }
 
 class _VisitedWidget extends StatelessWidget {
-  final List<DbPlace> visitedPlaces;
-  const _VisitedWidget({Key? key, required this.visitedPlaces}) : super(key: key);
+  const _VisitedWidget({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final db = context.read<AppDb>();
+    final orientation = MediaQuery.of(context).orientation == Orientation.portrait;
 
-    return ReorderableListView(
-      onReorder: (oldIndex, newIndex) {
-        context.read<VisitedScreenBloc>().add(
-              DragCardOnVisitedEvent(
+    return FutureBuilder(
+      future: context.read<VisitedScreenBloc>().getVisitedPlaces(db),
+      // ignore: avoid_types_on_closure_parameters
+      builder: (_, AsyncSnapshot<List<DbPlace>> snapshot) {
+        if (snapshot.connectionState == ConnectionState.done) {
+          final visitedPlaces = snapshot.data;
+
+          return ReorderableListView.builder(
+            onReorder: (oldIndex, newIndex) async {
+              if (newIndex > oldIndex) {
+                newIndex -= 1;
+              }
+              final place = visitedPlaces!.removeAt(oldIndex);
+              visitedPlaces.insert(newIndex, place);
+              for (var i = 0; i < visitedPlaces.length; i++) {
+                final updatedPlace = visitedPlaces[i].copyWith(index: Value<int>(i));
+                await db.updatePlace(updatedPlace);
+              }
+            },
+            itemCount: visitedPlaces!.length,
+            itemBuilder: (_, index) {
+              final place = visitedPlaces[index];
+
+              return _VisitedPlacesList(
+                key: ObjectKey(index),
+                orientation: orientation,
+                place: place,
                 db: db,
-                newIndex: newIndex,
-                oldIndex: oldIndex,
-                places: visitedPlaces,
-              ),
-            );
+                theme: theme,
+              );
+            },
+          );
+        } else {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        }
       },
-      children: [
-        for (var i = 0; i < visitedPlaces.length; i++)
-          Container(),
-      ],
+    );
+  }
+}
+
+class _VisitedPlacesList extends StatelessWidget {
+  final bool orientation;
+  final DbPlace place;
+  final AppDb db;
+  final ThemeData theme;
+
+  const _VisitedPlacesList({
+    Key? key,
+    required this.orientation,
+    required this.place,
+    required this.db,
+    required this.theme,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return AspectRatio(
+      aspectRatio: orientation ? AppCardSize.visitingCardDismiss : AppCardSize.visitingCardDismissLandscape,
+      child: Padding(
+        padding: const EdgeInsets.only(bottom: 11.0),
+        child: PlaceCard(
+          placeIndex: place.id,
+          actionThree: () async {
+            debugPrint('pressed_share_place');
+          },
+          isVisitingScreen: true,
+          place: place,
+          url: place.urls,
+          type: place.placeType,
+          name: place.name,
+          aspectRatio: AppCardSize.visitingCardDismiss,
+          details: [
+            Text(
+              place.name,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: theme.textTheme.headlineSmall,
+            ),
+            const SizedBox(height: 2),
+            const Text(
+              '${AppString.targetReach} 12 окт. 2022',
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: AppTypography.detailsText,
+            ),
+            const SizedBox(height: 10),
+            const Text(
+              '${AppString.closed} 09:00',
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: AppTypography.textText16Regular,
+            ),
+          ],
+          actionOne: const PlaceIcons(
+            assetName: AppAssets.calendarWhite,
+            width: 24,
+            height: 24,
+          ),
+          actionTwo: const PlaceIcons(
+            assetName: AppAssets.share,
+            width: 22,
+            height: 22,
+          ),
+        ),
+      ),
     );
   }
 }

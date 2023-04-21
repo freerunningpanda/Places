@@ -3,13 +3,11 @@ import 'dart:io';
 import 'package:flutter/material.dart' hide ErrorWidget;
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:places/blocs/favorite/favorite_bloc.dart';
 import 'package:places/blocs/want_to_visit/want_to_visit_bloc.dart';
 import 'package:places/cubits/places_list/places_list_cubit.dart';
 import 'package:places/data/api/api_places.dart';
 import 'package:places/data/database/database.dart';
 import 'package:places/data/interactor/place_interactor.dart';
-import 'package:places/data/model/place.dart';
 import 'package:places/data/repository/place_repository.dart';
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_card_size.dart';
@@ -199,7 +197,6 @@ class _PlaceListWidgetPortraitState extends State<_PlaceListWidgetPortrait> {
                           width: 22,
                           height: 22,
                         ),
-                        addPlace: null,
                         url: imageUrl,
                         type: place.placeType,
                         name: place.name,
@@ -246,7 +243,7 @@ class _PlaceListWidgetPortraitState extends State<_PlaceListWidgetPortrait> {
                 place: place,
               ),
             );
-        db.addPlace(place);
+        db.addPlace(place, isSearchScreen: false);
       } else {
         place.isFavorite = false;
         context.read<WantToVisitBloc>().add(
@@ -399,7 +396,7 @@ class _PlaceListWidgetLandscapeState extends State<_PlaceListWidgetLandscape> {
       if (!isFavorite) {
         place.isFavorite = true;
         PlaceInteractor.favoritePlaces.add(place);
-        db.addPlace(place);
+        db.addPlace(place, isSearchScreen: false);
       } else {
         place.isFavorite = false;
         PlaceInteractor.favoritePlaces.remove(place);

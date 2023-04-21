@@ -35,14 +35,13 @@ class PlaceRepository {
   Future<DbPlace> getPlaceDetails(DbPlace place) =>
       apiPlaces.getPlaceDetails(place.id).then(Mapper.detailPlaceFromApiToUi);
 
-  List<DbPlace> getFavoritesPlaces() => apiPlaces.getFavoritesPlaces();
 
   Future<void> removeFromFavorites({required DbPlace place, required AppDb db}) async {
    await db.deletePlace(place);
   }
 
   Future<void> addToFavorites({required DbPlace place, required AppDb db}) async {
-    await db.addPlace(place);
+    await db.addPlace(place, isSearchScreen: false);
   }
 
    Future<void> loadFavoritePlaces(AppDb db) async {

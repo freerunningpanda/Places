@@ -2,12 +2,10 @@ import 'dart:convert';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
-import 'package:places/data/database/database.dart';
 import 'package:places/data/dio_configurator.dart';
 import 'package:places/data/dto/place_request.dart';
 import 'package:places/data/dto/place_response.dart';
 import 'package:places/data/exceptions/network_exception.dart';
-import 'package:places/data/interactor/place_interactor.dart';
 import 'package:places/mocks.dart';
 
 class ApiPlaces {
@@ -57,16 +55,6 @@ class ApiPlaces {
         statusCode: e.error.toString(),
       );
     }
-  }
-
-  List<DbPlace> getFavoritesPlaces() {
-    // final interactor = PlaceInteractor(
-    //   repository: PlaceRepository(
-    //     apiPlaces: ApiPlaces(),
-    //   ),
-    // );
-
-    return PlaceInteractor.favoritePlaces;
   }
 
   Future<String> postPlace() async {

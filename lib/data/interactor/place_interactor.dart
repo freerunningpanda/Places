@@ -12,6 +12,7 @@ class PlaceInteractor {
   static List<DbPlace>  visitedPlaces = [];
   static Set<DbPlace> filtersWithDistance = {};
   static List<DbPlace> foundedPlaces = PlaceInteractor.filtersWithDistance.toList();
+  static List<DbPlace> savedPlaces = [];
   static Set<Place> newPlaces = {};
   final PlaceRepository repository;
   final controller = TextEditingController();
@@ -26,7 +27,6 @@ class PlaceInteractor {
 
   Future<DbPlace> getPlaceDetails(DbPlace place) => repository.getPlaceDetails(place);
 
-  List<DbPlace> getFavoritesPlaces() => repository.getFavoritesPlaces();
 
   Future<void> loadAllPlaces({required AppDb db}) => repository.loadAllPlaces(db);
 

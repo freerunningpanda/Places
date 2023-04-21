@@ -48,7 +48,6 @@ class _SearchBarState extends State<SearchBar> {
   Widget build(BuildContext context) {
     final customColors = Theme.of(context).extension<CustomColors>()!;
     final theme = Theme.of(context);
-    // final filteredPlaces = SearchScreenBloc().filteredPlaces;
     final interactor = PlaceInteractor(
       repository: PlaceRepository(
         apiPlaces: ApiPlaces(),
@@ -90,16 +89,15 @@ class _SearchBarState extends State<SearchBar> {
                       interactor.query = value;
 
                       context.read<SearchScreenBloc>().activeFocus(isActive: true);
-                      await context.read<SearchScreenBloc>().searchPlaces(value, db);
+                      final foundedPlaces = await context.read<SearchScreenBloc>().searchPlaces(value, db);
+
                       // Не виджет истории поиска. Поэтому isHistoryClear: false
                       // Параметр isHistoryClear отвечает за отображение всех найденных мест
                       // После очистки истории поиска
-
                       // ignore: use_build_context_synchronously
                       context.read<SearchScreenBloc>().add(
                             PlacesFoundEvent(
-                              // filteredPlaces: await db.allPlacesEntries,
-                              filteredPlaces: PlaceInteractor.foundedPlaces,
+                              filteredPlaces: foundedPlaces,
                               isHistoryClear: false,
                               fromFiltersScreen: false,
                               searchHistoryIsEmpty: searchStoryList.isEmpty, // Чтобы обновить стейт экрана
@@ -127,24 +125,56 @@ class _SearchBarState extends State<SearchBar> {
                               );
                         }
                       }
+                      await db.deleteUnsearchedPlaces();
 
                       // Если виджет searchBar на главном экране
                       if (!widget.isSearchPage) {
-                        final list = await db.allPlacesEntries;
+                        // Получить историю поиска
+                        final historyList = await db.allHistorysEntries;
+                        // Получить загруженные места с экрана фильтров
+                        final loadedPlaces = await db.allPlacesEntries;
 
-                        // ignore: use_build_context_synchronously
-                        context.read<SearchScreenBloc>().add(
-                              PlacesFoundEvent(
-                                filteredPlaces: list,
-                                isHistoryClear: false,
-                                fromFiltersScreen: false,
-                                searchHistoryIsEmpty: searchStoryList.isEmpty, // Чтобы обновить стейт экрана
-                                // Если крайнее место было удалено из истории
-                                isQueryEmpty: interactor.query.isEmpty, // Для отображения найденных по фильтру мест
-                                // При пустом поисковом запросе
-                                db: db,
-                              ),
-                            );
+                        await showSearchPlacesHistory(
+                          loadedPlaces: loadedPlaces,
+                          historyList: historyList,
+                          db: db,
+                        );
+
+                        final searchedPlaces = await db.searchedPlacesEntries;
+
+                        // Если история поиска пустая, то получить места с экрана фильтров из БД
+                        if (historyList.isEmpty) {
+                          // ignore: use_build_context_synchronously
+                          context.read<SearchScreenBloc>().add(
+                                PlacesFoundEvent(
+                                  // filteredPlaces: foundedPlaces.isEmpty ? filteredList : foundedPlaces,
+                                  filteredPlaces: loadedPlaces,
+                                  isHistoryClear: false,
+                                  fromFiltersScreen: false,
+                                  searchHistoryIsEmpty: searchStoryList.isEmpty, // Чтобы обновить стейт экрана
+                                  // Если крайнее место было удалено из истории
+                                  isQueryEmpty: interactor.query.isEmpty, // Для отображения найденных по фильтру мест
+                                  // При пустом поисковом запросе
+                                  db: db,
+                                ),
+                              );
+                          // Иначе получить места из истории поиска
+                        } else {
+                          // ignore: use_build_context_synchronously
+                          context.read<SearchScreenBloc>().add(
+                                PlacesFoundEvent(
+                                  filteredPlaces: searchedPlaces,
+                                  isHistoryClear: false,
+                                  fromFiltersScreen: false,
+                                  searchHistoryIsEmpty: searchStoryList.isEmpty, // Чтобы обновить стейт экрана
+                                  // Если крайнее место было удалено из истории
+                                  isQueryEmpty: interactor.query.isEmpty, // Для отображения найденных по фильтру мест
+                                  // При пустом поисковом запросе
+                                  db: db,
+                                ),
+                              );
+                        }
+
                         // Просто переходим на экран поиска мест
                         // ignore: use_build_context_synchronously
                         await Navigator.of(context).push(
@@ -156,10 +186,12 @@ class _SearchBarState extends State<SearchBar> {
                       }
                     },
                     // При отправке данных из поиска
-                    onFieldSubmitted: (value) {
+                    onFieldSubmitted: (value) async {
                       // Добавляем значение из поиска в БД
                       bloc
+                        // ignore: unawaited_futures
                         ..addHistory(widget.searchController.text, db)
+                        // ignore: unawaited_futures
                         ..loadHistorys(db);
 
                       context
@@ -209,5 +241,24 @@ class _SearchBarState extends State<SearchBar> {
         ),
       ),
     );
+  }
+
+  /// Показать историю поиска
+  Future<void> showSearchPlacesHistory({
+    required List<DbPlace> loadedPlaces, // Загруженные места с экрана фильтров
+    required List<SearchHistory> historyList, // История поиска
+    required AppDb db, // БД
+  }) async {  
+    for (var i = 0; i < loadedPlaces.length; i++) {
+      // Проверка на соответствие истории запроса с именем места
+      final containsTitle = historyList.any(
+        (item) => loadedPlaces[i].name.toLowerCase().contains(item.title.toLowerCase()),
+      );
+      // Если есть соответствие, то добавляем места в базу указывая флаг isSearchScreen на true
+      // чтобы отобразить места только с данным флагом в истории 
+      if (containsTitle) {
+        await db.addPlace(loadedPlaces[i], isSearchScreen: true);
+      }
+    }
   }
 }

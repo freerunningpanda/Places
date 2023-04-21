@@ -29,28 +29,41 @@ class AppDb extends _$AppDb {
         },
       );
 
+  /// Получить историю поисковых запросов
   Future<List<SearchHistory>> get allHistorysEntries => select(searchHistorys).get();
 
-  Future<List<DbPlace>> get allPlacesEntries => select(dbPlaces).get();
+  /// Получить все места не хранящиеся в Избранном
+  Future<List<DbPlace>> get allPlacesEntries => (select(dbPlaces)..where((tbl) => tbl.isFavorite.equals(false))).get();
 
+  /// Получить список избранных мест
   Future<List<DbPlace>> get favoritePlacesEntries =>
       (select(dbPlaces)..where((tbl) => tbl.isFavorite.equals(true))).get();
 
+  /// Получить список мест отмеченных как для экрана поиска
+  Future<List<DbPlace>> get searchedPlacesEntries =>
+      (select(dbPlaces)..where((tbl) => tbl.isSearchScreen.equals(true))).get();
+
+  
   AppDb() : super(_openConnection());
 
+  
+  /// Сохранить запрос в истории поиска
   Future<int> addHistoryItem(SearchHistorysCompanion history) {
     return into(searchHistorys).insert(history);
   }
 
+  /// Удалить элемент истории поиска
   Future<void> deleteHistory(int id) {
     return customStatement('DELETE FROM "search_historys" WHERE id = $id');
   }
 
+  /// Очистить всю историю поиска
   Future<void> deleteAllHistory() {
     return customStatement('DELETE FROM "search_historys"');
   }
 
-  Future<int> addPlace(DbPlace place) async {
+  /// Добавить место в базу данных
+  Future<int> addPlace(DbPlace place, {required bool isSearchScreen}) async {
     return into(dbPlaces).insert(
       DbPlacesCompanion.insert(
         id: place.id,
@@ -61,38 +74,62 @@ class AppDb extends _$AppDb {
         placeType: place.placeType,
         description: place.description,
         isFavorite: place.isFavorite,
+        isSearchScreen: isSearchScreen,
       ),
     );
   }
 
+  /// Удалить только те места, которые не хранятся в избранном
   Future<void> deleteAllPlaces() async {
-    await customStatement('DELETE FROM "db_places"'); // Сначала удалить предыдущие места из таблицы
+    await customStatement(
+      'DELETE FROM "db_places" WHERE is_favorite = false',
+    ); // Сначала удалить предыдущие места из таблицы
   }
 
-  Future<void> addPlaces(List<DbPlace> places) async {
-    await batch((batch) {
-      for (final place in places) {
-        batch.insert(
-          dbPlaces,
-          DbPlacesCompanion.insert(
-            id: place.id,
-            lat: place.lat,
-            lng: place.lng,
-            name: place.name,
-            urls: place.urls,
-            placeType: place.placeType,
-            description: place.description,
-            isFavorite: place.isFavorite,
-          ),
-        );
-      }
-    });
+  /// Удалить места помеченные как для поиска
+  Future<void> deleteUnsearchedPlaces() => (delete(dbPlaces)..where((tbl) => tbl.isSearchScreen.equals(true))).go();
+
+  /// Удалить дубликаты мест по имени (на всякий случай)
+  Future<void> distinctByName() async {
+    await customUpdate('''
+      DELETE FROM db_places
+      WHERE id NOT IN (
+        SELECT MIN(id)
+        FROM db_places
+        GROUP BY name
+      )
+    ''');
   }
 
-    Future<void> updatePlace(DbPlace updatedPlace) async {
+  /// Сохранить список отфильтрованных мест для экрана поиска
+  Future<void> addPlacesToSearchScreen(List<DbPlace> places, {required bool isSearchScreen}) async {
+    final distinctPlaces = places.toSet().toList();
+
+    for (final place in distinctPlaces) {
+      await into(dbPlaces).insert(
+        DbPlacesCompanion.insert(
+          id: place.id,
+          lat: place.lat,
+          lng: place.lng,
+          name: place.name,
+          urls: place.urls,
+          placeType: place.placeType,
+          description: place.description,
+          isFavorite: false,
+          isSearchScreen: isSearchScreen,
+        ),
+      );
+    }
+    // удалить дубликаты мест по имени
+    await distinctByName();
+  }
+
+  /// Обновить место в базе
+  Future<void> updatePlace(DbPlace updatedPlace) async {
     await update(dbPlaces).replace(updatedPlace);
   }
 
+  /// Удалить место из базы
   Future<void> deletePlace(DbPlace place) async {
     await (delete(dbPlaces)..where((tbl) => tbl.id.equals(place.id))).go();
   }

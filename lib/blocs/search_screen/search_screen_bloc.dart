@@ -1,5 +1,4 @@
 import 'package:equatable/equatable.dart';
-import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geolocator/geolocator.dart';
@@ -72,18 +71,13 @@ class SearchScreenBloc extends Bloc<SearchScreenEvent, SearchScreenState> {
         emit(
           SearchScreenPlacesFoundState(
             filteredPlaces: event.isHistoryClear ? event.filteredPlaces!.toList() : PlaceInteractor.foundedPlaces,
-            length: await loadPlaces(event.db),
+            length: await loadFilteredPlaces(event.db),
             // length: AppPreferences.getPlacesListByDistance()?.length ?? 0,
           ),
         );
       }
     });
   }
-
-  // Future<void> loadFilteredPlaces(AppDb db) async {
-  //   list = await db.allPlacesEntries;
-  //   debugPrint('list_of_founded_places: ${list.length}');
-  // }
 
   void activeFocus({required bool isActive}) {
     // ignore: prefer-conditional-expressions
@@ -94,32 +88,29 @@ class SearchScreenBloc extends Bloc<SearchScreenEvent, SearchScreenState> {
     }
   }
 
-  Future<void> searchPlaces(String query, AppDb db) async {
+  Future<List<DbPlace>> searchPlaces(String query, AppDb db) async {
     final placesList = await db.allPlacesEntries;
-    // Если список мест в Preferences не null, искать в нём
-    // Данное решение, для того, чтобы не ловить крэш после удаления/установки приложения
-    for (final el in placesList) {
-      final distance = Geolocator.distanceBetween(
-        Mocks.mockLat,
-        Mocks.mockLot,
-        el.lat,
-        el.lng,
-      );
-      if (distance >= Mocks.rangeValues.start && distance <= Mocks.rangeValues.end) {
-        PlaceInteractor.foundedPlaces = placesList.where((place) {
-          final placeTitle = place.name.toLowerCase();
-          final input = query.toLowerCase();
-          debugPrint('filteredPlaces: ${PlaceInteractor.foundedPlaces}');
+    PlaceInteractor.foundedPlaces = placesList.where(
+      (place) {
+        final distance = Geolocator.distanceBetween(
+          Mocks.mockLat,
+          Mocks.mockLot,
+          place.lat,
+          place.lng,
+        );
+        final placeTitle = place.name.toLowerCase();
+        final input = query.toLowerCase();
 
-          return placeTitle.contains(input);
-        }).toList();
-      }
-    }
+        return distance >= Mocks.rangeValues.start && distance <= Mocks.rangeValues.end && placeTitle.contains(input);
+      },
+    ).toList();
+    
+    return PlaceInteractor.foundedPlaces;
   }
+}
 
-  Future<int> loadPlaces(AppDb db) async {
-    final placesList = await db.allPlacesEntries;
+Future<int> loadFilteredPlaces(AppDb db) async {
+  final placesList = await db.allPlacesEntries;
 
-    return placesList.length;
-  }
+  return placesList.length;
 }

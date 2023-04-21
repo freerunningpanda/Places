@@ -54,6 +54,7 @@ class PlaceRequest {
       );
 
   static Set<PlaceRequest> decode(String places) => (json.decode(places) as List<dynamic>)
+      // ignore: avoid_annotating_with_dynamic
       .map<PlaceRequest>((dynamic place) => PlaceRequest.fromJson(place as Map<String, dynamic>))
       .toSet();
 }

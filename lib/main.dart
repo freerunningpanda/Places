@@ -53,7 +53,10 @@ void main() async {
               ),
           ),
           BlocProvider<VisitedScreenBloc>(
-            create: (_) => VisitedScreenBloc(),
+            create: (_) => VisitedScreenBloc(db: db)
+              ..add(
+                VisitedListLoadedEvent(),
+              ),
           ),
           BlocProvider<SearchScreenBloc>(
             create: (_) => SearchScreenBloc(),

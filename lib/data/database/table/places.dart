@@ -10,4 +10,5 @@ class DbPlaces extends Table {
   TextColumn get placeType => text().withLength(min: 1, max: 255)();
   TextColumn get description => text()();
   BoolColumn get isFavorite => boolean()();
+  BoolColumn get isSearchScreen => boolean()();
 }

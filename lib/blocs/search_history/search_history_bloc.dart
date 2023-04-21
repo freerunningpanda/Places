@@ -8,7 +8,6 @@ part 'search_history_event.dart';
 part 'search_history_state.dart';
 
 class SearchHistoryBloc extends Bloc<SearchHistoryEvent, SearchHistoryState> {
-  // final _db = AppDb();
   List<SearchHistory> list = [];
 
   SearchHistoryBloc() : super(SearchHistoryEmptyState()) {
