@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:places/cubits/image_provider/image_provider_cubit.dart';
 
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_strings.dart';
@@ -6,13 +8,8 @@ import 'package:places/ui/widgets/cancel_button.dart';
 import 'package:places/ui/widgets/place_icons.dart';
 
 class PickImageWidget extends StatelessWidget {
-  final VoidCallback imgFromCamera;
-  final VoidCallback imgFromGallery;
-
   const PickImageWidget({
     Key? key,
-    required this.imgFromCamera,
-    required this.imgFromGallery,
   }) : super(key: key);
 
   @override
@@ -28,22 +25,16 @@ class PickImageWidget extends StatelessWidget {
       titlePadding: EdgeInsets.zero,
       title: _DialogContent(
         theme: theme,
-        imgFromCamera: imgFromCamera,
-        imgFromGallery: imgFromGallery,
       ),
     );
   }
 }
 
 class _DialogContent extends StatelessWidget {
-  final VoidCallback imgFromCamera;
-  final VoidCallback imgFromGallery;
   final ThemeData theme;
 
   const _DialogContent({
     Key? key,
-    required this.imgFromCamera,
-    required this.imgFromGallery,
     required this.theme,
   }) : super(key: key);
 
@@ -59,8 +50,6 @@ class _DialogContent extends StatelessWidget {
         children: [
           _DialogItems(
             theme: theme,
-            imgFromCamera: imgFromCamera,
-            imgFromGallery: imgFromGallery,
           ),
           const Positioned(
             left: 0,
@@ -75,19 +64,17 @@ class _DialogContent extends StatelessWidget {
 }
 
 class _DialogItems extends StatelessWidget {
-  final VoidCallback imgFromCamera;
-  final VoidCallback imgFromGallery;
   final ThemeData theme;
 
   const _DialogItems({
     Key? key,
-    required this.imgFromCamera,
-    required this.imgFromGallery,
     required this.theme,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final cubit = context.read<ImageProviderCubit>();
+
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 16.0),
       child: Column(
@@ -98,14 +85,14 @@ class _DialogItems extends StatelessWidget {
             theme: theme,
             assetName: AppAssets.camera,
             title: AppString.camera,
-            pickImage: imgFromCamera,
+            pickImage: cubit.pickImageFromCamera,
           ),
           const Divider(),
           _DialogItem(
             theme: theme,
             assetName: AppAssets.photo,
             title: AppString.photo,
-            pickImage: imgFromGallery,
+            pickImage: cubit.pickImageFromGallery,
           ),
           const Divider(),
           _DialogItem(

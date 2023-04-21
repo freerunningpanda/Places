@@ -1,8 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:places/data/model/place.dart';
-import 'package:places/ui/res/app_strings.dart';
 
 part 'image_provider_state.dart';
 

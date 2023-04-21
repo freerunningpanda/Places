@@ -9,7 +9,6 @@ import 'package:places/cubits/add_place_screen/add_place_screen_cubit.dart';
 import 'package:places/cubits/create_place/create_place_button_cubit.dart';
 import 'package:places/cubits/image_provider/image_provider_cubit.dart';
 import 'package:places/data/interactor/place_interactor.dart';
-import 'package:places/data/model/place.dart';
 import 'package:places/data/repository/category_repository.dart';
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_strings.dart';
@@ -203,8 +202,6 @@ class _ImagePickerWidgetState extends State<_ImagePickerWidget> {
             children: [
               _PickImageWidget(
                 theme: widget.theme,
-                imgFromCamera: cubit.pickImageFromCamera,
-                imgFromGallery: cubit.pickImageFromGallery,
               ),
             ],
           ),
@@ -305,14 +302,10 @@ class _PlaceContent extends StatelessWidget {
 /// Class for image picking to horizontal list
 class _PickImageWidget extends StatelessWidget {
   final ThemeData theme;
-  final VoidCallback imgFromCamera;
-  final VoidCallback imgFromGallery;
 
   const _PickImageWidget({
     Key? key,
     required this.theme,
-    required this.imgFromCamera,
-    required this.imgFromGallery,
   }) : super(key: key);
 
   @override
@@ -335,10 +328,7 @@ class _PickImageWidget extends StatelessWidget {
           await showDialog<PickImageWidget>(
             context: context,
             builder: (_) {
-              return PickImageWidget(
-                imgFromCamera: imgFromCamera,
-                imgFromGallery: imgFromGallery,
-              );
+              return PickImageWidget();
             },
           );
         },
