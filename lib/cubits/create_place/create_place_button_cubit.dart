@@ -40,7 +40,6 @@ class CreatePlaceButtonCubit extends Cubit<CreatePlaceButtonState> {
         placeType: place.placeType,
         description: place.description,
       ),
-      urls: PlaceInteractor.urls,
     );
     // placeInteractor.addNewPlace(place: place);
   }

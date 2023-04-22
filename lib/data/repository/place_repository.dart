@@ -35,11 +35,9 @@ class PlaceRepository {
   // Загрузить место на сервер
   Future<String> postPlace({
     required DbPlace place,
-    required List<XFile> urls,
   }) =>
       apiPlaces.postPlace(
         place: place,
-        urls: urls,
       );
 
   // Преобразовать одно место из Dto в место для UI

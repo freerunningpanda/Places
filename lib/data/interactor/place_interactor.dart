@@ -30,11 +30,9 @@ class PlaceInteractor {
 
   Future<String> postPlace({
     required DbPlace place,
-    required List<XFile> urls,
   }) =>
       repository.postPlace(
         place: place,
-        urls: urls,
       );
 
   Future<void> loadAllPlaces({required AppDb db}) => repository.loadAllPlaces(db);
