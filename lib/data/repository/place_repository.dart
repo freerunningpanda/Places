@@ -31,30 +31,32 @@ class PlaceRepository {
   //   return places;
   // }
 
+  // Загрузить место на сервер
+  Future<String> postPlace(DbPlace place) => apiPlaces.postPlace(place: place);
+
   // Преобразовать одно место из Dto в место для UI
   Future<DbPlace> getPlaceDetails(DbPlace place) =>
       apiPlaces.getPlaceDetails(place.id).then(Mapper.detailPlaceFromApiToUi);
 
-
   Future<void> removeFromFavorites({required DbPlace place, required AppDb db}) async {
-   await db.deletePlace(place);
+    await db.deletePlace(place);
   }
 
   Future<void> addToFavorites({required DbPlace place, required AppDb db}) async {
     await db.addPlace(place, isSearchScreen: false);
   }
 
-   Future<void> loadFavoritePlaces(AppDb db) async {
+  Future<void> loadFavoritePlaces(AppDb db) async {
     PlaceInteractor.favoritePlaces = await db.favoritePlacesEntries;
     debugPrint('places_list: ${PlaceInteractor.favoritePlaces.length}');
   }
 
-   Future<void> loadAllPlaces(AppDb db) async {
+  Future<void> loadAllPlaces(AppDb db) async {
     PlaceInteractor.favoritePlaces = await db.allPlacesEntries;
     debugPrint('places_list: ${PlaceInteractor.favoritePlaces.length}');
   }
 
-  void addNewPlace({required Place place}) {
+  void addNewPlace({required DbPlace place}) {
     PlaceInteractor.newPlaces.add(place);
   }
 }

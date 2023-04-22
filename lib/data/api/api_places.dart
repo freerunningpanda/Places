@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
+import 'package:places/data/database/database.dart';
 import 'package:places/data/dio_configurator.dart';
 import 'package:places/data/dto/place_request.dart';
 import 'package:places/data/dto/place_response.dart';
@@ -57,22 +58,21 @@ class ApiPlaces {
     }
   }
 
-  Future<String> postPlace() async {
+  Future<String> postPlace({required DbPlace place}) async {
     initInterceptors();
     try {
+      final urls = place.urls.split('|');
+      final formData = FormData.fromMap(<String, dynamic>{
+        'lat': place.lat,
+        'lng': place.lng,
+        'name': place.name,
+        'placeType': place.placeType,
+        'description': place.description,
+        'urls[]': urls,
+      });
       final response = await dio.post<String>(
         '/place',
-        data: jsonEncode(
-          {
-            // 'id': 4,
-            'lat': 565407.77,
-            'lng': 6547450.76,
-            'name': 'Место',
-            'urls': ['http://test.com'],
-            'placeType': 'temple',
-            'description': 'Описание',
-          },
-        ),
+        data: formData,
       );
       if (response.statusCode == 200) {
         return response.data ?? '';

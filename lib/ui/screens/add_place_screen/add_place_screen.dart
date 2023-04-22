@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -8,6 +9,7 @@ import 'package:places/blocs/choose_category_bloc/choose_category_bloc.dart';
 import 'package:places/cubits/add_place_screen/add_place_screen_cubit.dart';
 import 'package:places/cubits/create_place/create_place_button_cubit.dart';
 import 'package:places/cubits/image_provider/image_provider_cubit.dart';
+import 'package:places/data/database/database.dart';
 import 'package:places/data/interactor/place_interactor.dart';
 import 'package:places/data/repository/category_repository.dart';
 import 'package:places/ui/res/app_assets.dart';
@@ -48,7 +50,7 @@ class _AddPlaceScreenState extends State<AddPlaceScreen> {
     final theme = Theme.of(context);
 
     final focus = context.read<AddPlaceScreenCubit>();
-    final place = context.read<CreatePlaceButtonCubit>();
+    final cubit = context.read<CreatePlaceButtonCubit>();
 
     context.watch<CreatePlaceButtonCubit>().updateButtonState(
           titleValue: titleController.text,
@@ -95,7 +97,7 @@ class _AddPlaceScreenState extends State<AddPlaceScreen> {
                           controller: titleController,
                           textInputAction: TextInputAction.next,
                           onSubmitted: (value) => focus.goToLat(latFocus: latFocus),
-                          onChanged: (value) => place.name = value,
+                          onChanged: (value) => cubit.name = value,
                         ),
                         const SizedBox(height: 24),
                         _CoordinatsInputWidget(
@@ -118,15 +120,28 @@ class _AddPlaceScreenState extends State<AddPlaceScreen> {
                           focusNode: descriptionFocus,
                           controller: descriptionController,
                           textInputAction: TextInputAction.done,
-                          onChanged: (value) => place.details = value,
+                          onChanged: (value) => cubit.description = value,
                         ),
                         SizedBox(height: height * 0.18),
                         CreateButton(
                           title: AppString.create,
                           onTap: () {
+                            final random = Random();
+                            final id = random.nextInt(99999);
+                            
                             debugPrint('🟡---------create btn pressed');
-                            place
-                              ..addNewPlace()
+                            cubit
+                              ..addNewPlace(
+                                DbPlace(
+                                  id: id,
+                                  lat: cubit.lat,
+                                  lng: cubit.lng,
+                                  name: cubit.name,
+                                  urls: cubit.urls,
+                                  placeType: cubit.placeType,
+                                  description: cubit.description,
+                                ),
+                              )
                               // После добавления места, отправляю пустые данные в поля, чтобы сменить состояние
                               // кнопки на неактивную
                               ..updateButtonState(
@@ -141,13 +156,13 @@ class _AddPlaceScreenState extends State<AddPlaceScreen> {
                             debugPrint('🟡---------Создан объект: ${PlaceInteractor.newPlaces.toList()}');
                             // Меняю isEnabled в выбранной категории на false и затем очищаю список
                             context.read<ChooseCategoryBloc>().resetCategoryState(
-                                  activeCategories: place.chosenCategory,
+                                  activeCategories: cubit.chosenCategory,
                                 );
                             // Из-за очищенного выше списка в isEmpty упадёт true
                             // Для перерисовки состоянии категории на "Не выбрано"
                             context.read<ChooseCategoryBloc>().add(
                                   UnchosenCategoryEvent(
-                                    isEmpty: place.chosenCategory.isEmpty,
+                                    isEmpty: cubit.chosenCategory.isEmpty,
                                   ),
                                 );
                           },
@@ -181,13 +196,6 @@ class _ImagePickerWidget extends StatefulWidget {
 }
 
 class _ImagePickerWidgetState extends State<_ImagePickerWidget> {
-  // TODO(Alex): rewrite.
-  // final placeList = PlaceInteractor(
-  //   repository: PlaceRepository(
-  //     apiPlaces: ApiPlaces(),
-  //   ),
-  // ).favoritePlaces;
-
   final ImagePicker picker = ImagePicker();
 
   @override
@@ -506,7 +514,7 @@ class _CoordinatsInputWidget extends StatelessWidget {
                 onTap: focus.tapOnLot,
                 onChanged: (value) {
                   if (double.tryParse(value) != null) {
-                    place.lot = double.parse(value);
+                    place.lng = double.parse(value);
                   }
                 },
               ),

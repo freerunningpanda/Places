@@ -1,9 +1,9 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:places/data/api/api_places.dart';
+import 'package:places/data/database/database.dart';
 import 'package:places/data/interactor/place_interactor.dart';
 import 'package:places/data/model/category.dart';
-import 'package:places/data/model/place.dart';
 import 'package:places/data/repository/category_repository.dart';
 import 'package:places/data/repository/place_repository.dart';
 
@@ -14,9 +14,10 @@ class CreatePlaceButtonCubit extends Cubit<CreatePlaceButtonState> {
   final chosenCategory = CategoryRepository.chosenCategories;
   String name = '';
   double lat = 0;
-  double lot = 0;
-  String details = '';
-  String type = '';
+  double lng = 0;
+  String description = '';
+  String placeType = '';
+  String urls = '';
   CreatePlaceButtonCubit()
       : super(
           const CreatePlaceButtonState(
@@ -28,18 +29,19 @@ class CreatePlaceButtonCubit extends Cubit<CreatePlaceButtonState> {
           ),
         );
 
-  void addNewPlace() {
-    placeInteractor.addNewPlace(
-      place: Place(
-        id: 0,
-        urls: [''],
-        name: name,
-        lat: lat,
-        lng: lot,
-        description: details,
-        placeType: chosenCategory[0].title,
-      ),
-    );
+  void addNewPlace(DbPlace place) {
+    // placeInteractor.postPlace(
+    //   DbPlace(
+    //     id: place.id,
+    //     lat: place.lat,
+    //     lng: place.lng,
+    //     name: place.name,
+    //     urls: place.urls,
+    //     placeType: place.placeType,
+    //     description: place.description,
+    //   ),
+    // );
+    placeInteractor.addNewPlace(place: place);
   }
 
   void updateButtonState({
