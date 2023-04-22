@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:places/data/database/database.dart';
 import 'package:places/data/model/category.dart';
 import 'package:places/data/model/place.dart';
@@ -27,7 +28,14 @@ class PlaceInteractor {
 
   Future<DbPlace> getPlaceDetails(DbPlace place) => repository.getPlaceDetails(place);
 
-  Future<String> postPlace(DbPlace place) => repository.postPlace(place);
+  Future<String> postPlace({
+    required DbPlace place,
+    required List<XFile> urls,
+  }) =>
+      repository.postPlace(
+        place: place,
+        urls: urls,
+      );
 
   Future<void> loadAllPlaces({required AppDb db}) => repository.loadAllPlaces(db);
 

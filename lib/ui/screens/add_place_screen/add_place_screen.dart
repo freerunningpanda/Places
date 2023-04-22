@@ -50,7 +50,9 @@ class _AddPlaceScreenState extends State<AddPlaceScreen> {
     final theme = Theme.of(context);
 
     final focus = context.read<AddPlaceScreenCubit>();
-    final cubit = context.read<CreatePlaceButtonCubit>();
+    final createPlaceBtnCubit = context.read<CreatePlaceButtonCubit>();
+    final imageProviderCubit = context.read<ImageProviderCubit>();
+    final addPlaceScreenCubit = context.read<AddPlaceScreenCubit>();
 
     context.watch<CreatePlaceButtonCubit>().updateButtonState(
           titleValue: titleController.text,
@@ -97,7 +99,7 @@ class _AddPlaceScreenState extends State<AddPlaceScreen> {
                           controller: titleController,
                           textInputAction: TextInputAction.next,
                           onSubmitted: (value) => focus.goToLat(latFocus: latFocus),
-                          onChanged: (value) => cubit.name = value,
+                          onChanged: (value) => createPlaceBtnCubit.name = value,
                         ),
                         const SizedBox(height: 24),
                         _CoordinatsInputWidget(
@@ -120,7 +122,7 @@ class _AddPlaceScreenState extends State<AddPlaceScreen> {
                           focusNode: descriptionFocus,
                           controller: descriptionController,
                           textInputAction: TextInputAction.done,
-                          onChanged: (value) => cubit.description = value,
+                          onChanged: (value) => createPlaceBtnCubit.description = value,
                         ),
                         SizedBox(height: height * 0.18),
                         CreateButton(
@@ -128,18 +130,20 @@ class _AddPlaceScreenState extends State<AddPlaceScreen> {
                           onTap: () {
                             final random = Random();
                             final id = random.nextInt(99999);
-                            
+                            final urlList = imageProviderCubit.images;
+                            final urls = urlList.join('|');
+
                             debugPrint('🟡---------create btn pressed');
-                            cubit
+                            createPlaceBtnCubit
                               ..addNewPlace(
                                 DbPlace(
                                   id: id,
-                                  lat: cubit.lat,
-                                  lng: cubit.lng,
-                                  name: cubit.name,
-                                  urls: cubit.urls,
-                                  placeType: cubit.placeType,
-                                  description: cubit.description,
+                                  lat: createPlaceBtnCubit.lat,
+                                  lng: createPlaceBtnCubit.lng,
+                                  name: createPlaceBtnCubit.name,
+                                  urls: urls,
+                                  placeType: addPlaceScreenCubit.chosenCategories[0].placeType,
+                                  description: createPlaceBtnCubit.description,
                                 ),
                               )
                               // После добавления места, отправляю пустые данные в поля, чтобы сменить состояние
@@ -156,13 +160,13 @@ class _AddPlaceScreenState extends State<AddPlaceScreen> {
                             debugPrint('🟡---------Создан объект: ${PlaceInteractor.newPlaces.toList()}');
                             // Меняю isEnabled в выбранной категории на false и затем очищаю список
                             context.read<ChooseCategoryBloc>().resetCategoryState(
-                                  activeCategories: cubit.chosenCategory,
+                                  activeCategories: createPlaceBtnCubit.chosenCategory,
                                 );
                             // Из-за очищенного выше списка в isEmpty упадёт true
                             // Для перерисовки состоянии категории на "Не выбрано"
                             context.read<ChooseCategoryBloc>().add(
                                   UnchosenCategoryEvent(
-                                    isEmpty: cubit.chosenCategory.isEmpty,
+                                    isEmpty: createPlaceBtnCubit.chosenCategory.isEmpty,
                                   ),
                                 );
                           },
@@ -276,7 +280,7 @@ class _PlaceContent extends StatelessWidget {
           child: Stack(
             children: [
               Image.file(
-                File(image!.path),
+                File(image!.path).absolute,
                 width: 72,
                 height: 72,
                 fit: BoxFit.cover,

@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:places/data/api/api_places.dart';
 import 'package:places/data/database/database.dart';
 import 'package:places/data/interactor/place_interactor.dart';
@@ -17,7 +18,7 @@ class CreatePlaceButtonCubit extends Cubit<CreatePlaceButtonState> {
   double lng = 0;
   String description = '';
   String placeType = '';
-  String urls = '';
+  List<XFile> urls = [];
   CreatePlaceButtonCubit()
       : super(
           const CreatePlaceButtonState(
@@ -30,18 +31,19 @@ class CreatePlaceButtonCubit extends Cubit<CreatePlaceButtonState> {
         );
 
   void addNewPlace(DbPlace place) {
-    // placeInteractor.postPlace(
-    //   DbPlace(
-    //     id: place.id,
-    //     lat: place.lat,
-    //     lng: place.lng,
-    //     name: place.name,
-    //     urls: place.urls,
-    //     placeType: place.placeType,
-    //     description: place.description,
-    //   ),
-    // );
-    placeInteractor.addNewPlace(place: place);
+    placeInteractor.postPlace(
+      place: DbPlace(
+        id: place.id,
+        lat: place.lat,
+        lng: place.lng,
+        name: place.name,
+        urls: place.urls,
+        placeType: place.placeType,
+        description: place.description,
+      ),
+      urls: urls,
+    );
+    // placeInteractor.addNewPlace(place: place);
   }
 
   void updateButtonState({

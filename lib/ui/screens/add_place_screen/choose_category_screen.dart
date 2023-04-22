@@ -65,6 +65,7 @@ class ChooseCategoryWidget extends StatelessWidget {
                                   ChosenCategoryEvent(
                                     isEmpty: chosenCategories.isEmpty,
                                     chosenCategory: chosenCategories[0],
+                                    placeType: chosenCategories[0].placeType,
                                   ),
                                 );
                           } else {
@@ -94,6 +95,7 @@ class ChooseCategoryWidget extends StatelessWidget {
                         ChosenCategoryEvent(
                           isEmpty: chosenCategories.isEmpty,
                           chosenCategory: chosenCategories[0],
+                          placeType: chosenCategories[0].placeType,
                         ),
                       );
                   context.read<CreatePlaceButtonCubit>().updateButtonState(

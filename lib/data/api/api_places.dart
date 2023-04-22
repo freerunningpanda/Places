@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:places/data/database/database.dart';
 import 'package:places/data/dio_configurator.dart';
 import 'package:places/data/dto/place_request.dart';
@@ -58,21 +59,22 @@ class ApiPlaces {
     }
   }
 
-  Future<String> postPlace({required DbPlace place}) async {
+    Future<String> postPlace({required DbPlace place}) async {
     initInterceptors();
     try {
-      final urls = place.urls.split('|');
-      final formData = FormData.fromMap(<String, dynamic>{
-        'lat': place.lat,
-        'lng': place.lng,
-        'name': place.name,
-        'placeType': place.placeType,
-        'description': place.description,
-        'urls[]': urls,
-      });
       final response = await dio.post<String>(
         '/place',
-        data: formData,
+        data: jsonEncode(
+          {
+            // 'id': 4,
+            'lat': place.lat,
+            'lng': place.lng,
+            'name': place.name,
+            'urls': ['http://test.com'],
+            'placeType': place.placeType,
+            'description': place.description,
+          },
+        ),
       );
       if (response.statusCode == 200) {
         return response.data ?? '';
@@ -85,6 +87,44 @@ class ApiPlaces {
       );
     }
   }
+
+  // Future<String> postPlace({required DbPlace place, required List<XFile> urls}) async {
+  //   initInterceptors();
+  //   try {
+  //     final formData = FormData.fromMap(<String, dynamic>{
+  //       'lat': place.lat,
+  //       'lng': place.lng,
+  //       'name': place.name,
+  //       'placeType': place.placeType,
+  //       'description': 'Тест загрузки',
+  //     });
+
+  //     // Добавить изображения в form data
+  //     for (var i = 0; i < urls.length; i++) {
+  //     final file = await urls[i].readAsBytes();
+  //     formData.files.add(MapEntry(
+  //         'urls[]',
+  //         MultipartFile.fromBytes(
+  //             file,
+  //             filename: '${place.name}_$i',
+  //         ),
+  //     ));
+  //   }
+  //     final response = await dio.post<String>(
+  //       '/place',
+  //       data: formData,
+  //     );
+  //     if (response.statusCode == 200) {
+  //       return response.data ?? '';
+  //     }
+  //     throw Exception('No 200 status code: Error code: ${response.statusCode}');
+  //   } on DioError catch (e) {
+  //     throw NetworkException(
+  //       query: e.requestOptions.path,
+  //       statusCode: e.error.toString(),
+  //     );
+  //   }
+  // }
 
   Future<String> putPlace(int id) async {
     initInterceptors();

@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:places/data/api/api_places.dart';
 import 'package:places/data/database/database.dart';
 import 'package:places/data/interactor/place_interactor.dart';
@@ -32,7 +33,14 @@ class PlaceRepository {
   // }
 
   // Загрузить место на сервер
-  Future<String> postPlace(DbPlace place) => apiPlaces.postPlace(place: place);
+  Future<String> postPlace({
+    required DbPlace place,
+    required List<XFile> urls,
+  }) =>
+      apiPlaces.postPlace(
+        place: place,
+        // urls: urls,
+      );
 
   // Преобразовать одно место из Dto в место для UI
   Future<DbPlace> getPlaceDetails(DbPlace place) =>
