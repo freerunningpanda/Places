@@ -130,7 +130,7 @@ class _AddPlaceScreenState extends State<AddPlaceScreen> {
                           onTap: () {
                             final random = Random();
                             final id = random.nextInt(99999);
-                            final urlList = imageProviderCubit.images;
+                            final urlList = PlaceInteractor.urls;
                             final urls = urlList.join('|');
 
                             debugPrint('🟡---------create btn pressed');
@@ -226,9 +226,9 @@ class _ImagePickerWidgetState extends State<_ImagePickerWidget> {
                   children: [
                     Row(
                       children: [
-                        for (var i = 0; i < cubit.images.length; i++)
+                        for (var i = 0; i < PlaceInteractor.urls.length; i++)
                           _ImagePlace(
-                            image: cubit.images[i],
+                            image: PlaceInteractor.urls[i],
                             index: i,
                           ),
                       ],

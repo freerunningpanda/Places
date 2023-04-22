@@ -2,13 +2,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:places/data/database/database.dart';
 import 'package:places/data/model/category.dart';
-import 'package:places/data/model/place.dart';
 import 'package:places/data/repository/place_repository.dart';
 
 class PlaceInteractor {
   static final List<Category> activeFilters = [];
   static final List<DbPlace> initialFilteredPlaces = [];
   static final List<String> searchHistoryList = [];
+  static final List<XFile> urls = [];
   static List<DbPlace> favoritePlaces = [];
   static List<DbPlace> visitedPlaces = [];
   static Set<DbPlace> filtersWithDistance = {};

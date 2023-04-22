@@ -39,7 +39,7 @@ class PlaceRepository {
   }) =>
       apiPlaces.postPlace(
         place: place,
-        // urls: urls,
+        urls: urls,
       );
 
   // Преобразовать одно место из Dto в место для UI

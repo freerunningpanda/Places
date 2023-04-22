@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:path/path.dart';
 import 'package:places/data/database/database.dart';
 import 'package:places/data/dio_configurator.dart';
 import 'package:places/data/dto/place_request.dart';
@@ -59,22 +60,35 @@ class ApiPlaces {
     }
   }
 
-    Future<String> postPlace({required DbPlace place}) async {
+  Future<String> postPlace({required DbPlace place, required List<XFile> urls}) async {
     initInterceptors();
     try {
+      // Create a new FormData object to store the request data
+      final formData = FormData();
+
+      // Add the place data to the FormData object
+      formData.fields.addAll([
+        MapEntry('lat', place.lat.toString()),
+        MapEntry('lng', place.lng.toString()),
+        MapEntry('name', place.name),
+        MapEntry('placeType', place.placeType),
+        MapEntry('description', place.description),
+      ]);
+
+      // Convert the list of XFile images to MultipartFile objects and add them to the FormData object
+      final files = <MultipartFile>[];
+      for (final url in urls) {
+        files.add(await MultipartFile.fromFile(url.path, filename: basename(url.path)));
+      }
+      for (final file in files) {
+        formData.files.add(
+          MapEntry('urls', file),
+        );
+      }
+
       final response = await dio.post<String>(
         '/place',
-        data: jsonEncode(
-          {
-            // 'id': 4,
-            'lat': place.lat,
-            'lng': place.lng,
-            'name': place.name,
-            'urls': ['http://test.com'],
-            'placeType': place.placeType,
-            'description': place.description,
-          },
-        ),
+        data: formData,
       );
       if (response.statusCode == 200) {
         return response.data ?? '';

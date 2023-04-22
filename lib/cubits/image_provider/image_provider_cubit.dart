@@ -1,19 +1,19 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:places/data/interactor/place_interactor.dart';
 
 part 'image_provider_state.dart';
 
 class ImageProviderCubit extends Cubit<ImageProviderState> {
 
-  final List<XFile> images = [];
 
   ImageProviderCubit() : super(const ImageProviderState(length: 0));
 
   void removeImage(int index) {
-    if (images.isNotEmpty) {
-      images.removeAt(index);
-      emit(state.copyWith(length: images.length));
+    if (PlaceInteractor.urls.isNotEmpty) {
+      PlaceInteractor.urls.removeAt(index);
+      emit(state.copyWith(length: PlaceInteractor.urls.length));
     }
   }
 
@@ -23,8 +23,8 @@ class ImageProviderCubit extends Cubit<ImageProviderState> {
       imageQuality: 50,
     );
     if (image != null) {
-      images.add(image);
-      emit(state.copyWith(length: images.length));
+      PlaceInteractor.urls.add(image);
+      emit(state.copyWith(length: PlaceInteractor.urls.length));
     }
   }
 
@@ -35,8 +35,8 @@ class ImageProviderCubit extends Cubit<ImageProviderState> {
     );
 
     if (image != null) {
-      images.add(image);
-      emit(state.copyWith(length: images.length));
+      PlaceInteractor.urls.add(image);
+      emit(state.copyWith(length: PlaceInteractor.urls.length));
     }
   }
 }

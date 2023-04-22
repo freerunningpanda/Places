@@ -18,7 +18,6 @@ class CreatePlaceButtonCubit extends Cubit<CreatePlaceButtonState> {
   double lng = 0;
   String description = '';
   String placeType = '';
-  List<XFile> urls = [];
   CreatePlaceButtonCubit()
       : super(
           const CreatePlaceButtonState(
@@ -41,7 +40,7 @@ class CreatePlaceButtonCubit extends Cubit<CreatePlaceButtonState> {
         placeType: place.placeType,
         description: place.description,
       ),
-      urls: urls,
+      urls: PlaceInteractor.urls,
     );
     // placeInteractor.addNewPlace(place: place);
   }
