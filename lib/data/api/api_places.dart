@@ -5,8 +5,6 @@ import 'package:flutter/foundation.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mime_type/mime_type.dart';
-import 'package:path/path.dart';
-import 'package:places/data/database/database.dart';
 import 'package:places/data/dio_configurator.dart';
 import 'package:places/data/dto/place_model.dart';
 import 'package:places/data/dto/place_request.dart';

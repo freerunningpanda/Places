@@ -6,8 +6,6 @@ import 'package:places/data/interactor/place_interactor.dart';
 part 'image_provider_state.dart';
 
 class ImageProviderCubit extends Cubit<ImageProviderState> {
-
-
   ImageProviderCubit() : super(const ImageProviderState(length: 0));
 
   void removeImage(int index) {
@@ -38,5 +36,10 @@ class ImageProviderCubit extends Cubit<ImageProviderState> {
       PlaceInteractor.urls.add(image);
       emit(state.copyWith(length: PlaceInteractor.urls.length));
     }
+  }
+
+  void clearImages() {
+    PlaceInteractor.urls.clear();
+    emit(state.copyWith(length: PlaceInteractor.urls.length));
   }
 }
