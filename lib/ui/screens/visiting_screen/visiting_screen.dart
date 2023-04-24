@@ -46,7 +46,7 @@ class _VisitingScreenState extends State<VisitingScreen> {
 
                             return const _EmptyList(
                               icon: AppAssets.card,
-                              description: AppString.likedPlaces,
+                              description: AppStrings.likedPlaces,
                             );
                           }
                           if (state is WantToVisitScreenIsNotEmpty) {
@@ -57,7 +57,7 @@ class _VisitingScreenState extends State<VisitingScreen> {
 
                               return const _EmptyList(
                                 icon: AppAssets.card,
-                                description: AppString.likedPlaces,
+                                description: AppStrings.likedPlaces,
                               );
                             }
                             debugPrint('Места (BlocBuilder): ${state.favoritePlaces}');
@@ -76,7 +76,7 @@ class _VisitingScreenState extends State<VisitingScreen> {
                           if (state is VisitedEmptyState) {
                             return const _EmptyList(
                               icon: AppAssets.goIconTransparent,
-                              description: AppString.finishRoute,
+                              description: AppStrings.finishRoute,
                             );
                           }
                           if (state is VisitedIsNotEmpty) {
@@ -122,7 +122,7 @@ class _AppBarState extends State<_AppBar> with TickerProviderStateMixin {
       backgroundColor: theme.scaffoldBackgroundColor,
       centerTitle: true,
       title: Text(
-        AppString.visitingScreenTitle,
+        AppStrings.visitingScreenTitle,
         style: theme.textTheme.titleLarge,
       ),
       elevation: 0,
@@ -156,12 +156,12 @@ class _TabBarWidgetState extends State<_TabBarWidget> with TickerProviderStateMi
         tabs: [
           Tab(
             child: Text(
-              AppString.tabBarOneText,
+              AppStrings.tabBarOneText,
             ),
           ),
           Tab(
             child: Text(
-              AppString.tabBarTwoText,
+              AppStrings.tabBarTwoText,
             ),
           ),
         ],
@@ -221,7 +221,7 @@ class _WantToVisitWidgetState extends State<_WantToVisitWidget> {
                   height: 22,
                 ),
                 style: AppTypography.greenColor,
-                target: AppString.planning,
+                target: AppStrings.planning,
               );
             },
           );
@@ -285,7 +285,7 @@ class _DismissibleWidget extends StatelessWidget {
                           PlaceIcons(assetName: AppAssets.bucket, width: 24, height: 24),
                           SizedBox(height: 8),
                           Text(
-                            AppString.delete,
+                            AppStrings.delete,
                             style: AppTypography.removeCardText,
                           ),
                         ],
@@ -380,7 +380,7 @@ class _DismissibleWidget extends StatelessWidget {
                     ),
                     const SizedBox(height: 10),
                     const Text(
-                      '${AppString.closed} 09:00',
+                      '${AppStrings.closed} 09:00',
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: AppTypography.textText16Regular,
@@ -493,14 +493,14 @@ class _VisitedPlacesList extends StatelessWidget {
             ),
             const SizedBox(height: 2),
             const Text(
-              '${AppString.targetReach} 12 окт. 2022',
+              '${AppStrings.targetReach} 12 окт. 2022',
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
               style: AppTypography.detailsText,
             ),
             const SizedBox(height: 10),
             const Text(
-              '${AppString.closed} 09:00',
+              '${AppStrings.closed} 09:00',
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
               style: AppTypography.textText16Regular,
@@ -543,7 +543,7 @@ class _EmptyList extends StatelessWidget {
         ),
         const SizedBox(height: 24),
         const Text(
-          AppString.emptyList,
+          AppStrings.emptyList,
           style: AppTypography.emptyListTitle,
         ),
         const SizedBox(height: 8),

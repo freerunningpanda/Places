@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:places/data/api/api_places.dart';
 import 'package:places/data/database/database.dart';
+import 'package:places/data/dto/place_model.dart';
 import 'package:places/data/interactor/place_interactor.dart';
 import 'package:places/data/model/place.dart';
 import 'package:places/data/repository/mapper.dart';
@@ -33,12 +34,15 @@ class PlaceRepository {
   // }
 
   // Загрузить место на сервер
-  Future<String> postPlace({
-    required DbPlace place,
+  Future<PlaceModel> postPlace({
+    required PlaceModel place,
   }) =>
       apiPlaces.postPlace(
         place: place,
       );
+
+  // Загрузить фото на сервер
+  Future<String> uploadFile(XFile image) => apiPlaces.uploadFile(image);
 
   // Преобразовать одно место из Dto в место для UI
   Future<DbPlace> getPlaceDetails(DbPlace place) =>
@@ -61,6 +65,8 @@ class PlaceRepository {
     PlaceInteractor.favoritePlaces = await db.allPlacesEntries;
     debugPrint('places_list: ${PlaceInteractor.favoritePlaces.length}');
   }
+
+  Future<String> deletePlace(int id) => apiPlaces.deletePlace(id);
 
   void addNewPlace({required DbPlace place}) {
     PlaceInteractor.newPlaces.add(place);

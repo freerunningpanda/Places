@@ -38,7 +38,7 @@ class ChooseCategoryWidget extends StatelessWidget {
                 leading: _BackButtonWidget(
                   chosenCategory: chosenCategories,
                 ),
-                title: AppString.category,
+                title: AppStrings.category,
               ),
               const SizedBox(height: 40),
               Expanded(
@@ -89,7 +89,7 @@ class ChooseCategoryWidget extends StatelessWidget {
               SizedBox(height: height * 0.3),
               SaveButton(
                 chosenCategory: chosenCategories,
-                title: AppString.save,
+                title: AppStrings.save,
                 onTap: () {
                   context.read<ChooseCategoryBloc>().add(
                         ChosenCategoryEvent(

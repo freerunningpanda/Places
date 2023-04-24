@@ -254,7 +254,7 @@ class _DetailsScreenTitle extends StatelessWidget {
             ),
             const SizedBox(width: 16),
             Text(
-              '${AppString.closed} 9:00',
+              '${AppStrings.closed} 9:00',
               style: theme.textTheme.bodySmall,
             ),
           ],
@@ -386,7 +386,7 @@ class _PlaceDetailsBuildRouteBtn extends StatelessWidget {
               ),
               const SizedBox(width: 8),
               Text(
-                AppString.goButtonTitle.toUpperCase(),
+                AppStrings.goButtonTitle.toUpperCase(),
                 style: AppTypography.placeDetailsButtonName,
               ),
             ],
@@ -426,7 +426,7 @@ class _PlaceDetailsBottom extends StatelessWidget {
               ),
               SizedBox(width: 9),
               Text(
-                AppString.schedule,
+                AppStrings.schedule,
               ),
             ],
           ),
@@ -447,7 +447,7 @@ class _PlaceDetailsBottom extends StatelessWidget {
               ),
               const SizedBox(width: 9),
               Text(
-                AppString.favourite,
+                AppStrings.favourite,
                 style: theme.textTheme.displaySmall,
               ),
               const SizedBox(

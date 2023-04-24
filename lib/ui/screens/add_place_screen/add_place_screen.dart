@@ -9,9 +9,13 @@ import 'package:places/blocs/choose_category_bloc/choose_category_bloc.dart';
 import 'package:places/cubits/add_place_screen/add_place_screen_cubit.dart';
 import 'package:places/cubits/create_place/create_place_button_cubit.dart';
 import 'package:places/cubits/image_provider/image_provider_cubit.dart';
+import 'package:places/data/api/api_places.dart';
 import 'package:places/data/database/database.dart';
+import 'package:places/data/dto/place_model.dart';
+import 'package:places/data/dto/place_request.dart';
 import 'package:places/data/interactor/place_interactor.dart';
 import 'package:places/data/repository/category_repository.dart';
+import 'package:places/data/repository/place_repository.dart';
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_strings.dart';
 import 'package:places/ui/res/app_typography.dart';
@@ -76,7 +80,7 @@ class _AddPlaceScreenState extends State<AddPlaceScreen> {
                   theme: theme,
                   width: width / 4.5,
                   leading: _CancelButtonWidget(theme: theme),
-                  title: AppString.newPlace,
+                  title: AppStrings.newPlace,
                 ),
                 const SizedBox(height: 40),
                 _ImagePickerWidget(theme: theme),
@@ -92,7 +96,7 @@ class _AddPlaceScreenState extends State<AddPlaceScreen> {
                         const SizedBox(height: 16),
                         _TextInputWidget(
                           theme: theme,
-                          title: AppString.title,
+                          title: AppStrings.title,
                           height: 40,
                           suffixIcon: SuffixIcon(controller: titleController, theme: theme),
                           focusNode: titleFocus,
@@ -115,8 +119,8 @@ class _AddPlaceScreenState extends State<AddPlaceScreen> {
                         const SizedBox(height: 37),
                         _TextInputWidget(
                           theme: theme,
-                          title: AppString.description,
-                          hintText: AppString.enterTheText,
+                          title: AppStrings.description,
+                          hintText: AppStrings.enterTheText,
                           maxLines: 5,
                           height: 80,
                           focusNode: descriptionFocus,
@@ -126,22 +130,16 @@ class _AddPlaceScreenState extends State<AddPlaceScreen> {
                         ),
                         SizedBox(height: height * 0.18),
                         CreateButton(
-                          title: AppString.create,
+                          title: AppStrings.create,
                           onTap: () {
-                            final random = Random();
-                            final id = random.nextInt(99999);
-                            final urlList = PlaceInteractor.urls;
-                            final urls = urlList.join('|');
-
                             debugPrint('🟡---------create btn pressed');
                             createPlaceBtnCubit
                               ..addNewPlace(
-                                DbPlace(
-                                  id: id,
+                                PlaceModel(
                                   lat: createPlaceBtnCubit.lat,
                                   lng: createPlaceBtnCubit.lng,
                                   name: createPlaceBtnCubit.name,
-                                  urls: urls,
+                                  urls: createPlaceBtnCubit.uploadedImages,
                                   placeType: addPlaceScreenCubit.chosenCategories[0].placeType,
                                   description: createPlaceBtnCubit.description,
                                 ),
@@ -364,7 +362,7 @@ class _CancelButtonWidget extends StatelessWidget {
       borderRadius: BorderRadius.circular(12),
       onTap: () => Navigator.pop(context),
       child: Text(
-        AppString.cancel,
+        AppStrings.cancel,
         style: theme.textTheme.displayLarge,
       ),
     );
@@ -459,7 +457,7 @@ class _PointOnMapWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const Text(
-      AppString.pointOnTheMap,
+      AppStrings.pointOnTheMap,
       style: AppTypography.clearButton,
     );
   }
@@ -496,7 +494,7 @@ class _CoordinatsInputWidget extends StatelessWidget {
               child: _LatLotWidget(
                 focusNode: latFocus,
                 theme: theme,
-                title: AppString.lat,
+                title: AppStrings.lat,
                 onSubmitted: (v) => focus.goToLot(lotFocus: lotFocus),
                 controller: latController,
                 onTap: focus.tapOnLat,
@@ -512,7 +510,7 @@ class _CoordinatsInputWidget extends StatelessWidget {
               child: _LatLotWidget(
                 focusNode: lotFocus,
                 theme: theme,
-                title: AppString.lot,
+                title: AppStrings.lot,
                 onSubmitted: (v) => focus.goToDescription(descriptionFocus: descriptionFocus),
                 controller: lotController,
                 onTap: focus.tapOnLot,
@@ -623,7 +621,7 @@ class _CategoryChooseWidget extends StatelessWidget {
         Row(
           children: [
             Text(
-              AppString.category.toUpperCase(),
+              AppStrings.category.toUpperCase(),
               style: theme.textTheme.labelLarge,
             ),
           ],
@@ -646,7 +644,7 @@ class _CategoryChooseWidget extends StatelessWidget {
                 BlocBuilder<ChooseCategoryBloc, ChooseCategoryState>(
                   builder: (_, state) {
                     return state.isEmpty
-                        ? Text(AppString.nochoose, style: theme.textTheme.titleMedium)
+                        ? Text(AppStrings.nochoose, style: theme.textTheme.titleMedium)
                         // null быть не может, так как при сохранении категории она прокинется в стэйт
                         : Text(state.chosenCategory!.title, style: theme.textTheme.titleMedium);
                   },

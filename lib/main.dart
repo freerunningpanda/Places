@@ -122,7 +122,7 @@ class _AppState extends State<App> {
     return MaterialApp(
       theme: isDarkMode ? _darkTheme : _lightTheme,
       debugShowCheckedModeBanner: false,
-      title: AppString.places,
+      title: AppStrings.places,
       home: const MainScreen(),
     );
   }

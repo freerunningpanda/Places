@@ -45,7 +45,7 @@ class PlaceListScreen extends StatelessWidget {
               centerTitle: orientation ? isPortrait : !isPortrait,
               pinned: true,
               title: Text(
-                AppString.appTitle,
+                AppStrings.appTitle,
                 style: theme.textTheme.titleLarge,
               ),
             ),

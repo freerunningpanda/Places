@@ -1,4 +1,4 @@
-abstract class AppString {
+abstract class AppStrings {
   static const places = 'Places';
   static const appTitle = 'Список интересных мест';
   static const goButtonTitle = 'Построить маршрут';
@@ -60,4 +60,7 @@ abstract class AppString {
   static const error = 'Ошибка';
   static const search = 'Поиск';
   static const errorDescription = 'Что то пошло не так\nПопробуйте позже.';
+  static const placePath = '/place';
+  static const uploadFilePath = '/upload_file';
+  static const baseUrl = 'https://test-backend-flutter.surfstudio.ru';
 }

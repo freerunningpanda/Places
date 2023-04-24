@@ -67,7 +67,7 @@ class FilterScreen extends StatelessWidget {
                     Expanded(
                       child: ActionButton(
                         activeFilters: PlaceInteractor.activeFilters,
-                        title: AppString.showPlaces,
+                        title: AppStrings.showPlaces,
                         rangeValues: Mocks.rangeValues,
                         onTap: () => goToSearchScreen(context, db),
                       ),
@@ -75,7 +75,7 @@ class FilterScreen extends StatelessWidget {
                   else
                     ActionButton(
                       activeFilters: PlaceInteractor.activeFilters,
-                      title: AppString.showPlaces,
+                      title: AppStrings.showPlaces,
                       rangeValues: Mocks.rangeValues,
                       onTap: () => goToSearchScreen(context, db),
                     ),
@@ -138,7 +138,7 @@ class _Title extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const Text(
-      AppString.categories,
+      AppStrings.categories,
       style: AppTypography.categoriesGrey,
     );
   }
@@ -187,7 +187,7 @@ class _ClearButtonWidgetState extends State<_ClearButtonWidget> {
         context.read<FiltersScreenBloc>().add(ClearAllFiltersEvent());
       },
       child: const Text(
-        AppString.clear,
+        AppStrings.clear,
         style: AppTypography.clearButton,
       ),
     );
@@ -524,7 +524,7 @@ class _DistanceSlider extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  AppString.distantion,
+                  AppStrings.distantion,
                   style: theme.textTheme.displayMedium,
                 ),
                 Text(
