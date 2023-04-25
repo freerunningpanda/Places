@@ -15,7 +15,6 @@ class PlaceInteractor {
   static Set<DbPlace> filtersWithDistance = {};
   static List<DbPlace> foundedPlaces = PlaceInteractor.filtersWithDistance.toList();
   static List<DbPlace> savedPlaces = [];
-  static Set<DbPlace> newPlaces = {};
   final PlaceRepository repository;
   final controller = TextEditingController();
   String query = '';
@@ -49,5 +48,4 @@ class PlaceInteractor {
 
   Future<String> deletePlace(int id) => repository.deletePlace(id);
 
-  void addNewPlace({required DbPlace place}) => repository.addNewPlace(place: place);
 }

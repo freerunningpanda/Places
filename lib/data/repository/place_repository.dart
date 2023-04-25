@@ -68,7 +68,4 @@ class PlaceRepository {
 
   Future<String> deletePlace(int id) => apiPlaces.deletePlace(id);
 
-  void addNewPlace({required DbPlace place}) {
-    PlaceInteractor.newPlaces.add(place);
-  }
 }

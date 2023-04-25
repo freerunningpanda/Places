@@ -9,7 +9,7 @@ import 'package:places/cubits/add_place_screen/add_place_screen_cubit.dart';
 import 'package:places/cubits/create_place/create_place_button_cubit.dart';
 // import 'package:places/data/api/api_places.dart';
 import 'package:places/data/dto/place_model.dart';
-import 'package:places/data/interactor/place_interactor.dart';
+// import 'package:places/data/interactor/place_interactor.dart';
 import 'package:places/data/model/create_button_state.dart';
 import 'package:places/data/repository/category_repository.dart';
 // import 'package:places/data/repository/place_repository.dart';
@@ -159,7 +159,6 @@ class _AddPlaceScreenState extends State<AddPlaceScreen> {
                             // Для обновления состояния кнопки "Создать"
                             clearControllers();
 
-                            debugPrint('🟡---------Создан объект: ${PlaceInteractor.newPlaces.toList()}');
                             // Меняю isEnabled в выбранной категории на false и затем очищаю список
                             context.read<ChooseCategoryBloc>().resetCategoryState(
                                   activeCategories: createPlaceBtnCubit.chosenCategory,
