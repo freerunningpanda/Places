@@ -14,6 +14,7 @@ import 'package:places/data/database/database.dart';
 import 'package:places/data/dto/place_model.dart';
 import 'package:places/data/dto/place_request.dart';
 import 'package:places/data/interactor/place_interactor.dart';
+import 'package:places/data/model/create_button_state.dart';
 import 'package:places/data/repository/category_repository.dart';
 import 'package:places/data/repository/place_repository.dart';
 import 'package:places/ui/res/app_assets.dart';
@@ -59,10 +60,14 @@ class _AddPlaceScreenState extends State<AddPlaceScreen> {
     final addPlaceScreenCubit = context.read<AddPlaceScreenCubit>();
 
     context.watch<CreatePlaceButtonCubit>().updateButtonState(
-          titleValue: titleController.text,
-          descriptionValue: descriptionController.text,
-          latValue: latController.text,
-          lotValue: lotController.text,
+          createButton: CreateButtonState(
+            titleValue: titleController.text,
+            chosenCategory: createPlaceBtnCubit.chosenCategory,
+            descriptionValue: descriptionController.text,
+            latValue: latController.text,
+            lngValue: lotController.text,
+            imagesToUpload: PlaceInteractor.urls,
+          ),
         );
 
     return Scaffold(
@@ -147,15 +152,19 @@ class _AddPlaceScreenState extends State<AddPlaceScreen> {
                               // После добавления места, отправляю пустые данные в поля, чтобы сменить состояние
                               // кнопки на неактивную
                               ..updateButtonState(
-                                titleValue: '',
-                                descriptionValue: '',
-                                latValue: '',
-                                lotValue: '',
+                                createButton: CreateButtonState(
+                                  chosenCategory: [],
+                                  titleValue: '',
+                                  descriptionValue: '',
+                                  latValue: '',
+                                  lngValue: '',
+                                  imagesToUpload: [],
+                                ),
                               );
                             // Для обновления состояния кнопки "Создать"
                             clearControllers();
                             // Очистить список фото для загрузки
-                            imageProviderCubit.clearImages();
+                            createPlaceBtnCubit.clearImages();
 
                             debugPrint('🟡---------Создан объект: ${PlaceInteractor.newPlaces.toList()}');
                             // Меняю isEnabled в выбранной категории на false и затем очищаю список
@@ -218,7 +227,7 @@ class _ImagePickerWidgetState extends State<_ImagePickerWidget> {
             ],
           ),
           Expanded(
-            child: BlocBuilder<ImageProviderCubit, ImageProviderState>(
+            child: BlocBuilder<CreatePlaceButtonCubit, CreatePlaceButtonState>(
               builder: (context, state) {
                 return ListView(
                   scrollDirection: Axis.horizontal,
@@ -267,11 +276,25 @@ class _PlaceContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final cubit = context.read<ImageProviderCubit>();
+    final buttonCubit = context.read<CreatePlaceButtonCubit>();
 
     return Dismissible(
       direction: DismissDirection.vertical,
       key: UniqueKey(),
-      onDismissed: (direction) => cubit.removeImage(index),
+      onDismissed: (direction) {
+        buttonCubit
+          ..removeImage(index: index)
+          ..updateButtonState(
+            createButton: CreateButtonState(
+              chosenCategory: buttonCubit.chosenCategory,
+              titleValue: buttonCubit.name,
+              descriptionValue: buttonCubit.description,
+              latValue: buttonCubit.lat.toString(),
+              lngValue: buttonCubit.lng.toString(),
+              imagesToUpload: PlaceInteractor.urls,
+            ),
+          );
+      },
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 8),
         decoration: const BoxDecoration(),
@@ -298,7 +321,20 @@ class _PlaceContent extends StatelessWidget {
                   type: MaterialType.transparency,
                   child: InkWell(
                     borderRadius: BorderRadius.circular(30),
-                    onTap: () => cubit.removeImage(index),
+                    onTap: () {
+                      buttonCubit
+                        ..removeImage(index: index)
+                        ..updateButtonState(
+                          createButton: CreateButtonState(
+                            chosenCategory: buttonCubit.chosenCategory,
+                            titleValue: buttonCubit.name,
+                            descriptionValue: buttonCubit.description,
+                            latValue: buttonCubit.lat.toString(),
+                            lngValue: buttonCubit.lng.toString(),
+                            imagesToUpload: PlaceInteractor.urls,
+                          ),
+                        );
+                    },
                     child: const SizedBox(height: 24, width: 24),
                   ),
                 ),
@@ -322,6 +358,8 @@ class _PickImageWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final cubit = context.read<CreatePlaceButtonCubit>();
+
     return Container(
       margin: const EdgeInsets.only(right: 8),
       width: 72,
@@ -340,7 +378,14 @@ class _PickImageWidget extends StatelessWidget {
           await showDialog<PickImageWidget>(
             context: context,
             builder: (_) {
-              return PickImageWidget();
+              return PickImageWidget(
+                chosenCategory: cubit.chosenCategory,
+                titleValue: cubit.name,
+                descriptionValue: cubit.description,
+                latValue: cubit.lat.toString(),
+                lngValue: cubit.lng.toString(),
+                imagesToUpload: PlaceInteractor.urls,
+              );
             },
           );
         },
