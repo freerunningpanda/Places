@@ -162,8 +162,6 @@ class _AddPlaceScreenState extends State<AddPlaceScreen> {
                               );
                             // Для обновления состояния кнопки "Создать"
                             clearControllers();
-                            // Очистить список фото для загрузки
-                            createPlaceBtnCubit.clearImages();
 
                             debugPrint('🟡---------Создан объект: ${PlaceInteractor.newPlaces.toList()}');
                             // Меняю isEnabled в выбранной категории на false и затем очищаю список

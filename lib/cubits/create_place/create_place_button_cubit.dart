@@ -14,8 +14,8 @@ part 'create_place_button_state.dart';
 class CreatePlaceButtonCubit extends Cubit<CreatePlaceButtonState> {
   final PlaceInteractor placeInteractor = PlaceInteractor(repository: PlaceRepository(apiPlaces: ApiPlaces()));
   final chosenCategory = CategoryRepository.chosenCategories;
-  final imagesToUpload = PlaceInteractor.urls;
   final uploadedImages = <String>[];
+  List<XFile> imagesToUpload = PlaceInteractor.urls;
   String name = '';
   double lat = 0;
   double lng = 0;
@@ -24,7 +24,7 @@ class CreatePlaceButtonCubit extends Cubit<CreatePlaceButtonState> {
   CreatePlaceButtonCubit()
       : super(
           const CreatePlaceButtonState(
-            chosenCategory:  [],
+            chosenCategory: [],
             descriptionValue: '',
             latValue: '',
             lotValue: '',
@@ -49,6 +49,8 @@ class CreatePlaceButtonCubit extends Cubit<CreatePlaceButtonState> {
     );
 
     await placeInteractor.postPlace(place: place);
+
+    clearImages();
   }
 
   void updateButtonState({required CreateButtonState createButton}) {
@@ -117,6 +119,7 @@ class CreatePlaceButtonCubit extends Cubit<CreatePlaceButtonState> {
 
   void clearImages() {
     imagesToUpload.clear();
+    uploadedImages.clear();
     emit(
       state.copyWith(imagesToUploadLength: imagesToUpload.length),
     );
