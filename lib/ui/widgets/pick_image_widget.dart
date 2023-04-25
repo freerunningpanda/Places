@@ -59,7 +59,7 @@ class _DialogContent extends StatelessWidget {
       constraints: BoxConstraints(
         minWidth: MediaQuery.of(context).size.width,
       ),
-      height: 152,
+      height: 122,
       child: Stack(
         clipBehavior: Clip.none,
         children: [
@@ -135,13 +135,13 @@ class _DialogItems extends StatelessWidget {
                 );
             },
           ),
-          const Divider(),
-          _DialogItem(
-            theme: theme,
-            assetName: AppAssets.file,
-            title: AppStrings.file,
-            pickImage: () {},
-          ),
+          // const Divider(),
+          // _DialogItem(
+          //   theme: theme,
+          //   assetName: AppAssets.file,
+          //   title: AppStrings.file,
+          //   pickImage: () {},
+          // ),
           const SizedBox(height: 4),
         ],
       ),

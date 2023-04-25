@@ -20,6 +20,7 @@ class PlaceModel {
         lng = json['lng'] as double,
         name = json['name'] as String,
         urls = List<String>.from(
+          // ignore: avoid_annotating_with_dynamic
           (json['urls'] as List).map<String>((dynamic e) => e as String),
         ),
         placeType = json['placeType'] as String,

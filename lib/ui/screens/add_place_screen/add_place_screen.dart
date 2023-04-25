@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -8,15 +7,12 @@ import 'package:image_picker/image_picker.dart';
 import 'package:places/blocs/choose_category_bloc/choose_category_bloc.dart';
 import 'package:places/cubits/add_place_screen/add_place_screen_cubit.dart';
 import 'package:places/cubits/create_place/create_place_button_cubit.dart';
-import 'package:places/cubits/image_provider/image_provider_cubit.dart';
-import 'package:places/data/api/api_places.dart';
-import 'package:places/data/database/database.dart';
+// import 'package:places/data/api/api_places.dart';
 import 'package:places/data/dto/place_model.dart';
-import 'package:places/data/dto/place_request.dart';
 import 'package:places/data/interactor/place_interactor.dart';
 import 'package:places/data/model/create_button_state.dart';
 import 'package:places/data/repository/category_repository.dart';
-import 'package:places/data/repository/place_repository.dart';
+// import 'package:places/data/repository/place_repository.dart';
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_strings.dart';
 import 'package:places/ui/res/app_typography.dart';
@@ -355,6 +351,11 @@ class _PickImageWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final cubit = context.read<CreatePlaceButtonCubit>();
+    // final interactor = PlaceInteractor(
+    //   repository: PlaceRepository(
+    //     apiPlaces: ApiPlaces(),
+    //   ),
+    // );
 
     return Container(
       margin: const EdgeInsets.only(right: 8),
@@ -370,7 +371,7 @@ class _PickImageWidget extends StatelessWidget {
       child: IconButton(
         icon: const Icon(Icons.add_rounded, size: 45),
         onPressed: () async {
-          // context.read<AppSettings>().pickImage();
+          // await interactor.deletePlace(596); // Для удаления тестовых мест с сервера
           await showDialog<PickImageWidget>(
             context: context,
             builder: (_) {

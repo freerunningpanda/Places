@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:places/data/database/database.dart';
 import 'package:places/data/dto/place_model.dart';
-import 'package:places/data/dto/place_request.dart';
 import 'package:places/data/model/category.dart';
 import 'package:places/data/repository/place_repository.dart';
 
