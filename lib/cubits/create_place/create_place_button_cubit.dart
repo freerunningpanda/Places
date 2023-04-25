@@ -34,11 +34,15 @@ class CreatePlaceButtonCubit extends Cubit<CreatePlaceButtonState> {
           ),
         );
 
+  /// Добавить новое место
   Future<void> addNewPlace(PlaceModel placeModel) async {
+
+    // Загрузить на сервер все картинки для загрузки, получив на них ссылки
     for (var i = 0; i < imagesToUpload.length; i++) {
       uploadedImages.add(await placeInteractor.uploadFile(imagesToUpload[i]));
     }
 
+    // Полученные ссылки на загруженные картинки прокидываем в urls
     final place = PlaceModel(
       lat: placeModel.lat,
       lng: placeModel.lng,
@@ -50,9 +54,11 @@ class CreatePlaceButtonCubit extends Cubit<CreatePlaceButtonState> {
 
     await placeInteractor.postPlace(place: place);
 
+    // Очистить список с изображениями после отправки места на сервер
     clearImages();
   }
 
+  /// Обновить состояние кнопки создания места
   void updateButtonState({required CreateButtonState createButton}) {
     emit(
       state.copyWith(
@@ -67,7 +73,7 @@ class CreatePlaceButtonCubit extends Cubit<CreatePlaceButtonState> {
     );
   }
 
-  // Метод отвечающий за изменение состояния кнопки создания нового места
+  /// Метод отвечающий за изменение состояния кнопки создания нового места
   bool buttonStyle({required CreatePlaceButtonState state}) {
     return state.chosenCategory.isEmpty ||
         state.titleValue.isEmpty ||
@@ -77,6 +83,7 @@ class CreatePlaceButtonCubit extends Cubit<CreatePlaceButtonState> {
         state.imagesToUpload.isEmpty;
   }
 
+  /// Удалить картинку из списка для загрузки
   void removeImage({required int index}) {
     if (imagesToUpload.isNotEmpty) {
       imagesToUpload.removeAt(index);
@@ -88,6 +95,7 @@ class CreatePlaceButtonCubit extends Cubit<CreatePlaceButtonState> {
     }
   }
 
+  /// Добавить картинку с камеры
   Future<void> pickImageFromCamera() async {
     final image = await ImagePicker().pickImage(
       source: ImageSource.camera,
@@ -103,6 +111,7 @@ class CreatePlaceButtonCubit extends Cubit<CreatePlaceButtonState> {
     }
   }
 
+  /// Добавить картинку с галереи
   Future<void> pickImageFromGallery() async {
     final image = await ImagePicker().pickImage(
       source: ImageSource.gallery,
@@ -117,6 +126,7 @@ class CreatePlaceButtonCubit extends Cubit<CreatePlaceButtonState> {
     }
   }
 
+  /// Очистить картинки (для загрузки, загруженные)
   void clearImages() {
     imagesToUpload.clear();
     uploadedImages.clear();
