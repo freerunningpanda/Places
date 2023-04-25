@@ -1,12 +1,5 @@
 part of 'create_place_button_cubit.dart';
 
-abstract class CreatePlaceButtonInitial extends Equatable {
-  @override
-  List<Object?> get props => [];
-
-  const CreatePlaceButtonInitial();
-}
-
 class CreatePlaceButtonState extends Equatable {
   final List<Category> chosenCategory;
   final String titleValue;

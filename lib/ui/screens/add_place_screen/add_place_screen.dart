@@ -56,7 +56,6 @@ class _AddPlaceScreenState extends State<AddPlaceScreen> {
 
     final focus = context.read<AddPlaceScreenCubit>();
     final createPlaceBtnCubit = context.read<CreatePlaceButtonCubit>();
-    final imageProviderCubit = context.read<ImageProviderCubit>();
     final addPlaceScreenCubit = context.read<AddPlaceScreenCubit>();
 
     context.watch<CreatePlaceButtonCubit>().updateButtonState(
@@ -66,7 +65,7 @@ class _AddPlaceScreenState extends State<AddPlaceScreen> {
             descriptionValue: descriptionController.text,
             latValue: latController.text,
             lngValue: lotController.text,
-            imagesToUpload: PlaceInteractor.urls,
+            imagesToUpload: createPlaceBtnCubit.imagesToUpload,
           ),
         );
 
@@ -213,7 +212,7 @@ class _ImagePickerWidgetState extends State<_ImagePickerWidget> {
 
   @override
   Widget build(BuildContext context) {
-    final cubit = context.read<ImageProviderCubit>();
+    final cubit = context.read<CreatePlaceButtonCubit>();
 
     return SizedBox(
       height: 72,
@@ -235,9 +234,9 @@ class _ImagePickerWidgetState extends State<_ImagePickerWidget> {
                   children: [
                     Row(
                       children: [
-                        for (var i = 0; i < PlaceInteractor.urls.length; i++)
+                        for (var i = 0; i < cubit.imagesToUpload.length; i++)
                           _ImagePlace(
-                            image: PlaceInteractor.urls[i],
+                            image: cubit.imagesToUpload[i],
                             index: i,
                           ),
                       ],
@@ -275,23 +274,22 @@ class _PlaceContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final cubit = context.read<ImageProviderCubit>();
-    final buttonCubit = context.read<CreatePlaceButtonCubit>();
+    final cubit = context.read<CreatePlaceButtonCubit>();
 
     return Dismissible(
       direction: DismissDirection.vertical,
       key: UniqueKey(),
       onDismissed: (direction) {
-        buttonCubit
+        cubit
           ..removeImage(index: index)
           ..updateButtonState(
             createButton: CreateButtonState(
-              chosenCategory: buttonCubit.chosenCategory,
-              titleValue: buttonCubit.name,
-              descriptionValue: buttonCubit.description,
-              latValue: buttonCubit.lat.toString(),
-              lngValue: buttonCubit.lng.toString(),
-              imagesToUpload: PlaceInteractor.urls,
+              chosenCategory: cubit.chosenCategory,
+              titleValue: cubit.name,
+              descriptionValue: cubit.description,
+              latValue: cubit.lat.toString(),
+              lngValue: cubit.lng.toString(),
+              imagesToUpload: cubit.imagesToUpload,
             ),
           );
       },
@@ -322,16 +320,16 @@ class _PlaceContent extends StatelessWidget {
                   child: InkWell(
                     borderRadius: BorderRadius.circular(30),
                     onTap: () {
-                      buttonCubit
+                      cubit
                         ..removeImage(index: index)
                         ..updateButtonState(
                           createButton: CreateButtonState(
-                            chosenCategory: buttonCubit.chosenCategory,
-                            titleValue: buttonCubit.name,
-                            descriptionValue: buttonCubit.description,
-                            latValue: buttonCubit.lat.toString(),
-                            lngValue: buttonCubit.lng.toString(),
-                            imagesToUpload: PlaceInteractor.urls,
+                            chosenCategory: cubit.chosenCategory,
+                            titleValue: cubit.name,
+                            descriptionValue: cubit.description,
+                            latValue: cubit.lat.toString(),
+                            lngValue: cubit.lng.toString(),
+                            imagesToUpload: cubit.imagesToUpload,
                           ),
                         );
                     },
@@ -384,7 +382,7 @@ class _PickImageWidget extends StatelessWidget {
                 descriptionValue: cubit.description,
                 latValue: cubit.lat.toString(),
                 lngValue: cubit.lng.toString(),
-                imagesToUpload: PlaceInteractor.urls,
+                imagesToUpload: cubit.imagesToUpload,
               );
             },
           );

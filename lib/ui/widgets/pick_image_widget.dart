@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 
 import 'package:places/cubits/create_place/create_place_button_cubit.dart';
-import 'package:places/cubits/image_provider/image_provider_cubit.dart';
 import 'package:places/data/model/category.dart';
 import 'package:places/data/model/create_button_state.dart';
 import 'package:places/ui/res/app_assets.dart';
@@ -40,12 +39,6 @@ class PickImageWidget extends StatelessWidget {
       alignment: const Alignment(0, 0.83),
       titlePadding: EdgeInsets.zero,
       title: _DialogContent(
-        chosenCategory: chosenCategory,
-        descriptionValue: descriptionValue,
-        imagesToUpload: imagesToUpload,
-        latValue: latValue,
-        lotValue: lngValue,
-        titleValue: titleValue,
         theme: theme,
       ),
     );
@@ -53,22 +46,10 @@ class PickImageWidget extends StatelessWidget {
 }
 
 class _DialogContent extends StatelessWidget {
-  final List<Category> chosenCategory;
-  final String titleValue;
-  final String descriptionValue;
-  final String latValue;
-  final String lotValue;
-  final List<XFile> imagesToUpload;
   final ThemeData theme;
 
   const _DialogContent({
     Key? key,
-    required this.chosenCategory,
-    required this.titleValue,
-    required this.descriptionValue,
-    required this.latValue,
-    required this.lotValue,
-    required this.imagesToUpload,
     required this.theme,
   }) : super(key: key);
 
@@ -83,12 +64,6 @@ class _DialogContent extends StatelessWidget {
         clipBehavior: Clip.none,
         children: [
           _DialogItems(
-            chosenCategory: chosenCategory,
-            descriptionValue: descriptionValue,
-            imagesToUpload: imagesToUpload,
-            latValue: latValue,
-            lotValue: lotValue,
-            titleValue: titleValue,
             theme: theme,
           ),
           const Positioned(
@@ -105,28 +80,15 @@ class _DialogContent extends StatelessWidget {
 
 class _DialogItems extends StatelessWidget {
   final ThemeData theme;
-  final List<Category> chosenCategory;
-  final String titleValue;
-  final String descriptionValue;
-  final String latValue;
-  final String lotValue;
-  final List<XFile> imagesToUpload;
 
   const _DialogItems({
     Key? key,
     required this.theme,
-    required this.chosenCategory,
-    required this.titleValue,
-    required this.descriptionValue,
-    required this.latValue,
-    required this.lotValue,
-    required this.imagesToUpload,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final cubit = context.read<ImageProviderCubit>();
-    final buttonCubit = context.read<CreatePlaceButtonCubit>();
+    final cubit = context.read<CreatePlaceButtonCubit>();
 
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -139,16 +101,16 @@ class _DialogItems extends StatelessWidget {
             assetName: AppAssets.camera,
             title: AppStrings.camera,
             pickImage: () {
-              buttonCubit
+              cubit
                 ..pickImageFromCamera()
                 ..updateButtonState(
                   createButton: CreateButtonState(
-                    chosenCategory: chosenCategory,
-                    titleValue: titleValue,
-                    descriptionValue: descriptionValue,
-                    latValue: latValue,
-                    lngValue: lotValue,
-                    imagesToUpload: imagesToUpload,
+                    chosenCategory: cubit.chosenCategory,
+                    titleValue: cubit.name,
+                    descriptionValue: cubit.description,
+                    latValue: cubit.lat.toString(),
+                    lngValue: cubit.lng.toString(),
+                    imagesToUpload: cubit.imagesToUpload,
                   ),
                 );
             },
@@ -159,16 +121,16 @@ class _DialogItems extends StatelessWidget {
             assetName: AppAssets.photo,
             title: AppStrings.photo,
             pickImage: () {
-              buttonCubit
+              cubit
                 ..pickImageFromGallery()
                 ..updateButtonState(
                   createButton: CreateButtonState(
-                    chosenCategory: chosenCategory,
-                    titleValue: titleValue,
-                    descriptionValue: descriptionValue,
-                    latValue: latValue,
-                    lngValue: lotValue,
-                    imagesToUpload: imagesToUpload,
+                    chosenCategory: cubit.chosenCategory,
+                    titleValue: cubit.name,
+                    descriptionValue: cubit.description,
+                    latValue: cubit.lat.toString(),
+                    lngValue: cubit.lng.toString(),
+                    imagesToUpload: cubit.imagesToUpload,
                   ),
                 );
             },

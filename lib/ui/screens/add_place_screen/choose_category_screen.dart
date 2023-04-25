@@ -108,7 +108,7 @@ class ChooseCategoryWidget extends StatelessWidget {
                           descriptionValue: cubit.description,
                           latValue: cubit.lat.toString(),
                           lngValue: cubit.lng.toString(),
-                          imagesToUpload: PlaceInteractor.urls,
+                          imagesToUpload: cubit.imagesToUpload,
                         ),
                       );
                   Navigator.pop(context);
@@ -143,7 +143,7 @@ class _BackButtonWidget extends StatelessWidget {
                 descriptionValue: cubit.description,
                 latValue: cubit.lat.toString(),
                 lngValue: cubit.lng.toString(),
-                imagesToUpload: PlaceInteractor.urls,
+                imagesToUpload: cubit.imagesToUpload,
               ),
             );
         context.read<ChooseCategoryBloc>().resetCategoryState(activeCategories: chosenCategory);

@@ -14,6 +14,7 @@ part 'create_place_button_state.dart';
 class CreatePlaceButtonCubit extends Cubit<CreatePlaceButtonState> {
   final PlaceInteractor placeInteractor = PlaceInteractor(repository: PlaceRepository(apiPlaces: ApiPlaces()));
   final chosenCategory = CategoryRepository.chosenCategories;
+  final imagesToUpload = PlaceInteractor.urls;
   final uploadedImages = <String>[];
   String name = '';
   double lat = 0;
@@ -22,20 +23,20 @@ class CreatePlaceButtonCubit extends Cubit<CreatePlaceButtonState> {
   String placeType = '';
   CreatePlaceButtonCubit()
       : super(
-          CreatePlaceButtonState(
-            chosenCategory: const [],
+          const CreatePlaceButtonState(
+            chosenCategory:  [],
             descriptionValue: '',
             latValue: '',
             lotValue: '',
             titleValue: '',
-            imagesToUpload: const [],
-            imagesToUploadLength: PlaceInteractor.urls.length,
+            imagesToUpload: [],
+            imagesToUploadLength: 0,
           ),
         );
 
   Future<void> addNewPlace(PlaceModel placeModel) async {
-    for (var i = 0; i < PlaceInteractor.urls.length; i++) {
-      uploadedImages.add(await placeInteractor.uploadFile(PlaceInteractor.urls[i]));
+    for (var i = 0; i < imagesToUpload.length; i++) {
+      uploadedImages.add(await placeInteractor.uploadFile(imagesToUpload[i]));
     }
 
     final place = PlaceModel(
@@ -58,8 +59,8 @@ class CreatePlaceButtonCubit extends Cubit<CreatePlaceButtonState> {
         descriptionValue: createButton.descriptionValue,
         latValue: createButton.latValue,
         lotValue: createButton.lngValue,
-        imagesToUpload: PlaceInteractor.urls,
-        imagesToUploadLength: PlaceInteractor.urls.length,
+        imagesToUpload: imagesToUpload,
+        imagesToUploadLength: imagesToUpload.length,
       ),
     );
   }
@@ -75,11 +76,11 @@ class CreatePlaceButtonCubit extends Cubit<CreatePlaceButtonState> {
   }
 
   void removeImage({required int index}) {
-    if (PlaceInteractor.urls.isNotEmpty) {
-      PlaceInteractor.urls.removeAt(index);
+    if (imagesToUpload.isNotEmpty) {
+      imagesToUpload.removeAt(index);
       emit(
         state.copyWith(
-          imagesToUploadLength: PlaceInteractor.urls.length,
+          imagesToUploadLength: imagesToUpload.length,
         ),
       );
     }
@@ -91,10 +92,10 @@ class CreatePlaceButtonCubit extends Cubit<CreatePlaceButtonState> {
       imageQuality: 50,
     );
     if (image != null) {
-      PlaceInteractor.urls.add(image);
+      imagesToUpload.add(image);
       emit(
         state.copyWith(
-          imagesToUploadLength: PlaceInteractor.urls.length,
+          imagesToUploadLength: imagesToUpload.length,
         ),
       );
     }
@@ -107,17 +108,17 @@ class CreatePlaceButtonCubit extends Cubit<CreatePlaceButtonState> {
     );
 
     if (image != null) {
-      PlaceInteractor.urls.add(image);
+      imagesToUpload.add(image);
       emit(
-        state.copyWith(imagesToUploadLength: PlaceInteractor.urls.length),
+        state.copyWith(imagesToUploadLength: imagesToUpload.length),
       );
     }
   }
 
   void clearImages() {
-    PlaceInteractor.urls.clear();
+    imagesToUpload.clear();
     emit(
-      state.copyWith(imagesToUploadLength: PlaceInteractor.urls.length),
+      state.copyWith(imagesToUploadLength: imagesToUpload.length),
     );
   }
 }
