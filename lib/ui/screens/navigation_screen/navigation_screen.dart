@@ -52,7 +52,7 @@ class _NavigationScreenState extends State<NavigationScreen> {
             ),
             BottomNavigationBarItem(
               icon: PlaceIcons(
-                assetName: AppAssets.map,
+                assetName: currentIndex == 1 ? AppAssets.mapFull : AppAssets.map,
                 width: 24,
                 height: 24,
                 color: theme.iconTheme.color,

@@ -11,6 +11,7 @@ abstract class AppAssets {
   static const listPlaces = 'lib/ui/res/icons/list.svg';
   static const listPlacesFilled = 'lib/ui/res/icons/list_filled.svg';
   static const map = 'lib/ui/res/icons/map.svg';
+  static const mapFull = 'lib/ui/res/icons/map_full.svg';
   static const settings = 'lib/ui/res/icons/settings.svg';
   static const settingsFill = 'lib/ui/res/icons/settings_fill.svg';
   static const heartFull = 'lib/ui/res/icons/heart_full.svg';
