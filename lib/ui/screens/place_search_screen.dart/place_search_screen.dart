@@ -49,7 +49,7 @@ class _PlaceSearchScreenState extends State<PlaceSearchScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const SizedBox(height: 16),
-              const SearchAppBar(),
+              const SearchAppBar(title: AppStrings.appTitle),
               const SizedBox(height: 16),
               BlocBuilder<SearchBarBloc, SearchBarState>(
                 builder: (_, state) {

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:places/ui/res/app_strings.dart';
 
 class SearchAppBar extends StatelessWidget implements PreferredSizeWidget {
+  final String title;
   @override
   Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 
-  const SearchAppBar({Key? key}) : super(key: key);
+  const SearchAppBar({Key? key, required this.title}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -14,7 +14,7 @@ class SearchAppBar extends StatelessWidget implements PreferredSizeWidget {
       toolbarHeight: 16,
       centerTitle: true,
       title: Text(
-        AppStrings.appTitle,
+        title,
         style: theme.textTheme.titleLarge,
       ),
       bottomOpacity: 0.0,

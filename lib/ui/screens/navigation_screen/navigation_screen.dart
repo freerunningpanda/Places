@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:places/ui/res/app_assets.dart';
+import 'package:places/ui/screens/map_screen/map_screen.dart';
 import 'package:places/ui/screens/place_list_screen/place_list_screen.dart';
 import 'package:places/ui/screens/settings_screen/settings_screen.dart';
 import 'package:places/ui/screens/visiting_screen/visiting_screen.dart';
@@ -15,7 +16,7 @@ class NavigationScreen extends StatefulWidget {
 class _NavigationScreenState extends State<NavigationScreen> {
   final screens = const [
     PlaceListScreen(key: PageStorageKey('SaveScrollPosition'),),
-    SizedBox(),
+    MapScreen(),
     VisitingScreen(),
     SettingsScreen(),
   ];
