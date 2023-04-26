@@ -26,7 +26,7 @@ class AddNewPlaceButton extends StatelessWidget {
               colors: AppColors.limeGradient,
             ),
             borderRadius: BorderRadius.circular(30),
-            color: Colors.green,
+            color: AppColors.green,
           ),
           child: Row(
             children: const [
