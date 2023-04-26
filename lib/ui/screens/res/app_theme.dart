@@ -81,6 +81,7 @@ abstract class AppTheme {
       ),
       highlightColor: AppColors.inactiveBlack,
       canvasColor: AppColors.lightGreen,
+      disabledColor: AppColors.chevroneColor,
       focusColor: AppColors.chevroneColor,
       sliderTheme: SliderThemeData(
         activeTickMarkColor: AppColors.greenOpacity,
@@ -158,6 +159,7 @@ abstract class AppTheme {
       ),
       highlightColor: AppColors.inactiveBlack,
       canvasColor: AppColors.lightGreen,
+      disabledColor: AppColors.backgroundColor,
       focusColor: AppColors.chevroneColor,
       sliderTheme: SliderThemeData(
         activeTickMarkColor: AppColors.greenOpacity,

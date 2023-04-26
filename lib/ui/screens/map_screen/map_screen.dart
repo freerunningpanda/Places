@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:places/cubits/places_list/places_list_cubit.dart';
+import 'package:places/ui/res/app_assets.dart';
+import 'package:places/ui/res/app_colors.dart';
 import 'package:places/ui/res/app_strings.dart';
 import 'package:places/ui/widgets/add_new_place_button.dart';
+import 'package:places/ui/widgets/place_icons.dart';
 import 'package:places/ui/widgets/search_appbar.dart';
 import 'package:places/ui/widgets/search_bar.dart';
 
@@ -37,7 +40,66 @@ class _MapScreenState extends State<MapScreen> {
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      floatingActionButton: const AddNewPlaceButton(),
+      floatingActionButton: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          ActionWidget(
+            assetName: AppAssets.refresh,
+            onTap: () {},
+          ),
+          const AddNewPlaceButton(),
+          ActionWidget(
+            assetName: AppAssets.geolocation,
+            onTap: () {},
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class ActionWidget extends StatelessWidget {
+  final String assetName;
+  final VoidCallback onTap;
+  const ActionWidget({
+    Key? key,
+    required this.assetName,
+    required this.onTap,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    return Stack(
+      children: [
+        Container(
+          width: 48,
+          height: 48,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(50),
+            color: theme.tabBarTheme.labelColor,
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(12.0),
+            child: PlaceIcons(
+              assetName: assetName,
+              width: 24,
+              height: 24,
+              color: theme.disabledColor,
+            ),
+          ),
+        ),
+        Positioned.fill(
+          child: Material(
+            type: MaterialType.transparency,
+            child: InkWell(
+              borderRadius: BorderRadius.circular(30),
+              onTap: onTap,
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

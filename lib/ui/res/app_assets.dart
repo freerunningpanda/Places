@@ -45,5 +45,7 @@ abstract class AppAssets {
   static const photo = 'lib/ui/res/icons/photo.svg';
   static const error = 'lib/ui/res/icons/error.svg';
   static const loader = 'lib/ui/res/icons/loader.svg';
+  static const geolocation = 'lib/ui/res/icons/geolocation.svg';
+  static const refresh = 'lib/ui/res/icons/refresh.svg';
 
 }
