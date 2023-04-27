@@ -23,27 +23,28 @@ class _MapScreenState extends State<MapScreen> {
     final readOnly = context.read<PlacesListCubit>().readOnly;
 
     return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0),
-        child: Column(
-          children: [
-            const SizedBox(height: 16),
-            const SearchAppBar(title: AppStrings.mapScreenTitle),
-            const SizedBox(height: 16),
-            SearchBar(
-              isMainPage: true,
-              isSearchPage: isSearchPage,
-              readOnly: readOnly,
-              searchController: TextEditingController(),
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: Column(
+              children: [
+                const SizedBox(height: 16),
+                const SearchAppBar(title: AppStrings.mapScreenTitle),
+                const SizedBox(height: 16),
+                SearchBar(
+                  isMainPage: true,
+                  isSearchPage: isSearchPage,
+                  readOnly: readOnly,
+                  searchController: TextEditingController(),
+                ),
+              ],
             ),
-            Expanded(
-              child: Container(
-                padding: const EdgeInsets.all(8),
-                child: const YandexMap(),
-              ),
-            ),
-          ],
-        ),
+          ),
+          const Expanded(
+            child: YandexMap(),
+          ),
+        ],
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: Row(

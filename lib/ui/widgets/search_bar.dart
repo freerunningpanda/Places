@@ -59,7 +59,7 @@ class _SearchBarState extends State<SearchBar> {
 
     return Padding(
       padding: const EdgeInsets.only(
-        bottom: 34,
+        bottom: 14,
       ),
       child: Container(
         padding: const EdgeInsets.only(left: 15),
