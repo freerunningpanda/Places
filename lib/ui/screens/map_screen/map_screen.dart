@@ -7,6 +7,7 @@ import 'package:places/ui/widgets/add_new_place_button.dart';
 import 'package:places/ui/widgets/place_icons.dart';
 import 'package:places/ui/widgets/search_appbar.dart';
 import 'package:places/ui/widgets/search_bar.dart';
+import 'package:yandex_mapkit/yandex_mapkit.dart';
 
 class MapScreen extends StatefulWidget {
   const MapScreen({Key? key}) : super(key: key);
@@ -34,6 +35,12 @@ class _MapScreenState extends State<MapScreen> {
               isSearchPage: isSearchPage,
               readOnly: readOnly,
               searchController: TextEditingController(),
+            ),
+            Expanded(
+              child: Container(
+                padding: const EdgeInsets.all(8),
+                child: const YandexMap(),
+              ),
             ),
           ],
         ),
