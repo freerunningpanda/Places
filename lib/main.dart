@@ -23,6 +23,7 @@ import 'package:places/ui/screens/onboarding_screen/onboarding_screen.dart';
 import 'package:places/ui/screens/res/app_theme.dart';
 import 'package:places/ui/screens/splash_screen/splash_screen.dart';
 import 'package:provider/provider.dart';
+import 'package:yandex_mapkit/yandex_mapkit.dart';
 
 final ThemeData _lightTheme = AppTheme.buildTheme();
 final ThemeData _darkTheme = AppTheme.buildThemeDark();
@@ -32,6 +33,8 @@ final AppDb db = AppDb();
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await AppPreferences.init();
+  AndroidYandexMap.useAndroidViewSurface = false;
+
   runApp(
     MultiProvider(
       providers: [
