@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:places/cubits/places_list/places_list_cubit.dart';
+import 'package:places/data/database/database.dart';
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_strings.dart';
 import 'package:places/ui/widgets/add_new_place_button.dart';
@@ -41,8 +42,15 @@ class _MapScreenState extends State<MapScreen> {
               ],
             ),
           ),
-          const Expanded(
-            child: YandexMap(),
+          Expanded(
+            child: YandexMap(
+              mapObjects: [
+                PlacemarkMapObject(
+                  mapId: const MapObjectId('UUID'),
+                  point: const Point(latitude: 55.994672, longitude: 37.595131),
+                ),
+              ],
+            ),
           ),
         ],
       ),
