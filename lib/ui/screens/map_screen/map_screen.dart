@@ -21,6 +21,7 @@ class _MapScreenState extends State<MapScreen> {
   @override
   Widget build(BuildContext context) {
     final isSearchPage = context.read<PlacesListCubit>().isSearchPage;
+    final isDarkMode = context.read<ThemeDataProvider>().isDarkMode;
     final readOnly = context.read<PlacesListCubit>().readOnly;
 
     return Scaffold(
@@ -55,9 +56,12 @@ class _MapScreenState extends State<MapScreen> {
                                 latitude: state.places[i].lat,
                                 longitude: state.places[i].lng,
                               ),
+                              onTap: (mapObject, point) {
+                                debugPrint('${state.places[i].name} tapped');
+                              },
                             ),
                         ],
-                        nightModeEnabled: context.read<ThemeDataProvider>().isDarkMode,
+                        nightModeEnabled: isDarkMode,
                       )
                     : const Center(
                         child: CircularProgressIndicator(),
