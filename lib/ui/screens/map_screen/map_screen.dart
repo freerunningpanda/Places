@@ -45,15 +45,18 @@ class _MapScreenState extends State<MapScreen> {
             child: BlocBuilder<PlacesListCubit, PlacesListState>(
               builder: (context, state) {
                 return state is PlacesListLoadedState
-                    ? YandexMap(mapObjects: [
-                        PlacemarkMapObject(
-                          mapId: const MapObjectId('UUID'),
-                          point: Point(
-                            latitude: state.places[1].lat,
-                            longitude: state.places[7].lng,
-                          ),
-                        ),
-                      ])
+                    ? YandexMap(
+                        mapObjects: [
+                          for (var i = 0; i < state.places.length; i++)
+                            PlacemarkMapObject(
+                              mapId: MapObjectId(state.places[i].name),
+                              point: Point(
+                                latitude: state.places[i].lat,
+                                longitude: state.places[i].lng,
+                              ),
+                            ),
+                        ],
+                      )
                     : const Center(child: CircularProgressIndicator());
               },
             ),
