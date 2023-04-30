@@ -47,7 +47,17 @@ class _MapScreenState extends State<MapScreen> {
               mapObjects: [
                 PlacemarkMapObject(
                   mapId: const MapObjectId('UUID'),
-                  point: const Point(latitude: 55.994672, longitude: 37.595131),
+                  point: const Point(
+                    latitude: 55.994672,
+                    longitude: 37.595131,
+                  ),
+                ),
+                PlacemarkMapObject(
+                  mapId: const MapObjectId('UUIDq'),
+                  point: const Point(
+                    latitude: 56.001115,
+                    longitude: 37.649036,
+                  ),
                 ),
               ],
             ),
