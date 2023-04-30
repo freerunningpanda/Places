@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:places/cubits/places_list/places_list_cubit.dart';
-import 'package:places/data/database/database.dart';
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_strings.dart';
 import 'package:places/ui/widgets/add_new_place_button.dart';
@@ -43,23 +42,20 @@ class _MapScreenState extends State<MapScreen> {
             ),
           ),
           Expanded(
-            child: YandexMap(
-              mapObjects: [
-                PlacemarkMapObject(
-                  mapId: const MapObjectId('UUID'),
-                  point: const Point(
-                    latitude: 55.994672,
-                    longitude: 37.595131,
-                  ),
-                ),
-                PlacemarkMapObject(
-                  mapId: const MapObjectId('UUIDq'),
-                  point: const Point(
-                    latitude: 56.001115,
-                    longitude: 37.649036,
-                  ),
-                ),
-              ],
+            child: BlocBuilder<PlacesListCubit, PlacesListState>(
+              builder: (context, state) {
+                return state is PlacesListLoadedState
+                    ? YandexMap(mapObjects: [
+                        PlacemarkMapObject(
+                          mapId: const MapObjectId('UUID'),
+                          point: Point(
+                            latitude: state.places[1].lat,
+                            longitude: state.places[7].lng,
+                          ),
+                        ),
+                      ])
+                    : const Center(child: CircularProgressIndicator());
+              },
             ),
           ),
         ],
