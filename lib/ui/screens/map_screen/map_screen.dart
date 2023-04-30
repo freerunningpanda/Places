@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:places/cubits/places_list/places_list_cubit.dart';
+import 'package:places/providers/theme_data_provider.dart';
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_strings.dart';
 import 'package:places/ui/widgets/add_new_place_button.dart';
@@ -56,8 +57,11 @@ class _MapScreenState extends State<MapScreen> {
                               ),
                             ),
                         ],
+                        nightModeEnabled: context.read<ThemeDataProvider>().isDarkMode,
                       )
-                    : const Center(child: CircularProgressIndicator());
+                    : const Center(
+                        child: CircularProgressIndicator(),
+                      );
               },
             ),
           ),
