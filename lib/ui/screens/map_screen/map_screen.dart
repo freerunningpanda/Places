@@ -64,6 +64,21 @@ class _MapScreenState extends State<MapScreen> {
                         onMapCreated: (yandexMapController) async {
                           controller = yandexMapController;
                         },
+                        onUserLocationAdded: (view) async {
+                          return view.copyWith(
+                            pin: view.pin.copyWith(
+                              icon: PlacemarkIcon.single(PlacemarkIconStyle(
+                                image: BitmapDescriptor.fromAssetImage('lib/assets/user.png'),
+                              )),
+                            ),
+                            arrow: view.arrow.copyWith(
+                              icon: PlacemarkIcon.single(PlacemarkIconStyle(
+                                image: BitmapDescriptor.fromAssetImage('lib/assets/arrow.png'),
+                              )),
+                            ),
+                            accuracyCircle: view.accuracyCircle.copyWith(fillColor: Colors.green.withOpacity(0.5)),
+                          );
+                        },
                         mapObjects: [
                           for (var i = 0; i < state.places.length; i++)
                             PlacemarkMapObject(
@@ -99,9 +114,28 @@ class _MapScreenState extends State<MapScreen> {
           ActionWidget(
             assetName: AppAssets.geolocation,
             onTap: () async {
-              await controller.moveCamera(
-                CameraUpdate.newCameraPosition(const CameraPosition(target: _point)),
-                animation: animation,
+              if (await locationPermissionNotGranted) {
+                // ignore: use_build_context_synchronously
+                _showMessage(
+                  context,
+                  const Text('Location permission was NOT granted'),
+                );
+
+                return;
+              }
+
+              // ignore: use_build_context_synchronously
+              final mediaQuery = MediaQuery.of(context);
+              final height = mapKey.currentContext!.size!.height * mediaQuery.devicePixelRatio;
+              final width = mapKey.currentContext!.size!.width * mediaQuery.devicePixelRatio;
+
+              await controller.toggleUserLayer(
+                visible: true,
+                autoZoomEnabled: true,
+                anchor: UserLocationAnchor(
+                  course: Offset(width * 0.5, height * 0.5),
+                  normal: Offset(width * 0.5, height * 0.5),
+                ),
               );
             },
           ),
@@ -109,8 +143,6 @@ class _MapScreenState extends State<MapScreen> {
       ),
     );
   }
-
-  Future<void> _showUserGeo() async {}
 
   void _showMessage(BuildContext context, Text text) {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: text));
