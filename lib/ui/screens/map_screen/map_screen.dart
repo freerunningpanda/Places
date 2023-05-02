@@ -137,6 +137,10 @@ class _MapScreenState extends State<MapScreen> {
     );
   }
 
+  Future<void> _showUserGeo() async {
+
+  }
+
   void _showMessage(BuildContext context, Text text) {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: text));
   }
