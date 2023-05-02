@@ -8,6 +8,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:places/blocs/details_screen/details_screen_bloc.dart';
 import 'package:places/data/database/database.dart';
 import 'package:places/ui/res/app_assets.dart';
+import 'package:places/ui/res/app_card_size.dart';
 import 'package:places/ui/res/app_typography.dart';
 import 'package:places/ui/screens/place_details/place_details.dart';
 import 'package:places/ui/screens/res/custom_colors.dart';
@@ -27,6 +28,7 @@ class PlaceCard extends StatelessWidget {
   final int placeIndex;
   final bool isVisitingScreen;
   final VoidCallback? actionThree;
+  final bool isMainScreen;
 
   const PlaceCard({
     Key? key,
@@ -42,6 +44,7 @@ class PlaceCard extends StatelessWidget {
     required this.placeIndex,
     required this.isVisitingScreen,
     this.actionThree,
+    required this.isMainScreen,
   }) : super(key: key);
 
   @override
@@ -53,7 +56,7 @@ class PlaceCard extends StatelessWidget {
     final orientation = MediaQuery.of(context).orientation == Orientation.portrait;
 
     return SizedBox(
-      height: orientation ? size.height / 2.5 : size.height / 2.0,
+      height: orientation ? size.height / 2.5 : size.height / 1.2,
       width: size.width,
       child: ClipRRect(
         borderRadius: const BorderRadius.all(
@@ -72,6 +75,7 @@ class PlaceCard extends StatelessWidget {
                     name: name,
                     type: type,
                     url: urlsList,
+                    isMainScreen: isMainScreen,
                   ),
                   const SizedBox(height: 16),
                   _PlaceCardBottom(
@@ -182,7 +186,7 @@ class RippleIcons extends StatelessWidget {
         Positioned(
           top: 16,
           right: 16,
-          child: Material( 
+          child: Material(
             type: MaterialType.transparency,
             child: SizedBox(
               width: 22,
@@ -236,12 +240,14 @@ class _PlaceCardTop extends StatefulWidget {
   final String type;
   final List<String>? url;
   final String name;
+  final bool isMainScreen;
 
   const _PlaceCardTop({
     Key? key,
     required this.type,
     required this.url,
     required this.name,
+    required this.isMainScreen,
   }) : super(key: key);
 
   @override
@@ -268,8 +274,11 @@ class _PlaceCardTopState extends State<_PlaceCardTop> with TickerProviderStateMi
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+    final orientation = MediaQuery.of(context).orientation == Orientation.portrait;
+
     return Container(
-      height: 96,
+      height: widget.isMainScreen ? (orientation ? size.height * 0.18 : size.height * 0.35) : (orientation ? size.height * 0.1 : size.height * 0.23),
       decoration: const BoxDecoration(
         borderRadius: BorderRadius.only(
           topLeft: Radius.circular(8.0),

@@ -297,7 +297,7 @@ class _DismissibleWidget extends StatelessWidget {
             ),
           ),
           AspectRatio(
-            aspectRatio: orientation ? AppCardSize.visitingCard : AppCardSize.visitingCardLandscape,
+            aspectRatio: orientation ? AppCardSize.visitingCard : AppCardSize.visitingCardDismissLandscape,
             child: Dismissible(
               key: ObjectKey(index),
               onDismissed: (direction) async {
@@ -336,6 +336,7 @@ class _DismissibleWidget extends StatelessWidget {
               child: Padding(
                 padding: const EdgeInsets.only(bottom: 11.0),
                 child: PlaceCard(
+                  isMainScreen: false,
                   placeIndex: place.id,
                   actionThree: () async {
                     debugPrint('pressed_remove_place');
@@ -474,6 +475,7 @@ class _VisitedPlacesList extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.only(bottom: 11.0),
         child: PlaceCard(
+          isMainScreen: false,
           placeIndex: place.id,
           actionThree: () async {
             debugPrint('pressed_share_place');
