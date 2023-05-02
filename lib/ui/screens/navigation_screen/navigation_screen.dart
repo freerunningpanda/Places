@@ -3,6 +3,7 @@ import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/screens/map_screen/map_screen.dart';
 import 'package:places/ui/screens/place_list_screen/place_list_screen.dart';
 import 'package:places/ui/screens/settings_screen/settings_screen.dart';
+import 'package:places/ui/screens/user_layer_page/user_layer_page.dart';
 import 'package:places/ui/screens/visiting_screen/visiting_screen.dart';
 import 'package:places/ui/widgets/place_icons.dart';
 
@@ -17,6 +18,7 @@ class _NavigationScreenState extends State<NavigationScreen> {
   final screens = const [
     PlaceListScreen(key: PageStorageKey('SaveScrollPosition'),),
     MapScreen(),
+    // UserLayerExample(),
     VisitingScreen(),
     SettingsScreen(),
   ];

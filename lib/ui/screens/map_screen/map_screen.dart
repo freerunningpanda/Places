@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:places/cubits/places_list/places_list_cubit.dart';
+import 'package:places/mocks.dart';
 import 'package:places/providers/theme_data_provider.dart';
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_strings.dart';
@@ -19,6 +20,11 @@ class MapScreen extends StatefulWidget {
 }
 
 class _MapScreenState extends State<MapScreen> {
+  static const Point _point = Point(
+    latitude: Mocks.mockLat,
+    longitude: Mocks.mockLot,
+  );
+  final animation = const MapAnimation();
   late YandexMapController controller;
   GlobalKey mapKey = GlobalKey();
 
@@ -58,23 +64,6 @@ class _MapScreenState extends State<MapScreen> {
                         onMapCreated: (yandexMapController) async {
                           controller = yandexMapController;
                         },
-                        onUserLocationAdded: (view) async {
-                          return view.copyWith(
-                            pin: view.pin.copyWith(
-                              icon: PlacemarkIcon.single(
-                                PlacemarkIconStyle(image: BitmapDescriptor.fromAssetImage('lib/assets/user.png')),
-                              ),
-                            ),
-                            arrow: view.arrow.copyWith(
-                              icon: PlacemarkIcon.single(
-                                PlacemarkIconStyle(image: BitmapDescriptor.fromAssetImage('lib/assets/arrow.png')),
-                              ),
-                            ),
-                            accuracyCircle: view.accuracyCircle.copyWith(
-                              fillColor: Colors.green.withOpacity(0.5),
-                            ),
-                          );
-                        },
                         mapObjects: [
                           for (var i = 0; i < state.places.length; i++)
                             PlacemarkMapObject(
@@ -110,25 +99,9 @@ class _MapScreenState extends State<MapScreen> {
           ActionWidget(
             assetName: AppAssets.geolocation,
             onTap: () async {
-              if (await locationPermissionNotGranted) {
-                // ignore: use_build_context_synchronously
-                _showMessage(context, const Text('Location permission was NOT granted'));
-
-                return;
-              }
-
-              // ignore: use_build_context_synchronously
-              final mediaQuery = MediaQuery.of(context);
-              final height = mapKey.currentContext!.size!.height * mediaQuery.devicePixelRatio;
-              final width = mapKey.currentContext!.size!.width * mediaQuery.devicePixelRatio;
-
-              await controller.toggleUserLayer(
-                visible: true,
-                autoZoomEnabled: true,
-                anchor: UserLocationAnchor(
-                  course: Offset(width * 0.5, height * 0.5),
-                  normal: Offset(width * 0.5, height * 0.5),
-                ),
+              await controller.moveCamera(
+                CameraUpdate.newCameraPosition(const CameraPosition(target: _point)),
+                animation: animation,
               );
             },
           ),
@@ -137,9 +110,7 @@ class _MapScreenState extends State<MapScreen> {
     );
   }
 
-  Future<void> _showUserGeo() async {
-
-  }
+  Future<void> _showUserGeo() async {}
 
   void _showMessage(BuildContext context, Text text) {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: text));
