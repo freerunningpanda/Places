@@ -20,7 +20,7 @@ class PlaceRepository {
   Future<List<DbPlace>> getPlaces() async {
     final places = await apiPlaces.getPlaces(
       category: '',
-      radius: 15000,
+      radius: 10000,
     );
 
     return places.map(Mapper.placesFromApiToUi).toList();

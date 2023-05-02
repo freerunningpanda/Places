@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mime_type/mime_type.dart';
@@ -10,7 +11,6 @@ import 'package:places/data/dto/place_model.dart';
 import 'package:places/data/dto/place_request.dart';
 import 'package:places/data/dto/place_response.dart';
 import 'package:places/data/exceptions/network_exception.dart';
-import 'package:places/mocks.dart';
 import 'package:places/ui/res/app_strings.dart';
 
 class ApiPlaces {
@@ -18,11 +18,12 @@ class ApiPlaces {
     initInterceptors();
 
     try {
+      final position = await Geolocator.getCurrentPosition();
       final response = await dio.post<String>(
         '/filtered_places',
         data: jsonEncode({
-          'lat': Mocks.mockLat,
-          'lng': Mocks.mockLot,
+          'lat': position.latitude,
+          'lng': position.longitude,
           'radius': radius.toDouble(),
           'typeFilter': ['park', 'museum', 'other', 'theatre'],
           'nameFilter': category,

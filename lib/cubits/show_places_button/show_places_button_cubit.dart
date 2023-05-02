@@ -45,9 +45,10 @@ class ShowPlacesButtonCubit extends Cubit<ShowPlacesButtonState> {
     // Потому что при удалении фильтров нужно снова показать количество всех мест
     // В радиусе поиска
     for (final el in places) {
+      final position = await Geolocator.getCurrentPosition();
       final distance = Geolocator.distanceBetween(
-        Mocks.mockLat,
-        Mocks.mockLot,
+        position.latitude,
+        position.longitude,
         el.lat,
         el.lng,
       );
@@ -97,9 +98,10 @@ class ShowPlacesButtonCubit extends Cubit<ShowPlacesButtonState> {
         PlaceInteractor.filtersWithDistance.clear();
         // Если отсортированный по типу список мест пуст. То пройтись вообще по всем местам.
         for (final el in places) {
+          final position = await Geolocator.getCurrentPosition();
           final distance = Geolocator.distanceBetween(
-            Mocks.mockLat,
-            Mocks.mockLot,
+            position.latitude,
+            position.longitude,
             el.lat,
             el.lng,
           );
@@ -128,12 +130,10 @@ class ShowPlacesButtonCubit extends Cubit<ShowPlacesButtonState> {
         placesByDistance?.clear();
         // Если есть места в отсортированном по типу списке мест то пройтись по нему
         for (final el in placesByType) {
-          // if (PlaceInteractor.initialFilteredPlaces.isEmpty) {
-          //   PlaceInteractor.filtersWithDistance.clear();
-          // }
+          final position = await Geolocator.getCurrentPosition();
           final distance = Geolocator.distanceBetween(
-            Mocks.mockLat,
-            Mocks.mockLot,
+            position.latitude,
+            position.longitude,
             el.lat,
             el.lng,
           );
@@ -164,9 +164,10 @@ class ShowPlacesButtonCubit extends Cubit<ShowPlacesButtonState> {
       PlaceInteractor.filtersWithDistance.clear();
       // Если отсортированный по типу список мест пуст. То пройтись вообще по всем местам.
       for (final el in places) {
+        final position = await Geolocator.getCurrentPosition();
         final distance = Geolocator.distanceBetween(
-          Mocks.mockLat,
-          Mocks.mockLot,
+          position.latitude,
+          position.longitude,
           el.lat,
           el.lng,
         );
@@ -194,12 +195,10 @@ class ShowPlacesButtonCubit extends Cubit<ShowPlacesButtonState> {
       PlaceInteractor.filtersWithDistance.clear();
       // Если есть места в отсортированном по типу списке мест то пройтись по нему
       for (final el in PlaceInteractor.initialFilteredPlaces) {
-        // if (PlaceInteractor.initialFilteredPlaces.isEmpty) {
-        //   PlaceInteractor.filtersWithDistance.clear();
-        // }
+        final position = await Geolocator.getCurrentPosition();
         final distance = Geolocator.distanceBetween(
-          Mocks.mockLat,
-          Mocks.mockLot,
+          position.latitude,
+          position.longitude,
           el.lat,
           el.lng,
         );

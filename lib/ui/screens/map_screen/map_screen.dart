@@ -20,10 +20,6 @@ class MapScreen extends StatefulWidget {
 }
 
 class _MapScreenState extends State<MapScreen> {
-  static const Point _point = Point(
-    latitude: Mocks.mockLat,
-    longitude: Mocks.mockLot,
-  );
   final animation = const MapAnimation();
   late YandexMapController controller;
   GlobalKey mapKey = GlobalKey();
@@ -76,7 +72,9 @@ class _MapScreenState extends State<MapScreen> {
                                 image: BitmapDescriptor.fromAssetImage('lib/assets/arrow.png'),
                               )),
                             ),
-                            accuracyCircle: view.accuracyCircle.copyWith(fillColor: Colors.green.withOpacity(0.5)),
+                            accuracyCircle: view.accuracyCircle.copyWith(
+                              fillColor: Colors.green.withOpacity(0.5),
+                            ),
                           );
                         },
                         mapObjects: [

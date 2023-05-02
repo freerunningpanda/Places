@@ -90,11 +90,12 @@ class SearchScreenBloc extends Bloc<SearchScreenEvent, SearchScreenState> {
 
   Future<List<DbPlace>> searchPlaces(String query, AppDb db) async {
     final placesList = await db.allPlacesEntries;
+    final position = await Geolocator.getCurrentPosition();
     PlaceInteractor.foundedPlaces = placesList.where(
       (place) {
         final distance = Geolocator.distanceBetween(
-          Mocks.mockLat,
-          Mocks.mockLot,
+          position.latitude,
+          position.longitude,
           place.lat,
           place.lng,
         );
