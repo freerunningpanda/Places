@@ -92,11 +92,13 @@ class _MapScreenState extends State<MapScreen> {
                                       icon: _isMarkSelected
                                           ? PlacemarkIcon.single(
                                               PlacemarkIconStyle(
+                                                scale: 3,
                                                 image: BitmapDescriptor.fromAssetImage(AppAssets.greenRound),
                                               ),
                                             )
                                           : PlacemarkIcon.single(
                                               PlacemarkIconStyle(
+                                                scale: 3,
                                                 image: themeData.isDarkMode
                                                     ? BitmapDescriptor.fromAssetImage(AppAssets.whiteRound)
                                                     : BitmapDescriptor.fromAssetImage(AppAssets.blueRound),
@@ -113,6 +115,7 @@ class _MapScreenState extends State<MapScreen> {
                                           if (_isMarkSelected) {
                                             _isMarkSelected = false;
                                             _tappedPlacemark = null;
+                                            _isAddPlaceBtnVisible = true;
                                           } else {
                                             _isMarkSelected = true;
                                             _tappedPlacemark = place;
