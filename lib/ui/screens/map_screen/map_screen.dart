@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:places/cubits/places_list/places_list_cubit.dart';
-import 'package:places/mocks.dart';
+import 'package:places/data/database/database.dart';
 import 'package:places/providers/theme_data_provider.dart';
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_strings.dart';
@@ -23,8 +23,9 @@ class _MapScreenState extends State<MapScreen> {
   final animation = const MapAnimation();
   late YandexMapController controller;
   GlobalKey mapKey = GlobalKey();
-
   Future<bool> get locationPermissionNotGranted async => !(await Permission.location.request().isGranted);
+  bool _isAddPlaceBtnVisible = true;
+  DbPlace? _tappedPlacemark;
 
   @override
   Widget build(BuildContext context) {
@@ -55,42 +56,72 @@ class _MapScreenState extends State<MapScreen> {
             child: BlocBuilder<PlacesListCubit, PlacesListState>(
               builder: (context, state) {
                 return state is PlacesListLoadedState
-                    ? YandexMap(
-                        key: mapKey,
-                        onMapCreated: (yandexMapController) async {
-                          controller = yandexMapController;
-                        },
-                        onUserLocationAdded: (view) async {
-                          return view.copyWith(
-                            pin: view.pin.copyWith(
-                              icon: PlacemarkIcon.single(PlacemarkIconStyle(
-                                image: BitmapDescriptor.fromAssetImage('lib/assets/user.png'),
-                              )),
-                            ),
-                            arrow: view.arrow.copyWith(
-                              icon: PlacemarkIcon.single(PlacemarkIconStyle(
-                                image: BitmapDescriptor.fromAssetImage('lib/assets/arrow.png'),
-                              )),
-                            ),
-                            accuracyCircle: view.accuracyCircle.copyWith(
-                              fillColor: Colors.green.withOpacity(0.5),
-                            ),
-                          );
-                        },
-                        mapObjects: [
-                          for (var i = 0; i < state.places.length; i++)
-                            PlacemarkMapObject(
-                              mapId: MapObjectId(state.places[i].name),
-                              point: Point(
-                                latitude: state.places[i].lat,
-                                longitude: state.places[i].lng,
+                    ? Stack(
+                        children: [
+                          YandexMap(
+                            key: mapKey,
+                            onMapCreated: (yandexMapController) async {
+                              controller = yandexMapController;
+                            },
+                            onUserLocationAdded: (view) async {
+                              return view.copyWith(
+                                pin: view.pin.copyWith(
+                                  icon: PlacemarkIcon.single(PlacemarkIconStyle(
+                                    image: BitmapDescriptor.fromAssetImage('lib/assets/user.png'),
+                                  )),
+                                ),
+                                arrow: view.arrow.copyWith(
+                                  icon: PlacemarkIcon.single(PlacemarkIconStyle(
+                                    image: BitmapDescriptor.fromAssetImage('lib/assets/arrow.png'),
+                                  )),
+                                ),
+                                accuracyCircle: view.accuracyCircle.copyWith(
+                                  fillColor: Colors.green.withOpacity(0.5),
+                                ),
+                              );
+                            },
+                            // onMapTap: (argument) {
+                            //   debugPrint('hide preview');
+                            //   setState(() {
+                            //     _tappedPlacemark = null;
+                            //     _isAddPlaceBtnVisible = true;
+                            //   });
+                            // },
+                            mapObjects: [
+                              for (var i = 0; i < state.places.length; i++)
+                                PlacemarkMapObject(
+                                  mapId: MapObjectId(state.places[i].name),
+                                  point: Point(
+                                    latitude: state.places[i].lat,
+                                    longitude: state.places[i].lng,
+                                  ),
+                                  onTap: (mapObject, point) {
+                                    debugPrint('${state.places[i].name} tapped');
+                                    setState(() {
+                                      _tappedPlacemark = state.places[i];
+                                      _isAddPlaceBtnVisible = !_isAddPlaceBtnVisible;
+                                      if (_isAddPlaceBtnVisible) {
+                                        _tappedPlacemark = null;
+                                      }
+                                    });
+                                  },
+                                ),
+                            ],
+                            nightModeEnabled: isDarkMode,
+                          ),
+                          if (_tappedPlacemark != null)
+                            Positioned(
+                              bottom: 0,
+                              left: 16,
+                              right: 16,
+                              child: Container(
+                                width: 100,
+                                height: 100,
+                                color: Colors.red,
+                                child: Text(_tappedPlacemark!.name),
                               ),
-                              onTap: (mapObject, point) {
-                                debugPrint('${state.places[i].name} tapped');
-                              },
                             ),
                         ],
-                        nightModeEnabled: isDarkMode,
                       )
                     : const Center(
                         child: CircularProgressIndicator(),
@@ -101,43 +132,46 @@ class _MapScreenState extends State<MapScreen> {
         ],
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      floatingActionButton: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          ActionWidget(
-            assetName: AppAssets.refresh,
-            onTap: () {},
-          ),
-          const AddNewPlaceButton(),
-          ActionWidget(
-            assetName: AppAssets.geolocation,
-            onTap: () async {
-              if (await locationPermissionNotGranted) {
+      floatingActionButton: Visibility(
+        visible: _isAddPlaceBtnVisible,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            ActionWidget(
+              assetName: AppAssets.refresh,
+              onTap: () {},
+            ),
+            const AddNewPlaceButton(),
+            ActionWidget(
+              assetName: AppAssets.geolocation,
+              onTap: () async {
+                if (await locationPermissionNotGranted) {
+                  // ignore: use_build_context_synchronously
+                  _showMessage(
+                    context,
+                    const Text('Location permission was NOT granted'),
+                  );
+
+                  return;
+                }
+
                 // ignore: use_build_context_synchronously
-                _showMessage(
-                  context,
-                  const Text('Location permission was NOT granted'),
+                final mediaQuery = MediaQuery.of(context);
+                final height = mapKey.currentContext!.size!.height * mediaQuery.devicePixelRatio;
+                final width = mapKey.currentContext!.size!.width * mediaQuery.devicePixelRatio;
+
+                await controller.toggleUserLayer(
+                  visible: true,
+                  autoZoomEnabled: true,
+                  anchor: UserLocationAnchor(
+                    course: Offset(width * 0.5, height * 0.5),
+                    normal: Offset(width * 0.5, height * 0.5),
+                  ),
                 );
-
-                return;
-              }
-
-              // ignore: use_build_context_synchronously
-              final mediaQuery = MediaQuery.of(context);
-              final height = mapKey.currentContext!.size!.height * mediaQuery.devicePixelRatio;
-              final width = mapKey.currentContext!.size!.width * mediaQuery.devicePixelRatio;
-
-              await controller.toggleUserLayer(
-                visible: true,
-                autoZoomEnabled: true,
-                anchor: UserLocationAnchor(
-                  course: Offset(width * 0.5, height * 0.5),
-                  normal: Offset(width * 0.5, height * 0.5),
-                ),
-              );
-            },
-          ),
-        ],
+              },
+            ),
+          ],
+        ),
       ),
     );
   }
