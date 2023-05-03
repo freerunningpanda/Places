@@ -26,12 +26,14 @@ class _MapScreenState extends State<MapScreen> {
   Future<bool> get locationPermissionNotGranted async => !(await Permission.location.request().isGranted);
   bool _isAddPlaceBtnVisible = true;
   DbPlace? _tappedPlacemark;
+  bool _isMarkSelected = false;
 
   @override
   Widget build(BuildContext context) {
     final isSearchPage = context.read<PlacesListCubit>().isSearchPage;
     final isDarkMode = context.read<ThemeDataProvider>().isDarkMode;
     final readOnly = context.read<PlacesListCubit>().readOnly;
+    final themeData = context.read<ThemeDataProvider>();
 
     return Scaffold(
       body: Column(
@@ -80,31 +82,41 @@ class _MapScreenState extends State<MapScreen> {
                                 ),
                               );
                             },
-                            // onMapTap: (argument) {
-                            //   debugPrint('hide preview');
-                            //   setState(() {
-                            //     _tappedPlacemark = null;
-                            //     _isAddPlaceBtnVisible = true;
-                            //   });
-                            // },
                             mapObjects: state.places
                                 .asMap()
                                 .map(
                                   (i, place) => MapEntry(
                                     i,
                                     PlacemarkMapObject(
+                                      opacity: 1,
+                                      icon: _isMarkSelected
+                                          ? PlacemarkIcon.single(
+                                              PlacemarkIconStyle(
+                                                image: BitmapDescriptor.fromAssetImage(AppAssets.greenRound),
+                                              ),
+                                            )
+                                          : PlacemarkIcon.single(
+                                              PlacemarkIconStyle(
+                                                image: themeData.isDarkMode
+                                                    ? BitmapDescriptor.fromAssetImage(AppAssets.whiteRound)
+                                                    : BitmapDescriptor.fromAssetImage(AppAssets.blueRound),
+                                              ),
+                                            ),
                                       mapId: MapObjectId(place.name),
                                       point: Point(
                                         latitude: place.lat,
                                         longitude: place.lng,
                                       ),
-                                      onTap: (mapObject, point) {
+                                      onTap: (mapObject, point) async {
                                         debugPrint('${place.name} tapped');
                                         setState(() {
-                                          _tappedPlacemark = place;
-                                          _isAddPlaceBtnVisible = !_isAddPlaceBtnVisible;
-                                          if (_isAddPlaceBtnVisible) {
+                                          if (_isMarkSelected) {
+                                            _isMarkSelected = false;
                                             _tappedPlacemark = null;
+                                          } else {
+                                            _isMarkSelected = true;
+                                            _tappedPlacemark = place;
+                                            _isAddPlaceBtnVisible = false;
                                           }
                                         });
                                       },

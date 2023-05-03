@@ -47,5 +47,8 @@ abstract class AppAssets {
   static const loader = 'lib/ui/res/icons/loader.svg';
   static const geolocation = 'lib/ui/res/icons/geolocation.svg';
   static const refresh = 'lib/ui/res/icons/refresh.svg';
+  static const greenRound = 'lib/ui/res/icons/green_round.png';
+  static const blueRound = 'lib/ui/res/icons/blue_round.png';
+  static const whiteRound = 'lib/ui/res/icons/white_round.png';
 
 }
