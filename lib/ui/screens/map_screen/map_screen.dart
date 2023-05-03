@@ -87,26 +87,32 @@ class _MapScreenState extends State<MapScreen> {
                             //     _isAddPlaceBtnVisible = true;
                             //   });
                             // },
-                            mapObjects: [
-                              for (var i = 0; i < state.places.length; i++)
-                                PlacemarkMapObject(
-                                  mapId: MapObjectId(state.places[i].name),
-                                  point: Point(
-                                    latitude: state.places[i].lat,
-                                    longitude: state.places[i].lng,
+                            mapObjects: state.places
+                                .asMap()
+                                .map(
+                                  (i, place) => MapEntry(
+                                    i,
+                                    PlacemarkMapObject(
+                                      mapId: MapObjectId(place.name),
+                                      point: Point(
+                                        latitude: place.lat,
+                                        longitude: place.lng,
+                                      ),
+                                      onTap: (mapObject, point) {
+                                        debugPrint('${place.name} tapped');
+                                        setState(() {
+                                          _tappedPlacemark = place;
+                                          _isAddPlaceBtnVisible = !_isAddPlaceBtnVisible;
+                                          if (_isAddPlaceBtnVisible) {
+                                            _tappedPlacemark = null;
+                                          }
+                                        });
+                                      },
+                                    ),
                                   ),
-                                  onTap: (mapObject, point) {
-                                    debugPrint('${state.places[i].name} tapped');
-                                    setState(() {
-                                      _tappedPlacemark = state.places[i];
-                                      _isAddPlaceBtnVisible = !_isAddPlaceBtnVisible;
-                                      if (_isAddPlaceBtnVisible) {
-                                        _tappedPlacemark = null;
-                                      }
-                                    });
-                                  },
-                                ),
-                            ],
+                                )
+                                .values
+                                .toList(),
                             nightModeEnabled: isDarkMode,
                           ),
                           if (_tappedPlacemark != null)
