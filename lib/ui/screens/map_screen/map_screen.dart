@@ -26,7 +26,6 @@ class _MapScreenState extends State<MapScreen> {
   Future<bool> get locationPermissionNotGranted async => !(await Permission.location.request().isGranted);
   bool _isAddPlaceBtnVisible = true;
   DbPlace? _tappedPlacemark;
-  bool _isMarkSelected = false;
 
   @override
   Widget build(BuildContext context) {
@@ -89,7 +88,7 @@ class _MapScreenState extends State<MapScreen> {
                                     i,
                                     PlacemarkMapObject(
                                       opacity: 1,
-                                      icon: _isMarkSelected
+                                      icon: _tappedPlacemark == place
                                           ? PlacemarkIcon.single(
                                               PlacemarkIconStyle(
                                                 scale: 3,
@@ -111,17 +110,15 @@ class _MapScreenState extends State<MapScreen> {
                                       ),
                                       onTap: (mapObject, point) async {
                                         debugPrint('${place.name} tapped');
-                                        setState(() {
-                                          if (_isMarkSelected) {
-                                            _isMarkSelected = false;
-                                            _tappedPlacemark = null;
-                                            _isAddPlaceBtnVisible = true;
-                                          } else {
-                                            _isMarkSelected = true;
+                                        setState(
+                                          () {
                                             _tappedPlacemark = place;
-                                            _isAddPlaceBtnVisible = false;
-                                          }
-                                        });
+                                            _isAddPlaceBtnVisible = !_isAddPlaceBtnVisible;
+                                            if (_isAddPlaceBtnVisible) {
+                                              _tappedPlacemark = null;
+                                            }
+                                          },
+                                        );
                                       },
                                     ),
                                   ),
