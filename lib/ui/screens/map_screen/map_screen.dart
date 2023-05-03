@@ -114,11 +114,34 @@ class _MapScreenState extends State<MapScreen> {
                               bottom: 0,
                               left: 16,
                               right: 16,
-                              child: Container(
-                                width: 100,
-                                height: 100,
-                                color: Colors.red,
-                                child: Text(_tappedPlacemark!.name),
+                              child: Stack(
+                                children: [
+                                  Column(
+                                    children: [
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          ActionWidget(
+                                            assetName: AppAssets.refresh,
+                                            onTap: () {},
+                                          ),
+                                          ActionWidget(
+                                            assetName: AppAssets.refresh,
+                                            onTap: () {},
+                                          ),
+                                        ],
+                                      ),
+                                      
+                                      Container(
+                                        margin: const EdgeInsets.symmetric(vertical: 16.0),
+                                        width: double.infinity,
+                                        height: 100,
+                                        color: Colors.red,
+                                        child: Text(_tappedPlacemark!.name),
+                                      ),
+                                    ],
+                                  ),
+                                ],
                               ),
                             ),
                         ],
