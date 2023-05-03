@@ -112,9 +112,11 @@ class _MapScreenState extends State<MapScreen> {
                                         debugPrint('${place.name} tapped');
                                         setState(
                                           () {
-                                            _tappedPlacemark = place;
-                                            _isAddPlaceBtnVisible = !_isAddPlaceBtnVisible;
-                                            if (_isAddPlaceBtnVisible) {
+                                            if (_tappedPlacemark != place) {
+                                              _isAddPlaceBtnVisible = false;
+                                              _tappedPlacemark = place;
+                                            } else {
+                                              _isAddPlaceBtnVisible = true;
                                               _tappedPlacemark = null;
                                             }
                                           },
