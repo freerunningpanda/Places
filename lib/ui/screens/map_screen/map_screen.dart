@@ -24,7 +24,6 @@ class _MapScreenState extends State<MapScreen> {
   late YandexMapController controller;
   GlobalKey mapKey = GlobalKey();
   Future<bool> get locationPermissionNotGranted async => !(await Permission.location.request().isGranted);
-  bool _isAddPlaceBtnVisible = true;
   DbPlace? _tappedPlacemark;
 
   @override
@@ -120,7 +119,7 @@ class _MapScreenState extends State<MapScreen> {
                                 .toList(),
                             nightModeEnabled: isDarkMode,
                           ),
-                          if (_tappedPlacemark != null)
+                          if (cubit.tappedPlacemark != null)
                             Positioned(
                               bottom: 0,
                               left: 16,
@@ -173,7 +172,7 @@ class _MapScreenState extends State<MapScreen> {
                                         width: double.infinity,
                                         height: 100,
                                         color: Colors.red,
-                                        child: Text(_tappedPlacemark!.name),
+                                        child: Text(cubit.tappedPlacemark!.name),
                                       ),
                                     ],
                                   ),
@@ -191,46 +190,57 @@ class _MapScreenState extends State<MapScreen> {
         ],
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      floatingActionButton: Visibility(
-        visible: _isAddPlaceBtnVisible,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            ActionWidget(
-              assetName: AppAssets.refresh,
-              onTap: () {},
-            ),
-            const AddNewPlaceButton(),
-            ActionWidget(
-              assetName: AppAssets.geolocation,
-              onTap: () async {
-                if (await locationPermissionNotGranted) {
-                  // ignore: use_build_context_synchronously
-                  _showMessage(
-                    context,
-                    const Text('Location permission was NOT granted'),
-                  );
-
-                  return;
-                }
-
-                // ignore: use_build_context_synchronously
-                final mediaQuery = MediaQuery.of(context);
-                final height = mapKey.currentContext!.size!.height * mediaQuery.devicePixelRatio;
-                final width = mapKey.currentContext!.size!.width * mediaQuery.devicePixelRatio;
-
-                await controller.toggleUserLayer(
-                  visible: true,
-                  autoZoomEnabled: true,
-                  anchor: UserLocationAnchor(
-                    course: Offset(width * 0.5, height * 0.5),
-                    normal: Offset(width * 0.5, height * 0.5),
+      floatingActionButton: BlocBuilder<PlacesListCubit, PlacesListState>(
+        builder: (context, state) {
+          if (state is PlacesListLoadedState) {
+            
+            return Visibility(
+              visible: cubit.isAddPlaceBtnVisible,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  ActionWidget(
+                    assetName: AppAssets.refresh,
+                    onTap: () {},
                   ),
-                );
-              },
-            ),
-          ],
-        ),
+                  const AddNewPlaceButton(),
+                  ActionWidget(
+                    assetName: AppAssets.geolocation,
+                    onTap: () async {
+                      if (await locationPermissionNotGranted) {
+                        // ignore: use_build_context_synchronously
+                        _showMessage(
+                          context,
+                          const Text('Location permission was NOT granted'),
+                        );
+
+                        return;
+                      }
+
+                      // ignore: use_build_context_synchronously
+                      final mediaQuery = MediaQuery.of(context);
+                      final height = mapKey.currentContext!.size!.height * mediaQuery.devicePixelRatio;
+                      final width = mapKey.currentContext!.size!.width * mediaQuery.devicePixelRatio;
+
+                      await controller.toggleUserLayer(
+                        visible: true,
+                        autoZoomEnabled: true,
+                        anchor: UserLocationAnchor(
+                          course: Offset(width * 0.5, height * 0.5),
+                          normal: Offset(width * 0.5, height * 0.5),
+                        ),
+                      );
+                    },
+                  ),
+                ],
+              ),
+            );
+          } else {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+        },
       ),
     );
   }
