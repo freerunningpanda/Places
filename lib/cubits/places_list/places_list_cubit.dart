@@ -17,18 +17,38 @@ class PlacesListCubit extends Cubit<PlacesListState> {
       apiPlaces: ApiPlaces(),
     ),
   );
+  List<DbPlace> places = [];
+  bool isAddPlaceBtnVisible = true;
+  DbPlace? tappedPlacemark;
 
   PlacesListCubit() : super(PlacesListEmptyState());
 
   Future<void> getPlaces() async {
     try {
       emit(PlaceListLoadingState());
-      final places = await interactor.getPlaces();
+      places = await interactor.getPlaces();
       emit(PlacesListLoadedState(
         places: places,
       ));
     } on DioError catch (e) {
       emit(PlacesListErrorState(error: e.message));
     }
+  }
+
+  void choosePlace(DbPlace place) {
+    if (tappedPlacemark != place) {
+      isAddPlaceBtnVisible = false;
+      tappedPlacemark = place;
+    } else {
+      isAddPlaceBtnVisible = true;
+      tappedPlacemark = null;
+    }
+    emit(
+      PlacesListLoadedState(
+        places: places,
+        isAddPlaceBtnVisible: isAddPlaceBtnVisible,
+        tappedPlacemark: tappedPlacemark,
+      ),
+    );
   }
 }

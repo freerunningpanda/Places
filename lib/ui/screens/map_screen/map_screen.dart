@@ -33,6 +33,7 @@ class _MapScreenState extends State<MapScreen> {
     final isDarkMode = context.read<ThemeDataProvider>().isDarkMode;
     final readOnly = context.read<PlacesListCubit>().readOnly;
     final themeData = context.read<ThemeDataProvider>();
+    final cubit = context.read<PlacesListCubit>();
 
     return Scaffold(
       body: Column(
@@ -88,7 +89,7 @@ class _MapScreenState extends State<MapScreen> {
                                     i,
                                     PlacemarkMapObject(
                                       opacity: 1,
-                                      icon: _tappedPlacemark == place
+                                      icon: cubit.tappedPlacemark == place
                                           ? PlacemarkIcon.single(
                                               PlacemarkIconStyle(
                                                 scale: 3,
@@ -110,17 +111,7 @@ class _MapScreenState extends State<MapScreen> {
                                       ),
                                       onTap: (mapObject, point) async {
                                         debugPrint('${place.name} tapped');
-                                        setState(
-                                          () {
-                                            if (_tappedPlacemark != place) {
-                                              _isAddPlaceBtnVisible = false;
-                                              _tappedPlacemark = place;
-                                            } else {
-                                              _isAddPlaceBtnVisible = true;
-                                              _tappedPlacemark = null;
-                                            }
-                                          },
-                                        );
+                                        cubit.choosePlace(place);
                                       },
                                     ),
                                   ),
