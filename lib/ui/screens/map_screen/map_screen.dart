@@ -136,77 +136,101 @@ class _MapScreenState extends State<MapScreen> {
                                 children: [
                                   Column(
                                     children: [
-                                      Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          ActionWidget(
-                                            assetName: AppAssets.refresh,
-                                            onTap: () {},
-                                          ),
-                                          ActionWidget(
-                                            assetName: AppAssets.geolocation,
-                                            onTap: () async {
-                                              if (await locationPermissionNotGranted) {
-                                                // ignore: use_build_context_synchronously
-                                                _showMessage(
-                                                  context,
-                                                  const Text('Location permission was NOT granted'),
-                                                );
-
-                                                return;
-                                              }
-
-                                              // ignore: use_build_context_synchronously
-                                              final mediaQuery = MediaQuery.of(context);
-                                              final height =
-                                                  mapKey.currentContext!.size!.height * mediaQuery.devicePixelRatio;
-                                              final width =
-                                                  mapKey.currentContext!.size!.width * mediaQuery.devicePixelRatio;
-
-                                              await controller.toggleUserLayer(
-                                                visible: true,
-                                                autoZoomEnabled: true,
-                                                anchor: UserLocationAnchor(
-                                                  course: Offset(width * 0.5, height * 0.5),
-                                                  normal: Offset(width * 0.5, height * 0.5),
-                                                ),
-                                              );
-                                            },
-                                          ),
-                                        ],
-                                      ),
-                                      PlaceCard(
-                                        url: state.places[index].urls,
-                                        type: state.places[index].placeType,
-                                        name: state.places[index].name,
-                                        details: [
-                                          Text(
-                                            state.places[index].name,
-                                            maxLines: 2,
-                                            // style: widget.theme.textTheme.headlineSmall,
-                                          ),
-                                          const SizedBox(height: 2),
-                                          SizedBox(
-                                            height: size.height / 7,
-                                            child: Text(
-                                              state.places[index].description,
-                                              overflow: TextOverflow.ellipsis,
-                                              style: AppTypography.textText16Regular,
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(vertical: 16.0),
+                                        child: Row(
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            ActionWidget(
+                                              assetName: AppAssets.refresh,
+                                              onTap: () {},
                                             ),
-                                          ),
-                                        ],
-                                        actionOne: const PlaceIcons(
-                                          assetName: AppAssets.heartFull,
-                                          width: 22,
-                                          height: 22,
+                                            ActionWidget(
+                                              assetName: AppAssets.geolocation,
+                                              onTap: () async {
+                                                if (await locationPermissionNotGranted) {
+                                                  // ignore: use_build_context_synchronously
+                                                  _showMessage(
+                                                    context,
+                                                    const Text('Location permission was NOT granted'),
+                                                  );
+
+                                                  return;
+                                                }
+
+                                                // ignore: use_build_context_synchronously
+                                                final mediaQuery = MediaQuery.of(context);
+                                                final height =
+                                                    mapKey.currentContext!.size!.height * mediaQuery.devicePixelRatio;
+                                                final width =
+                                                    mapKey.currentContext!.size!.width * mediaQuery.devicePixelRatio;
+
+                                                await controller.toggleUserLayer(
+                                                  visible: true,
+                                                  autoZoomEnabled: true,
+                                                  anchor: UserLocationAnchor(
+                                                    course: Offset(width * 0.5, height * 0.5),
+                                                    normal: Offset(width * 0.5, height * 0.5),
+                                                  ),
+                                                );
+                                              },
+                                            ),
+                                          ],
                                         ),
-                                        aspectRatio: AppCardSize.placeCard,
-                                        place: state.places[index],
-                                        placeIndex: index,
-                                        isVisitingScreen: false,
-                                        isMainScreen: false,
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.only(bottom: 16.0),
+                                        child: AspectRatio(
+                                          aspectRatio: AppCardSize.previewCard,
+                                          child: PlaceCard(
+                                            url: state.places[index].urls,
+                                            type: state.places[index].placeType,
+                                            name: state.places[index].name,
+                                            details: [
+                                              Text(
+                                                state.places[index].name,
+                                                maxLines: 2,
+                                                // style: widget.theme.textTheme.headlineSmall,
+                                              ),
+                                              const SizedBox(height: 2),
+                                              SizedBox(
+                                                width: size.width * 0.5,
+                                                child: Text(
+                                                  state.places[index].description,
+                                                  overflow: TextOverflow.ellipsis,
+                                                  style: AppTypography.textText16Regular,
+                                                ),
+                                              ),
+                                            ],
+                                            actionOne: const PlaceIcons(
+                                              assetName: AppAssets.heartFull,
+                                              width: 22,
+                                              height: 22,
+                                            ),
+                                            aspectRatio: AppCardSize.visitingCard,
+                                            place: state.places[index],
+                                            placeIndex: index,
+                                            isVisitingScreen: false,
+                                            isMainScreen: false,
+                                          ),
+                                        ),
                                       ),
                                     ],
+                                  ),
+                                  Positioned(
+                                    right: 16,
+                                    bottom: 30,
+                                    child: Material(
+                                      type: MaterialType.transparency,
+                                      child: InkWell(
+                                        onTap: () => debugPrint('route tapped'),
+                                        child: const PlaceIcons(
+                                          assetName: AppAssets.route,
+                                          width: 40,
+                                          height: 40,
+                                        ),
+                                      ),
+                                    ),
                                   ),
                                 ],
                               ),
