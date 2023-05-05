@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:places/ui/screens/navigation_screen/navigation_screen.dart';
 
 import 'package:places/ui/screens/res/custom_colors.dart';
 
@@ -19,6 +20,11 @@ class ChevroneBack extends StatelessWidget {
       onTap: () {
         debugPrint('🟡---------Back button pressed');
         Navigator.pop(context);
+        // Navigator.of(context).push(
+        //   MaterialPageRoute<NavigationScreen>(
+        //     builder: (_) => const NavigationScreen(),
+        //   ),
+        // );
       },
       child: Container(
         width: height,

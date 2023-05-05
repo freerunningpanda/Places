@@ -5,6 +5,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart' hide ErrorWidget;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:places/blocs/details_screen/details_screen_bloc.dart';
+import 'package:places/blocs/favorite/favorite_bloc.dart';
 import 'package:places/blocs/want_to_visit/want_to_visit_bloc.dart';
 import 'package:places/data/api/api_places.dart';
 import 'package:places/data/database/database.dart';
@@ -14,6 +15,7 @@ import 'package:places/data/repository/place_repository.dart';
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_strings.dart';
 import 'package:places/ui/res/app_typography.dart';
+import 'package:places/ui/screens/visiting_screen/visiting_screen.dart';
 import 'package:places/ui/widgets/chevrone_back.dart';
 import 'package:places/ui/widgets/error_widget.dart';
 import 'package:places/ui/widgets/place_icons.dart';
@@ -415,140 +417,104 @@ class _PlaceDetailsBottomState extends State<_PlaceDetailsBottom> {
     final theme = Theme.of(context);
     final db = context.read<AppDb>();
 
-    return FutureBuilder(
-      future: getValue(db, widget.place),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.done) {
-          final isFavorite = snapshot.data ?? false;
-
-          return Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              InkWell(
-                onTap: () => debugPrint('🟡---------Schedule pressed'),
-                child: Row(
-                  children: const [
-                    SizedBox(
-                      width: 17,
-                    ),
-                    PlaceIcons(
-                      assetName: AppAssets.calendar,
-                      width: 22,
-                      height: 19,
-                    ),
-                    SizedBox(width: 9),
-                    Text(
-                      AppStrings.schedule,
-                    ),
-                  ],
-                ),
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        InkWell(
+          onTap: () => debugPrint('🟡---------Schedule pressed'),
+          child: Row(
+            children: const [
+              SizedBox(
+                width: 17,
               ),
-              InkWell(
-                onTap: () => toggleFavorite(widget.place),
-                child: Row(
-                  children: [
-                    if (isFavorite == true)
-                      const PlaceIcons(
-                        assetName: AppAssets.heartFull,
-                        width: 20,
-                        height: 18,
-                      )
-                    else
-                      const PlaceIcons(
-                        assetName: AppAssets.favourite,
-                        width: 20,
-                        height: 18,
-                      ),
-                    const SizedBox(width: 9),
-                    Text(
-                      AppStrings.favourite,
-                      style: theme.textTheme.displaySmall,
-                    ),
-                    const SizedBox(
-                      width: 24,
-                    ),
-                  ],
-                ),
+              PlaceIcons(
+                assetName: AppAssets.calendar,
+                width: 22,
+                height: 19,
+              ),
+              SizedBox(width: 9),
+              Text(
+                AppStrings.schedule,
               ),
             ],
-          );
-        } else {
-          return Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          ),
+        ),
+        InkWell(
+          onTap: () => toggleFavorite(widget.place, db),
+          child: Row(
             children: [
-              InkWell(
-                onTap: () => debugPrint('🟡---------Schedule pressed'),
-                child: Row(
-                  children: const [
-                    SizedBox(
-                      width: 17,
-                    ),
-                    PlaceIcons(
-                      assetName: AppAssets.calendar,
-                      width: 22,
-                      height: 19,
-                    ),
-                    SizedBox(width: 9),
-                    Text(
-                      AppStrings.schedule,
-                    ),
-                  ],
+              if (widget.place.isFavorite)
+                const PlaceIcons(
+                  assetName: AppAssets.heartFull,
+                  width: 20,
+                  height: 18,
+                )
+              else
+                const PlaceIcons(
+                  assetName: AppAssets.favourite,
+                  width: 20,
+                  height: 18,
                 ),
+              const SizedBox(width: 9),
+              Text(
+                AppStrings.favourite,
+                style: theme.textTheme.displaySmall,
               ),
-              InkWell(
-                onTap: () => toggleFavorite(widget.place),
-                child: Row(
-                  children: [
-                    PlaceIcons(
-                      assetName: AppAssets.favouriteDark,
-                      width: 20,
-                      height: 18,
-                      color: theme.iconTheme.color,
-                    ),
-                    const SizedBox(width: 9),
-                    Text(
-                      AppStrings.favourite,
-                      style: theme.textTheme.displaySmall,
-                    ),
-                    const SizedBox(
-                      width: 24,
-                    ),
-                  ],
-                ),
+              const SizedBox(
+                width: 24,
               ),
             ],
-          );
-        }
-      },
+          ),
+        ),
+      ],
     );
   }
 
-  Future<void> toggleFavorite(DbPlace place) async {
-    final db = context.read<AppDb>();
-    final isFavorite = await getValue(db, place);
-    setState(() {
-      if (!isFavorite) {
-        place.isFavorite = true;
-        context.read<WantToVisitBloc>().add(
-              AddToWantToVisitEvent(
-                db: db,
-                isFavorite: place.isFavorite,
-                place: place,
-              ),
-            );
-        db.addPlace(place, isSearchScreen: false);
-      } else {
-        place.isFavorite = false;
-        context.read<WantToVisitBloc>().add(
-              RemoveFromWantToVisitEvent(
-                db: db,
-                isFavorite: place.isFavorite,
-                place: place,
-              ),
-            );
-        db.deletePlace(place);
-      }
-    });
+  Future<void> toggleFavorite(DbPlace place, AppDb db) async {
+    // final db = context.read<AppDb>();
+    // final isFavorite = await getValue(db, place);
+    // setState(() {
+    //   if (!isFavorite) {
+    //     place.isFavorite = true;
+    //     context.read<WantToVisitBloc>().add(
+    //           AddToWantToVisitEvent(
+    //             db: db,
+    //             isFavorite: place.isFavorite,
+    //             place: place,
+    //           ),
+    //         );
+    //     db.addPlace(place, isSearchScreen: false);
+    //   } else {
+    //     place.isFavorite = false;
+    //     context.read<WantToVisitBloc>().add(
+    //           RemoveFromWantToVisitEvent(
+    //             db: db,
+    //             isFavorite: place.isFavorite,
+    //             place: place,
+    //           ),
+    //         );
+    //     db.deletePlace(place);
+    //   }
+    // });
+    place.isFavorite = false;
+    context.read<WantToVisitBloc>().add(
+          RemoveFromWantToVisitEvent(
+            db: db,
+            isFavorite: place.isFavorite,
+            place: place,
+          ),
+        );
+    place.isFavorite = false;
+    context.read<FavoriteBloc>().add(
+          RemoveFromFavoriteEvent(
+            db: db,
+            isFavorite: place.isFavorite,
+            place: place,
+            placeIndex: place.id,
+          ),
+        );
+    fromVisitingScreen = false;
+    await db.deletePlace(place);
   }
 
   // Получить список избранного из бд

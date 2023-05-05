@@ -76,6 +76,7 @@ class PlaceListScreen extends StatelessWidget {
                       ),
                     if (orientation)
                       _PlaceListWidgetPortrait(
+                        key: const PageStorageKey<String>('PlaceListScreen'),
                         placeList: state.places,
                         theme: theme,
                       )
@@ -131,16 +132,17 @@ class _PlaceListWidgetPortraitState extends State<_PlaceListWidgetPortrait> {
 
     return Expanded(
       child: ListView.builder(
+        key: const PageStorageKey<String>('SaveScrollPosition'),
         physics: Platform.isAndroid ? const ClampingScrollPhysics() : const BouncingScrollPhysics(),
         shrinkWrap: true,
         itemCount: widget.placeList.length,
         itemBuilder: (_, index) {
           final place = widget.placeList[index];
-
+      
           /// Из строки получаю список с картинками
           final urlsList = place.urls.split('|');
           final imageUrl = urlsList.isNotEmpty ? urlsList[0] : null;
-
+      
           return Column(
             children: [
               FittedBox(
@@ -150,7 +152,7 @@ class _PlaceListWidgetPortraitState extends State<_PlaceListWidgetPortrait> {
                   builder: (_, AsyncSnapshot<bool> snapshot) {
                     if (snapshot.connectionState == ConnectionState.done) {
                       final isFavorite = snapshot.data ?? false;
-
+      
                       return PlaceCard(
                         isMainScreen: true,
                         placeIndex: index,
