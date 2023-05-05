@@ -5,7 +5,10 @@ import 'package:places/cubits/places_list/places_list_cubit.dart';
 import 'package:places/data/database/database.dart';
 import 'package:places/providers/theme_data_provider.dart';
 import 'package:places/ui/res/app_assets.dart';
+import 'package:places/ui/res/app_card_size.dart';
 import 'package:places/ui/res/app_strings.dart';
+import 'package:places/ui/res/app_typography.dart';
+import 'package:places/ui/screens/place_card/place_card.dart';
 import 'package:places/ui/widgets/add_new_place_button.dart';
 import 'package:places/ui/widgets/place_icons.dart';
 import 'package:places/ui/widgets/search_appbar.dart';
@@ -23,8 +26,8 @@ class _MapScreenState extends State<MapScreen> {
   final animation = const MapAnimation();
   late YandexMapController controller;
   GlobalKey mapKey = GlobalKey();
+  int index = 0;
   Future<bool> get locationPermissionNotGranted async => !(await Permission.location.request().isGranted);
-  DbPlace? _tappedPlacemark;
 
   @override
   Widget build(BuildContext context) {
@@ -33,6 +36,7 @@ class _MapScreenState extends State<MapScreen> {
     final readOnly = context.read<PlacesListCubit>().readOnly;
     final themeData = context.read<ThemeDataProvider>();
     final cubit = context.read<PlacesListCubit>();
+    final size = MediaQuery.of(context).size;
 
     return Scaffold(
       body: Column(
@@ -84,36 +88,40 @@ class _MapScreenState extends State<MapScreen> {
                             mapObjects: state.places
                                 .asMap()
                                 .map(
-                                  (i, place) => MapEntry(
-                                    i,
-                                    PlacemarkMapObject(
-                                      opacity: 1,
-                                      icon: cubit.tappedPlacemark == place
-                                          ? PlacemarkIcon.single(
-                                              PlacemarkIconStyle(
-                                                scale: 3,
-                                                image: BitmapDescriptor.fromAssetImage(AppAssets.greenRound),
+                                  (i, place) {
+                                    index = i;
+
+                                    return MapEntry(
+                                      index,
+                                      PlacemarkMapObject(
+                                        opacity: 1,
+                                        icon: cubit.tappedPlacemark == place
+                                            ? PlacemarkIcon.single(
+                                                PlacemarkIconStyle(
+                                                  scale: 3,
+                                                  image: BitmapDescriptor.fromAssetImage(AppAssets.greenRound),
+                                                ),
+                                              )
+                                            : PlacemarkIcon.single(
+                                                PlacemarkIconStyle(
+                                                  scale: 3,
+                                                  image: themeData.isDarkMode
+                                                      ? BitmapDescriptor.fromAssetImage(AppAssets.whiteRound)
+                                                      : BitmapDescriptor.fromAssetImage(AppAssets.blueRound),
+                                                ),
                                               ),
-                                            )
-                                          : PlacemarkIcon.single(
-                                              PlacemarkIconStyle(
-                                                scale: 3,
-                                                image: themeData.isDarkMode
-                                                    ? BitmapDescriptor.fromAssetImage(AppAssets.whiteRound)
-                                                    : BitmapDescriptor.fromAssetImage(AppAssets.blueRound),
-                                              ),
-                                            ),
-                                      mapId: MapObjectId(place.name),
-                                      point: Point(
-                                        latitude: place.lat,
-                                        longitude: place.lng,
+                                        mapId: MapObjectId(place.name),
+                                        point: Point(
+                                          latitude: place.lat,
+                                          longitude: place.lng,
+                                        ),
+                                        onTap: (mapObject, point) async {
+                                          debugPrint('${place.name} tapped');
+                                          cubit.choosePlace(place);
+                                        },
                                       ),
-                                      onTap: (mapObject, point) async {
-                                        debugPrint('${place.name} tapped');
-                                        cubit.choosePlace(place);
-                                      },
-                                    ),
-                                  ),
+                                    );
+                                  },
                                 )
                                 .values
                                 .toList(),
@@ -167,12 +175,36 @@ class _MapScreenState extends State<MapScreen> {
                                           ),
                                         ],
                                       ),
-                                      Container(
-                                        margin: const EdgeInsets.symmetric(vertical: 16.0),
-                                        width: double.infinity,
-                                        height: 100,
-                                        color: Colors.red,
-                                        child: Text(cubit.tappedPlacemark!.name),
+                                      PlaceCard(
+                                        url: state.places[index].urls,
+                                        type: state.places[index].placeType,
+                                        name: state.places[index].name,
+                                        details: [
+                                          Text(
+                                            state.places[index].name,
+                                            maxLines: 2,
+                                            // style: widget.theme.textTheme.headlineSmall,
+                                          ),
+                                          const SizedBox(height: 2),
+                                          SizedBox(
+                                            height: size.height / 7,
+                                            child: Text(
+                                              state.places[index].description,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: AppTypography.textText16Regular,
+                                            ),
+                                          ),
+                                        ],
+                                        actionOne: const PlaceIcons(
+                                          assetName: AppAssets.heartFull,
+                                          width: 22,
+                                          height: 22,
+                                        ),
+                                        aspectRatio: AppCardSize.placeCard,
+                                        place: state.places[index],
+                                        placeIndex: index,
+                                        isVisitingScreen: false,
+                                        isMainScreen: false,
                                       ),
                                     ],
                                   ),
@@ -193,7 +225,6 @@ class _MapScreenState extends State<MapScreen> {
       floatingActionButton: BlocBuilder<PlacesListCubit, PlacesListState>(
         builder: (context, state) {
           if (state is PlacesListLoadedState) {
-            
             return Visibility(
               visible: cubit.isAddPlaceBtnVisible,
               child: Row(
