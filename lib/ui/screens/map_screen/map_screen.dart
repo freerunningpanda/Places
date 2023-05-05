@@ -183,12 +183,12 @@ class _MapScreenState extends State<MapScreen> {
                                         child: AspectRatio(
                                           aspectRatio: AppCardSize.previewCard,
                                           child: PlaceCard(
-                                            url: state.places[index].urls,
-                                            type: state.places[index].placeType,
-                                            name: state.places[index].name,
+                                            url: cubit.tappedPlacemark?.urls,
+                                            type: cubit.tappedPlacemark!.placeType,
+                                            name: cubit.tappedPlacemark!.name,
                                             details: [
                                               Text(
-                                                state.places[index].name,
+                                                cubit.tappedPlacemark!.name,
                                                 maxLines: 2,
                                                 // style: widget.theme.textTheme.headlineSmall,
                                               ),
@@ -196,7 +196,7 @@ class _MapScreenState extends State<MapScreen> {
                                               SizedBox(
                                                 width: size.width * 0.5,
                                                 child: Text(
-                                                  state.places[index].description,
+                                                  cubit.tappedPlacemark!.description,
                                                   overflow: TextOverflow.ellipsis,
                                                   style: AppTypography.textText16Regular,
                                                 ),
@@ -208,7 +208,7 @@ class _MapScreenState extends State<MapScreen> {
                                               height: 22,
                                             ),
                                             aspectRatio: AppCardSize.visitingCard,
-                                            place: state.places[index],
+                                            place: cubit.tappedPlacemark!,
                                             placeIndex: index,
                                             isVisitingScreen: false,
                                             isMainScreen: false,
