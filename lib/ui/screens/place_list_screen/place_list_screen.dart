@@ -261,15 +261,6 @@ class _PlaceListWidgetPortraitState extends State<_PlaceListWidgetPortrait> {
     });
   }
 
-  void removeFromFavorites(DbPlace place) {
-    final db = context.read<AppDb>();
-
-    setState(() {
-      place.isFavorite = false;
-      PlaceInteractor.favoritePlaces.remove(place);
-      db.deletePlace(place);
-    });
-  }
 
   // Получить список избранного из бд
   Future<void> getPlaces(AppDb db) async {

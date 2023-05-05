@@ -329,6 +329,7 @@ class _DismissibleWidget extends StatelessWidget {
                       ),
                     );
                 fromVisitingScreen = true;
+                await db.deletePlace(place);
                 debugPrint('placesToVisit[i].id: ${place.id}');
               },
               background: const SizedBox.shrink(),
@@ -358,6 +359,7 @@ class _DismissibleWidget extends StatelessWidget {
                           ),
                         );
                     fromVisitingScreen = true;
+                    await db.deletePlace(place);
                   },
                   isVisitingScreen: true,
                   place: place,
