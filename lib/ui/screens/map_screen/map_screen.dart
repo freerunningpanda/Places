@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:places/blocs/want_to_visit/want_to_visit_bloc.dart';
 import 'package:places/cubits/places_list/places_list_cubit.dart';
 import 'package:places/data/database/database.dart';
+import 'package:places/data/interactor/place_interactor.dart';
 import 'package:places/providers/theme_data_provider.dart';
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_card_size.dart';
@@ -37,6 +39,7 @@ class _MapScreenState extends State<MapScreen> {
     final themeData = context.read<ThemeDataProvider>();
     final cubit = context.read<PlacesListCubit>();
     final size = MediaQuery.of(context).size;
+    final db = context.read<AppDb>();
 
     return Scaffold(
       body: Column(
@@ -182,35 +185,106 @@ class _MapScreenState extends State<MapScreen> {
                                         padding: const EdgeInsets.only(bottom: 16.0),
                                         child: AspectRatio(
                                           aspectRatio: AppCardSize.previewCard,
-                                          child: PlaceCard(
-                                            url: cubit.tappedPlacemark?.urls,
-                                            type: cubit.tappedPlacemark!.placeType,
-                                            name: cubit.tappedPlacemark!.name,
-                                            details: [
-                                              Text(
-                                                cubit.tappedPlacemark!.name,
-                                                maxLines: 2,
-                                              ),
-                                              const SizedBox(height: 2),
-                                              SizedBox(
-                                                width: size.width * 0.5,
-                                                child: Text(
-                                                  cubit.tappedPlacemark!.description,
-                                                  overflow: TextOverflow.ellipsis,
-                                                  style: AppTypography.textText16Regular,
-                                                ),
-                                              ),
-                                            ],
-                                            actionOne: const PlaceIcons(
-                                              assetName: AppAssets.heartFull,
-                                              width: 22,
-                                              height: 22,
+                                          child: FutureBuilder(
+                                            future: getValue(
+                                              db,
+                                              state.tappedPlacemark ??
+                                                  DbPlace(
+                                                    id: 0,
+                                                    lat: 0,
+                                                    lng: 0,
+                                                    name: 'null',
+                                                    urls: 'null',
+                                                    placeType: 'null',
+                                                    description: 'null',
+                                                  ),
                                             ),
-                                            aspectRatio: AppCardSize.visitingCard,
-                                            place: cubit.tappedPlacemark!,
-                                            placeIndex: index,
-                                            isVisitingScreen: false,
-                                            isMainScreen: false,
+                                            // ignore: avoid_types_on_closure_parameters
+                                            builder: (_, AsyncSnapshot<bool> snapshot) {
+                                              if (snapshot.connectionState == ConnectionState.done) {
+                                                final isFavorite = snapshot.data ?? false;
+
+                                                return PlaceCard(
+                                                  url: cubit.tappedPlacemark?.urls,
+                                                  type: cubit.tappedPlacemark!.placeType,
+                                                  name: cubit.tappedPlacemark!.name,
+                                                  details: [
+                                                    Text(
+                                                      cubit.tappedPlacemark!.name,
+                                                      maxLines: 2,
+                                                    ),
+                                                    const SizedBox(height: 2),
+                                                    SizedBox(
+                                                      width: size.width * 0.5,
+                                                      child: Text(
+                                                        cubit.tappedPlacemark!.description,
+                                                        overflow: TextOverflow.ellipsis,
+                                                        style: AppTypography.textText16Regular,
+                                                      ),
+                                                    ),
+                                                  ],
+                                                  actionOne: isFavorite
+                                                      ? const PlaceIcons(
+                                                          assetName: AppAssets.heartFull,
+                                                          width: 22,
+                                                          height: 22,
+                                                        )
+                                                      : const PlaceIcons(
+                                                          assetName: AppAssets.favourite,
+                                                          width: 22,
+                                                          height: 22,
+                                                        ),
+                                                  addPlace: () => toggleFavorite(
+                                                    state.tappedPlacemark ??
+                                                        DbPlace(
+                                                          id: 0,
+                                                          lat: 0,
+                                                          lng: 0,
+                                                          name: 'null',
+                                                          urls: 'null',
+                                                          placeType: 'null',
+                                                          description: 'null',
+                                                        ),
+                                                  ),
+                                                  aspectRatio: AppCardSize.visitingCard,
+                                                  place: cubit.tappedPlacemark!,
+                                                  placeIndex: index,
+                                                  isVisitingScreen: false,
+                                                  isMainScreen: false,
+                                                );
+                                              } else {
+                                                return PlaceCard(
+                                                  url: cubit.tappedPlacemark?.urls,
+                                                  type: cubit.tappedPlacemark!.placeType,
+                                                  name: cubit.tappedPlacemark!.name,
+                                                  details: [
+                                                    Text(
+                                                      cubit.tappedPlacemark!.name,
+                                                      maxLines: 2,
+                                                    ),
+                                                    const SizedBox(height: 2),
+                                                    SizedBox(
+                                                      width: size.width * 0.5,
+                                                      child: Text(
+                                                        cubit.tappedPlacemark!.description,
+                                                        overflow: TextOverflow.ellipsis,
+                                                        style: AppTypography.textText16Regular,
+                                                      ),
+                                                    ),
+                                                  ],
+                                                  actionOne: const PlaceIcons(
+                                                    assetName: AppAssets.favourite,
+                                                    width: 22,
+                                                    height: 22,
+                                                  ),
+                                                  aspectRatio: AppCardSize.visitingCard,
+                                                  place: cubit.tappedPlacemark!,
+                                                  placeIndex: index,
+                                                  isVisitingScreen: false,
+                                                  isMainScreen: false,
+                                                );
+                                              }
+                                            },
                                           ),
                                         ),
                                       ),
@@ -297,6 +371,58 @@ class _MapScreenState extends State<MapScreen> {
         },
       ),
     );
+  }
+
+  Future<void> toggleFavorite(DbPlace place) async {
+    final db = context.read<AppDb>();
+    final isFavorite = await getValue(db, place);
+    setState(() {
+      if (!isFavorite) {
+        place.isFavorite = true;
+        context.read<WantToVisitBloc>().add(
+              AddToWantToVisitEvent(
+                db: db,
+                isFavorite: place.isFavorite,
+                place: place,
+              ),
+            );
+        db.addPlace(place, isSearchScreen: false);
+      } else {
+        place.isFavorite = false;
+        context.read<WantToVisitBloc>().add(
+              RemoveFromWantToVisitEvent(
+                db: db,
+                isFavorite: place.isFavorite,
+                place: place,
+              ),
+            );
+        db.deletePlace(place);
+      }
+    });
+  }
+
+  void removeFromFavorites(DbPlace place) {
+    final db = context.read<AppDb>();
+
+    setState(() {
+      place.isFavorite = false;
+      PlaceInteractor.favoritePlaces.remove(place);
+      db.deletePlace(place);
+    });
+  }
+
+  // Получить список избранного из бд
+  Future<void> getPlaces(AppDb db) async {
+    final list = await db.favoritePlacesEntries;
+    debugPrint('length: ${list.length}');
+  }
+
+  // Получить значение свойства isFavorite
+  Future<bool> getValue(AppDb db, DbPlace place) async {
+    final list = await db.favoritePlacesEntries;
+    final isFavorite = list.any((p) => p.id == place.id);
+
+    return isFavorite;
   }
 
   void _showMessage(BuildContext context, Text text) {
