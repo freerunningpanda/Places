@@ -190,7 +190,6 @@ class _MapScreenState extends State<MapScreen> {
                                               Text(
                                                 cubit.tappedPlacemark!.name,
                                                 maxLines: 2,
-                                                // style: widget.theme.textTheme.headlineSmall,
                                               ),
                                               const SizedBox(height: 2),
                                               SizedBox(
