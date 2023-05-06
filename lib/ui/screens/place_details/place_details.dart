@@ -440,81 +440,90 @@ class _PlaceDetailsBottomState extends State<_PlaceDetailsBottom> {
           ),
         ),
         InkWell(
-          onTap: () => toggleFavorite(widget.place, db),
-          child: Row(
-            children: [
-              if (widget.place.isFavorite)
-                const PlaceIcons(
-                  assetName: AppAssets.heartFull,
-                  width: 20,
-                  height: 18,
-                )
-              else
-                const PlaceIcons(
-                  assetName: AppAssets.favourite,
-                  width: 20,
-                  height: 18,
-                ),
-              const SizedBox(width: 9),
-              Text(
-                AppStrings.favourite,
-                style: theme.textTheme.displaySmall,
-              ),
-              const SizedBox(
-                width: 24,
-              ),
-            ],
+          onTap: () => toggleFavorite(widget.place),
+          child: FutureBuilder(
+            future: getValue(db, widget.place),
+            // ignore: avoid_types_on_closure_parameters
+            builder: (_, AsyncSnapshot<bool>  snapshot) {
+              if (snapshot.connectionState == ConnectionState.done) {
+                final isFavorite = snapshot.data ?? false;
+
+                return Row(
+                  children: [
+                    if (isFavorite)
+                      const PlaceIcons(
+                        assetName: AppAssets.heartFull,
+                        width: 20,
+                        height: 18,
+                      )
+                    else
+                      const PlaceIcons(
+                        assetName: AppAssets.favourite,
+                        width: 20,
+                        height: 18,
+                      ),
+                    const SizedBox(width: 9),
+                    Text(
+                      AppStrings.favourite,
+                      style: theme.textTheme.displaySmall,
+                    ),
+                    const SizedBox(
+                      width: 24,
+                    ),
+                  ],
+                );
+              } else {
+                return Row(
+                  children: [
+                    const PlaceIcons(
+                      assetName: AppAssets.favourite,
+                      width: 20,
+                      height: 18,
+                    ),
+                    const SizedBox(width: 9),
+                    Text(
+                      AppStrings.favourite,
+                      style: theme.textTheme.displaySmall,
+                    ),
+                    const SizedBox(
+                      width: 24,
+                    ),
+                  ],
+                );
+              }
+            },
           ),
         ),
       ],
     );
   }
 
-  Future<void> toggleFavorite(DbPlace place, AppDb db) async {
-    // final db = context.read<AppDb>();
-    // final isFavorite = await getValue(db, place);
-    // setState(() {
-    //   if (!isFavorite) {
-    //     place.isFavorite = true;
-    //     context.read<WantToVisitBloc>().add(
-    //           AddToWantToVisitEvent(
-    //             db: db,
-    //             isFavorite: place.isFavorite,
-    //             place: place,
-    //           ),
-    //         );
-    //     db.addPlace(place, isSearchScreen: false);
-    //   } else {
-    //     place.isFavorite = false;
-    //     context.read<WantToVisitBloc>().add(
-    //           RemoveFromWantToVisitEvent(
-    //             db: db,
-    //             isFavorite: place.isFavorite,
-    //             place: place,
-    //           ),
-    //         );
-    //     db.deletePlace(place);
-    //   }
-    // });
-    place.isFavorite = false;
-    context.read<WantToVisitBloc>().add(
-          RemoveFromWantToVisitEvent(
-            db: db,
-            isFavorite: place.isFavorite,
-            place: place,
-          ),
-        );
-    place.isFavorite = false;
-    context.read<FavoriteBloc>().add(
-          RemoveFromFavoriteEvent(
-            db: db,
-            isFavorite: place.isFavorite,
-            place: place,
-            placeIndex: place.id,
-          ),
-        );
-    fromVisitingScreen = false;
-    await db.deletePlace(place);
+  Future<void> toggleFavorite(DbPlace place) async {
+    final db = context.read<AppDb>();
+    final isFavorite = await getValue(db, place);
+    setState(() {
+      if (!isFavorite) {
+        place.isFavorite = true;
+        context.read<WantToVisitBloc>().add(
+              AddToWantToVisitEvent(
+                db: db,
+                isFavorite: place.isFavorite,
+                place: place,
+              ),
+            );
+        db.addPlace(place, isSearchScreen: false);
+      } else {
+        place.isFavorite = false;
+        context.read<WantToVisitBloc>().add(
+              RemoveFromWantToVisitEvent(
+                db: db,
+                isFavorite: place.isFavorite,
+                place: place,
+              ),
+            );
+        db.deletePlace(place);
+      }
+    });
   }
 
   // Получить список избранного из бд
