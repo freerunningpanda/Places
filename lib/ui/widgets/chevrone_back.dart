@@ -19,12 +19,16 @@ class ChevroneBack extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         debugPrint('🟡---------Back button pressed');
-        Navigator.pop(context);
-        // Navigator.of(context).push(
-        //   MaterialPageRoute<NavigationScreen>(
-        //     builder: (_) => const NavigationScreen(),
-        //   ),
-        // );
+        // Navigator.pop(context);
+        // Плохое решение, позиция скролла будет теряться каждый раз при возврате с экрана детализации места
+        // Из-за постоянной перестройки виджета
+        // Сделано ради обновления состояния лайков на экране интересных мест, поставленных на экране детализации 
+        // Не нашёл способа как это сделать сделать через менеджеры состояний
+        Navigator.of(context).push(
+          MaterialPageRoute<NavigationScreen>(
+            builder: (_) => const NavigationScreen(),
+          ),
+        );
       },
       child: Container(
         width: height,

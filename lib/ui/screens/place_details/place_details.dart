@@ -5,17 +5,13 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart' hide ErrorWidget;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:places/blocs/details_screen/details_screen_bloc.dart';
-import 'package:places/blocs/favorite/favorite_bloc.dart';
 import 'package:places/blocs/want_to_visit/want_to_visit_bloc.dart';
-import 'package:places/data/api/api_places.dart';
 import 'package:places/data/database/database.dart';
-import 'package:places/data/interactor/place_interactor.dart';
-import 'package:places/data/repository/place_repository.dart';
 
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_strings.dart';
 import 'package:places/ui/res/app_typography.dart';
-import 'package:places/ui/screens/visiting_screen/visiting_screen.dart';
+import 'package:places/ui/screens/navigation_screen/navigation_screen.dart';
 import 'package:places/ui/widgets/chevrone_back.dart';
 import 'package:places/ui/widgets/error_widget.dart';
 import 'package:places/ui/widgets/place_icons.dart';
@@ -80,30 +76,41 @@ class _PlaceDetailsState extends State<PlaceDetails> with TickerProviderStateMix
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: BlocBuilder<DetailsScreenBloc, DetailsScreenState>(
-        builder: (_, state) {
-          if (state is DetailsScreenLoadingState) {
-            return Transform.rotate(
-              angle: _rotateAnimation.value,
-              child: const PlaceIcons(
-                assetName: AppAssets.loader,
-                width: 30,
-                height: 30,
-              ),
-            );
-          } else if (state is DetailsScreenLoadedState) {
-            return _PlaceDetails(
-              height: widget.height,
-              place: widget.place,
-              pageController: _pageController,
-            );
-          }
+    return WillPopScope(
+      onWillPop: () {
+        Navigator.of(context).push(
+          MaterialPageRoute<NavigationScreen>(
+            builder: (_) => const NavigationScreen(),
+          ),
+        );
 
-          return const Center(
-            child: ErrorWidget(),
-          );
-        },
+        return Future.value(false);
+      },
+      child: Scaffold(
+        body: BlocBuilder<DetailsScreenBloc, DetailsScreenState>(
+          builder: (_, state) {
+            if (state is DetailsScreenLoadingState) {
+              return Transform.rotate(
+                angle: _rotateAnimation.value,
+                child: const PlaceIcons(
+                  assetName: AppAssets.loader,
+                  width: 30,
+                  height: 30,
+                ),
+              );
+            } else if (state is DetailsScreenLoadedState) {
+              return _PlaceDetails(
+                height: widget.height,
+                place: widget.place,
+                pageController: _pageController,
+              );
+            }
+
+            return const Center(
+              child: ErrorWidget(),
+            );
+          },
+        ),
       ),
     );
   }
@@ -444,7 +451,7 @@ class _PlaceDetailsBottomState extends State<_PlaceDetailsBottom> {
           child: FutureBuilder(
             future: getValue(db, widget.place),
             // ignore: avoid_types_on_closure_parameters
-            builder: (_, AsyncSnapshot<bool>  snapshot) {
+            builder: (_, AsyncSnapshot<bool> snapshot) {
               if (snapshot.connectionState == ConnectionState.done) {
                 final isFavorite = snapshot.data ?? false;
 

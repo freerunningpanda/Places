@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:places/blocs/choose_category_bloc/choose_category_bloc.dart';
 import 'package:places/blocs/details_screen/details_screen_bloc.dart';
-import 'package:places/blocs/favorite/favorite_bloc.dart';
 import 'package:places/blocs/filters_screen_bloc/filters_screen_bloc.dart';
 import 'package:places/blocs/search_bar/search_bar_bloc.dart';
 import 'package:places/blocs/search_history/search_history_bloc.dart';
@@ -74,9 +73,6 @@ void main() async {
           ),
           BlocProvider<DetailsScreenBloc>(
             create: (_) => DetailsScreenBloc(),
-          ),
-          BlocProvider<FavoriteBloc>(
-            create: (_) => FavoriteBloc(),
           ),
           BlocProvider<ChooseCategoryBloc>(
             create: (_) => ChooseCategoryBloc(),
