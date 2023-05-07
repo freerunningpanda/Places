@@ -320,14 +320,14 @@ class _DismissibleWidget extends StatelessWidget {
                       ),
                     );
                 place.isFavorite = false;
-                context.read<FavoriteBloc>().add(
-                      RemoveFromFavoriteEvent(
-                        db: db,
-                        isFavorite: place.isFavorite,
-                        place: place,
-                        placeIndex: place.id,
-                      ),
-                    );
+                // context.read<FavoriteBloc>().add(
+                //       RemoveFromFavoriteEvent(
+                //         db: db,
+                //         isFavorite: place.isFavorite,
+                //         place: place,
+                //         placeIndex: place.id,
+                //       ),
+                //     );
                 fromVisitingScreen = true;
                 await db.deletePlace(place);
                 debugPrint('placesToVisit[i].id: ${place.id}');
@@ -350,14 +350,14 @@ class _DismissibleWidget extends StatelessWidget {
                           ),
                         );
                     place.isFavorite = false;
-                    context.read<FavoriteBloc>().add(
-                          RemoveFromFavoriteEvent(
-                            db: db,
-                            isFavorite: place.isFavorite,
-                            place: place,
-                            placeIndex: place.id,
-                          ),
-                        );
+                    // context.read<FavoriteBloc>().add(
+                    //       RemoveFromFavoriteEvent(
+                    //         db: db,
+                    //         isFavorite: place.isFavorite,
+                    //         place: place,
+                    //         placeIndex: place.id,
+                    //       ),
+                    //     );
                     fromVisitingScreen = true;
                     await db.deletePlace(place);
                   },
