@@ -119,13 +119,6 @@ class _PlaceListWidgetPortraitState extends State<_PlaceListWidgetPortrait> {
   );
 
   @override
-  void initState() {
-    final db = context.read<AppDb>();
-    getPlaces(db);
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     final db = context.read<AppDb>();
@@ -261,12 +254,6 @@ class _PlaceListWidgetPortraitState extends State<_PlaceListWidgetPortrait> {
         interactor.removeFromFavorites(place: place, db: db);
       }
     });
-  }
-
-  // Получить список избранного из бд
-  Future<void> getPlaces(AppDb db) async {
-    final list = await db.favoritePlacesEntries;
-    debugPrint('length: ${list.length}');
   }
 
   // Получить значение свойства isFavorite
