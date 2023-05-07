@@ -138,11 +138,11 @@ class _PlaceListWidgetPortraitState extends State<_PlaceListWidgetPortrait> {
         itemCount: widget.placeList.length,
         itemBuilder: (_, index) {
           final place = widget.placeList[index];
-      
+
           /// Из строки получаю список с картинками
           final urlsList = place.urls.split('|');
           final imageUrl = urlsList.isNotEmpty ? urlsList[0] : null;
-      
+
           return Column(
             children: [
               FittedBox(
@@ -152,7 +152,7 @@ class _PlaceListWidgetPortraitState extends State<_PlaceListWidgetPortrait> {
                   builder: (_, AsyncSnapshot<bool> snapshot) {
                     if (snapshot.connectionState == ConnectionState.done) {
                       final isFavorite = snapshot.data ?? false;
-      
+
                       return PlaceCard(
                         isMainScreen: true,
                         placeIndex: index,
@@ -248,7 +248,7 @@ class _PlaceListWidgetPortraitState extends State<_PlaceListWidgetPortrait> {
                 place: place,
               ),
             );
-        db.addPlace(place, isSearchScreen: false);
+        interactor.addToFavorites(place: place, db: db);
       } else {
         place.isFavorite = false;
         context.read<WantToVisitBloc>().add(
@@ -258,11 +258,10 @@ class _PlaceListWidgetPortraitState extends State<_PlaceListWidgetPortrait> {
                 place: place,
               ),
             );
-        db.deletePlace(place);
+        interactor.removeFromFavorites(place: place, db: db);
       }
     });
   }
-
 
   // Получить список избранного из бд
   Future<void> getPlaces(AppDb db) async {
