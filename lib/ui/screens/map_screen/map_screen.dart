@@ -29,7 +29,6 @@ class _MapScreenState extends State<MapScreen> {
   late YandexMapController controller;
   GlobalKey mapKey = GlobalKey();
   int index = 0;
-  Future<bool> get locationPermissionNotGranted async => !(await Permission.location.request().isGranted);
 
   @override
   Widget build(BuildContext context) {
@@ -151,16 +150,6 @@ class _MapScreenState extends State<MapScreen> {
                                             ActionWidget(
                                               assetName: AppAssets.geolocation,
                                               onTap: () async {
-                                                if (await locationPermissionNotGranted) {
-                                                  // ignore: use_build_context_synchronously
-                                                  _showMessage(
-                                                    context,
-                                                    const Text('Location permission was NOT granted'),
-                                                  );
-
-                                                  return;
-                                                }
-
                                                 // ignore: use_build_context_synchronously
                                                 final mediaQuery = MediaQuery.of(context);
                                                 final height =
@@ -331,26 +320,24 @@ class _MapScreenState extends State<MapScreen> {
                     ActionWidget(assetName: AppAssets.refresh, onTap: () {}),
                     const AddNewPlaceButton(),
                     ActionWidget(
-                        assetName: AppAssets.geolocation,
-                        onTap: () async {
-                          if (await locationPermissionNotGranted) {
-                            // ignore: use_build_context_synchronously
-                            _showMessage(context, const Text('Location permission was NOT granted'));
-                            
-                            return;
-                          }
-                          // ignore: use_build_context_synchronously
-                          final mediaQuery = MediaQuery.of(context);
-                          final height = mapKey.currentContext!.size!.height * mediaQuery.devicePixelRatio;
-                          final width = mapKey.currentContext!.size!.width * mediaQuery.devicePixelRatio;
-                          await controller.toggleUserLayer(
-                              visible: true,
-                              autoZoomEnabled: true,
-                              anchor: UserLocationAnchor(
-                                  course: Offset(width * 0.5, height * 0.5),
-                                  normal: Offset(width * 0.5, height * 0.5),),);
-                        },),
-                  ]),)
+                      assetName: AppAssets.geolocation,
+                      onTap: () async {
+                        // ignore: use_build_context_synchronously
+                        final mediaQuery = MediaQuery.of(context);
+                        final height = mapKey.currentContext!.size!.height * mediaQuery.devicePixelRatio;
+                        final width = mapKey.currentContext!.size!.width * mediaQuery.devicePixelRatio;
+                        await controller.toggleUserLayer(
+                          visible: true,
+                          autoZoomEnabled: true,
+                          anchor: UserLocationAnchor(
+                            course: Offset(width * 0.5, height * 0.5),
+                            normal: Offset(width * 0.5, height * 0.5),
+                          ),
+                        );
+                      },
+                    ),
+                  ]),
+                )
               : const Center(child: CircularProgressIndicator());
         },
       ),
