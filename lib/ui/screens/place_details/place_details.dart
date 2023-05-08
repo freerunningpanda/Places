@@ -7,6 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:places/blocs/details_screen/details_screen_bloc.dart';
 import 'package:places/blocs/want_to_visit/want_to_visit_bloc.dart';
 import 'package:places/data/database/database.dart';
+import 'package:places/providers/theme_data_provider.dart';
 
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_strings.dart';
@@ -435,6 +436,7 @@ class _PlaceDetailsBottomState extends State<_PlaceDetailsBottom> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final themeProvider = context.read<ThemeDataProvider>();
     final db = context.read<AppDb>();
 
     return Row(
@@ -471,14 +473,14 @@ class _PlaceDetailsBottomState extends State<_PlaceDetailsBottom> {
                 return Row(
                   children: [
                     if (isFavorite)
-                      const PlaceIcons(
-                        assetName: AppAssets.heartFull,
+                      PlaceIcons(
+                        assetName: themeProvider.isDarkMode ? AppAssets.heartFull : AppAssets.heartFullDark,
                         width: 20,
                         height: 18,
                       )
                     else
-                      const PlaceIcons(
-                        assetName: AppAssets.favourite,
+                      PlaceIcons(
+                        assetName: themeProvider.isDarkMode ? AppAssets.favourite : AppAssets.favouriteDark,
                         width: 20,
                         height: 18,
                       ),
