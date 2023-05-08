@@ -85,7 +85,7 @@ class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMix
 
   /// Метод загрузки данных
   Future<void> _loadData() async {
-    final status = context.read<PermissionHandlerCubit>().status;
+    final status = PermissionHandlerCubit.status;
     if (status.isDenied) {
       await context.read<PlacesListCubit>().getPlacesNoGeo();
     } else if (status.isGranted) {

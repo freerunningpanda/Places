@@ -32,7 +32,6 @@ class FilterScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     final db = context.read<AppDb>();
-    final permissionCubit = context.read<PermissionHandlerCubit>();
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -61,7 +60,7 @@ class FilterScreen extends StatelessWidget {
                   ),
                   if (size.width <= 320) SizedBox(height: size.height / 10) else SizedBox(height: size.height / 3.5),
                   Visibility(
-                    visible: permissionCubit.status.isGranted,
+                    visible: PermissionHandlerCubit.status.isGranted,
                     child: Expanded(
                       child: _DistanceSlider(
                         filters: FiltersScreenBloc.filters,
