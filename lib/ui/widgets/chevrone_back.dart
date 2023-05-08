@@ -6,10 +6,12 @@ import 'package:places/ui/screens/res/custom_colors.dart';
 class ChevroneBack extends StatelessWidget {
   final double width;
   final double height;
+  final bool fromMainScreen;
   const ChevroneBack({
     Key? key,
     required this.height,
     required this.width,
+    required this.fromMainScreen,
   }) : super(key: key);
 
   @override
@@ -22,13 +24,17 @@ class ChevroneBack extends StatelessWidget {
         // Navigator.pop(context);
         // Плохое решение, позиция скролла будет теряться каждый раз при возврате с экрана детализации места
         // Из-за постоянной перестройки виджета
-        // Сделано ради обновления состояния лайков на экране интересных мест, поставленных на экране детализации 
+        // Сделано ради обновления состояния лайков на экране интересных мест, поставленных на экране детализации
         // Не нашёл способа как это сделать сделать через менеджеры состояний
-        Navigator.of(context).pushReplacement(
-          MaterialPageRoute<NavigationScreen>(
-            builder: (_) => const NavigationScreen(),
-          ),
-        );
+        if (fromMainScreen) {
+          Navigator.of(context).pushReplacement(
+            MaterialPageRoute<NavigationScreen>(
+              builder: (_) => const NavigationScreen(),
+            ),
+          );
+        } else {
+          Navigator.pop(context);
+        }
       },
       child: Container(
         width: height,

@@ -32,6 +32,7 @@ class FilterScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     final db = context.read<AppDb>();
+    final status = PermissionHandlerCubit.status.isGranted;
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -60,7 +61,7 @@ class FilterScreen extends StatelessWidget {
                   ),
                   if (size.width <= 320) SizedBox(height: size.height / 10) else SizedBox(height: size.height / 3.5),
                   Visibility(
-                    visible: PermissionHandlerCubit.status.isGranted,
+                    visible: status,
                     child: Expanded(
                       child: _DistanceSlider(
                         filters: FiltersScreenBloc.filters,
@@ -176,19 +177,19 @@ class _AppBar extends StatelessWidget implements PreferredSizeWidget {
   }
 }
 
-class _ClearButtonWidget extends StatefulWidget {
+class _ClearButtonWidget extends StatelessWidget {
   const _ClearButtonWidget({Key? key}) : super(key: key);
 
-  @override
-  State<_ClearButtonWidget> createState() => _ClearButtonWidgetState();
-}
-
-class _ClearButtonWidgetState extends State<_ClearButtonWidget> {
   @override
   Widget build(BuildContext context) {
     return TextButton(
       onPressed: () {
-        context.read<ShowPlacesButtonCubit>().clearAllFilters();
+        final status = PermissionHandlerCubit.status;
+        if (status.isDenied) {
+          context.read<ShowPlacesButtonCubit>().clearAllFiltersNoGeo();
+        } else if (status.isGranted) {
+          context.read<ShowPlacesButtonCubit>().clearAllFilters();
+        }
         context.read<FiltersScreenBloc>().add(ClearAllFiltersEvent());
       },
       child: const Text(
@@ -266,14 +267,20 @@ class _ItemFiltersListBigScreens extends StatelessWidget {
                 name: category.title,
                 assetName: category.assetName ?? 'null',
                 onTap: () async {
+                  final status = PermissionHandlerCubit.status;
                   final filteredByType =
                       filtersTable.places.where((place) => place.placeType.contains(category.placeType)).toList();
                   await context.read<FiltersScreenBloc>().addToFilteredList(
                         category: category,
                         filteredByType: filteredByType,
                       );
-                  // ignore: use_build_context_synchronously
-                  await context.read<ShowPlacesButtonCubit>().showCount(places: placeList);
+                  if (status.isDenied) {
+                    // ignore: use_build_context_synchronously
+                    await context.read<ShowPlacesButtonCubit>().showCountNoGeo(places: placeList);
+                  } else if (status.isGranted) {
+                    // ignore: use_build_context_synchronously
+                    await context.read<ShowPlacesButtonCubit>().showCount(places: placeList);
+                  }
 
                   if (!category.isEnabled) {
                     await AppPreferences.setCategoryByName(
@@ -349,14 +356,20 @@ class _ItemFiltersListSmallScreens extends StatelessWidget {
                 name: category.title,
                 assetName: category.assetName ?? 'null',
                 onTap: () async {
+                  final status = PermissionHandlerCubit.status;
                   final filteredByType =
                       filtersTable.places.where((place) => place.placeType.contains(category.placeType)).toList();
                   await context.read<FiltersScreenBloc>().addToFilteredList(
                         category: category,
                         filteredByType: filteredByType,
                       );
-                  // ignore: use_build_context_synchronously
-                  await context.read<ShowPlacesButtonCubit>().showCount(places: placeList);
+                  if (status.isDenied) {
+                    // ignore: use_build_context_synchronously
+                    await context.read<ShowPlacesButtonCubit>().showCountNoGeo(places: placeList);
+                  } else if (status.isGranted) {
+                    // ignore: use_build_context_synchronously
+                    await context.read<ShowPlacesButtonCubit>().showCount(places: placeList);
+                  }
 
                   if (!category.isEnabled) {
                     await AppPreferences.setCategoryByName(

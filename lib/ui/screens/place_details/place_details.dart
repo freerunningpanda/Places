@@ -109,6 +109,7 @@ class _PlaceDetailsState extends State<PlaceDetails> with TickerProviderStateMix
                 height: widget.height,
                 place: widget.place,
                 pageController: _pageController,
+                fromMainScreen: widget.fromMainScreen,
               );
             }
 
@@ -125,12 +126,14 @@ class _PlaceDetailsState extends State<PlaceDetails> with TickerProviderStateMix
 class _PlaceDetails extends StatelessWidget {
   final DbPlace place;
   final double height;
+  final bool fromMainScreen;
   final PageController _pageController;
 
   const _PlaceDetails({
     Key? key,
     required this.place,
     required this.height,
+    required this.fromMainScreen,
     required PageController pageController,
   })  : _pageController = pageController,
         super(key: key);
@@ -148,6 +151,7 @@ class _PlaceDetails extends StatelessWidget {
             images: urlsList,
             height: height,
             pageController: _pageController,
+            fromMainScreen: fromMainScreen,
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -178,6 +182,7 @@ class _PlaceDetailsGallery extends StatefulWidget {
   final List<String> images;
   final double height;
   final DbPlace place;
+  final bool fromMainScreen;
   final PageController _pageController;
 
   const _PlaceDetailsGallery({
@@ -185,6 +190,7 @@ class _PlaceDetailsGallery extends StatefulWidget {
     required this.images,
     required this.height,
     required this.place,
+    required this.fromMainScreen,
     required PageController pageController,
   })  : _pageController = pageController,
         super(key: key);
@@ -226,12 +232,13 @@ class _PlaceDetailsGalleryState extends State<_PlaceDetailsGallery> {
               ),
             ),
           ),
-          const Positioned(
+          Positioned(
             left: 16,
             top: 36,
             child: ChevroneBack(
               width: 32,
               height: 32,
+              fromMainScreen: widget.fromMainScreen,
             ),
           ),
         ],
