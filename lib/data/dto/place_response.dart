@@ -23,7 +23,7 @@ class PlaceResponse {
         id: json['id'] as int,
         lat: json['lat'] as double?,
         lon: json['lng'] as double?,
-        // distance: json['distance'] as double,
+        distance: json['distance'] as double?,
         name: json['name'] as String,
         // ignore: avoid_annotating_with_dynamic
         urls: (json['urls'] as List<dynamic>?)?.map((dynamic e) => e as String).toList() ?? [],
