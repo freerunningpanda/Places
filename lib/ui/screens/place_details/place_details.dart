@@ -532,13 +532,6 @@ class _PlaceDetailsBottomState extends State<_PlaceDetailsBottom> {
       }
     });
   }
-
-  // Получить список избранного из бд
-  Future<void> getPlaces(AppDb db) async {
-    final list = await db.favoritePlacesEntries;
-    debugPrint('length: ${list.length}');
-  }
-
   // Получить значение свойства isFavorite
   Future<bool> getValue(AppDb db, DbPlace place) async {
     final list = await db.favoritePlacesEntries;

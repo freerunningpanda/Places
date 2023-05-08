@@ -393,12 +393,6 @@ class _MapScreenState extends State<MapScreen> {
     });
   }
 
-  // Получить список избранного из бд
-  Future<void> getPlaces(AppDb db) async {
-    final list = await db.favoritePlacesEntries;
-    debugPrint('length: ${list.length}');
-  }
-
   // Получить значение свойства isFavorite
   Future<bool> getValue(AppDb db, DbPlace place) async {
     final list = await db.favoritePlacesEntries;

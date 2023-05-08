@@ -287,13 +287,6 @@ class _PlaceListWidgetLandscapeState extends State<_PlaceListWidgetLandscape> {
   );
 
   @override
-  void initState() {
-    final db = context.read<AppDb>();
-    getPlaces(db);
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     final db = context.read<AppDb>();
@@ -415,31 +408,29 @@ class _PlaceListWidgetLandscapeState extends State<_PlaceListWidgetLandscape> {
     setState(() {
       if (!isFavorite) {
         place.isFavorite = true;
-        PlaceInteractor.favoritePlaces.add(place);
-        db.addPlace(place, isSearchScreen: false);
+        context.read<WantToVisitBloc>().add(
+              AddToWantToVisitEvent(
+                db: db,
+                isFavorite: place.isFavorite,
+                place: place,
+              ),
+            );
+        interactor.addToFavorites(place: place, db: db);
       } else {
         place.isFavorite = false;
-        PlaceInteractor.favoritePlaces.remove(place);
-        db.deletePlace(place);
+        context.read<WantToVisitBloc>().add(
+              RemoveFromWantToVisitEvent(
+                db: db,
+                isFavorite: place.isFavorite,
+                place: place,
+              ),
+            );
+        interactor.removeFromFavorites(place: place, db: db);
       }
     });
   }
 
-  void removeFromFavorites(DbPlace place) {
-    final db = context.read<AppDb>();
-
-    setState(() {
-      place.isFavorite = false;
-      PlaceInteractor.favoritePlaces.remove(place);
-      db.deletePlace(place);
-    });
-  }
-
-  Future<void> getPlaces(AppDb db) async {
-    final list = await db.favoritePlacesEntries;
-    debugPrint('length: ${list.length}');
-  }
-
+  // Получить значение свойства isFavorite
   Future<bool> getValue(AppDb db, DbPlace place) async {
     final list = await db.favoritePlacesEntries;
     final isFavorite = list.any((p) => p.id == place.id);
