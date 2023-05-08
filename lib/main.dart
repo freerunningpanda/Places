@@ -12,6 +12,7 @@ import 'package:places/blocs/want_to_visit/want_to_visit_bloc.dart';
 import 'package:places/cubits/add_place_screen/add_place_screen_cubit.dart';
 import 'package:places/cubits/create_place/create_place_button_cubit.dart';
 import 'package:places/cubits/distance_slider_cubit/distance_slider_cubit.dart';
+import 'package:places/cubits/permission_handler/permission_handler_cubit.dart';
 import 'package:places/cubits/places_list/places_list_cubit.dart';
 import 'package:places/cubits/show_places_button/show_places_button_cubit.dart';
 import 'package:places/data/database/database.dart';
@@ -94,6 +95,9 @@ void main() async {
           ),
           BlocProvider<ShowPlacesButtonCubit>(
             create: (_) => ShowPlacesButtonCubit(),
+          ),
+          BlocProvider<PermissionHandlerCubit>(
+            create: (_) => PermissionHandlerCubit(),
           ),
         ],
         child: const App(),
