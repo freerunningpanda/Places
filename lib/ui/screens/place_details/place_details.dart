@@ -19,10 +19,12 @@ import 'package:places/ui/widgets/place_icons.dart';
 class PlaceDetails extends StatefulWidget {
   final DbPlace place;
   final double height;
+  final bool fromMainScreen;
   const PlaceDetails({
     Key? key,
     required this.place,
     required this.height,
+    required this.fromMainScreen,
   }) : super(key: key);
 
   @override
@@ -78,11 +80,15 @@ class _PlaceDetailsState extends State<PlaceDetails> with TickerProviderStateMix
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () {
-        Navigator.of(context).push(
-          MaterialPageRoute<NavigationScreen>(
-            builder: (_) => const NavigationScreen(),
-          ),
-        );
+        if (widget.fromMainScreen) {
+          Navigator.of(context).pushReplacement(
+            MaterialPageRoute<NavigationScreen>(
+              builder: (_) => const NavigationScreen(),
+            ),
+          );
+        } else {
+          Navigator.pop(context);
+        }
 
         return Future.value(false);
       },
@@ -532,6 +538,7 @@ class _PlaceDetailsBottomState extends State<_PlaceDetailsBottom> {
       }
     });
   }
+
   // Получить значение свойства isFavorite
   Future<bool> getValue(AppDb db, DbPlace place) async {
     final list = await db.favoritePlacesEntries;

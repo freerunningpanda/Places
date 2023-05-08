@@ -336,6 +336,7 @@ class _DismissibleWidget extends StatelessWidget {
               child: Padding(
                 padding: const EdgeInsets.only(bottom: 11.0),
                 child: PlaceCard(
+                  fromMainScreen: false,
                   isMainScreen: false,
                   placeIndex: place.id,
                   actionThree: () async {
@@ -476,6 +477,7 @@ class _VisitedPlacesList extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.only(bottom: 11.0),
         child: PlaceCard(
+          fromMainScreen: false,
           isMainScreen: false,
           placeIndex: place.id,
           actionThree: () async {

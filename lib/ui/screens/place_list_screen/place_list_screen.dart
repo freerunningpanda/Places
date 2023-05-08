@@ -42,6 +42,7 @@ class PlaceListScreen extends StatelessWidget {
         child: NestedScrollView(
           headerSliverBuilder: (_, innerBoxIsScrolled) => [
             SliverAppBar(
+              automaticallyImplyLeading: false,
               centerTitle: orientation ? isPortrait : !isPortrait,
               pinned: true,
               title: Text(
@@ -147,6 +148,7 @@ class _PlaceListWidgetPortraitState extends State<_PlaceListWidgetPortrait> {
                       final isFavorite = snapshot.data ?? false;
 
                       return PlaceCard(
+                        fromMainScreen: true,
                         isMainScreen: true,
                         placeIndex: index,
                         isVisitingScreen: false,
@@ -186,6 +188,7 @@ class _PlaceListWidgetPortraitState extends State<_PlaceListWidgetPortrait> {
                       );
                     } else {
                       return PlaceCard(
+                        fromMainScreen: true,
                         isMainScreen: true,
                         placeIndex: index,
                         isVisitingScreen: false,
@@ -321,6 +324,7 @@ class _PlaceListWidgetLandscapeState extends State<_PlaceListWidgetLandscape> {
                       final isFavorite = snapshot.data ?? false;
 
                       return PlaceCard(
+                        fromMainScreen: true,
                         isMainScreen: true,
                         placeIndex: index,
                         isVisitingScreen: false,
@@ -360,6 +364,7 @@ class _PlaceListWidgetLandscapeState extends State<_PlaceListWidgetLandscape> {
                       );
                     } else {
                       return PlaceCard(
+                        fromMainScreen: true,
                         isMainScreen: true,
                         placeIndex: index,
                         isVisitingScreen: false,

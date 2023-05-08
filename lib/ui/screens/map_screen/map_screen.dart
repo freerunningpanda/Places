@@ -205,6 +205,7 @@ class _MapScreenState extends State<MapScreen> {
                                                 final isFavorite = snapshot.data ?? false;
 
                                                 return PlaceCard(
+                                                  fromMainScreen: false,
                                                   url: cubit.tappedPlacemark?.urls,
                                                   type: cubit.tappedPlacemark!.placeType,
                                                   name: cubit.tappedPlacemark!.name,
@@ -254,6 +255,7 @@ class _MapScreenState extends State<MapScreen> {
                                                 );
                                               } else {
                                                 return PlaceCard(
+                                                  fromMainScreen: false,
                                                   url: cubit.tappedPlacemark?.urls,
                                                   type: cubit.tappedPlacemark!.placeType,
                                                   name: cubit.tappedPlacemark!.name,

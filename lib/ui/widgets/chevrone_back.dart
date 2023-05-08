@@ -24,7 +24,7 @@ class ChevroneBack extends StatelessWidget {
         // Из-за постоянной перестройки виджета
         // Сделано ради обновления состояния лайков на экране интересных мест, поставленных на экране детализации 
         // Не нашёл способа как это сделать сделать через менеджеры состояний
-        Navigator.of(context).push(
+        Navigator.of(context).pushReplacement(
           MaterialPageRoute<NavigationScreen>(
             builder: (_) => const NavigationScreen(),
           ),

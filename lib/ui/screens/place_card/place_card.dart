@@ -28,6 +28,7 @@ class PlaceCard extends StatelessWidget {
   final bool isVisitingScreen;
   final VoidCallback? actionThree;
   final bool isMainScreen;
+  final bool fromMainScreen;
 
   const PlaceCard({
     Key? key,
@@ -44,6 +45,7 @@ class PlaceCard extends StatelessWidget {
     required this.isVisitingScreen,
     this.actionThree,
     required this.isMainScreen,
+    required this.fromMainScreen,
   }) : super(key: key);
 
   @override
@@ -83,7 +85,10 @@ class PlaceCard extends StatelessWidget {
                   ),
                 ],
               ),
-              RippleCardFull(place: place),
+              RippleCardFull(
+                place: place,
+                fromMainScreen: fromMainScreen,
+              ),
               if (isVisitingScreen)
                 RippleIcons(
                   actionThree: actionThree,
@@ -205,14 +210,17 @@ class RippleIcons extends StatelessWidget {
 
 class RippleCardFull extends StatelessWidget {
   final DbPlace place;
+  final bool fromMainScreen;
 
   const RippleCardFull({
     Key? key,
     required this.place,
+    required this.fromMainScreen,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    
     return Positioned.fill(
       child: Material(
         type: MaterialType.transparency,
@@ -225,6 +233,7 @@ class RippleCardFull extends StatelessWidget {
                 builder: (_) => PlaceDetails(
                   height: 360,
                   place: place,
+                  fromMainScreen: fromMainScreen,
                 ),
               ),
             );
@@ -277,7 +286,9 @@ class _PlaceCardTopState extends State<_PlaceCardTop> with TickerProviderStateMi
     final orientation = MediaQuery.of(context).orientation == Orientation.portrait;
 
     return Container(
-      height: widget.isMainScreen ? (orientation ? size.height * 0.18 : size.height * 0.35) : (orientation ? size.height * 0.1 : size.height * 0.23),
+      height: widget.isMainScreen
+          ? (orientation ? size.height * 0.18 : size.height * 0.35)
+          : (orientation ? size.height * 0.1 : size.height * 0.23),
       decoration: const BoxDecoration(
         borderRadius: BorderRadius.only(
           topLeft: Radius.circular(8.0),
