@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:places/blocs/filters_screen_bloc/filters_screen_bloc.dart';
 import 'package:places/blocs/search_screen/search_screen_bloc.dart';
 import 'package:places/cubits/distance_slider_cubit/distance_slider_cubit.dart';
+import 'package:places/cubits/permission_handler/permission_handler_cubit.dart';
 import 'package:places/cubits/places_list/places_list_cubit.dart';
 import 'package:places/cubits/show_places_button/show_places_button_cubit.dart';
 import 'package:places/data/database/database.dart';
@@ -30,6 +32,7 @@ class FilterScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     final db = context.read<AppDb>();
+    final permissionCubit = context.read<PermissionHandlerCubit>();
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -57,10 +60,13 @@ class FilterScreen extends StatelessWidget {
                     activeFilters: PlaceInteractor.activeFilters,
                   ),
                   if (size.width <= 320) SizedBox(height: size.height / 10) else SizedBox(height: size.height / 3.5),
-                  Expanded(
-                    child: _DistanceSlider(
-                      filters: FiltersScreenBloc.filters,
-                      places: state.places,
+                  Visibility(
+                    visible: permissionCubit.status.isGranted,
+                    child: Expanded(
+                      child: _DistanceSlider(
+                        filters: FiltersScreenBloc.filters,
+                        places: state.places,
+                      ),
                     ),
                   ),
                   if (size.width <= 320)
@@ -101,7 +107,7 @@ class FilterScreen extends StatelessWidget {
     //   PlaceInteractor.filtersWithDistance.toList(),
     //   isSearchScreen: true,
     // );
-    
+
     // Добавить места, которые будут отображаться на экране поиска если очистить историю поиска
     await db.addPlacesToSearchScreen(
       PlaceInteractor.filtersWithDistance.toList(),
