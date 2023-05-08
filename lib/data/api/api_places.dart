@@ -22,9 +22,9 @@ class ApiPlaces {
       final response = await dio.post<String>(
         '/filtered_places',
         data: jsonEncode({
-          'lat': position.latitude,
-          'lng': position.longitude,
-          'radius': radius.toDouble(),
+          // 'lat': position.latitude,
+          // 'lng': position.longitude,
+          // 'radius': radius.toDouble(),
           'typeFilter': ['park', 'museum', 'other', 'theatre'],
           'nameFilter': category,
         }),
