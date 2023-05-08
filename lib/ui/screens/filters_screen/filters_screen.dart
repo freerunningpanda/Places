@@ -5,7 +5,6 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:places/blocs/filters_screen_bloc/filters_screen_bloc.dart';
 import 'package:places/blocs/search_screen/search_screen_bloc.dart';
 import 'package:places/cubits/distance_slider_cubit/distance_slider_cubit.dart';
-import 'package:places/cubits/permission_handler/permission_handler_cubit.dart';
 import 'package:places/cubits/places_list/places_list_cubit.dart';
 import 'package:places/cubits/show_places_button/show_places_button_cubit.dart';
 import 'package:places/data/database/database.dart';
@@ -13,6 +12,7 @@ import 'package:places/data/database/database.dart';
 import 'package:places/data/interactor/place_interactor.dart';
 import 'package:places/data/model/category.dart';
 import 'package:places/data/store/app_preferences.dart';
+import 'package:places/main.dart';
 import 'package:places/mocks.dart';
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_strings.dart';
@@ -32,7 +32,6 @@ class FilterScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     final db = context.read<AppDb>();
-    final status = PermissionHandlerCubit.status.isGranted;
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -60,15 +59,14 @@ class FilterScreen extends StatelessWidget {
                     activeFilters: PlaceInteractor.activeFilters,
                   ),
                   if (size.width <= 320) SizedBox(height: size.height / 10) else SizedBox(height: size.height / 3.5),
-                  Visibility(
-                    visible: status,
-                    child: Expanded(
-                      child: _DistanceSlider(
-                        filters: FiltersScreenBloc.filters,
-                        places: state.places,
-                      ),
+                  AbsorbPointer(
+                    absorbing: status.isDenied,
+                    child: _DistanceSlider(
+                      filters: FiltersScreenBloc.filters,
+                      places: state.places,
                     ),
                   ),
+                  const Spacer(),
                   if (size.width <= 320)
                     Expanded(
                       child: ActionButton(
@@ -184,7 +182,6 @@ class _ClearButtonWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextButton(
       onPressed: () {
-        final status = PermissionHandlerCubit.status;
         if (status.isDenied) {
           context.read<ShowPlacesButtonCubit>().clearAllFiltersNoGeo();
         } else if (status.isGranted) {
@@ -254,7 +251,7 @@ class _ItemFiltersListBigScreens extends StatelessWidget {
   Widget build(BuildContext context) {
     return Wrap(
       crossAxisAlignment: WrapCrossAlignment.center,
-      spacing: 24,
+      spacing: 14,
       runSpacing: 40,
       children: filtersTable.filters
           .asMap()
@@ -267,7 +264,6 @@ class _ItemFiltersListBigScreens extends StatelessWidget {
                 name: category.title,
                 assetName: category.assetName ?? 'null',
                 onTap: () async {
-                  final status = PermissionHandlerCubit.status;
                   final filteredByType =
                       filtersTable.places.where((place) => place.placeType.contains(category.placeType)).toList();
                   await context.read<FiltersScreenBloc>().addToFilteredList(
@@ -356,7 +352,6 @@ class _ItemFiltersListSmallScreens extends StatelessWidget {
                 name: category.title,
                 assetName: category.assetName ?? 'null',
                 onTap: () async {
-                  final status = PermissionHandlerCubit.status;
                   final filteredByType =
                       filtersTable.places.where((place) => place.placeType.contains(category.placeType)).toList();
                   await context.read<FiltersScreenBloc>().addToFilteredList(
@@ -536,37 +531,40 @@ class _DistanceSlider extends StatelessWidget {
 
     return BlocBuilder<DistanceSliderCubit, DistanceSliderState>(
       builder: (_, state) {
-        return Column(
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  AppStrings.distantion,
-                  style: theme.textTheme.displayMedium,
-                ),
-                Text(
-                  'от ${state.rangeValues.start.toInt()} до ${state.rangeValues.end.toInt()} м',
-                  style: theme.textTheme.titleMedium,
-                ),
-              ],
-            ),
-            const SizedBox(height: 24),
-            RangeSlider(
-              values: state.rangeValues,
-              min: min,
-              max: max,
-              onChanged: (values) {
-                context.read<DistanceSliderCubit>().changeArea(start: values.start, end: values.end);
-                context.read<ShowPlacesButtonCubit>().showCount(places: places);
-                for (final category in filters) {
-                  if (category.isEnabled) {
-                    context.read<ShowPlacesButtonCubit>().resetToZero();
+        return Opacity(
+          opacity: status.isDenied ? 0.3 : 1,
+          child: Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    AppStrings.distantion,
+                    style: theme.textTheme.displayMedium,
+                  ),
+                  Text(
+                    'от ${state.rangeValues.start.toInt()} до ${state.rangeValues.end.toInt()} м',
+                    style: theme.textTheme.titleMedium,
+                  ),
+                ],
+              ),
+              const SizedBox(height: 24),
+              RangeSlider(
+                values: state.rangeValues,
+                min: min,
+                max: max,
+                onChanged: (values) {
+                  context.read<DistanceSliderCubit>().changeArea(start: values.start, end: values.end);
+                  context.read<ShowPlacesButtonCubit>().showCount(places: places);
+                  for (final category in filters) {
+                    if (category.isEnabled) {
+                      context.read<ShowPlacesButtonCubit>().resetToZero();
+                    }
                   }
-                }
-              },
-            ),
-          ],
+                },
+              ),
+            ],
+          ),
         );
       },
     );

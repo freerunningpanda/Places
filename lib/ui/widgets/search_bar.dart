@@ -3,11 +3,11 @@ import 'package:permission_handler/permission_handler.dart';
 
 import 'package:places/blocs/search_history/search_history_bloc.dart';
 import 'package:places/blocs/search_screen/search_screen_bloc.dart';
-import 'package:places/cubits/permission_handler/permission_handler_cubit.dart';
 import 'package:places/data/api/api_places.dart';
 import 'package:places/data/database/database.dart';
 import 'package:places/data/interactor/place_interactor.dart';
 import 'package:places/data/repository/place_repository.dart';
+import 'package:places/main.dart';
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_strings.dart';
 import 'package:places/ui/res/app_typography.dart';
@@ -59,7 +59,6 @@ class _SearchBarState extends State<SearchBar> {
     final searchStoryList = PlaceInteractor.searchHistoryList;
     final bloc = context.read<SearchHistoryBloc>();
     final db = context.read<AppDb>();
-    final status = PermissionHandlerCubit.status;
 
     return Padding(
       padding: const EdgeInsets.only(

@@ -3,19 +3,18 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:places/cubits/permission_handler/permission_handler_cubit.dart';
 import 'package:places/data/api/api_places.dart';
 import 'package:places/data/database/database.dart';
 import 'package:places/data/interactor/place_interactor.dart';
 import 'package:places/data/repository/place_repository.dart';
 import 'package:places/data/store/app_preferences.dart';
+import 'package:places/main.dart';
 import 'package:places/mocks.dart';
 
 part 'search_screen_event.dart';
 part 'search_screen_state.dart';
 
 class SearchScreenBloc extends Bloc<SearchScreenEvent, SearchScreenState> {
-  final status = PermissionHandlerCubit.status;
   bool hasFocus = false;
   PlaceInteractor interactor = PlaceInteractor(
     repository: PlaceRepository(

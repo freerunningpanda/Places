@@ -3,9 +3,9 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:places/cubits/permission_handler/permission_handler_cubit.dart';
 import 'package:places/cubits/places_list/places_list_cubit.dart';
 import 'package:places/data/store/app_preferences.dart';
+import 'package:places/main.dart';
 
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_colors.dart';
@@ -78,14 +78,12 @@ class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMix
     isInitialized = false;
 
     /// изначально данные непроинициализированы.
-    await _getPermission();
     await _loadData();
     await _navigateToNext();
   }
 
   /// Метод загрузки данных
   Future<void> _loadData() async {
-    final status = PermissionHandlerCubit.status;
     if (status.isDenied) {
       await context.read<PlacesListCubit>().getPlacesNoGeo();
     } else if (status.isGranted) {
@@ -96,10 +94,6 @@ class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMix
     /// загрузка данных. isInitialized меняется на true.
   }
 
-  /// Метод получения разрешения на запрос геопозиции
-  Future<void> _getPermission() async {
-    await context.read<PermissionHandlerCubit>().requestPermission();
-  }
 
   /// Метод навигации
   Future<void> _navigateToNext() async {
