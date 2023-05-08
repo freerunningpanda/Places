@@ -26,6 +26,15 @@ class PlaceRepository {
     return places.map(Mapper.placesFromApiToUi).toList();
   }
 
+  // Получить все места если в гео было отказано пользователем
+  Future<List<DbPlace>> getPlacesNoGeo() async {
+    final places = await apiPlaces.getPlacesNoGeo(
+      category: '',
+    );
+
+    return places.map(Mapper.placesFromApiToUi).toList();
+  }
+
   // Получить моковые места
   // Future<List<Place>> getPlaces() async {
   //   final places = Mocks.mocks;

@@ -35,6 +35,18 @@ class PlacesListCubit extends Cubit<PlacesListState> {
     }
   }
 
+  Future<void> getPlacesNoGeo() async {
+    try {
+      emit(PlaceListLoadingState());
+      places = await interactor.getPlacesNoGeo();
+      emit(PlacesListLoadedState(
+        places: places,
+      ));
+    } on DioError catch (e) {
+      emit(PlacesListErrorState(error: e.message));
+    }
+  }
+
   void choosePlace(DbPlace place) {
     if (tappedPlacemark != place) {
       isAddPlaceBtnVisible = false;

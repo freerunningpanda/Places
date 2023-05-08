@@ -26,6 +26,8 @@ class PlaceInteractor {
 
   Future<List<DbPlace>> getPlaces() => repository.getPlaces();
 
+  Future<List<DbPlace>> getPlacesNoGeo() => repository.getPlacesNoGeo();
+
   Future<DbPlace> getPlaceDetails(DbPlace place) => repository.getPlaceDetails(place);
 
   Future<PlaceModel> postPlace({

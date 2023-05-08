@@ -22,9 +22,36 @@ class ApiPlaces {
       final response = await dio.post<String>(
         '/filtered_places',
         data: jsonEncode({
-          // 'lat': position.latitude,
-          // 'lng': position.longitude,
-          // 'radius': radius.toDouble(),
+          'lat': position.latitude,
+          'lng': position.longitude,
+          'radius': radius.toDouble(),
+          'typeFilter': ['park', 'museum', 'other', 'theatre'],
+          'nameFilter': category,
+        }),
+      );
+      if (response.statusCode == 200) {
+        final dynamic list = jsonDecode(response.data ?? '');
+        debugPrint('$list');
+
+        // ignore: avoid_annotating_with_dynamic
+        return (list as List<dynamic>).map((dynamic e) => PlaceResponse.fromJson(e as Map<String, dynamic>)).toList();
+      }
+      throw Exception('No 200 status code: Error code: ${response.statusCode}');
+    } on DioError catch (e) {
+      throw NetworkException(
+        query: e.requestOptions.path,
+        statusCode: e.error.toString(),
+      );
+    }
+  }
+
+  Future<List<PlaceResponse>> getPlacesNoGeo({required String category}) async {
+    initInterceptors();
+
+    try {
+      final response = await dio.post<String>(
+        '/filtered_places',
+        data: jsonEncode({
           'typeFilter': ['park', 'museum', 'other', 'theatre'],
           'nameFilter': category,
         }),
