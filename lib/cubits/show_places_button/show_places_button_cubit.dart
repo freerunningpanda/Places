@@ -77,7 +77,6 @@ class ShowPlacesButtonCubit extends Cubit<ShowPlacesButtonState> {
 
   // Метод для кнопки очистки всех фильтров. Гео отключено.
   Future<void> clearAllFiltersNoGeo() async {
-    debugPrint('Executed');
     filters.map((e) => e.isEnabled = false).toList();
     PlaceInteractor.initialFilteredPlaces.clear();
 
