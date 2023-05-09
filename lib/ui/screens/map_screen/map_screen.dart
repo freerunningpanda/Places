@@ -7,7 +7,7 @@ import 'package:places/cubits/places_list/places_list_cubit.dart';
 import 'package:places/data/database/database.dart';
 import 'package:places/data/interactor/place_interactor.dart';
 import 'package:places/main.dart';
-import 'package:places/providers/build_route_provider.dart';
+import 'package:places/providers/map_data_provider.dart';
 import 'package:places/providers/theme_data_provider.dart';
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_card_size.dart';
@@ -45,7 +45,7 @@ class _MapScreenState extends State<MapScreen> {
   Widget build(BuildContext context) {
     final isSearchPage = context.read<PlacesListCubit>().isSearchPage;
     final isDarkMode = context.read<ThemeDataProvider>().isDarkMode;
-    final buildRouteProvider = context.read<BuildRouteProvider>();
+    final buildRouteProvider = context.read<MapDataProvider>();
     final readOnly = context.read<PlacesListCubit>().readOnly;
     final themeData = context.read<ThemeDataProvider>();
     final cubit = context.read<PlacesListCubit>();

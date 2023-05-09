@@ -18,7 +18,7 @@ import 'package:places/cubits/places_list/places_list_cubit.dart';
 import 'package:places/cubits/show_places_button/show_places_button_cubit.dart';
 import 'package:places/data/database/database.dart';
 import 'package:places/data/store/app_preferences.dart';
-import 'package:places/providers/build_route_provider.dart';
+import 'package:places/providers/map_data_provider.dart';
 import 'package:places/providers/theme_data_provider.dart';
 import 'package:places/ui/res/app_strings.dart';
 import 'package:places/ui/screens/onboarding_screen/onboarding_screen.dart';
@@ -55,8 +55,8 @@ void main() async {
         Provider<AppDb>(
           create: (_) => db,
         ),
-        Provider<BuildRouteProvider>(
-          create: (_) => BuildRouteProvider(),
+        Provider<MapDataProvider>(
+          create: (_) => MapDataProvider(),
         ),
       ],
       child: MultiBlocProvider(

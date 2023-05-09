@@ -7,7 +7,7 @@ import 'package:places/main.dart';
 import 'package:provider/provider.dart';
 import 'package:yandex_mapkit/yandex_mapkit.dart';
 
-class BuildRouteProvider {
+class MapDataProvider {
   Future<void> buildRoute({
     required double lat,
     required double lng,
