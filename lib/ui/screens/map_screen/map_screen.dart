@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:places/blocs/want_to_visit/want_to_visit_bloc.dart';
 import 'package:places/cubits/places_list/places_list_cubit.dart';
 import 'package:places/data/database/database.dart';
 import 'package:places/data/interactor/place_interactor.dart';
+import 'package:places/main.dart';
 import 'package:places/providers/theme_data_provider.dart';
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_card_size.dart';
@@ -16,6 +18,8 @@ import 'package:places/ui/widgets/search_appbar.dart';
 import 'package:places/ui/widgets/search_bar.dart';
 import 'package:yandex_mapkit/yandex_mapkit.dart';
 
+
+
 class MapScreen extends StatefulWidget {
   const MapScreen({Key? key}) : super(key: key);
 
@@ -25,6 +29,20 @@ class MapScreen extends StatefulWidget {
 
 class _MapScreenState extends State<MapScreen> {
   final animation = const MapAnimation();
+  late final List<MapObject> mapObjects = [
+    PlacemarkMapObject(
+      mapId: cameraMapObjectId,
+      point: newPoint ?? const Point(latitude: 55.908155, longitude: 37.730916),
+      icon: PlacemarkIcon.single(
+        PlacemarkIconStyle(
+          image: BitmapDescriptor.fromAssetImage('lib/assets/place.png'),
+          scale: 0.75,
+        ),
+      ),
+      opacity: 0.5,
+    ),
+  ];
+  final MapObjectId cameraMapObjectId = const MapObjectId('camera_placemark');
   late YandexMapController controller;
   GlobalKey mapKey = GlobalKey();
   int index = 0;
@@ -67,7 +85,26 @@ class _MapScreenState extends State<MapScreen> {
                           YandexMap(
                             key: mapKey,
                             onMapCreated: (yandexMapController) async {
-                              controller = yandexMapController;
+                              for (var i in state.places) {
+                                final placemarkMapObject =
+                                    mapObjects.firstWhere((el) => el.mapId == cameraMapObjectId) as PlacemarkMapObject;
+                                controller = yandexMapController;
+
+                                await controller.moveCamera(
+                                  CameraUpdate.newCameraPosition(
+                                    CameraPosition(target: placemarkMapObject.point, zoom: 17),
+                                  ),
+                                );
+                              }
+                            },
+                            onCameraPositionChanged: (cameraPosition, _, __) {
+                              final placemarkMapObject =
+                                  mapObjects.firstWhere((el) => el.mapId == cameraMapObjectId) as PlacemarkMapObject;
+
+                              setState(() {
+                                mapObjects[mapObjects.indexOf(placemarkMapObject)] =
+                                    placemarkMapObject.copyWith(point: cameraPosition.target);
+                              });
                             },
                             onUserLocationAdded: (view) async {
                               return view.copyWith(

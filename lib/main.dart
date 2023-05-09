@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:places/blocs/choose_category_bloc/choose_category_bloc.dart';
 import 'package:places/blocs/details_screen/details_screen_bloc.dart';
@@ -29,11 +30,19 @@ final ThemeData _lightTheme = AppTheme.buildTheme();
 final ThemeData _darkTheme = AppTheme.buildThemeDark();
 final AppDb db = AppDb();
 late PermissionStatus status;
+Position? position;
+Point? newPoint;
+
+Future<void> getPosition() async {
+  position = await Geolocator.getCurrentPosition();
+  newPoint = Point(latitude: position!.latitude, longitude: position!.longitude);
+}
 
 // ignore: long-method
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   status = await Permission.location.request();
+  await getPosition();
   await AppPreferences.init();
   AndroidYandexMap.useAndroidViewSurface = false;
 
