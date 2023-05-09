@@ -318,12 +318,13 @@ class _MapScreenState extends State<MapScreen> {
                                         onTap: () {
                                           debugPrint('route tapped');
                                           final place = cubit.tappedPlacemark!;
-                                          buildRouteProvider.buildRoute(
-                                            lat: place.lat,
-                                            lng: place.lng,
-                                            title: place.name,
-                                          );
-                                          addToVisited(place);
+                                          buildRouteProvider
+                                            ..buildRoute(
+                                              lat: place.lat,
+                                              lng: place.lng,
+                                              title: place.name,
+                                            )
+                                            ..addToVisited(place, context);
                                         },
                                         child: const PlaceIcons(
                                           assetName: AppAssets.route,
@@ -379,19 +380,6 @@ class _MapScreenState extends State<MapScreen> {
         },
       ),
     );
-  }
-
-  Future<void> addToVisited(DbPlace place) async {
-    final db = context.read<AppDb>();
-    final isVisited = place.isVisited = true;
-    context.read<VisitedScreenBloc>().add(
-          AddToVisitedEvent(
-            db: db,
-            isVisited: isVisited,
-            place: place,
-          ),
-        );
-    await db.addPlace(place, isSearchScreen: false);
   }
 
   Future<void> refreshPlaces() async {

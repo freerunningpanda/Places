@@ -403,11 +403,13 @@ class _PlaceDetailsBuildRouteBtn extends StatelessWidget {
         child: GestureDetector(
           onTap: () {
             debugPrint('🟡---------Build a route pressed');
-            buildRouteProvider.buildRoute(
-              lat: place.lat,
-              lng: place.lng,
-              title: place.name,
-            );
+            buildRouteProvider
+              ..buildRoute(
+                lat: place.lat,
+                lng: place.lng,
+                title: place.name,
+              )
+              ..addToVisited(place, context);
           },
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
