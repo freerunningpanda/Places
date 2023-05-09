@@ -7,6 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:places/blocs/details_screen/details_screen_bloc.dart';
 import 'package:places/blocs/want_to_visit/want_to_visit_bloc.dart';
 import 'package:places/data/database/database.dart';
+import 'package:places/providers/build_route_provider.dart';
 import 'package:places/providers/theme_data_provider.dart';
 
 import 'package:places/ui/res/app_assets.dart';
@@ -388,6 +389,7 @@ class _PlaceDetailsBuildRouteBtn extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final buildRouteProvider = context.read<BuildRouteProvider>();
     final theme = Theme.of(context);
 
     return GestureDetector(
@@ -399,7 +401,14 @@ class _PlaceDetailsBuildRouteBtn extends StatelessWidget {
           color: theme.sliderTheme.activeTrackColor,
         ),
         child: GestureDetector(
-          onTap: () => debugPrint('🟡---------Build a route pressed'),
+          onTap: () {
+            debugPrint('🟡---------Build a route pressed');
+            buildRouteProvider.buildRoute(
+              lat: place.lat,
+              lng: place.lng,
+              title: place.name,
+            );
+          },
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [

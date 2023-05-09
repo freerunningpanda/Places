@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:map_launcher/map_launcher.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:places/blocs/visited/visited_screen_bloc.dart';
 import 'package:places/blocs/want_to_visit/want_to_visit_bloc.dart';
@@ -8,6 +7,7 @@ import 'package:places/cubits/places_list/places_list_cubit.dart';
 import 'package:places/data/database/database.dart';
 import 'package:places/data/interactor/place_interactor.dart';
 import 'package:places/main.dart';
+import 'package:places/providers/build_route_provider.dart';
 import 'package:places/providers/theme_data_provider.dart';
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_card_size.dart';
@@ -37,7 +37,7 @@ class _MapScreenState extends State<MapScreen> {
     ),
   ];
   final MapObjectId cameraMapObjectId = const MapObjectId('camera_placemark');
-  List<AvailableMap> availableMaps = [];
+  // List<AvailableMap> availableMaps = [];
   late YandexMapController controller;
   GlobalKey mapKey = GlobalKey();
   int index = 0;
@@ -46,6 +46,7 @@ class _MapScreenState extends State<MapScreen> {
   Widget build(BuildContext context) {
     final isSearchPage = context.read<PlacesListCubit>().isSearchPage;
     final isDarkMode = context.read<ThemeDataProvider>().isDarkMode;
+    final buildRouteProvider = context.read<BuildRouteProvider>();
     final readOnly = context.read<PlacesListCubit>().readOnly;
     final themeData = context.read<ThemeDataProvider>();
     final cubit = context.read<PlacesListCubit>();
@@ -317,7 +318,7 @@ class _MapScreenState extends State<MapScreen> {
                                         onTap: () {
                                           debugPrint('route tapped');
                                           final place = cubit.tappedPlacemark!;
-                                          buildRoute(
+                                          buildRouteProvider.buildRoute(
                                             lat: place.lat,
                                             lng: place.lng,
                                             title: place.name,
@@ -391,18 +392,6 @@ class _MapScreenState extends State<MapScreen> {
           ),
         );
     await db.addPlace(place, isSearchScreen: false);
-  }
-
-  Future<void> buildRoute({
-    required double lat,
-    required double lng,
-    required String title,
-  }) async {
-    availableMaps = await MapLauncher.installedMaps;
-    await availableMaps.first.showMarker(
-      coords: Coords(lat, lng),
-      title: title,
-    );
   }
 
   Future<void> refreshPlaces() async {
