@@ -76,7 +76,6 @@ class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMix
   /// Метод инициализации данных
   Future<void> _init() async {
     isInitialized = false;
-
     /// изначально данные непроинициализированы.
     await _loadData();
     await _navigateToNext();
@@ -93,7 +92,6 @@ class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMix
 
     /// загрузка данных. isInitialized меняется на true.
   }
-
 
   /// Метод навигации
   Future<void> _navigateToNext() async {

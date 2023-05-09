@@ -43,7 +43,6 @@ Future<void> getPosition() async {
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   status = await Permission.location.request();
-  await getPosition();
   await AppPreferences.init();
   AndroidYandexMap.useAndroidViewSurface = false;
 

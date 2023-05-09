@@ -12,6 +12,7 @@ import 'package:places/data/database/database.dart';
 import 'package:places/data/interactor/place_interactor.dart';
 import 'package:places/data/repository/place_repository.dart';
 import 'package:places/main.dart';
+import 'package:places/providers/build_route_provider.dart';
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_card_size.dart';
 import 'package:places/ui/res/app_colors.dart';
@@ -171,6 +172,8 @@ class _PlaceListWidgetPortraitState extends State<_PlaceListWidgetPortrait> {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     final db = context.read<AppDb>();
+    // Получить текущую позицию
+    context.read<BuildRouteProvider>().getPosition();
 
     return Expanded(
       child: RefreshIndicator(

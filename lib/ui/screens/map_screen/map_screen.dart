@@ -37,7 +37,6 @@ class _MapScreenState extends State<MapScreen> {
     ),
   ];
   final MapObjectId cameraMapObjectId = const MapObjectId('camera_placemark');
-  // List<AvailableMap> availableMaps = [];
   late YandexMapController controller;
   GlobalKey mapKey = GlobalKey();
   int index = 0;
