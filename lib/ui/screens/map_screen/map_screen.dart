@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:map_launcher/map_launcher.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:places/blocs/visited/visited_screen_bloc.dart';
 import 'package:places/blocs/want_to_visit/want_to_visit_bloc.dart';
 import 'package:places/cubits/places_list/places_list_cubit.dart';
 import 'package:places/data/database/database.dart';
@@ -315,12 +316,13 @@ class _MapScreenState extends State<MapScreen> {
                                       child: InkWell(
                                         onTap: () {
                                           debugPrint('route tapped');
-                                          final place = state.places[index];
+                                          final place = cubit.tappedPlacemark!;
                                           buildRoute(
                                             lat: place.lat,
                                             lng: place.lng,
                                             title: place.name,
                                           );
+                                          addToVisited(place);
                                         },
                                         child: const PlaceIcons(
                                           assetName: AppAssets.route,
@@ -376,6 +378,19 @@ class _MapScreenState extends State<MapScreen> {
         },
       ),
     );
+  }
+
+  Future<void> addToVisited(DbPlace place) async {
+    final db = context.read<AppDb>();
+    final isVisited = place.isVisited = true;
+    context.read<VisitedScreenBloc>().add(
+          AddToVisitedEvent(
+            db: db,
+            isVisited: isVisited,
+            place: place,
+          ),
+        );
+    await db.addPlace(place, isSearchScreen: false);
   }
 
   Future<void> buildRoute({

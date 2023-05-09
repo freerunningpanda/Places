@@ -8,13 +8,13 @@ abstract class VisitedScreenEvent {
 class VisitedListLoadedEvent extends VisitedScreenEvent {}
 
 class AddToVisitedEvent extends VisitedScreenEvent {
-  final bool isFavorite;
   final DbPlace place;
+  final bool isVisited;
   final AppDb db;
 
   const AddToVisitedEvent({
-    required this.isFavorite,
     required this.place,
+    required this.isVisited,
     required this.db,
   });
 }

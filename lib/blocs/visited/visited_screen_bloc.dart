@@ -1,4 +1,3 @@
-import 'package:drift/drift.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:places/data/database/database.dart';
@@ -19,6 +18,7 @@ class VisitedScreenBloc extends Bloc<VisitedScreenEvent, VisitedScreenState> {
         emit(
           VisitedIsNotEmpty(
             visitedPlaces: visitedPlaces,
+            isVisited: true,
             length: visitedPlaces.length,
           ),
         );
@@ -26,10 +26,11 @@ class VisitedScreenBloc extends Bloc<VisitedScreenEvent, VisitedScreenState> {
     });
     on<AddToVisitedEvent>(
       (event, emit) async {
-        final dbVisitedPlaces = await event.db.favoritePlacesEntries;
+        final dbVisitedPlaces = await event.db.visitedPlacesEntries;
         emit(
           VisitedIsNotEmpty(
             visitedPlaces: dbVisitedPlaces,
+            isVisited: event.isVisited,
             length: dbVisitedPlaces.length,
           ),
         );
@@ -37,21 +38,8 @@ class VisitedScreenBloc extends Bloc<VisitedScreenEvent, VisitedScreenState> {
     );
   }
 
-  Future<void> dragCard(List<DbPlace> places, AppDb db, int oldIndex, int newIndex) async {
-    var modifiedIndex = newIndex;
-    if (newIndex > oldIndex) modifiedIndex--;
-
-    final place = places.removeAt(oldIndex);
-
-    places.insert(modifiedIndex, place);
-    for (var i = 0; i < places.length; i++) {
-      final updatedPlace = places[i].copyWith(index: Value<int>(i));
-      await db.updatePlace(updatedPlace);
-    }
-  }
-
   Future<List<DbPlace>> getVisitedPlaces(AppDb db) async {
-    final list = await db.favoritePlacesEntries; // TODO: Заменить на посещённые места
+    final list = await db.visitedPlacesEntries;
 
     return list;
   }

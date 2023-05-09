@@ -138,6 +138,12 @@ class _PlaceListScreenState extends State<PlaceListScreen> with TickerProviderSt
       floatingActionButton: const AddNewPlaceButton(),
     );
   }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
 }
 
 class _PlaceListWidgetPortrait extends StatefulWidget {
