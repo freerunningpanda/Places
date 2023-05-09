@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:places/data/api/api_places.dart';
 import 'package:places/data/database/database.dart';
 import 'package:places/data/interactor/place_interactor.dart';
@@ -17,28 +18,17 @@ class PlacesListCubit extends Cubit<PlacesListState> {
       apiPlaces: ApiPlaces(),
     ),
   );
+
   List<DbPlace> places = [];
   bool isAddPlaceBtnVisible = true;
   DbPlace? tappedPlacemark;
 
   PlacesListCubit() : super(PlacesListEmptyState());
-
   Future<void> getPlaces() async {
     try {
       emit(PlaceListLoadingState());
-      places = await interactor.getPlaces();
-      emit(PlacesListLoadedState(
-        places: places,
-      ));
-    } on DioError catch (e) {
-      emit(PlacesListErrorState(error: e.message));
-    }
-  }
-
-  Future<void> getPlacesNoGeo() async {
-    try {
-      emit(PlaceListLoadingState());
-      places = await interactor.getPlacesNoGeo();
+      await Permission.location.request();
+      places = await Permission.location.isDenied ? await interactor.getPlacesNoGeo() : await interactor.getPlaces();
       emit(PlacesListLoadedState(
         places: places,
       ));

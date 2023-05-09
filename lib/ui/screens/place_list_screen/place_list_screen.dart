@@ -4,14 +4,12 @@ import 'dart:math';
 import 'package:flutter/material.dart' hide ErrorWidget;
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:places/blocs/want_to_visit/want_to_visit_bloc.dart';
 import 'package:places/cubits/places_list/places_list_cubit.dart';
 import 'package:places/data/api/api_places.dart';
 import 'package:places/data/database/database.dart';
 import 'package:places/data/interactor/place_interactor.dart';
 import 'package:places/data/repository/place_repository.dart';
-import 'package:places/main.dart';
 import 'package:places/providers/map_data_provider.dart';
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_card_size.dart';
@@ -179,9 +177,7 @@ class _PlaceListWidgetPortraitState extends State<_PlaceListWidgetPortrait> {
       child: RefreshIndicator(
         color: AppColors.backgroundColor,
         backgroundColor: AppColors.transparent,
-        onRefresh: () async => status.isDenied
-            ? await context.read<PlacesListCubit>().getPlacesNoGeo()
-            : await context.read<PlacesListCubit>().getPlaces(),
+        onRefresh: () => context.read<PlacesListCubit>().getPlaces(),
         child: ListView.builder(
           key: const PageStorageKey<String>('SaveScrollPosition'),
           physics: Platform.isAndroid ? const ClampingScrollPhysics() : const BouncingScrollPhysics(),
@@ -353,114 +349,117 @@ class _PlaceListWidgetLandscapeState extends State<_PlaceListWidgetLandscape> {
     final db = context.read<AppDb>();
 
     return Expanded(
-      child: GridView.builder(
-        padding: const EdgeInsets.symmetric(horizontal: 18.0),
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-          childAspectRatio: 3 / 1,
-          crossAxisSpacing: 36,
-          mainAxisExtent: 225,
-        ),
-        physics: Platform.isAndroid ? const ClampingScrollPhysics() : const BouncingScrollPhysics(),
-        shrinkWrap: true,
-        itemCount: widget.placeList.length,
-        itemBuilder: (_, index) {
-          final place = widget.placeList[index];
+      child: RefreshIndicator(
+        onRefresh: () => context.read<PlacesListCubit>().getPlaces(),
+        child: GridView.builder(
+          padding: const EdgeInsets.symmetric(horizontal: 18.0),
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
+            childAspectRatio: 3 / 1,
+            crossAxisSpacing: 36,
+            mainAxisExtent: 225,
+          ),
+          physics: Platform.isAndroid ? const ClampingScrollPhysics() : const BouncingScrollPhysics(),
+          shrinkWrap: true,
+          itemCount: widget.placeList.length,
+          itemBuilder: (_, index) {
+            final place = widget.placeList[index];
 
-          /// Из строки получаю список с картинками
-          final urlsList = place.urls.split('|');
-          final imageUrl = urlsList.isNotEmpty ? urlsList[0] : null;
+            /// Из строки получаю список с картинками
+            final urlsList = place.urls.split('|');
+            final imageUrl = urlsList.isNotEmpty ? urlsList[0] : null;
 
-          return Column(
-            children: [
-              FittedBox(
-                child: FutureBuilder(
-                  future: getValue(db, place),
-                  // ignore: avoid_types_on_closure_parameters
-                  builder: (_, AsyncSnapshot<bool> snapshot) {
-                    if (snapshot.connectionState == ConnectionState.done) {
-                      final isFavorite = snapshot.data ?? false;
+            return Column(
+              children: [
+                FittedBox(
+                  child: FutureBuilder(
+                    future: getValue(db, place),
+                    // ignore: avoid_types_on_closure_parameters
+                    builder: (_, AsyncSnapshot<bool> snapshot) {
+                      if (snapshot.connectionState == ConnectionState.done) {
+                        final isFavorite = snapshot.data ?? false;
 
-                      return PlaceCard(
-                        fromMainScreen: true,
-                        isMainScreen: true,
-                        placeIndex: index,
-                        isVisitingScreen: false,
-                        aspectRatio: AppCardSize.placeCardLandscape,
-                        actionOne: isFavorite
-                            ? const PlaceIcons(
-                                assetName: AppAssets.heartFull,
-                                width: 22,
-                                height: 22,
-                              )
-                            : const PlaceIcons(
-                                assetName: AppAssets.favourite,
-                                width: 22,
-                                height: 22,
+                        return PlaceCard(
+                          fromMainScreen: true,
+                          isMainScreen: true,
+                          placeIndex: index,
+                          isVisitingScreen: false,
+                          aspectRatio: AppCardSize.placeCardLandscape,
+                          actionOne: isFavorite
+                              ? const PlaceIcons(
+                                  assetName: AppAssets.heartFull,
+                                  width: 22,
+                                  height: 22,
+                                )
+                              : const PlaceIcons(
+                                  assetName: AppAssets.favourite,
+                                  width: 22,
+                                  height: 22,
+                                ),
+                          addPlace: () => toggleFavorite(place),
+                          url: imageUrl,
+                          type: place.placeType,
+                          name: place.name,
+                          place: place,
+                          details: [
+                            Text(
+                              place.name,
+                              maxLines: 2,
+                              style: widget.theme.textTheme.headlineSmall,
+                            ),
+                            const SizedBox(height: 2),
+                            SizedBox(
+                              height: size.height / 7,
+                              child: Text(
+                                place.description,
+                                overflow: TextOverflow.ellipsis,
+                                style: AppTypography.textText16Regular,
                               ),
-                        addPlace: () => toggleFavorite(place),
-                        url: imageUrl,
-                        type: place.placeType,
-                        name: place.name,
-                        place: place,
-                        details: [
-                          Text(
-                            place.name,
-                            maxLines: 2,
-                            style: widget.theme.textTheme.headlineSmall,
-                          ),
-                          const SizedBox(height: 2),
-                          SizedBox(
-                            height: size.height / 7,
-                            child: Text(
-                              place.description,
-                              overflow: TextOverflow.ellipsis,
-                              style: AppTypography.textText16Regular,
                             ),
+                          ],
+                        );
+                      } else {
+                        return PlaceCard(
+                          fromMainScreen: true,
+                          isMainScreen: true,
+                          placeIndex: index,
+                          isVisitingScreen: false,
+                          aspectRatio: AppCardSize.placeCardLandscape,
+                          actionOne: const PlaceIcons(
+                            assetName: AppAssets.favourite,
+                            width: 22,
+                            height: 22,
                           ),
-                        ],
-                      );
-                    } else {
-                      return PlaceCard(
-                        fromMainScreen: true,
-                        isMainScreen: true,
-                        placeIndex: index,
-                        isVisitingScreen: false,
-                        aspectRatio: AppCardSize.placeCardLandscape,
-                        actionOne: const PlaceIcons(
-                          assetName: AppAssets.favourite,
-                          width: 22,
-                          height: 22,
-                        ),
-                        url: imageUrl,
-                        type: place.placeType,
-                        name: place.name,
-                        place: place,
-                        details: [
-                          Text(
-                            place.name,
-                            maxLines: 2,
-                            style: widget.theme.textTheme.headlineSmall,
-                          ),
-                          const SizedBox(height: 2),
-                          SizedBox(
-                            height: size.height / 7,
-                            child: Text(
-                              place.description,
-                              overflow: TextOverflow.ellipsis,
-                              style: AppTypography.textText16Regular,
+                          url: imageUrl,
+                          type: place.placeType,
+                          name: place.name,
+                          place: place,
+                          details: [
+                            Text(
+                              place.name,
+                              maxLines: 2,
+                              style: widget.theme.textTheme.headlineSmall,
                             ),
-                          ),
-                        ],
-                      );
-                    }
-                  },
+                            const SizedBox(height: 2),
+                            SizedBox(
+                              height: size.height / 7,
+                              child: Text(
+                                place.description,
+                                overflow: TextOverflow.ellipsis,
+                                style: AppTypography.textText16Regular,
+                              ),
+                            ),
+                          ],
+                        );
+                      }
+                    },
+                  ),
                 ),
-              ),
-              const SizedBox(height: 11),
-            ],
-          );
-        },
+                const SizedBox(height: 11),
+              ],
+            );
+          },
+        ),
       ),
     );
   }

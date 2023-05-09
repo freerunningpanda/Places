@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:places/blocs/visited/visited_screen_bloc.dart';
 import 'package:places/blocs/want_to_visit/want_to_visit_bloc.dart';
 import 'package:places/cubits/places_list/places_list_cubit.dart';
 import 'package:places/data/database/database.dart';
@@ -83,21 +82,24 @@ class _MapScreenState extends State<MapScreen> {
                               final placemarkMapObject =
                                   mapObjects.firstWhere((el) => el.mapId == cameraMapObjectId) as PlacemarkMapObject;
                               controller = yandexMapController;
-
-                              await controller.moveCamera(
-                                CameraUpdate.newCameraPosition(
-                                  CameraPosition(target: placemarkMapObject.point, zoom: 12),
-                                ),
-                              );
+                              if (await Permission.location.isGranted) {
+                                await controller.moveCamera(
+                                  CameraUpdate.newCameraPosition(
+                                    CameraPosition(target: placemarkMapObject.point, zoom: 12),
+                                  ),
+                                );
+                              }
                             },
-                            onCameraPositionChanged: (cameraPosition, _, __) {
-                              final placemarkMapObject =
-                                  mapObjects.firstWhere((el) => el.mapId == cameraMapObjectId) as PlacemarkMapObject;
+                            onCameraPositionChanged: (cameraPosition, _, __) async {
+                              if (await Permission.location.isGranted) {
+                                final placemarkMapObject =
+                                    mapObjects.firstWhere((el) => el.mapId == cameraMapObjectId) as PlacemarkMapObject;
 
-                              setState(() {
-                                mapObjects[mapObjects.indexOf(placemarkMapObject)] =
-                                    placemarkMapObject.copyWith(point: cameraPosition.target);
-                              });
+                                setState(() {
+                                  mapObjects[mapObjects.indexOf(placemarkMapObject)] =
+                                      placemarkMapObject.copyWith(point: cameraPosition.target);
+                                });
+                              }
                             },
                             onUserLocationAdded: (view) async {
                               return view.copyWith(
@@ -382,11 +384,7 @@ class _MapScreenState extends State<MapScreen> {
   }
 
   Future<void> refreshPlaces() async {
-    if (status.isDenied) {
-      await context.read<PlacesListCubit>().getPlacesNoGeo();
-    } else if (status.isGranted) {
-      await context.read<PlacesListCubit>().getPlaces();
-    }
+    await context.read<PlacesListCubit>().getPlaces();
   }
 
   Future<void> toggleFavorite(DbPlace place) async {

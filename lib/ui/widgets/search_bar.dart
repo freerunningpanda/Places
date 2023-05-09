@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:permission_handler/permission_handler.dart';
 
 import 'package:places/blocs/search_history/search_history_bloc.dart';
 import 'package:places/blocs/search_screen/search_screen_bloc.dart';
@@ -7,7 +6,6 @@ import 'package:places/data/api/api_places.dart';
 import 'package:places/data/database/database.dart';
 import 'package:places/data/interactor/place_interactor.dart';
 import 'package:places/data/repository/place_repository.dart';
-import 'package:places/main.dart';
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_strings.dart';
 import 'package:places/ui/res/app_typography.dart';
@@ -90,13 +88,8 @@ class _SearchBarState extends State<SearchBar> {
                     readOnly: widget.readOnly ?? true,
                     onChanged: (value) async {
                       interactor.query = value;
-
                       context.read<SearchScreenBloc>().activeFocus(isActive: true);
-                      if (status.isDenied) {
-                        foundedPlaces = await context.read<SearchScreenBloc>().searchPlacesNoGeo(value, db);
-                      } else if (status.isGranted) {
-                        foundedPlaces = await context.read<SearchScreenBloc>().searchPlaces(value, db);
-                      }
+                      foundedPlaces = await context.read<SearchScreenBloc>().searchPlaces(value, db);
 
                       // Не виджет истории поиска. Поэтому isHistoryClear: false
                       // Параметр isHistoryClear отвечает за отображение всех найденных мест
