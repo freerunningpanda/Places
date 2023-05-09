@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:map_launcher/map_launcher.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:places/blocs/want_to_visit/want_to_visit_bloc.dart';
 import 'package:places/cubits/places_list/places_list_cubit.dart';
@@ -35,6 +36,7 @@ class _MapScreenState extends State<MapScreen> {
     ),
   ];
   final MapObjectId cameraMapObjectId = const MapObjectId('camera_placemark');
+  List<AvailableMap> availableMaps = [];
   late YandexMapController controller;
   GlobalKey mapKey = GlobalKey();
   int index = 0;
@@ -311,7 +313,15 @@ class _MapScreenState extends State<MapScreen> {
                                     child: Material(
                                       type: MaterialType.transparency,
                                       child: InkWell(
-                                        onTap: () => debugPrint('route tapped'),
+                                        onTap: () {
+                                          debugPrint('route tapped');
+                                          final place = state.places[index];
+                                          buildRoute(
+                                            lat: place.lat,
+                                            lng: place.lng,
+                                            title: place.name,
+                                          );
+                                        },
                                         child: const PlaceIcons(
                                           assetName: AppAssets.route,
                                           width: 40,
@@ -365,6 +375,18 @@ class _MapScreenState extends State<MapScreen> {
               : const SizedBox.shrink();
         },
       ),
+    );
+  }
+
+  Future<void> buildRoute({
+    required double lat,
+    required double lng,
+    required String title,
+  }) async {
+    availableMaps = await MapLauncher.installedMaps;
+    await availableMaps.first.showMarker(
+      coords: Coords(lat, lng),
+      title: title,
     );
   }
 
