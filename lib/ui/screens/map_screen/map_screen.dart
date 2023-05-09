@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:places/blocs/want_to_visit/want_to_visit_bloc.dart';
 import 'package:places/cubits/places_list/places_list_cubit.dart';
 import 'package:places/data/database/database.dart';
@@ -18,8 +17,6 @@ import 'package:places/ui/widgets/search_appbar.dart';
 import 'package:places/ui/widgets/search_bar.dart';
 import 'package:yandex_mapkit/yandex_mapkit.dart';
 
-// test
-
 class MapScreen extends StatefulWidget {
   const MapScreen({Key? key}) : super(key: key);
 
@@ -32,14 +29,7 @@ class _MapScreenState extends State<MapScreen> {
   late final List<MapObject> mapObjects = [
     PlacemarkMapObject(
       mapId: cameraMapObjectId,
-      point: newPoint ?? const Point(latitude: 55.908155, longitude: 37.730916),
-      icon: PlacemarkIcon.single(
-        PlacemarkIconStyle(
-          image: BitmapDescriptor.fromAssetImage('lib/assets/place.png'),
-          scale: 0.75,
-        ),
-      ),
-      opacity: 0.5,
+      point: currentPoint ?? const Point(latitude: 55.908155, longitude: 37.730916),
     ),
   ];
   final MapObjectId cameraMapObjectId = const MapObjectId('camera_placemark');
@@ -85,17 +75,15 @@ class _MapScreenState extends State<MapScreen> {
                           YandexMap(
                             key: mapKey,
                             onMapCreated: (yandexMapController) async {
-                              for (var i in state.places) {
-                                final placemarkMapObject =
-                                    mapObjects.firstWhere((el) => el.mapId == cameraMapObjectId) as PlacemarkMapObject;
-                                controller = yandexMapController;
+                              final placemarkMapObject =
+                                  mapObjects.firstWhere((el) => el.mapId == cameraMapObjectId) as PlacemarkMapObject;
+                              controller = yandexMapController;
 
-                                await controller.moveCamera(
-                                  CameraUpdate.newCameraPosition(
-                                    CameraPosition(target: placemarkMapObject.point, zoom: 17),
-                                  ),
-                                );
-                              }
+                              await controller.moveCamera(
+                                CameraUpdate.newCameraPosition(
+                                  CameraPosition(target: placemarkMapObject.point, zoom: 12),
+                                ),
+                              );
                             },
                             onCameraPositionChanged: (cameraPosition, _, __) {
                               final placemarkMapObject =
@@ -424,10 +412,6 @@ class _MapScreenState extends State<MapScreen> {
     final isFavorite = list.any((p) => p.id == place.id);
 
     return isFavorite;
-  }
-
-  void _showMessage(BuildContext context, Text text) {
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: text));
   }
 }
 

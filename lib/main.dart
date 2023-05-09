@@ -31,11 +31,11 @@ final ThemeData _darkTheme = AppTheme.buildThemeDark();
 final AppDb db = AppDb();
 late PermissionStatus status;
 Position? position;
-Point? newPoint;
+Point? currentPoint;
 
 Future<void> getPosition() async {
   position = await Geolocator.getCurrentPosition();
-  newPoint = Point(latitude: position!.latitude, longitude: position!.longitude);
+  currentPoint = Point(latitude: position!.latitude, longitude: position!.longitude);
 }
 
 // ignore: long-method
