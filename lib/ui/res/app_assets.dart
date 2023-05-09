@@ -51,5 +51,6 @@ abstract class AppAssets {
   static const blueRound = 'lib/ui/res/icons/blue_round.png';
   static const whiteRound = 'lib/ui/res/icons/white_round.png';
   static const route = 'lib/ui/res/icons/route.svg';
+  static const position = 'lib/ui/res/icons/position.svg';
 
 }

@@ -8,6 +8,7 @@ import 'package:places/main.dart';
 import 'package:places/providers/theme_data_provider.dart';
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_card_size.dart';
+import 'package:places/ui/res/app_colors.dart';
 import 'package:places/ui/res/app_strings.dart';
 import 'package:places/ui/res/app_typography.dart';
 import 'package:places/ui/screens/place_card/place_card.dart';
@@ -96,18 +97,16 @@ class _MapScreenState extends State<MapScreen> {
                             },
                             onUserLocationAdded: (view) async {
                               return view.copyWith(
-                                pin: view.pin.copyWith(
-                                  icon: PlacemarkIcon.single(PlacemarkIconStyle(
-                                    image: BitmapDescriptor.fromAssetImage('lib/assets/user.png'),
-                                  )),
-                                ),
                                 arrow: view.arrow.copyWith(
-                                  icon: PlacemarkIcon.single(PlacemarkIconStyle(
-                                    image: BitmapDescriptor.fromAssetImage('lib/assets/arrow.png'),
-                                  )),
+                                  icon: PlacemarkIcon.single(
+                                    PlacemarkIconStyle(
+                                      image: BitmapDescriptor.fromAssetImage(AppAssets.greenRound),
+                                    ),
+                                  ),
                                 ),
                                 accuracyCircle: view.accuracyCircle.copyWith(
-                                  fillColor: Colors.green.withOpacity(0.5),
+                                  fillColor: AppColors.green,
+                                  strokeColor: AppColors.backgroundColor,
                                 ),
                               );
                             },
