@@ -1,16 +1,20 @@
 import 'dart:io';
+import 'dart:math';
 
 import 'package:flutter/material.dart' hide ErrorWidget;
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:places/blocs/want_to_visit/want_to_visit_bloc.dart';
 import 'package:places/cubits/places_list/places_list_cubit.dart';
 import 'package:places/data/api/api_places.dart';
 import 'package:places/data/database/database.dart';
 import 'package:places/data/interactor/place_interactor.dart';
 import 'package:places/data/repository/place_repository.dart';
+import 'package:places/main.dart';
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_card_size.dart';
+import 'package:places/ui/res/app_colors.dart';
 import 'package:places/ui/res/app_strings.dart';
 import 'package:places/ui/res/app_typography.dart';
 import 'package:places/ui/screens/place_card/place_card.dart';
@@ -19,8 +23,30 @@ import 'package:places/ui/widgets/error_widget.dart';
 import 'package:places/ui/widgets/place_icons.dart';
 import 'package:places/ui/widgets/search_bar.dart';
 
-class PlaceListScreen extends StatelessWidget {
+class PlaceListScreen extends StatefulWidget {
   const PlaceListScreen({Key? key}) : super(key: key);
+
+  @override
+  State<PlaceListScreen> createState() => _PlaceListScreenState();
+}
+
+class _PlaceListScreenState extends State<PlaceListScreen> with TickerProviderStateMixin {
+  late final AnimationController _animationController;
+  late final Animation<double> _rotateAnimation;
+
+  @override
+  void initState() {
+    _animationController = AnimationController(vsync: this, duration: const Duration(seconds: 2));
+    _rotateAnimation = Tween<double>(begin: 0, end: -pi * 5).animate(
+      CurvedAnimation(parent: _animationController, curve: Curves.linear),
+    );
+
+    _animationController
+      ..forward()
+      ..repeat();
+
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -85,9 +111,25 @@ class PlaceListScreen extends StatelessWidget {
                       _PlaceListWidgetLandscape(placeList: state.places, theme: theme),
                   ],
                 );
+              } else if (state is PlacesListErrorState) {
+                return const ErrorWidget();
+              } else {
+                return Column(
+                  children: [
+                    AnimatedBuilder(
+                      animation: _animationController,
+                      builder: (context, child) => Transform.rotate(
+                        angle: _rotateAnimation.value,
+                        child: const PlaceIcons(
+                          assetName: AppAssets.loader,
+                          width: 30,
+                          height: 30,
+                        ),
+                      ),
+                    ),
+                  ],
+                );
               }
-
-              return const ErrorWidget();
             },
           ),
         ),
@@ -125,108 +167,115 @@ class _PlaceListWidgetPortraitState extends State<_PlaceListWidgetPortrait> {
     final db = context.read<AppDb>();
 
     return Expanded(
-      child: ListView.builder(
-        key: const PageStorageKey<String>('SaveScrollPosition'),
-        physics: Platform.isAndroid ? const ClampingScrollPhysics() : const BouncingScrollPhysics(),
-        shrinkWrap: true,
-        itemCount: widget.placeList.length,
-        itemBuilder: (_, index) {
-          final place = widget.placeList[index];
+      child: RefreshIndicator(
+        color: AppColors.backgroundColor,
+        backgroundColor: AppColors.transparent,
+        onRefresh: () async => status.isDenied
+            ? await context.read<PlacesListCubit>().getPlacesNoGeo()
+            : await context.read<PlacesListCubit>().getPlaces(),
+        child: ListView.builder(
+          key: const PageStorageKey<String>('SaveScrollPosition'),
+          physics: Platform.isAndroid ? const ClampingScrollPhysics() : const BouncingScrollPhysics(),
+          shrinkWrap: true,
+          itemCount: widget.placeList.length,
+          itemBuilder: (_, index) {
+            final place = widget.placeList[index];
 
-          /// Из строки получаю список с картинками
-          final urlsList = place.urls.split('|');
-          final imageUrl = urlsList.isNotEmpty ? urlsList[0] : null;
+            /// Из строки получаю список с картинками
+            final urlsList = place.urls.split('|');
+            final imageUrl = urlsList.isNotEmpty ? urlsList[0] : null;
 
-          return Column(
-            children: [
-              FittedBox(
-                child: FutureBuilder(
-                  future: getValue(db, place),
-                  // ignore: avoid_types_on_closure_parameters
-                  builder: (_, AsyncSnapshot<bool> snapshot) {
-                    if (snapshot.connectionState == ConnectionState.done) {
-                      final isFavorite = snapshot.data ?? false;
+            return Column(
+              children: [
+                FittedBox(
+                  child: FutureBuilder(
+                    future: getValue(db, place),
+                    // ignore: avoid_types_on_closure_parameters
+                    builder: (_, AsyncSnapshot<bool> snapshot) {
+                      if (snapshot.connectionState == ConnectionState.done) {
+                        final isFavorite = snapshot.data ?? false;
 
-                      return PlaceCard(
-                        fromMainScreen: true,
-                        isMainScreen: true,
-                        placeIndex: index,
-                        isVisitingScreen: false,
-                        aspectRatio: AppCardSize.placeCard,
-                        actionOne: isFavorite
-                            ? const PlaceIcons(
-                                assetName: AppAssets.heartFull,
-                                width: 22,
-                                height: 22,
-                              )
-                            : const PlaceIcons(
-                                assetName: AppAssets.favourite,
-                                width: 22,
-                                height: 22,
+                        return PlaceCard(
+                          fromMainScreen: true,
+                          isMainScreen: true,
+                          placeIndex: index,
+                          isVisitingScreen: false,
+                          aspectRatio: AppCardSize.placeCard,
+                          actionOne: isFavorite
+                              ? const PlaceIcons(
+                                  assetName: AppAssets.heartFull,
+                                  width: 22,
+                                  height: 22,
+                                )
+                              : const PlaceIcons(
+                                  assetName: AppAssets.favourite,
+                                  width: 22,
+                                  height: 22,
+                                ),
+                          addPlace: () => toggleFavorite(place),
+                          url: imageUrl,
+                          type: place.placeType,
+                          name: place.name,
+                          place: place,
+                          details: [
+                            Text(
+                              place.name,
+                              maxLines: 2,
+                              style: widget.theme.textTheme.headlineSmall,
+                            ),
+                            const SizedBox(height: 2),
+                            SizedBox(
+                              height: size.height / 7,
+                              child: Text(
+                                place.description,
+                                overflow: TextOverflow.ellipsis,
+                                style: AppTypography.textText16Regular,
                               ),
-                        addPlace: () => toggleFavorite(place),
-                        url: imageUrl,
-                        type: place.placeType,
-                        name: place.name,
-                        place: place,
-                        details: [
-                          Text(
-                            place.name,
-                            maxLines: 2,
-                            style: widget.theme.textTheme.headlineSmall,
-                          ),
-                          const SizedBox(height: 2),
-                          SizedBox(
-                            height: size.height / 7,
-                            child: Text(
-                              place.description,
-                              overflow: TextOverflow.ellipsis,
-                              style: AppTypography.textText16Regular,
                             ),
+                          ],
+                        );
+                      } else {
+                        return PlaceCard(
+                          fromMainScreen: true,
+                          isMainScreen: true,
+                          placeIndex: index,
+                          isVisitingScreen: false,
+                          aspectRatio: AppCardSize.placeCard,
+                          actionOne: const PlaceIcons(
+                            assetName: AppAssets.favourite,
+                            width: 22,
+                            height: 22,
                           ),
-                        ],
-                      );
-                    } else {
-                      return PlaceCard(
-                        fromMainScreen: true,
-                        isMainScreen: true,
-                        placeIndex: index,
-                        isVisitingScreen: false,
-                        aspectRatio: AppCardSize.placeCard,
-                        actionOne: const PlaceIcons(
-                          assetName: AppAssets.favourite,
-                          width: 22,
-                          height: 22,
-                        ),
-                        url: imageUrl,
-                        type: place.placeType,
-                        name: place.name,
-                        place: place,
-                        details: [
-                          Text(
-                            place.name,
-                            maxLines: 2,
-                            style: widget.theme.textTheme.headlineSmall,
-                          ),
-                          const SizedBox(height: 2),
-                          SizedBox(
-                            height: size.height / 7,
-                            child: Text(
-                              place.description,
-                              overflow: TextOverflow.ellipsis,
-                              style: AppTypography.textText16Regular,
+                          url: imageUrl,
+                          type: place.placeType,
+                          name: place.name,
+                          place: place,
+                          details: [
+                            Text(
+                              place.name,
+                              maxLines: 2,
+                              style: widget.theme.textTheme.headlineSmall,
                             ),
-                          ),
-                        ],
-                      );
-                    }
-                  },
+                            const SizedBox(height: 2),
+                            SizedBox(
+                              height: size.height / 7,
+                              child: Text(
+                                place.description,
+                                overflow: TextOverflow.ellipsis,
+                                style: AppTypography.textText16Regular,
+                              ),
+                            ),
+                          ],
+                        );
+                      }
+                    },
+                  ),
                 ),
-              ),
-              const SizedBox(height: 11),
-            ],
-          );
-        },
+                const SizedBox(height: 11),
+              ],
+            );
+          },
+        ),
       ),
     );
   }
