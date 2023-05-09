@@ -362,7 +362,7 @@ class _MapScreenState extends State<MapScreen> {
                     ),
                   ]),
                 )
-              : const Center(child: CircularProgressIndicator());
+              : const SizedBox.shrink();
         },
       ),
     );
