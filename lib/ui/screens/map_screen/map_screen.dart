@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:places/blocs/want_to_visit/want_to_visit_bloc.dart';
 import 'package:places/cubits/places_list/places_list_cubit.dart';
 import 'package:places/data/database/database.dart';
@@ -168,7 +169,7 @@ class _MapScreenState extends State<MapScreen> {
                                           children: [
                                             ActionWidget(
                                               assetName: AppAssets.refresh,
-                                              onTap: () {},
+                                              onTap: refreshPlaces,
                                             ),
                                             ActionWidget(
                                               assetName: AppAssets.geolocation,
@@ -340,7 +341,7 @@ class _MapScreenState extends State<MapScreen> {
               ? Visibility(
                   visible: cubit.isAddPlaceBtnVisible,
                   child: Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-                    ActionWidget(assetName: AppAssets.refresh, onTap: () {}),
+                    ActionWidget(assetName: AppAssets.refresh, onTap: refreshPlaces),
                     const AddNewPlaceButton(),
                     ActionWidget(
                       assetName: AppAssets.geolocation,
@@ -365,6 +366,14 @@ class _MapScreenState extends State<MapScreen> {
         },
       ),
     );
+  }
+
+  Future<void> refreshPlaces() async {
+    if (status.isDenied) {
+      await context.read<PlacesListCubit>().getPlacesNoGeo();
+    } else if (status.isGranted) {
+      await context.read<PlacesListCubit>().getPlaces();
+    }
   }
 
   Future<void> toggleFavorite(DbPlace place) async {
