@@ -79,6 +79,13 @@ class _VisitingScreenState extends State<VisitingScreen> {
                             );
                           }
                           if (state is VisitedIsNotEmpty) {
+                            if (state.visitedPlaces.isEmpty) {
+                              return const _EmptyList(
+                                icon: AppAssets.goIconTransparent,
+                                description: AppStrings.finishRoute,
+                              );
+                            }
+
                             return const _VisitedWidget(
                               key: PageStorageKey('VisitedScrollPosition'),
                             );
