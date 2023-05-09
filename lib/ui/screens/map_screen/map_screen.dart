@@ -18,7 +18,7 @@ import 'package:places/ui/widgets/search_appbar.dart';
 import 'package:places/ui/widgets/search_bar.dart';
 import 'package:yandex_mapkit/yandex_mapkit.dart';
 
-
+// test
 
 class MapScreen extends StatefulWidget {
   const MapScreen({Key? key}) : super(key: key);
