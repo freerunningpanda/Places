@@ -298,7 +298,7 @@ class _PlaceListWidgetPortraitState extends State<_PlaceListWidgetPortrait> {
                 place: place,
               ),
             );
-        interactor.addToFavorites(place: place, db: db);
+        interactor.addToFavorites(place: place, db: db, isVisited: false);
       } else {
         place.isFavorite = false;
         context.read<WantToVisitBloc>().add(
@@ -477,7 +477,7 @@ class _PlaceListWidgetLandscapeState extends State<_PlaceListWidgetLandscape> {
                 place: place,
               ),
             );
-        interactor.addToFavorites(place: place, db: db);
+        interactor.addToFavorites(place: place, db: db, isVisited: false);
       } else {
         place.isFavorite = false;
         context.read<WantToVisitBloc>().add(

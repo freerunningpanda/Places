@@ -257,7 +257,12 @@ class _SearchBarState extends State<SearchBar> {
       // Если есть соответствие, то добавляем места в базу указывая флаг isSearchScreen на true
       // чтобы отобразить места только с данным флагом в истории
       if (containsTitle) {
-        await db.addPlace(loadedPlaces[i], isSearchScreen: true);
+        await db.addPlace(
+          loadedPlaces[i],
+          isSearchScreen: true,
+          id: loadedPlaces[i].id,
+          isVisited: loadedPlaces[i].isVisited,
+        );
       }
     }
   }

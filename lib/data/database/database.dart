@@ -67,10 +67,10 @@ class AppDb extends _$AppDb {
   }
 
   /// Добавить место в базу данных
-  Future<int> addPlace(DbPlace place, {required bool isSearchScreen}) async {
+  Future<int> addPlace(DbPlace place, {required bool isSearchScreen, required int id, required bool isVisited}) async {
     return into(dbPlaces).insert(
       DbPlacesCompanion.insert(
-        id: place.id,
+        id: id,
         lat: place.lat,
         lng: place.lng,
         name: place.name,
@@ -79,7 +79,7 @@ class AppDb extends _$AppDb {
         description: place.description,
         isFavorite: place.isFavorite,
         isSearchScreen: isSearchScreen,
-        isVisited: place.isVisited,
+        isVisited: isVisited,
       ),
     );
   }

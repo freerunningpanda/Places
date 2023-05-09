@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:map_launcher/map_launcher.dart';
@@ -21,6 +23,7 @@ class MapDataProvider {
   }
 
   Future<void> addToVisited(DbPlace place, BuildContext context) async {
+    final id = Random().nextInt(784654) + 87843;
     final db = context.read<AppDb>();
     final isVisited = place.isVisited = true;
     context.read<VisitedScreenBloc>().add(
@@ -30,7 +33,12 @@ class MapDataProvider {
             place: place,
           ),
         );
-    await db.addPlace(place, isSearchScreen: false);
+    await db.addPlace(
+      place,
+      isSearchScreen: false,
+      id: id,
+      isVisited: true,
+    );
   }
 
   Future<void> getPosition() async {

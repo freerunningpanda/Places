@@ -544,7 +544,12 @@ class _PlaceDetailsBottomState extends State<_PlaceDetailsBottom> {
                 place: place,
               ),
             );
-        db.addPlace(place, isSearchScreen: false);
+        db.addPlace(
+          place,
+          isSearchScreen: false,
+          id: place.id,
+          isVisited: false,
+        );
       } else {
         place.isFavorite = false;
         context.read<WantToVisitBloc>().add(
