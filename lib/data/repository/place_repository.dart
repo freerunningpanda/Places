@@ -61,8 +61,17 @@ class PlaceRepository {
     await db.deletePlace(place);
   }
 
-  Future<void> addToFavorites({required DbPlace place, required AppDb db}) async {
-    await db.addPlace(place, isSearchScreen: false);
+  Future<void> addToFavorites({
+    required DbPlace place,
+    required AppDb db,
+    required bool isVisited,
+  }) async {
+    await db.addPlace(
+      place,
+      isSearchScreen: false,
+      id: place.id,
+      isVisited: isVisited,
+    );
   }
 
   Future<void> loadFavoritePlaces(AppDb db) async {
@@ -76,5 +85,4 @@ class PlaceRepository {
   }
 
   Future<String> deletePlace(int id) => apiPlaces.deletePlace(id);
-
 }

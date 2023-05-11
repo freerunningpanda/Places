@@ -43,6 +43,10 @@ class AppDb extends _$AppDb {
   Future<List<DbPlace>> get searchedPlacesEntries =>
       (select(dbPlaces)..where((tbl) => tbl.isSearchScreen.equals(true))).get();
 
+  /// Получить список посещённых мест
+  Future<List<DbPlace>> get visitedPlacesEntries =>
+      (select(dbPlaces)..where((tbl) => tbl.isVisited.equals(true))).get();
+
   
   AppDb() : super(_openConnection());
 
@@ -63,10 +67,10 @@ class AppDb extends _$AppDb {
   }
 
   /// Добавить место в базу данных
-  Future<int> addPlace(DbPlace place, {required bool isSearchScreen}) async {
+  Future<int> addPlace(DbPlace place, {required bool isSearchScreen, required int id, required bool isVisited}) async {
     return into(dbPlaces).insert(
       DbPlacesCompanion.insert(
-        id: place.id,
+        id: id,
         lat: place.lat,
         lng: place.lng,
         name: place.name,
@@ -75,6 +79,7 @@ class AppDb extends _$AppDb {
         description: place.description,
         isFavorite: place.isFavorite,
         isSearchScreen: isSearchScreen,
+        isVisited: isVisited,
       ),
     );
   }
@@ -117,6 +122,7 @@ class AppDb extends _$AppDb {
           description: place.description,
           isFavorite: false,
           isSearchScreen: isSearchScreen,
+          isVisited: place.isVisited,
         ),
       );
     }

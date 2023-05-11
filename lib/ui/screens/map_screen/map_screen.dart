@@ -6,6 +6,7 @@ import 'package:places/cubits/places_list/places_list_cubit.dart';
 import 'package:places/data/database/database.dart';
 import 'package:places/data/interactor/place_interactor.dart';
 import 'package:places/main.dart';
+import 'package:places/providers/map_data_provider.dart';
 import 'package:places/providers/theme_data_provider.dart';
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_card_size.dart';
@@ -43,6 +44,7 @@ class _MapScreenState extends State<MapScreen> {
   Widget build(BuildContext context) {
     final isSearchPage = context.read<PlacesListCubit>().isSearchPage;
     final isDarkMode = context.read<ThemeDataProvider>().isDarkMode;
+    final buildRouteProvider = context.read<MapDataProvider>();
     final readOnly = context.read<PlacesListCubit>().readOnly;
     final themeData = context.read<ThemeDataProvider>();
     final cubit = context.read<PlacesListCubit>();
@@ -80,21 +82,24 @@ class _MapScreenState extends State<MapScreen> {
                               final placemarkMapObject =
                                   mapObjects.firstWhere((el) => el.mapId == cameraMapObjectId) as PlacemarkMapObject;
                               controller = yandexMapController;
-
-                              await controller.moveCamera(
-                                CameraUpdate.newCameraPosition(
-                                  CameraPosition(target: placemarkMapObject.point, zoom: 12),
-                                ),
-                              );
+                              if (await Permission.location.isGranted) {
+                                await controller.moveCamera(
+                                  CameraUpdate.newCameraPosition(
+                                    CameraPosition(target: placemarkMapObject.point, zoom: 12),
+                                  ),
+                                );
+                              }
                             },
-                            onCameraPositionChanged: (cameraPosition, _, __) {
-                              final placemarkMapObject =
-                                  mapObjects.firstWhere((el) => el.mapId == cameraMapObjectId) as PlacemarkMapObject;
+                            onCameraPositionChanged: (cameraPosition, _, __) async {
+                              if (await Permission.location.isGranted) {
+                                final placemarkMapObject =
+                                    mapObjects.firstWhere((el) => el.mapId == cameraMapObjectId) as PlacemarkMapObject;
 
-                              setState(() {
-                                mapObjects[mapObjects.indexOf(placemarkMapObject)] =
-                                    placemarkMapObject.copyWith(point: cameraPosition.target);
-                              });
+                                setState(() {
+                                  mapObjects[mapObjects.indexOf(placemarkMapObject)] =
+                                      placemarkMapObject.copyWith(point: cameraPosition.target);
+                                });
+                              }
                             },
                             onUserLocationAdded: (view) async {
                               return view.copyWith(
@@ -311,7 +316,17 @@ class _MapScreenState extends State<MapScreen> {
                                     child: Material(
                                       type: MaterialType.transparency,
                                       child: InkWell(
-                                        onTap: () => debugPrint('route tapped'),
+                                        onTap: () {
+                                          debugPrint('route tapped');
+                                          final place = cubit.tappedPlacemark!;
+                                          buildRouteProvider
+                                            ..buildRoute(
+                                              lat: place.lat,
+                                              lng: place.lng,
+                                              title: place.name,
+                                            )
+                                            ..addToVisited(place, context);
+                                        },
                                         child: const PlaceIcons(
                                           assetName: AppAssets.route,
                                           width: 40,
@@ -369,11 +384,7 @@ class _MapScreenState extends State<MapScreen> {
   }
 
   Future<void> refreshPlaces() async {
-    if (status.isDenied) {
-      await context.read<PlacesListCubit>().getPlacesNoGeo();
-    } else if (status.isGranted) {
-      await context.read<PlacesListCubit>().getPlaces();
-    }
+    await context.read<PlacesListCubit>().getPlaces();
   }
 
   Future<void> toggleFavorite(DbPlace place) async {
@@ -389,7 +400,12 @@ class _MapScreenState extends State<MapScreen> {
                 place: place,
               ),
             );
-        db.addPlace(place, isSearchScreen: false);
+        db.addPlace(
+          place,
+          isSearchScreen: false,
+          id: place.id,
+          isVisited: false,
+        );
       } else {
         place.isFavorite = false;
         context.read<WantToVisitBloc>().add(

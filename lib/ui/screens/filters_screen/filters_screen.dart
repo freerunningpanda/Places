@@ -12,7 +12,6 @@ import 'package:places/data/database/database.dart';
 import 'package:places/data/interactor/place_interactor.dart';
 import 'package:places/data/model/category.dart';
 import 'package:places/data/store/app_preferences.dart';
-import 'package:places/main.dart';
 import 'package:places/mocks.dart';
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_strings.dart';
@@ -59,12 +58,18 @@ class FilterScreen extends StatelessWidget {
                     activeFilters: PlaceInteractor.activeFilters,
                   ),
                   if (size.width <= 320) SizedBox(height: size.height / 10) else SizedBox(height: size.height / 3.5),
-                  AbsorbPointer(
-                    absorbing: status.isDenied,
-                    child: _DistanceSlider(
-                      filters: FiltersScreenBloc.filters,
-                      places: state.places,
-                    ),
+                  FutureBuilder(
+                    future: Permission.location.isDenied,
+                    builder: (_, snapshot) {
+                      return snapshot.hasData && snapshot.data == true
+                          ? AbsorbPointer(
+                              child: _DistanceSlider(
+                                filters: FiltersScreenBloc.filters,
+                                places: state.places,
+                              ),
+                            )
+                          : _DistanceSlider(filters: FiltersScreenBloc.filters, places: state.places);
+                    },
                   ),
                   const Spacer(),
                   if (size.width <= 320)
@@ -113,18 +118,32 @@ class FilterScreen extends StatelessWidget {
     );
 
     final list = await db.allPlacesEntries;
+    if (await Permission.location.isDenied) {
+      // ignore: use_build_context_synchronously
+      context.read<SearchScreenBloc>().add(
+            PlacesFoundEvent(
+              searchHistoryIsEmpty: PlaceInteractor.searchHistoryList.isEmpty,
+              filteredPlaces: list,
+              isHistoryClear: false,
+              fromFiltersScreen: true,
+              isQueryEmpty: true,
+              db: db,
+            ),
+          );
+    } else if (await Permission.location.isGranted) {
+      // ignore: use_build_context_synchronously
+      context.read<SearchScreenBloc>().add(
+            PlacesNoGeoEvent(
+              searchHistoryIsEmpty: PlaceInteractor.searchHistoryList.isEmpty,
+              filteredPlaces: list,
+              isHistoryClear: false,
+              fromFiltersScreen: true,
+              isQueryEmpty: true,
+              db: db,
+            ),
+          );
+    }
 
-    // ignore: use_build_context_synchronously
-    context.read<SearchScreenBloc>().add(
-          PlacesFoundEvent(
-            searchHistoryIsEmpty: PlaceInteractor.searchHistoryList.isEmpty,
-            filteredPlaces: list,
-            isHistoryClear: false,
-            fromFiltersScreen: true,
-            isQueryEmpty: true,
-            db: db,
-          ),
-        );
     // ignore: use_build_context_synchronously
     await Navigator.of(context).push<PlaceSearchScreen>(
       MaterialPageRoute(
@@ -149,7 +168,6 @@ class _Title extends StatelessWidget {
 }
 
 class _AppBar extends StatelessWidget implements PreferredSizeWidget {
-  // final VoidCallback? onPressed;
   @override
   Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 
@@ -169,26 +187,39 @@ class _AppBar extends StatelessWidget implements PreferredSizeWidget {
         ),
         toolbarHeight: 86,
         bottomOpacity: 0.0,
-        actions: const [_ClearButtonWidget()],
+        actions: [
+          FutureBuilder(
+            future: Permission.location.isDenied,
+            builder: (_, snapshot) {
+              return snapshot.hasData && snapshot.data == true
+                  ? _ClearButtonWidget(
+                      onTap: () {
+                        context.read<ShowPlacesButtonCubit>().clearAllFiltersNoGeo();
+                        context.read<FiltersScreenBloc>().add(ClearAllFiltersEvent());
+                      },
+                    )
+                  : _ClearButtonWidget(
+                      onTap: () {
+                        context.read<ShowPlacesButtonCubit>().clearAllFilters();
+                        context.read<FiltersScreenBloc>().add(ClearAllFiltersEvent());
+                      },
+                    );
+            },
+          ),
+        ],
       ),
     );
   }
 }
 
 class _ClearButtonWidget extends StatelessWidget {
-  const _ClearButtonWidget({Key? key}) : super(key: key);
+  final VoidCallback? onTap;
+  const _ClearButtonWidget({Key? key, this.onTap}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return TextButton(
-      onPressed: () {
-        if (status.isDenied) {
-          context.read<ShowPlacesButtonCubit>().clearAllFiltersNoGeo();
-        } else if (status.isGranted) {
-          context.read<ShowPlacesButtonCubit>().clearAllFilters();
-        }
-        context.read<FiltersScreenBloc>().add(ClearAllFiltersEvent());
-      },
+      onPressed: onTap,
       child: const Text(
         AppStrings.clear,
         style: AppTypography.clearButton,
@@ -270,10 +301,10 @@ class _ItemFiltersListBigScreens extends StatelessWidget {
                         category: category,
                         filteredByType: filteredByType,
                       );
-                  if (status.isDenied) {
+                  if (await Permission.location.isDenied) {
                     // ignore: use_build_context_synchronously
                     await context.read<ShowPlacesButtonCubit>().showCountNoGeo(places: placeList);
-                  } else if (status.isGranted) {
+                  } else if (await Permission.location.isGranted) {
                     // ignore: use_build_context_synchronously
                     await context.read<ShowPlacesButtonCubit>().showCount(places: placeList);
                   }
@@ -358,10 +389,10 @@ class _ItemFiltersListSmallScreens extends StatelessWidget {
                         category: category,
                         filteredByType: filteredByType,
                       );
-                  if (status.isDenied) {
+                  if (await Permission.location.isDenied) {
                     // ignore: use_build_context_synchronously
                     await context.read<ShowPlacesButtonCubit>().showCountNoGeo(places: placeList);
-                  } else if (status.isGranted) {
+                  } else if (await Permission.location.isGranted) {
                     // ignore: use_build_context_synchronously
                     await context.read<ShowPlacesButtonCubit>().showCount(places: placeList);
                   }
@@ -531,40 +562,65 @@ class _DistanceSlider extends StatelessWidget {
 
     return BlocBuilder<DistanceSliderCubit, DistanceSliderState>(
       builder: (_, state) {
-        return Opacity(
-          opacity: status.isDenied ? 0.3 : 1,
-          child: Column(
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    AppStrings.distantion,
-                    style: theme.textTheme.displayMedium,
-                  ),
-                  Text(
-                    'от ${state.rangeValues.start.toInt()} до ${state.rangeValues.end.toInt()} м',
-                    style: theme.textTheme.titleMedium,
-                  ),
-                ],
-              ),
-              const SizedBox(height: 24),
-              RangeSlider(
-                values: state.rangeValues,
-                min: min,
-                max: max,
-                onChanged: (values) {
-                  context.read<DistanceSliderCubit>().changeArea(start: values.start, end: values.end);
-                  context.read<ShowPlacesButtonCubit>().showCount(places: places);
-                  for (final category in filters) {
-                    if (category.isEnabled) {
-                      context.read<ShowPlacesButtonCubit>().resetToZero();
-                    }
-                  }
-                },
-              ),
-            ],
-          ),
+        return FutureBuilder(
+          future: Permission.location.isDenied,
+          builder: (_, snapshot) {
+            return snapshot.hasData && snapshot.data == true
+                ? Opacity(
+                    opacity: 0.3,
+                    child: Column(children: [
+                      Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+                        Text(AppStrings.distantion, style: theme.textTheme.displayMedium),
+                        Text(
+                          'от ${state.rangeValues.start.toInt()} до ${state.rangeValues.end.toInt()} м',
+                          style: theme.textTheme.titleMedium,
+                        ),
+                      ]),
+                      const SizedBox(height: 24),
+                      RangeSlider(
+                        values: state.rangeValues,
+                        min: min,
+                        max: max,
+                        onChanged: (values) {
+                          context.read<DistanceSliderCubit>().changeArea(start: values.start, end: values.end);
+                          context.read<ShowPlacesButtonCubit>().showCount(places: places);
+                          for (final category in filters) {
+                            if (category.isEnabled) {
+                              context.read<ShowPlacesButtonCubit>().resetToZero();
+                            }
+                          }
+                        },
+                      ),
+                    ]),
+                  )
+                : Opacity(
+                    opacity: 1,
+                    child: Column(children: [
+                      Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+                        Text(AppStrings.distantion, style: theme.textTheme.displayMedium),
+                        Text(
+                          'от ${state.rangeValues.start.toInt()} до ${state.rangeValues.end.toInt()} м',
+                          style: theme.textTheme.titleMedium,
+                        ),
+                      ]),
+                      const SizedBox(height: 24),
+                      RangeSlider(
+                        values: state.rangeValues,
+                        min: min,
+                        max: max,
+                        onChanged: (values) {
+                          context.read<DistanceSliderCubit>().changeArea(start: values.start, end: values.end);
+                          context.read<ShowPlacesButtonCubit>().showCount(places: places);
+                          for (final category in filters) {
+                            if (category.isEnabled) {
+                              context.read<ShowPlacesButtonCubit>().resetToZero();
+                            }
+                          }
+                        },
+                      ),
+                    ]),
+                  );
+          },
         );
       },
     );

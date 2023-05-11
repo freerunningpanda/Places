@@ -11,4 +11,5 @@ class DbPlaces extends Table {
   TextColumn get description => text()();
   BoolColumn get isFavorite => boolean()();
   BoolColumn get isSearchScreen => boolean()();
+  BoolColumn get isVisited => boolean()();
 }

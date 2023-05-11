@@ -79,25 +79,21 @@ class ShowPlacesButtonCubit extends Cubit<ShowPlacesButtonState> {
   Future<void> clearAllFiltersNoGeo() async {
     filters.map((e) => e.isEnabled = false).toList();
     PlaceInteractor.initialFilteredPlaces.clear();
-    // Получаю снова все места
-    // Пока не нашёл способа как удалить все отфильтрованные места
-    // Оставив при этом остальные
-    // Поэтому такое решение
-    final places = await interactor.getPlaces();
-    // Здесь прохожусь только по всем местам
-    // Потому что при удалении фильтров нужно снова показать количество всех мест
-    // В радиусе поиска
-    for (final el in places) {
-      PlaceInteractor.filtersWithDistance.add(el);
-      final isEmpty = PlaceInteractor.filtersWithDistance.isEmpty;
-      final length = PlaceInteractor.filtersWithDistance.length;
-      debugPrint('🟡---------Добавленные места (дистанция): ${PlaceInteractor.filtersWithDistance}');
-      debugPrint(
-        '🟡---------Количество добавленных мест (дистанция): ${PlaceInteractor.filtersWithDistance.length}',
-      );
-      debugPrint('Длина после нажатия "Очистить": ${PlaceInteractor.filtersWithDistance.length}');
-      emit(ShowPlacesButtonState(isEmpty: isEmpty, foundPlacesLength: length));
+
+    final places = await interactor.getPlacesNoGeo();
+    for (final place in places) {
+      PlaceInteractor.filtersWithDistance.add(place);
     }
+
+    final isEmpty = PlaceInteractor.filtersWithDistance.isEmpty;
+    final length = PlaceInteractor.filtersWithDistance.length;
+
+    emit(
+      ShowPlacesButtonState(
+        isEmpty: isEmpty,
+        foundPlacesLength: length,
+      ),
+    );
   }
 
 // Если ни одно место не попало в список с фильтрами то обнулить счётчик
