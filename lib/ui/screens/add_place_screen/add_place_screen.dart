@@ -1,13 +1,18 @@
-import 'package:flutter/material.dart';
+import 'dart:io';
 
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:image_picker/image_picker.dart';
+
 import 'package:places/blocs/choose_category_bloc/choose_category_bloc.dart';
 import 'package:places/cubits/add_place_screen/add_place_screen_cubit.dart';
 import 'package:places/cubits/create_place/create_place_button_cubit.dart';
-import 'package:places/cubits/image_provider/image_provider_cubit.dart';
-import 'package:places/data/interactor/place_interactor.dart';
-import 'package:places/data/model/place.dart';
+// import 'package:places/data/api/api_places.dart';
+import 'package:places/data/dto/place_model.dart';
+// import 'package:places/data/interactor/place_interactor.dart';
+import 'package:places/data/model/create_button_state.dart';
 import 'package:places/data/repository/category_repository.dart';
+// import 'package:places/data/repository/place_repository.dart';
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_strings.dart';
 import 'package:places/ui/res/app_typography.dart';
@@ -46,13 +51,18 @@ class _AddPlaceScreenState extends State<AddPlaceScreen> {
     final theme = Theme.of(context);
 
     final focus = context.read<AddPlaceScreenCubit>();
-    final place = context.read<CreatePlaceButtonCubit>();
+    final createPlaceBtnCubit = context.read<CreatePlaceButtonCubit>();
+    final addPlaceScreenCubit = context.read<AddPlaceScreenCubit>();
 
     context.watch<CreatePlaceButtonCubit>().updateButtonState(
-          titleValue: titleController.text,
-          descriptionValue: descriptionController.text,
-          latValue: latController.text,
-          lotValue: lotController.text,
+          createButton: CreateButtonState(
+            titleValue: titleController.text,
+            chosenCategory: createPlaceBtnCubit.chosenCategory,
+            descriptionValue: descriptionController.text,
+            latValue: latController.text,
+            lngValue: lotController.text,
+            imagesToUpload: createPlaceBtnCubit.imagesToUpload,
+          ),
         );
 
     return Scaffold(
@@ -70,7 +80,7 @@ class _AddPlaceScreenState extends State<AddPlaceScreen> {
                   theme: theme,
                   width: width / 4.5,
                   leading: _CancelButtonWidget(theme: theme),
-                  title: AppString.newPlace,
+                  title: AppStrings.newPlace,
                 ),
                 const SizedBox(height: 40),
                 _ImagePickerWidget(theme: theme),
@@ -86,14 +96,14 @@ class _AddPlaceScreenState extends State<AddPlaceScreen> {
                         const SizedBox(height: 16),
                         _TextInputWidget(
                           theme: theme,
-                          title: AppString.title,
+                          title: AppStrings.title,
                           height: 40,
                           suffixIcon: SuffixIcon(controller: titleController, theme: theme),
                           focusNode: titleFocus,
                           controller: titleController,
                           textInputAction: TextInputAction.next,
                           onSubmitted: (value) => focus.goToLat(latFocus: latFocus),
-                          onChanged: (value) => place.name = value,
+                          onChanged: (value) => createPlaceBtnCubit.name = value,
                         ),
                         const SizedBox(height: 24),
                         _CoordinatsInputWidget(
@@ -109,43 +119,55 @@ class _AddPlaceScreenState extends State<AddPlaceScreen> {
                         const SizedBox(height: 37),
                         _TextInputWidget(
                           theme: theme,
-                          title: AppString.description,
-                          hintText: AppString.enterTheText,
+                          title: AppStrings.description,
+                          hintText: AppStrings.enterTheText,
                           maxLines: 5,
                           height: 80,
                           focusNode: descriptionFocus,
                           controller: descriptionController,
                           textInputAction: TextInputAction.done,
-                          onChanged: (value) => place.details = value,
+                          onChanged: (value) => createPlaceBtnCubit.description = value,
                         ),
                         SizedBox(height: height * 0.18),
                         CreateButton(
-                          title: AppString.create,
+                          title: AppStrings.create,
                           onTap: () {
                             debugPrint('🟡---------create btn pressed');
-                            place
-                              ..addNewPlace()
+                            createPlaceBtnCubit
+                              ..addNewPlace(
+                                PlaceModel(
+                                  lat: createPlaceBtnCubit.lat,
+                                  lng: createPlaceBtnCubit.lng,
+                                  name: createPlaceBtnCubit.name,
+                                  urls: createPlaceBtnCubit.uploadedImages,
+                                  placeType: addPlaceScreenCubit.chosenCategories[0].placeType,
+                                  description: createPlaceBtnCubit.description,
+                                ),
+                              )
                               // После добавления места, отправляю пустые данные в поля, чтобы сменить состояние
                               // кнопки на неактивную
                               ..updateButtonState(
-                                titleValue: '',
-                                descriptionValue: '',
-                                latValue: '',
-                                lotValue: '',
+                                createButton: CreateButtonState(
+                                  chosenCategory: [],
+                                  titleValue: '',
+                                  descriptionValue: '',
+                                  latValue: '',
+                                  lngValue: '',
+                                  imagesToUpload: [],
+                                ),
                               );
                             // Для обновления состояния кнопки "Создать"
                             clearControllers();
 
-                            debugPrint('🟡---------Создан объект: ${PlaceInteractor.newPlaces.toList()}');
                             // Меняю isEnabled в выбранной категории на false и затем очищаю список
                             context.read<ChooseCategoryBloc>().resetCategoryState(
-                                  activeCategories: place.chosenCategory,
+                                  activeCategories: createPlaceBtnCubit.chosenCategory,
                                 );
                             // Из-за очищенного выше списка в isEmpty упадёт true
                             // Для перерисовки состоянии категории на "Не выбрано"
                             context.read<ChooseCategoryBloc>().add(
                                   UnchosenCategoryEvent(
-                                    isEmpty: place.chosenCategory.isEmpty,
+                                    isEmpty: createPlaceBtnCubit.chosenCategory.isEmpty,
                                   ),
                                 );
                           },
@@ -179,15 +201,11 @@ class _ImagePickerWidget extends StatefulWidget {
 }
 
 class _ImagePickerWidgetState extends State<_ImagePickerWidget> {
-  // TODO(Alex): rewrite.
-  // final placeList = PlaceInteractor(
-  //   repository: PlaceRepository(
-  //     apiPlaces: ApiPlaces(),
-  //   ),
-  // ).favoritePlaces;
+  final ImagePicker picker = ImagePicker();
+
   @override
   Widget build(BuildContext context) {
-    final places = ImageProviderCubit.places;
+    final cubit = context.read<CreatePlaceButtonCubit>();
 
     return SizedBox(
       height: 72,
@@ -195,24 +213,30 @@ class _ImagePickerWidgetState extends State<_ImagePickerWidget> {
         children: [
           Row(
             children: [
-              _PickImageWidget(theme: widget.theme, places: places),
+              _PickImageWidget(
+                theme: widget.theme,
+              ),
             ],
           ),
           Expanded(
-            child: ListView(
-              scrollDirection: Axis.horizontal,
-              shrinkWrap: true,
-              children: [
-                Row(
+            child: BlocBuilder<CreatePlaceButtonCubit, CreatePlaceButtonState>(
+              builder: (context, state) {
+                return ListView(
+                  scrollDirection: Axis.horizontal,
+                  shrinkWrap: true,
                   children: [
-                    for (var i = 0; i < places.length; i++)
-                      _ImagePlace(
-                        image: places[i].urls[0],
-                        index: i,
-                      ),
+                    Row(
+                      children: [
+                        for (var i = 0; i < cubit.imagesToUpload.length; i++)
+                          _ImagePlace(
+                            image: cubit.imagesToUpload[i],
+                            index: i,
+                          ),
+                      ],
+                    ),
                   ],
-                ),
-              ],
+                );
+              },
             ),
           ),
         ],
@@ -222,7 +246,7 @@ class _ImagePickerWidgetState extends State<_ImagePickerWidget> {
 }
 
 class _ImagePlace extends StatelessWidget {
-  final String? image;
+  final XFile? image;
   final int index;
   const _ImagePlace({Key? key, required this.image, required this.index}) : super(key: key);
 
@@ -233,7 +257,7 @@ class _ImagePlace extends StatelessWidget {
 }
 
 class _PlaceContent extends StatelessWidget {
-  final String? image;
+  final XFile? image;
   final int index;
   const _PlaceContent({
     Key? key,
@@ -243,12 +267,25 @@ class _PlaceContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final cubit = context.read<ImageProviderCubit>();
+    final cubit = context.read<CreatePlaceButtonCubit>();
 
     return Dismissible(
       direction: DismissDirection.vertical,
       key: UniqueKey(),
-      onDismissed: (direction) => cubit.removeImage(index),
+      onDismissed: (direction) {
+        cubit
+          ..removeImage(index: index)
+          ..updateButtonState(
+            createButton: CreateButtonState(
+              chosenCategory: cubit.chosenCategory,
+              titleValue: cubit.name,
+              descriptionValue: cubit.description,
+              latValue: cubit.lat.toString(),
+              lngValue: cubit.lng.toString(),
+              imagesToUpload: cubit.imagesToUpload,
+            ),
+          );
+      },
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 8),
         decoration: const BoxDecoration(),
@@ -256,8 +293,8 @@ class _PlaceContent extends StatelessWidget {
           borderRadius: BorderRadius.circular(12),
           child: Stack(
             children: [
-              Image.network(
-                image ?? 'no_url',
+              Image.file(
+                File(image!.path).absolute,
                 width: 72,
                 height: 72,
                 fit: BoxFit.cover,
@@ -275,7 +312,20 @@ class _PlaceContent extends StatelessWidget {
                   type: MaterialType.transparency,
                   child: InkWell(
                     borderRadius: BorderRadius.circular(30),
-                    onTap: () => cubit.removeImage(index),
+                    onTap: () {
+                      cubit
+                        ..removeImage(index: index)
+                        ..updateButtonState(
+                          createButton: CreateButtonState(
+                            chosenCategory: cubit.chosenCategory,
+                            titleValue: cubit.name,
+                            descriptionValue: cubit.description,
+                            latValue: cubit.lat.toString(),
+                            lngValue: cubit.lng.toString(),
+                            imagesToUpload: cubit.imagesToUpload,
+                          ),
+                        );
+                    },
                     child: const SizedBox(height: 24, width: 24),
                   ),
                 ),
@@ -290,17 +340,22 @@ class _PlaceContent extends StatelessWidget {
 
 /// Class for image picking to horizontal list
 class _PickImageWidget extends StatelessWidget {
-  final List<Place> places;
   final ThemeData theme;
 
   const _PickImageWidget({
     Key? key,
     required this.theme,
-    required this.places,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final cubit = context.read<CreatePlaceButtonCubit>();
+    // final interactor = PlaceInteractor(
+    //   repository: PlaceRepository(
+    //     apiPlaces: ApiPlaces(),
+    //   ),
+    // );
+
     return Container(
       margin: const EdgeInsets.only(right: 8),
       width: 72,
@@ -315,11 +370,18 @@ class _PickImageWidget extends StatelessWidget {
       child: IconButton(
         icon: const Icon(Icons.add_rounded, size: 45),
         onPressed: () async {
-          // context.read<AppSettings>().pickImage();
+          // await interactor.deletePlace(596); // Для удаления тестовых мест с сервера
           await showDialog<PickImageWidget>(
             context: context,
             builder: (_) {
-              return const PickImageWidget();
+              return PickImageWidget(
+                chosenCategory: cubit.chosenCategory,
+                titleValue: cubit.name,
+                descriptionValue: cubit.description,
+                latValue: cubit.lat.toString(),
+                lngValue: cubit.lng.toString(),
+                imagesToUpload: cubit.imagesToUpload,
+              );
             },
           );
         },
@@ -343,7 +405,7 @@ class _CancelButtonWidget extends StatelessWidget {
       borderRadius: BorderRadius.circular(12),
       onTap: () => Navigator.pop(context),
       child: Text(
-        AppString.cancel,
+        AppStrings.cancel,
         style: theme.textTheme.displayLarge,
       ),
     );
@@ -438,7 +500,7 @@ class _PointOnMapWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const Text(
-      AppString.pointOnTheMap,
+      AppStrings.pointOnTheMap,
       style: AppTypography.clearButton,
     );
   }
@@ -475,7 +537,7 @@ class _CoordinatsInputWidget extends StatelessWidget {
               child: _LatLotWidget(
                 focusNode: latFocus,
                 theme: theme,
-                title: AppString.lat,
+                title: AppStrings.lat,
                 onSubmitted: (v) => focus.goToLot(lotFocus: lotFocus),
                 controller: latController,
                 onTap: focus.tapOnLat,
@@ -491,13 +553,13 @@ class _CoordinatsInputWidget extends StatelessWidget {
               child: _LatLotWidget(
                 focusNode: lotFocus,
                 theme: theme,
-                title: AppString.lot,
+                title: AppStrings.lot,
                 onSubmitted: (v) => focus.goToDescription(descriptionFocus: descriptionFocus),
                 controller: lotController,
                 onTap: focus.tapOnLot,
                 onChanged: (value) {
                   if (double.tryParse(value) != null) {
-                    place.lot = double.parse(value);
+                    place.lng = double.parse(value);
                   }
                 },
               ),
@@ -602,7 +664,7 @@ class _CategoryChooseWidget extends StatelessWidget {
         Row(
           children: [
             Text(
-              AppString.category.toUpperCase(),
+              AppStrings.category.toUpperCase(),
               style: theme.textTheme.labelLarge,
             ),
           ],
@@ -625,7 +687,7 @@ class _CategoryChooseWidget extends StatelessWidget {
                 BlocBuilder<ChooseCategoryBloc, ChooseCategoryState>(
                   builder: (_, state) {
                     return state.isEmpty
-                        ? Text(AppString.nochoose, style: theme.textTheme.titleMedium)
+                        ? Text(AppStrings.nochoose, style: theme.textTheme.titleMedium)
                         // null быть не может, так как при сохранении категории она прокинется в стэйт
                         : Text(state.chosenCategory!.title, style: theme.textTheme.titleMedium);
                   },

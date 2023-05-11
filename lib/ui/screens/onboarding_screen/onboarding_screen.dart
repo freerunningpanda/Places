@@ -34,21 +34,21 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       _OnboardingScreenContent(
         theme: theme,
         assetName: !isDarkMode ? AppAssets.tutorial_1 : AppAssets.tutorial_1Dark,
-        title: AppString.welcome,
-        description: AppString.findNewLoc,
+        title: AppStrings.welcome,
+        description: AppStrings.findNewLoc,
       ),
       _OnboardingScreenContent(
         theme: theme,
         assetName: !isDarkMode ? AppAssets.tutorial_2 : AppAssets.tutorial_2Dark,
-        title: AppString.routeBuild,
-        description: AppString.reachYourTarget,
+        title: AppStrings.routeBuild,
+        description: AppStrings.reachYourTarget,
       ),
       _OnboardingScreenContent(
         key: UniqueKey(),
         theme: theme,
         assetName: !isDarkMode ? AppAssets.tutorial_3 : AppAssets.tutorial_3Dark,
-        title: AppString.addYourPlaces,
-        description: AppString.shareYourPlaces,
+        title: AppStrings.addYourPlaces,
+        description: AppStrings.shareYourPlaces,
       ),
     ];
 
@@ -104,7 +104,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   const SizedBox(height: 32),
                   ActionButton(
                     isOnboarding: true,
-                    title: AppString.start,
+                    title: AppStrings.start,
                     onTap: () => Navigator.of(context).pushReplacement(
                       MaterialPageRoute<MainScreen>(
                         builder: (_) => const NavigationScreen(),
@@ -169,7 +169,7 @@ class _OnboardingScreenContentState extends State<_OnboardingScreenContent> with
                 ),
               ),
               child: Text(
-                AppString.skip,
+                AppStrings.skip,
                 style: widget.theme.textTheme.bodyMedium,
               ),
             ),

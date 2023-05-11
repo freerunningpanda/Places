@@ -276,7 +276,7 @@ class _ClearHistoryButton extends StatelessWidget {
       child: const Align(
         alignment: Alignment.centerLeft,
         child: Text(
-          AppString.clearHistory,
+          AppStrings.clearHistory,
           style: AppTypography.clearButton,
         ),
       ),
@@ -295,7 +295,7 @@ class _SearchHistoryTitle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Text(
-      AppString.youSearch,
+      AppStrings.youSearch,
       style: theme.textTheme.labelLarge,
     );
   }
@@ -413,7 +413,7 @@ class _EmptyStateWidget extends StatelessWidget {
             height: 24,
           ),
           const Text(
-            AppString.noPlaces,
+            AppStrings.noPlaces,
             style: AppTypography.emptyListTitle,
           ),
           const SizedBox(
@@ -422,7 +422,7 @@ class _EmptyStateWidget extends StatelessWidget {
           SizedBox(
             width: width * 0.6,
             child: const Text(
-              AppString.tryToChange,
+              AppStrings.tryToChange,
               style: AppTypography.detailsTextDarkMode,
               textAlign: TextAlign.center,
             ),

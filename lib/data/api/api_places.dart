@@ -2,11 +2,16 @@ import 'dart:convert';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
+import 'package:http_parser/http_parser.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:mime_type/mime_type.dart';
 import 'package:places/data/dio_configurator.dart';
+import 'package:places/data/dto/place_model.dart';
 import 'package:places/data/dto/place_request.dart';
 import 'package:places/data/dto/place_response.dart';
 import 'package:places/data/exceptions/network_exception.dart';
 import 'package:places/mocks.dart';
+import 'package:places/ui/res/app_strings.dart';
 
 class ApiPlaces {
   Future<List<PlaceResponse>> getPlaces({required String category, required int radius}) async {
@@ -57,27 +62,18 @@ class ApiPlaces {
     }
   }
 
-  Future<String> postPlace() async {
+  Future<PlaceModel> postPlace({required PlaceModel place}) async {
     initInterceptors();
     try {
-      final response = await dio.post<String>(
-        '/place',
-        data: jsonEncode(
-          {
-            // 'id': 4,
-            'lat': 565407.77,
-            'lng': 6547450.76,
-            'name': 'Место',
-            'urls': ['http://test.com'],
-            'placeType': 'temple',
-            'description': 'Описание',
-          },
-        ),
+      final response = await dio.post<Map<String, dynamic>>(
+        AppStrings.placePath,
+        data: jsonEncode(place.toJson()),
       );
-      if (response.statusCode == 200) {
-        return response.data ?? '';
-      }
-      throw Exception('No 200 status code: Error code: ${response.statusCode}');
+      final newPlace = PlaceModel.fromJson(
+        response.data as Map<String, dynamic>,
+      );
+
+      return newPlace;
     } on DioError catch (e) {
       throw NetworkException(
         query: e.requestOptions.path,
@@ -86,26 +82,28 @@ class ApiPlaces {
     }
   }
 
-  Future<String> putPlace(int id) async {
-    initInterceptors();
+  Future<String> uploadFile(XFile image) async {
+    final filename = image.path.split('/').last;
+
+    final mimeType = mime(filename);
+    final mimee = mimeType?.split('/')[0];
+    final type = mimeType?.split('/')[1];
+
     try {
-      final response = await dio.put<String>(
-        '/place/$id',
-        data: jsonEncode(
-          {
-            'lat': 565407.77,
-            'lng': 6547450.76,
-            'name': 'Место!!!',
-            'urls': ['http://example.com'],
-            'placeType': 'temple',
-            'description': 'Место',
-          },
+      final formData = FormData.fromMap(<String, dynamic>{
+        'image': await MultipartFile.fromFile(
+          image.path,
+          filename: filename,
+          contentType: MediaType(mimee!, type!),
         ),
+      });
+
+      final response = await dio.post<String>(
+        AppStrings.uploadFilePath,
+        data: formData,
       );
-      if (response.statusCode == 200) {
-        return response.data ?? '';
-      }
-      throw Exception('No 200 status code: Error code: ${response.statusCode}');
+
+      return '${AppStrings.baseUrl}/${response.headers['location']?.first}';
     } on DioError catch (e) {
       throw NetworkException(
         query: e.requestOptions.path,

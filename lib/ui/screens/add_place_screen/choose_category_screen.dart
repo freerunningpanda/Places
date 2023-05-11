@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:places/blocs/choose_category_bloc/choose_category_bloc.dart';
 import 'package:places/cubits/create_place/create_place_button_cubit.dart';
 import 'package:places/data/model/category.dart';
+import 'package:places/data/model/create_button_state.dart';
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_strings.dart';
 import 'package:places/ui/widgets/new_place_app_bar_widget.dart';
@@ -25,6 +26,7 @@ class ChooseCategoryWidget extends StatelessWidget {
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
     final theme = Theme.of(context);
+    final cubit = context.read<CreatePlaceButtonCubit>();
 
     return Scaffold(
       body: SafeArea(
@@ -38,7 +40,7 @@ class ChooseCategoryWidget extends StatelessWidget {
                 leading: _BackButtonWidget(
                   chosenCategory: chosenCategories,
                 ),
-                title: AppString.category,
+                title: AppStrings.category,
               ),
               const SizedBox(height: 40),
               Expanded(
@@ -65,6 +67,7 @@ class ChooseCategoryWidget extends StatelessWidget {
                                   ChosenCategoryEvent(
                                     isEmpty: chosenCategories.isEmpty,
                                     chosenCategory: chosenCategories[0],
+                                    placeType: chosenCategories[0].placeType,
                                   ),
                                 );
                           } else {
@@ -88,19 +91,24 @@ class ChooseCategoryWidget extends StatelessWidget {
               SizedBox(height: height * 0.3),
               SaveButton(
                 chosenCategory: chosenCategories,
-                title: AppString.save,
+                title: AppStrings.save,
                 onTap: () {
                   context.read<ChooseCategoryBloc>().add(
                         ChosenCategoryEvent(
                           isEmpty: chosenCategories.isEmpty,
                           chosenCategory: chosenCategories[0],
+                          placeType: chosenCategories[0].placeType,
                         ),
                       );
                   context.read<CreatePlaceButtonCubit>().updateButtonState(
-                        titleValue: '',
-                        descriptionValue: '',
-                        latValue: '',
-                        lotValue: '',
+                        createButton: CreateButtonState(
+                          chosenCategory: cubit.chosenCategory,
+                          titleValue: cubit.name,
+                          descriptionValue: cubit.description,
+                          latValue: cubit.lat.toString(),
+                          lngValue: cubit.lng.toString(),
+                          imagesToUpload: cubit.imagesToUpload,
+                        ),
                       );
                   Navigator.pop(context);
                 },
@@ -122,14 +130,20 @@ class _BackButtonWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final cubit = context.read<CreatePlaceButtonCubit>();
+
     return InkWell(
       borderRadius: BorderRadius.circular(40),
       onTap: () {
         context.read<CreatePlaceButtonCubit>().updateButtonState(
-              titleValue: '',
-              descriptionValue: '',
-              latValue: '',
-              lotValue: '',
+              createButton: CreateButtonState(
+                chosenCategory: [],
+                titleValue: cubit.name,
+                descriptionValue: cubit.description,
+                latValue: cubit.lat.toString(),
+                lngValue: cubit.lng.toString(),
+                imagesToUpload: cubit.imagesToUpload,
+              ),
             );
         context.read<ChooseCategoryBloc>().resetCategoryState(activeCategories: chosenCategory);
         context.read<ChooseCategoryBloc>().add(

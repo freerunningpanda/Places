@@ -13,6 +13,7 @@ class ChooseCategoryBloc extends Bloc<ChooseCategoryEvent, ChooseCategoryState> 
         ChooseCategoryState(
           isEmpty: event.isEmpty,
           chosenCategory: event.chosenCategory,
+          placeType: event.placeType,
         ),
       ),
     );

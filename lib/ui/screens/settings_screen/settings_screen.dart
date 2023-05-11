@@ -32,7 +32,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  AppString.darkTheme,
+                  AppStrings.darkTheme,
                   style: theme.textTheme.bodyLarge,
                 ),
                 const Switcher(),
@@ -52,7 +52,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      AppString.tutorial,
+                      AppStrings.tutorial,
                       style: theme.textTheme.bodyLarge,
                     ),
                     Padding(
@@ -85,7 +85,7 @@ class _AppBar extends StatelessWidget implements PreferredSizeWidget {
       automaticallyImplyLeading: false,
       centerTitle: true,
       title: Text(
-        AppString.settings,
+        AppStrings.settings,
         style: Theme.of(context).textTheme.titleLarge,
       ),
     );

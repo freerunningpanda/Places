@@ -41,7 +41,7 @@ class AddNewPlaceButton extends StatelessWidget {
             PlaceIcons(assetName: AppAssets.plus, width: 24, height: 24),
             SizedBox(width: 8),
             Text(
-              AppString.addNewPlace,
+              AppStrings.addNewPlace,
               style: AppTypography.placeCardTitle,
             ),
             Expanded(child: SizedBox()),

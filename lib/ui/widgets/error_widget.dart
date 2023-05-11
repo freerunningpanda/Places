@@ -23,13 +23,13 @@ class ErrorWidget extends StatelessWidget {
           ),
           SizedBox(height: 24),
           Text(
-            AppString.error,
+            AppStrings.error,
             textAlign: TextAlign.center,
             style: AppTypography.emptyListTitle,
           ),
           SizedBox(height: 8),
           Text(
-            AppString.errorDescription,
+            AppStrings.errorDescription,
             textAlign: TextAlign.center,
             style: AppTypography.detailsTextDarkMode,
           ),

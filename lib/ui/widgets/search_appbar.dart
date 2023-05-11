@@ -14,7 +14,7 @@ class SearchAppBar extends StatelessWidget implements PreferredSizeWidget {
       toolbarHeight: 16,
       centerTitle: true,
       title: Text(
-        AppString.appTitle,
+        AppStrings.appTitle,
         style: theme.textTheme.titleLarge,
       ),
       bottomOpacity: 0.0,

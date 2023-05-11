@@ -1,6 +1,8 @@
 import 'package:flutter/foundation.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:places/data/api/api_places.dart';
 import 'package:places/data/database/database.dart';
+import 'package:places/data/dto/place_model.dart';
 import 'package:places/data/interactor/place_interactor.dart';
 import 'package:places/data/model/place.dart';
 import 'package:places/data/repository/mapper.dart';
@@ -31,30 +33,39 @@ class PlaceRepository {
   //   return places;
   // }
 
+  // Загрузить место на сервер
+  Future<PlaceModel> postPlace({
+    required PlaceModel place,
+  }) =>
+      apiPlaces.postPlace(
+        place: place,
+      );
+
+  // Загрузить фото на сервер
+  Future<String> uploadFile(XFile image) => apiPlaces.uploadFile(image);
+
   // Преобразовать одно место из Dto в место для UI
   Future<DbPlace> getPlaceDetails(DbPlace place) =>
       apiPlaces.getPlaceDetails(place.id).then(Mapper.detailPlaceFromApiToUi);
 
-
   Future<void> removeFromFavorites({required DbPlace place, required AppDb db}) async {
-   await db.deletePlace(place);
+    await db.deletePlace(place);
   }
 
   Future<void> addToFavorites({required DbPlace place, required AppDb db}) async {
     await db.addPlace(place, isSearchScreen: false);
   }
 
-   Future<void> loadFavoritePlaces(AppDb db) async {
+  Future<void> loadFavoritePlaces(AppDb db) async {
     PlaceInteractor.favoritePlaces = await db.favoritePlacesEntries;
     debugPrint('places_list: ${PlaceInteractor.favoritePlaces.length}');
   }
 
-   Future<void> loadAllPlaces(AppDb db) async {
+  Future<void> loadAllPlaces(AppDb db) async {
     PlaceInteractor.favoritePlaces = await db.allPlacesEntries;
     debugPrint('places_list: ${PlaceInteractor.favoritePlaces.length}');
   }
 
-  void addNewPlace({required Place place}) {
-    PlaceInteractor.newPlaces.add(place);
-  }
+  Future<String> deletePlace(int id) => apiPlaces.deletePlace(id);
+
 }

@@ -5,11 +5,11 @@ import 'package:places/utils/place_type.dart';
 class CategoryRepository {
   static final List<Category> chosenCategories = [];
   static final List<Category> categories = [
-    Category(title: AppString.hotel, placeType: PlaceType.hotel),
-    Category(title: AppString.restaurant, placeType: PlaceType.restaurant),
-    Category(title: AppString.particularPlace, placeType: PlaceType.other),
-    Category(title: AppString.theater, placeType: PlaceType.park),
-    Category(title: AppString.museum, placeType: PlaceType.museum),
-    Category(title: AppString.cafe, placeType: PlaceType.cafe),
+    Category(title: AppStrings.hotel, placeType: PlaceType.hotel),
+    Category(title: AppStrings.restaurant, placeType: PlaceType.restaurant),
+    Category(title: AppStrings.particularPlace, placeType: PlaceType.other),
+    Category(title: AppStrings.theater, placeType: PlaceType.park),
+    Category(title: AppStrings.museum, placeType: PlaceType.museum),
+    Category(title: AppStrings.cafe, placeType: PlaceType.cafe),
   ];
 }

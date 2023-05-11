@@ -216,7 +216,7 @@ class _SearchBarState extends State<SearchBar> {
                         maxWidth: 24,
                         maxHeight: 24,
                       ),
-                      hintText: AppString.search,
+                      hintText: AppStrings.search,
                       hintStyle: AppTypography.textText16Search,
                       suffixIcon: focusNode.hasFocus && !widget.isMainPage
                           ? SuffixIcon(controller: widget.searchController, theme: theme)

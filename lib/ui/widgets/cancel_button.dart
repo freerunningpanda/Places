@@ -24,7 +24,7 @@ class CancelButton extends StatelessWidget {
             children:  [
               const SizedBox(width: 8),
               Text(
-                AppString.cancel.toUpperCase(),
+                AppStrings.cancel.toUpperCase(),
                 style: AppTypography.cancelButtonStyle,
               ),
             ],

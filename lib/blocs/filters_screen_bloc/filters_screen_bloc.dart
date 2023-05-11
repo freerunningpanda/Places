@@ -19,37 +19,37 @@ part 'filters_screen_state.dart';
 class FiltersScreenBloc extends Bloc<FiltersScreenEvent, FiltersScreenState> {
   static final List<Category> filters = [
     Category(
-      title: AppString.hotel,
+      title: AppStrings.hotel,
       assetName: AppAssets.hotel,
       placeType: PlaceType.hotel,
       isEnabled: AppPreferences.getCategoryByStatus(PlaceType.hotel),
     ),
     Category(
-      title: AppString.restaurant,
+      title: AppStrings.restaurant,
       assetName: AppAssets.restaurant,
       placeType: PlaceType.restaurant,
       isEnabled: AppPreferences.getCategoryByStatus(PlaceType.restaurant),
     ),
     Category(
-      title: AppString.particularPlace,
+      title: AppStrings.particularPlace,
       assetName: AppAssets.particularPlace,
       placeType: PlaceType.other,
       isEnabled: AppPreferences.getCategoryByStatus(PlaceType.other),
     ),
     Category(
-      title: AppString.park,
+      title: AppStrings.park,
       assetName: AppAssets.park,
       placeType: PlaceType.park,
       isEnabled: AppPreferences.getCategoryByStatus(PlaceType.park),
     ),
     Category(
-      title: AppString.museum,
+      title: AppStrings.museum,
       assetName: AppAssets.museum,
       placeType: PlaceType.museum,
       isEnabled: AppPreferences.getCategoryByStatus(PlaceType.museum),
     ),
     Category(
-      title: AppString.cafe,
+      title: AppStrings.cafe,
       assetName: AppAssets.cafe,
       placeType: PlaceType.cafe,
       isEnabled: AppPreferences.getCategoryByStatus(PlaceType.cafe),
