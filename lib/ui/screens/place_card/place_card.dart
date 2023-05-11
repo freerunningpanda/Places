@@ -27,6 +27,8 @@ class PlaceCard extends StatelessWidget {
   final int placeIndex;
   final bool isVisitingScreen;
   final VoidCallback? actionThree;
+  final bool isMainScreen;
+  final bool fromMainScreen;
 
   const PlaceCard({
     Key? key,
@@ -42,6 +44,8 @@ class PlaceCard extends StatelessWidget {
     required this.placeIndex,
     required this.isVisitingScreen,
     this.actionThree,
+    required this.isMainScreen,
+    required this.fromMainScreen,
   }) : super(key: key);
 
   @override
@@ -53,7 +57,7 @@ class PlaceCard extends StatelessWidget {
     final orientation = MediaQuery.of(context).orientation == Orientation.portrait;
 
     return SizedBox(
-      height: orientation ? size.height / 2.5 : size.height / 2.0,
+      height: orientation ? size.height / 2.5 : size.height / 1.2,
       width: size.width,
       child: ClipRRect(
         borderRadius: const BorderRadius.all(
@@ -72,6 +76,7 @@ class PlaceCard extends StatelessWidget {
                     name: name,
                     type: type,
                     url: urlsList,
+                    isMainScreen: isMainScreen,
                   ),
                   const SizedBox(height: 16),
                   _PlaceCardBottom(
@@ -80,7 +85,10 @@ class PlaceCard extends StatelessWidget {
                   ),
                 ],
               ),
-              RippleCardFull(place: place),
+              RippleCardFull(
+                place: place,
+                fromMainScreen: fromMainScreen,
+              ),
               if (isVisitingScreen)
                 RippleIcons(
                   actionThree: actionThree,
@@ -182,7 +190,7 @@ class RippleIcons extends StatelessWidget {
         Positioned(
           top: 16,
           right: 16,
-          child: Material( 
+          child: Material(
             type: MaterialType.transparency,
             child: SizedBox(
               width: 22,
@@ -202,14 +210,17 @@ class RippleIcons extends StatelessWidget {
 
 class RippleCardFull extends StatelessWidget {
   final DbPlace place;
+  final bool fromMainScreen;
 
   const RippleCardFull({
     Key? key,
     required this.place,
+    required this.fromMainScreen,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    
     return Positioned.fill(
       child: Material(
         type: MaterialType.transparency,
@@ -222,6 +233,7 @@ class RippleCardFull extends StatelessWidget {
                 builder: (_) => PlaceDetails(
                   height: 360,
                   place: place,
+                  fromMainScreen: fromMainScreen,
                 ),
               ),
             );
@@ -236,12 +248,14 @@ class _PlaceCardTop extends StatefulWidget {
   final String type;
   final List<String>? url;
   final String name;
+  final bool isMainScreen;
 
   const _PlaceCardTop({
     Key? key,
     required this.type,
     required this.url,
     required this.name,
+    required this.isMainScreen,
   }) : super(key: key);
 
   @override
@@ -268,8 +282,13 @@ class _PlaceCardTopState extends State<_PlaceCardTop> with TickerProviderStateMi
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+    final orientation = MediaQuery.of(context).orientation == Orientation.portrait;
+
     return Container(
-      height: 96,
+      height: widget.isMainScreen
+          ? (orientation ? size.height * 0.18 : size.height * 0.35)
+          : (orientation ? size.height * 0.1 : size.height * 0.23),
       decoration: const BoxDecoration(
         borderRadius: BorderRadius.only(
           topLeft: Radius.circular(8.0),

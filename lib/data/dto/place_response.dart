@@ -1,8 +1,8 @@
 class PlaceResponse {
   final int id;
-  final double lat;
-  final double lon;
-  final double distance;
+  final double? lat;
+  final double? lon;
+  final double? distance;
   final String name;
   final List<String> urls;
   final String placeType;
@@ -12,7 +12,7 @@ class PlaceResponse {
     required this.id,
     required this.lat,
     required this.lon,
-    required this.distance,
+    this.distance,
     required this.name,
     required this.urls,
     required this.placeType,
@@ -21,12 +21,12 @@ class PlaceResponse {
 
   factory PlaceResponse.fromJson(Map<String, dynamic> json) => PlaceResponse(
         id: json['id'] as int,
-        lat: json['lat'] as double,
-        lon: json['lng'] as double,
-        distance: json['distance'] as double,
+        lat: json['lat'] as double?,
+        lon: json['lng'] as double?,
+        distance: json['distance'] as double?,
         name: json['name'] as String,
         // ignore: avoid_annotating_with_dynamic
-        urls: (json['urls'] as List<dynamic>).map((dynamic e) => e as String).toList(),
+        urls: (json['urls'] as List<dynamic>?)?.map((dynamic e) => e as String).toList() ?? [],
         placeType: json['placeType'] as String,
         description: json['description'] as String,
       );

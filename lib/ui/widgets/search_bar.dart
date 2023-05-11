@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 import 'package:places/blocs/search_history/search_history_bloc.dart';
 import 'package:places/blocs/search_screen/search_screen_bloc.dart';
@@ -6,6 +7,7 @@ import 'package:places/data/api/api_places.dart';
 import 'package:places/data/database/database.dart';
 import 'package:places/data/interactor/place_interactor.dart';
 import 'package:places/data/repository/place_repository.dart';
+import 'package:places/main.dart';
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_strings.dart';
 import 'package:places/ui/res/app_typography.dart';
@@ -43,6 +45,7 @@ class _SearchBarState extends State<SearchBar> {
     ),
   );
   bool autofocus = true;
+  List<DbPlace> foundedPlaces = [];
 
   @override
   Widget build(BuildContext context) {
@@ -59,7 +62,7 @@ class _SearchBarState extends State<SearchBar> {
 
     return Padding(
       padding: const EdgeInsets.only(
-        bottom: 34,
+        bottom: 14,
       ),
       child: Container(
         padding: const EdgeInsets.only(left: 15),
@@ -89,7 +92,11 @@ class _SearchBarState extends State<SearchBar> {
                       interactor.query = value;
 
                       context.read<SearchScreenBloc>().activeFocus(isActive: true);
-                      final foundedPlaces = await context.read<SearchScreenBloc>().searchPlaces(value, db);
+                      if (status.isDenied) {
+                        foundedPlaces = await context.read<SearchScreenBloc>().searchPlacesNoGeo(value, db);
+                      } else if (status.isGranted) {
+                        foundedPlaces = await context.read<SearchScreenBloc>().searchPlaces(value, db);
+                      }
 
                       // Не виджет истории поиска. Поэтому isHistoryClear: false
                       // Параметр isHistoryClear отвечает за отображение всех найденных мест
@@ -248,14 +255,14 @@ class _SearchBarState extends State<SearchBar> {
     required List<DbPlace> loadedPlaces, // Загруженные места с экрана фильтров
     required List<SearchHistory> historyList, // История поиска
     required AppDb db, // БД
-  }) async {  
+  }) async {
     for (var i = 0; i < loadedPlaces.length; i++) {
       // Проверка на соответствие истории запроса с именем места
       final containsTitle = historyList.any(
         (item) => loadedPlaces[i].name.toLowerCase().contains(item.title.toLowerCase()),
       );
       // Если есть соответствие, то добавляем места в базу указывая флаг isSearchScreen на true
-      // чтобы отобразить места только с данным флагом в истории 
+      // чтобы отобразить места только с данным флагом в истории
       if (containsTitle) {
         await db.addPlace(loadedPlaces[i], isSearchScreen: true);
       }

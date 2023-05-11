@@ -20,7 +20,16 @@ class PlaceRepository {
   Future<List<DbPlace>> getPlaces() async {
     final places = await apiPlaces.getPlaces(
       category: '',
-      radius: 15000,
+      radius: 10000,
+    );
+
+    return places.map(Mapper.placesFromApiToUi).toList();
+  }
+
+  // Получить все места если в гео было отказано пользователем
+  Future<List<DbPlace>> getPlacesNoGeo() async {
+    final places = await apiPlaces.getPlacesNoGeo(
+      category: '',
     );
 
     return places.map(Mapper.placesFromApiToUi).toList();

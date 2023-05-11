@@ -1,7 +1,6 @@
 import 'package:drift/drift.dart' hide Column;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:places/blocs/favorite/favorite_bloc.dart';
 import 'package:places/blocs/visited/visited_screen_bloc.dart';
 import 'package:places/blocs/want_to_visit/want_to_visit_bloc.dart';
 import 'package:places/data/database/database.dart';
@@ -297,7 +296,7 @@ class _DismissibleWidget extends StatelessWidget {
             ),
           ),
           AspectRatio(
-            aspectRatio: orientation ? AppCardSize.visitingCard : AppCardSize.visitingCardLandscape,
+            aspectRatio: orientation ? AppCardSize.visitingCard : AppCardSize.visitingCardDismissLandscape,
             child: Dismissible(
               key: ObjectKey(index),
               onDismissed: (direction) async {
@@ -320,15 +319,16 @@ class _DismissibleWidget extends StatelessWidget {
                       ),
                     );
                 place.isFavorite = false;
-                context.read<FavoriteBloc>().add(
-                      RemoveFromFavoriteEvent(
-                        db: db,
-                        isFavorite: place.isFavorite,
-                        place: place,
-                        placeIndex: place.id,
-                      ),
-                    );
+                // context.read<FavoriteBloc>().add(
+                //       RemoveFromFavoriteEvent(
+                //         db: db,
+                //         isFavorite: place.isFavorite,
+                //         place: place,
+                //         placeIndex: place.id,
+                //       ),
+                //     );
                 fromVisitingScreen = true;
+                await db.deletePlace(place);
                 debugPrint('placesToVisit[i].id: ${place.id}');
               },
               background: const SizedBox.shrink(),
@@ -336,6 +336,8 @@ class _DismissibleWidget extends StatelessWidget {
               child: Padding(
                 padding: const EdgeInsets.only(bottom: 11.0),
                 child: PlaceCard(
+                  fromMainScreen: false,
+                  isMainScreen: false,
                   placeIndex: place.id,
                   actionThree: () async {
                     debugPrint('pressed_remove_place');
@@ -348,15 +350,16 @@ class _DismissibleWidget extends StatelessWidget {
                           ),
                         );
                     place.isFavorite = false;
-                    context.read<FavoriteBloc>().add(
-                          RemoveFromFavoriteEvent(
-                            db: db,
-                            isFavorite: place.isFavorite,
-                            place: place,
-                            placeIndex: place.id,
-                          ),
-                        );
+                    // context.read<FavoriteBloc>().add(
+                    //       RemoveFromFavoriteEvent(
+                    //         db: db,
+                    //         isFavorite: place.isFavorite,
+                    //         place: place,
+                    //         placeIndex: place.id,
+                    //       ),
+                    //     );
                     fromVisitingScreen = true;
+                    await db.deletePlace(place);
                   },
                   isVisitingScreen: true,
                   place: place,
@@ -474,6 +477,8 @@ class _VisitedPlacesList extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.only(bottom: 11.0),
         child: PlaceCard(
+          fromMainScreen: false,
+          isMainScreen: false,
           placeIndex: place.id,
           actionThree: () async {
             debugPrint('pressed_share_place');

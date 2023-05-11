@@ -113,17 +113,14 @@ class CreatePlaceButtonCubit extends Cubit<CreatePlaceButtonState> {
 
   /// Добавить картинку с галереи
   Future<void> pickImageFromGallery() async {
-    final image = await ImagePicker().pickImage(
-      source: ImageSource.gallery,
+    final images = await ImagePicker().pickMultiImage(
       imageQuality: 50,
     );
 
-    if (image != null) {
-      imagesToUpload.add(image);
-      emit(
-        state.copyWith(imagesToUploadLength: imagesToUpload.length),
-      );
-    }
+    imagesToUpload.addAll(images);
+    emit(
+      state.copyWith(imagesToUploadLength: imagesToUpload.length),
+    );
   }
 
   /// Очистить картинки (для загрузки, загруженные)

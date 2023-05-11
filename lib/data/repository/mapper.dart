@@ -9,8 +9,8 @@ class Mapper {
 
     return DbPlace(
       id: place.id,
-      lat: place.lat,
-      lng: place.lon,
+      lat: place.lat ?? 0,
+      lng: place.lon ?? 0,
       name: place.name,
       urls: urlsString,
       placeType: place.placeType,

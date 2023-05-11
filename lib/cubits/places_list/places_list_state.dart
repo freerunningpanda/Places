@@ -11,14 +11,19 @@ class PlacesListEmptyState extends PlacesListState {}
 
 class PlaceListLoadingState extends PlacesListState {}
 
+// ignore: must_be_immutable
 class PlacesListLoadedState extends PlacesListState {
   final List<DbPlace> places;
+  bool? isAddPlaceBtnVisible;
+  DbPlace? tappedPlacemark;
 
   @override
-  List<Object?> get props => [places];
+  List<Object?> get props => [places, isAddPlaceBtnVisible, tappedPlacemark];
 
-  const PlacesListLoadedState({
+  PlacesListLoadedState({
     required this.places,
+    this.isAddPlaceBtnVisible,
+    this.tappedPlacemark,
   });
 }
 

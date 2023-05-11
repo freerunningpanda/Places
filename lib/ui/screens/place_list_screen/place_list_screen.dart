@@ -42,6 +42,7 @@ class PlaceListScreen extends StatelessWidget {
         child: NestedScrollView(
           headerSliverBuilder: (_, innerBoxIsScrolled) => [
             SliverAppBar(
+              automaticallyImplyLeading: false,
               centerTitle: orientation ? isPortrait : !isPortrait,
               pinned: true,
               title: Text(
@@ -76,6 +77,7 @@ class PlaceListScreen extends StatelessWidget {
                       ),
                     if (orientation)
                       _PlaceListWidgetPortrait(
+                        key: const PageStorageKey<String>('PlaceListScreen'),
                         placeList: state.places,
                         theme: theme,
                       )
@@ -118,24 +120,19 @@ class _PlaceListWidgetPortraitState extends State<_PlaceListWidgetPortrait> {
   );
 
   @override
-  void initState() {
-    final db = context.read<AppDb>();
-    getPlaces(db);
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     final db = context.read<AppDb>();
 
     return Expanded(
       child: ListView.builder(
+        key: const PageStorageKey<String>('SaveScrollPosition'),
         physics: Platform.isAndroid ? const ClampingScrollPhysics() : const BouncingScrollPhysics(),
         shrinkWrap: true,
         itemCount: widget.placeList.length,
         itemBuilder: (_, index) {
           final place = widget.placeList[index];
+
           /// Из строки получаю список с картинками
           final urlsList = place.urls.split('|');
           final imageUrl = urlsList.isNotEmpty ? urlsList[0] : null;
@@ -151,6 +148,8 @@ class _PlaceListWidgetPortraitState extends State<_PlaceListWidgetPortrait> {
                       final isFavorite = snapshot.data ?? false;
 
                       return PlaceCard(
+                        fromMainScreen: true,
+                        isMainScreen: true,
                         placeIndex: index,
                         isVisitingScreen: false,
                         aspectRatio: AppCardSize.placeCard,
@@ -189,6 +188,8 @@ class _PlaceListWidgetPortraitState extends State<_PlaceListWidgetPortrait> {
                       );
                     } else {
                       return PlaceCard(
+                        fromMainScreen: true,
+                        isMainScreen: true,
                         placeIndex: index,
                         isVisitingScreen: false,
                         aspectRatio: AppCardSize.placeCard,
@@ -243,7 +244,7 @@ class _PlaceListWidgetPortraitState extends State<_PlaceListWidgetPortrait> {
                 place: place,
               ),
             );
-        db.addPlace(place, isSearchScreen: false);
+        interactor.addToFavorites(place: place, db: db);
       } else {
         place.isFavorite = false;
         context.read<WantToVisitBloc>().add(
@@ -253,25 +254,9 @@ class _PlaceListWidgetPortraitState extends State<_PlaceListWidgetPortrait> {
                 place: place,
               ),
             );
-        db.deletePlace(place);
+        interactor.removeFromFavorites(place: place, db: db);
       }
     });
-  }
-
-  void removeFromFavorites(DbPlace place) {
-    final db = context.read<AppDb>();
-
-    setState(() {
-      place.isFavorite = false;
-      PlaceInteractor.favoritePlaces.remove(place);
-      db.deletePlace(place);
-    });
-  }
-
-  // Получить список избранного из бд
-  Future<void> getPlaces(AppDb db) async {
-    final list = await db.favoritePlacesEntries;
-    debugPrint('length: ${list.length}');
   }
 
   // Получить значение свойства isFavorite
@@ -305,13 +290,6 @@ class _PlaceListWidgetLandscapeState extends State<_PlaceListWidgetLandscape> {
   );
 
   @override
-  void initState() {
-    final db = context.read<AppDb>();
-    getPlaces(db);
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     final db = context.read<AppDb>();
@@ -330,8 +308,10 @@ class _PlaceListWidgetLandscapeState extends State<_PlaceListWidgetLandscape> {
         itemCount: widget.placeList.length,
         itemBuilder: (_, index) {
           final place = widget.placeList[index];
+
           /// Из строки получаю список с картинками
           final urlsList = place.urls.split('|');
+          final imageUrl = urlsList.isNotEmpty ? urlsList[0] : null;
 
           return Column(
             children: [
@@ -344,15 +324,24 @@ class _PlaceListWidgetLandscapeState extends State<_PlaceListWidgetLandscape> {
                       final isFavorite = snapshot.data ?? false;
 
                       return PlaceCard(
+                        fromMainScreen: true,
+                        isMainScreen: true,
                         placeIndex: index,
                         isVisitingScreen: false,
-                        aspectRatio: 1.5 / 1,
-                        actionOne: Icon(
-                          isFavorite ? Icons.favorite : Icons.favorite_border,
-                          color: isFavorite ? Colors.red : null,
-                        ),
+                        aspectRatio: AppCardSize.placeCardLandscape,
+                        actionOne: isFavorite
+                            ? const PlaceIcons(
+                                assetName: AppAssets.heartFull,
+                                width: 22,
+                                height: 22,
+                              )
+                            : const PlaceIcons(
+                                assetName: AppAssets.favourite,
+                                width: 22,
+                                height: 22,
+                              ),
                         addPlace: () => toggleFavorite(place),
-                        url: urlsList[0],
+                        url: imageUrl,
                         type: place.placeType,
                         name: place.name,
                         place: place,
@@ -374,8 +363,37 @@ class _PlaceListWidgetLandscapeState extends State<_PlaceListWidgetLandscape> {
                         ],
                       );
                     } else {
-                      return const Center(
-                        child: CircularProgressIndicator(),
+                      return PlaceCard(
+                        fromMainScreen: true,
+                        isMainScreen: true,
+                        placeIndex: index,
+                        isVisitingScreen: false,
+                        aspectRatio: AppCardSize.placeCardLandscape,
+                        actionOne: const PlaceIcons(
+                          assetName: AppAssets.favourite,
+                          width: 22,
+                          height: 22,
+                        ),
+                        url: imageUrl,
+                        type: place.placeType,
+                        name: place.name,
+                        place: place,
+                        details: [
+                          Text(
+                            place.name,
+                            maxLines: 2,
+                            style: widget.theme.textTheme.headlineSmall,
+                          ),
+                          const SizedBox(height: 2),
+                          SizedBox(
+                            height: size.height / 7,
+                            child: Text(
+                              place.description,
+                              overflow: TextOverflow.ellipsis,
+                              style: AppTypography.textText16Regular,
+                            ),
+                          ),
+                        ],
                       );
                     }
                   },
@@ -395,31 +413,29 @@ class _PlaceListWidgetLandscapeState extends State<_PlaceListWidgetLandscape> {
     setState(() {
       if (!isFavorite) {
         place.isFavorite = true;
-        PlaceInteractor.favoritePlaces.add(place);
-        db.addPlace(place, isSearchScreen: false);
+        context.read<WantToVisitBloc>().add(
+              AddToWantToVisitEvent(
+                db: db,
+                isFavorite: place.isFavorite,
+                place: place,
+              ),
+            );
+        interactor.addToFavorites(place: place, db: db);
       } else {
         place.isFavorite = false;
-        PlaceInteractor.favoritePlaces.remove(place);
-        db.deletePlace(place);
+        context.read<WantToVisitBloc>().add(
+              RemoveFromWantToVisitEvent(
+                db: db,
+                isFavorite: place.isFavorite,
+                place: place,
+              ),
+            );
+        interactor.removeFromFavorites(place: place, db: db);
       }
     });
   }
 
-  void removeFromFavorites(DbPlace place) {
-    final db = context.read<AppDb>();
-
-    setState(() {
-      place.isFavorite = false;
-      PlaceInteractor.favoritePlaces.remove(place);
-      db.deletePlace(place);
-    });
-  }
-
-  Future<void> getPlaces(AppDb db) async {
-    final list = await db.favoritePlacesEntries;
-    debugPrint('length: ${list.length}');
-  }
-
+  // Получить значение свойства isFavorite
   Future<bool> getValue(AppDb db, DbPlace place) async {
     final list = await db.favoritePlacesEntries;
     final isFavorite = list.any((p) => p.id == place.id);

@@ -5,14 +5,14 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart' hide ErrorWidget;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:places/blocs/details_screen/details_screen_bloc.dart';
-import 'package:places/data/api/api_places.dart';
+import 'package:places/blocs/want_to_visit/want_to_visit_bloc.dart';
 import 'package:places/data/database/database.dart';
-import 'package:places/data/interactor/place_interactor.dart';
-import 'package:places/data/repository/place_repository.dart';
+import 'package:places/providers/theme_data_provider.dart';
 
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_strings.dart';
 import 'package:places/ui/res/app_typography.dart';
+import 'package:places/ui/screens/navigation_screen/navigation_screen.dart';
 import 'package:places/ui/widgets/chevrone_back.dart';
 import 'package:places/ui/widgets/error_widget.dart';
 import 'package:places/ui/widgets/place_icons.dart';
@@ -20,10 +20,12 @@ import 'package:places/ui/widgets/place_icons.dart';
 class PlaceDetails extends StatefulWidget {
   final DbPlace place;
   final double height;
+  final bool fromMainScreen;
   const PlaceDetails({
     Key? key,
     required this.place,
     required this.height,
+    required this.fromMainScreen,
   }) : super(key: key);
 
   @override
@@ -77,30 +79,46 @@ class _PlaceDetailsState extends State<PlaceDetails> with TickerProviderStateMix
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: BlocBuilder<DetailsScreenBloc, DetailsScreenState>(
-        builder: (_, state) {
-          if (state is DetailsScreenLoadingState) {
-            return Transform.rotate(
-              angle: _rotateAnimation.value,
-              child: const PlaceIcons(
-                assetName: AppAssets.loader,
-                width: 30,
-                height: 30,
-              ),
-            );
-          } else if (state is DetailsScreenLoadedState) {
-            return _PlaceDetails(
-              height: widget.height,
-              place: widget.place,
-              pageController: _pageController,
-            );
-          }
-
-          return const Center(
-            child: ErrorWidget(),
+    return WillPopScope(
+      onWillPop: () {
+        if (widget.fromMainScreen) {
+          Navigator.of(context).pushReplacement(
+            MaterialPageRoute<NavigationScreen>(
+              builder: (_) => const NavigationScreen(),
+            ),
           );
-        },
+        } else {
+          Navigator.pop(context);
+        }
+
+        return Future.value(false);
+      },
+      child: Scaffold(
+        body: BlocBuilder<DetailsScreenBloc, DetailsScreenState>(
+          builder: (_, state) {
+            if (state is DetailsScreenLoadingState) {
+              return Transform.rotate(
+                angle: _rotateAnimation.value,
+                child: const PlaceIcons(
+                  assetName: AppAssets.loader,
+                  width: 30,
+                  height: 30,
+                ),
+              );
+            } else if (state is DetailsScreenLoadedState) {
+              return _PlaceDetails(
+                height: widget.height,
+                place: widget.place,
+                pageController: _pageController,
+                fromMainScreen: widget.fromMainScreen,
+              );
+            }
+
+            return const Center(
+              child: ErrorWidget(),
+            );
+          },
+        ),
       ),
     );
   }
@@ -109,12 +127,14 @@ class _PlaceDetailsState extends State<PlaceDetails> with TickerProviderStateMix
 class _PlaceDetails extends StatelessWidget {
   final DbPlace place;
   final double height;
+  final bool fromMainScreen;
   final PageController _pageController;
 
   const _PlaceDetails({
     Key? key,
     required this.place,
     required this.height,
+    required this.fromMainScreen,
     required PageController pageController,
   })  : _pageController = pageController,
         super(key: key);
@@ -132,6 +152,7 @@ class _PlaceDetails extends StatelessWidget {
             images: urlsList,
             height: height,
             pageController: _pageController,
+            fromMainScreen: fromMainScreen,
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -162,6 +183,7 @@ class _PlaceDetailsGallery extends StatefulWidget {
   final List<String> images;
   final double height;
   final DbPlace place;
+  final bool fromMainScreen;
   final PageController _pageController;
 
   const _PlaceDetailsGallery({
@@ -169,6 +191,7 @@ class _PlaceDetailsGallery extends StatefulWidget {
     required this.images,
     required this.height,
     required this.place,
+    required this.fromMainScreen,
     required PageController pageController,
   })  : _pageController = pageController,
         super(key: key);
@@ -210,12 +233,13 @@ class _PlaceDetailsGalleryState extends State<_PlaceDetailsGallery> {
               ),
             ),
           ),
-          const Positioned(
+          Positioned(
             left: 16,
             top: 36,
             child: ChevroneBack(
               width: 32,
               height: 32,
+              fromMainScreen: widget.fromMainScreen,
             ),
           ),
         ],
@@ -397,7 +421,7 @@ class _PlaceDetailsBuildRouteBtn extends StatelessWidget {
   }
 }
 
-class _PlaceDetailsBottom extends StatelessWidget {
+class _PlaceDetailsBottom extends StatefulWidget {
   final DbPlace place;
   const _PlaceDetailsBottom({
     required this.place,
@@ -405,8 +429,14 @@ class _PlaceDetailsBottom extends StatelessWidget {
   }) : super(key: key);
 
   @override
+  State<_PlaceDetailsBottom> createState() => _PlaceDetailsBottomState();
+}
+
+class _PlaceDetailsBottomState extends State<_PlaceDetailsBottom> {
+  @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final themeProvider = context.read<ThemeDataProvider>();
     final db = context.read<AppDb>();
 
     return Row(
@@ -432,31 +462,97 @@ class _PlaceDetailsBottom extends StatelessWidget {
           ),
         ),
         InkWell(
-          onTap: () => PlaceInteractor(
-            repository: PlaceRepository(
-              apiPlaces: ApiPlaces(),
-            ),
-          ).addToFavorites(place: place, db: db),
-          child: Row(
-            children: [
-              PlaceIcons(
-                assetName: AppAssets.favouriteDark,
-                width: 20,
-                height: 18,
-                color: theme.iconTheme.color,
-              ),
-              const SizedBox(width: 9),
-              Text(
-                AppStrings.favourite,
-                style: theme.textTheme.displaySmall,
-              ),
-              const SizedBox(
-                width: 24,
-              ),
-            ],
+          onTap: () => toggleFavorite(widget.place),
+          child: FutureBuilder(
+            future: getValue(db, widget.place),
+            // ignore: avoid_types_on_closure_parameters
+            builder: (_, AsyncSnapshot<bool> snapshot) {
+              if (snapshot.connectionState == ConnectionState.done) {
+                final isFavorite = snapshot.data ?? false;
+
+                return Row(
+                  children: [
+                    if (isFavorite)
+                      PlaceIcons(
+                        assetName: themeProvider.isDarkMode ? AppAssets.heartFull : AppAssets.heartFullDark,
+                        width: 20,
+                        height: 18,
+                      )
+                    else
+                      PlaceIcons(
+                        assetName: themeProvider.isDarkMode ? AppAssets.favourite : AppAssets.favouriteDark,
+                        width: 20,
+                        height: 18,
+                      ),
+                    const SizedBox(width: 9),
+                    Text(
+                      AppStrings.favourite,
+                      style: theme.textTheme.displaySmall,
+                    ),
+                    const SizedBox(
+                      width: 24,
+                    ),
+                  ],
+                );
+              } else {
+                return Row(
+                  children: [
+                    const PlaceIcons(
+                      assetName: AppAssets.favourite,
+                      width: 20,
+                      height: 18,
+                    ),
+                    const SizedBox(width: 9),
+                    Text(
+                      AppStrings.favourite,
+                      style: theme.textTheme.displaySmall,
+                    ),
+                    const SizedBox(
+                      width: 24,
+                    ),
+                  ],
+                );
+              }
+            },
           ),
         ),
       ],
     );
+  }
+
+  Future<void> toggleFavorite(DbPlace place) async {
+    final db = context.read<AppDb>();
+    final isFavorite = await getValue(db, place);
+    setState(() {
+      if (!isFavorite) {
+        place.isFavorite = true;
+        context.read<WantToVisitBloc>().add(
+              AddToWantToVisitEvent(
+                db: db,
+                isFavorite: place.isFavorite,
+                place: place,
+              ),
+            );
+        db.addPlace(place, isSearchScreen: false);
+      } else {
+        place.isFavorite = false;
+        context.read<WantToVisitBloc>().add(
+              RemoveFromWantToVisitEvent(
+                db: db,
+                isFavorite: place.isFavorite,
+                place: place,
+              ),
+            );
+        db.deletePlace(place);
+      }
+    });
+  }
+
+  // Получить значение свойства isFavorite
+  Future<bool> getValue(AppDb db, DbPlace place) async {
+    final list = await db.favoritePlacesEntries;
+    final isFavorite = list.any((p) => p.id == place.id);
+
+    return isFavorite;
   }
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:places/blocs/filters_screen_bloc/filters_screen_bloc.dart';
 import 'package:places/blocs/search_screen/search_screen_bloc.dart';
 import 'package:places/cubits/distance_slider_cubit/distance_slider_cubit.dart';
@@ -11,6 +12,7 @@ import 'package:places/data/database/database.dart';
 import 'package:places/data/interactor/place_interactor.dart';
 import 'package:places/data/model/category.dart';
 import 'package:places/data/store/app_preferences.dart';
+import 'package:places/main.dart';
 import 'package:places/mocks.dart';
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_strings.dart';
@@ -57,12 +59,14 @@ class FilterScreen extends StatelessWidget {
                     activeFilters: PlaceInteractor.activeFilters,
                   ),
                   if (size.width <= 320) SizedBox(height: size.height / 10) else SizedBox(height: size.height / 3.5),
-                  Expanded(
+                  AbsorbPointer(
+                    absorbing: status.isDenied,
                     child: _DistanceSlider(
                       filters: FiltersScreenBloc.filters,
                       places: state.places,
                     ),
                   ),
+                  const Spacer(),
                   if (size.width <= 320)
                     Expanded(
                       child: ActionButton(
@@ -101,7 +105,7 @@ class FilterScreen extends StatelessWidget {
     //   PlaceInteractor.filtersWithDistance.toList(),
     //   isSearchScreen: true,
     // );
-    
+
     // Добавить места, которые будут отображаться на экране поиска если очистить историю поиска
     await db.addPlacesToSearchScreen(
       PlaceInteractor.filtersWithDistance.toList(),
@@ -171,19 +175,18 @@ class _AppBar extends StatelessWidget implements PreferredSizeWidget {
   }
 }
 
-class _ClearButtonWidget extends StatefulWidget {
+class _ClearButtonWidget extends StatelessWidget {
   const _ClearButtonWidget({Key? key}) : super(key: key);
 
-  @override
-  State<_ClearButtonWidget> createState() => _ClearButtonWidgetState();
-}
-
-class _ClearButtonWidgetState extends State<_ClearButtonWidget> {
   @override
   Widget build(BuildContext context) {
     return TextButton(
       onPressed: () {
-        context.read<ShowPlacesButtonCubit>().clearAllFilters();
+        if (status.isDenied) {
+          context.read<ShowPlacesButtonCubit>().clearAllFiltersNoGeo();
+        } else if (status.isGranted) {
+          context.read<ShowPlacesButtonCubit>().clearAllFilters();
+        }
         context.read<FiltersScreenBloc>().add(ClearAllFiltersEvent());
       },
       child: const Text(
@@ -248,7 +251,7 @@ class _ItemFiltersListBigScreens extends StatelessWidget {
   Widget build(BuildContext context) {
     return Wrap(
       crossAxisAlignment: WrapCrossAlignment.center,
-      spacing: 24,
+      spacing: 14,
       runSpacing: 40,
       children: filtersTable.filters
           .asMap()
@@ -267,8 +270,13 @@ class _ItemFiltersListBigScreens extends StatelessWidget {
                         category: category,
                         filteredByType: filteredByType,
                       );
-                  // ignore: use_build_context_synchronously
-                  await context.read<ShowPlacesButtonCubit>().showCount(places: placeList);
+                  if (status.isDenied) {
+                    // ignore: use_build_context_synchronously
+                    await context.read<ShowPlacesButtonCubit>().showCountNoGeo(places: placeList);
+                  } else if (status.isGranted) {
+                    // ignore: use_build_context_synchronously
+                    await context.read<ShowPlacesButtonCubit>().showCount(places: placeList);
+                  }
 
                   if (!category.isEnabled) {
                     await AppPreferences.setCategoryByName(
@@ -350,8 +358,13 @@ class _ItemFiltersListSmallScreens extends StatelessWidget {
                         category: category,
                         filteredByType: filteredByType,
                       );
-                  // ignore: use_build_context_synchronously
-                  await context.read<ShowPlacesButtonCubit>().showCount(places: placeList);
+                  if (status.isDenied) {
+                    // ignore: use_build_context_synchronously
+                    await context.read<ShowPlacesButtonCubit>().showCountNoGeo(places: placeList);
+                  } else if (status.isGranted) {
+                    // ignore: use_build_context_synchronously
+                    await context.read<ShowPlacesButtonCubit>().showCount(places: placeList);
+                  }
 
                   if (!category.isEnabled) {
                     await AppPreferences.setCategoryByName(
@@ -518,37 +531,40 @@ class _DistanceSlider extends StatelessWidget {
 
     return BlocBuilder<DistanceSliderCubit, DistanceSliderState>(
       builder: (_, state) {
-        return Column(
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  AppStrings.distantion,
-                  style: theme.textTheme.displayMedium,
-                ),
-                Text(
-                  'от ${state.rangeValues.start.toInt()} до ${state.rangeValues.end.toInt()} м',
-                  style: theme.textTheme.titleMedium,
-                ),
-              ],
-            ),
-            const SizedBox(height: 24),
-            RangeSlider(
-              values: state.rangeValues,
-              min: min,
-              max: max,
-              onChanged: (values) {
-                context.read<DistanceSliderCubit>().changeArea(start: values.start, end: values.end);
-                context.read<ShowPlacesButtonCubit>().showCount(places: places);
-                for (final category in filters) {
-                  if (category.isEnabled) {
-                    context.read<ShowPlacesButtonCubit>().resetToZero();
+        return Opacity(
+          opacity: status.isDenied ? 0.3 : 1,
+          child: Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    AppStrings.distantion,
+                    style: theme.textTheme.displayMedium,
+                  ),
+                  Text(
+                    'от ${state.rangeValues.start.toInt()} до ${state.rangeValues.end.toInt()} м',
+                    style: theme.textTheme.titleMedium,
+                  ),
+                ],
+              ),
+              const SizedBox(height: 24),
+              RangeSlider(
+                values: state.rangeValues,
+                min: min,
+                max: max,
+                onChanged: (values) {
+                  context.read<DistanceSliderCubit>().changeArea(start: values.start, end: values.end);
+                  context.read<ShowPlacesButtonCubit>().showCount(places: places);
+                  for (final category in filters) {
+                    if (category.isEnabled) {
+                      context.read<ShowPlacesButtonCubit>().resetToZero();
+                    }
                   }
-                }
-              },
-            ),
-          ],
+                },
+              ),
+            ],
+          ),
         );
       },
     );

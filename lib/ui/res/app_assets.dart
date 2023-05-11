@@ -11,6 +11,7 @@ abstract class AppAssets {
   static const listPlaces = 'lib/ui/res/icons/list.svg';
   static const listPlacesFilled = 'lib/ui/res/icons/list_filled.svg';
   static const map = 'lib/ui/res/icons/map.svg';
+  static const mapFull = 'lib/ui/res/icons/map_full.svg';
   static const settings = 'lib/ui/res/icons/settings.svg';
   static const settingsFill = 'lib/ui/res/icons/settings_fill.svg';
   static const heartFull = 'lib/ui/res/icons/heart_full.svg';
@@ -44,5 +45,12 @@ abstract class AppAssets {
   static const photo = 'lib/ui/res/icons/photo.svg';
   static const error = 'lib/ui/res/icons/error.svg';
   static const loader = 'lib/ui/res/icons/loader.svg';
+  static const geolocation = 'lib/ui/res/icons/geolocation.svg';
+  static const refresh = 'lib/ui/res/icons/refresh.svg';
+  static const greenRound = 'lib/ui/res/icons/green_round.png';
+  static const blueRound = 'lib/ui/res/icons/blue_round.png';
+  static const whiteRound = 'lib/ui/res/icons/white_round.png';
+  static const route = 'lib/ui/res/icons/route.svg';
+  static const position = 'lib/ui/res/icons/position.svg';
 
 }

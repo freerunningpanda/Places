@@ -49,7 +49,7 @@ class _PlaceSearchScreenState extends State<PlaceSearchScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const SizedBox(height: 16),
-              const SearchAppBar(),
+              const SearchAppBar(title: AppStrings.appTitle),
               const SizedBox(height: 16),
               BlocBuilder<SearchBarBloc, SearchBarState>(
                 builder: (_, state) {
@@ -489,6 +489,7 @@ class _RippleEffect extends StatelessWidget {
             Navigator.of(context).push<PlaceDetails>(
               MaterialPageRoute(
                 builder: (_) => PlaceDetails(
+                  fromMainScreen: false,
                   place: place,
                   height: 360,
                 ),
@@ -525,7 +526,7 @@ class _PlaceContent extends StatelessWidget {
         const SizedBox(height: 16),
         Container(
           height: 1,
-          width: width * 0.73,
+          width: (width * 0.73) - 16,
           color: theme.dividerColor,
         ),
       ],
@@ -567,7 +568,7 @@ class _PlaceTitle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: width * 0.73,
+      width: (width * 0.73) - 16,
       child: Text(
         place.name,
         overflow: TextOverflow.ellipsis,

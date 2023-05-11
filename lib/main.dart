@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:places/blocs/choose_category_bloc/choose_category_bloc.dart';
 import 'package:places/blocs/details_screen/details_screen_bloc.dart';
-import 'package:places/blocs/favorite/favorite_bloc.dart';
 import 'package:places/blocs/filters_screen_bloc/filters_screen_bloc.dart';
 import 'package:places/blocs/search_bar/search_bar_bloc.dart';
 import 'package:places/blocs/search_history/search_history_bloc.dart';
@@ -23,15 +24,28 @@ import 'package:places/ui/screens/onboarding_screen/onboarding_screen.dart';
 import 'package:places/ui/screens/res/app_theme.dart';
 import 'package:places/ui/screens/splash_screen/splash_screen.dart';
 import 'package:provider/provider.dart';
+import 'package:yandex_mapkit/yandex_mapkit.dart';
 
 final ThemeData _lightTheme = AppTheme.buildTheme();
 final ThemeData _darkTheme = AppTheme.buildThemeDark();
 final AppDb db = AppDb();
+late PermissionStatus status;
+Position? position;
+Point? currentPoint;
+
+Future<void> getPosition() async {
+  position = await Geolocator.getCurrentPosition();
+  currentPoint = Point(latitude: position!.latitude, longitude: position!.longitude);
+}
 
 // ignore: long-method
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  status = await Permission.location.request();
+  await getPosition();
   await AppPreferences.init();
+  AndroidYandexMap.useAndroidViewSurface = false;
+
   runApp(
     MultiProvider(
       providers: [
@@ -71,9 +85,6 @@ void main() async {
           ),
           BlocProvider<DetailsScreenBloc>(
             create: (_) => DetailsScreenBloc(),
-          ),
-          BlocProvider<FavoriteBloc>(
-            create: (_) => FavoriteBloc(),
           ),
           BlocProvider<ChooseCategoryBloc>(
             create: (_) => ChooseCategoryBloc(),

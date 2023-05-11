@@ -1,6 +1,7 @@
 abstract class AppStrings {
   static const places = 'Places';
   static const appTitle = 'Список интересных мест';
+  static const mapScreenTitle = 'Карта';
   static const goButtonTitle = 'Построить маршрут';
   static const schedule = 'Запланировать';
   static const favourite = 'В Избранное';

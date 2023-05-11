@@ -2,11 +2,13 @@ import 'package:equatable/equatable.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:places/data/api/api_places.dart';
 import 'package:places/data/database/database.dart';
 import 'package:places/data/interactor/place_interactor.dart';
 import 'package:places/data/repository/place_repository.dart';
 import 'package:places/data/store/app_preferences.dart';
+import 'package:places/main.dart';
 import 'package:places/mocks.dart';
 
 part 'search_screen_event.dart';
@@ -23,62 +25,68 @@ class SearchScreenBloc extends Bloc<SearchScreenEvent, SearchScreenState> {
   SearchScreenBloc() : super(SearchScreenEmptyState()) {
     activeFocus(isActive: true);
     on<PlacesFoundEvent>((event, emit) async {
-      await searchPlaces(interactor.query, event.db);
-      // debugPrint('Длина списка мест после поиска: ${PlaceInteractor.foundedPlaces.length}');
-      emit(
-        SearchScreenPlacesFoundState(
-          filteredPlaces: event.filteredPlaces ?? [],
-          // filteredPlaces: PlaceInteractor.foundedPlaces,
-          length: event.filteredPlaces!.length,
-          // length: AppPreferences.getPlacesListByDistance()?.length ?? 0,
-        ),
-      );
-      // Если поисковый запрос содержит значение и список найденных мест пуст
-      // Эмитим пустое состояние экрана
-
-      // P.S.: когда данное условие стояло ниже следующего условия
-      // Оно не дёргалось и пустой стэйт не эмитился после ввода имени места
-      // Которого в списке нет. Не понятно почему
-      // Сейчас перенёс его сюда и оно срабатывает
-
-      if (!event.isQueryEmpty && PlaceInteractor.foundedPlaces.isEmpty) {
-        emit(SearchScreenEmptyState());
+      if (status.isDenied) {
+        await searchPlacesNoGeo(interactor.query, event.db);
+      } else if (status.isGranted) {
+        await searchPlaces(interactor.query, event.db);
       }
-      // Если поисковый запрос пуст, то показывать все найденные по фильтрам места
-      // Теперь не будет отображаться пустое состояние, потому что сработает данное условие
-      // И в стэйт прокинутся отфильтрованные места
-      if (event.isQueryEmpty || event.searchHistoryIsEmpty) {
-        emit(
-          SearchScreenPlacesFoundState(
-            filteredPlaces: event.filteredPlaces!.toList(),
-            length: AppPreferences.getPlacesListByDistance()?.length ?? 0,
-          ),
-        );
+      emitPlacesFoundState(event, emit);
+      emitEmptyStateIfNoPlacesFound(event, emit);
+      if (status.isDenied) {
+        emitAllFilteredPlacesIfQueryEmptyNoGeo(event, emit);
+      } else {
+        emitAllFilteredPlacesIfQueryEmpty(event, emit);
       }
-
-      // Предыдущее условие показывало пустой стэйт, потому что не было проверки
-      // На то, пустой запрос или нет. Поэтому при завершении поиска состоянием пустого экрана
-      // Возвратом на экран фильтров, затем снова на экран поиска - отображался экран ненайденных мест
-      // Решилось добавлением условия !event.isQueryEmpty - отвечающего за проверку строки поиска.
-      // Теперь пустое состояние покажется только в случае, когда в строке есть значение не соответсвующее имени места
-      // А до этого показывалось всегда, так как список найденных мест был пуст, если места не были найдены
-      // Что при дальнейшем использовании вызывало пустой стэйт, при переходе снова с экрана фильтров
-      // На экран поиска мест, с отфильтрованными местами
-      // if (PlaceInteractor.foundedPlaces.isEmpty) {
-      //   emit(SearchScreenEmptyState());
-      // }
-      if (event.isHistoryClear) {
-        emit(
-          SearchScreenPlacesFoundState(
-            filteredPlaces: event.isHistoryClear ? event.filteredPlaces!.toList() : PlaceInteractor.foundedPlaces,
-            length: await loadFilteredPlaces(event.db),
-            // length: AppPreferences.getPlacesListByDistance()?.length ?? 0,
-          ),
-        );
-      }
+      await emitFilteredPlacesIfHistoryClear(event, emit);
     });
   }
 
+  // Эмитить в стэйт найденные места
+  void emitPlacesFoundState(PlacesFoundEvent event, Emitter emit) {
+    emit(SearchScreenPlacesFoundState(
+      filteredPlaces: event.filteredPlaces ?? [],
+      length: event.filteredPlaces!.length,
+    ));
+  }
+
+// Эмитить пустой стэйт
+  void emitEmptyStateIfNoPlacesFound(PlacesFoundEvent event, Emitter emit) {
+    if (!event.isQueryEmpty && PlaceInteractor.foundedPlaces.isEmpty) {
+      emit(SearchScreenEmptyState());
+    }
+  }
+
+  // Эмитить все отфильтрованные места в стэйт если поисковый запрос пустой
+  void emitAllFilteredPlacesIfQueryEmpty(PlacesFoundEvent event, Emitter emit) {
+    if (event.isQueryEmpty || event.searchHistoryIsEmpty) {
+      emit(SearchScreenPlacesFoundState(
+        filteredPlaces: event.filteredPlaces!.toList(),
+        length: AppPreferences.getPlacesListByDistance()?.length ?? 0,
+      ));
+    }
+  }
+
+  // Эмитить все отфильтрованные места в стэйт если поисковый запрос пустой. Гео отключено.
+  void emitAllFilteredPlacesIfQueryEmptyNoGeo(PlacesFoundEvent event, Emitter emit) {
+    if (event.isQueryEmpty || event.searchHistoryIsEmpty) {
+      emit(SearchScreenPlacesFoundState(
+        filteredPlaces: event.filteredPlaces!.toList(),
+        length: AppPreferences.getPlacesListByType()?.length ?? 0,
+      ));
+    }
+  }
+
+  // Эмитить все отфильтрованные места в стэйт если история запросов пуста.
+  Future<void> emitFilteredPlacesIfHistoryClear(PlacesFoundEvent event, Emitter emit) async {
+    if (event.isHistoryClear) {
+      emit(SearchScreenPlacesFoundState(
+        filteredPlaces: event.isHistoryClear ? event.filteredPlaces!.toList() : PlaceInteractor.foundedPlaces,
+        length: await loadFilteredPlaces(event.db),
+      ));
+    }
+  }
+
+  // Контроль фокуса
   void activeFocus({required bool isActive}) {
     // ignore: prefer-conditional-expressions
     if (isActive) {
@@ -88,13 +96,15 @@ class SearchScreenBloc extends Bloc<SearchScreenEvent, SearchScreenState> {
     }
   }
 
+  // Поиск мест
   Future<List<DbPlace>> searchPlaces(String query, AppDb db) async {
     final placesList = await db.allPlacesEntries;
+    final position = await Geolocator.getCurrentPosition();
     PlaceInteractor.foundedPlaces = placesList.where(
       (place) {
         final distance = Geolocator.distanceBetween(
-          Mocks.mockLat,
-          Mocks.mockLot,
+          position.latitude,
+          position.longitude,
           place.lat,
           place.lng,
         );
@@ -104,11 +114,27 @@ class SearchScreenBloc extends Bloc<SearchScreenEvent, SearchScreenState> {
         return distance >= Mocks.rangeValues.start && distance <= Mocks.rangeValues.end && placeTitle.contains(input);
       },
     ).toList();
-    
+
+    return PlaceInteractor.foundedPlaces;
+  }
+
+// Поиск мест. Гео отключено
+  Future<List<DbPlace>> searchPlacesNoGeo(String query, AppDb db) async {
+    final placesList = await db.allPlacesEntries;
+    PlaceInteractor.foundedPlaces = placesList.where(
+      (place) {
+        final placeTitle = place.name.toLowerCase();
+        final input = query.toLowerCase();
+
+        return placeTitle.contains(input);
+      },
+    ).toList();
+
     return PlaceInteractor.foundedPlaces;
   }
 }
 
+// Загрузить отфильтрованные места из БД.
 Future<int> loadFilteredPlaces(AppDb db) async {
   final placesList = await db.allPlacesEntries;
 
