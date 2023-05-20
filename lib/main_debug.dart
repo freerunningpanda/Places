@@ -69,8 +69,8 @@ void main() async {
             create: (_) => WantToVisitBloc(
               db: db,
             )..add(
-                FavoriteListLoadedEvent(),
-              ),
+              FavoriteListLoadedEvent(),
+            ),
           ),
           BlocProvider<VisitedScreenBloc>(
             create: (_) => VisitedScreenBloc(db: db)
@@ -124,12 +124,12 @@ void main() async {
 void _defineEnvironment({required BuildConfig buildConfig}) {
   Environment.init(
     buildConfig: buildConfig,
-    buildType: BuildType.release,
+    buildType: BuildType.debug,
   );
 }
 
 BuildConfig _setUpConfig() {
   return BuildConfig(
-    envString: '',
+    envString: 'Debug сборка приложения',
   );
 }
