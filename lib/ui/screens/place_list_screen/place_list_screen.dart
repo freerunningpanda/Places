@@ -10,6 +10,7 @@ import 'package:places/data/api/api_places.dart';
 import 'package:places/data/database/database.dart';
 import 'package:places/data/interactor/place_interactor.dart';
 import 'package:places/data/repository/place_repository.dart';
+import 'package:places/environment/environment.dart';
 import 'package:places/providers/map_data_provider.dart';
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_card_size.dart';
@@ -30,6 +31,7 @@ class PlaceListScreen extends StatefulWidget {
 }
 
 class _PlaceListScreenState extends State<PlaceListScreen> with TickerProviderStateMixin {
+  final String envString = Environment.instance().buildConfig.envString;
   late final AnimationController _animationController;
   late final Animation<double> _rotateAnimation;
 
@@ -70,9 +72,17 @@ class _PlaceListScreenState extends State<PlaceListScreen> with TickerProviderSt
               automaticallyImplyLeading: false,
               centerTitle: orientation ? isPortrait : !isPortrait,
               pinned: true,
-              title: Text(
-                AppStrings.appTitle,
-                style: theme.textTheme.titleLarge,
+              title: Column(
+                children: [
+                  Text(
+                    AppStrings.appTitle,
+                    style: theme.textTheme.titleLarge,
+                  ),
+                  Text(
+                    envString,
+                    style: theme.textTheme.titleMedium,
+                  ),
+                ],
               ),
             ),
           ],
