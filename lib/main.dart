@@ -21,7 +21,7 @@ import 'package:places/data/store/app_preferences.dart';
 import 'package:places/environment/build_config.dart';
 import 'package:places/environment/build_type.dart';
 import 'package:places/environment/environment.dart';
-import 'package:places/main_debug.dart';
+import 'package:places/main.dart';
 import 'package:places/providers/map_data_provider.dart';
 import 'package:places/providers/theme_data_provider.dart';
 import 'package:places/ui/res/app_strings.dart';
@@ -69,8 +69,8 @@ void main() async {
             create: (_) => WantToVisitBloc(
               db: db,
             )..add(
-                FavoriteListLoadedEvent(),
-              ),
+              FavoriteListLoadedEvent(),
+            ),
           ),
           BlocProvider<VisitedScreenBloc>(
             create: (_) => VisitedScreenBloc(db: db)
@@ -124,12 +124,12 @@ void main() async {
 void _defineEnvironment({required BuildConfig buildConfig}) {
   Environment.init(
     buildConfig: buildConfig,
-    buildType: BuildType.release,
+    buildType: BuildType.debug,
   );
 }
 
 BuildConfig _setUpConfig() {
   return BuildConfig(
-    envString: '',
+    envString: 'Debug сборка приложения',
   );
 }

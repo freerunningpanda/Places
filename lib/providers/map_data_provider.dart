@@ -5,7 +5,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:map_launcher/map_launcher.dart';
 import 'package:places/blocs/visited/visited_screen_bloc.dart';
 import 'package:places/data/database/database.dart';
-import 'package:places/main.dart';
+import 'package:places/main_prod.dart';
 import 'package:provider/provider.dart';
 import 'package:yandex_mapkit/yandex_mapkit.dart';
 
