@@ -12,7 +12,6 @@ https://education.surf.ru
 <img src="https://github.com/freerunningpanda/places/assets/91142494/48cff09b-cfec-421e-86b4-e2b8432d7f74" width="300">
 <img src="https://github.com/freerunningpanda/places/assets/91142494/8a026fea-992f-43df-aa32-038655a3e296" width="300">
 
-
 ## Home screen
 
 <img src="https://github.com/freerunningpanda/places/assets/91142494/18044183-8895-4052-914e-2ce05b67af79" width="300">
@@ -47,6 +46,16 @@ https://education.surf.ru
 
 <img src="https://github.com/freerunningpanda/places/assets/91142494/b4d99836-9abf-4a28-8688-491575faafaf" width="300">
 <img src="https://github.com/freerunningpanda/places/assets/91142494/16349e35-01d5-4176-a6bd-c2fd524458ba" width="300">
+
+## Want to visit
+
+<img src="https://github.com/freerunningpanda/places/assets/91142494/2948298f-bd59-4114-b771-de03fff39e68" width="300">
+<img src="https://github.com/freerunningpanda/places/assets/91142494/48f3b0ef-e755-4ea9-8302-dda1d9c355b4" width="300">
+
+## Visited places
+
+<img src="https://github.com/freerunningpanda/places/assets/91142494/1e0f7f96-d145-4095-9e18-7d07377e25cc" width="300">
+<img src="https://github.com/freerunningpanda/places/assets/91142494/c612fd41-420e-49ff-8844-db1088c5205d" width="300">
 
 ## Theme switcher
 <img src="https://github.com/freerunningpanda/places/assets/91142494/838a1680-c7ba-4d84-b0eb-41165657d85a" width="300">
