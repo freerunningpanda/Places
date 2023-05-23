@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:places/ui/screens/map_screen/map_screen.dart';
 import 'package:places/ui/screens/navigation_screen/navigation_screen.dart';
 
 import 'package:places/ui/screens/res/custom_colors.dart';
@@ -7,11 +8,13 @@ class ChevroneBack extends StatelessWidget {
   final double width;
   final double height;
   final bool fromMainScreen;
+  final bool fromMapScreen;
   const ChevroneBack({
     Key? key,
     required this.height,
     required this.width,
     required this.fromMainScreen,
+    required this.fromMapScreen,
   }) : super(key: key);
 
   @override
@@ -29,10 +32,17 @@ class ChevroneBack extends StatelessWidget {
         if (fromMainScreen) {
           Navigator.of(context).pushReplacement(
             MaterialPageRoute<NavigationScreen>(
-              builder: (_) => const NavigationScreen(),
+              builder: (_) => const NavigationScreen(fromMapScreen: false),
             ),
           );
-        } else {
+        } else if (fromMapScreen) {
+          Navigator.of(context).pushReplacement(
+            MaterialPageRoute<NavigationScreen>(
+              builder: (_) => const NavigationScreen(fromMapScreen: true),
+            ),
+          );
+        }
+         else {
           Navigator.pop(context);
         }
       },

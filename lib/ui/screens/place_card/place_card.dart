@@ -29,6 +29,7 @@ class PlaceCard extends StatelessWidget {
   final VoidCallback? actionThree;
   final bool isMainScreen;
   final bool fromMainScreen;
+  final bool fromMapScreen;
 
   const PlaceCard({
     Key? key,
@@ -46,6 +47,7 @@ class PlaceCard extends StatelessWidget {
     this.actionThree,
     required this.isMainScreen,
     required this.fromMainScreen,
+    required this.fromMapScreen,
   }) : super(key: key);
 
   @override
@@ -88,6 +90,7 @@ class PlaceCard extends StatelessWidget {
               RippleCardFull(
                 place: place,
                 fromMainScreen: fromMainScreen,
+                fromMapScreen: fromMapScreen,
               ),
               if (isVisitingScreen)
                 RippleIcons(
@@ -211,16 +214,17 @@ class RippleIcons extends StatelessWidget {
 class RippleCardFull extends StatelessWidget {
   final DbPlace place;
   final bool fromMainScreen;
+  final bool fromMapScreen;
 
   const RippleCardFull({
     Key? key,
     required this.place,
     required this.fromMainScreen,
+    required this.fromMapScreen,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    
     return Positioned.fill(
       child: Material(
         type: MaterialType.transparency,
@@ -234,6 +238,7 @@ class RippleCardFull extends StatelessWidget {
                   height: 360,
                   place: place,
                   fromMainScreen: fromMainScreen,
+                  fromMapScreen: fromMapScreen,
                 ),
               ),
             );

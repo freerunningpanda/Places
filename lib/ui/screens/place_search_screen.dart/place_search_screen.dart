@@ -489,6 +489,7 @@ class _RippleEffect extends StatelessWidget {
             Navigator.of(context).push<PlaceDetails>(
               MaterialPageRoute(
                 builder: (_) => PlaceDetails(
+                  fromMapScreen: false,
                   fromMainScreen: false,
                   place: place,
                   height: 360,

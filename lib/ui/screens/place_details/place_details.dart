@@ -13,6 +13,7 @@ import 'package:places/providers/theme_data_provider.dart';
 import 'package:places/ui/res/app_assets.dart';
 import 'package:places/ui/res/app_strings.dart';
 import 'package:places/ui/res/app_typography.dart';
+import 'package:places/ui/screens/map_screen/map_screen.dart';
 import 'package:places/ui/screens/navigation_screen/navigation_screen.dart';
 import 'package:places/ui/widgets/chevrone_back.dart';
 import 'package:places/ui/widgets/error_widget.dart';
@@ -22,11 +23,13 @@ class PlaceDetails extends StatefulWidget {
   final DbPlace place;
   final double height;
   final bool fromMainScreen;
+  final bool fromMapScreen;
   const PlaceDetails({
     Key? key,
     required this.place,
     required this.height,
     required this.fromMainScreen,
+    required this.fromMapScreen,
   }) : super(key: key);
 
   @override
@@ -85,7 +88,13 @@ class _PlaceDetailsState extends State<PlaceDetails> with TickerProviderStateMix
         if (widget.fromMainScreen) {
           Navigator.of(context).pushReplacement(
             MaterialPageRoute<NavigationScreen>(
-              builder: (_) => const NavigationScreen(),
+              builder: (_) => const NavigationScreen(fromMapScreen: false),
+            ),
+          );
+        } else if (widget.fromMapScreen) {
+          Navigator.of(context).pushReplacement(
+            MaterialPageRoute<NavigationScreen>(
+              builder: (_) => const NavigationScreen(fromMapScreen: true),
             ),
           );
         } else {
@@ -112,6 +121,7 @@ class _PlaceDetailsState extends State<PlaceDetails> with TickerProviderStateMix
                 place: widget.place,
                 pageController: _pageController,
                 fromMainScreen: widget.fromMainScreen,
+                fromMapScreen: widget.fromMapScreen,
               );
             }
 
@@ -129,6 +139,7 @@ class _PlaceDetails extends StatelessWidget {
   final DbPlace place;
   final double height;
   final bool fromMainScreen;
+  final bool fromMapScreen;
   final PageController _pageController;
 
   const _PlaceDetails({
@@ -136,6 +147,7 @@ class _PlaceDetails extends StatelessWidget {
     required this.place,
     required this.height,
     required this.fromMainScreen,
+    required this.fromMapScreen,
     required PageController pageController,
   })  : _pageController = pageController,
         super(key: key);
@@ -154,6 +166,7 @@ class _PlaceDetails extends StatelessWidget {
             height: height,
             pageController: _pageController,
             fromMainScreen: fromMainScreen,
+            fromMapScreen: fromMapScreen,
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -185,6 +198,7 @@ class _PlaceDetailsGallery extends StatefulWidget {
   final double height;
   final DbPlace place;
   final bool fromMainScreen;
+  final bool fromMapScreen;
   final PageController _pageController;
 
   const _PlaceDetailsGallery({
@@ -193,6 +207,7 @@ class _PlaceDetailsGallery extends StatefulWidget {
     required this.height,
     required this.place,
     required this.fromMainScreen,
+    required this.fromMapScreen,
     required PageController pageController,
   })  : _pageController = pageController,
         super(key: key);
@@ -240,6 +255,7 @@ class _PlaceDetailsGalleryState extends State<_PlaceDetailsGallery> {
             child: ChevroneBack(
               width: 32,
               height: 32,
+              fromMapScreen: widget.fromMapScreen,
               fromMainScreen: widget.fromMainScreen,
             ),
           ),

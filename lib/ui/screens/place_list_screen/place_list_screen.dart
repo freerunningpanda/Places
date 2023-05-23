@@ -211,6 +211,7 @@ class _PlaceListWidgetPortraitState extends State<_PlaceListWidgetPortrait> {
                         final isFavorite = snapshot.data ?? false;
 
                         return PlaceCard(
+                          fromMapScreen: false,
                           fromMainScreen: true,
                           isMainScreen: true,
                           placeIndex: index,
@@ -251,6 +252,7 @@ class _PlaceListWidgetPortraitState extends State<_PlaceListWidgetPortrait> {
                         );
                       } else {
                         return PlaceCard(
+                          fromMapScreen: false,
                           fromMainScreen: true,
                           isMainScreen: true,
                           placeIndex: index,
@@ -390,6 +392,7 @@ class _PlaceListWidgetLandscapeState extends State<_PlaceListWidgetLandscape> {
                         final isFavorite = snapshot.data ?? false;
 
                         return PlaceCard(
+                          fromMapScreen: false,
                           fromMainScreen: true,
                           isMainScreen: true,
                           placeIndex: index,
@@ -430,6 +433,7 @@ class _PlaceListWidgetLandscapeState extends State<_PlaceListWidgetLandscape> {
                         );
                       } else {
                         return PlaceCard(
+                          fromMapScreen: false,
                           fromMainScreen: true,
                           isMainScreen: true,
                           placeIndex: index,

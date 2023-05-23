@@ -7,7 +7,11 @@ import 'package:places/ui/screens/visiting_screen/visiting_screen.dart';
 import 'package:places/ui/widgets/place_icons.dart';
 
 class NavigationScreen extends StatefulWidget {
-  const NavigationScreen({Key? key}) : super(key: key);
+  final bool fromMapScreen;
+  const NavigationScreen({
+    Key? key,
+    required this.fromMapScreen,
+  }) : super(key: key);
 
   @override
   State<NavigationScreen> createState() => _NavigationScreenState();
@@ -23,13 +27,14 @@ class _NavigationScreenState extends State<NavigationScreen> {
     SettingsScreen(),
   ];
   int currentIndex = 0;
+  int modifiedIndex = 1;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
     return Scaffold(
-      body: screens[currentIndex],
+      body: widget.fromMapScreen ? screens[modifiedIndex] : screens[currentIndex],
       bottomNavigationBar: DecoratedBox(
         position: DecorationPosition.foreground,
         decoration: BoxDecoration(
@@ -40,13 +45,21 @@ class _NavigationScreenState extends State<NavigationScreen> {
           ),
         ),
         child: BottomNavigationBar(
-          currentIndex: currentIndex,
-          onTap: (index) => setState(() => currentIndex = index),
+          currentIndex: widget.fromMapScreen ? modifiedIndex : currentIndex,
+          onTap: widget.fromMapScreen
+              ? (index) => setState(() => modifiedIndex = index)
+              : (index) => setState(() => currentIndex = index),
           type: BottomNavigationBarType.fixed,
           items: [
             BottomNavigationBarItem(
               icon: PlaceIcons(
-                assetName: currentIndex == 0 ? AppAssets.listPlacesFilled : AppAssets.listPlaces,
+                assetName: widget.fromMapScreen
+                    ? modifiedIndex == 0
+                        ? AppAssets.listPlacesFilled
+                        : AppAssets.listPlaces
+                    : currentIndex == 0
+                        ? AppAssets.listPlacesFilled
+                        : AppAssets.listPlaces,
                 width: 24,
                 height: 24,
                 color: theme.iconTheme.color,
@@ -55,7 +68,13 @@ class _NavigationScreenState extends State<NavigationScreen> {
             ),
             BottomNavigationBarItem(
               icon: PlaceIcons(
-                assetName: currentIndex == 1 ? AppAssets.mapFull : AppAssets.map,
+                assetName: widget.fromMapScreen
+                    ? modifiedIndex == 1
+                        ? AppAssets.mapFull
+                        : AppAssets.map
+                    : currentIndex == 1
+                        ? AppAssets.mapFull
+                        : AppAssets.map,
                 width: 24,
                 height: 24,
                 color: theme.iconTheme.color,
@@ -64,7 +83,13 @@ class _NavigationScreenState extends State<NavigationScreen> {
             ),
             BottomNavigationBarItem(
               icon: PlaceIcons(
-                assetName: currentIndex == 2 ? AppAssets.heartFullDark : AppAssets.favouriteDark,
+                assetName: widget.fromMapScreen
+                    ? modifiedIndex == 2
+                        ? AppAssets.heartFullDark
+                        : AppAssets.favouriteDark
+                    : currentIndex == 2
+                        ? AppAssets.heartFullDark
+                        : AppAssets.favouriteDark,
                 width: 24,
                 height: 24,
                 color: theme.iconTheme.color,
@@ -73,7 +98,13 @@ class _NavigationScreenState extends State<NavigationScreen> {
             ),
             BottomNavigationBarItem(
               icon: PlaceIcons(
-                assetName: currentIndex == 3 ? AppAssets.settingsFill : AppAssets.settings,
+                assetName: widget.fromMapScreen
+                    ? modifiedIndex == 3
+                        ? AppAssets.settingsFill
+                        : AppAssets.settings
+                    : currentIndex == 3
+                        ? AppAssets.settingsFill
+                        : AppAssets.settings,
                 width: 24,
                 height: 24,
                 color: theme.iconTheme.color,

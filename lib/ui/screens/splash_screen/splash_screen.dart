@@ -97,7 +97,7 @@ class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMix
       if (isFirstOpen) {
         await Navigator.of(context).pushReplacement(
           MaterialPageRoute<OnboardingScreen>(
-            builder: (_) => const NavigationScreen(),
+            builder: (_) => const NavigationScreen(fromMapScreen: false),
           ),
         );
       } else {

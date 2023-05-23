@@ -224,6 +224,7 @@ class _MapScreenState extends State<MapScreen> {
 
                                                 return PlaceCard(
                                                   fromMainScreen: false,
+                                                  fromMapScreen: true,
                                                   url: cubit.tappedPlacemark?.urls,
                                                   type: cubit.tappedPlacemark!.placeType,
                                                   name: cubit.tappedPlacemark!.name,
@@ -273,6 +274,7 @@ class _MapScreenState extends State<MapScreen> {
                                                 );
                                               } else {
                                                 return PlaceCard(
+                                                  fromMapScreen: true,
                                                   fromMainScreen: false,
                                                   url: cubit.tappedPlacemark?.urls,
                                                   type: cubit.tappedPlacemark!.placeType,

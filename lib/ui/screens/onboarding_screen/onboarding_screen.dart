@@ -109,7 +109,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     title: AppStrings.start,
                     onTap: () => Navigator.of(context).pushReplacement(
                       MaterialPageRoute<MainScreen>(
-                        builder: (_) => const NavigationScreen(),
+                        builder: (_) => const NavigationScreen(fromMapScreen: false),
                       ),
                     ),
                   ),
@@ -167,7 +167,7 @@ class _OnboardingScreenContentState extends State<_OnboardingScreenContent> with
             InkWell(
               onTap: () => Navigator.of(context).pushReplacement(
                 MaterialPageRoute<MainScreen>(
-                  builder: (_) => const NavigationScreen(),
+                  builder: (_) => const NavigationScreen(fromMapScreen: false),
                 ),
               ),
               child: Text(
