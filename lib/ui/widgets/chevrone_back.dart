@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:places/ui/screens/map_screen/map_screen.dart';
 import 'package:places/ui/screens/navigation_screen/navigation_screen.dart';
 
 import 'package:places/ui/screens/res/custom_colors.dart';
