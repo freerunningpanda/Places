@@ -14,8 +14,8 @@ https://education.surf.ru
 
 ## Home screen
 
-<img src="https://github.com/freerunningpanda/places/assets/91142494/18044183-8895-4052-914e-2ce05b67af79" width="300">
-<img src="https://github.com/freerunningpanda/places/assets/91142494/8751a864-d066-467a-82e2-7b8d51dd529c" width="300">
+<img src="https://github.com/freerunningpanda/places/assets/91142494/c574a4da-5e1c-4357-8a0c-7628be24642d" width="300">
+<img src="https://github.com/freerunningpanda/places/assets/91142494/6d342e15-164a-4e25-a614-60e6b007d574" width="300">
 
 ## Place details
 
