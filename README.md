@@ -49,13 +49,13 @@ https://education.surf.ru
 
 ## Want to visit
 
-<img src="https://github.com/freerunningpanda/places/assets/91142494/2948298f-bd59-4114-b771-de03fff39e68" width="300">
-<img src="https://github.com/freerunningpanda/places/assets/91142494/48f3b0ef-e755-4ea9-8302-dda1d9c355b4" width="300">
+<img src="https://github.com/freerunningpanda/places/assets/91142494/f1082e3d-18b1-4268-95d2-fd2c634d52d7" width="300">
+<img src="https://github.com/freerunningpanda/places/assets/91142494/f9485409-f598-4ee3-a49b-29f51941d932" width="300">
 
 ## Visited places
 
-<img src="https://github.com/freerunningpanda/places/assets/91142494/1e0f7f96-d145-4095-9e18-7d07377e25cc" width="300">
-<img src="https://github.com/freerunningpanda/places/assets/91142494/c612fd41-420e-49ff-8844-db1088c5205d" width="300">
+<img src="https://github.com/freerunningpanda/places/assets/91142494/22beb791-779f-4007-9c51-724bbd3bd572" width="300">
+<img src="https://github.com/freerunningpanda/places/assets/91142494/e4a2ecf0-f1cd-45c2-92bf-740e1a843d36" width="300">
 
 ## Theme switcher
 <img src="https://github.com/freerunningpanda/places/assets/91142494/838a1680-c7ba-4d84-b0eb-41165657d85a" width="300">
