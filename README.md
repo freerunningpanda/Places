@@ -1,4 +1,4 @@
-# Places
+# Places 
 
 Flutter education application for showing interesting places around user. 
 https://education.surf.ru
