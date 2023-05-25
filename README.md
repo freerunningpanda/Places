@@ -1,6 +1,6 @@
 # Places 
 
-Flutter education application for showing interesting places around user. 
+Education application based on Flutter for displaying interesting places around the user.
 https://education.surf.ru
 
 ## Onboarding screen
